@@ -17,9 +17,12 @@ struct TripRowView: View {
     var body: some View {
         VStack(alignment: .leading) {
             Text(trip.name)
+                .font(.title)
             HStack {
                 Text(trip.startDate, format: .dateTime.year().month().day())
+                Text("–")
                 Text(trip.endDate, format: .dateTime.year().month().day())
+                Text("–")
                 Text(String(trip.locations.count))
             }
         }

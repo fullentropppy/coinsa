@@ -15,8 +15,8 @@ struct TripListView: View {
     
     @Query(sort: \Trip.startDate) var trips: [Trip]
     
-    @State private var tripToEdit: Trip?
-    @State private var isShowingItemSheet = false
+    @State private var isShowingEdtitingSheet = false
+    @State private var tripToShow: Trip?
 
     // MARK: - Computed properties
     
@@ -30,21 +30,24 @@ struct TripListView: View {
         NavigationStack {
             List {
                 ForEach(trips) { trip in
-                    TripRowView(trip: trip)
-                        .onTapGesture { tripToEdit = trip }
+                    NavigationLink {
+                        TripDetailsView(trip: trip)
+                    } label: {
+                        TripRowView(trip: trip)
+                    }
                 }
             }
             .navigationTitle("trip.list.navigationTitle")
-            .sheet(isPresented: $isShowingItemSheet) {
-                TripEditView()
+            .sheet(isPresented: $isShowingEdtitingSheet) {
+                TripEditView(trip: nil)
             }
-            .sheet(item: $tripToEdit) { trip in
-                TripEditView(trip: trip)
+            .navigationDestination(item: $tripToShow) { trip in
+                TripDetailsView(trip: trip)
             }
             .toolbar {
                 if !trips.isEmpty {
                     Button("trip.list.addTrip", systemImage: "plus") {
-                        isShowingItemSheet = true
+                        isShowingEdtitingSheet = true
                     }
                 }
             }
@@ -55,7 +58,7 @@ struct TripListView: View {
                     } description: {
                         Text("trip.list.empty.desctiption")
                     } actions: {
-                        Button("trip.list.addTrip") { isShowingItemSheet = true }
+                        Button("trip.list.addTrip") { isShowingEdtitingSheet = true }
                     }
                 }
             }
@@ -77,4 +80,3 @@ struct TripListView: View {
         .environment(\.locale, Locale(identifier: "en"))
         .preferredColorScheme(.dark)
 }
-

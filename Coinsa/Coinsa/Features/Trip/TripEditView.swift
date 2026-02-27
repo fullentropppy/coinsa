@@ -15,7 +15,7 @@ struct TripEditView: View {
     @Environment(\.dismiss) private var dismiss
 
     @State private var viewModel: TripViewModel
-    
+        
     // MARK: - Computed properties
     
     private var store: TripStore {
@@ -24,7 +24,7 @@ struct TripEditView: View {
 
     // MARK: - Initialization
     
-    init(trip: Trip? = nil) {
+    init(trip: Trip? = nil, onSave: ((Trip) -> Void)? = nil) {
         _viewModel = State(initialValue: TripViewModel(trip: trip))
     }
     

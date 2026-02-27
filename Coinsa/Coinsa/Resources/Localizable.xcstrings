@@ -1,6 +1,9 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "–" : {
+      "shouldTranslate" : false
+    },
     "common.cancel" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -31,6 +34,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Готово"
+          }
+        }
+      }
+    },
+    "common.edit" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edit"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Изменить"
           }
         }
       }
@@ -150,6 +170,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Транспорт"
+          }
+        }
+      }
+    },
+    "trip.details.locations.empty" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No locations yet"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Локаций еще нет"
+          }
+        }
+      }
+    },
+    "trip.details.locations.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Locations"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Локации"
           }
         }
       }
