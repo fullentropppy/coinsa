@@ -65,6 +65,16 @@ struct TripListView: View {
 
 // MARK: - Previews
 
-#Preview {
+#Preview("Light - RU") {
     TripListView()
+        .modelContainer(PreviewData.container)
+        .environment(\.locale, Locale(identifier: "ru"))
+        .preferredColorScheme(.light)
 }
+#Preview("Dark - EN") {
+    TripListView()
+        .modelContainer(PreviewData.container)
+        .environment(\.locale, Locale(identifier: "en"))
+        .preferredColorScheme(.dark)
+}
+

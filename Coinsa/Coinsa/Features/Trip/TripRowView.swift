@@ -28,11 +28,14 @@ struct TripRowView: View {
 
 // MARK: - Previews
 
-#Preview {
-    let exampleTrip = Trip(
-        name: "Japan",
-        startDate: .now,
-        endDate: .now.addingTimeInterval(60 * 60 * 24 * 21)
-    )
-    TripRowView(trip: exampleTrip)
+#Preview("Light - RU") {
+    TripRowView(trip: PreviewData.firstTrip)
+        .environment(\.locale, Locale(identifier: "ru"))
+        .preferredColorScheme(.light)
 }
+#Preview("Dark - EN") {
+    TripRowView(trip: PreviewData.firstTrip)
+        .environment(\.locale, Locale(identifier: "en"))
+        .preferredColorScheme(.dark)
+}
+
