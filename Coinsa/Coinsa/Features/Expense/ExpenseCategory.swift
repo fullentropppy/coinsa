@@ -17,7 +17,7 @@ enum ExpenseCategory: String {
     case medicine = "expense.category.medicine"
     case other = "expense.category.other"
     
-    // MARK: - Properties
+    // MARK: - Computed properties
     
     var localized: String {
         String(localized: String.LocalizationValue(rawValue))

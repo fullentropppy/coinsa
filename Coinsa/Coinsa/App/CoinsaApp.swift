@@ -10,7 +10,7 @@ import SwiftData
 
 @main
 struct CoinsaApp: App {
-    // MARK: - Properties
+    // MARK: - Stored properties
     
     private let modelTypes: [any PersistentModel.Type] =
     [

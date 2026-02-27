@@ -9,7 +9,7 @@ import SwiftUI
 import SwiftData
 
 struct TripListView: View {
-    // MARK: - Properties
+    // MARK: - Stored properties
     
     @Environment(\.modelContext) private var context
     
@@ -18,6 +18,8 @@ struct TripListView: View {
     @State private var tripToEdit: Trip?
     @State private var isShowingItemSheet = false
 
+    // MARK: - Computed properties
+    
     private var store: TripStore {
         TripStore(context: context)
     }
@@ -32,9 +34,10 @@ struct TripListView: View {
                         .onTapGesture { tripToEdit = trip }
                 }
             }
-            
             .navigationTitle("trip.list.navigationTitle")
-            .sheet(isPresented: $isShowingItemSheet) { TripEditView() }
+            .sheet(isPresented: $isShowingItemSheet) {
+                TripEditView()
+            }
             .sheet(item: $tripToEdit) { trip in
                 TripEditView(trip: trip)
             }
@@ -59,6 +62,8 @@ struct TripListView: View {
         }
     }
 }
+
+// MARK: - Previews
 
 #Preview {
     TripListView()

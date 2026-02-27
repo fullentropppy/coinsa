@@ -10,7 +10,7 @@ import SwiftData
 
 @Model
 class Trip {
-    // MARK: - Properties
+    // MARK: - Stored properties
     
     var name: String
     var startDate: Date

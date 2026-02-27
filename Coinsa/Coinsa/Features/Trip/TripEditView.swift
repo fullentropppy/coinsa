@@ -8,17 +8,21 @@
 import SwiftUI
 
 struct TripEditView: View {
-    // MARK: - Properties
+    // MARK: - Stored properties
     
-    @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var context
+    @Environment(\.dismiss) private var dismiss
 
     @State private var viewModel: TripViewModel
+    
+    // MARK: - Computed properties
     
     private var store: TripStore {
         TripStore(context: context)
     }
 
+    // MARK: - Initialization
+    
     init(trip: Trip? = nil) {
         _viewModel = State(initialValue: TripViewModel(trip: trip))
     }
@@ -26,22 +30,22 @@ struct TripEditView: View {
     // MARK: - Body
     
     var body: some View {
-        @Bindable var viewModel = viewModel
-        
         NavigationStack {
             Form {
                 TextField("trip.editing.name.title", text: $viewModel.name)
                 DatePicker("trip.editing.startDate.title", selection: $viewModel.startDate, displayedComponents: .date)
                 DatePicker("trip.editing.endDate.title", selection: $viewModel.endDate, displayedComponents: .date)
             }
-            .navigationTitle(viewModel.title)
+            .navigationTitle(viewModel.navigationTitle)
             .toolbar {
                 ToolbarItemGroup(placement: .topBarLeading) {
-                    Button("common.cancel") { dismiss() }
+                    Button("common.cancel") {
+                        dismiss()
+                    }
                 }
 
                 ToolbarItemGroup(placement: .topBarTrailing) {
-                    Button(viewModel.isEditing ? "common.done" : "common.save") {
+                    Button("common.save") {
                         viewModel.save(using: store)
                         dismiss()
                     }
@@ -50,6 +54,8 @@ struct TripEditView: View {
         }
     }
 }
+
+// MARK: - Previews
 
 #Preview {
     TripEditView()

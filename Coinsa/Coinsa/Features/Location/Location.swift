@@ -10,15 +10,19 @@ import SwiftData
 
 @Model
 class Location {
-    // MARK: - Properties
+    // MARK: - Stored properties
     
     var name: String
+    var startDate: Date
+    var endDate: Date
     var trip: Trip
     
     // MARK: - Initialization
     
-    init(name: String, trip: Trip) {
+    init(name: String, startDate: Date, endDate: Date, trip: Trip) {
         self.name = name
+        self.startDate = startDate
+        self.endDate = endDate
         self.trip = trip
     }
 }

@@ -11,7 +11,7 @@ import Observation
 @MainActor
 @Observable
 final class TripViewModel {
-    // MARK: - Properties
+    // MARK: - Stored properties
     
     var name: String
     var startDate: Date
@@ -19,6 +19,16 @@ final class TripViewModel {
     var locations: [Location]
     
     private let trip: Trip?
+    
+    // MARK: - Computed properties
+    
+    var isEditing: Bool {
+        trip != nil
+    }
+
+    var navigationTitle: String {
+        String(localized: isEditing ? "trip.editing.navigationTitle.editing" : "trip.editing.navigationTitle.creating")
+    }
     
     // MARK: - Initialization
     
@@ -38,14 +48,8 @@ final class TripViewModel {
         }
     }
     
-    var isEditing: Bool {
-        trip != nil
-    }
-
-    var title: String {
-        String(localized: isEditing ? "trip.editing.navigationTitle.editing" : "trip.editing.navigationTitle.creating")
-    }
-
+    // MARK: - Public methods
+    
     func save(using store: TripStore) {
         if let trip {
             store.update(trip, name: name, startDate: startDate, endDate: endDate)

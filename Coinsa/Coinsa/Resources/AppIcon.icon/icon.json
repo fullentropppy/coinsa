@@ -17,8 +17,6 @@
   },
   "groups" : [
     {
-      "blend-mode" : "normal",
-      "blur-material" : null,
       "layers" : [
         {
           "fill-specializations" : [
@@ -29,19 +27,20 @@
             },
             {
               "appearance" : "dark",
-              "value" : "automatic"
+              "value" : {
+                "solid" : "extended-gray:1.00000,1.00000"
+              }
             }
           ],
-          "image-name" : "list.dash 1.svg",
-          "name" : "list.dash 1"
+          "glass" : true,
+          "image-name" : "lizard.fill 1.svg",
+          "name" : "lizard.fill"
         }
       ],
-      "lighting" : "individual",
       "shadow" : {
         "kind" : "neutral",
         "opacity" : 1
       },
-      "specular" : true,
       "translucency" : {
         "enabled" : true,
         "value" : 0.5

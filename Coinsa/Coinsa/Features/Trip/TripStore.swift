@@ -10,8 +10,12 @@ import SwiftData
 
 @MainActor
 struct TripStore {
+    // MARK: - Stored properties
+    
     let context: ModelContext
 
+    // MARK: - Public methods
+    
     func add(name: String, startDate: Date, endDate: Date) {
         let trip = Trip(name: name, startDate: startDate, endDate: endDate, locations: [])
         context.insert(trip)

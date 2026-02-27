@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct TripRowView: View {
-    // MARK: - Properties
+    // MARK: - Stored properties
     
     let trip: Trip
     
@@ -26,12 +26,13 @@ struct TripRowView: View {
     }
 }
 
+// MARK: - Previews
+
 #Preview {
     let exampleTrip = Trip(
-        name: "Japan", startDate: .now , endDate: .now.addingTimeInterval(60 * 60 * 24 * 21), locations: []
+        name: "Japan",
+        startDate: .now,
+        endDate: .now.addingTimeInterval(60 * 60 * 24 * 21)
     )
-    //let exampleLocation1 = Location(name: "Tokyo", trip: exampleTrip)
-    //let exampleLocation2 = Location(name: "Osaka", trip: exampleTrip)
-    
     TripRowView(trip: exampleTrip)
 }
