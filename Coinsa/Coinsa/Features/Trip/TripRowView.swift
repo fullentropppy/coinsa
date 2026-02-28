@@ -31,14 +31,15 @@ struct TripRowView: View {
 
 // MARK: - Previews
 
+
 #Preview("Light - RU") {
-    TripRowView(trip: PreviewData.firstTrip)
+    TripRowView(trip: PreviewDataFactory.builder().buildFirstTrip())
         .environment(\.locale, Locale(identifier: "ru"))
         .preferredColorScheme(.light)
 }
+
 #Preview("Dark - EN") {
-    TripRowView(trip: PreviewData.firstTrip)
+    TripRowView(trip: PreviewDataFactory.builder().buildFirstTrip())
         .environment(\.locale, Locale(identifier: "en"))
         .preferredColorScheme(.dark)
 }
-

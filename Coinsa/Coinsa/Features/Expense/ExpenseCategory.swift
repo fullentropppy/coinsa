@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum ExpenseCategory: String {
+enum ExpenseCategory: String, Codable, CaseIterable {
     // MARK: - Cases
     
     case food = "expense.category.food"

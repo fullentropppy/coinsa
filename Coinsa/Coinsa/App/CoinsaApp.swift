@@ -15,7 +15,9 @@ struct CoinsaApp: App {
     private let modelTypes: [any PersistentModel.Type] =
     [
         Trip.self,
-        Location.self
+        Location.self,
+        Budget.self,
+        Expense.self
     ]
     
     // MARK: - Body

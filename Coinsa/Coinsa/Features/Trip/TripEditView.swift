@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import SwiftData
 
 struct TripEditView: View {
     // MARK: - Stored properties
@@ -59,16 +58,17 @@ struct TripEditView: View {
 // MARK: - Previews
 
 #Preview("Light - RU") {
-    TripEditView(trip: PreviewData.firstTrip)
-        .modelContainer(PreviewData.container)
+    TripEditView(trip: PreviewDataFactory.builder().buildFirstTrip())
         .environment(\.locale, Locale(identifier: "ru"))
         .preferredColorScheme(.light)
 }
 
 #Preview("Dark - EN") {
-    TripEditView(trip: PreviewData.firstTrip)
-        .modelContainer(PreviewData.container)
+    TripEditView(trip: PreviewDataFactory.builder().buildFirstTrip())
         .environment(\.locale, Locale(identifier: "en"))
         .preferredColorScheme(.dark)
 }
 
+#Preview("Empty item") {
+    TripEditView(trip: nil)
+}

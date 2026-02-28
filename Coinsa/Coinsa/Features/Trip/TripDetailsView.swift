@@ -27,7 +27,7 @@ struct TripDetailsView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 10) {
-                VStack(alignment: .leading, spacing: 10) {
+                VStack(alignment: .leading) {
                     HStack {
                         Text(viewModel.startDate, format: .dateTime.year().month().day())
                         Text("–")
@@ -36,7 +36,7 @@ struct TripDetailsView: View {
                     .foregroundStyle(.secondary)
                 }
 
-                VStack(alignment: .leading, spacing: 8) {
+                VStack(alignment: .leading) {
                     Text("trip.details.locations.title")
                         .font(.headline)
                     ScrollView(.horizontal, showsIndicators: false) {
@@ -81,13 +81,13 @@ struct TripDetailsView: View {
 // MARK: - Previews
 
 #Preview("Light - RU") {
-    TripDetailsView(trip: PreviewData.firstTrip)
+    TripDetailsView(trip: PreviewDataFactory.builder().buildFirstTrip())
         .environment(\.locale, Locale(identifier: "ru"))
         .preferredColorScheme(.light)
 }
 
 #Preview("Dark - EN") {
-    TripDetailsView(trip: PreviewData.firstTrip)
+    TripDetailsView(trip: PreviewDataFactory.builder().buildFirstTrip())
         .environment(\.locale, Locale(identifier: "en"))
         .preferredColorScheme(.dark)
 }

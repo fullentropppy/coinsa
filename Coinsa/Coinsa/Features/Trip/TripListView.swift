@@ -70,13 +70,19 @@ struct TripListView: View {
 
 #Preview("Light - RU") {
     TripListView()
-        .modelContainer(PreviewData.container)
+        .modelContainer(PreviewDataFactory.builder().buildContainer())
         .environment(\.locale, Locale(identifier: "ru"))
         .preferredColorScheme(.light)
 }
+
 #Preview("Dark - EN") {
     TripListView()
-        .modelContainer(PreviewData.container)
+        .modelContainer(PreviewDataFactory.builder().buildContainer())
         .environment(\.locale, Locale(identifier: "en"))
         .preferredColorScheme(.dark)
+}
+
+#Preview("Empty list") {
+    TripListView()
+        .modelContainer(PreviewDataFactory.builder().withTrips(false).buildContainer())
 }
