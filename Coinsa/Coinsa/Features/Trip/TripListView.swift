@@ -17,6 +17,8 @@ struct TripListView: View {
     
     @State private var isShowingEdtitingSheet = false
     @State private var tripToShow: Trip?
+    @State private var isShowingDeleteConfirmation = false
+    @State private var tripsPendingDeletion: [Trip] = []
 
     // MARK: - Computed properties
     
@@ -36,6 +38,7 @@ struct TripListView: View {
                         TripRowView(trip: trip)
                     }
                 }
+                .onDelete(perform: requestDelete)
             }
             .navigationTitle("trip.list.navigationTitle")
             .sheet(isPresented: $isShowingEdtitingSheet) {
@@ -44,25 +47,75 @@ struct TripListView: View {
             .navigationDestination(item: $tripToShow) { trip in
                 TripDetailsView(trip: trip)
             }
-            .toolbar {
-                if !trips.isEmpty {
-                    Button("trip.list.addTrip", systemImage: "plus") {
-                        isShowingEdtitingSheet = true
-                    }
+            .alert("trip.list.deletionConfirmation.title", isPresented: $isShowingDeleteConfirmation) {
+                Button("trip.list.deletionConfirmation.delete", role: .destructive) {
+                    confirmDelete()
                 }
+                Button("common.cancel", role: .cancel) {
+                    cancelDelete()
+                }
+            } message: {
+                Text(deleteConfirmationMessage)
+            }
+            .toolbar {
+                toolbarContent
             }
             .overlay {
                 if trips.isEmpty {
-                    ContentUnavailableView {
-                        Label("trip.list.empty.title", systemImage: "suitcase")
-                    } description: {
-                        Text("trip.list.empty.desctiption")
-                    } actions: {
-                        Button("trip.list.addTrip") { isShowingEdtitingSheet = true }
-                    }
+                    emptyStateView
                 }
+                
             }
         }
+    }
+    
+    // MARK: - Components
+    
+    @ToolbarContentBuilder
+    private var toolbarContent: some ToolbarContent {
+        if !trips.isEmpty {
+            ToolbarItem(placement: .navigationBarLeading) {
+                EditButton()
+            }
+        }
+        
+        ToolbarItem(placement: .navigationBarTrailing) {
+            Button("trip.list.addTrip", systemImage: "plus") {
+                isShowingEdtitingSheet = true
+            }
+        }
+    }
+    
+    private var emptyStateView: some View {
+        ContentUnavailableView {
+            Label("trip.list.empty.title", systemImage: "suitcase")
+        } description: {
+            Text("trip.list.empty.desctiption")
+        } actions: {
+            Button("trip.list.addTrip") { isShowingEdtitingSheet = true }
+        }
+    }
+
+    private var deleteConfirmationMessage: LocalizedStringKey {
+        tripsPendingDeletion.count == 1
+        ? "trip.list.deletionConfirmation.message.single"
+        : "trip.list.deletionConfirmation.message.multiple"
+    }
+
+    // MARK: - Actions
+
+    private func requestDelete(at offsets: IndexSet) {
+        tripsPendingDeletion = offsets.map { trips[$0] }
+        isShowingDeleteConfirmation = true
+    }
+
+    private func confirmDelete() {
+        tripsPendingDeletion.forEach { store.delete($0) }
+        tripsPendingDeletion.removeAll()
+    }
+
+    private func cancelDelete() {
+        tripsPendingDeletion.removeAll()
     }
 }
 

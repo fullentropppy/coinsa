@@ -16,34 +16,37 @@ struct TripRowView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            Text(trip.name)
-                .font(.title)
+            Text(trip.name).font(.title2)
             HStack {
                 Text(trip.startDate, format: .dateTime.year().month().day())
                 Text("–")
                 Text(trip.endDate, format: .dateTime.year().month().day())
-                Text("–")
-                Text(String(trip.locations.count))
             }
+            .font(.callout).foregroundStyle(.secondary)
         }
     }
 }
 
 // MARK: - Previews
 
-
 #Preview("Light - RU") {
-    TripRowView(trip: PreviewDataFactory.builder().buildFirstTrip())
-        .environment(\.locale, Locale(identifier: "ru"))
-        .preferredColorScheme(.light)
+    List {
+        TripRowView(trip: PreviewDataFactory.builder().buildFirstTrip())
+            .environment(\.locale, Locale(identifier: "ru"))
+            .preferredColorScheme(.light)
+    }
 }
 
 #Preview("Dark - EN") {
-    TripRowView(trip: PreviewDataFactory.builder().buildFirstTrip())
-        .environment(\.locale, Locale(identifier: "en"))
-        .preferredColorScheme(.dark)
+    List {
+        TripRowView(trip: PreviewDataFactory.builder().buildFirstTrip())
+            .environment(\.locale, Locale(identifier: "en"))
+            .preferredColorScheme(.dark)
+    }
 }
 
 #Preview("Empty locations") {
-    TripRowView(trip: PreviewDataFactory.builder().withLocations(false).buildFirstTrip())
+    List {
+        TripRowView(trip: PreviewDataFactory.builder().withLocations(false).buildFirstTrip())
+    }
 }

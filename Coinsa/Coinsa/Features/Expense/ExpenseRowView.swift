@@ -17,9 +17,12 @@ struct ExpenseRowView: View {
     var body: some View {
         HStack {
             VStack(alignment: .leading, spacing: 4) {
-                Text(expense.date, format: .dateTime.year().month().day())
-                Text(expense.category.localized)
-                    .foregroundStyle(.secondary)
+                Text(expense.date, format: .dateTime.year().month().day().hour().minute())
+                HStack {
+                    Image(systemName: expense.category.sfSymbolName).imageScale(.small)
+                    Text(expense.category.localized).font(.callout)
+                }
+                .foregroundStyle(.secondary)
             }
             Spacer()
             Text(
@@ -33,13 +36,17 @@ struct ExpenseRowView: View {
 // MARK: - Previews
 
 #Preview("Light - RU") {
-    ExpenseRowView(expense: PreviewDataFactory.Builder().buildFirstExpense())
-        .environment(\.locale, Locale(identifier: "ru"))
-        .preferredColorScheme(.light)
+    List {
+        ExpenseRowView(expense: PreviewDataFactory.Builder().buildFirstExpense())
+            .environment(\.locale, Locale(identifier: "ru"))
+            .preferredColorScheme(.light)
+    }
 }
 
 #Preview("Dark - EN") {
-    ExpenseRowView(expense: PreviewDataFactory.Builder().buildFirstExpense())
-        .environment(\.locale, Locale(identifier: "en"))
-        .preferredColorScheme(.dark)
+    List {
+        ExpenseRowView(expense: PreviewDataFactory.Builder().buildFirstExpense())
+            .environment(\.locale, Locale(identifier: "en"))
+            .preferredColorScheme(.dark)
+    }
 }

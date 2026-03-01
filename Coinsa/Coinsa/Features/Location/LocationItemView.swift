@@ -16,7 +16,7 @@ struct LocationItemView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            Text(location.name)
+            Text(location.name).font(.title2)
             HStack(spacing: 6) {
                 Text(location.startDate, format: .dateTime.year().month().day())
                 Text("–")

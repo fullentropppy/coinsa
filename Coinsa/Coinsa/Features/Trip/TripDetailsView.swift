@@ -37,6 +37,7 @@ struct TripDetailsView: View {
             }
         }
         .navigationTitle(viewModel.name)
+        .padding()
         .toolbar {
             Button("common.edit") {
                 isShowingEditSheet = true
