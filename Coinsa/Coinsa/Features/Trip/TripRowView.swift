@@ -43,3 +43,7 @@ struct TripRowView: View {
         .environment(\.locale, Locale(identifier: "en"))
         .preferredColorScheme(.dark)
 }
+
+#Preview("Empty locations") {
+    TripRowView(trip: PreviewDataFactory.builder().withLocations(false).buildFirstTrip())
+}
