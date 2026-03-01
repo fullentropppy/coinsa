@@ -28,66 +28,11 @@ struct TripDetailsView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 10) {
-                VStack(alignment: .leading) {
-                    HStack {
-                        Text(viewModel.startDate, format: .dateTime.year().month().day())
-                        Text("–")
-                        Text(viewModel.endDate, format: .dateTime.year().month().day())
-                    }
-                    .foregroundStyle(.secondary)
-                }
-
-                VStack(alignment: .leading) {
-                    Text("trip.details.locations.title")
-                        .font(.headline)
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: 12) {
-                            if viewModel.locations.isEmpty {
-                                Text("trip.details.locations.empty")
-                            } else {
-                                ForEach(viewModel.locations) { location in
-                                    Button {
-                                        selectedLocation = location
-                                    } label: {
-                                        VStack(alignment: .leading) {
-                                            Text(location.name)
-                                            HStack(spacing: 6) {
-                                                Text(location.startDate, format: .dateTime.year().month().day())
-                                                Text("–")
-                                                Text(location.endDate, format: .dateTime.year().month().day())
-                                            }
-                                            .foregroundStyle(.secondary)
-                                        }
-                                        .padding(10)
-                                        .frame(width: 200, alignment: .leading)
-                                        .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 16))
-                                    }
-                                    .buttonStyle(.plain)
-                                }
-                            }
-                        }
-                    }
-                }
+                tripHeader
+                locations
                 
                 if let selectedLocation {
-                    VStack(alignment: .leading, spacing: 8) {
-                        ForEach(selectedLocation.expenses.sorted(by: { $0.date > $1.date })) { expense in
-                            HStack {
-                                VStack(alignment: .leading, spacing: 4) {
-                                    Text(expense.date, format: .dateTime.year().month().day())
-                                    Text(expense.category.localized)
-                                        .foregroundStyle(.secondary)
-                                }
-                                Spacer()
-                                Text(
-                                    expense.amountInLocationCurrency,
-                                    format: .currency(code: selectedLocation.locationCurrencyCode)
-                                )
-                            }
-                            .padding(10)
-                            .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 12))
-                        }
-                    }
+                    ExpenseListView(location: selectedLocation)
                 }
             }
         }
@@ -105,6 +50,42 @@ struct TripDetailsView: View {
         .onAppear {
             if selectedLocation == nil {
                 selectedLocation = viewModel.locations.first
+            }
+        }
+    }
+    
+    // MARK: - Subviews
+    
+    var tripHeader: some View {
+        VStack(alignment: .leading) {
+            HStack {
+                Text(viewModel.startDate, format: .dateTime.year().month().day())
+                Text("–")
+                Text(viewModel.endDate, format: .dateTime.year().month().day())
+            }
+            .foregroundStyle(.secondary)
+        }
+    }
+    
+    var locations: some View {
+        VStack(alignment: .leading) {
+            Text("trip.details.locations.title")
+                .font(.headline)
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 12) {
+                    if viewModel.locations.isEmpty {
+                        Text("trip.details.locations.empty")
+                    } else {
+                        ForEach(viewModel.locations) { location in
+                            Button {
+                                selectedLocation = location
+                            } label: {
+                                LocationItemView(location: location)
+                            }
+                            .buttonStyle(.plain)
+                        }
+                    }
+                }
             }
         }
     }
