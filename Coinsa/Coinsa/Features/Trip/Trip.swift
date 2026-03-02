@@ -19,6 +19,24 @@ class Trip {
     @Relationship(deleteRule: .cascade, inverse: \Location.trip)
     var locations: [Location]
     
+    // MARK: - Computed properties
+    
+    var locationsCount: Int {
+        locations.count
+    }
+    
+    var status: TripStatus {
+        let now = Date.now
+        
+        if now < startDate {
+            return .upcoming
+        } else if now >= startDate && now < endDate {
+            return .ongoing
+        } else {
+            return .completed
+        }
+    }
+    
     // MARK: - Initialization
     
     init(name: String, startDate: Date, endDate: Date, locations: [Location] = []) {

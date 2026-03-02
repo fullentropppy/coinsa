@@ -26,6 +26,10 @@ final class TripViewModel {
         trip != nil
     }
 
+    var tripToEdit: Trip? {
+        trip
+    }
+
     var navigationTitle: String {
         String(localized: isEditing ? "trip.editing.navigationTitle.editing" : "trip.editing.navigationTitle.creating")
     }

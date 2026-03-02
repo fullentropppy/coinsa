@@ -16,13 +16,22 @@ struct TripRowView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            Text(trip.name).font(.title2)
+            Text(trip.name).font(.title2).fontWeight(.semibold)
+            
             HStack {
-                Text(trip.startDate, format: .dateTime.year().month().day())
-                Text("–")
-                Text(trip.endDate, format: .dateTime.year().month().day())
+                TripStatusView(status: trip.status)
+                Spacer()
+                HStack(spacing: 2) {
+                    Text(trip.startDate..<trip.endDate, format: Date.tripIntervalFormat)
+                }
+                Spacer()
+                HStack(spacing: 2) {
+                    Image(systemName: "mappin.and.ellipse")
+                    Text(String(trip.locationsCount))
+                }
             }
-            .font(.callout).foregroundStyle(.secondary)
+            .font(.subheadline)
+            .foregroundStyle(.secondary)
         }
     }
 }
@@ -42,11 +51,5 @@ struct TripRowView: View {
         TripRowView(trip: PreviewDataFactory.builder().buildFirstTrip())
             .environment(\.locale, Locale(identifier: "en"))
             .preferredColorScheme(.dark)
-    }
-}
-
-#Preview("Empty locations") {
-    List {
-        TripRowView(trip: PreviewDataFactory.builder().withLocations(false).buildFirstTrip())
     }
 }

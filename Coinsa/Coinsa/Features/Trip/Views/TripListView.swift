@@ -17,8 +17,7 @@ struct TripListView: View {
     
     @State private var isShowingEdtitingSheet = false
     @State private var tripToShow: Trip?
-    @State private var isShowingDeleteConfirmation = false
-    @State private var tripsPendingDeletion: [Trip] = []
+    @State private var deletionHandler = TripDeletionHandler()
 
     // MARK: - Computed properties
     
@@ -33,7 +32,7 @@ struct TripListView: View {
             List {
                 ForEach(trips) { trip in
                     NavigationLink {
-                        TripDetailsView(trip: trip)
+                        
                     } label: {
                         TripRowView(trip: trip)
                     }
@@ -41,13 +40,14 @@ struct TripListView: View {
                 .onDelete(perform: requestDelete)
             }
             .navigationTitle("trip.list.navigationTitle")
+            .navigationBarTitleDisplayMode(.large)
             .sheet(isPresented: $isShowingEdtitingSheet) {
                 TripEditView(trip: nil)
             }
             .navigationDestination(item: $tripToShow) { trip in
-                TripDetailsView(trip: trip)
+                
             }
-            .alert("trip.list.deletionConfirmation.title", isPresented: $isShowingDeleteConfirmation) {
+            .alert("trip.list.deletionConfirmation.title", isPresented: $deletionHandler.isShowingDeleteConfirmation) {
                 Button("trip.list.deletionConfirmation.delete", role: .destructive) {
                     confirmDelete()
                 }
@@ -55,16 +55,15 @@ struct TripListView: View {
                     cancelDelete()
                 }
             } message: {
-                Text(deleteConfirmationMessage)
+                Text(deletionHandler.confirmationMessage)
             }
             .toolbar {
                 toolbarContent
             }
             .overlay {
                 if trips.isEmpty {
-                    emptyStateView
+                    TripEmptyStateView { isShowingEdtitingSheet = true }
                 }
-                
             }
         }
     }
@@ -86,36 +85,18 @@ struct TripListView: View {
         }
     }
     
-    private var emptyStateView: some View {
-        ContentUnavailableView {
-            Label("trip.list.empty.title", systemImage: "suitcase")
-        } description: {
-            Text("trip.list.empty.desctiption")
-        } actions: {
-            Button("trip.list.addTrip") { isShowingEdtitingSheet = true }
-        }
-    }
-
-    private var deleteConfirmationMessage: LocalizedStringKey {
-        tripsPendingDeletion.count == 1
-        ? "trip.list.deletionConfirmation.message.single"
-        : "trip.list.deletionConfirmation.message.multiple"
-    }
-
     // MARK: - Actions
 
     private func requestDelete(at offsets: IndexSet) {
-        tripsPendingDeletion = offsets.map { trips[$0] }
-        isShowingDeleteConfirmation = true
+        deletionHandler.requestDelete(trips: offsets.map { trips[$0] })
     }
 
     private func confirmDelete() {
-        tripsPendingDeletion.forEach { store.delete($0) }
-        tripsPendingDeletion.removeAll()
+        deletionHandler.confirmDelete(using: store)
     }
 
     private func cancelDelete() {
-        tripsPendingDeletion.removeAll()
+        deletionHandler.cancelDelete()
     }
 }
 

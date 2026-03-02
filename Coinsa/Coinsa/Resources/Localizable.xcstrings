@@ -1,9 +1,6 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "–" : {
-      "shouldTranslate" : false
-    },
     "common.cancel" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -174,6 +171,40 @@
         }
       }
     },
+    "trip.deletionConfirmation.message.multiple" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Are you sure you want to delete the selected trips?"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вы уверены что хотите удалить выбранные поездки?"
+          }
+        }
+      }
+    },
+    "trip.deletionConfirmation.message.single" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Are you sure you want to delete the trip?"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Вы уверены что хотите удалить поездку?"
+          }
+        }
+      }
+    },
     "trip.details.locations.empty" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -204,6 +235,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Локации"
+          }
+        }
+      }
+    },
+    "trip.editing.delete" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete the trip"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Удалить поездку"
           }
         }
       }
@@ -248,13 +296,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Trip creation"
+            "value" : "New trip"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Создание поездки"
+            "value" : "Новая поездка"
           }
         }
       }
@@ -265,13 +313,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Trip editing"
+            "value" : "Editing"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Изменение поездки"
+            "value" : "Изменение"
           }
         }
       }
@@ -323,40 +371,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Удалить"
-          }
-        }
-      }
-    },
-    "trip.list.deletionConfirmation.message.multiple" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Are you sure you want to delete the selected trips?"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Вы уверены что хотите удалить выбранные поездки?"
-          }
-        }
-      }
-    },
-    "trip.list.deletionConfirmation.message.single" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Are you sure you want to delete this trip?"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Вы уверены что хотите удалить выбранную поездку?"
           }
         }
       }
@@ -425,6 +439,57 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Поездки"
+          }
+        }
+      }
+    },
+    "trip.status.completed" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Completed"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Завершенная"
+          }
+        }
+      }
+    },
+    "trip.status.ongoing" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ongoing"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Текущая"
+          }
+        }
+      }
+    },
+    "trip.status.upcoming" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Upcoming"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Предстоящая"
           }
         }
       }
