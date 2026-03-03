@@ -10,7 +10,7 @@ import SwiftData
 
 @Model
 class Trip {
-    // MARK: - Stored properties
+    // MARK: - Stored Properties
     
     var name: String
     var startDate: Date
@@ -19,13 +19,13 @@ class Trip {
     @Relationship(deleteRule: .cascade, inverse: \Location.trip)
     var locations: [Location]
     
-    // MARK: - Computed properties
+    // MARK: - Computed Properties
     
     var locationsCount: Int {
         locations.count
     }
     
-    var status: TripStatus {
+    var status: EventStatus {
         let now = Date.now
         
         if now < startDate {

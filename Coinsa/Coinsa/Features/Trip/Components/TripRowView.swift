@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct TripRowView: View {
-    // MARK: - Stored properties
+    // MARK: - Stored Properties
     
     let trip: Trip
     
@@ -19,7 +19,7 @@ struct TripRowView: View {
             Text(trip.name).font(.title2).fontWeight(.semibold)
             
             HStack {
-                TripStatusView(status: trip.status)
+                EventStatusView(status: trip.status)
                 Spacer()
                 HStack(spacing: 2) {
                     Text(trip.startDate..<trip.endDate, format: Date.tripIntervalFormat)
@@ -39,8 +39,9 @@ struct TripRowView: View {
 // MARK: - Previews
 
 fileprivate var previewTrip: Trip {
-    let trips = PreviewDataBuilder.builder().buildData()
-    return trips.first!
+    let builder = PreviewDataBuilder.builder()
+    let data = builder.withLocations(false).buildData()
+    return builder.getTrip(from: data)
 }
 
 #Preview("Light - RU") {

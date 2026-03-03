@@ -1,17 +1,17 @@
 //
-//  TripStatusView.swift
+//  EventStatusView.swift
 //  Coinsa
 //
-//  Created by Daniil Gritsenko on 02.03.2026.
+//  Created by Daniil Gritsenko on 03.03.2026.
 //
 
 import SwiftUI
 
-struct TripStatusView: View {
-    // MARK: - Stored properties
-    
-    var status: TripStatus
-    
+struct EventStatusView: View {
+    // MARK: - Stored Properties
+
+    var status: EventStatus
+
     var body: some View {
         Text(status.localized)
             .font(.caption).foregroundStyle(status.color)
@@ -23,15 +23,15 @@ struct TripStatusView: View {
 // MARK: - Previews
 
 #Preview("Light - RU") {
-    TripStatusView(status: .upcoming)
-    TripStatusView(status: .ongoing)
-    TripStatusView(status: .completed)
+    EventStatusView(status: .upcoming)
+    EventStatusView(status: .ongoing)
+    EventStatusView(status: .completed)
         .preferredColorScheme(.light)
 }
 
 #Preview("Dark - RU") {
-    TripStatusView(status: .upcoming)
-    TripStatusView(status: .ongoing)
-    TripStatusView(status: .completed)
+    EventStatusView(status: .upcoming)
+    EventStatusView(status: .ongoing)
+    EventStatusView(status: .completed)
         .preferredColorScheme(.dark)
 }

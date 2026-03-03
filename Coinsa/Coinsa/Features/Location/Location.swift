@@ -24,7 +24,21 @@ class Location {
     
     @Relationship(deleteRule: .cascade, inverse: \Expense.location)
     var expenses: [Expense]
+
+    // MARK: - Computed properties
     
+    var status: EventStatus {
+        let now = Date.now
+
+        if now < startDate {
+            return .upcoming
+        } else if now >= startDate && now < endDate {
+            return .ongoing
+        } else {
+            return .completed
+        }
+    }
+
     // MARK: - Initialization
     
     init(

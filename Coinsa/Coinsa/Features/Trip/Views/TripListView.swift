@@ -9,17 +9,16 @@ import SwiftUI
 import SwiftData
 
 struct TripListView: View {
-    // MARK: - Stored properties
+    // MARK: - Stored Properties
     
     @Environment(\.modelContext) private var context
-    
-    @Query(sort: \Trip.startDate) var trips: [Trip]
-    
+    @Query(sort: \Trip.startDate) private var trips: [Trip]
+
     @State private var isShowingEdtitingSheet = false
     @State private var tripToShow: Trip?
     @State private var deletionHandler = TripDeletionHandler()
 
-    // MARK: - Computed properties
+    // MARK: - Computed Properties
     
     private var store: TripStore {
         TripStore(context: context)
@@ -32,7 +31,7 @@ struct TripListView: View {
             List {
                 ForEach(trips) { trip in
                     NavigationLink {
-                        
+                        LocationListView(trip: trip)
                     } label: {
                         TripRowView(trip: trip)
                     }
