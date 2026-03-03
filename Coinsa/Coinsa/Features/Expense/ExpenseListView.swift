@@ -27,18 +27,18 @@ struct ExpenseListView: View {
 
 // MARK: - Previews
 
-#Preview("Light - RU") {
-    ExpenseListView(location: PreviewDataFactory.Builder().buildFirstLocation())
-        .environment(\.locale, Locale(identifier: "ru"))
-        .preferredColorScheme(.light)
-}
-
-#Preview("Dark - EN") {
-    ExpenseListView(location: PreviewDataFactory.Builder().buildFirstLocation())
-        .environment(\.locale, Locale(identifier: "en"))
-        .preferredColorScheme(.dark)
-}
-
-#Preview("Empty expenses") {
-    ExpenseListView(location: PreviewDataFactory.Builder().withExpenses(false).buildFirstLocation())
-}
+//#Preview("Light - RU") {
+//    ExpenseListView(location: PreviewDataFactory.Builder().getLocation())
+//        .environment(\.locale, Locale(identifier: "ru"))
+//        .preferredColorScheme(.light)
+//}
+//
+//#Preview("Dark - EN") {
+//    ExpenseListView(location: PreviewDataFactory.Builder().getLocation())
+//        .environment(\.locale, Locale(identifier: "en"))
+//        .preferredColorScheme(.dark)
+//}
+//
+//#Preview("Empty expenses") {
+//    ExpenseListView(location: PreviewDataFactory.Builder().withExpenses(false).getLocation())
+//}

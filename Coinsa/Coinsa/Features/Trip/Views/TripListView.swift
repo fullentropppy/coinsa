@@ -102,21 +102,34 @@ struct TripListView: View {
 
 // MARK: - Previews
 
+fileprivate struct previewData {
+    let withTrips: Bool
+    
+    var container: ModelContainer {
+        PreviewDataBuilder.builder()
+            .withScenario(.all)
+            .withTrips(withTrips)
+            .withExpenses(false)
+            .withBudgets(false)
+            .buildContainer()
+    }
+}
+
 #Preview("Light - RU") {
     TripListView()
-        .modelContainer(PreviewDataFactory.builder().buildContainer())
+        .modelContainer(previewData(withTrips: true).container)
         .environment(\.locale, Locale(identifier: "ru"))
         .preferredColorScheme(.light)
 }
 
 #Preview("Dark - EN") {
     TripListView()
-        .modelContainer(PreviewDataFactory.builder().buildContainer())
+        .modelContainer(previewData(withTrips: true).container)
         .environment(\.locale, Locale(identifier: "en"))
         .preferredColorScheme(.dark)
 }
 
 #Preview("Empty list") {
     TripListView()
-        .modelContainer(PreviewDataFactory.builder().withTrips(false).buildContainer())
+        .modelContainer(previewData(withTrips: false).container)
 }

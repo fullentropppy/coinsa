@@ -52,6 +52,7 @@ struct TripEditView: View {
             .alert("trip.list.deletionConfirmation.title", isPresented: $deletionHandler.isShowingDeleteConfirmation) {
                 Button("trip.list.deletionConfirmation.delete", role: .destructive) {
                     confirmDelete()
+                    dismiss()
                 }
                 Button("common.cancel", role: .cancel) {
                     cancelDelete()
@@ -95,14 +96,19 @@ struct TripEditView: View {
 
 // MARK: - Previews
 
+fileprivate var previewTrip: Trip {
+    let trips = PreviewDataBuilder.builder().buildData()
+    return trips.first!
+}
+
 #Preview("Light - RU") {
-    TripEditView(trip: PreviewDataFactory.builder().buildFirstTrip())
+    TripEditView(trip: previewTrip)
         .environment(\.locale, Locale(identifier: "ru"))
         .preferredColorScheme(.light)
 }
 
 #Preview("Dark - EN") {
-    TripEditView(trip: PreviewDataFactory.builder().buildFirstTrip())
+    TripEditView(trip: previewTrip)
         .environment(\.locale, Locale(identifier: "en"))
         .preferredColorScheme(.dark)
 }

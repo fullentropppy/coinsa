@@ -38,9 +38,14 @@ struct TripRowView: View {
 
 // MARK: - Previews
 
+fileprivate var previewTrip: Trip {
+    let trips = PreviewDataBuilder.builder().buildData()
+    return trips.first!
+}
+
 #Preview("Light - RU") {
     List {
-        TripRowView(trip: PreviewDataFactory.builder().buildFirstTrip())
+        TripRowView(trip: previewTrip)
             .environment(\.locale, Locale(identifier: "ru"))
             .preferredColorScheme(.light)
     }
@@ -48,7 +53,7 @@ struct TripRowView: View {
 
 #Preview("Dark - EN") {
     List {
-        TripRowView(trip: PreviewDataFactory.builder().buildFirstTrip())
+        TripRowView(trip: previewTrip)
             .environment(\.locale, Locale(identifier: "en"))
             .preferredColorScheme(.dark)
     }

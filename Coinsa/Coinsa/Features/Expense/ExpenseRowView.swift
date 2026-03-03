@@ -35,18 +35,18 @@ struct ExpenseRowView: View {
 
 // MARK: - Previews
 
-#Preview("Light - RU") {
-    List {
-        ExpenseRowView(expense: PreviewDataFactory.Builder().buildFirstExpense())
-            .environment(\.locale, Locale(identifier: "ru"))
-            .preferredColorScheme(.light)
-    }
-}
-
-#Preview("Dark - EN") {
-    List {
-        ExpenseRowView(expense: PreviewDataFactory.Builder().buildFirstExpense())
-            .environment(\.locale, Locale(identifier: "en"))
-            .preferredColorScheme(.dark)
-    }
-}
+//#Preview("Light - RU") {
+//    List {
+//        ExpenseRowView(expense: PreviewDataFactory.Builder().getExpense())
+//            .environment(\.locale, Locale(identifier: "ru"))
+//            .preferredColorScheme(.light)
+//    }
+//}
+//
+//#Preview("Dark - EN") {
+//    List {
+//        ExpenseRowView(expense: PreviewDataFactory.Builder().getExpense())
+//            .environment(\.locale, Locale(identifier: "en"))
+//            .preferredColorScheme(.dark)
+//    }
+//}
