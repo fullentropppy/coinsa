@@ -15,7 +15,6 @@ struct TripListView: View {
     @Query(sort: \Trip.startDate) private var trips: [Trip]
 
     @State private var isShowingEdtitingSheet = false
-    @State private var tripToShow: Trip?
     @State private var deletionHandler = TripDeletionHandler()
 
     // MARK: - Computed Properties
@@ -31,7 +30,7 @@ struct TripListView: View {
             List {
                 ForEach(trips) { trip in
                     NavigationLink {
-                        LocationListView(trip: trip)
+                        TripDetailView(trip: trip)
                     } label: {
                         TripRowView(trip: trip)
                     }
@@ -42,9 +41,6 @@ struct TripListView: View {
             .navigationBarTitleDisplayMode(.large)
             .sheet(isPresented: $isShowingEdtitingSheet) {
                 TripEditView(trip: nil)
-            }
-            .navigationDestination(item: $tripToShow) { trip in
-                
             }
             .alert("trip.list.deletionConfirmation.title", isPresented: $deletionHandler.isShowingDeleteConfirmation) {
                 Button("trip.list.deletionConfirmation.delete", role: .destructive) {

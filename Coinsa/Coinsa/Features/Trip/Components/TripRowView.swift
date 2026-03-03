@@ -40,7 +40,7 @@ struct TripRowView: View {
 
 fileprivate var previewTrip: Trip {
     let builder = PreviewDataBuilder.builder()
-    let data = builder.withLocations(false).buildData()
+    let data = builder.buildData()
     return builder.getTrip(from: data)
 }
 
