@@ -18,13 +18,15 @@ struct LocationRowView: View {
             
             HStack {
                 EventStatusView(status: location.status)
+                
                 Spacer()
+                
                 HStack(spacing: 2) {
                     Text(location.startDate..<location.endDate, format: Date.tripIntervalFormat)
                 }
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
             }
-            .font(.subheadline)
-            .foregroundStyle(.secondary)
         }
     }
 }

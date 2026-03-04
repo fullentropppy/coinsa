@@ -16,22 +16,30 @@ struct TripRowView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            Text(trip.name).font(.title2).fontWeight(.semibold)
+            HStack {
+                Text(trip.name).font(.title2).fontWeight(.semibold)
+            }
             
             HStack {
                 EventStatusView(status: trip.status)
+                
                 Spacer()
+                
                 HStack(spacing: 2) {
                     Text(trip.startDate..<trip.endDate, format: Date.tripIntervalFormat)
                 }
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+                
                 Spacer()
+                
                 HStack(spacing: 2) {
                     Image(systemName: "mappin.and.ellipse")
                     Text(String(trip.locationsCount))
                 }
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
             }
-            .font(.subheadline)
-            .foregroundStyle(.secondary)
         }
     }
 }

@@ -33,19 +33,8 @@ struct TripEditView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section {
-                    TextField("trip.editing.name.title", text: $viewModel.name)
-                    DatePicker("trip.editing.startDate.title", selection: $viewModel.startDate, displayedComponents: .date)
-                    DatePicker("trip.editing.endDate.title", selection: $viewModel.endDate, displayedComponents: .date)
-                }
-
-                if viewModel.isEditing {
-                    Section {
-                        Button("trip.editing.delete", role: .destructive) {
-                            requestDelete()
-                        }
-                    }
-                }
+                mainDataSection
+                actionsSection
             }
             .navigationTitle(viewModel.navigationTitle)
             .toolbarTitleDisplayMode(.inline)
@@ -61,22 +50,47 @@ struct TripEditView: View {
                 Text(deletionHandler.confirmationMessage)
             }
             .toolbar {
-                ToolbarItemGroup(placement: .topBarLeading) {
-                    Button("common.cancel", systemImage: "xmark") {
-                        dismiss()
-                    }
-                }
-
-                ToolbarItemGroup(placement: .topBarTrailing) {
-                    Button("common.save", systemImage: "checkmark") {
-                        viewModel.save(using: store)
-                        dismiss()
-                    }
-                }
+                toolbarContent
             }
         }
     }
 
+    // MARK: - Components
+    
+    private var mainDataSection: some View {
+        Section {
+            TextField("trip.editing.name.title", text: $viewModel.name)
+            DatePicker("trip.editing.startDate.title", selection: $viewModel.startDate, displayedComponents: .date)
+            DatePicker("trip.editing.endDate.title", selection: $viewModel.endDate, displayedComponents: .date)
+        }
+    }
+    
+    private var actionsSection: some View {
+        Section {
+            if viewModel.isEditing {
+                Button("trip.editing.delete", role: .destructive) {
+                    requestDelete()
+                }
+            }
+        }
+    }
+    
+    @ToolbarContentBuilder
+    private var toolbarContent: some ToolbarContent {
+        ToolbarItemGroup(placement: .topBarLeading) {
+            Button("common.cancel", systemImage: "xmark") {
+                dismiss()
+            }
+        }
+
+        ToolbarItemGroup(placement: .topBarTrailing) {
+            Button("common.save", systemImage: "checkmark") {
+                viewModel.save(using: store)
+                dismiss()
+            }
+        }
+    }
+    
     // MARK: - Actions
 
     private func requestDelete() {

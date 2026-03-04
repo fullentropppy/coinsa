@@ -10,10 +10,11 @@ import SwiftData
 
 struct TripDetailView: View {
     // MARK: - Stored Properties
-    
-    let trip: Trip
+
     @State private var isShowingTripEdit = false
     @State private var isShowingLocationAdd = false
+    
+    let trip: Trip
     
     // MARK: - Body
     
@@ -27,7 +28,7 @@ struct TripDetailView: View {
         .navigationTitle(trip.name)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-
+            
         }
         .sheet(isPresented: $isShowingTripEdit) {
             
@@ -36,6 +37,11 @@ struct TripDetailView: View {
             
         }
     }
+    
+    // MARK: - Components
+    
+    // MARK: - Actions
+    
 }
 
 // MARK: - Previews

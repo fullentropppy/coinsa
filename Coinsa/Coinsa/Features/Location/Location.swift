@@ -27,6 +27,11 @@ class Location {
 
     // MARK: - Computed properties
     
+    var durationInDays: Int {
+        let difference = (endDate.timeIntervalSince(startDate) / 86400).rounded()
+        return difference == 0 ? 1 : Int(difference)
+    }
+    
     var status: EventStatus {
         let now = Date.now
 
