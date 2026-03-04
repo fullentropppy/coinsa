@@ -11,7 +11,7 @@ import Observation
 @MainActor
 @Observable
 final class TripViewModel {
-    // MARK: - Stored properties
+    // MARK: - Stored Properties
     
     var name: String
     var startDate: Date
@@ -20,7 +20,7 @@ final class TripViewModel {
     
     private let trip: Trip?
     
-    // MARK: - Computed properties
+    // MARK: - Computed Properties
     
     var isEditing: Bool {
         trip != nil

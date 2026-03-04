@@ -8,7 +8,7 @@
 import Foundation
 
 extension Date {
-    // MARK: - Single date
+    // MARK: - Single Date
     
     static var tripDisplayFormat: Date.FormatStyle {
         .dateTime
@@ -17,7 +17,7 @@ extension Date {
             .day()
     }
 
-    // MARK: - Date interval
+    // MARK: - Date Interval
     
     static var tripIntervalFormat: Date.IntervalFormatStyle {
         .interval

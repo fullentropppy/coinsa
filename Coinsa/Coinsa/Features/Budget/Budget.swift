@@ -10,7 +10,7 @@ import SwiftData
 
 @Model
 class Budget {
-    // MARK: - Stored properties
+    // MARK: - Stored Properties
     
     var category: ExpenseCategory
     var amountInBaseCurrency: Double

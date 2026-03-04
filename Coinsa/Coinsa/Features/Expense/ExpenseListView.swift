@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ExpenseListView: View {
-    // MARK: - Stored properties
+    // MARK: - Stored Properties
     
     let location: Location
     

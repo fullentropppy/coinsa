@@ -17,7 +17,7 @@ enum ExpenseCategory: String, Codable, CaseIterable {
     case medicine = "expense.category.medicine"
     case other = "expense.category.other"
     
-    // MARK: - Computed properties
+    // MARK: - Computed Properties
     
     var localized: String {
         String(localized: String.LocalizationValue(rawValue))

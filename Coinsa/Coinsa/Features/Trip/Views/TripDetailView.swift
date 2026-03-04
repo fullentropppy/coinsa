@@ -11,37 +11,139 @@ import SwiftData
 struct TripDetailView: View {
     // MARK: - Stored Properties
 
+    @Environment(\.modelContext) private var context
+    @Query private var locations: [Location]
+
     @State private var isShowingTripEdit = false
     @State private var isShowingLocationAdd = false
-    
+    @State private var deletionHandler = LocationDeletionHandler()
+
     let trip: Trip
-    
+
+    // MARK: - Initialization
+
+    init(trip: Trip) {
+        self.trip = trip
+        let tripID = trip.persistentModelID
+
+        _locations = Query(
+            filter: #Predicate<Location> { $0.trip.persistentModelID == tripID },
+            sort: \.startDate
+        )
+    }
+
+    // MARK: - Computed Properties
+
+    private var store: LocationStore {
+        LocationStore(context: context)
+    }
+
+    private var summaryViewModel: TripDetailViewModel {
+        TripDetailViewModel(trip: trip)
+    }
+
     // MARK: - Body
-    
+
     var body: some View {
-        VStack {
-            LocationListView(
-                trip: trip,
-                onAddLocation: { isShowingLocationAdd = true }
-            )
+        List {
+            Section {
+                TripDetailHeaderView(
+                    dateRange: summaryViewModel.dateIntervalText,
+                    plannedAmount: summaryViewModel.plannedAmountText,
+                    actualAmount: summaryViewModel.actualAmountText
+                )
+                .listRowSeparator(.hidden)
+                .listRowInsets(EdgeInsets(top: 16, leading: 16, bottom: 8, trailing: 16))
+            }
+
+            Section(header: Text("trip.detail.locations.header")) {
+                ForEach(locations) { location in
+                    NavigationLink {
+                        LocationDetailView(location: location)
+                    } label: {
+                        LocationRowView(location: location)
+                    }
+                }
+                .onDelete(perform: requestDelete)
+            }
         }
+        .listStyle(.insetGrouped)
         .navigationTitle(trip.name)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            
+            toolbarContent
         }
         .sheet(isPresented: $isShowingTripEdit) {
-            
+            TripEditView(trip: trip)
         }
         .sheet(isPresented: $isShowingLocationAdd) {
-            
+            LocationEditView()
+        }
+        .alert("location.list.deletionConfirmation.title", isPresented: $deletionHandler.isShowingDeleteConfirmation) {
+            Button("location.list.deletionConfirmation.delete", role: .destructive) {
+                confirmDelete()
+            }
+            Button("common.cancel", role: .cancel) {
+                cancelDelete()
+            }
+        } message: {
+            Text(deletionHandler.confirmationMessage)
+        }
+        .overlay {
+            if locations.isEmpty {
+                LocationEmptyStateView(onAddLocation: { isShowingLocationAdd = true })
+            }
+        }
+        .overlay(alignment: .bottomTrailing) {
+            addLocationButton
         }
     }
-    
+
     // MARK: - Components
-    
+
+    @ToolbarContentBuilder
+    private var toolbarContent: some ToolbarContent {
+        if !locations.isEmpty {
+            ToolbarItem(placement: .navigationBarLeading) {
+                EditButton()
+            }
+        }
+
+        ToolbarItem(placement: .navigationBarTrailing) {
+            Button("trip.detail.editTrip", systemImage: "pencil") {
+                isShowingTripEdit = true
+            }
+        }
+    }
+
+    private var addLocationButton: some View {
+        Button {
+            isShowingLocationAdd = true
+        } label: {
+            Image(systemName: "plus")
+                .font(.system(size: 18, weight: .semibold))
+                .foregroundStyle(.white)
+                .padding(16)
+                .background(Circle().fill(Color.accentColor))
+                .shadow(color: .black.opacity(0.2), radius: 8, x: 0, y: 4)
+        }
+        .padding(20)
+        .accessibilityLabel(Text("location.add.accessibilityLabel"))
+    }
+
     // MARK: - Actions
-    
+
+    private func requestDelete(at offsets: IndexSet) {
+        deletionHandler.requestDelete(locations: offsets.map { locations[$0] })
+    }
+
+    private func confirmDelete() {
+        deletionHandler.confirmDelete(using: store)
+    }
+
+    private func cancelDelete() {
+        deletionHandler.cancelDelete()
+    }
 }
 
 // MARK: - Previews

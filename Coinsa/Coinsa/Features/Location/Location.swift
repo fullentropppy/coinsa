@@ -10,7 +10,7 @@ import SwiftData
 
 @Model
 class Location {
-    // MARK: - Stored properties
+    // MARK: - Stored Properties
     
     var name: String
     var startDate: Date
@@ -25,7 +25,7 @@ class Location {
     @Relationship(deleteRule: .cascade, inverse: \Expense.location)
     var expenses: [Expense]
 
-    // MARK: - Computed properties
+    // MARK: - Computed Properties
     
     var durationInDays: Int {
         let difference = (endDate.timeIntervalSince(startDate) / 86400).rounded()

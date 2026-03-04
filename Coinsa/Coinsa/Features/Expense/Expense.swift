@@ -10,7 +10,7 @@ import SwiftData
 
 @Model
 class Expense {
-    // MARK: - Stored properties
+    // MARK: - Stored Properties
     
     var date: Date
     var amountInLocationCurrency: Double
