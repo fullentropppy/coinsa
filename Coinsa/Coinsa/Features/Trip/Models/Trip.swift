@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 @Model
-class Trip {
+class Trip: DateRangeProviding, StatusProviding {
     // MARK: - Stored Properties
     
     var name: String
@@ -19,27 +19,10 @@ class Trip {
     @Relationship(deleteRule: .cascade, inverse: \Location.trip)
     var locations: [Location]
     
-    // MARK: - Computed Properties
+    // MARK: - Computed Properties  
     
     var locationsCount: Int {
         locations.count
-    }
-    
-    var durationInDays: Int {
-        let difference = (endDate.timeIntervalSince(startDate) / 86400).rounded()
-        return difference == 0 ? 1 : Int(difference)
-    }
-    
-    var status: EventStatus {
-        let now = Date.now
-        
-        if now < startDate {
-            return .upcoming
-        } else if now >= startDate && now < endDate {
-            return .ongoing
-        } else {
-            return .completed
-        }
     }
     
     // MARK: - Initialization

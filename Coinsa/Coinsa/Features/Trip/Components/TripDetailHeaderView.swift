@@ -11,39 +11,48 @@ struct TripDetailHeaderView: View {
     // MARK: - Stored Properties
 
     let data: TripDetailHeaderData
+    let showsSummary: Bool
 
     // MARK: - Body
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 15) {
-            HStack(spacing: 10) {
-                Image(systemName: "calendar").foregroundStyle(.secondary)
-                Text(data.dateRange).font(.subheadline).foregroundStyle(.secondary)
+        VStack(alignment: .leading, spacing: 16) {
+            HStack(alignment: .center, spacing: 12) {
+                EventStatusView(status: data.status)
+
+                VStack(alignment: .leading, spacing: 6) {
+                    HStack(spacing: 8) {
+                        Image(systemName: "calendar").foregroundStyle(.secondary)
+                        Text(data.dateRange).font(.subheadline).foregroundStyle(.secondary)
+                    }
+
+                    HStack(spacing: 8) {
+                        Image(systemName: "clock").foregroundStyle(.secondary)
+                        Text(data.durationText).font(.subheadline).foregroundStyle(.secondary)
+                    }
+                }
             }
 
-            HStack(spacing: 10) {
-                Image(systemName: "clock").foregroundStyle(.secondary)
-                Text(data.durationText).font(.subheadline).foregroundStyle(.secondary)
-            }
+            if showsSummary {
+                HStack(spacing: 10) {
+                    AmountCardView(
+                        title: "trip.detail.summary.planned",
+                        amount: data.plannedAmount,
+                        tint: .blue
+                    )
+                    AmountCardView(
+                        title: "trip.detail.summary.actual",
+                        amount: data.actualAmount,
+                        tint: .yellow
+                    )
+                }
 
-            HStack(spacing: 10) {
                 AmountCardView(
-                    title: "trip.detail.summary.planned",
-                    amount: data.plannedAmount,
-                    tint: .blue
-                )
-                AmountCardView(
-                    title: "trip.detail.summary.actual",
-                    amount: data.actualAmount,
-                    tint: .yellow
+                    title: "trip.detail.summary.difference",
+                    amount: data.amountDifference,
+                    tint: differenceTint
                 )
             }
-            
-            AmountCardView(
-                title: "trip.detail.summary.difference",
-                amount: data.amountDifference,
-                tint: differenceTint
-            )
         }
     }
 
@@ -82,7 +91,7 @@ private struct PreviewData {
     var headerData: TripDetailHeaderData
     
     init() {
-        let builder = PreviewDataBuilder.builder()
+        let builder = PreviewBuilder.builder()
         let data = builder.buildData()
         let trip = builder.getTrip(from: data)
         let viewModel = TripDetailViewModel(trip: trip)
@@ -96,7 +105,8 @@ private struct PreviewData {
     
     List {
         TripDetailHeaderView(
-            data: data.headerData
+            data: data.headerData,
+            showsSummary: true
         )
         .environment(\.locale, Locale(identifier: "ru"))
         .preferredColorScheme(.light)
@@ -108,7 +118,8 @@ private struct PreviewData {
     
     List {
         TripDetailHeaderView(
-            data: data.headerData
+            data: data.headerData,
+            showsSummary: true
         )
         .environment(\.locale, Locale(identifier: "en"))
         .preferredColorScheme(.dark)

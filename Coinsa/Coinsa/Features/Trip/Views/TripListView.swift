@@ -15,7 +15,10 @@ struct TripListView: View {
     @Query(sort: \Trip.startDate) private var trips: [Trip]
 
     @State private var isShowingEdtitingSheet = false
-    @State private var deletionHandler = TripDeletionHandler()
+    @State private var deletionHandler = DeletionHandler<Trip>(
+        singleMessageKey: "trip.deletionConfirmation.message.single",
+        multipleMessageKey: "trip.deletionConfirmation.message.multiple"
+    )
 
     // MARK: - Computed Properties
     
@@ -83,11 +86,11 @@ struct TripListView: View {
     // MARK: - Actions
 
     private func requestDelete(at offsets: IndexSet) {
-        deletionHandler.requestDelete(trips: offsets.map { trips[$0] })
+        deletionHandler.requestDelete(items: offsets.map { trips[$0] })
     }
 
     private func confirmDelete() {
-        deletionHandler.confirmDelete(using: store)
+        deletionHandler.confirmDelete { store.delete($0) }
     }
 
     private func cancelDelete() {
@@ -101,7 +104,7 @@ private struct previewData {
     let withTrips: Bool
     
     var container: ModelContainer {
-        PreviewDataBuilder.builder()
+        PreviewBuilder.builder()
             .withScenario(.all)
             .withTrips(withTrips)
             .withExpenses(false)

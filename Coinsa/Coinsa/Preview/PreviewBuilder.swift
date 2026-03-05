@@ -9,14 +9,14 @@ import Foundation
 import SwiftData
 
 @MainActor
-struct PreviewDataBuilder {
+struct PreviewBuilder {
     // MARK: - Nested types
 
     final class Builder {
         // MARK: - Stored properties
 
         private var scenario: PreviewScenario = .japan
-        private var options = PreviewDataOptions()
+        private var options = PreviewOptions()
 
         // MARK: - Public methods. Builder parameters
 
@@ -45,7 +45,7 @@ struct PreviewDataBuilder {
             return self
         }
 
-        func withOptions(_ value: PreviewDataOptions) -> Builder {
+        func withOptions(_ value: PreviewOptions) -> Builder {
             options = value
             return self
         }
@@ -91,7 +91,7 @@ struct PreviewDataBuilder {
         // MARK: - Public methods. Sample data
 
         func buildData() -> [Trip] {
-            PreviewDataGenerator.makeTrips(for: scenario, options: options)
+            PreviewGenerator.makeTrips(for: scenario, options: options)
         }
 
         func getTrip(from data: [Trip], at index: Int = 0) -> Trip {

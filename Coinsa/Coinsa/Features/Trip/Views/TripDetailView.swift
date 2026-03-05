@@ -16,7 +16,10 @@ struct TripDetailView: View {
 
     @State private var isShowingTripEdit = false
     @State private var isShowingLocationAdd = false
-    @State private var deletionHandler = LocationDeletionHandler()
+    @State private var deletionHandler = DeletionHandler<Location>(
+        singleMessageKey: "location.deletionConfirmation.message.single",
+        multipleMessageKey: "location.deletionConfirmation.message.multiple"
+    )
 
     let trip: Trip
 
@@ -48,19 +51,24 @@ struct TripDetailView: View {
         List {
             Section {
                 TripDetailHeaderView(
-                    data: viewModel.headerData
+                    data: viewModel.headerData,
+                    showsSummary: !locations.isEmpty
                 )
             }
 
             Section(header: Text("trip.detail.locations.header")) {
-                ForEach(locations) { location in
-                    NavigationLink {
-                        LocationDetailView(location: location)
-                    } label: {
-                        LocationRowView(location: location)
+                if locations.isEmpty {
+                    LocationEmptyStateView(onAddLocation: { isShowingLocationAdd = true })
+                } else {
+                    ForEach(locations) { location in
+                        NavigationLink {
+                            LocationDetailView(location: location)
+                        } label: {
+                            LocationRowView(location: location)
+                        }
                     }
+                    .onDelete(perform: requestDelete)
                 }
-                .onDelete(perform: requestDelete)
             }
         }
         .navigationTitle(trip.name)
@@ -84,13 +92,10 @@ struct TripDetailView: View {
         } message: {
             Text(deletionHandler.confirmationMessage)
         }
-        .overlay {
-            if locations.isEmpty {
-                LocationEmptyStateView(onAddLocation: { isShowingLocationAdd = true })
-            }
-        }
         .overlay(alignment: .bottomTrailing) {
-            addLocationButton
+            if !locations.isEmpty {
+                addLocationButton
+            }
         }
     }
 
@@ -98,13 +103,10 @@ struct TripDetailView: View {
 
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
-        if !locations.isEmpty {
-            ToolbarItem(placement: .navigationBarLeading) {
+        ToolbarItemGroup(placement: .navigationBarTrailing) {
+            if !locations.isEmpty {
                 EditButton()
             }
-        }
-
-        ToolbarItem(placement: .navigationBarTrailing) {
             Button("trip.detail.editTrip", systemImage: "pencil") {
                 isShowingTripEdit = true
             }
@@ -116,11 +118,12 @@ struct TripDetailView: View {
             isShowingLocationAdd = true
         } label: {
             Image(systemName: "plus")
-                .font(.system(size: 18, weight: .semibold))
+                
+                .font(.system(size: 20, weight: .semibold))
                 .foregroundStyle(.white)
-                .padding(16)
+                .padding(15)
                 .background(Circle().fill(Color.accentColor))
-                .shadow(color: .black.opacity(0.2), radius: 8, x: 0, y: 4)
+                .shadow(color: .black.opacity(0.2), radius: 10, x: 0, y: 5)
         }
         .padding(20)
         .accessibilityLabel(Text("location.add.accessibilityLabel"))
@@ -129,11 +132,11 @@ struct TripDetailView: View {
     // MARK: - Actions
 
     private func requestDelete(at offsets: IndexSet) {
-        deletionHandler.requestDelete(locations: offsets.map { locations[$0] })
+        deletionHandler.requestDelete(items: offsets.map { locations[$0] })
     }
 
     private func confirmDelete() {
-        deletionHandler.confirmDelete(using: store)
+        deletionHandler.confirmDelete { store.delete($0) }
     }
 
     private func cancelDelete() {
@@ -148,7 +151,7 @@ private struct previewData {
     let trip: Trip
 
     init(withLocations: Bool) {
-        let builder = PreviewDataBuilder.builder().withLocations(withLocations)
+        let builder = PreviewBuilder.builder().withLocations(withLocations)
         self.container = builder.buildContainer()
         self.trip = builder.fetchTrip(from: container)
     }

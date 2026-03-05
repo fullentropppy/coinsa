@@ -15,19 +15,20 @@ struct TripDetailViewModel {
 
     // MARK: - Computed Properties
 
-    var dateIntervalText: String {
-        (trip.startDate..<trip.endDate).formatted(Date.tripIntervalFormat)
-    }
-
     var headerData: TripDetailHeaderData {
         TripDetailHeaderData(
             dateRange: dateIntervalText,
             durationText: durationText,
+            status: trip.status,
             plannedAmount: plannedAmountText,
             actualAmount: actualAmountText,
             amountDifference: amountDifferenceText,
             amountDifferenceValue: plannedAmount - actualAmount
         )
+    }
+    
+    var dateIntervalText: String {
+        (trip.startDate..<trip.endDate).formatted(Date.tripIntervalFormat)
     }
 
     var plannedAmountText: String {
@@ -78,6 +79,7 @@ struct TripDetailViewModel {
 struct TripDetailHeaderData {
     let dateRange: String
     let durationText: String
+    let status: EventStatus
     let plannedAmount: String
     let actualAmount: String
     let amountDifference: String

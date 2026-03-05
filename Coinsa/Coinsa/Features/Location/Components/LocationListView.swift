@@ -11,7 +11,12 @@ import SwiftData
 struct LocationListView: View {
     // MARK: - Stored Properties
     
+    @Environment(\.modelContext) private var context
     @Query private var locations: [Location]
+    @State private var deletionHandler = DeletionHandler<Location>(
+        singleMessageKey: "location.deletionConfirmation.message.single",
+        multipleMessageKey: "location.deletionConfirmation.message.multiple"
+    )
     
     private let trip: Trip
     private let onAddLocation: () -> Void
@@ -38,12 +43,55 @@ struct LocationListView: View {
                     LocationRowView(location: location)
                 }
             }
+            .onDelete(perform: requestDelete)
+        }
+        .toolbar {
+            toolbarContent
+        }
+        .alert("location.list.deletionConfirmation.title", isPresented: $deletionHandler.isShowingDeleteConfirmation) {
+            Button("location.list.deletionConfirmation.delete", role: .destructive) {
+                confirmDelete()
+            }
+            Button("common.cancel", role: .cancel) {
+                cancelDelete()
+            }
+        } message: {
+            Text(deletionHandler.confirmationMessage)
         }
         .overlay {
             if locations.isEmpty {
                 LocationEmptyStateView(onAddLocation: onAddLocation)
             }
         }
+    }
+
+    // MARK: - Components
+
+    @ToolbarContentBuilder
+    private var toolbarContent: some ToolbarContent {
+        if !locations.isEmpty {
+            ToolbarItem(placement: .navigationBarLeading) {
+                EditButton()
+            }
+        }
+    }
+
+    // MARK: - Actions
+
+    private var store: LocationStore {
+        LocationStore(context: context)
+    }
+
+    private func requestDelete(at offsets: IndexSet) {
+        deletionHandler.requestDelete(items: offsets.map { locations[$0] })
+    }
+
+    private func confirmDelete() {
+        deletionHandler.confirmDelete { store.delete($0) }
+    }
+
+    private func cancelDelete() {
+        deletionHandler.cancelDelete()
     }
 }
 
@@ -54,7 +102,7 @@ private struct previewData {
     let trip: Trip
     
     init(withLocations: Bool) {
-        let builder = PreviewDataBuilder.builder().withLocations(withLocations)
+        let builder = PreviewBuilder.builder().withLocations(withLocations)
         self.container = builder.buildContainer()
         self.trip = builder.fetchTrip(from: container)
     }

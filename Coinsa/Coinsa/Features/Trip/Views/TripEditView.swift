@@ -14,7 +14,10 @@ struct TripEditView: View {
     @Environment(\.dismiss) private var dismiss
 
     @State private var viewModel: TripViewModel
-    @State private var deletionHandler = TripDeletionHandler()
+    @State private var deletionHandler = DeletionHandler<Trip>(
+        singleMessageKey: "trip.deletionConfirmation.message.single",
+        multipleMessageKey: "trip.deletionConfirmation.message.multiple"
+    )
         
     // MARK: - Computed properties
     
@@ -95,11 +98,11 @@ struct TripEditView: View {
 
     private func requestDelete() {
         guard let trip = viewModel.tripToEdit else { return }
-        deletionHandler.requestDelete(trips: [trip])
+        deletionHandler.requestDelete(items: [trip])
     }
 
     private func confirmDelete() {
-        deletionHandler.confirmDelete(using: store)
+        deletionHandler.confirmDelete { store.delete($0) }
         dismiss()
     }
 
@@ -111,7 +114,7 @@ struct TripEditView: View {
 // MARK: - Previews
 
 private var previewTrip: Trip {
-    let builder = PreviewDataBuilder.builder().withBudgets(false).withExpenses(false)
+    let builder = PreviewBuilder.builder().withBudgets(false).withExpenses(false)
     let data = builder.buildData()
     return builder.getTrip(from: data)
 }

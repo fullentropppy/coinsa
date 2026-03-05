@@ -34,7 +34,7 @@ struct LocationRowView: View {
 // MARK: - Previews
 
 private var previewLocation: Location {
-    let builder = PreviewDataBuilder.builder()
+    let builder = PreviewBuilder.builder()
     let data = builder.buildData()
     return builder.getLocation(from: data)
 }

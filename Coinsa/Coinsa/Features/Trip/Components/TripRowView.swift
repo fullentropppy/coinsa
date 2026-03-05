@@ -47,7 +47,7 @@ struct TripRowView: View {
 // MARK: - Previews
 
 private var previewTrip: Trip {
-    let builder = PreviewDataBuilder.builder()
+    let builder = PreviewBuilder.builder()
     let data = builder.buildData()
     return builder.getTrip(from: data)
 }

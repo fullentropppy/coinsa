@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct PreviewDataOptions {
+struct PreviewOptions {
     // MARK: - PreviewDataOptions. Stored Properties
     
     var includeTrips = true
@@ -25,7 +25,7 @@ enum PreviewScenario: CaseIterable {
     case all
 }
 
-enum PreviewDataGenerator {
+enum PreviewGenerator {
     // MARK: - Stored Properties
 
     private static let now = Date()
@@ -34,7 +34,7 @@ enum PreviewDataGenerator {
 
     // MARK: - Public Methods
 
-    static func makeTrips(for scenario: PreviewScenario, options: PreviewDataOptions) -> [Trip] {
+    static func makeTrips(for scenario: PreviewScenario, options: PreviewOptions) -> [Trip] {
         var trips: [Trip] = []
         
         if !options.includeTrips {
@@ -56,7 +56,7 @@ enum PreviewDataGenerator {
 
     // MARK: - Turkey Trip Making
 
-    private static func makeTurkeyTrip(options: PreviewDataOptions) -> Trip {
+    private static func makeTurkeyTrip(options: PreviewOptions) -> Trip {
         let turkeyTrip = Trip(
             name: PreviewTrip.turkey.localized,
             startDate: now.addingTimeInterval(-day * 97),
@@ -73,7 +73,7 @@ enum PreviewDataGenerator {
         return turkeyTrip
     }
 
-    private static func makeIstanbulLocation(trip: Trip, options: PreviewDataOptions) -> Location {
+    private static func makeIstanbulLocation(trip: Trip, options: PreviewOptions) -> Location {
         let istanbulData = PreviewLocation.istanbul
 
         let istanbul = Location(
@@ -170,7 +170,7 @@ enum PreviewDataGenerator {
 
     // MARK: - South Korea Trip Making
 
-    private static func makeSouthKoreaTrip(options: PreviewDataOptions) -> Trip {
+    private static func makeSouthKoreaTrip(options: PreviewOptions) -> Trip {
         let startDate = now.addingTimeInterval(-day * 3)
         let endDate = startDate.addingTimeInterval(day * 10)
 
@@ -197,7 +197,7 @@ enum PreviewDataGenerator {
         trip: Trip,
         startDate: Date,
         endDate: Date,
-        options: PreviewDataOptions
+        options: PreviewOptions
     ) -> Location {
         let seoulData = PreviewLocation.seoul
 
@@ -225,7 +225,7 @@ enum PreviewDataGenerator {
         trip: Trip,
         startDate: Date,
         endDate: Date,
-        options: PreviewDataOptions
+        options: PreviewOptions
     ) -> Location {
         let busanData = PreviewLocation.busan
 
@@ -406,7 +406,7 @@ enum PreviewDataGenerator {
 
     // MARK: - Japan Trip Making
 
-    private static func makeJapanTrip(options: PreviewDataOptions) -> Trip {
+    private static func makeJapanTrip(options: PreviewOptions) -> Trip {
         let startDate = now.addingTimeInterval(day * 20)
         let endDate = startDate.addingTimeInterval(day * 14)
 
@@ -436,7 +436,7 @@ enum PreviewDataGenerator {
         trip: Trip,
         startDate: Date,
         endDate: Date,
-        options: PreviewDataOptions
+        options: PreviewOptions
     ) -> Location {
         let tokyoData = PreviewLocation.tokyo
 
@@ -464,7 +464,7 @@ enum PreviewDataGenerator {
         trip: Trip,
         startDate: Date,
         endDate: Date,
-        options: PreviewDataOptions
+        options: PreviewOptions
     ) -> Location {
         let kyotoData = PreviewLocation.kyoto
 
@@ -492,7 +492,7 @@ enum PreviewDataGenerator {
         trip: Trip,
         startDate: Date,
         endDate: Date,
-        options: PreviewDataOptions
+        options: PreviewOptions
     ) -> Location {
         let osakaData = PreviewLocation.osaka
 

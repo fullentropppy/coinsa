@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 @Model
-class Location {
+class Location: DateRangeProviding, StatusProviding {
     // MARK: - Stored Properties
     
     var name: String
@@ -24,25 +24,6 @@ class Location {
     
     @Relationship(deleteRule: .cascade, inverse: \Expense.location)
     var expenses: [Expense]
-
-    // MARK: - Computed Properties
-    
-    var durationInDays: Int {
-        let difference = (endDate.timeIntervalSince(startDate) / 86400).rounded()
-        return difference == 0 ? 1 : Int(difference)
-    }
-    
-    var status: EventStatus {
-        let now = Date.now
-
-        if now < startDate {
-            return .upcoming
-        } else if now >= startDate && now < endDate {
-            return .ongoing
-        } else {
-            return .completed
-        }
-    }
 
     // MARK: - Initialization
     
