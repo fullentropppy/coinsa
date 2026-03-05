@@ -38,7 +38,7 @@ struct TripDetailView: View {
         LocationStore(context: context)
     }
 
-    private var summaryViewModel: TripDetailViewModel {
+    private var viewModel: TripDetailViewModel {
         TripDetailViewModel(trip: trip)
     }
 
@@ -48,12 +48,8 @@ struct TripDetailView: View {
         List {
             Section {
                 TripDetailHeaderView(
-                    dateRange: summaryViewModel.dateIntervalText,
-                    plannedAmount: summaryViewModel.plannedAmountText,
-                    actualAmount: summaryViewModel.actualAmountText
+                    data: viewModel.headerData
                 )
-                .listRowSeparator(.hidden)
-                .listRowInsets(EdgeInsets(top: 16, leading: 16, bottom: 8, trailing: 16))
             }
 
             Section(header: Text("trip.detail.locations.header")) {
@@ -67,7 +63,6 @@ struct TripDetailView: View {
                 .onDelete(perform: requestDelete)
             }
         }
-        .listStyle(.insetGrouped)
         .navigationTitle(trip.name)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -148,7 +143,7 @@ struct TripDetailView: View {
 
 // MARK: - Previews
 
-fileprivate struct previewData {
+private struct previewData {
     let container: ModelContainer
     let trip: Trip
 

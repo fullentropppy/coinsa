@@ -11,13 +11,23 @@ struct TripDetailViewModel {
     // MARK: - Stored Properties
 
     let trip: Trip
-    let currencyCode: String
+    let baseCurrencyCode: String
 
     // MARK: - Computed Properties
 
     var dateIntervalText: String {
-        "10-10"
-        //String(DateInterval(start: trip.startDate, end: trip.endDate)
+        (trip.startDate..<trip.endDate).formatted(Date.tripIntervalFormat)
+    }
+
+    var headerData: TripDetailHeaderData {
+        TripDetailHeaderData(
+            dateRange: dateIntervalText,
+            durationText: durationText,
+            plannedAmount: plannedAmountText,
+            actualAmount: actualAmountText,
+            amountDifference: amountDifferenceText,
+            amountDifferenceValue: plannedAmount - actualAmount
+        )
     }
 
     var plannedAmountText: String {
@@ -28,11 +38,15 @@ struct TripDetailViewModel {
         formattedCurrency(actualAmount)
     }
 
+    var amountDifferenceText: String {
+        formattedCurrency(plannedAmount - actualAmount)
+    }
+    
     // MARK: - Initialization
 
     init(trip: Trip, currencyCode: String = Locale.current.currency?.identifier ?? "USD") {
         self.trip = trip
-        self.currencyCode = currencyCode
+        self.baseCurrencyCode = currencyCode
     }
 
     // MARK: - Private Methods
@@ -49,7 +63,23 @@ struct TripDetailViewModel {
             .reduce(0) { $0 + $1.amountInLocationCurrency * $1.exchangeRateLocationToBaseCurrency }
     }
 
-    private func formattedCurrency(_ amount: Double) -> String {
-        amount.formatted(.currency(code: currencyCode))
+    private var durationText: String {
+        String(
+            format: NSLocalizedString("trip.detail.summary.days", comment: ""),
+            trip.durationInDays
+        )
     }
+
+    private func formattedCurrency(_ amount: Double) -> String {
+        amount.formatted(.currency(code: baseCurrencyCode))
+    }
+}
+
+struct TripDetailHeaderData {
+    let dateRange: String
+    let durationText: String
+    let plannedAmount: String
+    let actualAmount: String
+    let amountDifference: String
+    let amountDifferenceValue: Double
 }

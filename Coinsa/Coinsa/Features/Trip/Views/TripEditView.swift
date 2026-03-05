@@ -110,7 +110,7 @@ struct TripEditView: View {
 
 // MARK: - Previews
 
-fileprivate var previewTrip: Trip {
+private var previewTrip: Trip {
     let builder = PreviewDataBuilder.builder().withBudgets(false).withExpenses(false)
     let data = builder.buildData()
     return builder.getTrip(from: data)

@@ -10,42 +10,45 @@ import SwiftUI
 struct TripDetailHeaderView: View {
     // MARK: - Stored Properties
 
-    let dateRange: String
-    let plannedAmount: String
-    let actualAmount: String
+    let data: TripDetailHeaderData
 
     // MARK: - Body
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            HStack(spacing: 8) {
-                Image(systemName: "calendar")
-                    .foregroundStyle(.secondary)
-                Text(dateRange)
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
+        VStack(alignment: .leading, spacing: 15) {
+            HStack(spacing: 10) {
+                Image(systemName: "calendar").foregroundStyle(.secondary)
+                Text(data.dateRange).font(.subheadline).foregroundStyle(.secondary)
             }
 
-            HStack(spacing: 12) {
+            HStack(spacing: 10) {
+                Image(systemName: "clock").foregroundStyle(.secondary)
+                Text(data.durationText).font(.subheadline).foregroundStyle(.secondary)
+            }
+
+            HStack(spacing: 10) {
                 AmountCardView(
                     title: "trip.detail.summary.planned",
-                    amount: plannedAmount,
+                    amount: data.plannedAmount,
                     tint: .blue
                 )
-
                 AmountCardView(
                     title: "trip.detail.summary.actual",
-                    amount: actualAmount,
-                    tint: .orange
+                    amount: data.actualAmount,
+                    tint: .yellow
                 )
             }
+            
+            AmountCardView(
+                title: "trip.detail.summary.difference",
+                amount: data.amountDifference,
+                tint: differenceTint
+            )
         }
-        .padding(16)
-        .background(
-            RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .fill(.background)
-                .shadow(color: .black.opacity(0.08), radius: 10, x: 0, y: 6)
-        )
+    }
+
+    private var differenceTint: Color {
+        data.amountDifferenceValue >= 0 ? .green : .red
     }
 }
 
@@ -60,19 +63,54 @@ private struct AmountCardView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text(title)
-                .font(.caption)
-                .foregroundStyle(.secondary)
+            Text(title).font(.caption).foregroundStyle(.secondary)
 
-            Text(amount)
-                .font(.headline)
-                .foregroundStyle(.primary)
+            Text(amount).font(.headline).foregroundStyle(.primary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(12)
+        .padding(10)
         .background(
-            RoundedRectangle(cornerRadius: 12, style: .continuous)
-                .fill(tint.opacity(0.12))
+            RoundedRectangle(cornerRadius: 15, style: .continuous)
+                .fill(tint.opacity(0.1))
         )
+    }
+}
+
+// MARK: - Preview
+
+private struct PreviewData {
+    var headerData: TripDetailHeaderData
+    
+    init() {
+        let builder = PreviewDataBuilder.builder()
+        let data = builder.buildData()
+        let trip = builder.getTrip(from: data)
+        let viewModel = TripDetailViewModel(trip: trip)
+        
+        self.headerData = viewModel.headerData
+    }
+}
+
+#Preview("Light - RU") {
+    let data = PreviewData()
+    
+    List {
+        TripDetailHeaderView(
+            data: data.headerData
+        )
+        .environment(\.locale, Locale(identifier: "ru"))
+        .preferredColorScheme(.light)
+    }
+}
+
+#Preview("Dark - EN") {
+    let data = PreviewData()
+    
+    List {
+        TripDetailHeaderView(
+            data: data.headerData
+        )
+        .environment(\.locale, Locale(identifier: "en"))
+        .preferredColorScheme(.dark)
     }
 }

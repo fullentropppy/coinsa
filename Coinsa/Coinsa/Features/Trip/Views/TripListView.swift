@@ -97,7 +97,7 @@ struct TripListView: View {
 
 // MARK: - Previews
 
-fileprivate struct previewData {
+private struct previewData {
     let withTrips: Bool
     
     var container: ModelContainer {

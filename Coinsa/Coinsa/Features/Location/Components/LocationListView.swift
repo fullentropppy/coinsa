@@ -49,7 +49,7 @@ struct LocationListView: View {
 
 // MARK: - Previews
 
-fileprivate struct previewData {
+private struct previewData {
     let container: ModelContainer
     let trip: Trip
     
