@@ -10,11 +10,11 @@ import SwiftUI
 struct DeletionHandler<Item> {
     // MARK: - Stored Properties
 
-    var isShowingDeleteConfirmation = false
-    var itemsPendingDeletion: [Item] = []
-
     private let singleMessageKey: LocalizedStringKey
     private let multipleMessageKey: LocalizedStringKey
+    
+    var isShowingDeleteConfirmation = false
+    var itemsPendingDeletion: [Item] = []
 
     // MARK: - Initialization
 

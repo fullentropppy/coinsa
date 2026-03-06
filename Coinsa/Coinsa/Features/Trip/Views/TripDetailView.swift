@@ -126,7 +126,6 @@ struct TripDetailView: View {
                 .shadow(color: .black.opacity(0.2), radius: 10, x: 0, y: 5)
         }
         .padding(20)
-        .accessibilityLabel(Text("location.add.accessibilityLabel"))
     }
 
     // MARK: - Actions

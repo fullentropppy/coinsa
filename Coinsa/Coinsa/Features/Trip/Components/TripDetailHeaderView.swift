@@ -18,7 +18,7 @@ struct TripDetailHeaderView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             HStack(alignment: .center, spacing: 12) {
-                EventStatusView(status: data.status)
+                EventStatusLabelView(status: data.status)
 
                 VStack(alignment: .leading, spacing: 6) {
                     HStack(spacing: 8) {

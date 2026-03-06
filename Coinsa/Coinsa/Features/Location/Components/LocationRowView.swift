@@ -14,19 +14,18 @@ struct LocationRowView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            Text(location.name).font(.title2).fontWeight(.semibold)
+            HStack {
+                EventStatusDotView(status: location.status)
+                EventTitleView(title: location.name)
+            }
+            .padding(2)
             
             HStack {
-                EventStatusView(status: location.status)
-                
+                EventIntervalView(startDate: location.startDate, endDate: location.endDate)
                 Spacer()
-                
-                HStack(spacing: 2) {
-                    Text(location.startDate..<location.endDate, format: Date.tripIntervalFormat)
-                }
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
+                EventDurationView(days: location.durationInDays)
             }
+            .padding(2)
         }
     }
 }
