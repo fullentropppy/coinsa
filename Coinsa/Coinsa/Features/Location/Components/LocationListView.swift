@@ -60,7 +60,13 @@ struct LocationListView: View {
         }
         .overlay {
             if locations.isEmpty {
-                LocationEmptyStateView(onAddLocation: onAddLocation)
+                EmptyStateView(
+                    imageName: "mappin.and.ellipse",
+                    title: "location.list.empty.title",
+                    description: "location.list.empty.desctiption",
+                    buttonLabel: "location.list.addLocation",
+                    onAddTrip: { onAddLocation() }
+                )
             }
         }
     }

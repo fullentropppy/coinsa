@@ -7,9 +7,13 @@
 
 import Foundation
 
+// MARK: - Protocol
+
 protocol StatusProviding: DateRangeProviding {
     var status: EventStatus { get }
 }
+
+// MARK: - Default Implementation
 
 extension StatusProviding {
     var status: EventStatus {

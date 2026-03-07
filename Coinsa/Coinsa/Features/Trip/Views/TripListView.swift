@@ -60,7 +60,13 @@ struct TripListView: View {
             }
             .overlay {
                 if trips.isEmpty {
-                    TripEmptyStateView { isShowingEdtitingSheet = true }
+                    EmptyStateView(
+                        imageName: "suitcase",
+                        title: "trip.list.empty.title",
+                        description: "trip.list.empty.desctiption",
+                        buttonLabel: "trip.list.addTrip",
+                        onAddTrip: { isShowingEdtitingSheet = true }
+                    )
                 }
             }
         }

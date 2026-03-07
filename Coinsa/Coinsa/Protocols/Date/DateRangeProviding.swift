@@ -7,10 +7,14 @@
 
 import Foundation
 
+// MARK: - Protocol
+
 protocol DateRangeProviding {
     var startDate: Date { get }
     var endDate: Date { get }
 }
+
+// MARK: - Default Implementation
 
 extension DateRangeProviding {
     var durationInDays: Int {

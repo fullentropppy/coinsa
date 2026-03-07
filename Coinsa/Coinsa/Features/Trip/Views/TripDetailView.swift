@@ -58,7 +58,13 @@ struct TripDetailView: View {
 
             Section(header: Text("trip.detail.locations.header")) {
                 if locations.isEmpty {
-                    LocationEmptyStateView(onAddLocation: { isShowingLocationAdd = true })
+                    EmptyStateView(
+                        imageName: "mappin.and.ellipse",
+                        title: "location.list.empty.title",
+                        description: "location.list.empty.desctiption",
+                        buttonLabel: "location.list.addLocation",
+                        onAddTrip: { isShowingLocationAdd = true }
+                    )
                 } else {
                     ForEach(locations) { location in
                         NavigationLink {
