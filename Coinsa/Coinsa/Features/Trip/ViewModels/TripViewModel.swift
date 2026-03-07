@@ -13,12 +13,12 @@ import Observation
 final class TripViewModel {
     // MARK: - Stored Properties
     
+    private let trip: Trip?
+    
     var name: String
     var startDate: Date
     var endDate: Date
     var locations: [Location]
-    
-    private let trip: Trip?
     
     // MARK: - Computed Properties
     
@@ -31,7 +31,11 @@ final class TripViewModel {
     }
 
     var navigationTitle: String {
-        String(localized: isEditing ? "trip.editing.navigationTitle.editing" : "trip.editing.navigationTitle.creating")
+        String(
+            localized: isEditing
+            ? "trip.editing.navigationTitle.editing"
+            : "trip.editing.navigationTitle.creating"
+        )
     }
     
     // MARK: - Initialization

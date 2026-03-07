@@ -7,24 +7,31 @@
 
 import SwiftUI
 
-struct EventTitleView: View {
+struct EventIntervalView: View {
     // MARK: - Stored Properties
     
-    let title: String
+    let startDate: Date
+    let endDate: Date
     
     // MARK: - Body
     
     var body: some View {
-        Text(title).font(.title2).fontWeight(.semibold)
+        Text(startDate..<endDate, format: Date.tripIntervalFormat)
+            .font(.subheadline)
+            .foregroundStyle(.secondary)
     }
 }
 
 // MARK: - Previews
 
 #Preview("Light - RU") {
-    EventTitleView(title: "Заголовок").preferredColorScheme(.light)
+    EventIntervalView(startDate: .now, endDate: .now.addingTimeInterval(604800))
+        .environment(\.locale, Locale(identifier: "ru"))
+        .preferredColorScheme(.light)
 }
 
 #Preview("Dark - EN") {
-    EventTitleView(title: "Title").preferredColorScheme(.light)
+    EventIntervalView(startDate: .now, endDate: .now.addingTimeInterval(604800))
+        .environment(\.locale, Locale(identifier: "en"))
+        .preferredColorScheme(.dark)
 }

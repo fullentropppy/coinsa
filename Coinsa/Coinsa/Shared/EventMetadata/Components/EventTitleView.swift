@@ -1,5 +1,5 @@
 //
-//  EventTitleView.swift
+//  EventIntervalView.swift
 //  Coinsa
 //
 //  Created by Daniil Gritsenko on 06.03.2026.
@@ -7,31 +7,24 @@
 
 import SwiftUI
 
-struct EventIntervalView: View {
+struct EventTitleView: View {
     // MARK: - Stored Properties
     
-    let startDate: Date
-    let endDate: Date
+    let title: String
     
     // MARK: - Body
     
     var body: some View {
-        Text(startDate..<endDate, format: Date.tripIntervalFormat)
-            .font(.subheadline)
-            .foregroundStyle(.secondary)
+        Text(title).font(.title2).fontWeight(.semibold)
     }
 }
 
 // MARK: - Previews
 
 #Preview("Light - RU") {
-    EventIntervalView(startDate: .now, endDate: .now.addingTimeInterval(604800))
-        .environment(\.locale, Locale(identifier: "ru"))
-        .preferredColorScheme(.light)
+    EventTitleView(title: "Заголовок").preferredColorScheme(.light)
 }
 
 #Preview("Dark - EN") {
-    EventIntervalView(startDate: .now, endDate: .now.addingTimeInterval(604800))
-        .environment(\.locale, Locale(identifier: "en"))
-        .preferredColorScheme(.dark)
+    EventTitleView(title: "Title").preferredColorScheme(.light)
 }

@@ -17,20 +17,12 @@ struct TripDetailHeaderView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            HStack(alignment: .center, spacing: 12) {
+            HStack {
                 EventStatusLabelView(status: data.status)
-
-                VStack(alignment: .leading, spacing: 6) {
-                    HStack(spacing: 8) {
-                        Image(systemName: "calendar").foregroundStyle(.secondary)
-                        Text(data.dateRange).font(.subheadline).foregroundStyle(.secondary)
-                    }
-
-                    HStack(spacing: 8) {
-                        Image(systemName: "clock").foregroundStyle(.secondary)
-                        Text(data.durationText).font(.subheadline).foregroundStyle(.secondary)
-                    }
-                }
+                Spacer()
+                EventIntervalView(startDate: data.startDate, endDate: data.endDate)
+                Spacer()
+                EventDurationView(days: data.durationDays)
             }
 
             if showsSummary {
@@ -38,11 +30,13 @@ struct TripDetailHeaderView: View {
                     AmountCardView(
                         title: "trip.detail.summary.planned",
                         amount: data.plannedAmount,
+                        currencyCode: data.currencyCode,
                         tint: .blue
                     )
                     AmountCardView(
                         title: "trip.detail.summary.actual",
                         amount: data.actualAmount,
+                        currencyCode: data.currencyCode,
                         tint: .yellow
                     )
                 }
@@ -50,6 +44,7 @@ struct TripDetailHeaderView: View {
                 AmountCardView(
                     title: "trip.detail.summary.difference",
                     amount: data.amountDifference,
+                    currencyCode: data.currencyCode,
                     tint: differenceTint
                 )
             }
@@ -57,7 +52,7 @@ struct TripDetailHeaderView: View {
     }
 
     private var differenceTint: Color {
-        data.amountDifferenceValue >= 0 ? .green : .red
+        data.amountDifference >= 0 ? .green : .red
     }
 }
 
@@ -65,7 +60,8 @@ private struct AmountCardView: View {
     // MARK: - Stored Properties
 
     let title: LocalizedStringKey
-    let amount: String
+    let amount: Double
+    let currencyCode: String
     let tint: Color
 
     // MARK: - Body
@@ -73,8 +69,7 @@ private struct AmountCardView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             Text(title).font(.caption).foregroundStyle(.secondary)
-
-            Text(amount).font(.headline).foregroundStyle(.primary)
+            Text(formattedAmount).font(.headline).foregroundStyle(.primary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(10)
@@ -82,6 +77,10 @@ private struct AmountCardView: View {
             RoundedRectangle(cornerRadius: 15, style: .continuous)
                 .fill(tint.opacity(0.1))
         )
+    }
+
+    private var formattedAmount: String {
+        amount.formatted(.currency(code: currencyCode))
     }
 }
 
