@@ -17,8 +17,7 @@ struct TripDetailView: View {
     @State private var isShowingTripEdit = false
     @State private var isShowingLocationAdd = false
     @State private var deletionHandler = DeletionHandler<Location>(
-        singleMessageKey: "location.deletionConfirmation.message.single",
-        multipleMessageKey: "location.deletionConfirmation.message.multiple"
+        messageKey: "location.deletionConfirmation.message.single"
     )
 
     let trip: Trip
@@ -78,7 +77,7 @@ struct TripDetailView: View {
             }
         }
         .navigationTitle(trip.name)
-        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarTitleDisplayMode(.large)
         .toolbar {
             toolbarContent
         }
@@ -109,10 +108,7 @@ struct TripDetailView: View {
 
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
-        ToolbarItemGroup(placement: .navigationBarTrailing) {
-            if !locations.isEmpty {
-                EditButton()
-            }
+        ToolbarItemGroup(placement: .topBarTrailing) {
             Button("trip.detail.editTrip", systemImage: "pencil") {
                 isShowingTripEdit = true
             }

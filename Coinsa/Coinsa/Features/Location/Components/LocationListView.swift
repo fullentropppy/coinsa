@@ -14,8 +14,7 @@ struct LocationListView: View {
     @Environment(\.modelContext) private var context
     @Query private var locations: [Location]
     @State private var deletionHandler = DeletionHandler<Location>(
-        singleMessageKey: "location.deletionConfirmation.message.single",
-        multipleMessageKey: "location.deletionConfirmation.message.multiple"
+        messageKey: "location.deletionConfirmation.message.single"
     )
     
     private let trip: Trip
@@ -45,9 +44,6 @@ struct LocationListView: View {
             }
             .onDelete(perform: requestDelete)
         }
-        .toolbar {
-            toolbarContent
-        }
         .alert("location.list.deletionConfirmation.title", isPresented: $deletionHandler.isShowingDeleteConfirmation) {
             Button("location.list.deletionConfirmation.delete", role: .destructive) {
                 confirmDelete()
@@ -67,17 +63,6 @@ struct LocationListView: View {
                     buttonLabel: "location.list.addLocation",
                     onAddTrip: { onAddLocation() }
                 )
-            }
-        }
-    }
-
-    // MARK: - Components
-
-    @ToolbarContentBuilder
-    private var toolbarContent: some ToolbarContent {
-        if !locations.isEmpty {
-            ToolbarItem(placement: .navigationBarLeading) {
-                EditButton()
             }
         }
     }
@@ -116,22 +101,28 @@ private struct previewData {
 
 #Preview("Light - RU") {
     let data = previewData(withLocations: true)
-    LocationListView(trip: data.trip, onAddLocation: {})
-        .modelContainer(data.container)
-        .environment(\.locale, Locale(identifier: "ru"))
-        .preferredColorScheme(.light)
+    NavigationStack {
+        LocationListView(trip: data.trip, onAddLocation: {})
+            .modelContainer(data.container)
+            .environment(\.locale, Locale(identifier: "ru"))
+            .preferredColorScheme(.light)
+    }
 }
 
 #Preview("Dark - EN") {
     let data = previewData(withLocations: true)
-    LocationListView(trip: data.trip, onAddLocation: {})
-        .modelContainer(data.container)
-        .environment(\.locale, Locale(identifier: "en"))
-        .preferredColorScheme(.dark)
+    NavigationStack {
+        LocationListView(trip: data.trip, onAddLocation: {})
+            .modelContainer(data.container)
+            .environment(\.locale, Locale(identifier: "en"))
+            .preferredColorScheme(.dark)
+    }
 }
 
 #Preview("Empty list") {
     let data = previewData(withLocations: false)
-    LocationListView(trip: data.trip, onAddLocation: {})
-        .modelContainer(data.container)
+    NavigationStack {
+        LocationListView(trip: data.trip, onAddLocation: {})
+            .modelContainer(data.container)
+    }
 }

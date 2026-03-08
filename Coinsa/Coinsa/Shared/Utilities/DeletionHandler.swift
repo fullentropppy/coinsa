@@ -10,23 +10,21 @@ import SwiftUI
 struct DeletionHandler<Item> {
     // MARK: - Stored Properties
 
-    private let singleMessageKey: LocalizedStringKey
-    private let multipleMessageKey: LocalizedStringKey
+    private let messageKey: LocalizedStringKey
     
     var isShowingDeleteConfirmation = false
     var itemsPendingDeletion: [Item] = []
 
     // MARK: - Initialization
 
-    init(singleMessageKey: LocalizedStringKey, multipleMessageKey: LocalizedStringKey) {
-        self.singleMessageKey = singleMessageKey
-        self.multipleMessageKey = multipleMessageKey
+    init(messageKey: LocalizedStringKey) {
+        self.messageKey = messageKey
     }
 
     // MARK: - Computed Properties
 
     var confirmationMessage: LocalizedStringKey {
-        itemsPendingDeletion.count == 1 ? singleMessageKey : multipleMessageKey
+        messageKey
     }
 
     // MARK: - Public Methods

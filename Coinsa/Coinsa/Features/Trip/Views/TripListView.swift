@@ -16,8 +16,7 @@ struct TripListView: View {
 
     @State private var isShowingEdtitingSheet = false
     @State private var deletionHandler = DeletionHandler<Trip>(
-        singleMessageKey: "trip.deletionConfirmation.message.single",
-        multipleMessageKey: "trip.deletionConfirmation.message.multiple"
+        messageKey: "trip.deletionConfirmation.message.single"
     )
 
     // MARK: - Computed Properties
@@ -76,13 +75,7 @@ struct TripListView: View {
     
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
-        if !trips.isEmpty {
-            ToolbarItem(placement: .navigationBarLeading) {
-                EditButton()
-            }
-        }
-        
-        ToolbarItem(placement: .navigationBarTrailing) {
+        ToolbarItem(placement: .topBarTrailing) {
             Button("trip.list.addTrip", systemImage: "plus") {
                 isShowingEdtitingSheet = true
             }

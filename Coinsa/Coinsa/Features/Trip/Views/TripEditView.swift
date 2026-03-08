@@ -15,8 +15,7 @@ struct TripEditView: View {
 
     @State private var viewModel: TripViewModel
     @State private var deletionHandler = DeletionHandler<Trip>(
-        singleMessageKey: "trip.deletionConfirmation.message.single",
-        multipleMessageKey: "trip.deletionConfirmation.message.multiple"
+        messageKey: "trip.deletionConfirmation.message.single"
     )
         
     // MARK: - Computed properties
