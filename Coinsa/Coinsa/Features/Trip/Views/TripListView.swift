@@ -64,7 +64,7 @@ struct TripListView: View {
                         title: "trip.list.empty.title",
                         description: "trip.list.empty.desctiption",
                         buttonLabel: "trip.list.addTrip",
-                        onAddTrip: { isShowingEdtitingSheet = true }
+                        onAddAction: { isShowingEdtitingSheet = true }
                     )
                 }
             }
@@ -76,7 +76,7 @@ struct TripListView: View {
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
         ToolbarItem(placement: .topBarTrailing) {
-            Button("trip.list.addTrip", systemImage: "plus") {
+            ButtonView.add {
                 isShowingEdtitingSheet = true
             }
         }

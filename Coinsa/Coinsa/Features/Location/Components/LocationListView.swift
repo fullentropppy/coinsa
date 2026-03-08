@@ -61,7 +61,7 @@ struct LocationListView: View {
                     title: "location.list.empty.title",
                     description: "location.list.empty.desctiption",
                     buttonLabel: "location.list.addLocation",
-                    onAddTrip: { onAddLocation() }
+                    onAddAction: { onAddLocation() }
                 )
             }
         }

@@ -80,13 +80,13 @@ struct TripEditView: View {
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
         ToolbarItemGroup(placement: .topBarLeading) {
-            Button("common.cancel", systemImage: "xmark") {
+            ButtonView.close {
                 dismiss()
             }
         }
 
         ToolbarItemGroup(placement: .topBarTrailing) {
-            Button("common.save", systemImage: "checkmark") {
+            ButtonView.save {
                 viewModel.save(using: store)
                 dismiss()
             }

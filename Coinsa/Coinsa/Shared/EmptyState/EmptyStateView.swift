@@ -14,7 +14,7 @@ struct EmptyStateView: View {
     let title: LocalizedStringKey
     let description: LocalizedStringKey
     let buttonLabel: LocalizedStringKey
-    let onAddTrip: () -> Void
+    let onAddAction: () -> Void
     
     // MARK: - Body
     
@@ -26,7 +26,7 @@ struct EmptyStateView: View {
                 .padding()
         } actions: {
             Button(buttonLabel) {
-                onAddTrip()
+                onAddAction()
             }
             .buttonStyle(.glassProminent)
             .controlSize(.large)
@@ -42,7 +42,7 @@ private var tripEmptyStateView: some View {
         title: "trip.list.empty.title",
         description: "trip.list.empty.desctiption",
         buttonLabel: "trip.list.addTrip",
-        onAddTrip: {}
+        onAddAction: {}
     )
 }
 
@@ -52,7 +52,7 @@ private var locationEmptyStateView: some View {
         title: "location.list.empty.title",
         description: "location.list.empty.desctiption",
         buttonLabel: "location.list.addLocation",
-        onAddTrip: {}
+        onAddAction: {}
     )
 }
 

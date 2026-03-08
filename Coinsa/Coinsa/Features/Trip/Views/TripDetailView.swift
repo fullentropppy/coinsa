@@ -62,7 +62,7 @@ struct TripDetailView: View {
                         title: "location.list.empty.title",
                         description: "location.list.empty.desctiption",
                         buttonLabel: "location.list.addLocation",
-                        onAddTrip: { isShowingLocationAdd = true }
+                        onAddAction: { isShowingLocationAdd = true }
                     )
                 } else {
                     ForEach(locations) { location in
@@ -99,7 +99,10 @@ struct TripDetailView: View {
         }
         .overlay(alignment: .bottomTrailing) {
             if !locations.isEmpty {
-                addLocationButton
+                ButtonView.add {
+                    isShowingLocationAdd = true
+                }
+                .buttonStyle(PrimaryButtonStyle())
             }
         }
     }
@@ -109,25 +112,10 @@ struct TripDetailView: View {
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
         ToolbarItemGroup(placement: .topBarTrailing) {
-            Button("trip.detail.editTrip", systemImage: "pencil") {
+            ButtonView.edit {
                 isShowingTripEdit = true
             }
         }
-    }
-
-    private var addLocationButton: some View {
-        Button {
-            isShowingLocationAdd = true
-        } label: {
-            Image(systemName: "plus")
-                
-                .font(.system(size: 20, weight: .semibold))
-                .foregroundStyle(.white)
-                .padding(15)
-                .background(Circle().fill(Color.accentColor))
-                .shadow(color: .black.opacity(0.2), radius: 10, x: 0, y: 5)
-        }
-        .padding(20)
     }
 
     // MARK: - Actions
