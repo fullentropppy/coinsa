@@ -17,14 +17,15 @@ struct CoinsaApp: App {
         Trip.self,
         Location.self,
         Budget.self,
-        Expense.self
+        Expense.self,
+        AppSettings.self
     ]
     
     // MARK: - Body
     
     var body: some Scene {
         WindowGroup {
-            TripListView()
+            RootContainerView()
         }
         .modelContainer(for: modelTypes)
     }

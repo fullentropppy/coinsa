@@ -28,7 +28,12 @@ struct LocationEditView: View {
     // MARK: - Initialization
 
     init(trip: Trip, location: Location? = nil) {
-        _viewModel = State(initialValue: LocationViewModel(trip: trip, location: location))
+        _viewModel = State(
+            initialValue: LocationViewModel(
+                trip: trip,
+                location: location
+            )
+        )
     }
 
     // MARK: - Body
@@ -72,14 +77,14 @@ struct LocationEditView: View {
 
     private var currencySection: some View {
         Section {
-            LabeledContent {
-                TextField("", text: $viewModel.locationCurrencyCode)
-                    .textInputAutocapitalization(.characters)
-                    .autocorrectionDisabled()
-                    .multilineTextAlignment(.trailing)
-            } label: {
-                Text("location.editing.currencyCode.title")
+            Picker("location.editing.currencyCode.title", selection: locationCurrencyBinding) {
+                ForEach(CurrencyOption.allCases) { option in
+                    Text(option.localizedNameKey)
+                        .tag(option)
+                }
             }
+            .pickerStyle(.navigationLink)
+
             LabeledContent {
                 TextField(
                     "",
@@ -202,6 +207,13 @@ struct LocationEditView: View {
         return plannedTotalBase / rate
     }
 
+    private var locationCurrencyBinding: Binding<CurrencyOption> {
+        Binding(
+            get: { CurrencyOption.from(code: viewModel.locationCurrencyCode) },
+            set: { viewModel.locationCurrencyCode = $0.code }
+        )
+    }
+
     private func requestDelete() {
         guard let location = viewModel.locationToEdit else { return }
         deletionHandler.requestDelete(items: [location])
@@ -234,7 +246,10 @@ private struct previewData {
 
 #Preview("Light - RU") {
     let data = previewData()
-    LocationEditView(trip: data.trip, location: data.location)
+    LocationEditView(
+        trip: data.trip,
+        location: data.location
+    )
         .modelContainer(data.container)
         .environment(\.locale, Locale(identifier: "ru"))
         .preferredColorScheme(.light)
@@ -242,7 +257,10 @@ private struct previewData {
 
 #Preview("Dark - EN") {
     let data = previewData()
-    LocationEditView(trip: data.trip, location: data.location)
+    LocationEditView(
+        trip: data.trip,
+        location: data.location
+    )
         .modelContainer(data.container)
         .environment(\.locale, Locale(identifier: "en"))
         .preferredColorScheme(.dark)

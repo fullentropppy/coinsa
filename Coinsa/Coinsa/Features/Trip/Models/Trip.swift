@@ -15,6 +15,7 @@ class Trip: DateRangeProviding, StatusProviding {
     var name: String
     var startDate: Date
     var endDate: Date
+    var baseCurrencyCode: String
     
     @Relationship(deleteRule: .cascade, inverse: \Location.trip)
     var locations: [Location]
@@ -27,10 +28,17 @@ class Trip: DateRangeProviding, StatusProviding {
     
     // MARK: - Initialization
     
-    init(name: String, startDate: Date, endDate: Date, locations: [Location] = []) {
+    init(
+        name: String,
+        startDate: Date,
+        endDate: Date,
+        baseCurrencyCode: String = CurrencyOption.defaultOption.code,
+        locations: [Location] = []
+    ) {
         self.name = name
         self.startDate = startDate
         self.endDate = endDate
+        self.baseCurrencyCode = baseCurrencyCode
         self.locations = locations
     }
 }

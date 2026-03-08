@@ -30,9 +30,9 @@ struct TripDetailViewModel {
     
     // MARK: - Initialization
 
-    init(trip: Trip, currencyCode: String = Locale.current.currency?.identifier ?? "USD") {
+    init(trip: Trip) {
         self.trip = trip
-        self.baseCurrencyCode = currencyCode
+        self.baseCurrencyCode = trip.baseCurrencyCode
     }
 
     // MARK: - Private Methods

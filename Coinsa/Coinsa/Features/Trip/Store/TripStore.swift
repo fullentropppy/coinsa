@@ -16,8 +16,14 @@ struct TripStore {
 
     // MARK: - Public Methods
     
-    func add(name: String, startDate: Date, endDate: Date) {
-        let trip = Trip(name: name, startDate: startDate, endDate: endDate, locations: [])
+    func add(name: String, startDate: Date, endDate: Date, baseCurrencyCode: String) {
+        let trip = Trip(
+            name: name,
+            startDate: startDate,
+            endDate: endDate,
+            baseCurrencyCode: baseCurrencyCode,
+            locations: []
+        )
         context.insert(trip)
     }
 

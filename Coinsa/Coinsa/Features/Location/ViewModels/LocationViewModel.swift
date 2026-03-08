@@ -45,14 +45,10 @@ final class LocationViewModel {
 
     // MARK: - Initialization
 
-    init(
-        trip: Trip,
-        location: Location?,
-        baseCurrencyCode: String = Locale.current.currency?.identifier ?? "USD"
-    ) {
+    init(trip: Trip, location: Location?) {
         self.location = location
         self.trip = location?.trip ?? trip
-        self.baseCurrencyCode = baseCurrencyCode
+        self.baseCurrencyCode = self.trip.baseCurrencyCode
 
         if let location {
             name = location.name

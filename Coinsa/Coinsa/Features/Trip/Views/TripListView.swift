@@ -12,6 +12,7 @@ struct TripListView: View {
     // MARK: - Stored Properties
     
     @Environment(\.modelContext) private var context
+    @Environment(AppSettingsStore.self) private var settingsStore
     @Query(sort: \Trip.startDate) private var trips: [Trip]
 
     @State private var isShowingEdtitingSheet = false
@@ -42,7 +43,7 @@ struct TripListView: View {
             .navigationTitle("trip.list.navigationTitle")
             .navigationBarTitleDisplayMode(.large)
             .sheet(isPresented: $isShowingEdtitingSheet) {
-                TripEditView(trip: nil)
+                TripEditView(trip: nil, baseCurrencyCode: settingsStore.baseCurrencyCode)
             }
             .alert("trip.list.deletionConfirmation.title", isPresented: $deletionHandler.isShowingDeleteConfirmation) {
                 Button("trip.list.deletionConfirmation.delete", role: .destructive) {
@@ -99,11 +100,11 @@ struct TripListView: View {
 
 // MARK: - Previews
 
-private struct previewData {
-    let withTrips: Bool
-    
-    var container: ModelContainer {
-        PreviewBuilder.builder()
+private struct PreviewData {
+    let container: ModelContainer
+
+    init(withTrips: Bool) {
+        self.container = PreviewBuilder.builder()
             .withScenario(.all)
             .withTrips(withTrips)
             .withExpenses(false)
@@ -113,20 +114,35 @@ private struct previewData {
 }
 
 #Preview("Light - RU") {
-    TripListView()
-        .modelContainer(previewData(withTrips: true).container)
+    let data = PreviewData(withTrips: true)
+    let store = AppSettingsStore(context: data.container.mainContext)
+    store.baseCurrencyCode = PreviewCurrency.baseCurrencyCode
+
+    return TripListView()
+        .modelContainer(data.container)
+        .environment(store)
         .environment(\.locale, Locale(identifier: "ru"))
         .preferredColorScheme(.light)
 }
 
 #Preview("Dark - EN") {
-    TripListView()
-        .modelContainer(previewData(withTrips: true).container)
+    let data = PreviewData(withTrips: true)
+    let store = AppSettingsStore(context: data.container.mainContext)
+    store.baseCurrencyCode = PreviewCurrency.baseCurrencyCode
+
+    return TripListView()
+        .modelContainer(data.container)
+        .environment(store)
         .environment(\.locale, Locale(identifier: "en"))
         .preferredColorScheme(.dark)
 }
 
 #Preview("Empty list") {
-    TripListView()
-        .modelContainer(previewData(withTrips: false).container)
+    let data = PreviewData(withTrips: false)
+    let store = AppSettingsStore(context: data.container.mainContext)
+    store.baseCurrencyCode = PreviewCurrency.baseCurrencyCode
+
+    return TripListView()
+        .modelContainer(data.container)
+        .environment(store)
 }

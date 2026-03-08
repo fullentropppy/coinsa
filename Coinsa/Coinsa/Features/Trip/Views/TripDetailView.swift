@@ -82,7 +82,7 @@ struct TripDetailView: View {
             toolbarContent
         }
         .sheet(isPresented: $isShowingTripEdit) {
-            TripEditView(trip: trip)
+            TripEditView(trip: trip, baseCurrencyCode: trip.baseCurrencyCode)
         }
         .sheet(isPresented: $isShowingLocationAdd) {
             LocationEditView(trip: trip)
@@ -135,7 +135,7 @@ struct TripDetailView: View {
 
 // MARK: - Previews
 
-private struct previewData {
+private struct PreviewData {
     let container: ModelContainer
     let trip: Trip
 
@@ -146,30 +146,33 @@ private struct previewData {
     }
 }
 
-#Preview("Light - RU") {
-    let data = previewData(withLocations: true)
-    NavigationStack {
+@MainActor
+private func previewView(
+    withLocations: Bool,
+    localeIdentifier: String,
+    colorScheme: ColorScheme?
+) -> some View {
+    let data = PreviewData(withLocations: withLocations)
+    let store = AppSettingsStore(context: data.container.mainContext)
+    store.baseCurrencyCode = PreviewCurrency.baseCurrencyCode
+
+    return NavigationStack {
         TripDetailView(trip: data.trip)
             .modelContainer(data.container)
-            .environment(\.locale, Locale(identifier: "ru"))
-            .preferredColorScheme(.light)
+            .environment(store)
+            .environment(\.locale, Locale(identifier: localeIdentifier))
+            .preferredColorScheme(colorScheme)
     }
+}
+
+#Preview("Light - RU") {
+    previewView(withLocations: true, localeIdentifier: "ru", colorScheme: .light)
 }
 
 #Preview("Dark - EN") {
-    let data = previewData(withLocations: true)
-    NavigationStack {
-        TripDetailView(trip: data.trip)
-            .modelContainer(data.container)
-            .environment(\.locale, Locale(identifier: "en"))
-            .preferredColorScheme(.dark)
-    }
+    previewView(withLocations: true, localeIdentifier: "en", colorScheme: .dark)
 }
 
 #Preview("Empty list") {
-    let data = previewData(withLocations: false)
-    NavigationStack {
-        TripDetailView(trip: data.trip)
-            .modelContainer(data.container)
-    }
+    previewView(withLocations: false, localeIdentifier: "en", colorScheme: nil)
 }

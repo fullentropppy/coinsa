@@ -19,6 +19,7 @@ final class TripViewModel {
     var startDate: Date
     var endDate: Date
     var locations: [Location]
+    let baseCurrencyCode: String
     
     // MARK: - Computed Properties
     
@@ -40,7 +41,7 @@ final class TripViewModel {
     
     // MARK: - Initialization
     
-    init(trip: Trip?) {
+    init(trip: Trip?, baseCurrencyCode: String) {
         self.trip = trip
 
         if let trip {
@@ -48,11 +49,13 @@ final class TripViewModel {
             startDate = trip.startDate
             endDate = trip.endDate
             locations = trip.locations
+            self.baseCurrencyCode = trip.baseCurrencyCode
         } else {
             name = ""
             startDate = .now
             endDate = .now
             locations = []
+            self.baseCurrencyCode = baseCurrencyCode
         }
     }
     
@@ -62,7 +65,12 @@ final class TripViewModel {
         if let trip {
             store.update(trip, name: name, startDate: startDate, endDate: endDate)
         } else {
-            store.add(name: name, startDate: startDate, endDate: endDate)
+            store.add(
+                name: name,
+                startDate: startDate,
+                endDate: endDate,
+                baseCurrencyCode: baseCurrencyCode
+            )
         }
     }
 }
