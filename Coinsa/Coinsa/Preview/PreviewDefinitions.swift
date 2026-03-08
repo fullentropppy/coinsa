@@ -8,37 +8,43 @@
 import Foundation
 
 enum PreviewTrip: String {
-    case turkey
-    case southKorea
-    case japan
+    // MARK: - PreviewTrip. Cases
+    
+    case turkey = "preview.data.trip.turkey"
+    case southKorea = "preview.data.trip.southKorea"
+    case japan = "preview.data.trip.japan"
 
-    var localized: String {
-        let key = "preview.data.trip.\(rawValue)"
-        return String(localized: String.LocalizationValue(key))
+    // MARK: - PreviewTrip. Computed Properties
+    
+    var localizedDisplayName: String {
+        String(localized: String.LocalizationValue(rawValue))
     }
 }
 
 enum PreviewLocation: String {
-    case istanbul
-    case seoul
-    case busan
-    case tokyo
-    case kyoto
-    case osaka
+    // MARK: - PreviewLocation. Cases
+    
+    case istanbul = "preview.data.location.istanbul"
+    case seoul = "preview.data.location.seoul"
+    case busan = "preview.data.location.busan"
+    case tokyo = "preview.data.location.tokyo"
+    case kyoto = "preview.data.location.kyoto"
+    case osaka = "preview.data.location.osaka"
 
-    var localized: String {
-        let key = "preview.data.location.\(rawValue)"
-        return String(localized: String.LocalizationValue(key))
+    // MARK: - PreviewLocation. Computed Properties
+    
+    var localizedDisplayName: String {
+        return String(localized: String.LocalizationValue(rawValue))
     }
 
     var currencyCode: String {
         switch self {
         case .istanbul:
-            return "TRY"
+            return CurrencyOption.try.code
         case .seoul, .busan:
-            return "KRW"
+            return CurrencyOption.krw.code
         case .tokyo, .kyoto, .osaka:
-            return "JPY"
+            return CurrencyOption.jpy.code
         }
     }
 
@@ -52,24 +58,27 @@ enum PreviewLocation: String {
 }
 
 enum PreviewExpenseComment: String {
-    case breakfast
-    case lunch
-    case streetFood
-    case snacks
-    case train
-    case subway
-    case bus
-    case taxi
-    case museum
-    case temple
-    case souvenirs
-    case clothes
-    case pharmacy
-    case miscellaneous
+    // MARK: - PreviewExpenseComment. Cases
+    
+    case breakfast = "preview.data.expenseComment.breakfast"
+    case lunch  = "preview.data.expenseComment.lunch"
+    case streetFood  = "preview.data.expenseComment.streetFood"
+    case snacks = "preview.data.expenseComment.snacks"
+    case train = "preview.data.expenseComment.train"
+    case subway = "preview.data.expenseComment.subway"
+    case bus = "preview.data.expenseComment.bus"
+    case taxi = "preview.data.expenseComment.taxi"
+    case museum = "preview.data.expenseComment.museum"
+    case temple = "preview.data.expenseComment.temple"
+    case souvenirs = "preview.data.expenseComment.souvenirs"
+    case clothes = "preview.data.expenseComment.clothes"
+    case pharmacy = "preview.data.expenseComment.pharmacy"
+    case miscellaneous = "preview.data.expenseComment.miscellaneous"
 
-    var localized: String {
-        let key = "preview.data.expenseComment.\(rawValue)"
-        return String(localized: String.LocalizationValue(key))
+    // MARK: - PreviewExpenseComment. Computed Properties
+    
+    var localizedDisplayName: String {
+        return String(localized: String.LocalizationValue(rawValue))
     }
 }
 
@@ -79,9 +88,9 @@ enum PreviewCurrency {
     }
 
     fileprivate static let exchangeRates: [String: [String: Double]] = [
-        "TRY": ["USD": 0.022, "RUB": 1.8],
-        "KRW": ["USD": 0.00075, "RUB": 0.065],
-        "JPY": ["USD": 0.007, "RUB": 0.6]
+        CurrencyOption.try.code: [CurrencyOption.usd.code: 0.022, CurrencyOption.rub.code: 1.8],
+        CurrencyOption.krw.code: [CurrencyOption.usd.code: 0.00075, CurrencyOption.rub.code: 0.065],
+        CurrencyOption.jpy.code: [CurrencyOption.usd.code: 0.007, CurrencyOption.rub.code: 0.6]
     ]
 
     fileprivate static func exchangeRate(from: String, to: String) -> Double {

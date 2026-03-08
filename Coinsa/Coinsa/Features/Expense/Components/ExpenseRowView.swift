@@ -20,7 +20,7 @@ struct ExpenseRowView: View {
                 Text(expense.date, format: .dateTime.year().month().day().hour().minute())
                 HStack {
                     Image(systemName: expense.category.sfSymbolName).imageScale(.small)
-                    Text(expense.category.localized).font(.callout)
+                    Text(expense.category.localizedDisplayName).font(.callout)
                 }
                 .foregroundStyle(.secondary)
             }

@@ -72,6 +72,91 @@
         }
       }
     },
+    "currency.name.aed" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "UAE Dirham (AED)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Дирхам ОАЭ (AED)"
+          }
+        }
+      }
+    },
+    "currency.name.amd" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Armenian Dram (AMD)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Армянский драм (AMD)"
+          }
+        }
+      }
+    },
+    "currency.name.azn" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Azerbaijani Manat (AZN)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Азербайджанский манат (AZN)"
+          }
+        }
+      }
+    },
+    "currency.name.byn" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Belarusian Ruble (BYN)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Белорусский рубль (BYN)"
+          }
+        }
+      }
+    },
+    "currency.name.cny" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chinese Yuan (CNY)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Китайский юань (CNY)"
+          }
+        }
+      }
+    },
     "currency.name.eur" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -85,6 +170,159 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Евро (EUR)"
+          }
+        }
+      }
+    },
+    "currency.name.gbp" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "British Pound Sterling (GBP)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Британский фунт стерлингов (GBP)"
+          }
+        }
+      }
+    },
+    "currency.name.gel" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Georgian Lari (GEL)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Грузинский лари (GEL)"
+          }
+        }
+      }
+    },
+    "currency.name.hkd" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hong Kong Dollar (HKD)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Гонконгский доллар (HKD)"
+          }
+        }
+      }
+    },
+    "currency.name.idr" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Indonesian Rupiah (IDR)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Индонезийская рупия (IDR)"
+          }
+        }
+      }
+    },
+    "currency.name.jpy" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Japan Yen (JPY)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Японская Йена (JPY)"
+          }
+        }
+      }
+    },
+    "currency.name.krw" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "South Korean Won (KRW)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Южнокорейская Вона (KRW)"
+          }
+        }
+      }
+    },
+    "currency.name.kzt" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kazakhstani Tenge (KZT)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Казахстанский тенге (KZT)"
+          }
+        }
+      }
+    },
+    "currency.name.mop" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Macanese Pataca (MOP)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Патака Макао (MOP)"
+          }
+        }
+      }
+    },
+    "currency.name.myr" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Malaysian Ringgit (MYR)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Малайзийский ринггит (MYR)"
           }
         }
       }
@@ -106,6 +344,57 @@
         }
       }
     },
+    "currency.name.sgd" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Singapore Dollar (SGD)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сингапурский доллар (SGD)"
+          }
+        }
+      }
+    },
+    "currency.name.thb" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thai Baht (THB)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Тайский бат (THB)"
+          }
+        }
+      }
+    },
+    "currency.name.try" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Turkish Lira (TRY)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Турецкая лира (TRY)"
+          }
+        }
+      }
+    },
     "currency.name.usd" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -119,6 +408,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Доллар США (USD)"
+          }
+        }
+      }
+    },
+    "currency.name.uzs" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uzbekistani Som (UZS)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Узбекский сум (UZS)"
+          }
+        }
+      }
+    },
+    "currency.name.vnd" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vietnamese Dong (VND)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вьетнамский донг (VND)"
           }
         }
       }

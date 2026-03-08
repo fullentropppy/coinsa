@@ -31,8 +31,8 @@ struct SettingsView: View {
     private var baseCurrencySection: some View {
         Section {
             Picker("settings.baseCurrency.title", selection: baseCurrencyOptionBinding) {
-                ForEach(CurrencyOption.allCases) { option in
-                    Text(option.localizedNameKey)
+                ForEach(CurrencyOption.allCasesSortedByName) { option in
+                    Text(option.localizedDisplayName)
                         .tag(option)
                 }
             }

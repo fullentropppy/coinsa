@@ -10,15 +10,15 @@ import SwiftData
 
 @MainActor
 struct PreviewBuilder {
-    // MARK: - Nested types
+    // MARK: - Nested Types
 
     final class Builder {
-        // MARK: - Stored properties
+        // MARK: - Stored Properties
 
         private var scenario: PreviewScenario = .japan
         private var options = PreviewOptions()
 
-        // MARK: - Public methods. Builder parameters
+        // MARK: - Public Methods. Builder Parameters
 
         func withScenario(_ value: PreviewScenario) -> Builder {
             scenario = value
@@ -50,7 +50,7 @@ struct PreviewBuilder {
             return self
         }
 
-        // MARK: - Public methods. Container
+        // MARK: - Public Methods. Container
 
         func buildContainer() -> ModelContainer {
             makeContainer(with: buildData())
@@ -88,7 +88,7 @@ struct PreviewBuilder {
             )
         }
 
-        // MARK: - Public methods. Sample data
+        // MARK: - Public Methods. Sample Data
 
         func buildData() -> [Trip] {
             PreviewGenerator.makeTrips(for: scenario, options: options)
@@ -121,13 +121,13 @@ struct PreviewBuilder {
         }
     }
 
-    // MARK: - Public methods
+    // MARK: - Public Static Methods
 
     static func builder() -> Builder {
         Builder()
     }
 
-    // MARK: - Private methods. Container
+    // MARK: - Private Static Methods. Container
 
     private static func makeContainer(with trips: [Trip]) -> ModelContainer {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)

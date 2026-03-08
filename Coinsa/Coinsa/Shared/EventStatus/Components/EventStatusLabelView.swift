@@ -15,7 +15,7 @@ struct EventStatusLabelView: View {
     // MARK: - Body
     
     var body: some View {
-        Text(status.localized)
+        Text(status.localizedDisplayName)
             .font(.caption).foregroundStyle(status.color)
             .padding(.horizontal, 10).padding(.vertical, 5)
             .overlay(

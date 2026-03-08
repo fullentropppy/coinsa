@@ -16,7 +16,7 @@ enum EventStatus: String, Codable, CaseIterable {
 
     // MARK: - Computed Properties
 
-    var localized: String {
+    var localizedDisplayName: String {
         String(localized: String.LocalizationValue(rawValue))
     }
 }

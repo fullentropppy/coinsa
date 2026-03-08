@@ -78,8 +78,8 @@ struct LocationEditView: View {
     private var currencySection: some View {
         Section {
             Picker("location.editing.currencyCode.title", selection: locationCurrencyBinding) {
-                ForEach(CurrencyOption.allCases) { option in
-                    Text(option.localizedNameKey)
+                ForEach(CurrencyOption.allCasesSortedByName) { option in
+                    Text(option.localizedDisplayName)
                         .tag(option)
                 }
             }
@@ -109,7 +109,7 @@ struct LocationEditView: View {
                         Image(systemName: category.sfSymbolName)
                             .foregroundStyle(.secondary)
                             .frame(width: 24)
-                        Text(category.localized)
+                        Text(category.localizedDisplayName)
                         Spacer()
                     }
                     HStack(spacing: 12) {
