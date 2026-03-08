@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct TripDetailHeaderView: View {
+struct TripHeaderView: View {
     // MARK: - Stored Properties
 
     let data: TripDetailHeaderData
@@ -27,13 +27,13 @@ struct TripDetailHeaderView: View {
 
             if showsSummary {
                 HStack(spacing: 10) {
-                    AmountCardView(
+                    TripAmountCardView(
                         title: "trip.detail.summary.planned",
                         amount: data.plannedAmount,
                         currencyCode: data.currencyCode,
                         tint: .blue
                     )
-                    AmountCardView(
+                    TripAmountCardView(
                         title: "trip.detail.summary.actual",
                         amount: data.actualAmount,
                         currencyCode: data.currencyCode,
@@ -41,7 +41,7 @@ struct TripDetailHeaderView: View {
                     )
                 }
 
-                AmountCardView(
+                TripAmountCardView(
                     title: "trip.detail.summary.difference",
                     amount: data.amountDifference,
                     currencyCode: data.currencyCode,
@@ -50,37 +50,9 @@ struct TripDetailHeaderView: View {
             }
         }
     }
-
+    
     private var differenceTint: Color {
         data.amountDifference >= 0 ? .green : .red
-    }
-}
-
-private struct AmountCardView: View {
-    // MARK: - Stored Properties
-
-    let title: LocalizedStringKey
-    let amount: Double
-    let currencyCode: String
-    let tint: Color
-
-    // MARK: - Body
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text(title).font(.caption).foregroundStyle(.secondary)
-            Text(formattedAmount).font(.headline).foregroundStyle(.primary)
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(10)
-        .background(
-            RoundedRectangle(cornerRadius: 15, style: .continuous)
-                .fill(tint.opacity(0.1))
-        )
-    }
-
-    private var formattedAmount: String {
-        amount.formatted(.currency(code: currencyCode))
     }
 }
 
@@ -103,7 +75,7 @@ private struct PreviewData {
     let data = PreviewData()
     
     List {
-        TripDetailHeaderView(
+        TripHeaderView(
             data: data.headerData,
             showsSummary: true
         )
@@ -116,7 +88,7 @@ private struct PreviewData {
     let data = PreviewData()
     
     List {
-        TripDetailHeaderView(
+        TripHeaderView(
             data: data.headerData,
             showsSummary: true
         )

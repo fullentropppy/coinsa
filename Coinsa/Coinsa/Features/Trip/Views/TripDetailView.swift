@@ -49,7 +49,7 @@ struct TripDetailView: View {
     var body: some View {
         List {
             Section {
-                TripDetailHeaderView(
+                TripHeaderView(
                     data: viewModel.headerData,
                     showsSummary: !locations.isEmpty
                 )
@@ -85,7 +85,7 @@ struct TripDetailView: View {
             TripEditView(trip: trip)
         }
         .sheet(isPresented: $isShowingLocationAdd) {
-            LocationEditView()
+            LocationEditView(trip: trip)
         }
         .alert("location.list.deletionConfirmation.title", isPresented: $deletionHandler.isShowingDeleteConfirmation) {
             Button("location.list.deletionConfirmation.delete", role: .destructive) {
