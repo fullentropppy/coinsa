@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import SwiftUI
 
 enum CurrencyOption: String, CaseIterable, Identifiable {
     // MARK: - Cases

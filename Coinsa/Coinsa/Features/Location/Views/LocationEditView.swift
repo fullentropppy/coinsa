@@ -106,7 +106,7 @@ struct LocationEditView: View {
             ForEach(ExpenseCategory.allCases, id: \.self) { category in
                 VStack(alignment: .leading, spacing: 8) {
                     HStack {
-                        Image(systemName: category.sfSymbolName)
+                        Image(systemName: category.symbolName)
                             .foregroundStyle(.secondary)
                             .frame(width: 24)
                         Text(category.localizedDisplayName)

@@ -8,8 +8,6 @@
 import Foundation
 
 struct PreviewOptions {
-    // MARK: - PreviewDataOptions. Stored Properties
-    
     var includeTrips = true
     var includeLocations = true
     var includeBudgets = true
@@ -17,8 +15,6 @@ struct PreviewOptions {
 }
 
 enum PreviewScenario: CaseIterable {
-    // MARK: - PreviewScenario. Cases
-    
     case turkey
     case southKorea
     case japan
@@ -58,7 +54,7 @@ enum PreviewGenerator {
 
     private static func makeTurkeyTrip(options: PreviewOptions) -> Trip {
         let turkeyTrip = Trip(
-            name: PreviewTrip.turkey.localizedDisplayName,
+            name: PreviewTrip.turkey.rawValue,
             startDate: now.addingTimeInterval(-day * 97),
             endDate: now.addingTimeInterval(-day * 90)
         )
@@ -77,7 +73,7 @@ enum PreviewGenerator {
         let istanbulData = PreviewLocation.istanbul
 
         let istanbul = Location(
-            name: istanbulData.localizedDisplayName,
+            name: istanbulData.rawValue,
             startDate: trip.startDate,
             endDate: trip.endDate,
             locationCurrencyCode: istanbulData.currencyCode,
@@ -118,7 +114,7 @@ enum PreviewGenerator {
                 exchangeRateLocationToBaseCurrency: exchangeRate,
                 category: .food,
                 location: location,
-                comment: PreviewExpenseComment.breakfast.localizedDisplayName
+                comment: PreviewExpenseComment.breakfast.rawValue
             ),
             Expense(
                 date: now.addingTimeInterval(-day * 97 + hour * 19),
@@ -133,7 +129,7 @@ enum PreviewGenerator {
                 exchangeRateLocationToBaseCurrency: exchangeRate,
                 category: .transport,
                 location: location,
-                comment: PreviewExpenseComment.bus.localizedDisplayName
+                comment: PreviewExpenseComment.bus.rawValue
             ),
             Expense(
                 date: now.addingTimeInterval(-day * 95 + hour * 18),
@@ -141,7 +137,7 @@ enum PreviewGenerator {
                 exchangeRateLocationToBaseCurrency: exchangeRate,
                 category: .transport,
                 location: location,
-                comment: PreviewExpenseComment.taxi.localizedDisplayName
+                comment: PreviewExpenseComment.taxi.rawValue
             ),
             Expense(
                 date: now.addingTimeInterval(-day * 94 + hour * 12),
@@ -156,7 +152,7 @@ enum PreviewGenerator {
                 exchangeRateLocationToBaseCurrency: exchangeRate,
                 category: .food,
                 location: location,
-                comment: PreviewExpenseComment.lunch.localizedDisplayName
+                comment: PreviewExpenseComment.lunch.rawValue
             ),
             Expense(
                 date: now.addingTimeInterval(-day * 91 + hour * 9),
@@ -175,7 +171,7 @@ enum PreviewGenerator {
         let endDate = startDate.addingTimeInterval(day * 10)
 
         let southKoreaTrip = Trip(
-            name: PreviewTrip.southKorea.localizedDisplayName,
+            name: PreviewTrip.southKorea.rawValue,
             startDate: startDate,
             endDate: endDate
         )
@@ -202,7 +198,7 @@ enum PreviewGenerator {
         let seoulData = PreviewLocation.seoul
 
         let seoul = Location(
-            name: seoulData.localizedDisplayName,
+            name: seoulData.rawValue,
             startDate: startDate,
             endDate: endDate,
             locationCurrencyCode: seoulData.currencyCode,
@@ -230,7 +226,7 @@ enum PreviewGenerator {
         let busanData = PreviewLocation.busan
 
         let busan = Location(
-            name: busanData.localizedDisplayName,
+            name: busanData.rawValue,
             startDate: startDate,
             endDate: endDate,
             locationCurrencyCode: busanData.currencyCode,
@@ -280,7 +276,7 @@ enum PreviewGenerator {
                 exchangeRateLocationToBaseCurrency: exchangeRate,
                 category: .food,
                 location: location,
-                comment: PreviewExpenseComment.breakfast.localizedDisplayName
+                comment: PreviewExpenseComment.breakfast.rawValue
             ),
             Expense(
                 date: startDate.addingTimeInterval(hour * 13),
@@ -288,7 +284,7 @@ enum PreviewGenerator {
                 exchangeRateLocationToBaseCurrency: exchangeRate,
                 category: .food,
                 location: location,
-                comment: PreviewExpenseComment.lunch.localizedDisplayName
+                comment: PreviewExpenseComment.lunch.rawValue
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 1 + hour * 9),
@@ -296,7 +292,7 @@ enum PreviewGenerator {
                 exchangeRateLocationToBaseCurrency: exchangeRate,
                 category: .transport,
                 location: location,
-                comment: PreviewExpenseComment.subway.localizedDisplayName
+                comment: PreviewExpenseComment.subway.rawValue
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 1 + hour * 19),
@@ -304,7 +300,7 @@ enum PreviewGenerator {
                 exchangeRateLocationToBaseCurrency: exchangeRate,
                 category: .shopping,
                 location: location,
-                comment: PreviewExpenseComment.souvenirs.localizedDisplayName
+                comment: PreviewExpenseComment.souvenirs.rawValue
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 2 + hour * 11),
@@ -312,7 +308,7 @@ enum PreviewGenerator {
                 exchangeRateLocationToBaseCurrency: exchangeRate,
                 category: .food,
                 location: location,
-                comment: PreviewExpenseComment.streetFood.localizedDisplayName
+                comment: PreviewExpenseComment.streetFood.rawValue
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 2 + hour * 17),
@@ -320,7 +316,7 @@ enum PreviewGenerator {
                 exchangeRateLocationToBaseCurrency: exchangeRate,
                 category: .activities,
                 location: location,
-                comment: PreviewExpenseComment.museum.localizedDisplayName
+                comment: PreviewExpenseComment.museum.rawValue
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 3 + hour * 14),
@@ -328,7 +324,7 @@ enum PreviewGenerator {
                 exchangeRateLocationToBaseCurrency: exchangeRate,
                 category: .medicine,
                 location: location,
-                comment: PreviewExpenseComment.pharmacy.localizedDisplayName
+                comment: PreviewExpenseComment.pharmacy.rawValue
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 3 + hour * 20),
@@ -336,7 +332,7 @@ enum PreviewGenerator {
                 exchangeRateLocationToBaseCurrency: exchangeRate,
                 category: .shopping,
                 location: location,
-                comment: PreviewExpenseComment.clothes.localizedDisplayName
+                comment: PreviewExpenseComment.clothes.rawValue
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 4 + hour * 12),
@@ -344,7 +340,7 @@ enum PreviewGenerator {
                 exchangeRateLocationToBaseCurrency: exchangeRate,
                 category: .transport,
                 location: location,
-                comment: PreviewExpenseComment.bus.localizedDisplayName
+                comment: PreviewExpenseComment.bus.rawValue
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 5 + hour * 18),
@@ -352,7 +348,7 @@ enum PreviewGenerator {
                 exchangeRateLocationToBaseCurrency: exchangeRate,
                 category: .other,
                 location: location,
-                comment: PreviewExpenseComment.miscellaneous.localizedDisplayName
+                comment: PreviewExpenseComment.miscellaneous.rawValue
             )
         ]
     }
@@ -367,7 +363,7 @@ enum PreviewGenerator {
                 exchangeRateLocationToBaseCurrency: exchangeRate,
                 category: .food,
                 location: location,
-                comment: PreviewExpenseComment.streetFood.localizedDisplayName
+                comment: PreviewExpenseComment.streetFood.rawValue
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 1 + hour * 9),
@@ -375,7 +371,7 @@ enum PreviewGenerator {
                 exchangeRateLocationToBaseCurrency: exchangeRate,
                 category: .transport,
                 location: location,
-                comment: PreviewExpenseComment.bus.localizedDisplayName
+                comment: PreviewExpenseComment.bus.rawValue
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 2 + hour * 15),
@@ -383,7 +379,7 @@ enum PreviewGenerator {
                 exchangeRateLocationToBaseCurrency: exchangeRate,
                 category: .activities,
                 location: location,
-                comment: PreviewExpenseComment.temple.localizedDisplayName
+                comment: PreviewExpenseComment.temple.rawValue
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 2 + hour * 20),
@@ -391,7 +387,7 @@ enum PreviewGenerator {
                 exchangeRateLocationToBaseCurrency: exchangeRate,
                 category: .shopping,
                 location: location,
-                comment: PreviewExpenseComment.souvenirs.localizedDisplayName
+                comment: PreviewExpenseComment.souvenirs.rawValue
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 3 + hour * 12),
@@ -399,7 +395,7 @@ enum PreviewGenerator {
                 exchangeRateLocationToBaseCurrency: exchangeRate,
                 category: .other,
                 location: location,
-                comment: PreviewExpenseComment.miscellaneous.localizedDisplayName
+                comment: PreviewExpenseComment.miscellaneous.rawValue
             )
         ]
     }
@@ -411,7 +407,7 @@ enum PreviewGenerator {
         let endDate = startDate.addingTimeInterval(day * 14)
 
         let japanTrip = Trip(
-            name: PreviewTrip.japan.localizedDisplayName,
+            name: PreviewTrip.japan.rawValue,
             startDate: startDate,
             endDate: endDate
         )
@@ -441,7 +437,7 @@ enum PreviewGenerator {
         let tokyoData = PreviewLocation.tokyo
 
         let tokyo = Location(
-            name: tokyoData.localizedDisplayName,
+            name: tokyoData.rawValue,
             startDate: startDate,
             endDate: endDate,
             locationCurrencyCode: tokyoData.currencyCode,
@@ -469,7 +465,7 @@ enum PreviewGenerator {
         let kyotoData = PreviewLocation.kyoto
 
         let kyoto = Location(
-            name: kyotoData.localizedDisplayName,
+            name: kyotoData.rawValue,
             startDate: startDate,
             endDate: endDate,
             locationCurrencyCode: kyotoData.currencyCode,
@@ -497,7 +493,7 @@ enum PreviewGenerator {
         let osakaData = PreviewLocation.osaka
 
         let osaka = Location(
-            name: osakaData.localizedDisplayName,
+            name: osakaData.rawValue,
             startDate: startDate,
             endDate: endDate,
             locationCurrencyCode: osakaData.currencyCode,
@@ -556,7 +552,7 @@ enum PreviewGenerator {
                 exchangeRateLocationToBaseCurrency: exchangeRate,
                 category: .food,
                 location: location,
-                comment: PreviewExpenseComment.breakfast.localizedDisplayName
+                comment: PreviewExpenseComment.breakfast.rawValue
             ),
             Expense(
                 date: startDate.addingTimeInterval(hour * 13),
@@ -571,7 +567,7 @@ enum PreviewGenerator {
                 exchangeRateLocationToBaseCurrency: exchangeRate,
                 category: .transport,
                 location: location,
-                comment: PreviewExpenseComment.subway.localizedDisplayName
+                comment: PreviewExpenseComment.subway.rawValue
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 2 + hour * 15),
@@ -579,7 +575,7 @@ enum PreviewGenerator {
                 exchangeRateLocationToBaseCurrency: exchangeRate,
                 category: .activities,
                 location: location,
-                comment: PreviewExpenseComment.museum.localizedDisplayName
+                comment: PreviewExpenseComment.museum.rawValue
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 2 + hour * 20),
@@ -587,7 +583,7 @@ enum PreviewGenerator {
                 exchangeRateLocationToBaseCurrency: exchangeRate,
                 category: .shopping,
                 location: location,
-                comment: PreviewExpenseComment.clothes.localizedDisplayName
+                comment: PreviewExpenseComment.clothes.rawValue
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 3 + hour * 11),
@@ -609,7 +605,7 @@ enum PreviewGenerator {
                 exchangeRateLocationToBaseCurrency: exchangeRate,
                 category: .other,
                 location: location,
-                comment: PreviewExpenseComment.miscellaneous.localizedDisplayName
+                comment: PreviewExpenseComment.miscellaneous.rawValue
             )
         ]
     }
@@ -624,7 +620,7 @@ enum PreviewGenerator {
                 exchangeRateLocationToBaseCurrency: exchangeRate,
                 category: .food,
                 location: location,
-                comment: PreviewExpenseComment.snacks.localizedDisplayName
+                comment: PreviewExpenseComment.snacks.rawValue
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 1 + hour * 12),
@@ -632,7 +628,7 @@ enum PreviewGenerator {
                 exchangeRateLocationToBaseCurrency: exchangeRate,
                 category: .transport,
                 location: location,
-                comment: PreviewExpenseComment.bus.localizedDisplayName
+                comment: PreviewExpenseComment.bus.rawValue
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 2 + hour * 16),
@@ -647,7 +643,7 @@ enum PreviewGenerator {
                 exchangeRateLocationToBaseCurrency: exchangeRate,
                 category: .shopping,
                 location: location,
-                comment: PreviewExpenseComment.souvenirs.localizedDisplayName
+                comment: PreviewExpenseComment.souvenirs.rawValue
             )
         ]
     }
@@ -669,7 +665,7 @@ enum PreviewGenerator {
                 exchangeRateLocationToBaseCurrency: exchangeRate,
                 category: .transport,
                 location: location,
-                comment: PreviewExpenseComment.train.localizedDisplayName
+                comment: PreviewExpenseComment.train.rawValue
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 2 + hour * 13),
@@ -677,7 +673,7 @@ enum PreviewGenerator {
                 exchangeRateLocationToBaseCurrency: exchangeRate,
                 category: .activities,
                 location: location,
-                comment: PreviewExpenseComment.museum.localizedDisplayName
+                comment: PreviewExpenseComment.museum.rawValue
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 2 + hour * 19),
@@ -685,7 +681,7 @@ enum PreviewGenerator {
                 exchangeRateLocationToBaseCurrency: exchangeRate,
                 category: .shopping,
                 location: location,
-                comment: PreviewExpenseComment.clothes.localizedDisplayName
+                comment: PreviewExpenseComment.clothes.rawValue
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 3 + hour * 9),

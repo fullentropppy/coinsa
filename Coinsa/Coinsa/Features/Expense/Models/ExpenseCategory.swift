@@ -8,29 +8,10 @@
 import Foundation
 
 enum ExpenseCategory: String, Codable, CaseIterable {
-    // MARK: - Cases
-    
-    case food = "expense.category.food"
-    case transport = "expense.category.transport"
-    case activities = "expense.category.entertainment"
-    case shopping = "expense.category.shopping"
-    case medicine = "expense.category.medicine"
-    case other = "expense.category.other"
-    
-    // MARK: - Computed Properties
-    
-    var localizedDisplayName: String {
-        String(localized: String.LocalizationValue(rawValue))
-    }
-    
-    var sfSymbolName: String {
-        switch self {
-        case .food: "fork.knife"
-        case .transport: "car"
-        case .activities: "sparkles.2"
-        case .shopping: "bag"
-        case .medicine: "pills"
-        case .other: "circle.grid.2x2"
-        }
-    }
+    case food
+    case transport
+    case activities
+    case shopping
+    case medicine
+    case other
 }

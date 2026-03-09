@@ -22,9 +22,9 @@ struct EventTitleView: View {
 // MARK: - Previews
 
 #Preview("Light - RU") {
-    EventTitleView(title: "Заголовок").preferredColorScheme(.light)
+    EventTitleView(title: "Заголовок события").preferredColorScheme(.light)
 }
 
 #Preview("Dark - EN") {
-    EventTitleView(title: "Title").preferredColorScheme(.light)
+    EventTitleView(title: "Event title").preferredColorScheme(.light)
 }

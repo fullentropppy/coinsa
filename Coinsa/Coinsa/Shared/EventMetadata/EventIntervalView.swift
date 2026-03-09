@@ -25,17 +25,17 @@ struct EventIntervalView: View {
 // MARK: - Previews
 
 private extension EventIntervalView {
-    static func preview(locale: String, colorScheme: ColorScheme) -> some View {
+    static func preview(locale: Locale, colorScheme: ColorScheme) -> some View {
         EventIntervalView(startDate: .now, endDate: .now.addingTimeInterval(604800))
-            .environment(\.locale, Locale(identifier: locale))
+            .environment(\.locale, locale)
             .preferredColorScheme(colorScheme)
     }
 }
 
 #Preview("Light - RU") {
-    EventIntervalView.preview(locale: "ru", colorScheme: .light)
+    EventIntervalView.preview(locale: PreviewLocale.ru.locale, colorScheme: .light)
 }
 
 #Preview("Dark - EN") {
-    EventIntervalView.preview(locale: "en", colorScheme: .dark)
+    EventIntervalView.preview(locale: PreviewLocale.en.locale, colorScheme: .dark)
 }

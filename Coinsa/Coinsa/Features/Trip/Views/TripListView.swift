@@ -29,22 +29,15 @@ struct TripListView: View {
     
     var body: some View {
         NavigationStack {
-            List {
-                ForEach(trips) { trip in
-                    NavigationLink {
-                        TripDetailView(trip: trip)
-                    } label: {
-                        TripRowView(trip: trip)
-                    }
-                }
-                .onDelete(perform: requestDelete)
-            }
+            tripListContent
             .navigationTitle("trip.list.navigationTitle")
             .navigationBarTitleDisplayMode(.large)
             .sheet(isPresented: $isShowingEdtitingSheet) {
                 TripEditView(trip: nil)
             }
-            .alert("trip.list.deletionConfirmation.title", isPresented: $deletionHandler.isShowingDeleteConfirmation) {
+            .alert("trip.list.deletionConfirmation.title",
+                   isPresented: $deletionHandler.isShowingDeleteConfirmation
+            ) {
                 Button("trip.list.deletionConfirmation.delete", role: .destructive) {
                     confirmDelete()
                 }
@@ -59,19 +52,36 @@ struct TripListView: View {
             }
             .overlay {
                 if trips.isEmpty {
-                    EmptyStateView(
-                        imageName: "suitcase",
-                        title: "trip.list.empty.title",
-                        description: "trip.list.empty.desctiption",
-                        buttonLabel: "trip.list.addTrip",
-                        onAddAction: { isShowingEdtitingSheet = true }
-                    )
+                    emptyStateContent
                 }
             }
         }
     }
     
     // MARK: - Components
+    
+    private var tripListContent: some View {
+        List {
+            ForEach(trips) { trip in
+                NavigationLink {
+                    TripDetailView(trip: trip)
+                } label: {
+                    TripRowView(trip: trip)
+                }
+            }
+            .onDelete(perform: requestDelete)
+        }
+    }
+    
+    private var emptyStateContent: some View {
+        EmptyStateView(
+            imageName: "suitcase",
+            title: "trip.list.empty.title",
+            description: "trip.list.empty.desctiption",
+            buttonLabel: "trip.list.addTrip",
+            onAddAction: { isShowingEdtitingSheet = true }
+        )
+    }
     
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
@@ -99,40 +109,46 @@ struct TripListView: View {
 
 // MARK: - Previews
 
-private struct PreviewData {
-    let container: ModelContainer
-
-    init(withTrips: Bool) {
-        self.container = PreviewBuilder.builder()
+private extension TripListView {
+    static func preview(
+        withTrips: Bool,
+        locale: Locale,
+        colorScheme: ColorScheme
+    ) -> some View {
+        let container = PreviewBuilder.builder()
             .withScenario(.all)
             .withTrips(withTrips)
             .withExpenses(false)
             .withBudgets(false)
             .buildContainer()
+
+        return TripListView()
+            .modelContainer(container)
+            .environment(\.locale, locale)
+            .preferredColorScheme(colorScheme)
     }
 }
 
 #Preview("Light - RU") {
-    let data = PreviewData(withTrips: true)
-
-    return TripListView()
-        .modelContainer(data.container)
-        .environment(\.locale, Locale(identifier: "ru"))
-        .preferredColorScheme(.light)
+    TripListView.preview(
+        withTrips: true, locale: PreviewLocale.ru.locale, colorScheme: .light
+    )
 }
 
 #Preview("Dark - EN") {
-    let data = PreviewData(withTrips: true)
-
-    return TripListView()
-        .modelContainer(data.container)
-        .environment(\.locale, Locale(identifier: "en"))
-        .preferredColorScheme(.dark)
+    TripListView.preview(
+        withTrips: true, locale: PreviewLocale.en.locale, colorScheme: .dark
+    )
 }
 
-#Preview("Empty list") {
-    let data = PreviewData(withTrips: false)
+#Preview("Empty list. Light - RU") {
+    TripListView.preview(
+        withTrips: false, locale: PreviewLocale.ru.locale, colorScheme: .light
+    )
+}
 
-    return TripListView()
-        .modelContainer(data.container)
+#Preview("Empty list. Dark - EN") {
+    TripListView.preview(
+        withTrips: false, locale: PreviewLocale.ru.locale, colorScheme: .dark
+    )
 }

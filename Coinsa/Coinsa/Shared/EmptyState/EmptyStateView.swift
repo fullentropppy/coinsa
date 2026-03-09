@@ -37,7 +37,7 @@ struct EmptyStateView: View {
 // MARK: - Previews
 
 private extension EmptyStateView {
-    static func tripPreview(locale: String, colorScheme: ColorScheme) -> some View {
+    static func tripPreview(locale: Locale, colorScheme: ColorScheme) -> some View {
         EmptyStateView(
             imageName: "suitcase",
             title: "trip.list.empty.title",
@@ -45,11 +45,11 @@ private extension EmptyStateView {
             buttonLabel: "trip.list.addTrip",
             onAddAction: {}
         )
-        .environment(\.locale, Locale(identifier: locale))
+        .environment(\.locale, locale)
         .preferredColorScheme(colorScheme)
     }
     
-    static func locationPreview(locale: String, colorScheme: ColorScheme) -> some View {
+    static func locationPreview(locale: Locale, colorScheme: ColorScheme) -> some View {
         EmptyStateView(
             imageName: "mappin.and.ellipse",
             title: "location.list.empty.title",
@@ -57,23 +57,23 @@ private extension EmptyStateView {
             buttonLabel: "location.list.addLocation",
             onAddAction: {}
         )
-        .environment(\.locale, Locale(identifier: locale))
+        .environment(\.locale, locale)
         .preferredColorScheme(colorScheme)
     }
 }
 
 #Preview("Trip. Light - RU") {
-    EmptyStateView.tripPreview(locale: "ru", colorScheme: .light)
+    EmptyStateView.tripPreview(locale: PreviewLocale.ru.locale, colorScheme: .light)
 }
 
 #Preview("Trip. Dark - EN") {
-    EmptyStateView.tripPreview(locale: "en", colorScheme: .dark)
+    EmptyStateView.tripPreview(locale: PreviewLocale.en.locale, colorScheme: .dark)
 }
 
 #Preview("Location. Light - RU") {
-    EmptyStateView.locationPreview(locale: "ru", colorScheme: .light)
+    EmptyStateView.locationPreview(locale: PreviewLocale.ru.locale, colorScheme: .light)
 }
 
 #Preview("Location. Dark - EN") {
-    EmptyStateView.locationPreview(locale: "en", colorScheme: .dark)
+    EmptyStateView.locationPreview(locale: PreviewLocale.en.locale, colorScheme: .dark)
 }

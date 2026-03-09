@@ -28,21 +28,21 @@ struct EventStatusLabelView: View {
 // MARK: - Previews
 
 private extension EventStatusLabelView {
-    static func preview(locale: String, colorScheme: ColorScheme) -> some View {
+    static func preview(locale: Locale, colorScheme: ColorScheme) -> some View {
         VStack(spacing: 20) {
             EventStatusLabelView(status: .upcoming)
             EventStatusLabelView(status: .ongoing)
             EventStatusLabelView(status: .completed)
         }
-        .environment(\.locale, Locale(identifier: locale))
+        .environment(\.locale, locale)
         .preferredColorScheme(colorScheme)
     }
 }
 
 #Preview("Light - RU") {
-    EventStatusLabelView.preview(locale: "ru", colorScheme: .light)
+    EventStatusLabelView.preview(locale: PreviewLocale.ru.locale, colorScheme: .light)
 }
 
 #Preview("Dark - EN") {
-    EventStatusLabelView.preview(locale: "en", colorScheme: .dark)
+    EventStatusLabelView.preview(locale: PreviewLocale.en.locale, colorScheme: .dark)
 }

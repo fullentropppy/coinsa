@@ -30,7 +30,7 @@ struct SettingsView: View {
     private var baseCurrencySection: some View {
         Section {
             LabeledContent("settings.baseCurrency.title") {
-                Text(CurrencyOption.baseOption.localizedDisplayName)
+                Text(CurrencyOption.baseOption.localizedKey)
             }
         } footer: {
             Text("settings.baseCurrency.footer")
@@ -41,7 +41,7 @@ struct SettingsView: View {
         Section {
             Picker("settings.theme.title", selection: themeBinding) {
                 ForEach(AppTheme.allCases) { theme in
-                    Text(theme.titleKey)
+                    Text(theme.localizedKey)
                         .tag(theme)
                 }
             }
@@ -62,31 +62,22 @@ struct SettingsView: View {
 // MARK: - Previews
 
 private extension SettingsView {
-    private struct PreviewData {
-        let container: ModelContainer
-        let store: AppSettingsStore
-        
-        init() {
-            self.container = PreviewBuilder.builder().buildContainer()
-            self.store = AppSettingsStore(context: container.mainContext)
-        }
-    }
-    
-    static func preview(locale: String, colorScheme: ColorScheme) -> some View {
-        let data = PreviewData()
+    static func preview(locale: Locale, colorScheme: ColorScheme) -> some View {
+        let container = PreviewBuilder.builder().buildContainer()
+        let store = AppSettingsStore(context: container.mainContext)
         
         return SettingsView()
-            .modelContainer(data.container)
-            .environment(data.store)
-            .environment(\.locale, Locale(identifier: locale))
+            .modelContainer(container)
+            .environment(store)
+            .environment(\.locale, locale)
             .preferredColorScheme(colorScheme)
     }
 }
 
 #Preview("Light - RU") {
-    SettingsView.preview(locale: "ru", colorScheme: .light)
+    SettingsView.preview(locale: PreviewLocale.ru.locale, colorScheme: .light)
 }
 
 #Preview("Dark - EN") {
-    SettingsView.preview(locale: "en", colorScheme: .dark)
+    SettingsView.preview(locale: PreviewLocale.en.locale, colorScheme: .dark)
 }

@@ -5,7 +5,7 @@
 //  Created by Daniil Gritsenko on 09.03.2026.
 //
 
-import SwiftUI
+import Foundation
 
 // MARK: - Protocol
 
@@ -16,12 +16,8 @@ protocol LocalizationKeyProviding: RawRepresentable where RawValue == String {
 // MARK: - Default Implementation
 
 extension LocalizationKeyProviding {
-    private var localizationKey: String {
+    var localizationKey: String {
         "\(Self.localizationKeyPrefix).\(rawValue.lowercased())"
-    }
-
-    var localizedKey: LocalizedStringKey {
-        LocalizedStringKey(localizationKey)
     }
 
     var localizedDisplayName: String {
