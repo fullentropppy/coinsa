@@ -6,12 +6,9 @@
 //
 
 import SwiftUI
-import SwiftData
 
 struct UpcomingTripView: View {
     // MARK: - Stored Properties
-
-    @Environment(AppSettingsStore.self) private var settingsStore
 
     @State private var isShowingTripAdd = false
 
@@ -48,7 +45,7 @@ struct UpcomingTripView: View {
         .padding(.horizontal, 20)
         .padding(.top, 24)
         .sheet(isPresented: $isShowingTripAdd) {
-            TripEditView(trip: nil, baseCurrencyCode: settingsStore.baseCurrencyCode)
+            TripEditView(trip: nil)
         }
     }
 }
@@ -59,11 +56,7 @@ struct UpcomingTripView: View {
     let builder = PreviewBuilder.builder()
     let container = builder.buildContainer()
     let trip = builder.fetchTrip(from: container)
-    let store = AppSettingsStore(context: container.mainContext)
-    store.baseCurrencyCode = PreviewCurrency.baseCurrencyCode
-
     return UpcomingTripView(trip: trip)
-        .environment(store)
         .environment(\.locale, Locale(identifier: "ru"))
         .preferredColorScheme(.light)
 }

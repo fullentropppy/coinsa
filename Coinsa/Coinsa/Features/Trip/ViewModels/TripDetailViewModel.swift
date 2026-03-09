@@ -11,7 +11,6 @@ struct TripDetailViewModel {
     // MARK: - Stored Properties
 
     let trip: Trip
-    let baseCurrencyCode: String
 
     // MARK: - Computed Properties
 
@@ -24,7 +23,7 @@ struct TripDetailViewModel {
             plannedAmount: plannedAmount,
             actualAmount: actualAmount,
             amountDifference: plannedAmount - actualAmount,
-            currencyCode: baseCurrencyCode
+            currencyCode: CurrencyOption.baseCurrencyCode
         )
     }
     
@@ -32,7 +31,6 @@ struct TripDetailViewModel {
 
     init(trip: Trip) {
         self.trip = trip
-        self.baseCurrencyCode = trip.baseCurrencyCode
     }
 
     // MARK: - Private Methods

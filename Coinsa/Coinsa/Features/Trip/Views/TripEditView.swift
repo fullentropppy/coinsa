@@ -26,8 +26,8 @@ struct TripEditView: View {
 
     // MARK: - Initialization
     
-    init(trip: Trip? = nil, baseCurrencyCode: String, onSave: ((Trip) -> Void)? = nil) {
-        _viewModel = State(initialValue: TripViewModel(trip: trip, baseCurrencyCode: baseCurrencyCode))
+    init(trip: Trip? = nil, onSave: ((Trip) -> Void)? = nil) {
+        _viewModel = State(initialValue: TripViewModel(trip: trip))
     }
     
     // MARK: - Body
@@ -119,17 +119,17 @@ private var previewTrip: Trip {
 }
 
 #Preview("Light - RU") {
-    TripEditView(trip: previewTrip, baseCurrencyCode: PreviewCurrency.baseCurrencyCode)
+    TripEditView(trip: previewTrip)
         .environment(\.locale, Locale(identifier: "ru"))
         .preferredColorScheme(.light)
 }
 
 #Preview("Dark - EN") {
-    TripEditView(trip: previewTrip, baseCurrencyCode: PreviewCurrency.baseCurrencyCode)
+    TripEditView(trip: previewTrip)
         .environment(\.locale, Locale(identifier: "en"))
         .preferredColorScheme(.dark)
 }
 
 #Preview("Empty item") {
-    TripEditView(trip: nil, baseCurrencyCode: PreviewCurrency.baseCurrencyCode)
+    TripEditView(trip: nil)
 }

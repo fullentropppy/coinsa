@@ -26,23 +26,7 @@ final class AppSettingsStore {
     @ObservationIgnored
     private let defaults = UserDefaults.standard
 
-    private var isNormalizingCurrency = false
-
-    var baseCurrencyCode: String {
-        didSet {
-            guard !isNormalizingCurrency else { return }
-
-            let normalized = Self.normalizeCurrencyCode(baseCurrencyCode)
-            if normalized != baseCurrencyCode {
-                isNormalizingCurrency = true
-                baseCurrencyCode = normalized
-                isNormalizingCurrency = false
-                return
-            }
-
-            settings.baseCurrencyCode = normalized
-        }
-    }
+    let baseCurrencyCode: String
 
     var selectedTheme: AppTheme {
         didSet {
@@ -62,19 +46,15 @@ final class AppSettingsStore {
         if let stored = try? context.fetch(FetchDescriptor<AppSettings>()).first {
             settings = stored
         } else {
-            let newSettings = AppSettings(baseCurrencyCode: CurrencyOption.defaultOption.code)
+            let newSettings = AppSettings(baseCurrencyCode: CurrencyOption.baseCurrencyCode)
             context.insert(newSettings)
             settings = newSettings
         }
 
-        baseCurrencyCode = CurrencyOption.from(code: settings.baseCurrencyCode).code
+        baseCurrencyCode = CurrencyOption.baseCurrencyCode
+        settings.baseCurrencyCode = baseCurrencyCode
+
         let rawTheme = defaults.string(forKey: themeKey) ?? AppTheme.system.rawValue
         selectedTheme = AppTheme(rawValue: rawTheme) ?? .system
-    }
-
-    // MARK: - Private Methods
-
-    private static func normalizeCurrencyCode(_ code: String) -> String {
-        CurrencyOption.from(code: code).code
     }
 }

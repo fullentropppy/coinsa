@@ -60,8 +60,7 @@ enum PreviewGenerator {
         let turkeyTrip = Trip(
             name: PreviewTrip.turkey.localizedDisplayName,
             startDate: now.addingTimeInterval(-day * 97),
-            endDate: now.addingTimeInterval(-day * 90),
-            baseCurrencyCode: PreviewCurrency.baseCurrencyCode
+            endDate: now.addingTimeInterval(-day * 90)
         )
 
         guard options.includeLocations else {
@@ -178,8 +177,7 @@ enum PreviewGenerator {
         let southKoreaTrip = Trip(
             name: PreviewTrip.southKorea.localizedDisplayName,
             startDate: startDate,
-            endDate: endDate,
-            baseCurrencyCode: PreviewCurrency.baseCurrencyCode
+            endDate: endDate
         )
 
         guard options.includeLocations else {
@@ -415,8 +413,7 @@ enum PreviewGenerator {
         let japanTrip = Trip(
             name: PreviewTrip.japan.localizedDisplayName,
             startDate: startDate,
-            endDate: endDate,
-            baseCurrencyCode: PreviewCurrency.baseCurrencyCode
+            endDate: endDate
         )
 
         guard options.includeLocations else {

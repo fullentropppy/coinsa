@@ -26,16 +26,21 @@ struct EventDurationView: View {
 
 // MARK: - Previews
 
+private extension EventDurationView {
+    static func preview(colorScheme: ColorScheme) -> some View {
+        VStack(spacing: 20) {
+            EventDurationView(days: 7)
+            EventDurationView(days: 14)
+            EventDurationView(days: 31)
+        }
+        .preferredColorScheme(colorScheme)
+    }
+}
+
 #Preview("Light") {
-    EventDurationView(days: 7)
-    EventDurationView(days: 14)
-    EventDurationView(days: 31)
-        .preferredColorScheme(.light)
+    EventDurationView.preview(colorScheme: .light)
 }
 
 #Preview("Dark") {
-    EventDurationView(days: 7)
-    EventDurationView(days: 14)
-    EventDurationView(days: 31)
-        .preferredColorScheme(.dark)
+    EventDurationView.preview(colorScheme: .dark)
 }

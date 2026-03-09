@@ -38,30 +38,20 @@ enum CurrencyOption: String, CaseIterable, Identifiable {
     
     var id: String { rawValue }
     var code: String { rawValue }
-
+    
     // MARK: - Computed Properties
     
-    var localizedDisplayName: String {
-        let key = "currency.name.\(rawValue.lowercased())"
-        return String(localized: String.LocalizationValue(key))
+    static var baseOption: CurrencyOption {
+        CurrencyOption.rub
+    }
+    
+    static var baseCurrencyCode: String {
+        baseOption.code
     }
 
-    // MARK: - Computed Static Properties
-    
-    static var allCasesSortedByName: [CurrencyOption] {
-        allCases.sorted {
-            $0.localizedDisplayName.localizedCaseInsensitiveCompare($1.localizedDisplayName) == .orderedAscending
-        }
-    }
-    
-    // MARK: - Public Static Methods
+    // MARK: - Public Methods
     
     static func from(code: String) -> CurrencyOption {
-        CurrencyOption(rawValue: code.uppercased()) ?? .usd
-    }
-    
-    static var defaultOption: CurrencyOption {
-        let localeCode = Locale.current.currency?.identifier ?? CurrencyOption.usd.code
-        return CurrencyOption(rawValue: localeCode) ?? .usd
+        CurrencyOption(rawValue: code.uppercased()) ?? .rub
     }
 }

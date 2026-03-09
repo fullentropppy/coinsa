@@ -19,11 +19,9 @@ struct RootTabView: View {
             Tab("tab.now", systemImage: "clock", value: .now) {
                 NowView()
             }
-
             Tab("tab.trips", systemImage: "suitcase", value: .trips) {
                 TripListView()
             }
-
             Tab("tab.settings", systemImage: "gearshape", value: .settings) {
                 SettingsView()
             }

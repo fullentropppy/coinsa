@@ -8,8 +8,6 @@
 import SwiftUI
 
 extension EventStatus {
-    // MARK: - Computed Properties
-
     var color: Color {
         switch self {
         case .upcoming:

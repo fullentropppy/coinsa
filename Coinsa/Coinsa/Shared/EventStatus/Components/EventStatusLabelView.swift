@@ -15,7 +15,7 @@ struct EventStatusLabelView: View {
     // MARK: - Body
     
     var body: some View {
-        Text(status.localizedDisplayName)
+        Text(status.localizedKey)
             .font(.caption).foregroundStyle(status.color)
             .padding(.horizontal, 10).padding(.vertical, 5)
             .overlay(
@@ -27,18 +27,22 @@ struct EventStatusLabelView: View {
 
 // MARK: - Previews
 
-#Preview("Light - RU") {
-    EventStatusLabelView(status: .upcoming)
-    EventStatusLabelView(status: .ongoing)
-    EventStatusLabelView(status: .completed)
-        .environment(\.locale, Locale(identifier: "ru"))
-        .preferredColorScheme(.light)
+private extension EventStatusLabelView {
+    static func preview(locale: String, colorScheme: ColorScheme) -> some View {
+        VStack(spacing: 20) {
+            EventStatusLabelView(status: .upcoming)
+            EventStatusLabelView(status: .ongoing)
+            EventStatusLabelView(status: .completed)
+        }
+        .environment(\.locale, Locale(identifier: locale))
+        .preferredColorScheme(colorScheme)
+    }
 }
 
-#Preview("Dark - RU") {
-    EventStatusLabelView(status: .upcoming)
-    EventStatusLabelView(status: .ongoing)
-    EventStatusLabelView(status: .completed)
-        .environment(\.locale, Locale(identifier: "en"))
-        .preferredColorScheme(.dark)
+#Preview("Light - RU") {
+    EventStatusLabelView.preview(locale: "ru", colorScheme: .light)
+}
+
+#Preview("Dark - EN") {
+    EventStatusLabelView.preview(locale: "en", colorScheme: .dark)
 }

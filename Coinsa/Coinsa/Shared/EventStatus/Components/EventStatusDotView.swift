@@ -21,16 +21,21 @@ struct EventStatusDotView: View {
 
 // MARK: - Previews
 
+private extension EventStatusDotView {
+    static func preview(colorScheme: ColorScheme) -> some View {
+        VStack(spacing: 20) {
+            EventStatusDotView(status: .upcoming)
+            EventStatusDotView(status: .ongoing)
+            EventStatusDotView(status: .completed)
+        }
+        .preferredColorScheme(colorScheme)
+    }
+}
+
 #Preview("Light") {
-    EventStatusDotView(status: .upcoming)
-    EventStatusDotView(status: .ongoing)
-    EventStatusDotView(status: .completed)
-        .preferredColorScheme(.light)
+    EventStatusDotView.preview(colorScheme: .light)
 }
 
 #Preview("Dark") {
-    EventStatusDotView(status: .upcoming)
-    EventStatusDotView(status: .ongoing)
-    EventStatusDotView(status: .completed)
-        .preferredColorScheme(.dark)
+    EventStatusDotView.preview(colorScheme: .dark)
 }

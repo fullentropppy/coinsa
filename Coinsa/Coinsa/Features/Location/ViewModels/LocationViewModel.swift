@@ -48,7 +48,7 @@ final class LocationViewModel {
     init(trip: Trip, location: Location?) {
         self.location = location
         self.trip = location?.trip ?? trip
-        self.baseCurrencyCode = self.trip.baseCurrencyCode
+        self.baseCurrencyCode = CurrencyOption.baseCurrencyCode
 
         if let location {
             name = location.name

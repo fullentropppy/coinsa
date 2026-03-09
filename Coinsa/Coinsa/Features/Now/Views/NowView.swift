@@ -45,12 +45,8 @@ struct NowView: View {
 
 #Preview("Light - RU") {
     let container = PreviewBuilder.builder().buildContainer()
-    let store = AppSettingsStore(context: container.mainContext)
-    store.baseCurrencyCode = PreviewCurrency.baseCurrencyCode
-
     return NowView()
         .modelContainer(container)
-        .environment(store)
         .environment(\.locale, Locale(identifier: "ru"))
         .preferredColorScheme(.light)
 }

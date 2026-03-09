@@ -9,14 +9,13 @@ import Foundation
 import SwiftData
 
 @Model
-class Trip: DateRangeProviding, StatusProviding {
+class Trip: DateRangeProviding, EventStatusProviding {
     // MARK: - Stored Properties
     
     var name: String
     var startDate: Date
     var endDate: Date
-    var baseCurrencyCode: String
-    
+
     @Relationship(deleteRule: .cascade, inverse: \Location.trip)
     var locations: [Location]
     
@@ -32,13 +31,11 @@ class Trip: DateRangeProviding, StatusProviding {
         name: String,
         startDate: Date,
         endDate: Date,
-        baseCurrencyCode: String = CurrencyOption.defaultOption.code,
         locations: [Location] = []
     ) {
         self.name = name
         self.startDate = startDate
         self.endDate = endDate
-        self.baseCurrencyCode = baseCurrencyCode
         self.locations = locations
     }
 }

@@ -22,7 +22,6 @@ struct SettingsView: View {
                 themeSection
             }
             .navigationTitle("settings.navigationTitle")
-            .navigationBarTitleDisplayMode(.large)
         }
     }
 
@@ -30,13 +29,9 @@ struct SettingsView: View {
 
     private var baseCurrencySection: some View {
         Section {
-            Picker("settings.baseCurrency.title", selection: baseCurrencyOptionBinding) {
-                ForEach(CurrencyOption.allCasesSortedByName) { option in
-                    Text(option.localizedDisplayName)
-                        .tag(option)
-                }
+            LabeledContent("settings.baseCurrency.title") {
+                Text(CurrencyOption.baseOption.localizedDisplayName)
             }
-            .pickerStyle(.navigationLink)
         } footer: {
             Text("settings.baseCurrency.footer")
         }
@@ -56,13 +51,6 @@ struct SettingsView: View {
 
     // MARK: - Bindings
 
-    private var baseCurrencyOptionBinding: Binding<CurrencyOption> {
-        Binding(
-            get: { CurrencyOption.from(code: settingsStore.baseCurrencyCode) },
-            set: { settingsStore.baseCurrencyCode = $0.code }
-        )
-    }
-
     private var themeBinding: Binding<AppTheme> {
         Binding(
             get: { settingsStore.selectedTheme },
@@ -73,14 +61,32 @@ struct SettingsView: View {
 
 // MARK: - Previews
 
-#Preview("Light - RU") {
-    let container = PreviewBuilder.builder().buildContainer()
-    let store = AppSettingsStore(context: container.mainContext)
-    store.baseCurrencyCode = PreviewCurrency.baseCurrencyCode
+private extension SettingsView {
+    private struct PreviewData {
+        let container: ModelContainer
+        let store: AppSettingsStore
+        
+        init() {
+            self.container = PreviewBuilder.builder().buildContainer()
+            self.store = AppSettingsStore(context: container.mainContext)
+        }
+    }
+    
+    static func preview(locale: String, colorScheme: ColorScheme) -> some View {
+        let data = PreviewData()
+        
+        return SettingsView()
+            .modelContainer(data.container)
+            .environment(data.store)
+            .environment(\.locale, Locale(identifier: locale))
+            .preferredColorScheme(colorScheme)
+    }
+}
 
-    return SettingsView()
-        .modelContainer(container)
-        .environment(store)
-        .environment(\.locale, Locale(identifier: "ru"))
-        .preferredColorScheme(.light)
+#Preview("Light - RU") {
+    SettingsView.preview(locale: "ru", colorScheme: .light)
+}
+
+#Preview("Dark - EN") {
+    SettingsView.preview(locale: "en", colorScheme: .dark)
 }

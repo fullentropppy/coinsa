@@ -31,7 +31,7 @@ struct TripAmountCardView: View {
     }
 
     private var formattedAmount: String {
-        amount.formatted(.currency(code: currencyCode))
+        amount.formatted(.currency(code: currencyCode).presentation(.isoCode))
     }
 }
 
@@ -49,7 +49,7 @@ struct TripAmountCardView: View {
 
 #Preview("Dark - EN") {
     TripAmountCardView(
-        title: "Planned", amount: 760.25, currencyCode: "USD", tint: .blue
+        title: "Planned", amount: 760.25, currencyCode: "RUB", tint: .blue
     )
         .environment(\.locale, Locale(identifier: "ru"))
         .preferredColorScheme(.light)

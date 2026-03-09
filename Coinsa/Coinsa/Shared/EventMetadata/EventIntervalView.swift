@@ -24,14 +24,18 @@ struct EventIntervalView: View {
 
 // MARK: - Previews
 
+private extension EventIntervalView {
+    static func preview(locale: String, colorScheme: ColorScheme) -> some View {
+        EventIntervalView(startDate: .now, endDate: .now.addingTimeInterval(604800))
+            .environment(\.locale, Locale(identifier: locale))
+            .preferredColorScheme(colorScheme)
+    }
+}
+
 #Preview("Light - RU") {
-    EventIntervalView(startDate: .now, endDate: .now.addingTimeInterval(604800))
-        .environment(\.locale, Locale(identifier: "ru"))
-        .preferredColorScheme(.light)
+    EventIntervalView.preview(locale: "ru", colorScheme: .light)
 }
 
 #Preview("Dark - EN") {
-    EventIntervalView(startDate: .now, endDate: .now.addingTimeInterval(604800))
-        .environment(\.locale, Locale(identifier: "en"))
-        .preferredColorScheme(.dark)
+    EventIntervalView.preview(locale: "en", colorScheme: .dark)
 }

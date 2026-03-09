@@ -1,5 +1,5 @@
 //
-//  StatusProviding.swift
+//  EventStatusProviding.swift
 //  Coinsa
 //
 //  Created by Daniil Gritsenko on 05.03.2026.
@@ -9,13 +9,13 @@ import Foundation
 
 // MARK: - Protocol
 
-protocol StatusProviding: DateRangeProviding {
+protocol EventStatusProviding: DateRangeProviding {
     var status: EventStatus { get }
 }
 
 // MARK: - Default Implementation
 
-extension StatusProviding {
+extension EventStatusProviding {
     var status: EventStatus {
         let now = Date.now
         if now < startDate {

@@ -8,10 +8,14 @@
 import SwiftUI
 
 enum AppTheme: String, CaseIterable, Identifiable {
+    // MARK: - Cases
+    
     case system
     case light
     case dark
 
+    // MARK: - Computed Properties
+    
     var id: String { rawValue }
 
     var titleKey: LocalizedStringKey {

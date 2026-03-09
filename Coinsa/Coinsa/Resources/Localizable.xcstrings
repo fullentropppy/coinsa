@@ -4,6 +4,9 @@
     "" : {
       "shouldTranslate" : false
     },
+    "~ %@" : {
+
+    },
     "common.cancel" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1024,22 +1027,6 @@
         }
       }
     },
-    "preview.data.baseCurrencyCode" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "USD"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "RUB"
-          }
-        }
-      }
-    },
     "preview.data.expenseComment.breakfast" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1420,13 +1407,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Select the base currency for new trips"
+            "value" : "The default currency for displaying amounts in trips, locations, expenses, and for budget planning. It cannot be changed."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Выберите базовую валюту для новых поездок"
+            "value" : "Валюта по умолчанию для отображения сумм в поездках, локациях, тратах и для планирования бюджета. Не может быть изменена."
           }
         }
       }
@@ -1443,7 +1430,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Базовая валюта"
+            "value" : "Осн. валюта"
           }
         }
       }

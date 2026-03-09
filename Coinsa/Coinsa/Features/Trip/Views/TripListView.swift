@@ -12,7 +12,6 @@ struct TripListView: View {
     // MARK: - Stored Properties
     
     @Environment(\.modelContext) private var context
-    @Environment(AppSettingsStore.self) private var settingsStore
     @Query(sort: \Trip.startDate) private var trips: [Trip]
 
     @State private var isShowingEdtitingSheet = false
@@ -43,7 +42,7 @@ struct TripListView: View {
             .navigationTitle("trip.list.navigationTitle")
             .navigationBarTitleDisplayMode(.large)
             .sheet(isPresented: $isShowingEdtitingSheet) {
-                TripEditView(trip: nil, baseCurrencyCode: settingsStore.baseCurrencyCode)
+                TripEditView(trip: nil)
             }
             .alert("trip.list.deletionConfirmation.title", isPresented: $deletionHandler.isShowingDeleteConfirmation) {
                 Button("trip.list.deletionConfirmation.delete", role: .destructive) {
@@ -115,34 +114,25 @@ private struct PreviewData {
 
 #Preview("Light - RU") {
     let data = PreviewData(withTrips: true)
-    let store = AppSettingsStore(context: data.container.mainContext)
-    store.baseCurrencyCode = PreviewCurrency.baseCurrencyCode
 
     return TripListView()
         .modelContainer(data.container)
-        .environment(store)
         .environment(\.locale, Locale(identifier: "ru"))
         .preferredColorScheme(.light)
 }
 
 #Preview("Dark - EN") {
     let data = PreviewData(withTrips: true)
-    let store = AppSettingsStore(context: data.container.mainContext)
-    store.baseCurrencyCode = PreviewCurrency.baseCurrencyCode
 
     return TripListView()
         .modelContainer(data.container)
-        .environment(store)
         .environment(\.locale, Locale(identifier: "en"))
         .preferredColorScheme(.dark)
 }
 
 #Preview("Empty list") {
     let data = PreviewData(withTrips: false)
-    let store = AppSettingsStore(context: data.container.mainContext)
-    store.baseCurrencyCode = PreviewCurrency.baseCurrencyCode
 
     return TripListView()
         .modelContainer(data.container)
-        .environment(store)
 }

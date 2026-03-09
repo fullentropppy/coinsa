@@ -59,21 +59,24 @@ extension ButtonView {
 
 // MARK: - Previews
 
-private var previewButtons: some View {
-    HStack {
-        ButtonView.add(action: {})
-        ButtonView.edit(action: {})
-        ButtonView.save(action: {})
-        ButtonView.delete(action: {})
-        ButtonView.close(action: {})
-        ButtonView.settings(action: {})
+private extension ButtonView {
+    static func preview(colorScheme: ColorScheme) -> some View {
+        VStack(spacing: 20) {
+            ButtonView.add(action: {})
+            ButtonView.edit(action: {})
+            ButtonView.save(action: {})
+            ButtonView.delete(action: {})
+            ButtonView.close(action: {})
+            ButtonView.settings(action: {})
+        }
+        .preferredColorScheme(colorScheme)
     }
 }
 
 #Preview("Light") {
-    previewButtons.preferredColorScheme(.light)
+    ButtonView.preview(colorScheme: .light)
 }
 
 #Preview("dark") {
-    previewButtons.preferredColorScheme(.dark)
+    ButtonView.preview(colorScheme: .dark)
 }

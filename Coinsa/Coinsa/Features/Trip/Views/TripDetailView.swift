@@ -82,7 +82,7 @@ struct TripDetailView: View {
             toolbarContent
         }
         .sheet(isPresented: $isShowingTripEdit) {
-            TripEditView(trip: trip, baseCurrencyCode: trip.baseCurrencyCode)
+            TripEditView(trip: trip)
         }
         .sheet(isPresented: $isShowingLocationAdd) {
             LocationEditView(trip: trip)
@@ -153,13 +153,9 @@ private func previewView(
     colorScheme: ColorScheme?
 ) -> some View {
     let data = PreviewData(withLocations: withLocations)
-    let store = AppSettingsStore(context: data.container.mainContext)
-    store.baseCurrencyCode = PreviewCurrency.baseCurrencyCode
-
     return NavigationStack {
         TripDetailView(trip: data.trip)
             .modelContainer(data.container)
-            .environment(store)
             .environment(\.locale, Locale(identifier: localeIdentifier))
             .preferredColorScheme(colorScheme)
     }

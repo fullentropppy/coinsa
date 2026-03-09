@@ -49,11 +49,11 @@ enum PreviewLocation: String {
     }
 
     var exchangeRateToBaseCurrency: Double {
-        PreviewCurrency.exchangeRate(from: currencyCode, to: PreviewCurrency.baseCurrencyCode)
+        PreviewCurrency.exchangeRate(from: currencyCode, to: CurrencyOption.baseCurrencyCode)
     }
 
     var exchangeRateFromBaseCurrency: Double {
-        PreviewCurrency.exchangeRate(from: PreviewCurrency.baseCurrencyCode, to: currencyCode)
+        PreviewCurrency.exchangeRate(from: CurrencyOption.baseCurrencyCode, to: currencyCode)
     }
 }
 
@@ -82,18 +82,18 @@ enum PreviewExpenseComment: String {
     }
 }
 
-enum PreviewCurrency {
-    static var baseCurrencyCode: String {
-        String(localized: String.LocalizationValue("preview.data.baseCurrencyCode"))
-    }
-
-    fileprivate static let exchangeRates: [String: [String: Double]] = [
+private enum PreviewCurrency {
+    // MARK: - PreviewCurrency. Stored Properties
+    
+    static let exchangeRates: [String: [String: Double]] = [
         CurrencyOption.try.code: [CurrencyOption.usd.code: 0.022, CurrencyOption.rub.code: 1.8],
         CurrencyOption.krw.code: [CurrencyOption.usd.code: 0.00075, CurrencyOption.rub.code: 0.065],
         CurrencyOption.jpy.code: [CurrencyOption.usd.code: 0.007, CurrencyOption.rub.code: 0.6]
     ]
 
-    fileprivate static func exchangeRate(from: String, to: String) -> Double {
+    // MARK: - PreviewCurrency. Public Methods
+    
+    static func exchangeRate(from: String, to: String) -> Double {
         if let directRate = exchangeRates[from]?[to] {
             return directRate
         }

@@ -15,18 +15,18 @@ struct DeletionHandler<Item> {
     var isShowingDeleteConfirmation = false
     var itemsPendingDeletion: [Item] = []
 
-    // MARK: - Initialization
-
-    init(messageKey: LocalizedStringKey) {
-        self.messageKey = messageKey
-    }
-
     // MARK: - Computed Properties
 
     var confirmationMessage: LocalizedStringKey {
         messageKey
     }
 
+    // MARK: - Initialization
+
+    init(messageKey: LocalizedStringKey) {
+        self.messageKey = messageKey
+    }
+    
     // MARK: - Public Methods
 
     mutating func requestDelete(items: [Item]) {

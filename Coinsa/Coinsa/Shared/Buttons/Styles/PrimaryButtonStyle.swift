@@ -8,8 +8,6 @@
 import SwiftUI
 
 struct PrimaryButtonStyle: ButtonStyle {
-    // MARK: - Public Methods
-    
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .font(.system(size: 20, weight: .semibold))

@@ -27,7 +27,7 @@ struct ExpenseRowView: View {
             Spacer()
             Text(
                 expense.amountInLocationCurrency,
-                format: .currency(code: expense.location.locationCurrencyCode)
+                format: .currency(code: expense.location.locationCurrencyCode).presentation(.isoCode)
             )
         }
     }

@@ -36,46 +36,44 @@ struct EmptyStateView: View {
 
 // MARK: - Previews
 
-private var tripEmptyStateView: some View {
-    EmptyStateView(
-        imageName: "suitcase",
-        title: "trip.list.empty.title",
-        description: "trip.list.empty.desctiption",
-        buttonLabel: "trip.list.addTrip",
-        onAddAction: {}
-    )
-}
-
-private var locationEmptyStateView: some View {
-    EmptyStateView(
-        imageName: "mappin.and.ellipse",
-        title: "location.list.empty.title",
-        description: "location.list.empty.desctiption",
-        buttonLabel: "location.list.addLocation",
-        onAddAction: {}
-    )
+private extension EmptyStateView {
+    static func tripPreview(locale: String, colorScheme: ColorScheme) -> some View {
+        EmptyStateView(
+            imageName: "suitcase",
+            title: "trip.list.empty.title",
+            description: "trip.list.empty.desctiption",
+            buttonLabel: "trip.list.addTrip",
+            onAddAction: {}
+        )
+        .environment(\.locale, Locale(identifier: locale))
+        .preferredColorScheme(colorScheme)
+    }
+    
+    static func locationPreview(locale: String, colorScheme: ColorScheme) -> some View {
+        EmptyStateView(
+            imageName: "mappin.and.ellipse",
+            title: "location.list.empty.title",
+            description: "location.list.empty.desctiption",
+            buttonLabel: "location.list.addLocation",
+            onAddAction: {}
+        )
+        .environment(\.locale, Locale(identifier: locale))
+        .preferredColorScheme(colorScheme)
+    }
 }
 
 #Preview("Trip. Light - RU") {
-    tripEmptyStateView
-        .environment(\.locale, Locale(identifier: "ru"))
-        .preferredColorScheme(.light)
+    EmptyStateView.tripPreview(locale: "ru", colorScheme: .light)
 }
 
 #Preview("Trip. Dark - EN") {
-    tripEmptyStateView
-        .environment(\.locale, Locale(identifier: "en"))
-        .preferredColorScheme(.dark)
+    EmptyStateView.tripPreview(locale: "en", colorScheme: .dark)
 }
 
 #Preview("Location. Light - RU") {
-    locationEmptyStateView
-        .environment(\.locale, Locale(identifier: "ru"))
-        .preferredColorScheme(.light)
+    EmptyStateView.locationPreview(locale: "ru", colorScheme: .light)
 }
 
 #Preview("Location. Dark - EN") {
-    locationEmptyStateView
-        .environment(\.locale, Locale(identifier: "en"))
-        .preferredColorScheme(.dark)
+    EmptyStateView.locationPreview(locale: "en", colorScheme: .dark)
 }

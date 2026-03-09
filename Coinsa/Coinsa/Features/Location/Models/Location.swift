@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 @Model
-class Location: DateRangeProviding, StatusProviding {
+class Location: DateRangeProviding, EventStatusProviding {
     // MARK: - Stored Properties
     
     var name: String

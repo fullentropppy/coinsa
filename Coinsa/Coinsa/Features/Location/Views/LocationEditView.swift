@@ -112,15 +112,17 @@ struct LocationEditView: View {
                         Text(category.localizedDisplayName)
                         Spacer()
                     }
-                    HStack(spacing: 12) {
+                    VStack(alignment: .leading, spacing: 6) {
                         budgetInputRow(
                             currencyCode: viewModel.baseCurrencyCode,
                             value: budgetBinding(for: category)
                         )
-                        budgetInputRow(
-                            currencyCode: viewModel.locationCurrencyCode.uppercased(),
-                            value: budgetLocalBinding(for: category)
+
+                        Text(
+                            "~ \(plannedLocalAmount(for: category), format: .currency(code: viewModel.locationCurrencyCode).presentation(.isoCode))"
                         )
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                     }
                 }
             }
@@ -131,8 +133,8 @@ struct LocationEditView: View {
                 Text("location.editing.budgets.total")
                 Spacer()
                 VStack(alignment: .trailing, spacing: 5) {
-                    Text(plannedTotalBase, format: .currency(code: viewModel.baseCurrencyCode))
-                    Text(plannedTotalLocal, format: .currency(code: viewModel.locationCurrencyCode))
+                    Text(plannedTotalBase, format: .currency(code: viewModel.baseCurrencyCode).presentation(.isoCode))
+                    Text(plannedTotalLocal, format: .currency(code: viewModel.locationCurrencyCode).presentation(.isoCode))
                 }
             }
         }
@@ -183,18 +185,10 @@ struct LocationEditView: View {
         )
     }
 
-    private func budgetLocalBinding(for category: ExpenseCategory) -> Binding<Double> {
-        Binding(
-            get: {
-                let rate = viewModel.exchangeRateLocationToBaseCurrency
-                guard rate > 0 else { return 0 }
-                return (viewModel.budgetAmounts[category] ?? 0) / rate
-            },
-            set: { newValue in
-                let rate = viewModel.exchangeRateLocationToBaseCurrency
-                viewModel.budgetAmounts[category] = max(0, newValue * rate)
-            }
-        )
+    private func plannedLocalAmount(for category: ExpenseCategory) -> Double {
+        let rate = viewModel.exchangeRateLocationToBaseCurrency
+        guard rate > 0 else { return 0 }
+        return (viewModel.budgetAmounts[category] ?? 0) / rate
     }
 
     private var plannedTotalBase: Double {
