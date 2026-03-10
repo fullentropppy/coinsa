@@ -57,27 +57,13 @@ struct TripDetailView: View {
 
             Section(header: Text("trip.detail.locations.header")) {
                 if locations.isEmpty {
-                    EmptyStateView(
-                        imageName: "mappin.and.ellipse",
-                        title: "location.list.empty.title",
-                        description: "location.list.empty.desctiption",
-                        buttonLabel: "location.list.addLocation",
-                        onAddAction: { isShowingLocationAdd = true }
-                    )
+                    emptyLocationListContent
                 } else {
-                    ForEach(locations) { location in
-                        NavigationLink {
-                            LocationDetailView(location: location)
-                        } label: {
-                            LocationRowView(location: location)
-                        }
-                    }
-                    .onDelete(perform: requestDelete)
+                    locationListContent
                 }
             }
         }
         .navigationTitle(trip.name)
-        .navigationBarTitleDisplayMode(.large)
         .toolbar {
             toolbarContent
         }
@@ -109,6 +95,27 @@ struct TripDetailView: View {
 
     // MARK: - Components
 
+    private var locationListContent: some View {
+        ForEach(locations) { location in
+            NavigationLink {
+                LocationDetailView(location: location)
+            } label: {
+                LocationRowView(location: location)
+            }
+        }
+        .onDelete(perform: requestDelete)
+    }
+    
+    private var emptyLocationListContent: some View {
+        EmptyStateView(
+            imageName: "mappin.and.ellipse",
+            title: "location.list.empty.title",
+            description: "location.list.empty.desctiption",
+            buttonLabel: "location.list.addLocation",
+            onAddAction: { isShowingLocationAdd = true }
+        )
+    }
+    
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
         ToolbarItemGroup(placement: .topBarTrailing) {
@@ -135,40 +142,45 @@ struct TripDetailView: View {
 
 // MARK: - Previews
 
-private struct PreviewData {
-    let container: ModelContainer
-    let trip: Trip
-
-    init(withLocations: Bool) {
+private extension TripDetailView {
+    static func preview(
+        withLocations: Bool,
+        locale: Locale,
+        colorScheme: ColorScheme
+    ) -> some View {
         let builder = PreviewBuilder.builder().withLocations(withLocations)
-        self.container = builder.buildContainer()
-        self.trip = builder.fetchTrip(from: container)
-    }
-}
-
-@MainActor
-private func previewView(
-    withLocations: Bool,
-    localeIdentifier: String,
-    colorScheme: ColorScheme?
-) -> some View {
-    let data = PreviewData(withLocations: withLocations)
-    return NavigationStack {
-        TripDetailView(trip: data.trip)
-            .modelContainer(data.container)
-            .environment(\.locale, Locale(identifier: localeIdentifier))
-            .preferredColorScheme(colorScheme)
+        let container = builder.buildContainer()
+        let trip = builder.fetchTrip(from: container)
+        
+        return NavigationStack {
+            TripDetailView(trip: trip)
+                .modelContainer(container)
+                .environment(\.locale, locale)
+                .preferredColorScheme(colorScheme)
+        }
     }
 }
 
 #Preview("Light - RU") {
-    previewView(withLocations: true, localeIdentifier: "ru", colorScheme: .light)
+    TripDetailView.preview(
+        withLocations: true, locale: PreviewLocale.ru.locale, colorScheme: .light
+    )
 }
 
 #Preview("Dark - EN") {
-    previewView(withLocations: true, localeIdentifier: "en", colorScheme: .dark)
+    TripDetailView.preview(
+        withLocations: true, locale: PreviewLocale.en.locale, colorScheme: .dark
+    )
 }
 
-#Preview("Empty list") {
-    previewView(withLocations: false, localeIdentifier: "en", colorScheme: nil)
+#Preview("Empty List. Light - RU") {
+    TripDetailView.preview(
+        withLocations: false, locale: PreviewLocale.ru.locale, colorScheme: .light
+    )
+}
+
+#Preview("Empty List. Dark - EN") {
+    TripDetailView.preview(
+        withLocations: false, locale: PreviewLocale.ru.locale, colorScheme: .dark
+    )
 }

@@ -13,86 +13,99 @@ struct TripHeaderView: View {
     let data: TripDetailHeaderData
     let showsSummary: Bool
 
-    // MARK: - Body
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            HStack {
-                EventStatusLabelView(status: data.status)
-                Spacer()
-                EventIntervalView(startDate: data.startDate, endDate: data.endDate)
-                Spacer()
-                EventDurationView(days: data.durationDays)
-            }
-
-            if showsSummary {
-                HStack(spacing: 10) {
-                    TripAmountCardView(
-                        title: "trip.detail.summary.planned",
-                        amount: data.plannedAmount,
-                        currencyCode: data.currencyCode,
-                        tint: .blue
-                    )
-                    TripAmountCardView(
-                        title: "trip.detail.summary.actual",
-                        amount: data.actualAmount,
-                        currencyCode: data.currencyCode,
-                        tint: .yellow
-                    )
-                }
-
-                TripAmountCardView(
-                    title: "trip.detail.summary.difference",
-                    amount: data.amountDifference,
-                    currencyCode: data.currencyCode,
-                    tint: differenceTint
-                )
-            }
-        }
-    }
+    // MARK: - Computed Properties
     
     private var differenceTint: Color {
         data.amountDifference >= 0 ? .green : .red
     }
+    
+    // MARK: - Body
+
+    var body: some View {
+        VStack(spacing: 14) {
+            headerContent
+            if showsSummary {
+                summaryContent
+            }
+        }
+    }
+    
+    // MARK: - Components
+    
+    private var headerContent: some View {
+        HStack {
+            EventStatusLabelView(status: data.status)
+            Spacer()
+            EventIntervalView(startDate: data.startDate, endDate: data.endDate)
+            Spacer()
+            EventDurationView(days: data.durationDays)
+        }
+    }
+    
+    private var summaryContent: some View {
+        VStack(spacing: 14) {
+            HStack(spacing: 14) {
+                TripAmountCardView(
+                    title: "trip.detail.summary.planned",
+                    amount: data.plannedAmount,
+                    currencyCode: data.currencyCode,
+                    tint: .blue
+                )
+                TripAmountCardView(
+                    title: "trip.detail.summary.actual",
+                    amount: data.actualAmount,
+                    currencyCode: data.currencyCode,
+                    tint: .yellow
+                )
+            }
+            
+            TripAmountCardView(
+                title: "trip.detail.summary.difference",
+                amount: data.amountDifference,
+                currencyCode: data.currencyCode,
+                tint: differenceTint
+            )
+        }
+    }
+    
 }
 
 // MARK: - Preview
 
-private struct PreviewData {
-    var headerData: TripDetailHeaderData
-    
-    init() {
-        let builder = PreviewBuilder.builder()
-        let data = builder.buildData()
-        let trip = builder.getTrip(from: data)
-        let viewModel = TripDetailViewModel(trip: trip)
-        
-        self.headerData = viewModel.headerData
+private extension TripHeaderView {
+    static func preview(
+        withSummary: Bool,
+        locale: Locale,
+        colorScheme: ColorScheme
+    ) -> some View {
+        List {
+            let builder = PreviewBuilder.builder()
+            let data = builder.buildData()
+            let trip = builder.getTrip(from: data)
+            let viewModel = TripDetailViewModel(trip: trip)
+            
+            TripHeaderView(
+                data: viewModel.headerData,
+                showsSummary: withSummary
+            )
+            .environment(\.locale, locale)
+            .preferredColorScheme(colorScheme)
+        }
     }
 }
 
 #Preview("Light - RU") {
-    let data = PreviewData()
-    
-    List {
-        TripHeaderView(
-            data: data.headerData,
-            showsSummary: true
-        )
-        .environment(\.locale, Locale(identifier: "ru"))
-        .preferredColorScheme(.light)
-    }
+    TripHeaderView.preview(withSummary: true, locale: PreviewLocale.ru.locale, colorScheme: .light)
 }
 
 #Preview("Dark - EN") {
-    let data = PreviewData()
-    
-    List {
-        TripHeaderView(
-            data: data.headerData,
-            showsSummary: true
-        )
-        .environment(\.locale, Locale(identifier: "en"))
-        .preferredColorScheme(.dark)
-    }
+    TripHeaderView.preview(withSummary: true, locale: PreviewLocale.en.locale, colorScheme: .dark)
+}
+
+#Preview("No Summary. Light - RU") {
+    TripHeaderView.preview(withSummary: false, locale: PreviewLocale.ru.locale, colorScheme: .light)
+}
+
+#Preview("No Summary. Dark - EN") {
+    TripHeaderView.preview(withSummary: false, locale: PreviewLocale.en.locale, colorScheme: .dark)
 }

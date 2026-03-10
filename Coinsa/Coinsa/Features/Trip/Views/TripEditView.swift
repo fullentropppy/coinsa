@@ -112,24 +112,38 @@ struct TripEditView: View {
 
 // MARK: - Previews
 
-private var previewTrip: Trip {
-    let builder = PreviewBuilder.builder().withBudgets(false).withExpenses(false)
-    let data = builder.buildData()
-    return builder.getTrip(from: data)
+private extension TripEditView {
+    static func preview(
+        withTrip: Bool,
+        locale: Locale,
+        colorScheme: ColorScheme
+    ) -> some View {
+        var trip: Trip? = nil
+        
+        if withTrip {
+            let builder = PreviewBuilder.builder().withBudgets(false).withExpenses(false)
+            let data = builder.buildData()
+            trip = builder.getTrip(from: data)
+        }
+
+        return TripEditView(trip: trip)
+            .environment(\.locale, locale)
+            .preferredColorScheme(colorScheme)
+    }
 }
 
 #Preview("Light - RU") {
-    TripEditView(trip: previewTrip)
-        .environment(\.locale, Locale(identifier: "ru"))
-        .preferredColorScheme(.light)
+    TripEditView.preview(withTrip: true, locale: PreviewLocale.ru.locale, colorScheme: .light)
 }
 
 #Preview("Dark - EN") {
-    TripEditView(trip: previewTrip)
-        .environment(\.locale, Locale(identifier: "en"))
-        .preferredColorScheme(.dark)
+    TripEditView.preview(withTrip: true, locale: PreviewLocale.en.locale, colorScheme: .dark)
 }
 
-#Preview("Empty item") {
-    TripEditView(trip: nil)
+#Preview("New Trip. Light - RU") {
+    TripEditView.preview(withTrip: false, locale: PreviewLocale.ru.locale, colorScheme: .light)
+}
+
+#Preview("New Trip. Dark - EN") {
+    TripEditView.preview(withTrip: false, locale: PreviewLocale.en.locale, colorScheme: .dark)
 }

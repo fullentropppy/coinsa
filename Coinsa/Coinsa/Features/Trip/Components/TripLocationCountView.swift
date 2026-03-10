@@ -28,16 +28,21 @@ struct TripLocationCountView: View {
 
 // MARK: - Previews
 
+private extension TripLocationCountView {
+    static func preview(colorScheme: ColorScheme) -> some View {
+        VStack(spacing: 20) {
+            TripLocationCountView(count: 1)
+            TripLocationCountView(count: 5)
+            TripLocationCountView(count: 10)
+        }
+        .preferredColorScheme(colorScheme)
+    }
+}
+
 #Preview("Light") {
-    TripLocationCountView(count: 1)
-    TripLocationCountView(count: 5)
-    TripLocationCountView(count: 10)
-        .preferredColorScheme(.light)
+    TripLocationCountView.preview(colorScheme: .light)
 }
 
 #Preview("Dark") {
-    TripLocationCountView(count: 1)
-    TripLocationCountView(count: 5)
-    TripLocationCountView(count: 10)
-        .preferredColorScheme(.dark)
+    TripLocationCountView.preview(colorScheme: .dark)
 }

@@ -35,24 +35,24 @@ struct TripRowView: View {
 
 // MARK: - Previews
 
-extension TripRowView {
-    static func preview(locale: String, colorScheme: ColorScheme) -> some View {
+private extension TripRowView {
+    static func preview(locale: Locale, colorScheme: ColorScheme) -> some View {
         let builder = PreviewBuilder.builder()
         let data = builder.buildData()
         let trip = builder.getTrip(from: data)
 
         return List {
             TripRowView(trip: trip)
-                .environment(\.locale, Locale(identifier: locale))
+                .environment(\.locale, locale)
                 .preferredColorScheme(colorScheme)
         }
     }
 }
 
 #Preview("Light - RU") {
-    TripRowView.preview(locale: "ru", colorScheme: .light)
+    TripRowView.preview(locale: PreviewLocale.ru.locale, colorScheme: .light)
 }
 
 #Preview("Dark - EN") {
-    TripRowView.preview(locale: "en", colorScheme: .dark)
+    TripRowView.preview(locale: PreviewLocale.en.locale, colorScheme: .dark)
 }

@@ -37,21 +37,25 @@ struct TripAmountCardView: View {
 
 // MARK: - Preview
 
+private extension TripAmountCardView {
+    static func preview(locale: Locale, colorScheme: ColorScheme) -> some View {
+        TripAmountCardView(
+            title: "trip.detail.summary.planned",
+            amount: 56950.55,
+            currencyCode: CurrencyOption.baseCurrencyCode,
+            tint: .blue
+        )
+        .padding(100)
+        .environment(\.locale, locale)
+        .preferredColorScheme(colorScheme)
+        
+    }
+}
+
 #Preview("Light - RU") {
-    TripAmountCardView(
-        title: "План", amount: 56950.55, currencyCode: "RUB", tint: .blue
-    )
-        .environment(\.locale, Locale(identifier: "ru"))
-        .preferredColorScheme(.light)
-        .padding()
-    
+    TripAmountCardView.preview(locale: PreviewLocale.ru.locale, colorScheme: .light)
 }
 
 #Preview("Dark - EN") {
-    TripAmountCardView(
-        title: "Planned", amount: 760.25, currencyCode: "RUB", tint: .blue
-    )
-        .environment(\.locale, Locale(identifier: "ru"))
-        .preferredColorScheme(.light)
-        .padding()
+    TripAmountCardView.preview(locale: PreviewLocale.en.locale, colorScheme: .dark)
 }

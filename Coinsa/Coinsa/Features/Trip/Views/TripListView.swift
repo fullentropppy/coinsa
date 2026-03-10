@@ -31,7 +31,6 @@ struct TripListView: View {
         NavigationStack {
             tripListContent
             .navigationTitle("trip.list.navigationTitle")
-            .navigationBarTitleDisplayMode(.large)
             .sheet(isPresented: $isShowingEdtitingSheet) {
                 TripEditView(trip: nil)
             }
@@ -52,7 +51,7 @@ struct TripListView: View {
             }
             .overlay {
                 if trips.isEmpty {
-                    emptyStateContent
+                    emptyTripListContent
                 }
             }
         }
@@ -73,7 +72,7 @@ struct TripListView: View {
         }
     }
     
-    private var emptyStateContent: some View {
+    private var emptyTripListContent: some View {
         EmptyStateView(
             imageName: "suitcase",
             title: "trip.list.empty.title",
@@ -141,13 +140,13 @@ private extension TripListView {
     )
 }
 
-#Preview("Empty list. Light - RU") {
+#Preview("Empty List. Light - RU") {
     TripListView.preview(
         withTrips: false, locale: PreviewLocale.ru.locale, colorScheme: .light
     )
 }
 
-#Preview("Empty list. Dark - EN") {
+#Preview("Empty List. Dark - EN") {
     TripListView.preview(
         withTrips: false, locale: PreviewLocale.ru.locale, colorScheme: .dark
     )
