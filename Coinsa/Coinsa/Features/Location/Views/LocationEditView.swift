@@ -27,11 +27,12 @@ struct LocationEditView: View {
 
     // MARK: - Initialization
 
-    init(trip: Trip, location: Location? = nil) {
+    init(trip: Trip, location: Location? = nil, baseCurrencyOption: CurrencyOption) {
         _viewModel = State(
             initialValue: LocationViewModel(
                 trip: trip,
-                location: location
+                location: location,
+                baseCurrencyOption: baseCurrencyOption
             )
         )
     }
@@ -103,7 +104,7 @@ struct LocationEditView: View {
 
     private var budgetsSection: some View {
         Section {
-            ForEach(ExpenseCategory.allCases, id: \.self) { category in
+            ForEach(ExpenseCategory.allCases, id: \.id) { (category: ExpenseCategory) in
                 VStack(alignment: .leading, spacing: 8) {
                     HStack {
                         Image(systemName: category.symbolName)
@@ -114,12 +115,12 @@ struct LocationEditView: View {
                     }
                     VStack(alignment: .leading, spacing: 6) {
                         budgetInputRow(
-                            currencyCode: viewModel.baseCurrencyCode,
+                            currencyCode: viewModel.baseCurrencyOption.code,
                             value: budgetBinding(for: category)
                         )
 
                         Text(
-                            "~ \(plannedLocalAmount(for: category), format: .currency(code: viewModel.locationCurrencyCode).presentation(.isoCode))"
+                            "~ \(plannedLocalAmount(for: category), format: .currency(code: viewModel.locationCurrencyOption.code).presentation(.isoCode))"
                         )
                         .font(.caption)
                         .foregroundStyle(.secondary)
@@ -133,8 +134,8 @@ struct LocationEditView: View {
                 Text("location.editing.budgets.total")
                 Spacer()
                 VStack(alignment: .trailing, spacing: 5) {
-                    Text(plannedTotalBase, format: .currency(code: viewModel.baseCurrencyCode).presentation(.isoCode))
-                    Text(plannedTotalLocal, format: .currency(code: viewModel.locationCurrencyCode).presentation(.isoCode))
+                    Text(plannedTotalBase, format: .currency(code: viewModel.baseCurrencyOption.code).presentation(.isoCode))
+                    Text(plannedTotalLocal, format: .currency(code: viewModel.baseCurrencyOption.code).presentation(.isoCode))
                 }
             }
         }
@@ -203,8 +204,8 @@ struct LocationEditView: View {
 
     private var locationCurrencyBinding: Binding<CurrencyOption> {
         Binding(
-            get: { CurrencyOption.from(code: viewModel.locationCurrencyCode) },
-            set: { viewModel.locationCurrencyCode = $0.code }
+            get: { viewModel.locationCurrencyOption },
+            set: { viewModel.locationCurrencyOption = $0 }
         )
     }
 
@@ -242,7 +243,8 @@ private struct previewData {
     let data = previewData()
     LocationEditView(
         trip: data.trip,
-        location: data.location
+        location: data.location,
+        baseCurrencyOption: CurrencyOption.defaultOption
     )
         .modelContainer(data.container)
         .environment(\.locale, Locale(identifier: "ru"))
@@ -253,7 +255,8 @@ private struct previewData {
     let data = previewData()
     LocationEditView(
         trip: data.trip,
-        location: data.location
+        location: data.location,
+        baseCurrencyOption: CurrencyOption.defaultOption
     )
         .modelContainer(data.container)
         .environment(\.locale, Locale(identifier: "en"))
@@ -262,6 +265,9 @@ private struct previewData {
 
 #Preview("Empty item") {
     let data = previewData()
-    LocationEditView(trip: data.trip)
+    LocationEditView(
+        trip: data.trip,
+        baseCurrencyOption: CurrencyOption.defaultOption
+    )
         .modelContainer(data.container)
 }

@@ -16,12 +16,12 @@ final class LocationViewModel {
     private let location: Location?
 
     let trip: Trip
-    let baseCurrencyCode: String
+    let baseCurrencyOption: CurrencyOption
 
     var name: String
     var startDate: Date
     var endDate: Date
-    var locationCurrencyCode: String
+    var locationCurrencyOption: CurrencyOption
     var exchangeRateLocationToBaseCurrency: Double
     var budgetAmounts: [ExpenseCategory: Double]
 
@@ -45,22 +45,22 @@ final class LocationViewModel {
 
     // MARK: - Initialization
 
-    init(trip: Trip, location: Location?) {
+    init(trip: Trip, location: Location?, baseCurrencyOption: CurrencyOption) {
         self.location = location
         self.trip = location?.trip ?? trip
-        self.baseCurrencyCode = CurrencyOption.baseCurrencyCode
+        self.baseCurrencyOption = baseCurrencyOption
 
         if let location {
             name = location.name
             startDate = location.startDate
             endDate = location.endDate
-            locationCurrencyCode = location.locationCurrencyCode
+            locationCurrencyOption = CurrencyOption.from(code: location.locationCurrencyCode)
             exchangeRateLocationToBaseCurrency = location.exchangeRateLocationToBaseCurrency
         } else {
             name = ""
             startDate = trip.startDate
             endDate = trip.endDate
-            locationCurrencyCode = baseCurrencyCode
+            locationCurrencyOption = baseCurrencyOption
             exchangeRateLocationToBaseCurrency = 1.0
         }
 
@@ -81,7 +81,7 @@ final class LocationViewModel {
                 name: name,
                 startDate: startDate,
                 endDate: endDate,
-                locationCurrencyCode: locationCurrencyCode,
+                locationCurrencyOption: locationCurrencyOption,
                 exchangeRateLocationToBaseCurrency: exchangeRateLocationToBaseCurrency,
                 budgetsByCategory: budgetAmounts
             )
@@ -90,7 +90,7 @@ final class LocationViewModel {
                 name: name,
                 startDate: startDate,
                 endDate: endDate,
-                locationCurrencyCode: locationCurrencyCode,
+                locationCurrencyOption: locationCurrencyOption,
                 exchangeRateLocationToBaseCurrency: exchangeRateLocationToBaseCurrency,
                 trip: trip,
                 budgetsByCategory: budgetAmounts

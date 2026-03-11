@@ -5,7 +5,7 @@
       "shouldTranslate" : false
     },
     "~ %@" : {
-
+      "shouldTranslate" : false
     },
     "common.cancel" : {
       "extractionState" : "manual",
@@ -496,6 +496,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Предстоящая"
+          }
+        }
+      }
+    },
+    "expense.category.activity" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Activity"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Активность"
           }
         }
       }

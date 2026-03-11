@@ -26,16 +26,20 @@ final class AppSettingsStore {
     @ObservationIgnored
     private let defaults = UserDefaults.standard
 
-    let baseCurrencyCode: String
+    // MARK: - Computed Properties
+    
+    private var baseCurrencyCode: String {
+        settings.baseCurrencyCode
+    }
 
+    var baseCurrencyOption: CurrencyOption {
+        CurrencyOption.from(code: baseCurrencyCode)
+    }
+    
     var selectedTheme: AppTheme {
         didSet {
             defaults.set(selectedTheme.rawValue, forKey: themeKey)
         }
-    }
-
-    var colorScheme: ColorScheme? {
-        selectedTheme.colorScheme
     }
 
     // MARK: - Initialization
@@ -43,16 +47,13 @@ final class AppSettingsStore {
     init(context: ModelContext) {
         self.context = context
 
-        if let stored = try? context.fetch(FetchDescriptor<AppSettings>()).first {
-            settings = stored
+        if let storedSettings = try? context.fetch(FetchDescriptor<AppSettings>()).first {
+            settings = storedSettings
         } else {
-            let newSettings = AppSettings(baseCurrencyCode: CurrencyOption.baseCurrencyCode)
+            let newSettings = AppSettings(baseCurrencyCode: CurrencyOption.defaultCurrencyCode)
             context.insert(newSettings)
             settings = newSettings
         }
-
-        baseCurrencyCode = CurrencyOption.baseCurrencyCode
-        settings.baseCurrencyCode = baseCurrencyCode
 
         let rawTheme = defaults.string(forKey: themeKey) ?? AppTheme.system.rawValue
         selectedTheme = AppTheme(rawValue: rawTheme) ?? .system

@@ -48,13 +48,13 @@ struct TripHeaderView: View {
                 TripAmountCardView(
                     title: "trip.detail.summary.planned",
                     amount: data.plannedAmount,
-                    currencyCode: data.currencyCode,
+                    currencyOption: data.currencyOption,
                     tint: .blue
                 )
                 TripAmountCardView(
                     title: "trip.detail.summary.actual",
                     amount: data.actualAmount,
-                    currencyCode: data.currencyCode,
+                    currencyOption: data.currencyOption,
                     tint: .yellow
                 )
             }
@@ -62,7 +62,7 @@ struct TripHeaderView: View {
             TripAmountCardView(
                 title: "trip.detail.summary.difference",
                 amount: data.amountDifference,
-                currencyCode: data.currencyCode,
+                currencyOption: data.currencyOption,
                 tint: differenceTint
             )
         }
@@ -82,7 +82,10 @@ private extension TripHeaderView {
             let builder = PreviewBuilder.builder()
             let data = builder.buildData()
             let trip = builder.getTrip(from: data)
-            let viewModel = TripDetailViewModel(trip: trip)
+            let viewModel = TripDetailViewModel(
+                trip: trip,
+                baseCurrencyOption: CurrencyOption.defaultOption
+            )
             
             TripHeaderView(
                 data: viewModel.headerData,

@@ -8,10 +8,15 @@
 import Foundation
 
 enum ExpenseCategory: String, Codable, CaseIterable {
+    // MARK: - Cases
     case food
     case transport
-    case activities
+    case activity
     case shopping
     case medicine
     case other
+    
+    // MARK: - Computed Properties
+    
+    var id: String { rawValue }
 }

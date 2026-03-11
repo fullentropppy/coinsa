@@ -12,7 +12,7 @@ struct TripAmountCardView: View {
 
     let title: LocalizedStringKey
     let amount: Double
-    let currencyCode: String
+    let currencyOption: CurrencyOption
     let tint: Color
 
     // MARK: - Body
@@ -20,7 +20,7 @@ struct TripAmountCardView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             Text(title).font(.caption).foregroundStyle(.secondary)
-            Text(formattedAmount).font(.headline).foregroundStyle(.primary)
+            Text(currencyOption.code).font(.headline).foregroundStyle(.primary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(10)
@@ -28,10 +28,6 @@ struct TripAmountCardView: View {
             RoundedRectangle(cornerRadius: 15, style: .continuous)
                 .fill(tint.opacity(0.1))
         )
-    }
-
-    private var formattedAmount: String {
-        amount.formatted(.currency(code: currencyCode).presentation(.isoCode))
     }
 }
 
@@ -42,7 +38,7 @@ private extension TripAmountCardView {
         TripAmountCardView(
             title: "trip.detail.summary.planned",
             amount: 56950.55,
-            currencyCode: CurrencyOption.baseCurrencyCode,
+            currencyOption: CurrencyOption.defaultOption,
             tint: .blue
         )
         .padding(100)

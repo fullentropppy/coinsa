@@ -40,17 +40,17 @@ enum CurrencyOption: String, CaseIterable, Identifiable {
     
     // MARK: - Computed Properties
     
-    static var baseOption: CurrencyOption {
+    static var defaultOption: CurrencyOption {
         CurrencyOption.rub
     }
     
-    static var baseCurrencyCode: String {
-        baseOption.code
+    static var defaultCurrencyCode: String {
+        defaultOption.code
     }
 
     // MARK: - Public Methods
     
     static func from(code: String) -> CurrencyOption {
-        CurrencyOption(rawValue: code.uppercased()) ?? .rub
+        CurrencyOption(rawValue: code.uppercased()) ?? .defaultOption
     }
 }

@@ -98,7 +98,7 @@ enum PreviewGenerator {
         return [
             Budget(category: .food, amountInBaseCurrency: exchangeRate * 21000, location: location),
             Budget(category: .transport, amountInBaseCurrency: exchangeRate * 3600, location: location),
-            Budget(category: .activities, amountInBaseCurrency: exchangeRate * 8200, location: location),
+            Budget(category: .activity, amountInBaseCurrency: exchangeRate * 8200, location: location),
             Budget(category: .shopping, amountInBaseCurrency: exchangeRate * 6800, location: location),
             Budget(category: .other, amountInBaseCurrency: exchangeRate * 4200, location: location)
         ]
@@ -120,7 +120,7 @@ enum PreviewGenerator {
                 date: now.addingTimeInterval(-day * 97 + hour * 19),
                 amountInLocationCurrency: 2100,
                 exchangeRateLocationToBaseCurrency: exchangeRate,
-                category: .activities,
+                category: .activity,
                 location: location
             ),
             Expense(
@@ -251,7 +251,7 @@ enum PreviewGenerator {
         return [
             Budget(category: .food, amountInBaseCurrency: exchangeRate * 24000, location: location),
             Budget(category: .transport, amountInBaseCurrency: exchangeRate * 5200, location: location),
-            Budget(category: .activities, amountInBaseCurrency: exchangeRate * 11000, location: location),
+            Budget(category: .activity, amountInBaseCurrency: exchangeRate * 11000, location: location),
             Budget(category: .shopping, amountInBaseCurrency: exchangeRate * 8500, location: location)
         ]
     }
@@ -314,7 +314,7 @@ enum PreviewGenerator {
                 date: startDate.addingTimeInterval(day * 2 + hour * 17),
                 amountInLocationCurrency: 28000,
                 exchangeRateLocationToBaseCurrency: exchangeRate,
-                category: .activities,
+                category: .activity,
                 location: location,
                 comment: PreviewExpenseComment.museum.rawValue
             ),
@@ -377,7 +377,7 @@ enum PreviewGenerator {
                 date: startDate.addingTimeInterval(day * 2 + hour * 15),
                 amountInLocationCurrency: 29500,
                 exchangeRateLocationToBaseCurrency: exchangeRate,
-                category: .activities,
+                category: .activity,
                 location: location,
                 comment: PreviewExpenseComment.temple.rawValue
             ),
@@ -518,7 +518,7 @@ enum PreviewGenerator {
         return [
             Budget(category: .food, amountInBaseCurrency: exchangeRate * 30000, location: location),
             Budget(category: .transport, amountInBaseCurrency: exchangeRate * 7200, location: location),
-            Budget(category: .activities, amountInBaseCurrency: exchangeRate * 13500, location: location),
+            Budget(category: .activity, amountInBaseCurrency: exchangeRate * 13500, location: location),
             Budget(category: .shopping, amountInBaseCurrency: exchangeRate * 10500, location: location),
             Budget(category: .medicine, amountInBaseCurrency: exchangeRate * 4200, location: location),
             Budget(category: .other, amountInBaseCurrency: exchangeRate * 6500, location: location)
@@ -530,7 +530,7 @@ enum PreviewGenerator {
 
         return [
             Budget(category: .food, amountInBaseCurrency: exchangeRate * 15000, location: location),
-            Budget(category: .activities, amountInBaseCurrency: exchangeRate * 6200, location: location)
+            Budget(category: .activity, amountInBaseCurrency: exchangeRate * 6200, location: location)
         ]
     }
 
@@ -573,7 +573,7 @@ enum PreviewGenerator {
                 date: startDate.addingTimeInterval(day * 2 + hour * 15),
                 amountInLocationCurrency: 2100,
                 exchangeRateLocationToBaseCurrency: exchangeRate,
-                category: .activities,
+                category: .activity,
                 location: location,
                 comment: PreviewExpenseComment.museum.rawValue
             ),
@@ -634,7 +634,7 @@ enum PreviewGenerator {
                 date: startDate.addingTimeInterval(day * 2 + hour * 16),
                 amountInLocationCurrency: 2100,
                 exchangeRateLocationToBaseCurrency: exchangeRate,
-                category: .activities,
+                category: .activity,
                 location: location
             ),
             Expense(
@@ -671,7 +671,7 @@ enum PreviewGenerator {
                 date: startDate.addingTimeInterval(day * 2 + hour * 13),
                 amountInLocationCurrency: 2400,
                 exchangeRateLocationToBaseCurrency: exchangeRate,
-                category: .activities,
+                category: .activity,
                 location: location,
                 comment: PreviewExpenseComment.museum.rawValue
             ),

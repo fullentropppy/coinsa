@@ -20,7 +20,7 @@ struct LocationStore {
         name: String,
         startDate: Date,
         endDate: Date,
-        locationCurrencyCode: String,
+        locationCurrencyOption: CurrencyOption,
         exchangeRateLocationToBaseCurrency: Double,
         trip: Trip,
         budgetsByCategory: [ExpenseCategory: Double]
@@ -29,7 +29,7 @@ struct LocationStore {
             name: name,
             startDate: startDate,
             endDate: endDate,
-            locationCurrencyCode: locationCurrencyCode,
+            locationCurrencyCode: locationCurrencyOption.code,
             exchangeRateLocationToBaseCurrency: exchangeRateLocationToBaseCurrency,
             trip: trip,
             budgets: [],
@@ -45,14 +45,14 @@ struct LocationStore {
         name: String,
         startDate: Date,
         endDate: Date,
-        locationCurrencyCode: String,
+        locationCurrencyOption: CurrencyOption,
         exchangeRateLocationToBaseCurrency: Double,
         budgetsByCategory: [ExpenseCategory: Double]
     ) {
         location.name = name
         location.startDate = startDate
         location.endDate = endDate
-        location.locationCurrencyCode = locationCurrencyCode
+        location.locationCurrencyCode = locationCurrencyOption.code
         location.exchangeRateLocationToBaseCurrency = exchangeRateLocationToBaseCurrency
 
         applyBudgets(budgetsByCategory, to: location)

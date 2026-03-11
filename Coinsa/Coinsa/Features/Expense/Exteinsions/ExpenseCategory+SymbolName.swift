@@ -12,7 +12,7 @@ extension ExpenseCategory {
         switch self {
         case .food: "fork.knife"
         case .transport: "car"
-        case .activities: "sparkles.2"
+        case .activity: "sparkles.2"
         case .shopping: "bag"
         case .medicine: "pills"
         case .other: "circle.grid.2x2"

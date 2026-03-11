@@ -12,6 +12,8 @@ struct TripDetailView: View {
     // MARK: - Stored Properties
 
     @Environment(\.modelContext) private var context
+    @Environment(AppSettingsStore.self) private var settingsStore
+    
     @Query private var locations: [Location]
 
     @State private var isShowingTripEdit = false
@@ -41,7 +43,10 @@ struct TripDetailView: View {
     }
 
     private var viewModel: TripDetailViewModel {
-        TripDetailViewModel(trip: trip)
+        TripDetailViewModel(
+            trip: trip,
+            baseCurrencyOption: CurrencyOption.defaultOption
+        )
     }
 
     // MARK: - Body
@@ -71,7 +76,10 @@ struct TripDetailView: View {
             TripEditView(trip: trip)
         }
         .sheet(isPresented: $isShowingLocationAdd) {
-            LocationEditView(trip: trip)
+            LocationEditView(
+                trip: trip,
+                baseCurrencyOption: settingsStore.baseCurrencyOption
+            )
         }
         .alert("location.list.deletionConfirmation.title", isPresented: $deletionHandler.isShowingDeleteConfirmation) {
             Button("location.list.deletionConfirmation.delete", role: .destructive) {
@@ -151,10 +159,12 @@ private extension TripDetailView {
         let builder = PreviewBuilder.builder().withLocations(withLocations)
         let container = builder.buildContainer()
         let trip = builder.fetchTrip(from: container)
+        let settingsStore = AppSettingsStore(context: container.mainContext)
         
         return NavigationStack {
             TripDetailView(trip: trip)
                 .modelContainer(container)
+                .environment(settingsStore)
                 .environment(\.locale, locale)
                 .preferredColorScheme(colorScheme)
         }

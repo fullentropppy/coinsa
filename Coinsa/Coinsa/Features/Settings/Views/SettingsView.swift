@@ -11,7 +11,7 @@ import SwiftData
 struct SettingsView: View {
     // MARK: - Stored Properties
 
-    @Environment(AppSettingsStore.self) private var settingsStore
+    @Environment(AppSettingsStore.self) private var appSettingsStore
 
     // MARK: - Body
 
@@ -30,7 +30,7 @@ struct SettingsView: View {
     private var baseCurrencySection: some View {
         Section {
             LabeledContent("settings.baseCurrency.title") {
-                Text(CurrencyOption.baseOption.localizedKey)
+                Text(appSettingsStore.baseCurrencyOption.localizedKey)
             }
         } footer: {
             Text("settings.baseCurrency.footer")
@@ -53,8 +53,8 @@ struct SettingsView: View {
 
     private var themeBinding: Binding<AppTheme> {
         Binding(
-            get: { settingsStore.selectedTheme },
-            set: { settingsStore.selectedTheme = $0 }
+            get: { appSettingsStore.selectedTheme },
+            set: { appSettingsStore.selectedTheme = $0 }
         )
     }
 }

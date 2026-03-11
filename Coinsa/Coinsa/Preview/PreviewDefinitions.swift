@@ -30,11 +30,11 @@ enum PreviewLocation: String {
     }
 
     var exchangeRateToBaseCurrency: Double {
-        PreviewCurrency.exchangeRate(from: currencyCode, to: CurrencyOption.baseCurrencyCode)
+        PreviewCurrency.exchangeRate(from: currencyCode, to: CurrencyOption.defaultCurrencyCode)
     }
 
     var exchangeRateFromBaseCurrency: Double {
-        PreviewCurrency.exchangeRate(from: CurrencyOption.baseCurrencyCode, to: currencyCode)
+        PreviewCurrency.exchangeRate(from: CurrencyOption.defaultCurrencyCode, to: currencyCode)
     }
 }
 
