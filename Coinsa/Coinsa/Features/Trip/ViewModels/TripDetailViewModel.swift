@@ -16,7 +16,10 @@ struct TripDetailViewModel {
     // MARK: - Computed Properties
 
     var headerData: TripDetailHeaderData {
-        TripDetailHeaderData(
+        let plannedAmount = trip.calculatePlannedAmount(inBase: true)
+        let actualAmount = trip.calculateActualAmount(inBase: true)
+        
+        return TripDetailHeaderData(
             startDate: trip.startDate,
             endDate: trip.endDate,
             durationDays: trip.durationInDays,
@@ -34,21 +37,6 @@ struct TripDetailViewModel {
         self.trip = trip
         self.baseCurrencyOption = baseCurrencyOption
     }
-
-    // MARK: - Private Methods
-
-    private var plannedAmount: Double {
-        trip.locations
-            .flatMap(\.budgets)
-            .reduce(0) { $0 + $1.amountInBaseCurrency }
-    }
-
-    private var actualAmount: Double {
-        trip.locations
-            .flatMap(\.expenses)
-            .reduce(0) { $0 + $1.amountInLocationCurrency * $1.exchangeRateLocationToBaseCurrency }
-    }
-
 }
 
 struct TripDetailHeaderData {

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct UpcomingTripView: View {
     // MARK: - Stored Properties
@@ -24,7 +25,7 @@ struct UpcomingTripView: View {
                         .font(.headline)
 
                     NavigationLink {
-                        TripDetailView(trip: trip)
+                        TripDetailView(tripID: trip.persistentModelID)
                     } label: {
                         TripRowView(trip: trip)
                     }

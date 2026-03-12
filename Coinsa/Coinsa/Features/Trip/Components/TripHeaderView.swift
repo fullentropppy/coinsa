@@ -67,7 +67,6 @@ struct TripHeaderView: View {
             )
         }
     }
-    
 }
 
 // MARK: - Preview

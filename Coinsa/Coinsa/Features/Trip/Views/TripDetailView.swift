@@ -14,44 +14,67 @@ struct TripDetailView: View {
     @Environment(\.modelContext) private var context
     @Environment(AppSettingsStore.self) private var settingsStore
     
+    @Query private var trips: [Trip]
     @Query private var locations: [Location]
 
-    @State private var isShowingTripEdit = false
-    @State private var isShowingLocationAdd = false
+    @State private var viewModel: TripDetailViewModel?
     @State private var deletionHandler = DeletionHandler<Location>(
         messageKey: "location.deletionConfirmation.message.single"
     )
+    
+    @State private var isShowingTripEdit = false
+    @State private var isShowingLocationAdd = false
 
-    let trip: Trip
+    let tripID: PersistentIdentifier
 
+    // MARK: - Computed Properties
+
+    private var trip: Trip? {
+        trips.first
+    }
+    
+    private var repository: LocationRepository {
+        LocationRepository(context: context)
+    }
+    
     // MARK: - Initialization
 
-    init(trip: Trip) {
-        self.trip = trip
-        let tripID = trip.persistentModelID
-
+    init(tripID: PersistentIdentifier) {
+        self.tripID = tripID
+        
+        _trips = Query(
+            filter: #Predicate<Trip> { $0.persistentModelID == tripID }
+        )
+        
         _locations = Query(
             filter: #Predicate<Location> { $0.trip.persistentModelID == tripID },
             sort: \.startDate
         )
-    }
-
-    // MARK: - Computed Properties
-
-    private var store: LocationStore {
-        LocationStore(context: context)
-    }
-
-    private var viewModel: TripDetailViewModel {
-        TripDetailViewModel(
-            trip: trip,
-            baseCurrencyOption: CurrencyOption.defaultOption
-        )
+        
+        _viewModel = State(initialValue: nil)
     }
 
     // MARK: - Body
 
     var body: some View {
+        Group {
+            if let trip, let viewModel {
+                detailContent(trip: trip, viewModel: viewModel)
+            } else {
+                ProgressView()
+            }
+        }
+        .onAppear {
+            updateViewModel()
+        }
+        .onChange(of: trips.count) { _, _ in
+            updateViewModel()
+        }
+    }
+
+    // MARK: - Components
+
+    private func detailContent(trip: Trip, viewModel: TripDetailViewModel) -> some View {
         List {
             Section {
                 TripHeaderView(
@@ -78,7 +101,7 @@ struct TripDetailView: View {
         .sheet(isPresented: $isShowingLocationAdd) {
             LocationEditView(
                 trip: trip,
-                baseCurrencyOption: settingsStore.baseCurrencyOption
+                baseCurrencyOption: viewModel.baseCurrencyOption
             )
         }
         .alert("location.list.deletionConfirmation.title", isPresented: $deletionHandler.isShowingDeleteConfirmation) {
@@ -100,8 +123,6 @@ struct TripDetailView: View {
             }
         }
     }
-
-    // MARK: - Components
 
     private var locationListContent: some View {
         ForEach(locations) { location in
@@ -140,11 +161,22 @@ struct TripDetailView: View {
     }
 
     private func confirmDelete() {
-        deletionHandler.confirmDelete { store.delete($0) }
+        deletionHandler.confirmDelete { repository.delete($0) }
     }
 
     private func cancelDelete() {
         deletionHandler.cancelDelete()
+    }
+
+    private func updateViewModel() {
+        guard let trip else {
+            viewModel = nil
+            return
+        }
+        viewModel = TripDetailViewModel(
+            trip: trip,
+            baseCurrencyOption: settingsStore.baseCurrencyOption
+        )
     }
 }
 
@@ -158,11 +190,11 @@ private extension TripDetailView {
     ) -> some View {
         let builder = PreviewBuilder.builder().withLocations(withLocations)
         let container = builder.buildContainer()
-        let trip = builder.fetchTrip(from: container)
         let settingsStore = AppSettingsStore(context: container.mainContext)
+        let tripID = builder.fetchTrip(from: container).persistentModelID
         
         return NavigationStack {
-            TripDetailView(trip: trip)
+            TripDetailView(tripID: tripID)
                 .modelContainer(container)
                 .environment(settingsStore)
                 .environment(\.locale, locale)

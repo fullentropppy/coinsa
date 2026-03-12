@@ -1,5 +1,5 @@
 //
-//  LocationStore.swift
+//  LocationRepository.swift
 //  Coinsa
 //
 //  Created by Daniil Gritsenko on 04.03.2026.
@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 @MainActor
-struct LocationStore {
+struct LocationRepository {
     // MARK: - Stored Properties
 
     let context: ModelContext
@@ -52,8 +52,8 @@ struct LocationStore {
         location.name = name
         location.startDate = startDate
         location.endDate = endDate
-        location.locationCurrencyCode = locationCurrencyOption.code
-        location.exchangeRateLocationToBaseCurrency = exchangeRateLocationToBaseCurrency
+        location.currencyCode = locationCurrencyOption.code
+        location.rateToBaseCurrency = exchangeRateLocationToBaseCurrency
 
         applyBudgets(budgetsByCategory, to: location)
     }

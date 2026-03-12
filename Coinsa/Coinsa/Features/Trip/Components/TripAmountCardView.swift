@@ -20,7 +20,12 @@ struct TripAmountCardView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             Text(title).font(.caption).foregroundStyle(.secondary)
-            Text(currencyOption.code).font(.headline).foregroundStyle(.primary)
+            HStack {
+                Text(String(format: "%.2f", amount))
+                    .font(.headline).foregroundStyle(.primary)
+                Text(currencyOption.code)
+                    .font(.headline).foregroundStyle(.secondary)
+            }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(10)

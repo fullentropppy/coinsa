@@ -54,8 +54,8 @@ final class LocationViewModel {
             name = location.name
             startDate = location.startDate
             endDate = location.endDate
-            locationCurrencyOption = CurrencyOption.from(code: location.locationCurrencyCode)
-            exchangeRateLocationToBaseCurrency = location.exchangeRateLocationToBaseCurrency
+            locationCurrencyOption = CurrencyOption.from(code: location.currencyCode)
+            exchangeRateLocationToBaseCurrency = location.rateToBaseCurrency
         } else {
             name = ""
             startDate = trip.startDate
@@ -74,9 +74,9 @@ final class LocationViewModel {
 
     // MARK: - Public Methods
 
-    func save(using store: LocationStore) {
+    func save(using repository: LocationRepository) {
         if let location {
-            store.update(
+            repository.update(
                 location,
                 name: name,
                 startDate: startDate,
@@ -86,7 +86,7 @@ final class LocationViewModel {
                 budgetsByCategory: budgetAmounts
             )
         } else {
-            store.add(
+            repository.add(
                 name: name,
                 startDate: startDate,
                 endDate: endDate,

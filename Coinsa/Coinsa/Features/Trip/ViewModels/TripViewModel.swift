@@ -58,11 +58,15 @@ final class TripViewModel {
     
     // MARK: - Public methods
     
-    func save(using store: TripStore) {
+    func save(using repository: TripRepository) {
         if let trip {
-            store.update(trip, name: name, startDate: startDate, endDate: endDate)
+            repository.update(
+                trip,
+                name: name,
+                startDate: startDate,
+                endDate: endDate)
         } else {
-            store.add(
+            repository.add(
                 name: name,
                 startDate: startDate,
                 endDate: endDate

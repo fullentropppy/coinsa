@@ -15,8 +15,8 @@ class Location: DateRangeProviding, EventStatusProviding {
     var name: String
     var startDate: Date
     var endDate: Date
-    var locationCurrencyCode: String
-    var exchangeRateLocationToBaseCurrency: Double
+    var currencyCode: String
+    var rateToBaseCurrency: Double
     var trip: Trip
     
     @Relationship(deleteRule: .cascade, inverse: \Budget.location)
@@ -40,10 +40,26 @@ class Location: DateRangeProviding, EventStatusProviding {
         self.name = name
         self.startDate = startDate
         self.endDate = endDate
-        self.locationCurrencyCode = locationCurrencyCode
-        self.exchangeRateLocationToBaseCurrency = exchangeRateLocationToBaseCurrency
+        self.currencyCode = locationCurrencyCode
+        self.rateToBaseCurrency = exchangeRateLocationToBaseCurrency
         self.trip = trip
         self.budgets = budgets
         self.expenses = expenses
+    }
+    
+    // MARK: - Public Methods
+
+    func calculatePlannedAmount(inBaseCurrency: Bool) -> Double {
+        budgets.reduce(0) {
+            let exchangeRate = inBaseCurrency ? rateToBaseCurrency : 1
+            return $0 + $1.amountInBaseCurrency * exchangeRate
+        }
+    }
+
+    func calculateActualAmount(inBaseCurrency: Bool) -> Double {
+        expenses.reduce(0) {
+            let exchangeRate = inBaseCurrency ? $1.rateToBaseCurrency : 1
+            return $0 + $1.amountInLocationCurrency * exchangeRate
+        }
     }
 }

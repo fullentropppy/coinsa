@@ -69,8 +69,8 @@ struct LocationListView: View {
 
     // MARK: - Actions
 
-    private var store: LocationStore {
-        LocationStore(context: context)
+    private var repository: LocationRepository {
+        LocationRepository(context: context)
     }
 
     private func requestDelete(at offsets: IndexSet) {
@@ -78,7 +78,7 @@ struct LocationListView: View {
     }
 
     private func confirmDelete() {
-        deletionHandler.confirmDelete { store.delete($0) }
+        deletionHandler.confirmDelete { repository.delete($0) }
     }
 
     private func cancelDelete() {

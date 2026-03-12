@@ -14,7 +14,7 @@ class Expense {
     
     var date: Date
     var amountInLocationCurrency: Double
-    var exchangeRateLocationToBaseCurrency: Double
+    var rateToBaseCurrency: Double
     var category: ExpenseCategory
     var location: Location
     var comment: String?
@@ -31,7 +31,7 @@ class Expense {
     ) {
         self.date = date
         self.amountInLocationCurrency = amountInLocationCurrency
-        self.exchangeRateLocationToBaseCurrency = exchangeRateLocationToBaseCurrency
+        self.rateToBaseCurrency = exchangeRateLocationToBaseCurrency
         self.category = category
         self.location = location
         self.comment = comment

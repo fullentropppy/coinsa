@@ -38,4 +38,18 @@ class Trip: DateRangeProviding, EventStatusProviding {
         self.endDate = endDate
         self.locations = locations
     }
+    
+    // MARK: - Public Methods
+
+    func calculatePlannedAmount(inBase: Bool) -> Double {
+        locations.reduce(0) {
+            $0 + $1.calculatePlannedAmount(inBaseCurrency: inBase)
+        }
+    }
+    
+    func calculateActualAmount(inBase: Bool) -> Double {
+        locations.reduce(0) {
+            $0 + $1.calculateActualAmount(inBaseCurrency: inBase)
+        }
+    }
 }

@@ -1,5 +1,5 @@
 //
-//  TripStore.swift
+//  TripRepository.swift
 //  Coinsa
 //
 //  Created by Daniil Gritsenko on 27.02.2026.
@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 @MainActor
-struct TripStore {
+struct TripRepository {
     // MARK: - Stored Properties
     
     let context: ModelContext

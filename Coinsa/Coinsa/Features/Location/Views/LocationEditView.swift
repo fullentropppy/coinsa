@@ -21,8 +21,8 @@ struct LocationEditView: View {
 
     // MARK: - Computed Properties
 
-    private var store: LocationStore {
-        LocationStore(context: context)
+    private var repository: LocationRepository {
+        LocationRepository(context: context)
     }
 
     // MARK: - Initialization
@@ -171,7 +171,7 @@ struct LocationEditView: View {
 
         ToolbarItemGroup(placement: .topBarTrailing) {
             ButtonView.save {
-                viewModel.save(using: store)
+                viewModel.save(using: repository)
                 dismiss()
             }
         }
@@ -215,7 +215,7 @@ struct LocationEditView: View {
     }
 
     private func confirmDelete() {
-        deletionHandler.confirmDelete { store.delete($0) }
+        deletionHandler.confirmDelete { repository.delete($0) }
         dismiss()
     }
 

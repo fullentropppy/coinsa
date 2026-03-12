@@ -105,7 +105,7 @@ enum PreviewGenerator {
     }
 
     private static func makeIstanbulExpenses(location: Location) -> [Expense] {
-        let exchangeRate = location.exchangeRateLocationToBaseCurrency
+        let exchangeRate = location.rateToBaseCurrency
 
         return [
             Expense(
@@ -267,7 +267,7 @@ enum PreviewGenerator {
     }
 
     private static func makeSeoulExpenses(location: Location, startDate: Date) -> [Expense] {
-        let exchangeRate = location.exchangeRateLocationToBaseCurrency
+        let exchangeRate = location.rateToBaseCurrency
 
         return [
             Expense(
@@ -354,7 +354,7 @@ enum PreviewGenerator {
     }
 
     private static func makeBusanExpenses(location: Location, startDate: Date) -> [Expense] {
-        let exchangeRate = location.exchangeRateLocationToBaseCurrency
+        let exchangeRate = location.rateToBaseCurrency
 
         return [
             Expense(
@@ -543,7 +543,7 @@ enum PreviewGenerator {
     }
 
     private static func makeTokyoExpenses(location: Location, startDate: Date) -> [Expense] {
-        let exchangeRate = location.exchangeRateLocationToBaseCurrency
+        let exchangeRate = location.rateToBaseCurrency
 
         return [
             Expense(
@@ -611,7 +611,7 @@ enum PreviewGenerator {
     }
 
     private static func makeKyotoExpenses(location: Location, startDate: Date) -> [Expense] {
-        let exchangeRate = location.exchangeRateLocationToBaseCurrency
+        let exchangeRate = location.rateToBaseCurrency
 
         return [
             Expense(
@@ -649,7 +649,7 @@ enum PreviewGenerator {
     }
 
     private static func makeOsakaExpenses(location: Location, startDate: Date) -> [Expense] {
-        let exchangeRate = location.exchangeRateLocationToBaseCurrency
+        let exchangeRate = location.rateToBaseCurrency
 
         return [
             Expense(

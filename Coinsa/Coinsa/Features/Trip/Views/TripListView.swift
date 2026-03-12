@@ -12,17 +12,18 @@ struct TripListView: View {
     // MARK: - Stored Properties
     
     @Environment(\.modelContext) private var context
+    
     @Query(sort: \Trip.startDate) private var trips: [Trip]
 
-    @State private var isShowingEdtitingSheet = false
+    @State private var isShowingTripEdit = false
     @State private var deletionHandler = DeletionHandler<Trip>(
         messageKey: "trip.deletionConfirmation.message.single"
     )
 
     // MARK: - Computed Properties
     
-    private var store: TripStore {
-        TripStore(context: context)
+    private var repository: TripRepository {
+        TripRepository(context: context)
     }
     
     // MARK: - Body
@@ -31,7 +32,7 @@ struct TripListView: View {
         NavigationStack {
             tripListContent
             .navigationTitle("trip.list.navigationTitle")
-            .sheet(isPresented: $isShowingEdtitingSheet) {
+            .sheet(isPresented: $isShowingTripEdit) {
                 TripEditView(trip: nil)
             }
             .alert("trip.list.deletionConfirmation.title",
@@ -63,7 +64,7 @@ struct TripListView: View {
         List {
             ForEach(trips) { trip in
                 NavigationLink {
-                    TripDetailView(trip: trip)
+                    TripDetailView(tripID: trip.persistentModelID)
                 } label: {
                     TripRowView(trip: trip)
                 }
@@ -78,7 +79,7 @@ struct TripListView: View {
             title: "trip.list.empty.title",
             description: "trip.list.empty.desctiption",
             buttonLabel: "trip.list.addTrip",
-            onAddAction: { isShowingEdtitingSheet = true }
+            onAddAction: { isShowingTripEdit = true }
         )
     }
     
@@ -86,7 +87,7 @@ struct TripListView: View {
     private var toolbarContent: some ToolbarContent {
         ToolbarItem(placement: .topBarTrailing) {
             ButtonView.add {
-                isShowingEdtitingSheet = true
+                isShowingTripEdit = true
             }
         }
     }
@@ -98,7 +99,7 @@ struct TripListView: View {
     }
 
     private func confirmDelete() {
-        deletionHandler.confirmDelete { store.delete($0) }
+        deletionHandler.confirmDelete { repository.delete($0) }
     }
 
     private func cancelDelete() {
@@ -120,9 +121,12 @@ private extension TripListView {
             .withExpenses(false)
             .withBudgets(false)
             .buildContainer()
-
+        
+        let settingsStore = AppSettingsStore(context: container.mainContext)
+        
         return TripListView()
             .modelContainer(container)
+            .environment(settingsStore)
             .environment(\.locale, locale)
             .preferredColorScheme(colorScheme)
     }

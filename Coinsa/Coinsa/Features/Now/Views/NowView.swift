@@ -31,7 +31,7 @@ struct NowView: View {
     var body: some View {
         NavigationStack {
             if let currentTrip {
-                TripDetailView(trip: currentTrip)
+                TripDetailView(tripID: currentTrip.persistentModelID)
             } else {
                 UpcomingTripView(trip: upcomingTrip)
                     .navigationTitle("now.navigationTitle")

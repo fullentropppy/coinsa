@@ -20,8 +20,8 @@ struct TripEditView: View {
         
     // MARK: - Computed properties
     
-    private var store: TripStore {
-        TripStore(context: context)
+    private var repository: TripRepository {
+        TripRepository(context: context)
     }
 
     // MARK: - Initialization
@@ -87,7 +87,7 @@ struct TripEditView: View {
 
         ToolbarItemGroup(placement: .topBarTrailing) {
             ButtonView.save {
-                viewModel.save(using: store)
+                viewModel.save(using: repository)
                 dismiss()
             }
         }
@@ -101,7 +101,7 @@ struct TripEditView: View {
     }
 
     private func confirmDelete() {
-        deletionHandler.confirmDelete { store.delete($0) }
+        deletionHandler.confirmDelete { repository.delete($0) }
         dismiss()
     }
 
