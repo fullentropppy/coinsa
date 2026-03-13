@@ -1,5 +1,5 @@
 //
-//  EventIntervalView.swift
+//  EventTitleText.swift
 //  Coinsa
 //
 //  Created by Daniil Gritsenko on 06.03.2026.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct EventTitleView: View {
+struct EventTitleText: View {
     // MARK: - Stored Properties
     
     let title: String
@@ -22,9 +22,9 @@ struct EventTitleView: View {
 // MARK: - Previews
 
 #Preview("Light - RU") {
-    EventTitleView(title: "Заголовок события").preferredColorScheme(.light)
+    EventTitleText(title: "Заголовок события").preferredColorScheme(.light)
 }
 
 #Preview("Dark - EN") {
-    EventTitleView(title: "Event title").preferredColorScheme(.light)
+    EventTitleText(title: "Event title").preferredColorScheme(.light)
 }

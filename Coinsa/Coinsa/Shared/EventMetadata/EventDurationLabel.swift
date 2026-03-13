@@ -1,5 +1,5 @@
 //
-//  TripLocationCountView.swift
+//  EventDurationLabel.swift
 //  Coinsa
 //
 //  Created by Daniil Gritsenko on 06.03.2026.
@@ -7,19 +7,17 @@
 
 import SwiftUI
 
-import SwiftUI
-
-struct TripLocationCountView: View {
+struct EventDurationLabel: View {
     // MARK: - Stored Properties
     
-    let count: Int
+    let days: Int
     
     // MARK: - Body
     
     var body: some View {
         HStack(spacing: 2) {
-            Image(systemName: "mappin.and.ellipse")
-            Text(String(count))
+            Image(systemName: "clock")
+            Text(String(days))
         }
         .font(.subheadline)
         .foregroundStyle(.secondary)
@@ -28,21 +26,21 @@ struct TripLocationCountView: View {
 
 // MARK: - Previews
 
-private extension TripLocationCountView {
+private extension EventDurationLabel {
     static func preview(colorScheme: ColorScheme) -> some View {
         VStack(spacing: 20) {
-            TripLocationCountView(count: 1)
-            TripLocationCountView(count: 5)
-            TripLocationCountView(count: 10)
+            EventDurationLabel(days: 7)
+            EventDurationLabel(days: 14)
+            EventDurationLabel(days: 31)
         }
         .preferredColorScheme(colorScheme)
     }
 }
 
 #Preview("Light") {
-    TripLocationCountView.preview(colorScheme: .light)
+    EventDurationLabel.preview(colorScheme: .light)
 }
 
 #Preview("Dark") {
-    TripLocationCountView.preview(colorScheme: .dark)
+    EventDurationLabel.preview(colorScheme: .dark)
 }

@@ -1,5 +1,5 @@
 //
-//  EventStatusDotView.swift
+//  EventStatusImage.swift
 //  Coinsa
 //
 //  Created by Daniil Gritsenko on 06.03.2026.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct EventStatusDotView: View {
+struct EventStatusImage: View {
     // MARK: - Stored Properties
 
     var status: EventStatus
@@ -21,21 +21,21 @@ struct EventStatusDotView: View {
 
 // MARK: - Previews
 
-private extension EventStatusDotView {
+private extension EventStatusImage {
     static func preview(colorScheme: ColorScheme) -> some View {
         VStack(spacing: 20) {
-            EventStatusDotView(status: .upcoming)
-            EventStatusDotView(status: .ongoing)
-            EventStatusDotView(status: .completed)
+            EventStatusImage(status: .upcoming)
+            EventStatusImage(status: .ongoing)
+            EventStatusImage(status: .completed)
         }
         .preferredColorScheme(colorScheme)
     }
 }
 
 #Preview("Light") {
-    EventStatusDotView.preview(colorScheme: .light)
+    EventStatusImage.preview(colorScheme: .light)
 }
 
 #Preview("Dark") {
-    EventStatusDotView.preview(colorScheme: .dark)
+    EventStatusImage.preview(colorScheme: .dark)
 }

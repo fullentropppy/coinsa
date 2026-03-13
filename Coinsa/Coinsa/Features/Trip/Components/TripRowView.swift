@@ -17,16 +17,16 @@ struct TripRowView: View {
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
-                EventStatusDotView(status: trip.status)
-                EventTitleView(title: trip.name)
+                EventStatusImage(status: trip.status)
+                EventTitleText(title: trip.name)
             }
             .padding(2)
             
             HStack {
-                EventIntervalView(startDate: trip.startDate, endDate: trip.endDate)
+                EventIntervalText(startDate: trip.startDate, endDate: trip.endDate)
                 Spacer()
-                EventDurationView(days: trip.durationInDays)
-                TripLocationCountView(count: trip.locationsCount)
+                EventDurationLabel(days: trip.durationInDays)
+                TripLocationCountLabel(count: trip.locationsCount)
             }
             .padding(2)
         }

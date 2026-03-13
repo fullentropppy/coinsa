@@ -20,18 +20,13 @@ struct TripAmountCardView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             Text(title).font(.caption).foregroundStyle(.secondary)
-            HStack {
-                Text(String(format: "%.2f", amount))
-                    .font(.headline).foregroundStyle(.primary)
-                Text(currencyOption.code)
-                    .font(.headline).foregroundStyle(.secondary)
-            }
+            AmountText(amount: amount, currencyOption: currencyOption)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(10)
         .background(
             RoundedRectangle(cornerRadius: 15, style: .continuous)
-                .fill(tint.opacity(0.1))
+                .fill(tint.opacity(0.4).gradient)
         )
     }
 }
@@ -40,12 +35,32 @@ struct TripAmountCardView: View {
 
 private extension TripAmountCardView {
     static func preview(locale: Locale, colorScheme: ColorScheme) -> some View {
-        TripAmountCardView(
-            title: "trip.detail.summary.planned",
-            amount: 56950.55,
-            currencyOption: CurrencyOption.defaultOption,
-            tint: .blue
-        )
+        VStack(spacing: 20) {
+            TripAmountCardView(
+                title: "trip.detail.summary.planned",
+                amount: 299.55,
+                currencyOption: CurrencyOption.eur,
+                tint: .blue
+            )
+            TripAmountCardView(
+                title: "trip.detail.summary.actual",
+                amount: 3512.01,
+                currencyOption: CurrencyOption.usd,
+                tint: .yellow
+            )
+            TripAmountCardView(
+                title: "trip.detail.summary.difference",
+                amount: 19500.0,
+                currencyOption: CurrencyOption.rub,
+                tint: .green
+            )
+            TripAmountCardView(
+                title: "trip.detail.summary.difference",
+                amount: -33075.25,
+                currencyOption: CurrencyOption.rub,
+                tint: .red
+            )
+        }
         .padding(100)
         .environment(\.locale, locale)
         .preferredColorScheme(colorScheme)

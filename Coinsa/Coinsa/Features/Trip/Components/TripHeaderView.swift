@@ -34,11 +34,11 @@ struct TripHeaderView: View {
     
     private var headerContent: some View {
         HStack {
-            EventStatusLabelView(status: data.status)
+            EventStatusLabel(status: data.status)
             Spacer()
-            EventIntervalView(startDate: data.startDate, endDate: data.endDate)
+            EventIntervalText(startDate: data.startDate, endDate: data.endDate)
             Spacer()
-            EventDurationView(days: data.durationDays)
+            EventDurationLabel(days: data.durationDays)
         }
     }
     

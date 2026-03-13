@@ -20,10 +20,10 @@ struct TripDetailViewModel {
         let actualAmount = trip.calculateActualAmount(inBase: true)
         
         return TripDetailHeaderData(
+            status: trip.status,
             startDate: trip.startDate,
             endDate: trip.endDate,
             durationDays: trip.durationInDays,
-            status: trip.status,
             plannedAmount: plannedAmount,
             actualAmount: actualAmount,
             amountDifference: plannedAmount - actualAmount,
@@ -40,10 +40,10 @@ struct TripDetailViewModel {
 }
 
 struct TripDetailHeaderData {
+    let status: EventStatus
     let startDate: Date
     let endDate: Date
     let durationDays: Int
-    let status: EventStatus
     let plannedAmount: Double
     let actualAmount: Double
     let amountDifference: Double

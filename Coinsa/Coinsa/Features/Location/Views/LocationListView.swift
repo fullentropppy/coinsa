@@ -12,20 +12,27 @@ struct LocationListView: View {
     // MARK: - Stored Properties
     
     @Environment(\.modelContext) private var context
+    
     @Query private var locations: [Location]
+    
     @State private var deletionHandler = DeletionHandler<Location>(
         messageKey: "location.deletionConfirmation.message.single"
     )
     
-    private let trip: Trip
+    private let tripID: PersistentIdentifier
     private let onAddLocation: () -> Void
+    
+    // MARK: - Computed Properties
+    
+    private var repository: LocationRepository {
+        LocationRepository(context: context)
+    }
     
     // MARK: - Initialization
     
-    init(trip: Trip, onAddLocation: @escaping () -> Void) {
-        self.trip = trip
+    init(tripID: PersistentIdentifier, onAddLocation: @escaping () -> Void) {
+        self.tripID = tripID
         self.onAddLocation = onAddLocation
-        let tripID = trip.persistentModelID
         
         _locations = Query(
             filter: #Predicate<Location> { $0.trip.persistentModelID == tripID },
@@ -69,10 +76,6 @@ struct LocationListView: View {
 
     // MARK: - Actions
 
-    private var repository: LocationRepository {
-        LocationRepository(context: context)
-    }
-
     private func requestDelete(at offsets: IndexSet) {
         deletionHandler.requestDelete(items: offsets.map { locations[$0] })
     }
@@ -88,41 +91,51 @@ struct LocationListView: View {
 
 // MARK: - Previews
 
-private struct previewData {
-    let container: ModelContainer
-    let trip: Trip
+private extension LocationListView {
+    static func preview(
+        withLocations: Bool,
+        locale: Locale,
+        colorScheme: ColorScheme
+    ) -> some View {
+        let builder = PreviewBuilder
+            .builder()
+            .withLocations(withLocations)
+            .withExpenses(false)
+            .withBudgets(false)
     
-    init(withLocations: Bool) {
-        let builder = PreviewBuilder.builder().withLocations(withLocations)
-        self.container = builder.buildContainer()
-        self.trip = builder.fetchTrip(from: container)
+        let container = builder.buildContainer()
+        let tripID = builder.fetchTrip(from: container).persistentModelID
+        
+        return NavigationStack {
+            LocationListView(tripID: tripID, onAddLocation: {})
+                .modelContainer(container)
+                .environment(\.locale, locale)
+                .preferredColorScheme(colorScheme)
+        }
     }
 }
 
 #Preview("Light - RU") {
-    let data = previewData(withLocations: true)
-    NavigationStack {
-        LocationListView(trip: data.trip, onAddLocation: {})
-            .modelContainer(data.container)
-            .environment(\.locale, Locale(identifier: "ru"))
-            .preferredColorScheme(.light)
-    }
+    LocationListView.preview(
+        withLocations: true, locale: PreviewLocale.ru.locale, colorScheme: .light
+    )
 }
 
 #Preview("Dark - EN") {
-    let data = previewData(withLocations: true)
-    NavigationStack {
-        LocationListView(trip: data.trip, onAddLocation: {})
-            .modelContainer(data.container)
-            .environment(\.locale, Locale(identifier: "en"))
-            .preferredColorScheme(.dark)
-    }
+    LocationListView.preview(
+        withLocations: true, locale: PreviewLocale.en.locale, colorScheme: .dark
+    )
 }
 
-#Preview("Empty list") {
-    let data = previewData(withLocations: false)
-    NavigationStack {
-        LocationListView(trip: data.trip, onAddLocation: {})
-            .modelContainer(data.container)
-    }
+#Preview("Empty List. Light - RU") {
+    LocationListView.preview(
+        withLocations: false, locale: PreviewLocale.ru.locale, colorScheme: .light
+    )
 }
+
+#Preview("Empty List. Dark - EN") {
+    LocationListView.preview(
+        withLocations: false, locale: PreviewLocale.en.locale, colorScheme: .dark
+    )
+}
+
