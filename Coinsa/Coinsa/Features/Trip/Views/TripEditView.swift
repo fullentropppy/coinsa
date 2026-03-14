@@ -26,7 +26,7 @@ struct TripEditView: View {
 
     // MARK: - Initialization
     
-    init(trip: Trip? = nil, onSave: ((Trip) -> Void)? = nil) {
+    init(trip: Trip? = nil) {
         _viewModel = State(initialValue: TripViewModel(trip: trip))
     }
     

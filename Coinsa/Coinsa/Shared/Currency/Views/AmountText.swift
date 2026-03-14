@@ -12,15 +12,48 @@ struct AmountText: View {
     
     let amount: Double
     let currencyOption: CurrencyOption
+    let style: ComponentStyle
+    
+    // MARK: - Initialization
+    
+    init(amount: Double, currencyOption: CurrencyOption, style: ComponentStyle = .default) {
+        self.amount = amount
+        self.currencyOption = currencyOption
+        self.style = style
+    }
     
     // MARK: - Body
     
     var body: some View {
-        HStack {
+        HStack(spacing: 4) {
             Text(amount, format: .number.precision(.fractionLength(2)))
-                .font(.headline)
-                .foregroundStyle(.primary)
-            CurrencyCodeText(currencyOption: currencyOption)
+                .font(amountFont)
+                .foregroundStyle(amountColor)
+            CurrencyCodeText(currencyOption: currencyOption, style: style)
+        }
+    }
+    
+    // MARK: - Components
+    
+    private var amountFont: Font {
+        switch style {
+        case .default:
+            return .body
+        case .primary:
+            return .headline
+        case .secondary:
+            return .subheadline
+        case .tertiary:
+            return .footnote
+        }
+    }
+    
+    var amountColor: Color {
+        switch style {
+        case .default, .primary:
+            return .primary
+        default:
+            return .secondary
         }
     }
 }
@@ -30,12 +63,10 @@ struct AmountText: View {
 private extension AmountText {
     static func preview(locale: Locale, colorScheme: ColorScheme) -> some View {
         VStack(spacing: 20) {
-            AmountText(amount: 5.04, currencyOption: CurrencyOption.usd)
-            AmountText(amount: 78.0, currencyOption: CurrencyOption.eur)
-            AmountText(amount: 181.98, currencyOption: CurrencyOption.cny)
-            AmountText(amount: 4903.5, currencyOption: CurrencyOption.aed)
-            AmountText(amount: 24600.0, currencyOption: CurrencyOption.try)
-            AmountText(amount: 220592.43, currencyOption: CurrencyOption.rub)
+            AmountText(amount: 65099.99, currencyOption: CurrencyOption.rub, style: .default)
+            AmountText(amount: 9032.50, currencyOption: CurrencyOption.usd, style: .primary)
+            AmountText(amount: 501.0, currencyOption: CurrencyOption.eur, style: .secondary)
+            AmountText(amount: 99.09, currencyOption: CurrencyOption.jpy, style: .tertiary)
         }
         .environment(\.locale, locale)
         .preferredColorScheme(colorScheme)

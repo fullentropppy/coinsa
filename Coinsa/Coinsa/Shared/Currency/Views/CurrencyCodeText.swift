@@ -11,11 +11,41 @@ struct CurrencyCodeText: View {
     // MARK: - Stored Properties
     
     let currencyOption: CurrencyOption
+    let style: ComponentStyle
+    
+    // MARK: - Initialization
+    
+    init(currencyOption: CurrencyOption, style: ComponentStyle = .default) {
+        self.currencyOption = currencyOption
+        self.style = style
+    }
     
     // MARK: - Body
     
     var body: some View {
-        Text(currencyOption.code).font(.headline).foregroundStyle(.secondary)
+        Text(currencyOption.code).font(codeFont).foregroundStyle(codeColor)
+    }
+    
+    // MARK: - Components
+    
+    var codeFont: Font {
+        switch style {
+        case .default, .primary:
+            return .body
+        case .secondary:
+            return .subheadline
+        case .tertiary:
+            return .footnote
+        }
+    }
+    
+    var codeColor: Color {
+        switch style {
+        case .primary:
+            return .primary
+        default:
+            return .secondary
+        }
     }
 }
 
@@ -24,12 +54,10 @@ struct CurrencyCodeText: View {
 private extension CurrencyCodeText {
     static func preview(colorScheme: ColorScheme) -> some View {
         VStack(spacing: 20) {
-            CurrencyCodeText(currencyOption: CurrencyOption.usd)
-            CurrencyCodeText(currencyOption: CurrencyOption.eur)
-            CurrencyCodeText(currencyOption: CurrencyOption.cny)
-            CurrencyCodeText(currencyOption: CurrencyOption.aed)
-            CurrencyCodeText(currencyOption: CurrencyOption.try)
-            CurrencyCodeText(currencyOption: CurrencyOption.rub)
+            CurrencyCodeText(currencyOption: CurrencyOption.rub, style: .default)
+            CurrencyCodeText(currencyOption: CurrencyOption.usd, style: .primary)
+            CurrencyCodeText(currencyOption: CurrencyOption.eur, style: .secondary)
+            CurrencyCodeText(currencyOption: CurrencyOption.jpy, style: .tertiary)
         }
         .preferredColorScheme(colorScheme)
     }

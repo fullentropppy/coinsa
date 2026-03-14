@@ -9,6 +9,7 @@ import Foundation
 
 enum ExpenseCategory: String, Codable, CaseIterable {
     // MARK: - Cases
+    
     case food
     case transport
     case activity

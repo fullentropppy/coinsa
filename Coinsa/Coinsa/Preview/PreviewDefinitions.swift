@@ -19,7 +19,7 @@ enum PreviewLocation: String {
     case busan = "Пусан"
     case tokyo = "Токио"
     case kyoto = "Киото"
-    case osaka = "Оска"
+    case osaka = "Осака"
 
     var currencyCode: String {
         switch self {

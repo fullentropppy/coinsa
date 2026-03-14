@@ -84,7 +84,7 @@ struct LocationEditView: View {
                         .tag(option)
                 }
             }
-            .pickerStyle(.navigationLink)
+            .pickerStyle(.menu)
 
             LabeledContent {
                 TextField(
@@ -105,26 +105,20 @@ struct LocationEditView: View {
     private var budgetsSection: some View {
         Section {
             ForEach(ExpenseCategory.allCases, id: \.id) { (category: ExpenseCategory) in
-                VStack(alignment: .leading, spacing: 8) {
+                VStack(spacing: 8) {
                     HStack {
-                        Image(systemName: category.symbolName)
-                            .foregroundStyle(.secondary)
-                            .frame(width: 24)
-                        Text(category.localizedDisplayName)
-                        Spacer()
-                    }
-                    VStack(alignment: .leading, spacing: 6) {
+                        ExpenseCategoryLabel(category: category)
                         budgetInputRow(
-                            currencyCode: viewModel.baseCurrencyOption.code,
+                            currencyOption: viewModel.baseCurrencyOption,
                             value: budgetBinding(for: category)
                         )
-
-                        Text(
-                            "~ \(plannedLocalAmount(for: category), format: .currency(code: viewModel.locationCurrencyOption.code).presentation(.isoCode))"
-                        )
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
                     }
+                    AmountText(
+                        amount: viewModel.plannedLocalAmount(for: category),
+                        currencyOption: viewModel.locationCurrencyOption,
+                        style: .tertiary
+                    )
+                    .frame(maxWidth: .infinity, alignment: .trailing)
                 }
             }
         } header: {
@@ -134,20 +128,27 @@ struct LocationEditView: View {
                 Text("location.editing.budgets.total")
                 Spacer()
                 VStack(alignment: .trailing, spacing: 5) {
-                    Text(plannedTotalBase, format: .currency(code: viewModel.baseCurrencyOption.code).presentation(.isoCode))
-                    Text(plannedTotalLocal, format: .currency(code: viewModel.baseCurrencyOption.code).presentation(.isoCode))
+                    AmountText(
+                        amount: viewModel.plannedTotalBase,
+                        currencyOption: viewModel.baseCurrencyOption,
+                        style: .tertiary
+                    )
+                    AmountText(
+                        amount: viewModel.plannedTotalLocal,
+                        currencyOption: viewModel.locationCurrencyOption,
+                        style: .tertiary
+                    )
                 }
             }
         }
     }
 
-    private func budgetInputRow(currencyCode: String, value: Binding<Double>) -> some View {
+    private func budgetInputRow(currencyOption: CurrencyOption, value: Binding<Double>) -> some View {
         HStack(spacing: 6) {
             TextField("", value: value, format: .number)
                 .keyboardType(.decimalPad)
                 .multilineTextAlignment(.trailing)
-            Text(currencyCode)
-                .foregroundStyle(.secondary)
+            CurrencyCodeText(currencyOption: currencyOption)
         }
     }
 
@@ -186,22 +187,6 @@ struct LocationEditView: View {
         )
     }
 
-    private func plannedLocalAmount(for category: ExpenseCategory) -> Double {
-        let rate = viewModel.exchangeRateLocationToBaseCurrency
-        guard rate > 0 else { return 0 }
-        return (viewModel.budgetAmounts[category] ?? 0) / rate
-    }
-
-    private var plannedTotalBase: Double {
-        viewModel.budgetAmounts.values.reduce(0, +)
-    }
-
-    private var plannedTotalLocal: Double {
-        let rate = viewModel.exchangeRateLocationToBaseCurrency
-        guard rate > 0 else { return 0 }
-        return plannedTotalBase / rate
-    }
-
     private var locationCurrencyBinding: Binding<CurrencyOption> {
         Binding(
             get: { viewModel.locationCurrencyOption },
@@ -226,48 +211,52 @@ struct LocationEditView: View {
 
 // MARK: - Previews
 
-private struct previewData {
-    let container: ModelContainer
-    let trip: Trip
-    let location: Location
+private extension LocationEditView {
+    static func preview(
+        withLocation: Bool,
+        locale: Locale,
+        colorScheme: ColorScheme
+    ) -> some View {
+        let builder = PreviewBuilder.builder()
+        let container = builder.buildContainer()
+        let trip = builder.fetchTrip(from: container)
+        var location: Location? = nil
+        
+        if withLocation {
+            location = builder.fetchLocation(from: container)
+        }
 
-    init() {
-        let builder = PreviewBuilder.builder().withBudgets(true).withExpenses(false)
-        self.container = builder.buildContainer()
-        self.trip = builder.fetchTrip(from: container)
-        self.location = builder.fetchLocation(from: container)
+        return LocationEditView(
+            trip: trip,
+            location: location,
+            baseCurrencyOption: CurrencyOption.rub
+        )
+        .modelContainer(container)
+        .environment(\.locale, locale)
+        .preferredColorScheme(colorScheme)
     }
 }
 
 #Preview("Light - RU") {
-    let data = previewData()
-    LocationEditView(
-        trip: data.trip,
-        location: data.location,
-        baseCurrencyOption: CurrencyOption.defaultOption
+    LocationEditView.preview(
+        withLocation: true, locale: PreviewLocale.ru.locale, colorScheme: .light
     )
-        .modelContainer(data.container)
-        .environment(\.locale, Locale(identifier: "ru"))
-        .preferredColorScheme(.light)
 }
 
 #Preview("Dark - EN") {
-    let data = previewData()
-    LocationEditView(
-        trip: data.trip,
-        location: data.location,
-        baseCurrencyOption: CurrencyOption.defaultOption
+    LocationEditView.preview(
+        withLocation: true, locale: PreviewLocale.en.locale, colorScheme: .dark
     )
-        .modelContainer(data.container)
-        .environment(\.locale, Locale(identifier: "en"))
-        .preferredColorScheme(.dark)
 }
 
-#Preview("Empty item") {
-    let data = previewData()
-    LocationEditView(
-        trip: data.trip,
-        baseCurrencyOption: CurrencyOption.defaultOption
+#Preview("New Location. Light - RU") {
+    LocationEditView.preview(
+        withLocation: false, locale: PreviewLocale.ru.locale, colorScheme: .light
     )
-        .modelContainer(data.container)
+}
+
+#Preview("New Location. Dark - EN") {
+    LocationEditView.preview(
+        withLocation: false, locale: PreviewLocale.en.locale, colorScheme: .dark
+    )
 }

@@ -43,6 +43,16 @@ final class LocationViewModel {
         )
     }
 
+    var plannedTotalBase: Double {
+        budgetAmounts.values.reduce(0, +)
+    }
+
+    var plannedTotalLocal: Double {
+        let rate = exchangeRateLocationToBaseCurrency
+        guard rate > 0 else { return 0 }
+        return plannedTotalBase / rate
+    }
+
     // MARK: - Initialization
 
     init(trip: Trip, location: Location?, baseCurrencyOption: CurrencyOption) {
@@ -73,6 +83,12 @@ final class LocationViewModel {
     }
 
     // MARK: - Public Methods
+
+    func plannedLocalAmount(for category: ExpenseCategory) -> Double {
+        let rate = exchangeRateLocationToBaseCurrency
+        guard rate > 0 else { return 0 }
+        return (budgetAmounts[category] ?? 0) / rate
+    }
 
     func save(using repository: LocationRepository) {
         if let location {
