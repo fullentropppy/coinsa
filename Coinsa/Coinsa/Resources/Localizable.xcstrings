@@ -4,9 +4,6 @@
     "" : {
       "shouldTranslate" : false
     },
-    "~ %@" : {
-      "shouldTranslate" : false
-    },
     "common.cancel" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -619,6 +616,24 @@
         }
       }
     },
+    "expense.deletionConfirmation.message.single" : {
+
+    },
+    "expense.list.addExpense" : {
+
+    },
+    "expense.list.deletionConfirmation.delete" : {
+
+    },
+    "expense.list.deletionConfirmation.title" : {
+
+    },
+    "expense.list.empty.description" : {
+
+    },
+    "expense.list.empty.title" : {
+
+    },
     "location.add.navigationTitle" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -649,6 +664,57 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Вы уверены что хотите удалить локацию?"
+          }
+        }
+      }
+    },
+    "location.detail.summary.actual" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actual"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Факт"
+          }
+        }
+      }
+    },
+    "location.detail.summary.difference" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Difference"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Разница"
+          }
+        }
+      }
+    },
+    "location.detail.summary.planned" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Planned"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "План"
           }
         }
       }

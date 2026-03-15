@@ -116,7 +116,7 @@ struct LocationEditView: View {
                     AmountText(
                         amount: viewModel.plannedLocalAmount(for: category),
                         currencyOption: viewModel.locationCurrencyOption,
-                        style: .tertiary
+                        style: .secondary
                     )
                     .frame(maxWidth: .infinity, alignment: .trailing)
                 }

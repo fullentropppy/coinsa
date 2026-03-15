@@ -18,7 +18,13 @@ class Expense {
     var category: ExpenseCategory
     var location: Location
     var comment: String?
+
+    // MARK: - Computed Properties
     
+    var amountInBaseCurrency: Double {
+        amountInLocationCurrency * rateToBaseCurrency
+    }
+
     // MARK: - Initialization
     
     init(

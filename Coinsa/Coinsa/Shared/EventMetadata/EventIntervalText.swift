@@ -16,7 +16,7 @@ struct EventIntervalText: View {
     // MARK: - Body
     
     var body: some View {
-        Text(startDate..<endDate, format: Date.tripIntervalFormat)
+        Text(startDate..<endDate, format: Date.intervalFormat)
             .font(.subheadline)
             .foregroundStyle(.secondary)
     }

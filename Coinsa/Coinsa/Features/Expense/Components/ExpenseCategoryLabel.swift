@@ -19,7 +19,7 @@ struct ExpenseCategoryLabel: View {
             Image(systemName: category.symbolName)
                 .foregroundStyle(.secondary)
                 .frame(width: 24)
-            Text(category.localizedDisplayName)
+            Text(category.localizedKey)
         }
     }
 }
