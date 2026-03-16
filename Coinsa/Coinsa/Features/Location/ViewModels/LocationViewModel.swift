@@ -21,8 +21,8 @@ final class LocationViewModel {
     var name: String
     var startDate: Date
     var endDate: Date
-    var locationCurrencyOption: CurrencyOption
-    var exchangeRateLocationToBaseCurrency: Double
+    var currencyOption: CurrencyOption
+    var rateToBaseCurrency: Double
     var budgetAmounts: [ExpenseCategory: Double]
 
     // MARK: - Computed Properties
@@ -48,7 +48,7 @@ final class LocationViewModel {
     }
 
     var plannedTotalLocal: Double {
-        let rate = exchangeRateLocationToBaseCurrency
+        let rate = rateToBaseCurrency
         guard rate > 0 else { return 0 }
         return plannedTotalBase / rate
     }
@@ -64,14 +64,14 @@ final class LocationViewModel {
             name = location.name
             startDate = location.startDate
             endDate = location.endDate
-            locationCurrencyOption = CurrencyOption.from(code: location.currencyCode)
-            exchangeRateLocationToBaseCurrency = location.rateToBaseCurrency
+            currencyOption = CurrencyOption.from(code: location.currencyCode)
+            rateToBaseCurrency = location.rateToBaseCurrency
         } else {
             name = ""
             startDate = trip.startDate
             endDate = trip.endDate
-            locationCurrencyOption = baseCurrencyOption
-            exchangeRateLocationToBaseCurrency = 1.0
+            currencyOption = baseCurrencyOption
+            rateToBaseCurrency = 1.0
         }
 
         budgetAmounts = Dictionary(uniqueKeysWithValues: ExpenseCategory.allCases.map { ($0, 0) })
@@ -85,7 +85,7 @@ final class LocationViewModel {
     // MARK: - Public Methods
 
     func plannedLocalAmount(for category: ExpenseCategory) -> Double {
-        let rate = exchangeRateLocationToBaseCurrency
+        let rate = rateToBaseCurrency
         guard rate > 0 else { return 0 }
         return (budgetAmounts[category] ?? 0) / rate
     }
@@ -97,8 +97,8 @@ final class LocationViewModel {
                 name: name,
                 startDate: startDate,
                 endDate: endDate,
-                locationCurrencyOption: locationCurrencyOption,
-                exchangeRateLocationToBaseCurrency: exchangeRateLocationToBaseCurrency,
+                locationCurrencyOption: currencyOption,
+                exchangeRateLocationToBaseCurrency: rateToBaseCurrency,
                 budgetsByCategory: budgetAmounts
             )
         } else {
@@ -106,8 +106,8 @@ final class LocationViewModel {
                 name: name,
                 startDate: startDate,
                 endDate: endDate,
-                locationCurrencyOption: locationCurrencyOption,
-                exchangeRateLocationToBaseCurrency: exchangeRateLocationToBaseCurrency,
+                locationCurrencyOption: currencyOption,
+                exchangeRateLocationToBaseCurrency: rateToBaseCurrency,
                 trip: trip,
                 budgetsByCategory: budgetAmounts
             )

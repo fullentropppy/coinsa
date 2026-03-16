@@ -89,7 +89,7 @@ struct LocationEditView: View {
             LabeledContent {
                 TextField(
                     "",
-                    value: $viewModel.exchangeRateLocationToBaseCurrency,
+                    value: $viewModel.rateToBaseCurrency,
                     format: .number
                 )
                 .keyboardType(.decimalPad)
@@ -115,7 +115,7 @@ struct LocationEditView: View {
                     }
                     AmountText(
                         amount: viewModel.plannedLocalAmount(for: category),
-                        currencyOption: viewModel.locationCurrencyOption,
+                        currencyOption: viewModel.currencyOption,
                         style: .secondary
                     )
                     .frame(maxWidth: .infinity, alignment: .trailing)
@@ -135,7 +135,7 @@ struct LocationEditView: View {
                     )
                     AmountText(
                         amount: viewModel.plannedTotalLocal,
-                        currencyOption: viewModel.locationCurrencyOption,
+                        currencyOption: viewModel.currencyOption,
                         style: .tertiary
                     )
                 }
@@ -180,17 +180,17 @@ struct LocationEditView: View {
 
     // MARK: - Actions
 
+    private var locationCurrencyBinding: Binding<CurrencyOption> {
+        Binding(
+            get: { viewModel.currencyOption },
+            set: { viewModel.currencyOption = $0 }
+        )
+    }
+    
     private func budgetBinding(for category: ExpenseCategory) -> Binding<Double> {
         Binding(
             get: { viewModel.budgetAmounts[category] ?? 0 },
             set: { viewModel.budgetAmounts[category] = $0 }
-        )
-    }
-
-    private var locationCurrencyBinding: Binding<CurrencyOption> {
-        Binding(
-            get: { viewModel.locationCurrencyOption },
-            set: { viewModel.locationCurrencyOption = $0 }
         )
     }
 

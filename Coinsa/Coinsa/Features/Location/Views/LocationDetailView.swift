@@ -11,39 +11,84 @@ import SwiftData
 struct LocationDetailView: View {
     // MARK: - Stored Properties
 
+    @Environment(\.modelContext) private var context
     @Environment(AppSettingsStore.self) private var settingsStore
 
-    @State private var isShowingLocationEdit = false
+    @Query private var locations: [Location]
+    @Query private var expenses: [Expense]
 
-    let location: Location
+    @State private var viewModel: LocationDetailViewModel?
+    @State private var deletionHandler = DeletionHandler<Expense>(
+        messageKey: "expense.deletionConfirmation.message.single"
+    )
+    
+    @State private var isShowingLocationEdit = false
+    @State private var isShowingExpenseAdd = false
+    
+    let locationID: PersistentIdentifier
 
     // MARK: - Computed Properties
 
-    private var viewModel: LocationDetailViewModel {
-        LocationDetailViewModel(
-            location: location,
-            baseCurrencyOption: settingsStore.baseCurrencyOption
-        )
+    private var location: Location? {
+        locations.first
     }
 
-    private var shouldShowAddButton: Bool {
-        !location.expenses.isEmpty
+    private var repository: ExpenseRepository {
+        ExpenseRepository(context: context)
+    }
+
+    // MARK: - Initialization
+
+    init(locationID: PersistentIdentifier) {
+        self.locationID = locationID
+
+        _locations = Query(
+            filter: #Predicate<Location> { $0.persistentModelID == locationID }
+        )
+
+        _expenses = Query(
+            filter: #Predicate<Expense> { $0.location.persistentModelID == locationID },
+            sort: \.date
+        )
+
+        _viewModel = State(initialValue: nil)
     }
 
     // MARK: - Body
 
     var body: some View {
+        Group {
+            if let location, let viewModel {
+                detailContent(location: location, viewModel: viewModel)
+            } else {
+                ProgressView()
+            }
+        }
+        .onAppear {
+            updateViewModel()
+        }
+        .onChange(of: locations.count) { _, _ in
+            updateViewModel()
+        }
+    }
+
+    // MARK: - Components
+
+    private func detailContent(location: Location, viewModel: LocationDetailViewModel) -> some View {
         List {
             Section {
-                LocationHeaderView(data: viewModel.headerData)
+                LocationHeaderView(
+                    data: viewModel.headerData,
+                    showsSummary: !expenses.isEmpty
+                )
             }
 
-            Section {
-                ExpenseListView(
-                    locationID: location.persistentModelID,
-                    onAddExpense: { handleAddExpense() },
-                    presentation: .embedded
-                )
+            Section(header: Text("location.detail.expenses.header")) {
+                if expenses.isEmpty {
+                    emptyExpenseListContent
+                } else {
+                    expenseListContent
+                }
             }
         }
         .navigationTitle(location.name)
@@ -57,18 +102,50 @@ struct LocationDetailView: View {
                 baseCurrencyOption: settingsStore.baseCurrencyOption
             )
         }
+        .alert("expense.list.deletionConfirmation.title", isPresented: $deletionHandler.isShowingDeleteConfirmation) {
+            Button("expense.list.deletionConfirmation.delete", role: .destructive) {
+                confirmDelete()
+            }
+            Button("common.cancel", role: .cancel) {
+                cancelDelete()
+            }
+        } message: {
+            Text(deletionHandler.confirmationMessage)
+        }
         .overlay(alignment: .bottomTrailing) {
-            if shouldShowAddButton {
+            if !expenses.isEmpty {
                 ButtonView.add {
-                    handleAddExpense()
+                    isShowingExpenseAdd = true
                 }
                 .buttonStyle(PrimaryButtonStyle())
             }
         }
     }
-
-    // MARK: - Components
     
+    private var expenseListContent: some View {
+        ForEach(expenses) { expense in
+            NavigationLink {
+                
+            } label: {
+                ExpenseRowView(
+                    expense: expense,
+                    baseCurrencyOption: settingsStore.baseCurrencyOption
+                )
+            }
+        }
+        .onDelete(perform: requestDelete)
+    }
+
+    private var emptyExpenseListContent: some View {
+        EmptyStateView(
+            imageName: "creditcard",
+            title: "expense.list.empty.title",
+            description: "expense.list.empty.description",
+            buttonLabel: "expense.list.addExpense",
+            onAddAction: { isShowingExpenseAdd = true }
+        )
+    }
+
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
         ToolbarItemGroup(placement: .topBarTrailing) {
@@ -80,7 +157,28 @@ struct LocationDetailView: View {
 
     // MARK: - Actions
 
-    private func handleAddExpense() { }
+    private func updateViewModel() {
+        guard let location else {
+            viewModel = nil
+            return
+        }
+        viewModel = LocationDetailViewModel(
+            location: location,
+            baseCurrencyOption: settingsStore.baseCurrencyOption
+        )
+    }
+    
+    private func requestDelete(at offsets: IndexSet) {
+        deletionHandler.requestDelete(items: offsets.map { expenses[$0] })
+    }
+
+    private func confirmDelete() {
+        deletionHandler.confirmDelete { context.delete($0) }
+    }
+
+    private func cancelDelete() {
+        deletionHandler.cancelDelete()
+    }
 }
 
 // MARK: - Previews
@@ -94,10 +192,10 @@ private extension LocationDetailView {
         let builder = PreviewBuilder.builder().withExpenses(withExpenses)
         let container = builder.buildContainer()
         let settingsStore = AppSettingsStore(context: container.mainContext)
-        let location = builder.fetchLocation(from: container)
+        let locationID = builder.fetchLocation(from: container).persistentModelID
 
         return NavigationStack {
-            LocationDetailView(location: location)
+            LocationDetailView(locationID: locationID)
                 .modelContainer(container)
                 .environment(settingsStore)
                 .environment(\.locale, locale)

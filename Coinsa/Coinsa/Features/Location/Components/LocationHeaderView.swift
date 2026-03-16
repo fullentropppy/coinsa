@@ -11,7 +11,8 @@ struct LocationHeaderView: View {
     // MARK: - Stored Properties
 
     let data: LocationDetailHeaderData
-
+    let showsSummary: Bool
+    
     // MARK: - Computed Properties
 
     private var differenceTint: Color {
@@ -43,7 +44,7 @@ struct LocationHeaderView: View {
         VStack(spacing: 14) {
             HStack(spacing: 14) {
                 LocationAmountCardView(
-                    title: "location.detail.summary.planned",
+                    title: "amount.planned",
                     localAmount: data.plannedAmountLocal,
                     localCurrencyOption: data.localCurrencyOption,
                     baseAmount: data.plannedAmountBase,
@@ -51,7 +52,7 @@ struct LocationHeaderView: View {
                     tint: .blue
                 )
                 LocationAmountCardView(
-                    title: "location.detail.summary.actual",
+                    title: "amount.actual",
                     localAmount: data.actualAmountLocal,
                     localCurrencyOption: data.localCurrencyOption,
                     baseAmount: data.actualAmountBase,
@@ -61,7 +62,7 @@ struct LocationHeaderView: View {
             }
 
             LocationAmountCardView(
-                title: "location.detail.summary.difference",
+                title: "amount.difference",
                 localAmount: data.amountDifferenceLocal,
                 localCurrencyOption: data.localCurrencyOption,
                 baseAmount: data.amountDifferenceBase,
@@ -85,7 +86,7 @@ private extension LocationHeaderView {
                 baseCurrencyOption: CurrencyOption.defaultOption
             )
 
-            LocationHeaderView(data: viewModel.headerData)
+            LocationHeaderView(data: viewModel.headerData, showsSummary: true)
                 .environment(\.locale, locale)
                 .preferredColorScheme(colorScheme)
         }

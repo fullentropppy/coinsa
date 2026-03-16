@@ -37,25 +37,25 @@ private extension TripAmountCardView {
     static func preview(locale: Locale, colorScheme: ColorScheme) -> some View {
         VStack(spacing: 20) {
             TripAmountCardView(
-                title: "trip.detail.summary.planned",
+                title: "amount.planned",
                 amount: 299.55,
                 currencyOption: CurrencyOption.eur,
                 tint: .blue
             )
             TripAmountCardView(
-                title: "trip.detail.summary.actual",
+                title: "amount.actual",
                 amount: 3512.01,
                 currencyOption: CurrencyOption.usd,
                 tint: .yellow
             )
             TripAmountCardView(
-                title: "trip.detail.summary.difference",
+                title: "amount.difference",
                 amount: 19500.0,
                 currencyOption: CurrencyOption.rub,
                 tint: .green
             )
             TripAmountCardView(
-                title: "trip.detail.summary.difference",
+                title: "amount.difference",
                 amount: -33075.25,
                 currencyOption: CurrencyOption.rub,
                 tint: .red

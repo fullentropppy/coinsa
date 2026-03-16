@@ -118,8 +118,8 @@ private extension TripListView {
         let container = PreviewBuilder.builder()
             .withScenario(.all)
             .withTrips(withTrips)
-            .withExpenses(false)
-            .withBudgets(false)
+            .withExpenses(true)
+            .withBudgets(true)
             .buildContainer()
         
         let settingsStore = AppSettingsStore(context: container.mainContext)

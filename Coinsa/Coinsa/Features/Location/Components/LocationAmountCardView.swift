@@ -40,7 +40,7 @@ private extension LocationAmountCardView {
     static func preview(locale: Locale, colorScheme: ColorScheme) -> some View {
         VStack(spacing: 20) {
             LocationAmountCardView(
-                title: "location.detail.summary.planned",
+                title: "amount.planned",
                 localAmount: 299.55,
                 localCurrencyOption: .eur,
                 baseAmount: 3012.21,
@@ -48,7 +48,7 @@ private extension LocationAmountCardView {
                 tint: .blue
             )
             LocationAmountCardView(
-                title: "location.detail.summary.actual",
+                title: "amount.actual",
                 localAmount: 1094.10,
                 localCurrencyOption: .usd,
                 baseAmount: 96771.0,
@@ -56,7 +56,7 @@ private extension LocationAmountCardView {
                 tint: .yellow
             )
             LocationAmountCardView(
-                title: "location.detail.summary.actual",
+                title: "amount.actual",
                 localAmount: 45000.0,
                 localCurrencyOption: .jpy,
                 baseAmount: 22675.5,
@@ -64,7 +64,7 @@ private extension LocationAmountCardView {
                 tint: .green
             )
             LocationAmountCardView(
-                title: "location.detail.summary.actual",
+                title: "amount.actual",
                 localAmount: -9209.07,
                 localCurrencyOption: .krw,
                 baseAmount: -499.26,

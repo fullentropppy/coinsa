@@ -46,13 +46,13 @@ struct TripHeaderView: View {
         VStack(spacing: 14) {
             HStack(spacing: 14) {
                 TripAmountCardView(
-                    title: "trip.detail.summary.planned",
+                    title: "amount.planned",
                     amount: data.plannedAmount,
                     currencyOption: data.currencyOption,
                     tint: .blue
                 )
                 TripAmountCardView(
-                    title: "trip.detail.summary.actual",
+                    title: "amount.actual",
                     amount: data.actualAmount,
                     currencyOption: data.currencyOption,
                     tint: .yellow
@@ -60,7 +60,7 @@ struct TripHeaderView: View {
             }
             
             TripAmountCardView(
-                title: "trip.detail.summary.difference",
+                title: "amount.difference",
                 amount: data.amountDifference,
                 currencyOption: data.currencyOption,
                 tint: differenceTint

@@ -127,7 +127,7 @@ struct TripDetailView: View {
     private var locationListContent: some View {
         ForEach(locations) { location in
             NavigationLink {
-                LocationDetailView(location: location)
+                LocationDetailView(locationID: location.persistentModelID)
             } label: {
                 LocationRowView(location: location)
             }
@@ -156,6 +156,17 @@ struct TripDetailView: View {
 
     // MARK: - Actions
 
+    private func updateViewModel() {
+        guard let trip else {
+            viewModel = nil
+            return
+        }
+        viewModel = TripDetailViewModel(
+            trip: trip,
+            baseCurrencyOption: settingsStore.baseCurrencyOption
+        )
+    }
+    
     private func requestDelete(at offsets: IndexSet) {
         deletionHandler.requestDelete(items: offsets.map { locations[$0] })
     }
@@ -166,17 +177,6 @@ struct TripDetailView: View {
 
     private func cancelDelete() {
         deletionHandler.cancelDelete()
-    }
-
-    private func updateViewModel() {
-        guard let trip else {
-            viewModel = nil
-            return
-        }
-        viewModel = TripDetailViewModel(
-            trip: trip,
-            baseCurrencyOption: settingsStore.baseCurrencyOption
-        )
     }
 }
 
