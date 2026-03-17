@@ -507,6 +507,38 @@
         }
       }
     },
+    "delete.confirm" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Удалить"
+          }
+        }
+      }
+    },
+    "delete.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deletion confirmation"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Подтверждение удаление"
+          }
+        }
+      }
+    },
     "event.status.completed" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -711,7 +743,8 @@
         }
       }
     },
-    "expense.deletionConfirmation.message.single" : {
+    "expense.delete.message" : {
+      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -858,7 +891,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Редактировать трату"
+            "value" : "Изменение"
           }
         }
       }
@@ -876,38 +909,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Добавить трату"
-          }
-        }
-      }
-    },
-    "expense.list.deletionConfirmation.delete" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Delete"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Удалить"
-          }
-        }
-      }
-    },
-    "expense.list.deletionConfirmation.title" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Confirm deletion"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Подтверждение удаления"
           }
         }
       }
@@ -963,7 +964,7 @@
         }
       }
     },
-    "location.deletionConfirmation.message.single" : {
+    "location.delete.message" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -1231,40 +1232,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Добавить локацию"
-          }
-        }
-      }
-    },
-    "location.list.deletionConfirmation.delete" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Delete"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Удалить"
-          }
-        }
-      }
-    },
-    "location.list.deletionConfirmation.title" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Confirm deletion"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Подтверждение удаления"
           }
         }
       }
@@ -1558,7 +1525,7 @@
         }
       }
     },
-    "trip.deletionConfirmation.message.single" : {
+    "trip.delete.message" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -1571,23 +1538,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Вы уверены что хотите удалить поездку?"
-          }
-        }
-      }
-    },
-    "trip.detail.editTrip" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Edit trip"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Редактировать"
           }
         }
       }
@@ -1724,40 +1674,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Добавить поездку"
-          }
-        }
-      }
-    },
-    "trip.list.deletionConfirmation.delete" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Delete"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Удалить"
-          }
-        }
-      }
-    },
-    "trip.list.deletionConfirmation.title" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Confirm deletion"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Подтверждение удаление"
           }
         }
       }

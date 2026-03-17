@@ -15,9 +15,7 @@ struct LocationEditView: View {
     @Environment(\.dismiss) private var dismiss
 
     @State private var viewModel: LocationViewModel
-    @State private var deletionHandler = DeletionHandler<Location>(
-        messageKey: "location.deletionConfirmation.message.single"
-    )
+    @State private var deletionHandler = DeletionHandler<Location>()
 
     // MARK: - Computed Properties
 
@@ -27,12 +25,12 @@ struct LocationEditView: View {
 
     // MARK: - Initialization
 
-    init(trip: Trip, location: Location? = nil, baseCurrencyOption: CurrencyOption) {
+    init(trip: Trip, location: Location? = nil, baseCurrency: Currency) {
         _viewModel = State(
             initialValue: LocationViewModel(
                 trip: trip,
                 location: location,
-                baseCurrencyOption: baseCurrencyOption
+                baseCurrency: baseCurrency
             )
         )
     }
@@ -49,20 +47,20 @@ struct LocationEditView: View {
             }
             .navigationTitle(viewModel.navigationTitle)
             .toolbarTitleDisplayMode(.inline)
-            .alert("location.list.deletionConfirmation.title", isPresented: $deletionHandler.isShowingDeleteConfirmation) {
-                Button("location.list.deletionConfirmation.delete", role: .destructive) {
-                    confirmDelete()
-                    dismiss()
-                }
-                Button("common.cancel", role: .cancel) {
-                    cancelDelete()
-                }
-            } message: {
-                Text(deletionHandler.confirmationMessage)
-            }
             .toolbar {
                 toolbarContent
             }
+            .deleteConfirmationAlert(
+                isPresented: $deletionHandler.isShowingDeleteConfirmation,
+                message: "location.delete.message",
+                onConfirm: {
+                    confirmDelete()
+                    dismiss()
+                },
+                onCancel: {
+                    cancelDelete()
+                }
+            )
         }
     }
 
@@ -79,7 +77,7 @@ struct LocationEditView: View {
     private var currencySection: some View {
         Section {
             Picker("location.editing.currencyCode.title", selection: locationCurrencyBinding) {
-                ForEach(CurrencyOption.allCasesSortedByName) { option in
+                ForEach(Currency.allCasesSortedByName) { option in
                     Text(option.localizedDisplayName)
                         .tag(option)
                 }
@@ -109,13 +107,13 @@ struct LocationEditView: View {
                     HStack {
                         ExpenseCategoryLabel(category: category)
                         budgetInputRow(
-                            currencyOption: viewModel.baseCurrencyOption,
+                            currency: viewModel.baseCurrency,
                             value: budgetBinding(for: category)
                         )
                     }
                     AmountText(
                         amount: viewModel.plannedLocalAmount(for: category),
-                        currencyOption: viewModel.currencyOption,
+                        currency: viewModel.currency,
                         style: .secondary
                     )
                     .frame(maxWidth: .infinity, alignment: .trailing)
@@ -130,12 +128,12 @@ struct LocationEditView: View {
                 VStack(alignment: .trailing, spacing: 5) {
                     AmountText(
                         amount: viewModel.plannedTotalBase,
-                        currencyOption: viewModel.baseCurrencyOption,
+                        currency: viewModel.baseCurrency,
                         style: .tertiary
                     )
                     AmountText(
                         amount: viewModel.plannedTotalLocal,
-                        currencyOption: viewModel.currencyOption,
+                        currency: viewModel.currency,
                         style: .tertiary
                     )
                 }
@@ -143,12 +141,12 @@ struct LocationEditView: View {
         }
     }
 
-    private func budgetInputRow(currencyOption: CurrencyOption, value: Binding<Double>) -> some View {
+    private func budgetInputRow(currency: Currency, value: Binding<Double>) -> some View {
         HStack(spacing: 6) {
             TextField("", value: value, format: .number)
                 .keyboardType(.decimalPad)
                 .multilineTextAlignment(.trailing)
-            CurrencyCodeText(currencyOption: currencyOption)
+            CurrencyCodeText(currency: currency)
         }
     }
 
@@ -180,10 +178,10 @@ struct LocationEditView: View {
 
     // MARK: - Actions
 
-    private var locationCurrencyBinding: Binding<CurrencyOption> {
+    private var locationCurrencyBinding: Binding<Currency> {
         Binding(
-            get: { viewModel.currencyOption },
-            set: { viewModel.currencyOption = $0 }
+            get: { viewModel.currency },
+            set: { viewModel.currency = $0 }
         )
     }
     
@@ -196,7 +194,7 @@ struct LocationEditView: View {
 
     private func requestDelete() {
         guard let location = viewModel.locationToEdit else { return }
-        deletionHandler.requestDelete(items: [location])
+        deletionHandler.requestDelete(for: [location])
     }
 
     private func confirmDelete() {
@@ -229,7 +227,7 @@ private extension LocationEditView {
         return LocationEditView(
             trip: trip,
             location: location,
-            baseCurrencyOption: CurrencyOption.rub
+            baseCurrency: Currency.rub
         )
         .modelContainer(container)
         .environment(\.locale, locale)

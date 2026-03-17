@@ -30,7 +30,7 @@ struct SettingsView: View {
     private var baseCurrencySection: some View {
         Section {
             LabeledContent("settings.baseCurrency.title") {
-                Text(appSettingsStore.baseCurrencyOption.localizedKey)
+                Text(appSettingsStore.baseCurrency.localizedKey)
             }
         } footer: {
             Text("settings.baseCurrency.footer")

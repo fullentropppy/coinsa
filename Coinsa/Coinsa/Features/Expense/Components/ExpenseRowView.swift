@@ -12,7 +12,7 @@ struct ExpenseRowView: View {
     // MARK: - Stored Properties
 
     let expense: Expense
-    let baseCurrencyOption: CurrencyOption
+    let baseCurrency: Currency
     
     // MARK: - Body
     
@@ -27,11 +27,11 @@ struct ExpenseRowView: View {
                 VStack(alignment: .trailing, spacing: 10) {
                     AmountText(
                         amount: expense.amountInBaseCurrency,
-                        currencyOption: baseCurrencyOption
+                        currency: baseCurrency
                     )
                     AmountText(
                         amount: expense.amountInLocationCurrency,
-                        currencyOption: CurrencyOption.from(code: expense.location.currencyCode),
+                        currency: Currency.from(code: expense.location.currencyCode),
                         style: .secondary
                     )
                 }
@@ -53,7 +53,7 @@ private extension ExpenseRowView {
         return List {
             ExpenseRowView(
                 expense: expense,
-                baseCurrencyOption: CurrencyOption.defaultOption
+                baseCurrency: Currency.defaultOption
             )
             .environment(\.locale, locale)
             .preferredColorScheme(colorScheme)

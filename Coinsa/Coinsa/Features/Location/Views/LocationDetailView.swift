@@ -18,9 +18,7 @@ struct LocationDetailView: View {
     @Query private var expenses: [Expense]
 
     @State private var viewModel: LocationDetailViewModel?
-    @State private var deletionHandler = DeletionHandler<Expense>(
-        messageKey: "expense.deletionConfirmation.message.single"
-    )
+    @State private var deletionHandler = DeletionHandler<Expense>()
     
     @State private var isShowingLocationEdit = false
     @State private var isShowingExpenseAdd = false
@@ -99,24 +97,14 @@ struct LocationDetailView: View {
             LocationEditView(
                 trip: location.trip,
                 location: location,
-                baseCurrencyOption: settingsStore.baseCurrencyOption
+                baseCurrency: settingsStore.baseCurrency
             )
         }
         .sheet(isPresented: $isShowingExpenseAdd) {
             ExpenseEditView(
                 location: location,
-                baseCurrencyOption: settingsStore.baseCurrencyOption
+                baseCurrency: settingsStore.baseCurrency
             )
-        }
-        .alert("expense.list.deletionConfirmation.title", isPresented: $deletionHandler.isShowingDeleteConfirmation) {
-            Button("expense.list.deletionConfirmation.delete", role: .destructive) {
-                confirmDelete()
-            }
-            Button("common.cancel", role: .cancel) {
-                cancelDelete()
-            }
-        } message: {
-            Text(deletionHandler.confirmationMessage)
         }
         .overlay(alignment: .bottomTrailing) {
             if !expenses.isEmpty {
@@ -126,6 +114,16 @@ struct LocationDetailView: View {
                 .buttonStyle(PrimaryButtonStyle())
             }
         }
+        .deleteConfirmationAlert(
+            isPresented: $deletionHandler.isShowingDeleteConfirmation,
+            message: "expense.delete.message",
+            onConfirm: {
+                confirmDelete()
+            },
+            onCancel: {
+                cancelDelete()
+            }
+        )
     }
     
     private var expenseListContent: some View {
@@ -135,7 +133,7 @@ struct LocationDetailView: View {
             } label: {
                 ExpenseRowView(
                     expense: expense,
-                    baseCurrencyOption: settingsStore.baseCurrencyOption
+                    baseCurrency: settingsStore.baseCurrency
                 )
             }
         }
@@ -170,12 +168,12 @@ struct LocationDetailView: View {
         }
         viewModel = LocationDetailViewModel(
             location: location,
-            baseCurrencyOption: settingsStore.baseCurrencyOption
+            baseCurrency: settingsStore.baseCurrency
         )
     }
     
     private func requestDelete(at offsets: IndexSet) {
-        deletionHandler.requestDelete(items: offsets.map { expenses[$0] })
+        deletionHandler.requestDelete(for: offsets.map { expenses[$0] })
     }
 
     private func confirmDelete() {

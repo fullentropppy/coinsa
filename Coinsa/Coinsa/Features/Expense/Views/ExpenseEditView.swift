@@ -15,9 +15,7 @@ struct ExpenseEditView: View {
     @Environment(\.dismiss) private var dismiss
 
     @State private var viewModel: ExpenseViewModel
-    @State private var deletionHandler = DeletionHandler<Expense>(
-        messageKey: "expense.deletionConfirmation.message.single"
-    )
+    @State private var deletionHandler = DeletionHandler<Expense>()
 
     // MARK: - Computed Properties
 
@@ -27,12 +25,12 @@ struct ExpenseEditView: View {
 
     // MARK: - Initialization
 
-    init(location: Location, expense: Expense? = nil, baseCurrencyOption: CurrencyOption) {
+    init(location: Location, expense: Expense? = nil, baseCurrency: Currency) {
         _viewModel = State(
             initialValue: ExpenseViewModel(
                 location: location,
                 expense: expense,
-                baseCurrencyOption: baseCurrencyOption
+                baseCurrency: baseCurrency
             )
         )
     }
@@ -49,20 +47,20 @@ struct ExpenseEditView: View {
             }
             .navigationTitle(viewModel.navigationTitle)
             .toolbarTitleDisplayMode(.inline)
-            .alert("expense.list.deletionConfirmation.title", isPresented: $deletionHandler.isShowingDeleteConfirmation) {
-                Button("expense.list.deletionConfirmation.delete", role: .destructive) {
-                    confirmDelete()
-                    dismiss()
-                }
-                Button("common.cancel", role: .cancel) {
-                    cancelDelete()
-                }
-            } message: {
-                Text(deletionHandler.confirmationMessage)
-            }
             .toolbar {
                 toolbarContent
             }
+            .deleteConfirmationAlert(
+                isPresented: $deletionHandler.isShowingDeleteConfirmation,
+                message: "expense.delete.message",
+                onConfirm: {
+                    confirmDelete()
+                    dismiss()
+                },
+                onCancel: {
+                    cancelDelete()
+                }
+            )
         }
     }
 
@@ -89,7 +87,7 @@ struct ExpenseEditView: View {
                     TextField("", value: $viewModel.amountInLocationCurrency, format: .number)
                         .keyboardType(.decimalPad)
                         .multilineTextAlignment(.trailing)
-                    CurrencyCodeText(currencyOption: viewModel.localCurrencyOption)
+                    CurrencyCodeText(currency: viewModel.localCurrency)
                 }
             } label: {
                 Text("expense.amount.local")
@@ -98,7 +96,7 @@ struct ExpenseEditView: View {
             LabeledContent {
                 AmountText(
                     amount: viewModel.amountInBaseCurrency,
-                    currencyOption: viewModel.baseCurrencyOption,
+                    currency: viewModel.baseCurrency,
                     style: .secondary
                 )
             } label: {
@@ -151,7 +149,7 @@ struct ExpenseEditView: View {
 
     private func requestDelete() {
         guard let expense = viewModel.expenseToEdit else { return }
-        deletionHandler.requestDelete(items: [expense])
+        deletionHandler.requestDelete(for: [expense])
     }
 
     private func confirmDelete() {
@@ -179,7 +177,7 @@ private extension ExpenseEditView {
         return ExpenseEditView(
             location: location,
             expense: expense,
-            baseCurrencyOption: CurrencyOption.rub
+            baseCurrency: Currency.rub
         )
         .modelContainer(container)
         .environment(\.locale, locale)

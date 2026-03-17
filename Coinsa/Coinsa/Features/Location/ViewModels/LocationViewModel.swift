@@ -16,12 +16,12 @@ final class LocationViewModel {
     private let location: Location?
 
     let trip: Trip
-    let baseCurrencyOption: CurrencyOption
+    let baseCurrency: Currency
 
     var name: String
     var startDate: Date
     var endDate: Date
-    var currencyOption: CurrencyOption
+    var currency: Currency
     var rateToBaseCurrency: Double
     var budgetAmounts: [ExpenseCategory: Double]
 
@@ -55,22 +55,22 @@ final class LocationViewModel {
 
     // MARK: - Initialization
 
-    init(trip: Trip, location: Location?, baseCurrencyOption: CurrencyOption) {
+    init(trip: Trip, location: Location?, baseCurrency: Currency) {
         self.location = location
         self.trip = location?.trip ?? trip
-        self.baseCurrencyOption = baseCurrencyOption
+        self.baseCurrency = baseCurrency
 
         if let location {
             name = location.name
             startDate = location.startDate
             endDate = location.endDate
-            currencyOption = CurrencyOption.from(code: location.currencyCode)
+            currency = Currency.from(code: location.currencyCode)
             rateToBaseCurrency = location.rateToBaseCurrency
         } else {
             name = ""
             startDate = trip.startDate
             endDate = trip.endDate
-            currencyOption = baseCurrencyOption
+            currency = baseCurrency
             rateToBaseCurrency = 1.0
         }
 
@@ -97,7 +97,7 @@ final class LocationViewModel {
                 name: name,
                 startDate: startDate,
                 endDate: endDate,
-                locationCurrencyOption: currencyOption,
+                locationCurrency: currency,
                 exchangeRateLocationToBaseCurrency: rateToBaseCurrency,
                 budgetsByCategory: budgetAmounts
             )
@@ -106,7 +106,7 @@ final class LocationViewModel {
                 name: name,
                 startDate: startDate,
                 endDate: endDate,
-                locationCurrencyOption: currencyOption,
+                locationCurrency: currency,
                 exchangeRateLocationToBaseCurrency: rateToBaseCurrency,
                 trip: trip,
                 budgetsByCategory: budgetAmounts

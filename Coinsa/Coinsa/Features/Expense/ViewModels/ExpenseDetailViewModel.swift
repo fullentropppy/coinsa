@@ -11,8 +11,8 @@ struct ExpenseDetailViewModel {
     // MARK: - Stored Properties
 
     let expense: Expense
-    let baseCurrencyOption: CurrencyOption
-    let localCurrencyOption: CurrencyOption
+    let baseCurrency: Currency
+    let localCurrency: Currency
 
     // MARK: - Computed Properties
 
@@ -21,16 +21,16 @@ struct ExpenseDetailViewModel {
             category: expense.category,
             date: expense.date,
             amount: expense.amountInLocationCurrency,
-            localCurrencyOption: localCurrencyOption
+            localCurrency: localCurrency
         )
     }
 
     // MARK: - Initialization
 
-    init(expense: Expense, baseCurrencyOption: CurrencyOption) {
+    init(expense: Expense, baseCurrency: Currency) {
         self.expense = expense
-        self.baseCurrencyOption = baseCurrencyOption
-        self.localCurrencyOption = CurrencyOption.from(code: expense.location.currencyCode)
+        self.baseCurrency = baseCurrency
+        self.localCurrency = Currency.from(code: expense.location.currencyCode)
     }
 }
 
@@ -38,5 +38,5 @@ struct ExpenseDetailHeaderData {
     let category: ExpenseCategory
     let date: Date
     let amount: Double
-    let localCurrencyOption: CurrencyOption
+    let localCurrency: Currency
 }

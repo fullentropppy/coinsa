@@ -11,8 +11,8 @@ struct LocationDetailViewModel {
     // MARK: - Stored Properties
 
     let location: Location
-    let baseCurrencyOption: CurrencyOption
-    let localCurrencyOption: CurrencyOption
+    let baseCurrency: Currency
+    let localCurrency: Currency
 
     // MARK: - Computed Properties
 
@@ -33,17 +33,17 @@ struct LocationDetailViewModel {
             actualAmountBase: actualAmountBase,
             amountDifferenceLocal: plannedAmountLocal - actualAmountLocal,
             amountDifferenceBase: plannedAmountBase - actualAmountBase,
-            localCurrencyOption: localCurrencyOption,
-            baseCurrencyOption: baseCurrencyOption
+            localCurrency: localCurrency,
+            baseCurrency: baseCurrency
         )
     }
 
     // MARK: - Initialization
 
-    init(location: Location, baseCurrencyOption: CurrencyOption) {
+    init(location: Location, baseCurrency: Currency) {
         self.location = location
-        self.baseCurrencyOption = baseCurrencyOption
-        self.localCurrencyOption = CurrencyOption.from(code: location.currencyCode)
+        self.baseCurrency = baseCurrency
+        self.localCurrency = Currency.from(code: location.currencyCode)
     }
 }
 
@@ -58,6 +58,6 @@ struct LocationDetailHeaderData {
     let actualAmountBase: Double
     let amountDifferenceLocal: Double
     let amountDifferenceBase: Double
-    let localCurrencyOption: CurrencyOption
-    let baseCurrencyOption: CurrencyOption
+    let localCurrency: Currency
+    let baseCurrency: Currency
 }

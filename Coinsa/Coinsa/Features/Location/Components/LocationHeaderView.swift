@@ -34,9 +34,9 @@ struct LocationHeaderView: View {
         HStack {
             EventStatusLabel(status: data.status)
             Spacer()
-            EventIntervalText(startDate: data.startDate, endDate: data.endDate)
+            IntervalText(startDate: data.startDate, endDate: data.endDate)
             Spacer()
-            EventDurationLabel(days: data.durationDays)
+            DurationLabel(days: data.durationDays)
         }
     }
 
@@ -46,17 +46,17 @@ struct LocationHeaderView: View {
                 LocationAmountCardView(
                     title: "amount.planned",
                     localAmount: data.plannedAmountLocal,
-                    localCurrencyOption: data.localCurrencyOption,
+                    localCurrency: data.localCurrency,
                     baseAmount: data.plannedAmountBase,
-                    baseCurrencyOption: data.baseCurrencyOption,
+                    baseCurrency: data.baseCurrency,
                     tint: .blue
                 )
                 LocationAmountCardView(
                     title: "amount.actual",
                     localAmount: data.actualAmountLocal,
-                    localCurrencyOption: data.localCurrencyOption,
+                    localCurrency: data.localCurrency,
                     baseAmount: data.actualAmountBase,
-                    baseCurrencyOption: data.baseCurrencyOption,
+                    baseCurrency: data.baseCurrency,
                     tint: .yellow
                 )
             }
@@ -64,9 +64,9 @@ struct LocationHeaderView: View {
             LocationAmountCardView(
                 title: "amount.difference",
                 localAmount: data.amountDifferenceLocal,
-                localCurrencyOption: data.localCurrencyOption,
+                localCurrency: data.localCurrency,
                 baseAmount: data.amountDifferenceBase,
-                baseCurrencyOption: data.baseCurrencyOption,
+                baseCurrency: data.baseCurrency,
                 tint: differenceTint
             )
         }
@@ -83,7 +83,7 @@ private extension LocationHeaderView {
             let location = builder.getLocation(from: data)
             let viewModel = LocationDetailViewModel(
                 location: location,
-                baseCurrencyOption: CurrencyOption.defaultOption
+                baseCurrency: Currency.defaultOption
             )
 
             LocationHeaderView(data: viewModel.headerData, showsSummary: true)

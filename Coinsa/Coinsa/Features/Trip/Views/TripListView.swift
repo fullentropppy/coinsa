@@ -16,9 +16,7 @@ struct TripListView: View {
     @Query(sort: \Trip.startDate) private var trips: [Trip]
 
     @State private var isShowingTripEdit = false
-    @State private var deletionHandler = DeletionHandler<Trip>(
-        messageKey: "trip.deletionConfirmation.message.single"
-    )
+    @State private var deletionHandler = DeletionHandler<Trip>()
 
     // MARK: - Computed Properties
     
@@ -35,18 +33,6 @@ struct TripListView: View {
             .sheet(isPresented: $isShowingTripEdit) {
                 TripEditView(trip: nil)
             }
-            .alert("trip.list.deletionConfirmation.title",
-                   isPresented: $deletionHandler.isShowingDeleteConfirmation
-            ) {
-                Button("trip.list.deletionConfirmation.delete", role: .destructive) {
-                    confirmDelete()
-                }
-                Button("common.cancel", role: .cancel) {
-                    cancelDelete()
-                }
-            } message: {
-                Text(deletionHandler.confirmationMessage)
-            }
             .toolbar {
                 toolbarContent
             }
@@ -55,6 +41,16 @@ struct TripListView: View {
                     emptyTripListContent
                 }
             }
+            .deleteConfirmationAlert(
+                isPresented: $deletionHandler.isShowingDeleteConfirmation,
+                message: "trip.delete.message",
+                onConfirm: {
+                    confirmDelete()
+                },
+                onCancel: {
+                    cancelDelete()
+                }
+            )
         }
     }
     
@@ -95,7 +91,7 @@ struct TripListView: View {
     // MARK: - Actions
 
     private func requestDelete(at offsets: IndexSet) {
-        deletionHandler.requestDelete(items: offsets.map { trips[$0] })
+        deletionHandler.requestDelete(for: offsets.map { trips[$0] })
     }
 
     private func confirmDelete() {

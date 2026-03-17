@@ -24,7 +24,7 @@ struct ExpenseDetailView: View {
             expense: expense,
             viewModel: ExpenseDetailViewModel(
                 expense: expense,
-                baseCurrencyOption: settingsStore.baseCurrencyOption
+                baseCurrency: settingsStore.baseCurrency
             )
         )
     }
@@ -49,7 +49,7 @@ struct ExpenseDetailView: View {
             ExpenseEditView(
                 location: expense.location,
                 expense: expense,
-                baseCurrencyOption: settingsStore.baseCurrencyOption
+                baseCurrency: settingsStore.baseCurrency
             )
         }
     }
@@ -65,12 +65,12 @@ struct ExpenseDetailView: View {
                     amountSubcard(
                         title: "expense.amount.base",
                         amount: expense.amountInBaseCurrency,
-                        currencyOption: viewModel.baseCurrencyOption
+                        currency: viewModel.baseCurrency
                     )
                     amountSubcard(
                         title: "expense.amount.local",
                         amount: expense.amountInLocationCurrency,
-                        currencyOption: viewModel.localCurrencyOption
+                        currency: viewModel.localCurrency
                     )
                 }
                 exchangeRateLabel(expense: expense, viewModel: viewModel)
@@ -81,10 +81,10 @@ struct ExpenseDetailView: View {
     private func amountSubcard(
         title: LocalizedStringKey,
         amount: Double,
-        currencyOption: CurrencyOption
+        currency: Currency
     ) -> some View {
         VStack(alignment: .leading, spacing: 6) {
-            CurrencyCodeText(currencyOption: currencyOption)
+            CurrencyCodeText(currency: currency)
             AmountText(amount: amount, style: .primary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -104,7 +104,7 @@ struct ExpenseDetailView: View {
             expense.rateToBaseCurrency
         )
         return HStack(spacing: 6) {
-            Text("1 \(viewModel.localCurrencyOption.code) = \(rateText) \(viewModel.baseCurrencyOption.code)")
+            Text("1 \(viewModel.localCurrency.code) = \(rateText) \(viewModel.baseCurrency.code)")
         }
         .font(.caption)
         .foregroundStyle(.secondary)

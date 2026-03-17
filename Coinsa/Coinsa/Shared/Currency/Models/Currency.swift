@@ -1,5 +1,5 @@
 //
-//  CurrencyOption.swift
+//  Currency.swift
 //  Coinsa
 //
 //  Created by Daniil Gritsenko on 08.03.2026.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum CurrencyOption: String, CaseIterable, Identifiable {
+enum Currency: String, CaseIterable, Identifiable {
     // MARK: - Cases
 
     case aed = "AED"
@@ -40,8 +40,8 @@ enum CurrencyOption: String, CaseIterable, Identifiable {
     
     // MARK: - Computed Properties
     
-    static var defaultOption: CurrencyOption {
-        CurrencyOption.rub
+    static var defaultOption: Currency {
+        Currency.rub
     }
     
     static var defaultCurrencyCode: String {
@@ -50,7 +50,7 @@ enum CurrencyOption: String, CaseIterable, Identifiable {
 
     // MARK: - Public Methods
     
-    static func from(code: String) -> CurrencyOption {
-        CurrencyOption(rawValue: code.uppercased()) ?? .defaultOption
+    static func from(code: String) -> Currency {
+        Currency(rawValue: code.uppercased()) ?? .defaultOption
     }
 }

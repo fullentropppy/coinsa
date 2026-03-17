@@ -16,8 +16,8 @@ final class ExpenseViewModel {
     private let expense: Expense?
 
     let location: Location
-    let baseCurrencyOption: CurrencyOption
-    let localCurrencyOption: CurrencyOption
+    let baseCurrency: Currency
+    let localCurrency: Currency
 
     var category: ExpenseCategory
     var date: Date
@@ -51,11 +51,11 @@ final class ExpenseViewModel {
 
     // MARK: - Initialization
 
-    init(location: Location, expense: Expense?, baseCurrencyOption: CurrencyOption) {
+    init(location: Location, expense: Expense?, baseCurrency: Currency) {
         self.expense = expense
         self.location = expense?.location ?? location
-        self.baseCurrencyOption = baseCurrencyOption
-        self.localCurrencyOption = CurrencyOption.from(code: self.location.currencyCode)
+        self.baseCurrency = baseCurrency
+        self.localCurrency = Currency.from(code: self.location.currencyCode)
 
         if let expense {
             category = expense.category

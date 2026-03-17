@@ -18,9 +18,7 @@ struct TripDetailView: View {
     @Query private var locations: [Location]
 
     @State private var viewModel: TripDetailViewModel?
-    @State private var deletionHandler = DeletionHandler<Location>(
-        messageKey: "location.deletionConfirmation.message.single"
-    )
+    @State private var deletionHandler = DeletionHandler<Location>()
     
     @State private var isShowingTripEdit = false
     @State private var isShowingLocationAdd = false
@@ -101,18 +99,8 @@ struct TripDetailView: View {
         .sheet(isPresented: $isShowingLocationAdd) {
             LocationEditView(
                 trip: trip,
-                baseCurrencyOption: viewModel.baseCurrencyOption
+                baseCurrency: viewModel.baseCurrency
             )
-        }
-        .alert("location.list.deletionConfirmation.title", isPresented: $deletionHandler.isShowingDeleteConfirmation) {
-            Button("location.list.deletionConfirmation.delete", role: .destructive) {
-                confirmDelete()
-            }
-            Button("common.cancel", role: .cancel) {
-                cancelDelete()
-            }
-        } message: {
-            Text(deletionHandler.confirmationMessage)
         }
         .overlay(alignment: .bottomTrailing) {
             if !locations.isEmpty {
@@ -122,6 +110,16 @@ struct TripDetailView: View {
                 .buttonStyle(PrimaryButtonStyle())
             }
         }
+        .deleteConfirmationAlert(
+            isPresented: $deletionHandler.isShowingDeleteConfirmation,
+            message: "location.delete.message",
+            onConfirm: {
+                confirmDelete()
+            },
+            onCancel: {
+                cancelDelete()
+            }
+        )
     }
 
     private var locationListContent: some View {
@@ -163,12 +161,12 @@ struct TripDetailView: View {
         }
         viewModel = TripDetailViewModel(
             trip: trip,
-            baseCurrencyOption: settingsStore.baseCurrencyOption
+            baseCurrency: settingsStore.baseCurrency
         )
     }
     
     private func requestDelete(at offsets: IndexSet) {
-        deletionHandler.requestDelete(items: offsets.map { locations[$0] })
+        deletionHandler.requestDelete(for: offsets.map { locations[$0] })
     }
 
     private func confirmDelete() {

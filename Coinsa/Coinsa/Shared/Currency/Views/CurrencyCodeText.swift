@@ -10,25 +10,25 @@ import SwiftUI
 struct CurrencyCodeText: View {
     // MARK: - Stored Properties
     
-    let currencyOption: CurrencyOption
+    let currency: Currency
     let style: ComponentStyle
     
     // MARK: - Initialization
     
-    init(currencyOption: CurrencyOption, style: ComponentStyle = .default) {
-        self.currencyOption = currencyOption
+    init(currency: Currency, style: ComponentStyle = .default) {
+        self.currency = currency
         self.style = style
     }
     
     // MARK: - Body
     
     var body: some View {
-        Text(currencyOption.code).font(codeFont).foregroundStyle(codeColor)
+        Text(currency.code).font(styleFont).foregroundStyle(styleColor)
     }
     
     // MARK: - Components
     
-    var codeFont: Font {
+    var styleFont: Font {
         switch style {
         case .default, .primary:
             return .body
@@ -39,7 +39,7 @@ struct CurrencyCodeText: View {
         }
     }
     
-    var codeColor: Color {
+    var styleColor: Color {
         switch style {
         case .primary:
             return .primary
@@ -54,10 +54,10 @@ struct CurrencyCodeText: View {
 private extension CurrencyCodeText {
     static func preview(colorScheme: ColorScheme) -> some View {
         VStack(spacing: 20) {
-            CurrencyCodeText(currencyOption: CurrencyOption.rub, style: .default)
-            CurrencyCodeText(currencyOption: CurrencyOption.usd, style: .primary)
-            CurrencyCodeText(currencyOption: CurrencyOption.eur, style: .secondary)
-            CurrencyCodeText(currencyOption: CurrencyOption.jpy, style: .tertiary)
+            CurrencyCodeText(currency: Currency.rub, style: .default)
+            CurrencyCodeText(currency: Currency.usd, style: .primary)
+            CurrencyCodeText(currency: Currency.eur, style: .secondary)
+            CurrencyCodeText(currency: Currency.jpy, style: .tertiary)
         }
         .preferredColorScheme(colorScheme)
     }

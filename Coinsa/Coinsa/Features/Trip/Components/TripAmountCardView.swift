@@ -12,7 +12,7 @@ struct TripAmountCardView: View {
 
     let title: LocalizedStringKey
     let amount: Double
-    let currencyOption: CurrencyOption
+    let currency: Currency
     let tint: Color
 
     // MARK: - Body
@@ -20,7 +20,7 @@ struct TripAmountCardView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             Text(title).font(.caption).foregroundStyle(.secondary)
-            AmountText(amount: amount, currencyOption: currencyOption)
+            AmountText(amount: amount, currency: currency)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(10)
@@ -39,25 +39,25 @@ private extension TripAmountCardView {
             TripAmountCardView(
                 title: "amount.planned",
                 amount: 299.55,
-                currencyOption: CurrencyOption.eur,
+                currency: Currency.eur,
                 tint: .blue
             )
             TripAmountCardView(
                 title: "amount.actual",
                 amount: 3512.01,
-                currencyOption: CurrencyOption.usd,
+                currency: Currency.usd,
                 tint: .yellow
             )
             TripAmountCardView(
                 title: "amount.difference",
                 amount: 19500.0,
-                currencyOption: CurrencyOption.rub,
+                currency: Currency.rub,
                 tint: .green
             )
             TripAmountCardView(
                 title: "amount.difference",
                 amount: -33075.25,
-                currencyOption: CurrencyOption.rub,
+                currency: Currency.rub,
                 tint: .red
             )
         }

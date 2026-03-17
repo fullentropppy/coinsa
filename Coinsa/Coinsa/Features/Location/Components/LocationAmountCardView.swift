@@ -12,9 +12,9 @@ struct LocationAmountCardView: View {
     
     let title: LocalizedStringKey
     let localAmount: Double
-    let localCurrencyOption: CurrencyOption
+    let localCurrency: Currency
     let baseAmount: Double
-    let baseCurrencyOption: CurrencyOption
+    let baseCurrency: Currency
     let tint: Color
     
     // MARK: - Body
@@ -22,8 +22,8 @@ struct LocationAmountCardView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             Text(title).font(.caption).foregroundStyle(.secondary)
-            AmountText(amount: baseAmount, currencyOption: baseCurrencyOption)
-            AmountText(amount: localAmount, currencyOption: localCurrencyOption, style: .secondary)
+            AmountText(amount: baseAmount, currency: baseCurrency)
+            AmountText(amount: localAmount, currency: localCurrency, style: .secondary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(10)
@@ -42,33 +42,33 @@ private extension LocationAmountCardView {
             LocationAmountCardView(
                 title: "amount.planned",
                 localAmount: 299.55,
-                localCurrencyOption: .eur,
+                localCurrency: .eur,
                 baseAmount: 3012.21,
-                baseCurrencyOption: .rub,
+                baseCurrency: .rub,
                 tint: .blue
             )
             LocationAmountCardView(
                 title: "amount.actual",
                 localAmount: 1094.10,
-                localCurrencyOption: .usd,
+                localCurrency: .usd,
                 baseAmount: 96771.0,
-                baseCurrencyOption: .rub,
+                baseCurrency: .rub,
                 tint: .yellow
             )
             LocationAmountCardView(
                 title: "amount.actual",
                 localAmount: 45000.0,
-                localCurrencyOption: .jpy,
+                localCurrency: .jpy,
                 baseAmount: 22675.5,
-                baseCurrencyOption: .rub,
+                baseCurrency: .rub,
                 tint: .green
             )
             LocationAmountCardView(
                 title: "amount.actual",
                 localAmount: -9209.07,
-                localCurrencyOption: .krw,
+                localCurrency: .krw,
                 baseAmount: -499.26,
-                baseCurrencyOption: .rub,
+                baseCurrency: .rub,
                 tint: .red
             )
         }

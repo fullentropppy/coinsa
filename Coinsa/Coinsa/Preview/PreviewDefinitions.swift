@@ -23,18 +23,18 @@ enum PreviewLocation: String {
 
     var currencyCode: String {
         switch self {
-        case .istanbul: CurrencyOption.try.code
-        case .seoul, .busan: CurrencyOption.krw.code
-        case .tokyo, .kyoto, .osaka: CurrencyOption.jpy.code
+        case .istanbul: Currency.try.code
+        case .seoul, .busan: Currency.krw.code
+        case .tokyo, .kyoto, .osaka: Currency.jpy.code
         }
     }
 
     var exchangeRateToBaseCurrency: Double {
-        PreviewCurrency.exchangeRate(from: currencyCode, to: CurrencyOption.defaultCurrencyCode)
+        PreviewCurrency.exchangeRate(from: currencyCode, to: Currency.defaultCurrencyCode)
     }
 
     var exchangeRateFromBaseCurrency: Double {
-        PreviewCurrency.exchangeRate(from: CurrencyOption.defaultCurrencyCode, to: currencyCode)
+        PreviewCurrency.exchangeRate(from: Currency.defaultCurrencyCode, to: currencyCode)
     }
 }
 
@@ -57,9 +57,9 @@ enum PreviewExpenseComment: String {
 
 private enum PreviewCurrency {
     static let exchangeRates: [String: [String: Double]] = [
-        CurrencyOption.try.code: [CurrencyOption.usd.code: 0.022, CurrencyOption.rub.code: 1.8],
-        CurrencyOption.krw.code: [CurrencyOption.usd.code: 0.00075, CurrencyOption.rub.code: 0.065],
-        CurrencyOption.jpy.code: [CurrencyOption.usd.code: 0.007, CurrencyOption.rub.code: 0.6]
+        Currency.try.code: [Currency.usd.code: 0.022, Currency.rub.code: 1.8],
+        Currency.krw.code: [Currency.usd.code: 0.00075, Currency.rub.code: 0.065],
+        Currency.jpy.code: [Currency.usd.code: 0.007, Currency.rub.code: 0.6]
     ]
 
     static func exchangeRate(from: String, to: String) -> Double {

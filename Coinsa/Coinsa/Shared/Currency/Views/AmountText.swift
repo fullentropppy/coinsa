@@ -11,18 +11,18 @@ struct AmountText: View {
     // MARK: - Stored Properties
     
     let amount: Double
-    let currencyOption: CurrencyOption?
+    let currency: Currency?
     let style: ComponentStyle
     
     // MARK: - Initialization
     
     init(
         amount: Double,
-        currencyOption: CurrencyOption? = nil,
+        currency: Currency? = nil,
         style: ComponentStyle = .default
     ) {
         self.amount = amount
-        self.currencyOption = currencyOption
+        self.currency = currency
         self.style = style
     }
     
@@ -31,18 +31,18 @@ struct AmountText: View {
     var body: some View {
         HStack(spacing: 4) {
             Text(amount, format: .number.precision(.fractionLength(2)))
-                .font(amountFont)
-                .foregroundStyle(amountColor)
+                .font(styleFont)
+                .foregroundStyle(styleColor)
             
-            if let currencyOption {
-                CurrencyCodeText(currencyOption: currencyOption, style: style)
+            if let currency {
+                CurrencyCodeText(currency: currency, style: style)
             }
         }
     }
     
     // MARK: - Components
     
-    private var amountFont: Font {
+    private var styleFont: Font {
         switch style {
         case .default:
             return .body
@@ -55,7 +55,7 @@ struct AmountText: View {
         }
     }
     
-    var amountColor: Color {
+    var styleColor: Color {
         switch style {
         case .default, .primary:
             return .primary
@@ -69,14 +69,14 @@ struct AmountText: View {
 
 private extension AmountText {
     static func preview(locale: Locale, colorScheme: ColorScheme) -> some View {
-        VStack(spacing: 20) {
-            AmountText(amount: 65099.99, currencyOption: CurrencyOption.rub, style: .default)
+        VStack(alignment: .leading, spacing: 20) {
+            AmountText(amount: 65099.99, currency: Currency.rub, style: .default)
             AmountText(amount: 65099.99, style: .default)
-            AmountText(amount: 9032.50, currencyOption: CurrencyOption.usd, style: .primary)
+            AmountText(amount: 9032.50, currency: Currency.usd, style: .primary)
             AmountText(amount: 9032.50, style: .primary)
-            AmountText(amount: 501.0, currencyOption: CurrencyOption.eur, style: .secondary)
+            AmountText(amount: 501.0, currency: Currency.eur, style: .secondary)
             AmountText(amount: 501.0, style: .secondary)
-            AmountText(amount: 99.09, currencyOption: CurrencyOption.jpy, style: .tertiary)
+            AmountText(amount: 99.09, currency: Currency.jpy, style: .tertiary)
             AmountText(amount: 99.09, style: .tertiary)
         }
         .environment(\.locale, locale)

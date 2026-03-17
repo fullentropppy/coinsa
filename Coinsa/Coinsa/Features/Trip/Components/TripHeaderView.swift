@@ -36,9 +36,9 @@ struct TripHeaderView: View {
         HStack {
             EventStatusLabel(status: data.status)
             Spacer()
-            EventIntervalText(startDate: data.startDate, endDate: data.endDate)
+            IntervalText(startDate: data.startDate, endDate: data.endDate)
             Spacer()
-            EventDurationLabel(days: data.durationDays)
+            DurationLabel(days: data.durationDays)
         }
     }
     
@@ -48,13 +48,13 @@ struct TripHeaderView: View {
                 TripAmountCardView(
                     title: "amount.planned",
                     amount: data.plannedAmount,
-                    currencyOption: data.currencyOption,
+                    currency: data.currency,
                     tint: .blue
                 )
                 TripAmountCardView(
                     title: "amount.actual",
                     amount: data.actualAmount,
-                    currencyOption: data.currencyOption,
+                    currency: data.currency,
                     tint: .yellow
                 )
             }
@@ -62,7 +62,7 @@ struct TripHeaderView: View {
             TripAmountCardView(
                 title: "amount.difference",
                 amount: data.amountDifference,
-                currencyOption: data.currencyOption,
+                currency: data.currency,
                 tint: differenceTint
             )
         }
@@ -83,7 +83,7 @@ private extension TripHeaderView {
             let trip = builder.getTrip(from: data)
             let viewModel = TripDetailViewModel(
                 trip: trip,
-                baseCurrencyOption: CurrencyOption.defaultOption
+                baseCurrency: Currency.defaultOption
             )
             
             TripHeaderView(

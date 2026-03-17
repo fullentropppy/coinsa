@@ -32,8 +32,8 @@ final class AppSettingsStore {
         settings.baseCurrencyCode
     }
 
-    var baseCurrencyOption: CurrencyOption {
-        CurrencyOption.from(code: baseCurrencyCode)
+    var baseCurrency: Currency {
+        Currency.from(code: baseCurrencyCode)
     }
     
     var selectedTheme: AppTheme {
@@ -50,7 +50,7 @@ final class AppSettingsStore {
         if let storedSettings = try? context.fetch(FetchDescriptor<AppSettings>()).first {
             settings = storedSettings
         } else {
-            let newSettings = AppSettings(baseCurrencyCode: CurrencyOption.defaultCurrencyCode)
+            let newSettings = AppSettings(baseCurrencyCode: Currency.defaultCurrencyCode)
             context.insert(newSettings)
             settings = newSettings
         }

@@ -18,14 +18,14 @@ struct TripRowView: View {
         VStack(alignment: .leading) {
             HStack {
                 EventStatusImage(status: trip.status)
-                EventTitleText(title: trip.name)
+                TitleText(title: trip.name)
             }
             .padding(2)
             
             HStack {
-                EventIntervalText(startDate: trip.startDate, endDate: trip.endDate)
+                IntervalText(startDate: trip.startDate, endDate: trip.endDate)
                 Spacer()
-                EventDurationLabel(days: trip.durationInDays)
+                DurationLabel(days: trip.durationInDays)
                 TripLocationCountLabel(count: trip.locationsCount)
             }
             .padding(2)

@@ -14,9 +14,7 @@ struct TripEditView: View {
     @Environment(\.dismiss) private var dismiss
 
     @State private var viewModel: TripViewModel
-    @State private var deletionHandler = DeletionHandler<Trip>(
-        messageKey: "trip.deletionConfirmation.message.single"
-    )
+    @State private var deletionHandler = DeletionHandler<Trip>()
         
     // MARK: - Computed properties
     
@@ -40,20 +38,20 @@ struct TripEditView: View {
             }
             .navigationTitle(viewModel.navigationTitle)
             .toolbarTitleDisplayMode(.inline)
-            .alert("trip.list.deletionConfirmation.title", isPresented: $deletionHandler.isShowingDeleteConfirmation) {
-                Button("trip.list.deletionConfirmation.delete", role: .destructive) {
-                    confirmDelete()
-                    dismiss()
-                }
-                Button("common.cancel", role: .cancel) {
-                    cancelDelete()
-                }
-            } message: {
-                Text(deletionHandler.confirmationMessage)
-            }
             .toolbar {
                 toolbarContent
             }
+            .deleteConfirmationAlert(
+                isPresented: $deletionHandler.isShowingDeleteConfirmation,
+                message: "trip.delete.message",
+                onConfirm: {
+                    confirmDelete()
+                    dismiss()
+                },
+                onCancel: {
+                    cancelDelete()
+                }
+            )
         }
     }
 
@@ -97,7 +95,7 @@ struct TripEditView: View {
 
     private func requestDelete() {
         guard let trip = viewModel.tripToEdit else { return }
-        deletionHandler.requestDelete(items: [trip])
+        deletionHandler.requestDelete(for: [trip])
     }
 
     private func confirmDelete() {

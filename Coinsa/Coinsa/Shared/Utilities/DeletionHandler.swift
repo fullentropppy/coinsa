@@ -10,31 +10,17 @@ import SwiftUI
 struct DeletionHandler<Item> {
     // MARK: - Stored Properties
 
-    private let messageKey: LocalizedStringKey
-    
     var isShowingDeleteConfirmation = false
     var itemsPendingDeletion: [Item] = []
-
-    // MARK: - Computed Properties
-
-    var confirmationMessage: LocalizedStringKey {
-        messageKey
-    }
-
-    // MARK: - Initialization
-
-    init(messageKey: LocalizedStringKey) {
-        self.messageKey = messageKey
-    }
     
     // MARK: - Public Methods
 
-    mutating func requestDelete(items: [Item]) {
+    mutating func requestDelete(for items: [Item]) {
         itemsPendingDeletion = items
         isShowingDeleteConfirmation = true
     }
 
-    mutating func confirmDelete(_ deleteAction: (Item) -> Void) {
+    mutating func confirmDelete(using deleteAction: (Item) -> Void) {
         itemsPendingDeletion.forEach(deleteAction)
         itemsPendingDeletion.removeAll()
     }
