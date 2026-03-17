@@ -11,12 +11,16 @@ struct AmountText: View {
     // MARK: - Stored Properties
     
     let amount: Double
-    let currencyOption: CurrencyOption
+    let currencyOption: CurrencyOption?
     let style: ComponentStyle
     
     // MARK: - Initialization
     
-    init(amount: Double, currencyOption: CurrencyOption, style: ComponentStyle = .default) {
+    init(
+        amount: Double,
+        currencyOption: CurrencyOption? = nil,
+        style: ComponentStyle = .default
+    ) {
         self.amount = amount
         self.currencyOption = currencyOption
         self.style = style
@@ -29,7 +33,10 @@ struct AmountText: View {
             Text(amount, format: .number.precision(.fractionLength(2)))
                 .font(amountFont)
                 .foregroundStyle(amountColor)
-            CurrencyCodeText(currencyOption: currencyOption, style: style)
+            
+            if let currencyOption {
+                CurrencyCodeText(currencyOption: currencyOption, style: style)
+            }
         }
     }
     
@@ -64,9 +71,13 @@ private extension AmountText {
     static func preview(locale: Locale, colorScheme: ColorScheme) -> some View {
         VStack(spacing: 20) {
             AmountText(amount: 65099.99, currencyOption: CurrencyOption.rub, style: .default)
+            AmountText(amount: 65099.99, style: .default)
             AmountText(amount: 9032.50, currencyOption: CurrencyOption.usd, style: .primary)
+            AmountText(amount: 9032.50, style: .primary)
             AmountText(amount: 501.0, currencyOption: CurrencyOption.eur, style: .secondary)
+            AmountText(amount: 501.0, style: .secondary)
             AmountText(amount: 99.09, currencyOption: CurrencyOption.jpy, style: .tertiary)
+            AmountText(amount: 99.09, style: .tertiary)
         }
         .environment(\.locale, locale)
         .preferredColorScheme(colorScheme)

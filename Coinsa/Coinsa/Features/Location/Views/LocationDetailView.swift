@@ -102,6 +102,12 @@ struct LocationDetailView: View {
                 baseCurrencyOption: settingsStore.baseCurrencyOption
             )
         }
+        .sheet(isPresented: $isShowingExpenseAdd) {
+            ExpenseEditView(
+                location: location,
+                baseCurrencyOption: settingsStore.baseCurrencyOption
+            )
+        }
         .alert("expense.list.deletionConfirmation.title", isPresented: $deletionHandler.isShowingDeleteConfirmation) {
             Button("expense.list.deletionConfirmation.delete", role: .destructive) {
                 confirmDelete()
@@ -125,7 +131,7 @@ struct LocationDetailView: View {
     private var expenseListContent: some View {
         ForEach(expenses) { expense in
             NavigationLink {
-                
+                ExpenseDetailView(expense: expense)
             } label: {
                 ExpenseRowView(
                     expense: expense,
