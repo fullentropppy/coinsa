@@ -64,7 +64,7 @@ final class LocationViewModel {
             name = location.name
             startDate = location.startDate
             endDate = location.endDate
-            currency = Currency.from(code: location.currencyCode)
+            currency = Currency.from(location.currencyCode)
             rateToBaseCurrency = location.rateToBaseCurrency
         } else {
             name = ""
@@ -97,8 +97,8 @@ final class LocationViewModel {
                 name: name,
                 startDate: startDate,
                 endDate: endDate,
-                locationCurrency: currency,
-                exchangeRateLocationToBaseCurrency: rateToBaseCurrency,
+                currency: currency,
+                rateToBaseCurrency: rateToBaseCurrency,
                 budgetsByCategory: budgetAmounts
             )
         } else {
@@ -106,8 +106,8 @@ final class LocationViewModel {
                 name: name,
                 startDate: startDate,
                 endDate: endDate,
-                locationCurrency: currency,
-                exchangeRateLocationToBaseCurrency: rateToBaseCurrency,
+                currency: currency,
+                rateToBaseCurrency: rateToBaseCurrency,
                 trip: trip,
                 budgetsByCategory: budgetAmounts
             )

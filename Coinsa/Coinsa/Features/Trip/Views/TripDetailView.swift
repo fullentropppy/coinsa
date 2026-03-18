@@ -193,11 +193,11 @@ private extension TripDetailView {
         
         return NavigationStack {
             TripDetailView(tripID: tripID)
-                .modelContainer(container)
-                .environment(settingsStore)
-                .environment(\.locale, locale)
-                .preferredColorScheme(colorScheme)
         }
+        .modelContainer(container)
+        .environment(settingsStore)
+        .environment(\.locale, locale)
+        .preferredColorScheme(colorScheme)
     }
 }
 

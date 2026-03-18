@@ -50,7 +50,7 @@ enum Currency: String, CaseIterable, Identifiable {
 
     // MARK: - Public Methods
     
-    static func from(code: String) -> Currency {
+    static func from(_ code: String) -> Currency {
         Currency(rawValue: code.uppercased()) ?? .defaultOption
     }
 }

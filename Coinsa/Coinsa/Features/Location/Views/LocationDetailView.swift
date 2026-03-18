@@ -200,11 +200,11 @@ private extension LocationDetailView {
 
         return NavigationStack {
             LocationDetailView(locationID: locationID)
-                .modelContainer(container)
-                .environment(settingsStore)
-                .environment(\.locale, locale)
-                .preferredColorScheme(colorScheme)
         }
+        .modelContainer(container)
+        .environment(settingsStore)
+        .environment(\.locale, locale)
+        .preferredColorScheme(colorScheme)
     }
 }
 

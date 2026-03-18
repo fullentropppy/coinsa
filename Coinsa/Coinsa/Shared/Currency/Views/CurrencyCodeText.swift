@@ -12,18 +12,20 @@ struct CurrencyCodeText: View {
     
     let currency: Currency
     let style: ComponentStyle
+    let tint: Color?
     
     // MARK: - Initialization
     
-    init(currency: Currency, style: ComponentStyle = .default) {
+    init(currency: Currency, style: ComponentStyle = .default, tint: Color? = nil) {
         self.currency = currency
         self.style = style
+        self.tint = tint
     }
     
     // MARK: - Body
     
     var body: some View {
-        Text(currency.code).font(styleFont).foregroundStyle(styleColor)
+        Text(currency.code).font(styleFont).foregroundStyle(resolvedColor)
     }
     
     // MARK: - Components
@@ -39,13 +41,17 @@ struct CurrencyCodeText: View {
         }
     }
     
-    var styleColor: Color {
+    private var styleColor: Color {
         switch style {
         case .primary:
             return .primary
         default:
             return .secondary
         }
+    }
+    
+    private var resolvedColor: Color {
+        tint ?? styleColor
     }
 }
 

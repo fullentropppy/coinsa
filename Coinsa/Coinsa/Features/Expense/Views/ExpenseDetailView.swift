@@ -36,7 +36,7 @@ struct ExpenseDetailView: View {
             amountBlock(expense: expense, viewModel: viewModel)
  
             if let comment = expense.comment {
-                Section("Комментарий") {
+                Section("expense.comment") {
                     Text(comment).foregroundStyle(.secondary)
                 }
             }
@@ -132,11 +132,11 @@ private extension ExpenseDetailView {
 
         return NavigationStack {
             ExpenseDetailView(expense: expense)
-                .modelContainer(container)
-                .environment(settingsStore)
-                .environment(\.locale, locale)
-                .preferredColorScheme(colorScheme)
         }
+        .modelContainer(container)
+        .environment(settingsStore)
+        .environment(\.locale, locale)
+        .preferredColorScheme(colorScheme)
     }
 }
 

@@ -73,6 +73,33 @@ struct LocationHeaderView: View {
     }
 }
 
+struct LocationAmountCardView: View {
+    // MARK: - Stored Properties
+    
+    let title: LocalizedStringKey
+    let localAmount: Double
+    let localCurrency: Currency
+    let baseAmount: Double
+    let baseCurrency: Currency
+    let tint: Color
+    
+    // MARK: - Body
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text(title).font(.caption).foregroundStyle(.secondary)
+            AmountText(amount: baseAmount, currency: baseCurrency)
+            AmountText(amount: localAmount, currency: localCurrency, style: .secondary)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(10)
+        .background(
+            RoundedRectangle(cornerRadius: 15, style: .continuous)
+                .fill(tint.opacity(0.4).gradient)
+        )
+    }
+}
+
 // MARK: - Preview
 
 private extension LocationHeaderView {

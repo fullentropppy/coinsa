@@ -743,6 +743,22 @@
         }
       }
     },
+    "expense.comment" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comment"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Комментарий"
+          }
+        }
+      }
+    },
     "expense.delete.message" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -756,23 +772,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Вы уверены что хотите удалить трату?"
-          }
-        }
-      }
-    },
-    "expense.detail.title" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Expense"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Трата"
           }
         }
       }
@@ -870,29 +869,6 @@
             "state" : "translated",
             "value" : "New expense"
           }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Новая трата"
-          }
-        }
-      }
-    },
-    "expense.editing.navigationTitle.editing" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Edit expense"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Изменение"
-          }
         }
       }
     },
@@ -943,23 +919,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Трат еще нет"
-          }
-        }
-      }
-    },
-    "location.add.navigationTitle" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "New location"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Новая локация"
           }
         }
       }
@@ -1728,9 +1687,6 @@
           }
         }
       }
-    },
-    "Комментарий" : {
-
     }
   },
   "version" : "1.1"

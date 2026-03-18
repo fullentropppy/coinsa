@@ -33,7 +33,7 @@ final class AppSettingsStore {
     }
 
     var baseCurrency: Currency {
-        Currency.from(code: baseCurrencyCode)
+        Currency.from(baseCurrencyCode)
     }
     
     var selectedTheme: AppTheme {

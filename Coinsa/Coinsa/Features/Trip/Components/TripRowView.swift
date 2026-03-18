@@ -43,9 +43,9 @@ private extension TripRowView {
 
         return List {
             TripRowView(trip: trip)
-                .environment(\.locale, locale)
-                .preferredColorScheme(colorScheme)
         }
+        .environment(\.locale, locale)
+        .preferredColorScheme(colorScheme)
     }
 }
 

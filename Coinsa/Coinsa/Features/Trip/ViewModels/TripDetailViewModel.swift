@@ -39,6 +39,8 @@ struct TripDetailViewModel {
     }
 }
 
+// MARK: - Supporting Types
+
 struct TripDetailHeaderData {
     let status: EventStatus
     let startDate: Date

@@ -43,7 +43,7 @@ struct LocationDetailViewModel {
     init(location: Location, baseCurrency: Currency) {
         self.location = location
         self.baseCurrency = baseCurrency
-        self.localCurrency = Currency.from(code: location.currencyCode)
+        self.localCurrency = Currency.from(location.currencyCode)
     }
 }
 

@@ -30,14 +30,14 @@ class Expense {
     init(
         date: Date = .now,
         amountInLocationCurrency: Double,
-        exchangeRateLocationToBaseCurrency: Double,
+        rateToBaseCurrency: Double,
         category: ExpenseCategory,
         location: Location,
         comment: String? = nil
     ) {
         self.date = date
         self.amountInLocationCurrency = amountInLocationCurrency
-        self.rateToBaseCurrency = exchangeRateLocationToBaseCurrency
+        self.rateToBaseCurrency = rateToBaseCurrency
         self.category = category
         self.location = location
         self.comment = comment

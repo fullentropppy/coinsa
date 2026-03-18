@@ -31,7 +31,7 @@ struct ExpenseRowView: View {
                     )
                     AmountText(
                         amount: expense.amountInLocationCurrency,
-                        currency: Currency.from(code: expense.location.currencyCode),
+                        currency: Currency.from(expense.location.currencyCode),
                         style: .secondary
                     )
                 }

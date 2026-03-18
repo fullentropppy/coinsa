@@ -31,8 +31,8 @@ class Location: DateRangeProviding, EventStatusProviding {
         name: String,
         startDate: Date,
         endDate: Date,
-        locationCurrencyCode: String,
-        exchangeRateLocationToBaseCurrency: Double,
+        currencyCode: String,
+        rateToBaseCurrency: Double,
         trip: Trip,
         budgets: [Budget] = [],
         expenses: [Expense] = []
@@ -40,8 +40,8 @@ class Location: DateRangeProviding, EventStatusProviding {
         self.name = name
         self.startDate = startDate
         self.endDate = endDate
-        self.currencyCode = locationCurrencyCode
-        self.rateToBaseCurrency = exchangeRateLocationToBaseCurrency
+        self.currencyCode = currencyCode
+        self.rateToBaseCurrency = rateToBaseCurrency
         self.trip = trip
         self.budgets = budgets
         self.expenses = expenses

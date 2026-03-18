@@ -30,9 +30,11 @@ struct ExpenseDetailViewModel {
     init(expense: Expense, baseCurrency: Currency) {
         self.expense = expense
         self.baseCurrency = baseCurrency
-        self.localCurrency = Currency.from(code: expense.location.currencyCode)
+        self.localCurrency = Currency.from(expense.location.currencyCode)
     }
 }
+
+// MARK: - Supporting Types
 
 struct ExpenseDetailHeaderData {
     let category: ExpenseCategory

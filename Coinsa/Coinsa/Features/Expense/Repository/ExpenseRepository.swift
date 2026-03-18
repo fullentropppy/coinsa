@@ -19,7 +19,7 @@ struct ExpenseRepository {
     func add(
         date: Date,
         amountInLocationCurrency: Double,
-        exchangeRateLocationToBaseCurrency: Double,
+        rateToBaseCurrency: Double,
         category: ExpenseCategory,
         location: Location,
         comment: String?
@@ -27,7 +27,7 @@ struct ExpenseRepository {
         let expense = Expense(
             date: date,
             amountInLocationCurrency: max(0, amountInLocationCurrency),
-            exchangeRateLocationToBaseCurrency: max(0, exchangeRateLocationToBaseCurrency),
+            rateToBaseCurrency: max(0, rateToBaseCurrency),
             category: category,
             location: location,
             comment: comment
@@ -39,13 +39,13 @@ struct ExpenseRepository {
         _ expense: Expense,
         date: Date,
         amountInLocationCurrency: Double,
-        exchangeRateLocationToBaseCurrency: Double,
+        rateToBaseCurrency: Double,
         category: ExpenseCategory,
         comment: String?
     ) {
         expense.date = date
         expense.amountInLocationCurrency = max(0, amountInLocationCurrency)
-        expense.rateToBaseCurrency = max(0, exchangeRateLocationToBaseCurrency)
+        expense.rateToBaseCurrency = max(0, rateToBaseCurrency)
         expense.category = category
         expense.comment = comment
     }

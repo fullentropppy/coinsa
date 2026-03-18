@@ -20,8 +20,8 @@ struct LocationRepository {
         name: String,
         startDate: Date,
         endDate: Date,
-        locationCurrency: Currency,
-        exchangeRateLocationToBaseCurrency: Double,
+        currency: Currency,
+        rateToBaseCurrency: Double,
         trip: Trip,
         budgetsByCategory: [ExpenseCategory: Double]
     ) {
@@ -29,8 +29,8 @@ struct LocationRepository {
             name: name,
             startDate: startDate,
             endDate: endDate,
-            locationCurrencyCode: locationCurrency.code,
-            exchangeRateLocationToBaseCurrency: exchangeRateLocationToBaseCurrency,
+            currencyCode: currency.code,
+            rateToBaseCurrency: rateToBaseCurrency,
             trip: trip,
             budgets: [],
             expenses: []
@@ -45,15 +45,15 @@ struct LocationRepository {
         name: String,
         startDate: Date,
         endDate: Date,
-        locationCurrency: Currency,
-        exchangeRateLocationToBaseCurrency: Double,
+        currency: Currency,
+        rateToBaseCurrency: Double,
         budgetsByCategory: [ExpenseCategory: Double]
     ) {
         location.name = name
         location.startDate = startDate
         location.endDate = endDate
-        location.currencyCode = locationCurrency.code
-        location.rateToBaseCurrency = exchangeRateLocationToBaseCurrency
+        location.currencyCode = currency.code
+        location.rateToBaseCurrency = rateToBaseCurrency
 
         applyBudgets(budgetsByCategory, to: location)
     }

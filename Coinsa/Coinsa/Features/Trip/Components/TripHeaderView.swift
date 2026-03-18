@@ -69,6 +69,31 @@ struct TripHeaderView: View {
     }
 }
 
+struct TripAmountCardView: View {
+    // MARK: - Stored Properties
+
+    let title: LocalizedStringKey
+    let amount: Double
+    let currency: Currency
+    let tint: Color
+
+    // MARK: - Body
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text(title).font(.caption).foregroundStyle(.secondary)
+            AmountText(amount: amount, currency: currency)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(10)
+        .background(
+            RoundedRectangle(cornerRadius: 15, style: .continuous)
+                .fill(tint.opacity(0.4).gradient)
+        )
+    }
+}
+
+
 // MARK: - Preview
 
 private extension TripHeaderView {

@@ -55,7 +55,7 @@ final class ExpenseViewModel {
         self.expense = expense
         self.location = expense?.location ?? location
         self.baseCurrency = baseCurrency
-        self.localCurrency = Currency.from(code: self.location.currencyCode)
+        self.localCurrency = Currency.from(self.location.currencyCode)
 
         if let expense {
             category = expense.category
@@ -83,7 +83,7 @@ final class ExpenseViewModel {
                 expense,
                 date: date,
                 amountInLocationCurrency: amountInLocationCurrency,
-                exchangeRateLocationToBaseCurrency: rateToBaseCurrency,
+                rateToBaseCurrency: rateToBaseCurrency,
                 category: category,
                 comment: commentValue
             )
@@ -91,7 +91,7 @@ final class ExpenseViewModel {
             repository.add(
                 date: date,
                 amountInLocationCurrency: amountInLocationCurrency,
-                exchangeRateLocationToBaseCurrency: rateToBaseCurrency,
+                rateToBaseCurrency: rateToBaseCurrency,
                 category: category,
                 location: location,
                 comment: commentValue

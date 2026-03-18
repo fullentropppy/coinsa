@@ -13,17 +13,20 @@ struct AmountText: View {
     let amount: Double
     let currency: Currency?
     let style: ComponentStyle
+    let tint: Color?
     
     // MARK: - Initialization
     
     init(
         amount: Double,
         currency: Currency? = nil,
-        style: ComponentStyle = .default
+        style: ComponentStyle = .default,
+        tint: Color? = nil
     ) {
         self.amount = amount
         self.currency = currency
         self.style = style
+        self.tint = tint
     }
     
     // MARK: - Body
@@ -32,10 +35,10 @@ struct AmountText: View {
         HStack(spacing: 4) {
             Text(amount, format: .number.precision(.fractionLength(2)))
                 .font(styleFont)
-                .foregroundStyle(styleColor)
+                .foregroundStyle(resolvedColor)
             
             if let currency {
-                CurrencyCodeText(currency: currency, style: style)
+                CurrencyCodeText(currency: currency, style: style, tint: tint)
             }
         }
     }
@@ -55,13 +58,17 @@ struct AmountText: View {
         }
     }
     
-    var styleColor: Color {
+    private var styleColor: Color {
         switch style {
         case .default, .primary:
             return .primary
         default:
             return .secondary
         }
+    }
+    
+    private var resolvedColor: Color {
+        tint ?? styleColor
     }
 }
 
