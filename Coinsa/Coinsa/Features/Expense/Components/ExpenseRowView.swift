@@ -21,16 +21,16 @@ struct ExpenseRowView: View {
             HStack {
                 VStack(alignment: .leading, spacing: 10) {
                     ExpenseCategoryLabel(category: expense.category)
-                    EventDateTimeText(dateTime: expense.date)
+                    DateLabel(expense.date)
                 }
                 Spacer()
                 VStack(alignment: .trailing, spacing: 10) {
                     AmountText(
-                        amount: expense.amountInBaseCurrency,
+                        expense.amountInBaseCurrency,
                         currency: baseCurrency
                     )
                     AmountText(
-                        amount: expense.amountInLocationCurrency,
+                        expense.amountInLocationCurrency,
                         currency: Currency.from(expense.location.currencyCode),
                         style: .secondary
                     )

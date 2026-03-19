@@ -10,13 +10,13 @@ import SwiftUI
 struct CurrencyCodeText: View {
     // MARK: - Stored Properties
     
-    let currency: Currency
-    let style: ComponentStyle
-    let tint: Color?
+    private let currency: Currency
+    private let style: ComponentStyle
+    private let tint: Color?
     
     // MARK: - Initialization
     
-    init(currency: Currency, style: ComponentStyle = .default, tint: Color? = nil) {
+    init(_ currency: Currency, style: ComponentStyle = .default, tint: Color? = nil) {
         self.currency = currency
         self.style = style
         self.tint = tint
@@ -59,11 +59,22 @@ struct CurrencyCodeText: View {
 
 private extension CurrencyCodeText {
     static func preview(colorScheme: ColorScheme) -> some View {
-        VStack(spacing: 20) {
-            CurrencyCodeText(currency: Currency.rub, style: .default)
-            CurrencyCodeText(currency: Currency.usd, style: .primary)
-            CurrencyCodeText(currency: Currency.eur, style: .secondary)
-            CurrencyCodeText(currency: Currency.jpy, style: .tertiary)
+        let currency = Currency.rub
+        
+        return VStack(spacing: 40){
+            VStack(spacing: 20) {
+                CurrencyCodeText(currency)
+                CurrencyCodeText(currency, style: .primary)
+                CurrencyCodeText(currency, style: .secondary)
+                CurrencyCodeText(currency, style: .tertiary)
+            }
+            
+            VStack(spacing: 20) {
+                CurrencyCodeText(currency, tint: .accent)
+                CurrencyCodeText(currency, style: .primary, tint: .pink)
+                CurrencyCodeText(currency, style: .secondary, tint: .orange)
+                CurrencyCodeText(currency, style: .tertiary, tint: .green)
+            }
         }
         .preferredColorScheme(colorScheme)
     }

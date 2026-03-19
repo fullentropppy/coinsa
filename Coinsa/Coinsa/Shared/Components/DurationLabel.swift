@@ -10,8 +10,8 @@ import SwiftUI
 struct DurationLabel: View {
     // MARK: - Stored Properties
     
-    let days: Int
-    let style: ComponentStyle
+    private let days: Int
+    private let style: ComponentStyle
     
     // MARK: - Initialization
     
@@ -58,11 +58,11 @@ struct DurationLabel: View {
 
 private extension DurationLabel {
     static func preview(colorScheme: ColorScheme) -> some View {
-        VStack(alignment: .leading, spacing: 20) {
-            DurationLabel(days: 7, style: .default)
+        VStack(spacing: 20) {
+            DurationLabel(days: 14)
             DurationLabel(days: 14, style: .primary)
-            DurationLabel(days: 30, style: .secondary)
-            DurationLabel(days: 60, style: .tertiary)
+            DurationLabel(days: 14, style: .secondary)
+            DurationLabel(days: 14, style: .tertiary)
         }
         .preferredColorScheme(colorScheme)
     }

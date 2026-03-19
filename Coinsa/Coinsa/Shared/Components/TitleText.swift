@@ -10,7 +10,13 @@ import SwiftUI
 struct TitleText: View {
     // MARK: - Stored Properties
     
-    let title: String
+    private let title: String
+    
+    // MARK: - Initialization
+    
+    init(_ title: String) {
+        self.title = title
+    }
     
     // MARK: - Body
     
@@ -22,9 +28,9 @@ struct TitleText: View {
 // MARK: - Previews
 
 #Preview("Light - RU") {
-    TitleText(title: "Заголовок события").preferredColorScheme(.light)
+    TitleText("Заголовок").preferredColorScheme(.light)
 }
 
 #Preview("Dark - EN") {
-    TitleText(title: "Event title").preferredColorScheme(.light)
+    TitleText("Title").preferredColorScheme(.light)
 }

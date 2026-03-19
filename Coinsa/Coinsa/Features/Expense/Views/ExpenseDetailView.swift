@@ -12,33 +12,28 @@ struct ExpenseDetailView: View {
     // MARK: - Stored Properties
 
     @Environment(AppSettingsStore.self) private var settingsStore
-
+    
     @State private var isShowingExpenseEdit = false
 
     let expense: Expense
 
+    // MARK: - Computed Properties
+    
+    private var viewModel: ExpenseDetailViewModel {
+        ExpenseDetailViewModel(
+            expense: expense,
+            baseCurrency: settingsStore.baseCurrency
+        )
+    }
+    
     // MARK: - Body
 
     var body: some View {
-        detailContent(
-            expense: expense,
-            viewModel: ExpenseDetailViewModel(
-                expense: expense,
-                baseCurrency: settingsStore.baseCurrency
-            )
-        )
-    }
-
-    // MARK: - Components
-
-    private func detailContent(expense: Expense, viewModel: ExpenseDetailViewModel) -> some View {
         List {
-            amountBlock(expense: expense, viewModel: viewModel)
- 
+            mainSection
+            
             if let comment = expense.comment {
-                Section("expense.comment") {
-                    Text(comment).foregroundStyle(.secondary)
-                }
+                commentSection(comment: comment)
             }
         }
         .navigationTitle(expense.category.localizedKey)
@@ -49,67 +44,66 @@ struct ExpenseDetailView: View {
             ExpenseEditView(
                 location: expense.location,
                 expense: expense,
-                baseCurrency: settingsStore.baseCurrency
+                baseCurrency: viewModel.baseCurrency
             )
         }
     }
 
-    private func amountBlock(expense: Expense, viewModel: ExpenseDetailViewModel) -> some View {
+    // MARK: - Components
+
+    private var mainSection: some View {
         Section {
-            VStack(alignment: .leading, spacing: 12) {
-                HStack {
-                    Image(systemName: "calendar").foregroundStyle(.secondary)
-                    EventDateTimeText(dateTime: expense.date)
-                }
-                HStack(spacing: 12) {
-                    amountSubcard(
-                        title: "expense.amount.base",
-                        amount: expense.amountInBaseCurrency,
-                        currency: viewModel.baseCurrency
+            VStack(spacing: 16) {
+                DateLabel(expense.date, style: .secondary)
+                
+                Spacer()
+
+                AmountText(
+                    expense.amountInLocationCurrency,
+                    currency: viewModel.localCurrency
+                )
+                .scaleEffect(2.2)
+                .frame(height: 40)
+                
+                amountSectionDevider
+                
+                VStack(spacing: 14) {
+                    AmountText(
+                        expense.amountInBaseCurrency,
+                        currency: viewModel.baseCurrency,
+                        style: .secondary
                     )
-                    amountSubcard(
-                        title: "expense.amount.local",
-                        amount: expense.amountInLocationCurrency,
-                        currency: viewModel.localCurrency
-                    )
+                    .scaleEffect(1.6)
+                    
+                    ExchangeRateText(
+                        from: viewModel.localCurrency,
+                        to: viewModel.baseCurrency,
+                        rate: expense.rateToBaseCurrency,
+                        style: .secondary)
                 }
-                exchangeRateLabel(expense: expense, viewModel: viewModel)
+                
+                amountSectionDevider
+                
+                Image(systemName: expense.category.symbolName)
+                    .foregroundStyle(.accent)
+                    .scaleEffect(1.2)
+                
+                Spacer()
             }
+            .frame(maxWidth: .infinity, minHeight: 300, alignment: .top)
         }
     }
-
-    private func amountSubcard(
-        title: LocalizedStringKey,
-        amount: Double,
-        currency: Currency
-    ) -> some View {
-        VStack(alignment: .leading, spacing: 6) {
-            CurrencyCodeText(currency: currency)
-            AmountText(amount: amount, style: .primary)
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(12)
-        .background(
-            RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .fill(.gray.opacity(0.15).gradient)
-        )
+    
+    private var amountSectionDevider: some View {
+        Divider().frame(maxWidth: 160, maxHeight: 10)
     }
-
-    private func exchangeRateLabel(
-        expense: Expense,
-        viewModel: ExpenseDetailViewModel
-    ) -> some View {
-        let rateText = String(
-            format: "%.4f",
-            expense.rateToBaseCurrency
-        )
-        return HStack(spacing: 6) {
-            Text("1 \(viewModel.localCurrency.code) = \(rateText) \(viewModel.baseCurrency.code)")
+    
+    private func commentSection(comment: String) -> some View {
+        Section("expense.comment") {
+            Text(comment)
         }
-        .font(.caption)
-        .foregroundStyle(.secondary)
     }
-
+    
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
         ToolbarItemGroup(placement: .topBarTrailing) {
@@ -118,7 +112,6 @@ struct ExpenseDetailView: View {
             }
         }
     }
-    
 }
 
 // MARK: - Previews

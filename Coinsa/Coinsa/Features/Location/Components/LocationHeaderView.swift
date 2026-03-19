@@ -32,9 +32,9 @@ struct LocationHeaderView: View {
 
     private var headerContent: some View {
         HStack {
-            EventStatusLabel(status: data.status)
+            EventStatusLabel(data.status)
             Spacer()
-            IntervalText(startDate: data.startDate, endDate: data.endDate)
+            DateLabel(from: data.startDate, to: data.endDate, style: .secondary)
             Spacer()
             DurationLabel(days: data.durationDays)
         }
@@ -88,8 +88,8 @@ struct LocationAmountCardView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             Text(title).font(.caption).foregroundStyle(.secondary)
-            AmountText(amount: baseAmount, currency: baseCurrency)
-            AmountText(amount: localAmount, currency: localCurrency, style: .secondary)
+            AmountText(baseAmount, currency: baseCurrency)
+            AmountText(localAmount, currency: localCurrency, style: .secondary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(10)

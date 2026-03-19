@@ -34,9 +34,9 @@ struct TripHeaderView: View {
     
     private var headerContent: some View {
         HStack {
-            EventStatusLabel(status: data.status)
+            EventStatusLabel(data.status)
             Spacer()
-            IntervalText(startDate: data.startDate, endDate: data.endDate)
+            DateLabel(from: data.startDate, to: data.endDate, style: .secondary)
             Spacer()
             DurationLabel(days: data.durationDays)
         }
@@ -82,7 +82,7 @@ struct TripAmountCardView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             Text(title).font(.caption).foregroundStyle(.secondary)
-            AmountText(amount: amount, currency: currency)
+            AmountText(amount, currency: currency)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(10)

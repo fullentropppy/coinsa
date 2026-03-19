@@ -112,7 +112,7 @@ struct LocationEditView: View {
                         )
                     }
                     AmountText(
-                        amount: viewModel.plannedLocalAmount(for: category),
+                        viewModel.plannedLocalAmount(for: category),
                         currency: viewModel.currency,
                         style: .secondary
                     )
@@ -127,12 +127,12 @@ struct LocationEditView: View {
                 Spacer()
                 VStack(alignment: .trailing, spacing: 5) {
                     AmountText(
-                        amount: viewModel.plannedTotalBase,
+                        viewModel.plannedTotalBase,
                         currency: viewModel.baseCurrency,
                         style: .tertiary
                     )
                     AmountText(
-                        amount: viewModel.plannedTotalLocal,
+                        viewModel.plannedTotalLocal,
                         currency: viewModel.currency,
                         style: .tertiary
                     )
@@ -146,7 +146,7 @@ struct LocationEditView: View {
             TextField("", value: value, format: .number)
                 .keyboardType(.decimalPad)
                 .multilineTextAlignment(.trailing)
-            CurrencyCodeText(currency: currency)
+            CurrencyCodeText(currency)
         }
     }
 

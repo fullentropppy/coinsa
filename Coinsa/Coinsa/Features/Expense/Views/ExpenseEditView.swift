@@ -87,7 +87,7 @@ struct ExpenseEditView: View {
                     TextField("", value: $viewModel.amountInLocationCurrency, format: .number)
                         .keyboardType(.decimalPad)
                         .multilineTextAlignment(.trailing)
-                    CurrencyCodeText(currency: viewModel.localCurrency)
+                    CurrencyCodeText(viewModel.localCurrency)
                 }
             } label: {
                 Text("expense.amount.local")
@@ -95,7 +95,7 @@ struct ExpenseEditView: View {
 
             LabeledContent {
                 AmountText(
-                    amount: viewModel.amountInBaseCurrency,
+                    viewModel.amountInBaseCurrency,
                     currency: viewModel.baseCurrency,
                     style: .secondary
                 )

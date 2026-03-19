@@ -10,15 +10,15 @@ import SwiftUI
 struct AmountText: View {
     // MARK: - Stored Properties
     
-    let amount: Double
-    let currency: Currency?
-    let style: ComponentStyle
-    let tint: Color?
+    private let amount: Double
+    private let currency: Currency?
+    private let style: ComponentStyle
+    private let tint: Color?
     
     // MARK: - Initialization
     
     init(
-        amount: Double,
+        _ amount: Double,
         currency: Currency? = nil,
         style: ComponentStyle = .default,
         tint: Color? = nil
@@ -38,7 +38,7 @@ struct AmountText: View {
                 .foregroundStyle(resolvedColor)
             
             if let currency {
-                CurrencyCodeText(currency: currency, style: style, tint: tint)
+                CurrencyCodeText(currency, style: style, tint: tint)
             }
         }
     }
@@ -76,15 +76,37 @@ struct AmountText: View {
 
 private extension AmountText {
     static func preview(locale: Locale, colorScheme: ColorScheme) -> some View {
-        VStack(alignment: .leading, spacing: 20) {
-            AmountText(amount: 65099.99, currency: Currency.rub, style: .default)
-            AmountText(amount: 65099.99, style: .default)
-            AmountText(amount: 9032.50, currency: Currency.usd, style: .primary)
-            AmountText(amount: 9032.50, style: .primary)
-            AmountText(amount: 501.0, currency: Currency.eur, style: .secondary)
-            AmountText(amount: 501.0, style: .secondary)
-            AmountText(amount: 99.09, currency: Currency.jpy, style: .tertiary)
-            AmountText(amount: 99.09, style: .tertiary)
+        let amount = 12345.67
+        let currency = Currency.rub
+        
+        return VStack(spacing: 40) {
+            VStack(spacing: 20) {
+                AmountText(amount)
+                AmountText(amount, style: .primary)
+                AmountText(amount, style: .secondary)
+                AmountText(amount, style: .tertiary)
+            }
+            
+            VStack(spacing: 20) {
+                AmountText(amount, tint: .accent)
+                AmountText(amount, style: .primary, tint: .pink)
+                AmountText(amount, style: .secondary, tint: .orange)
+                AmountText(amount, style: .tertiary, tint: .green)
+            }
+            
+            VStack(spacing: 20) {
+                AmountText(amount, currency: currency)
+                AmountText(amount, currency: currency, style: .primary)
+                AmountText(amount, currency: currency, style: .secondary)
+                AmountText(amount, currency: currency, style: .tertiary)
+            }
+            
+            VStack(spacing: 20) {
+                AmountText(amount, currency: currency, tint: .accent)
+                AmountText(amount, currency: currency, style: .primary, tint: .pink)
+                AmountText(amount, currency: currency, style: .secondary, tint: .orange)
+                AmountText(amount, currency: currency, style: .tertiary, tint: .green)
+            }
         }
         .environment(\.locale, locale)
         .preferredColorScheme(colorScheme)

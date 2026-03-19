@@ -10,8 +10,14 @@ import SwiftUI
 struct EventStatusLabel: View {
     // MARK: - Stored Properties
 
-    var status: EventStatus
+    private var status: EventStatus
 
+    // MARK: - Initialization
+    
+    init(_ status: EventStatus) {
+        self.status = status
+    }
+    
     // MARK: - Body
     
     var body: some View {
@@ -30,9 +36,9 @@ struct EventStatusLabel: View {
 private extension EventStatusLabel {
     static func preview(locale: Locale, colorScheme: ColorScheme) -> some View {
         VStack(spacing: 20) {
-            EventStatusLabel(status: .upcoming)
-            EventStatusLabel(status: .ongoing)
-            EventStatusLabel(status: .completed)
+            EventStatusLabel(.upcoming)
+            EventStatusLabel(.ongoing)
+            EventStatusLabel(.completed)
         }
         .environment(\.locale, locale)
         .preferredColorScheme(colorScheme)

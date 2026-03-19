@@ -10,8 +10,14 @@ import SwiftUI
 struct EventStatusImage: View {
     // MARK: - Stored Properties
 
-    var status: EventStatus
+    private var status: EventStatus
 
+    // MARK: - Initialization
+    
+    init(_ status: EventStatus) {
+        self.status = status
+    }
+    
     // MARK: - Body
     
     var body: some View {
@@ -24,9 +30,9 @@ struct EventStatusImage: View {
 private extension EventStatusImage {
     static func preview(colorScheme: ColorScheme) -> some View {
         VStack(spacing: 20) {
-            EventStatusImage(status: .upcoming)
-            EventStatusImage(status: .ongoing)
-            EventStatusImage(status: .completed)
+            EventStatusImage(.upcoming)
+            EventStatusImage(.ongoing)
+            EventStatusImage(.completed)
         }
         .preferredColorScheme(colorScheme)
     }
