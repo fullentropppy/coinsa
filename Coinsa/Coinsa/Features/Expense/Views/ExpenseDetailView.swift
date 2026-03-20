@@ -19,11 +19,12 @@ struct ExpenseDetailView: View {
 
     // MARK: - Computed Properties
     
-    private var viewModel: ExpenseDetailViewModel {
-        ExpenseDetailViewModel(
-            expense: expense,
-            baseCurrency: settingsStore.baseCurrency
-        )
+    private var baseCurrency: Currency {
+        settingsStore.baseCurrency
+    }
+    
+    private var localCurrency: Currency {
+        Currency.from(expense.location.currencyCode)
     }
     
     // MARK: - Body
@@ -42,9 +43,16 @@ struct ExpenseDetailView: View {
         }
         .sheet(isPresented: $isShowingExpenseEdit) {
             ExpenseEditView(
-                location: expense.location,
                 expense: expense,
-                baseCurrency: viewModel.baseCurrency
+                baseCurrency: baseCurrency
+            )
+        }
+        .overlay {
+            EventSummaryView(
+                symbolName: "mappin.and.ellipse",
+                name: expense.location.name,
+                startDate: expense.location.startDate,
+                endDate: expense.location.endDate
             )
         }
     }
@@ -59,8 +67,8 @@ struct ExpenseDetailView: View {
                 Spacer()
 
                 AmountText(
-                    expense.amountInLocationCurrency,
-                    currency: viewModel.localCurrency
+                    expense.amountInLocalCurrency,
+                    currency: localCurrency
                 )
                 .scaleEffect(2.2)
                 .frame(height: 40)
@@ -70,14 +78,14 @@ struct ExpenseDetailView: View {
                 VStack(spacing: 14) {
                     AmountText(
                         expense.amountInBaseCurrency,
-                        currency: viewModel.baseCurrency,
+                        currency: baseCurrency,
                         style: .secondary
                     )
                     .scaleEffect(1.6)
                     
                     ExchangeRateText(
-                        from: viewModel.localCurrency,
-                        to: viewModel.baseCurrency,
+                        from: localCurrency,
+                        to: baseCurrency,
                         rate: expense.rateToBaseCurrency,
                         style: .secondary)
                 }
@@ -99,7 +107,7 @@ struct ExpenseDetailView: View {
     }
     
     private func commentSection(comment: String) -> some View {
-        Section("expense.comment") {
+        Section {
             Text(comment)
         }
     }

@@ -16,13 +16,13 @@ final class ExpenseViewModel {
     private let expense: Expense?
 
     let location: Location
-    let baseCurrency: Currency
     let localCurrency: Currency
+    let baseCurrency: Currency
 
-    var category: ExpenseCategory
     var date: Date
-    var amountInLocationCurrency: Double
+    var amountInLocalCurrency: Double
     var rateToBaseCurrency: Double
+    var category: ExpenseCategory
     var comment: String
 
     // MARK: - Computed Properties
@@ -38,36 +38,46 @@ final class ExpenseViewModel {
     var navigationTitle: String {
         String(
             localized: isEditing
-                ? "expense.editing.navigationTitle.editing"
-                : "expense.editing.navigationTitle.creating"
+            ? "expense.navigationTitle.create"
+            : "expense.navigationTitle.edit"
         )
     }
 
     var amountInBaseCurrency: Double {
-        let normalizedAmount = max(0, amountInLocationCurrency)
-        let normalizedRate = max(0, rateToBaseCurrency)
-        return normalizedAmount * normalizedRate
+        amountInLocalCurrency * rateToBaseCurrency
     }
 
+    var convertedAmountText: String {
+        "\(amountInLocalCurrency) \(localCurrency.code) = \(amountInBaseCurrency) \(baseCurrency.code)"
+    }
+    
     // MARK: - Initialization
 
+    convenience init(location: Location, baseCurrency: Currency) {
+        self.init(location: location, expense: nil, baseCurrency: baseCurrency)
+    }
+
+    convenience init(expense: Expense, baseCurrency: Currency) {
+        self.init(location: expense.location, expense: expense, baseCurrency: baseCurrency)
+    }
+
     init(location: Location, expense: Expense?, baseCurrency: Currency) {
-        self.expense = expense
         self.location = expense?.location ?? location
-        self.baseCurrency = baseCurrency
+        self.expense = expense
         self.localCurrency = Currency.from(self.location.currencyCode)
+        self.baseCurrency = baseCurrency
 
         if let expense {
-            category = expense.category
             date = expense.date
-            amountInLocationCurrency = expense.amountInLocationCurrency
+            amountInLocalCurrency = expense.amountInLocalCurrency
             rateToBaseCurrency = expense.rateToBaseCurrency
+            category = expense.category
             comment = expense.comment ?? ""
         } else {
-            category = .food
             date = .now
-            amountInLocationCurrency = 0
+            amountInLocalCurrency = 0
             rateToBaseCurrency = self.location.rateToBaseCurrency
+            category = .food
             comment = ""
         }
     }
@@ -76,25 +86,25 @@ final class ExpenseViewModel {
 
     func save(using repository: ExpenseRepository) {
         let normalizedComment = comment.trimmingCharacters(in: .whitespacesAndNewlines)
-        let commentValue = normalizedComment.isEmpty ? nil : normalizedComment
+        let comment = normalizedComment.isEmpty ? nil : normalizedComment
 
         if let expense {
             repository.update(
                 expense,
                 date: date,
-                amountInLocationCurrency: amountInLocationCurrency,
+                amountInLocalCurrency: amountInLocalCurrency,
                 rateToBaseCurrency: rateToBaseCurrency,
                 category: category,
-                comment: commentValue
+                comment: comment
             )
         } else {
             repository.add(
                 date: date,
-                amountInLocationCurrency: amountInLocationCurrency,
+                amountInLocalCurrency: amountInLocalCurrency,
                 rateToBaseCurrency: rateToBaseCurrency,
                 category: category,
                 location: location,
-                comment: commentValue
+                comment: comment
             )
         }
     }

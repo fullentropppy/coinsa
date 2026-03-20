@@ -22,107 +22,126 @@ struct ExpenseEditView: View {
     private var repository: ExpenseRepository {
         ExpenseRepository(context: context)
     }
-
+    
     // MARK: - Initialization
 
-    init(location: Location, expense: Expense? = nil, baseCurrency: Currency) {
+    init(location: Location, baseCurrency: Currency) {
         _viewModel = State(
             initialValue: ExpenseViewModel(
                 location: location,
-                expense: expense,
                 baseCurrency: baseCurrency
             )
         )
     }
 
+    init(expense: Expense, baseCurrency: Currency) {
+        _viewModel = State(
+            initialValue: ExpenseViewModel(
+                expense: expense,
+                baseCurrency: baseCurrency
+            )
+        )
+    }
+    
     // MARK: - Body
-
+    
     var body: some View {
-        NavigationStack {
-            Form {
-                mainDataSection
-                amountSection
-                commentSection
-                actionsSection
+        Form {
+            mainDataSection
+            amountSection
+            commentSection
+            actionsSection
+        }
+        .navigationTitle(viewModel.navigationTitle)
+        .toolbarTitleDisplayMode(.inline)
+        .toolbar {
+            toolbarContent
+        }
+        .deleteConfirmationAlert(
+            isPresented: $deletionHandler.isShowingDeleteConfirmation,
+            message: "expense.delete.message",
+            onConfirm: {
+                confirmDelete()
+                dismiss()
+            },
+            onCancel: {
+                cancelDelete()
             }
-            .navigationTitle(viewModel.navigationTitle)
-            .toolbarTitleDisplayMode(.inline)
-            .toolbar {
-                toolbarContent
-            }
-            .deleteConfirmationAlert(
-                isPresented: $deletionHandler.isShowingDeleteConfirmation,
-                message: "expense.delete.message",
-                onConfirm: {
-                    confirmDelete()
-                    dismiss()
-                },
-                onCancel: {
-                    cancelDelete()
-                }
+        )
+        .overlay {
+            EventSummaryView(
+                symbolName: "mappin.and.ellipse",
+                name: viewModel.location.name,
+                startDate: viewModel.location.startDate,
+                endDate: viewModel.location.endDate
             )
         }
     }
 
     // MARK: - Components
-
+    
     private var mainDataSection: some View {
         Section {
-            Picker("expense.editing.category.title", selection: $viewModel.category) {
-                ForEach(ExpenseCategory.allCases, id: \.id) { category in
-                    Text(category.localizedKey)
-                        .tag(category)
+            DatePicker("expense.date", selection: $viewModel.date)
+            
+            HStack {
+                Picker("expense.category", selection: $viewModel.category) {
+                    ForEach(ExpenseCategory.allCases, id: \.id) { category in
+                        Text(category.localizedKey).tag(category)
+                    }
                 }
+                .pickerStyle(.menu)
+                
+                Image(systemName: viewModel.category.symbolName)
+                    .foregroundStyle(.secondary)
+                    .frame(width: 40, alignment: .center)
             }
-            .pickerStyle(.menu)
-
-            DatePicker("expense.editing.date.title", selection: $viewModel.date)
         }
-    }
+    } 
 
     private var amountSection: some View {
         Section {
             LabeledContent {
-                HStack(spacing: 6) {
-                    TextField("", value: $viewModel.amountInLocationCurrency, format: .number)
+                HStack {
+                    TextField("", value: $viewModel.amountInLocalCurrency, format: .number)
                         .keyboardType(.decimalPad)
                         .multilineTextAlignment(.trailing)
+                    
                     CurrencyCodeText(viewModel.localCurrency)
+                        .frame(width: 40, alignment: .center)
                 }
             } label: {
-                Text("expense.amount.local")
+                Text("expense.amount")
             }
-
+            
             LabeledContent {
-                AmountText(
-                    viewModel.amountInBaseCurrency,
-                    currency: viewModel.baseCurrency,
-                    style: .secondary
-                )
+                HStack {
+                    TextField("", value: $viewModel.rateToBaseCurrency, format: .number)
+                        .keyboardType(.decimalPad)
+                        .multilineTextAlignment(.trailing)
+                    
+                    CurrencyCodeText(viewModel.baseCurrency)
+                        .frame(width: 40, alignment: .center)
+                }
             } label: {
-                Text("expense.amount.base")
+                Text("expense.exchangeRate")
             }
-
-            LabeledContent {
-                TextField("", value: $viewModel.rateToBaseCurrency, format: .number)
-                    .keyboardType(.decimalPad)
-                    .multilineTextAlignment(.trailing)
-            } label: {
-                Text("expense.editing.exchangeRate.title")
-            }
+        } footer: {
+            Text(viewModel.convertedAmountText)
+                .frame(maxWidth: .infinity, alignment: .center)
         }
     }
 
     private var commentSection: some View {
         Section {
-            TextField("expense.editing.comment.title", text: $viewModel.comment, axis: .vertical)
+            TextField("expense.comment", text: $viewModel.comment, axis: .vertical)
         }
     }
 
     private var actionsSection: some View {
         Section {
             if viewModel.isEditing {
-                Button("expense.editing.delete", role: .destructive) {
+                Button("expense.delete", role: .destructive) {
                     requestDelete()
                 }
             }
@@ -174,11 +193,13 @@ private extension ExpenseEditView {
         let location = builder.fetchLocation(from: container)
         let expense = withExpense ? builder.fetchExpense(from: container) : nil
 
-        return ExpenseEditView(
-            location: location,
-            expense: expense,
-            baseCurrency: Currency.rub
-        )
+        return NavigationStack {
+            if let expense {
+                ExpenseEditView(expense: expense, baseCurrency: Currency.rub)
+            } else {
+                ExpenseEditView(location: location, baseCurrency: Currency.rub)
+            }
+        }
         .modelContainer(container)
         .environment(\.locale, locale)
         .preferredColorScheme(colorScheme)

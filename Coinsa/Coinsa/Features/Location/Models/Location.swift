@@ -59,7 +59,7 @@ class Location: DateRangeProviding, EventStatusProviding {
     func calculateActualAmount(inBaseCurrency: Bool) -> Double {
         expenses.reduce(0) {
             let exchangeRate = inBaseCurrency ? $1.rateToBaseCurrency : 1
-            return $0 + $1.amountInLocationCurrency * exchangeRate
+            return $0 + $1.amountInLocalCurrency * exchangeRate
         }
     }
 }

@@ -12,7 +12,8 @@
             "value" : "1 %1$@ = %2$@ %3$@"
           }
         }
-      }
+      },
+      "shouldTranslate" : false
     },
     "amount.actual" : {
       "extractionState" : "manual",
@@ -112,6 +113,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Изменить"
+          }
+        }
+      }
+    },
+    "common.mode.create" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Creating"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Создание"
+          }
+        }
+      }
+    },
+    "common.mode.edit" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Editing"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Изменение"
           }
         }
       }
@@ -590,6 +625,23 @@
         }
       }
     },
+    "expense.amount" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Amount"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сумма"
+          }
+        }
+      }
+    },
     "expense.amount.base" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -620,6 +672,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Локальная"
+          }
+        }
+      }
+    },
+    "expense.category" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Category"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Категория"
           }
         }
       }
@@ -759,6 +828,40 @@
         }
       }
     },
+    "expense.date" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Date"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Дата"
+          }
+        }
+      }
+    },
+    "expense.delete" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete expense"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Удалить трату"
+          }
+        }
+      }
+    },
     "expense.delete.message" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -776,75 +879,7 @@
         }
       }
     },
-    "expense.editing.category.title" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Category"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Категория"
-          }
-        }
-      }
-    },
-    "expense.editing.comment.title" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Comment"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Комментарий"
-          }
-        }
-      }
-    },
-    "expense.editing.date.title" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Date"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Дата"
-          }
-        }
-      }
-    },
-    "expense.editing.delete" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Delete expense"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Удалить трату"
-          }
-        }
-      }
-    },
-    "expense.editing.exchangeRate.title" : {
+    "expense.exchangeRate" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -856,18 +891,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Курс"
-          }
-        }
-      }
-    },
-    "expense.editing.navigationTitle.creating" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "New expense"
+            "value" : "Курс обмена"
           }
         }
       }
@@ -919,6 +943,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Трат еще нет"
+          }
+        }
+      }
+    },
+    "expense.navigationTitle.create" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Expense creation"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Создание траты"
+          }
+        }
+      }
+    },
+    "expense.navigationTitle.edit" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Expense editing"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Изменение траты"
           }
         }
       }

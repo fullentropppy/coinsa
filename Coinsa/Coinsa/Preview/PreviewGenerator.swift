@@ -110,7 +110,7 @@ enum PreviewGenerator {
         return [
             Expense(
                 date: now.addingTimeInterval(-day * 97 + hour * 8),
-                amountInLocationCurrency: 720,
+                amountInLocalCurrency: 720,
                 rateToBaseCurrency: exchangeRate,
                 category: .food,
                 location: location,
@@ -118,14 +118,14 @@ enum PreviewGenerator {
             ),
             Expense(
                 date: now.addingTimeInterval(-day * 97 + hour * 19),
-                amountInLocationCurrency: 2100,
+                amountInLocalCurrency: 2100,
                 rateToBaseCurrency: exchangeRate,
                 category: .activity,
                 location: location
             ),
             Expense(
                 date: now.addingTimeInterval(-day * 96 + hour * 11),
-                amountInLocationCurrency: 140,
+                amountInLocalCurrency: 140,
                 rateToBaseCurrency: exchangeRate,
                 category: .transport,
                 location: location,
@@ -133,7 +133,7 @@ enum PreviewGenerator {
             ),
             Expense(
                 date: now.addingTimeInterval(-day * 95 + hour * 18),
-                amountInLocationCurrency: 680,
+                amountInLocalCurrency: 680,
                 rateToBaseCurrency: exchangeRate,
                 category: .transport,
                 location: location,
@@ -141,14 +141,14 @@ enum PreviewGenerator {
             ),
             Expense(
                 date: now.addingTimeInterval(-day * 94 + hour * 12),
-                amountInLocationCurrency: 1450,
+                amountInLocalCurrency: 1450,
                 rateToBaseCurrency: exchangeRate,
                 category: .shopping,
                 location: location
             ),
             Expense(
                 date: now.addingTimeInterval(-day * 93 + hour * 20),
-                amountInLocationCurrency: 980,
+                amountInLocalCurrency: 980,
                 rateToBaseCurrency: exchangeRate,
                 category: .food,
                 location: location,
@@ -156,7 +156,7 @@ enum PreviewGenerator {
             ),
             Expense(
                 date: now.addingTimeInterval(-day * 91 + hour * 9),
-                amountInLocationCurrency: 2350,
+                amountInLocalCurrency: 2350,
                 rateToBaseCurrency: exchangeRate,
                 category: .other,
                 location: location
@@ -272,7 +272,7 @@ enum PreviewGenerator {
         return [
             Expense(
                 date: startDate.addingTimeInterval(hour * 8),
-                amountInLocationCurrency: 9500,
+                amountInLocalCurrency: 9500,
                 rateToBaseCurrency: exchangeRate,
                 category: .food,
                 location: location,
@@ -280,7 +280,7 @@ enum PreviewGenerator {
             ),
             Expense(
                 date: startDate.addingTimeInterval(hour * 13),
-                amountInLocationCurrency: 17000,
+                amountInLocalCurrency: 17000,
                 rateToBaseCurrency: exchangeRate,
                 category: .food,
                 location: location,
@@ -288,7 +288,7 @@ enum PreviewGenerator {
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 1 + hour * 9),
-                amountInLocationCurrency: 1600,
+                amountInLocalCurrency: 1600,
                 rateToBaseCurrency: exchangeRate,
                 category: .transport,
                 location: location,
@@ -296,7 +296,7 @@ enum PreviewGenerator {
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 1 + hour * 19),
-                amountInLocationCurrency: 22500,
+                amountInLocalCurrency: 22500,
                 rateToBaseCurrency: exchangeRate,
                 category: .shopping,
                 location: location,
@@ -304,7 +304,7 @@ enum PreviewGenerator {
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 2 + hour * 11),
-                amountInLocationCurrency: 13000,
+                amountInLocalCurrency: 13000,
                 rateToBaseCurrency: exchangeRate,
                 category: .food,
                 location: location,
@@ -312,7 +312,7 @@ enum PreviewGenerator {
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 2 + hour * 17),
-                amountInLocationCurrency: 28000,
+                amountInLocalCurrency: 28000,
                 rateToBaseCurrency: exchangeRate,
                 category: .activity,
                 location: location,
@@ -320,7 +320,7 @@ enum PreviewGenerator {
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 3 + hour * 14),
-                amountInLocationCurrency: 6200,
+                amountInLocalCurrency: 6200,
                 rateToBaseCurrency: exchangeRate,
                 category: .medicine,
                 location: location,
@@ -328,7 +328,7 @@ enum PreviewGenerator {
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 3 + hour * 20),
-                amountInLocationCurrency: 52000,
+                amountInLocalCurrency: 52000,
                 rateToBaseCurrency: exchangeRate,
                 category: .shopping,
                 location: location,
@@ -336,7 +336,7 @@ enum PreviewGenerator {
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 4 + hour * 12),
-                amountInLocationCurrency: 3100,
+                amountInLocalCurrency: 3100,
                 rateToBaseCurrency: exchangeRate,
                 category: .transport,
                 location: location,
@@ -344,7 +344,7 @@ enum PreviewGenerator {
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 5 + hour * 18),
-                amountInLocationCurrency: 8900,
+                amountInLocalCurrency: 8900,
                 rateToBaseCurrency: exchangeRate,
                 category: .other,
                 location: location,
@@ -359,7 +359,7 @@ enum PreviewGenerator {
         return [
             Expense(
                 date: startDate.addingTimeInterval(hour * 10),
-                amountInLocationCurrency: 12500,
+                amountInLocalCurrency: 12500,
                 rateToBaseCurrency: exchangeRate,
                 category: .food,
                 location: location,
@@ -367,7 +367,7 @@ enum PreviewGenerator {
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 1 + hour * 9),
-                amountInLocationCurrency: 1800,
+                amountInLocalCurrency: 1800,
                 rateToBaseCurrency: exchangeRate,
                 category: .transport,
                 location: location,
@@ -375,7 +375,7 @@ enum PreviewGenerator {
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 2 + hour * 15),
-                amountInLocationCurrency: 29500,
+                amountInLocalCurrency: 29500,
                 rateToBaseCurrency: exchangeRate,
                 category: .activity,
                 location: location,
@@ -383,7 +383,7 @@ enum PreviewGenerator {
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 2 + hour * 20),
-                amountInLocationCurrency: 14000,
+                amountInLocalCurrency: 14000,
                 rateToBaseCurrency: exchangeRate,
                 category: .shopping,
                 location: location,
@@ -391,7 +391,7 @@ enum PreviewGenerator {
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 3 + hour * 12),
-                amountInLocationCurrency: 5200,
+                amountInLocalCurrency: 5200,
                 rateToBaseCurrency: exchangeRate,
                 category: .other,
                 location: location,
@@ -548,7 +548,7 @@ enum PreviewGenerator {
         return [
             Expense(
                 date: startDate.addingTimeInterval(hour * 8),
-                amountInLocationCurrency: 980,
+                amountInLocalCurrency: 980,
                 rateToBaseCurrency: exchangeRate,
                 category: .food,
                 location: location,
@@ -556,14 +556,14 @@ enum PreviewGenerator {
             ),
             Expense(
                 date: startDate.addingTimeInterval(hour * 13),
-                amountInLocationCurrency: 1750,
+                amountInLocalCurrency: 1750,
                 rateToBaseCurrency: exchangeRate,
                 category: .food,
                 location: location
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 1 + hour * 10),
-                amountInLocationCurrency: 380,
+                amountInLocalCurrency: 380,
                 rateToBaseCurrency: exchangeRate,
                 category: .transport,
                 location: location,
@@ -571,7 +571,7 @@ enum PreviewGenerator {
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 2 + hour * 15),
-                amountInLocationCurrency: 2100,
+                amountInLocalCurrency: 2100,
                 rateToBaseCurrency: exchangeRate,
                 category: .activity,
                 location: location,
@@ -579,7 +579,7 @@ enum PreviewGenerator {
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 2 + hour * 20),
-                amountInLocationCurrency: 5400,
+                amountInLocalCurrency: 5400,
                 rateToBaseCurrency: exchangeRate,
                 category: .shopping,
                 location: location,
@@ -587,21 +587,21 @@ enum PreviewGenerator {
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 3 + hour * 11),
-                amountInLocationCurrency: 1200,
+                amountInLocalCurrency: 1200,
                 rateToBaseCurrency: exchangeRate,
                 category: .medicine,
                 location: location
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 4 + hour * 14),
-                amountInLocationCurrency: 700,
+                amountInLocalCurrency: 700,
                 rateToBaseCurrency: exchangeRate,
                 category: .transport,
                 location: location
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 5 + hour * 19),
-                amountInLocationCurrency: 2600,
+                amountInLocalCurrency: 2600,
                 rateToBaseCurrency: exchangeRate,
                 category: .other,
                 location: location,
@@ -616,7 +616,7 @@ enum PreviewGenerator {
         return [
             Expense(
                 date: startDate.addingTimeInterval(hour * 9),
-                amountInLocationCurrency: 980,
+                amountInLocalCurrency: 980,
                 rateToBaseCurrency: exchangeRate,
                 category: .food,
                 location: location,
@@ -624,7 +624,7 @@ enum PreviewGenerator {
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 1 + hour * 12),
-                amountInLocationCurrency: 720,
+                amountInLocalCurrency: 720,
                 rateToBaseCurrency: exchangeRate,
                 category: .transport,
                 location: location,
@@ -632,14 +632,14 @@ enum PreviewGenerator {
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 2 + hour * 16),
-                amountInLocationCurrency: 2100,
+                amountInLocalCurrency: 2100,
                 rateToBaseCurrency: exchangeRate,
                 category: .activity,
                 location: location
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 3 + hour * 19),
-                amountInLocationCurrency: 2600,
+                amountInLocalCurrency: 2600,
                 rateToBaseCurrency: exchangeRate,
                 category: .shopping,
                 location: location,
@@ -654,14 +654,14 @@ enum PreviewGenerator {
         return [
             Expense(
                 date: startDate.addingTimeInterval(hour * 8),
-                amountInLocationCurrency: 920,
+                amountInLocalCurrency: 920,
                 rateToBaseCurrency: exchangeRate,
                 category: .food,
                 location: location
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 1 + hour * 10),
-                amountInLocationCurrency: 780,
+                amountInLocalCurrency: 780,
                 rateToBaseCurrency: exchangeRate,
                 category: .transport,
                 location: location,
@@ -669,7 +669,7 @@ enum PreviewGenerator {
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 2 + hour * 13),
-                amountInLocationCurrency: 2400,
+                amountInLocalCurrency: 2400,
                 rateToBaseCurrency: exchangeRate,
                 category: .activity,
                 location: location,
@@ -677,7 +677,7 @@ enum PreviewGenerator {
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 2 + hour * 19),
-                amountInLocationCurrency: 5200,
+                amountInLocalCurrency: 5200,
                 rateToBaseCurrency: exchangeRate,
                 category: .shopping,
                 location: location,
@@ -685,14 +685,14 @@ enum PreviewGenerator {
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 3 + hour * 9),
-                amountInLocationCurrency: 880,
+                amountInLocalCurrency: 880,
                 rateToBaseCurrency: exchangeRate,
                 category: .medicine,
                 location: location
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 3 + hour * 18),
-                amountInLocationCurrency: 1900,
+                amountInLocalCurrency: 1900,
                 rateToBaseCurrency: exchangeRate,
                 category: .other,
                 location: location
