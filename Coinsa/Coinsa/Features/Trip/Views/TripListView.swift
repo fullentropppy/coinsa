@@ -91,15 +91,15 @@ struct TripListView: View {
     // MARK: - Actions
 
     private func requestDelete(at offsets: IndexSet) {
-        deletionHandler.requestDelete(for: offsets.map { trips[$0] })
+        deletionHandler.request(for: offsets.map { trips[$0] })
     }
 
     private func confirmDelete() {
-        deletionHandler.confirmDelete { repository.delete($0) }
+        deletionHandler.confirm { repository.delete($0) }
     }
 
     private func cancelDelete() {
-        deletionHandler.cancelDelete()
+        deletionHandler.cancel()
     }
 }
 

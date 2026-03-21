@@ -52,7 +52,6 @@ struct ExpenseEditView: View {
             commentSection
             actionsSection
         }
-        .navigationTitle(viewModel.navigationTitle)
         .toolbarTitleDisplayMode(.inline)
         .toolbar {
             toolbarContent
@@ -68,14 +67,6 @@ struct ExpenseEditView: View {
                 cancelDelete()
             }
         )
-        .overlay {
-            EventSummaryView(
-                symbolName: "mappin.and.ellipse",
-                name: viewModel.location.name,
-                startDate: viewModel.location.startDate,
-                endDate: viewModel.location.endDate
-            )
-        }
     }
 
     // MARK: - Components
@@ -150,6 +141,15 @@ struct ExpenseEditView: View {
 
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
+        ToolbarItem(placement: .principal) {
+            EventToolbarTitleView(
+                title: viewModel.navigationTitle,
+                eventName: viewModel.location.name,
+                startDate: viewModel.location.startDate,
+                endDate: viewModel.location.endDate
+            )
+        }
+        
         ToolbarItemGroup(placement: .topBarLeading) {
             ButtonView.close {
                 dismiss()
@@ -168,15 +168,15 @@ struct ExpenseEditView: View {
 
     private func requestDelete() {
         guard let expense = viewModel.expenseToEdit else { return }
-        deletionHandler.requestDelete(for: [expense])
+        deletionHandler.request(for: [expense])
     }
 
     private func confirmDelete() {
-        deletionHandler.confirmDelete { repository.delete($0) }
+        deletionHandler.confirm { repository.delete($0) }
     }
 
     private func cancelDelete() {
-        deletionHandler.cancelDelete()
+        deletionHandler.cancel()
     }
 }
 

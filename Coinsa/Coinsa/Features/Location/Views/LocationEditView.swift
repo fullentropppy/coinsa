@@ -25,10 +25,18 @@ struct LocationEditView: View {
 
     // MARK: - Initialization
 
-    init(trip: Trip, location: Location? = nil, baseCurrency: Currency) {
+    init(trip: Trip, baseCurrency: Currency) {
         _viewModel = State(
             initialValue: LocationViewModel(
                 trip: trip,
+                baseCurrency: baseCurrency
+            )
+        )
+    }
+    
+    init(location: Location, baseCurrency: Currency) {
+        _viewModel = State(
+            initialValue: LocationViewModel(
                 location: location,
                 baseCurrency: baseCurrency
             )
@@ -38,30 +46,28 @@ struct LocationEditView: View {
     // MARK: - Body
 
     var body: some View {
-        NavigationStack {
-            Form {
-                mainDataSection
-                currencySection
-                budgetsSection
-                actionsSection
-            }
-            .navigationTitle(viewModel.navigationTitle)
-            .toolbarTitleDisplayMode(.inline)
-            .toolbar {
-                toolbarContent
-            }
-            .deleteConfirmationAlert(
-                isPresented: $deletionHandler.isShowingDeleteConfirmation,
-                message: "location.delete.message",
-                onConfirm: {
-                    confirmDelete()
-                    dismiss()
-                },
-                onCancel: {
-                    cancelDelete()
-                }
-            )
+        Form {
+            mainDataSection
+            currencySection
+            budgetsSection
+            actionsSection
         }
+        .toolbarTitleDisplayMode(.inline)
+        .toolbar {
+            toolbarContent
+        }
+        .deleteConfirmationAlert(
+            isPresented: $deletionHandler.isShowingDeleteConfirmation,
+            message: "location.delete.message",
+            onConfirm: {
+                confirmDelete()
+                dismiss()
+            },
+            onCancel: {
+                cancelDelete()
+            }
+        )
+        
     }
 
     // MARK: - Components
@@ -162,12 +168,21 @@ struct LocationEditView: View {
 
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
+        ToolbarItem(placement: .principal) {
+            EventToolbarTitleView(
+                title: viewModel.navigationTitle,
+                eventName: viewModel.trip.name,
+                startDate: viewModel.trip.startDate,
+                endDate: viewModel.trip.endDate
+            )
+        }
+        
         ToolbarItemGroup(placement: .topBarLeading) {
             ButtonView.close {
                 dismiss()
             }
         }
-
+        
         ToolbarItemGroup(placement: .topBarTrailing) {
             ButtonView.save {
                 viewModel.save(using: repository)
@@ -194,16 +209,16 @@ struct LocationEditView: View {
 
     private func requestDelete() {
         guard let location = viewModel.locationToEdit else { return }
-        deletionHandler.requestDelete(for: [location])
+        deletionHandler.request(for: [location])
     }
 
     private func confirmDelete() {
-        deletionHandler.confirmDelete { repository.delete($0) }
+        deletionHandler.confirm { repository.delete($0) }
         dismiss()
     }
 
     private func cancelDelete() {
-        deletionHandler.cancelDelete()
+        deletionHandler.cancel()
     }
 }
 
@@ -223,12 +238,20 @@ private extension LocationEditView {
         if withLocation {
             location = builder.fetchLocation(from: container)
         }
-
-        return LocationEditView(
-            trip: trip,
-            location: location,
-            baseCurrency: Currency.rub
-        )
+        
+        return NavigationStack {
+            if let location {
+                LocationEditView(
+                    location: location,
+                    baseCurrency: Currency.defaultOption
+                )
+            } else {
+                LocationEditView(
+                    trip: trip,
+                    baseCurrency: Currency.defaultOption
+                )
+            }
+        }
         .modelContainer(container)
         .environment(\.locale, locale)
         .preferredColorScheme(colorScheme)

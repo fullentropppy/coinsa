@@ -38,8 +38,8 @@ final class LocationViewModel {
     var navigationTitle: String {
         String(
             localized: isEditing
-                ? "location.editing.navigationTitle.editing"
-                : "location.editing.navigationTitle.creating"
+            ? "location.navigationTitle.edit"
+            : "location.navigationTitle.create"
         )
     }
 
@@ -48,13 +48,20 @@ final class LocationViewModel {
     }
 
     var plannedTotalLocal: Double {
-        let rate = rateToBaseCurrency
-        guard rate > 0 else { return 0 }
-        return plannedTotalBase / rate
+        guard rateToBaseCurrency > 0 else { return 0 }
+        return plannedTotalBase / rateToBaseCurrency
     }
 
     // MARK: - Initialization
 
+    convenience init(trip: Trip, baseCurrency: Currency) {
+        self.init(trip: trip, location: nil, baseCurrency: baseCurrency)
+    }
+
+    convenience init(location: Location, baseCurrency: Currency) {
+        self.init(trip: location.trip, location: location, baseCurrency: baseCurrency)
+    }
+    
     init(trip: Trip, location: Location?, baseCurrency: Currency) {
         self.location = location
         self.trip = location?.trip ?? trip

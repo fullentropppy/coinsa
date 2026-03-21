@@ -37,7 +37,6 @@ struct ExpenseDetailView: View {
                 commentSection(comment: comment)
             }
         }
-        .navigationTitle(expense.category.localizedKey)
         .toolbar {
             toolbarContent
         }
@@ -47,14 +46,6 @@ struct ExpenseDetailView: View {
                 baseCurrency: baseCurrency
             )
         }
-        .overlay {
-            EventSummaryView(
-                symbolName: "mappin.and.ellipse",
-                name: expense.location.name,
-                startDate: expense.location.startDate,
-                endDate: expense.location.endDate
-            )
-        }
     }
 
     // MARK: - Components
@@ -62,7 +53,7 @@ struct ExpenseDetailView: View {
     private var mainSection: some View {
         Section {
             VStack(spacing: 16) {
-                DateLabel(expense.date, style: .secondary)
+                DateLabel(single: expense.date, style: .secondary)
                 
                 Spacer()
 
@@ -114,6 +105,15 @@ struct ExpenseDetailView: View {
     
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
+        ToolbarItem(placement: .principal) {
+            EventToolbarTitleView(
+                title: expense.category.localizedDisplayName,
+                eventName: expense.location.name,
+                startDate: expense.location.startDate,
+                endDate: expense.location.endDate
+            )
+        }
+        
         ToolbarItemGroup(placement: .topBarTrailing) {
             ButtonView.edit {
                 isShowingExpenseEdit = true

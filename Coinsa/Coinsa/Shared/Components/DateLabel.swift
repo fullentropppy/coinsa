@@ -18,7 +18,7 @@ struct DateLabel: View {
     // MARK: - Initialization
     
     init(
-        _ date: Date,
+        single date: Date,
         showsSymbol: Bool = false,
         style: ComponentStyle = .default
     ) {
@@ -94,17 +94,17 @@ private extension DateLabel {
         
         return VStack(spacing: 40) {
             VStack(spacing: 20) {
-                DateLabel(now)
-                DateLabel(now, style: .primary)
-                DateLabel(now, style: .secondary)
-                DateLabel(now, style: .tertiary)
+                DateLabel(single: now)
+                DateLabel(single: now, style: .primary)
+                DateLabel(single: now, style: .secondary)
+                DateLabel(single: now, style: .tertiary)
             }
             
             VStack(spacing: 20) {
-                DateLabel(now, showsSymbol: true)
-                DateLabel(now, showsSymbol: true, style: .primary)
-                DateLabel(now, showsSymbol: true, style: .secondary)
-                DateLabel(now, showsSymbol: true, style: .tertiary)
+                DateLabel(single: now, showsSymbol: true)
+                DateLabel(single: now, showsSymbol: true, style: .primary)
+                DateLabel(single: now, showsSymbol: true, style: .secondary)
+                DateLabel(single: now, showsSymbol: true, style: .tertiary)
             }
             
             VStack(spacing: 20) {

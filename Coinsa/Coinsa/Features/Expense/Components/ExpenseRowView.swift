@@ -21,7 +21,7 @@ struct ExpenseRowView: View {
             HStack {
                 VStack(alignment: .leading, spacing: 10) {
                     ExpenseCategoryLabel(category: expense.category)
-                    DateLabel(expense.date)
+                    DateLabel(single: expense.date)
                 }
                 Spacer()
                 VStack(alignment: .trailing, spacing: 10) {

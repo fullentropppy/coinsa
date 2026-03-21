@@ -38,6 +38,7 @@ struct LocationRepository {
 
         applyBudgets(budgetsByCategory, to: location)
         context.insert(location)
+        try? context.save()
     }
 
     func update(
@@ -56,10 +57,12 @@ struct LocationRepository {
         location.rateToBaseCurrency = rateToBaseCurrency
 
         applyBudgets(budgetsByCategory, to: location)
+        try? context.save()
     }
 
     func delete(_ location: Location) {
         context.delete(location)
+        try? context.save()
     }
 
     // MARK: - Private Methods
@@ -73,15 +76,13 @@ struct LocationRepository {
         )
 
         for (category, amount) in budgetsByCategory {
-            let normalizedAmount = max(0, amount)
-
-            if normalizedAmount > 0 {
+            if amount > 0 {
                 if let budget = existingBudgets[category] {
-                    budget.amountInBaseCurrency = normalizedAmount
+                    budget.amountInBaseCurrency = amount
                 } else {
                     let budget = Budget(
                         category: category,
-                        amountInBaseCurrency: normalizedAmount,
+                        amountInBaseCurrency: amount,
                         location: location
                     )
                     location.budgets.append(budget)

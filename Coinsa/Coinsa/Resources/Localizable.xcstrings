@@ -117,23 +117,6 @@
         }
       }
     },
-    "common.mode.create" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Creating"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Создание"
-          }
-        }
-      }
-    },
     "common.mode.edit" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1185,40 +1168,6 @@
         }
       }
     },
-    "location.editing.navigationTitle.creating" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "New location"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Новая локация"
-          }
-        }
-      }
-    },
-    "location.editing.navigationTitle.editing" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Editing"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Изменение"
-          }
-        }
-      }
-    },
     "location.editing.startDate.title" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1300,6 +1249,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Локации"
+          }
+        }
+      }
+    },
+    "location.navigationTitle.create" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Location creation"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Создание локации"
+          }
+        }
+      }
+    },
+    "location.navigationTitle.edit" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Location editing"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Изменение локации"
           }
         }
       }

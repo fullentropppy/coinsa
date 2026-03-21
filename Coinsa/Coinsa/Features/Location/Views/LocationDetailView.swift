@@ -96,7 +96,7 @@ struct LocationDetailView: View {
         .sheet(isPresented: $isShowingLocationEdit) {
             LocationEditView(
                 trip: location.trip,
-                location: location,
+                //location: location,
                 baseCurrency: settingsStore.baseCurrency
             )
         }
@@ -173,15 +173,15 @@ struct LocationDetailView: View {
     }
     
     private func requestDelete(at offsets: IndexSet) {
-        deletionHandler.requestDelete(for: offsets.map { expenses[$0] })
+        deletionHandler.request(for: offsets.map { expenses[$0] })
     }
 
     private func confirmDelete() {
-        deletionHandler.confirmDelete { context.delete($0) }
+        deletionHandler.confirm { context.delete($0) }
     }
 
     private func cancelDelete() {
-        deletionHandler.cancelDelete()
+        deletionHandler.cancel()
     }
 }
 

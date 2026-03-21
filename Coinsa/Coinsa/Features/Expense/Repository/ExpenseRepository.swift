@@ -33,6 +33,7 @@ struct ExpenseRepository {
             comment: comment
         )
         context.insert(expense)
+        try? context.save()
     }
 
     func update(
@@ -48,9 +49,11 @@ struct ExpenseRepository {
         expense.rateToBaseCurrency = max(0, rateToBaseCurrency)
         expense.category = category
         expense.comment = comment
+        try? context.save()
     }
 
     func delete(_ expense: Expense) {
         context.delete(expense)
+        try? context.save()
     }
 }

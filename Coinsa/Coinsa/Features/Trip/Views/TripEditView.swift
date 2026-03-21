@@ -95,16 +95,16 @@ struct TripEditView: View {
 
     private func requestDelete() {
         guard let trip = viewModel.tripToEdit else { return }
-        deletionHandler.requestDelete(for: [trip])
+        deletionHandler.request(for: [trip])
     }
 
     private func confirmDelete() {
-        deletionHandler.confirmDelete { repository.delete($0) }
+        deletionHandler.confirm { repository.delete($0) }
         dismiss()
     }
 
     private func cancelDelete() {
-        deletionHandler.cancelDelete()
+        deletionHandler.cancel()
     }
 }
 

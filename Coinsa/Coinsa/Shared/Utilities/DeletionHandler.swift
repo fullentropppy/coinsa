@@ -15,17 +15,17 @@ struct DeletionHandler<Item> {
     
     // MARK: - Public Methods
 
-    mutating func requestDelete(for items: [Item]) {
+    mutating func request(for items: [Item]) {
         itemsPendingDeletion = items
         isShowingDeleteConfirmation = true
     }
 
-    mutating func confirmDelete(using deleteAction: (Item) -> Void) {
+    mutating func confirm(using deleteAction: (Item) -> Void) {
         itemsPendingDeletion.forEach(deleteAction)
         itemsPendingDeletion.removeAll()
     }
 
-    mutating func cancelDelete() {
+    mutating func cancel() {
         itemsPendingDeletion.removeAll()
     }
 }
