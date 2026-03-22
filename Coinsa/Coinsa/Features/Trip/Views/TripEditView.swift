@@ -36,7 +36,6 @@ struct TripEditView: View {
                 mainDataSection
                 actionsSection
             }
-            .navigationTitle(viewModel.navigationTitle)
             .toolbarTitleDisplayMode(.inline)
             .toolbar {
                 toolbarContent
@@ -77,6 +76,10 @@ struct TripEditView: View {
     
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
+        ToolbarItem(placement: .principal) {
+            ContextToolbarTitleView(title: viewModel.navigationTitle)
+        }
+        
         ToolbarItemGroup(placement: .topBarLeading) {
             ButtonView.close {
                 dismiss()

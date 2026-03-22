@@ -29,28 +29,28 @@ struct TripListView: View {
     var body: some View {
         NavigationStack {
             tripListContent
-            .navigationTitle("trip.list.navigationTitle")
-            .sheet(isPresented: $isShowingTripEdit) {
-                TripEditView(trip: nil)
-            }
-            .toolbar {
-                toolbarContent
-            }
-            .overlay {
-                if trips.isEmpty {
-                    emptyTripListContent
+                .toolbarTitleDisplayMode(.inline)
+                .sheet(isPresented: $isShowingTripEdit) {
+                    TripEditView(trip: nil)
                 }
-            }
-            .deleteConfirmationAlert(
-                isPresented: $deletionHandler.isShowingDeleteConfirmation,
-                message: "trip.delete.message",
-                onConfirm: {
-                    confirmDelete()
-                },
-                onCancel: {
-                    cancelDelete()
+                .toolbar {
+                    toolbarContent
                 }
-            )
+                .overlay {
+                    if trips.isEmpty {
+                        emptyTripListContent
+                    }
+                }
+                .deleteConfirmationAlert(
+                    isPresented: $deletionHandler.isShowingDeleteConfirmation,
+                    message: "trip.delete.message",
+                    onConfirm: {
+                        confirmDelete()
+                    },
+                    onCancel: {
+                        cancelDelete()
+                    }
+                )
         }
     }
     
@@ -81,6 +81,10 @@ struct TripListView: View {
     
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
+        ToolbarItem(placement: .principal) {
+            ContextToolbarTitleView(title: String(localized: "trip.list.navigationTitle"))
+        }
+        
         ToolbarItem(placement: .topBarTrailing) {
             ButtonView.add {
                 isShowingTripEdit = true

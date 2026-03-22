@@ -31,11 +31,7 @@ final class TripViewModel {
     }
 
     var navigationTitle: String {
-        String(
-            localized: isEditing
-            ? "trip.editing.navigationTitle.editing"
-            : "trip.editing.navigationTitle.creating"
-        )
+        String(localized: isEditing ? "trip.navigationTitle.edit" : "trip.navigationTitle.create")
     }
     
     // MARK: - Initialization

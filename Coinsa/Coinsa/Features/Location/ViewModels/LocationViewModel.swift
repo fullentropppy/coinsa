@@ -21,7 +21,7 @@ final class LocationViewModel {
     var name: String
     var startDate: Date
     var endDate: Date
-    var currency: Currency
+    var locationCurrency: Currency
     var rateToBaseCurrency: Double
     var budgetAmounts: [ExpenseCategory: Double]
 
@@ -36,8 +36,7 @@ final class LocationViewModel {
     }
 
     var navigationTitle: String {
-        String(
-            localized: isEditing
+        String(localized: isEditing
             ? "location.navigationTitle.edit"
             : "location.navigationTitle.create"
         )
@@ -71,13 +70,13 @@ final class LocationViewModel {
             name = location.name
             startDate = location.startDate
             endDate = location.endDate
-            currency = Currency.from(location.currencyCode)
+            locationCurrency = Currency.from(location.currencyCode)
             rateToBaseCurrency = location.rateToBaseCurrency
         } else {
             name = ""
             startDate = trip.startDate
             endDate = trip.endDate
-            currency = baseCurrency
+            locationCurrency = baseCurrency
             rateToBaseCurrency = 1.0
         }
 
@@ -104,7 +103,7 @@ final class LocationViewModel {
                 name: name,
                 startDate: startDate,
                 endDate: endDate,
-                currency: currency,
+                currency: locationCurrency,
                 rateToBaseCurrency: rateToBaseCurrency,
                 budgetsByCategory: budgetAmounts
             )
@@ -113,7 +112,7 @@ final class LocationViewModel {
                 name: name,
                 startDate: startDate,
                 endDate: endDate,
-                currency: currency,
+                currency: locationCurrency,
                 rateToBaseCurrency: rateToBaseCurrency,
                 trip: trip,
                 budgetsByCategory: budgetAmounts

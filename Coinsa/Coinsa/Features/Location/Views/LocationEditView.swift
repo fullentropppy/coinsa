@@ -16,6 +16,7 @@ struct LocationEditView: View {
 
     @State private var viewModel: LocationViewModel
     @State private var deletionHandler = DeletionHandler<Location>()
+    @State private var budgetInputCurrency: BudgetInputCurrency = .base
 
     // MARK: - Computed Properties
 
@@ -46,43 +47,44 @@ struct LocationEditView: View {
     // MARK: - Body
 
     var body: some View {
-        Form {
-            mainDataSection
-            currencySection
-            budgetsSection
-            actionsSection
-        }
-        .toolbarTitleDisplayMode(.inline)
-        .toolbar {
-            toolbarContent
-        }
-        .deleteConfirmationAlert(
-            isPresented: $deletionHandler.isShowingDeleteConfirmation,
-            message: "location.delete.message",
-            onConfirm: {
-                confirmDelete()
-                dismiss()
-            },
-            onCancel: {
-                cancelDelete()
+        NavigationStack {
+            Form {
+                mainDataSection
+                currencySection
+                budgetsSection
+                actionsSection
             }
-        )
-        
+            .toolbarTitleDisplayMode(.inline)
+            .toolbar {
+                toolbarContent
+            }
+            .deleteConfirmationAlert(
+                isPresented: $deletionHandler.isShowingDeleteConfirmation,
+                message: "location.delete.message",
+                onConfirm: {
+                    confirmDelete()
+                    dismiss()
+                },
+                onCancel: {
+                    cancelDelete()
+                }
+            )
+        }
     }
 
     // MARK: - Components
 
     private var mainDataSection: some View {
         Section {
-            TextField("location.editing.name.title", text: $viewModel.name)
-            DatePicker("location.editing.startDate.title", selection: $viewModel.startDate, displayedComponents: .date)
-            DatePicker("location.editing.endDate.title", selection: $viewModel.endDate, displayedComponents: .date)
+            TextField("location.name", text: $viewModel.name)
+            DatePicker("location.startDate", selection: $viewModel.startDate, displayedComponents: .date)
+            DatePicker("location.endDate", selection: $viewModel.endDate, displayedComponents: .date)
         }
     }
 
     private var currencySection: some View {
         Section {
-            Picker("location.editing.currencyCode.title", selection: locationCurrencyBinding) {
+            Picker("location.currency", selection: locationCurrencyBinding) {
                 ForEach(Currency.allCasesSortedByName) { option in
                     Text(option.localizedDisplayName)
                         .tag(option)
@@ -90,7 +92,7 @@ struct LocationEditView: View {
             }
             .pickerStyle(.menu)
 
-            LabeledContent {
+            LabeledContent("location.exchangeRate") {
                 TextField(
                     "",
                     value: $viewModel.rateToBaseCurrency,
@@ -98,52 +100,56 @@ struct LocationEditView: View {
                 )
                 .keyboardType(.decimalPad)
                 .multilineTextAlignment(.trailing)
-            } label: {
-                Text("location.editing.exchangeRate.title")
             }
         } footer: {
-            Text("location.editing.currency.footer")
+            Text(
+                String(
+                    format: String(localized: "location.exchangeRate.hint"),
+                    viewModel.baseCurrency.code,
+                    viewModel.locationCurrency.code
+                )
+            )
+            .multilineTextAlignment(.center)
+            .frame(maxWidth: .infinity, alignment: .center)
         }
     }
 
     private var budgetsSection: some View {
-        Section {
+        Section("location.budget") {
+            LabeledContent("") {
+                Picker("", selection: $budgetInputCurrency) {
+                    Text(viewModel.baseCurrency.code)
+                        .tag(BudgetInputCurrency.base)
+                    
+                    Text(viewModel.locationCurrency.code)
+                        .tag(BudgetInputCurrency.location)
+                }
+                .pickerStyle(.segmented)
+            }
+            .listRowSeparator(.hidden)
+            
             ForEach(ExpenseCategory.allCases, id: \.id) { (category: ExpenseCategory) in
-                VStack(spacing: 8) {
-                    HStack {
-                        ExpenseCategoryLabel(category: category)
-                        budgetInputRow(
-                            currency: viewModel.baseCurrency,
-                            value: budgetBinding(for: category)
-                        )
-                    }
-                    AmountText(
-                        viewModel.plannedLocalAmount(for: category),
-                        currency: viewModel.currency,
-                        style: .secondary
+                HStack {
+                    ExpenseCategoryLabel(category: category)
+                    Spacer()
+                    budgetInputRow(
+                        currency: budgetInputCurrencyValue,
+                        value: budgetInputBinding(for: category)
                     )
-                    .frame(maxWidth: .infinity, alignment: .trailing)
                 }
             }
-        } header: {
-            Text("location.editing.budgets.header")
-        } footer: {
             HStack {
-                Text("location.editing.budgets.total")
+                Image(systemName: "sum")
+                    .foregroundStyle(.secondary)
+                    .frame(width: 24)
+                Text("location.budget.total")
                 Spacer()
-                VStack(alignment: .trailing, spacing: 5) {
-                    AmountText(
-                        viewModel.plannedTotalBase,
-                        currency: viewModel.baseCurrency,
-                        style: .tertiary
-                    )
-                    AmountText(
-                        viewModel.plannedTotalLocal,
-                        currency: viewModel.currency,
-                        style: .tertiary
-                    )
-                }
+                AmountText(
+                    budgetTotalValue,
+                    currency: budgetInputCurrencyValue
+                )
             }
+            .listRowSeparatorTint(.gray)
         }
     }
 
@@ -159,7 +165,7 @@ struct LocationEditView: View {
     private var actionsSection: some View {
         Section {
             if viewModel.isEditing {
-                Button("location.editing.delete", role: .destructive) {
+                Button("location.delete", role: .destructive) {
                     requestDelete()
                 }
             }
@@ -169,11 +175,9 @@ struct LocationEditView: View {
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
         ToolbarItem(placement: .principal) {
-            EventToolbarTitleView(
+            ContextToolbarTitleView(
                 title: viewModel.navigationTitle,
-                eventName: viewModel.trip.name,
-                startDate: viewModel.trip.startDate,
-                endDate: viewModel.trip.endDate
+                subtitle: viewModel.trip.name
             )
         }
         
@@ -193,17 +197,43 @@ struct LocationEditView: View {
 
     // MARK: - Actions
 
+    private var budgetInputCurrencyValue: Currency {
+        switch budgetInputCurrency {
+        case .base: viewModel.baseCurrency
+        case .location: viewModel.locationCurrency
+        }
+    }
+
+    private var budgetTotalValue: Double {
+        switch budgetInputCurrency {
+        case .base: viewModel.plannedTotalBase
+        case .location: viewModel.plannedTotalLocal
+        }
+    }
+    
     private var locationCurrencyBinding: Binding<Currency> {
         Binding(
-            get: { viewModel.currency },
-            set: { viewModel.currency = $0 }
+            get: { viewModel.locationCurrency },
+            set: { viewModel.locationCurrency = $0 }
         )
     }
     
-    private func budgetBinding(for category: ExpenseCategory) -> Binding<Double> {
+    private func budgetInputBinding(for category: ExpenseCategory) -> Binding<Double> {
         Binding(
-            get: { viewModel.budgetAmounts[category] ?? 0 },
-            set: { viewModel.budgetAmounts[category] = $0 }
+            get: {
+                switch budgetInputCurrency {
+                case .base: viewModel.budgetAmounts[category] ?? 0
+                case .location: viewModel.plannedLocalAmount(for: category)
+                }
+            },
+            set: { newValue in
+                switch budgetInputCurrency {
+                case .base: viewModel.budgetAmounts[category] = newValue
+                case .location:
+                    guard viewModel.rateToBaseCurrency > 0 else { return }
+                    viewModel.budgetAmounts[category] = newValue * viewModel.rateToBaseCurrency
+                }
+            }
         )
     }
 
@@ -220,6 +250,13 @@ struct LocationEditView: View {
     private func cancelDelete() {
         deletionHandler.cancel()
     }
+}
+
+// MARK: - Supporting Types
+
+private enum BudgetInputCurrency {
+    case base
+    case location
 }
 
 // MARK: - Previews
@@ -239,7 +276,7 @@ private extension LocationEditView {
             location = builder.fetchLocation(from: container)
         }
         
-        return NavigationStack {
+        return Group {
             if let location {
                 LocationEditView(
                     location: location,

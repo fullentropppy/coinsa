@@ -9,7 +9,7 @@ import Foundation
 
 enum PreviewTrip: String {
     case turkey = "Турция"
-    case southKorea = "Южная Коря"
+    case southKorea = "Южная Корея"
     case japan = "Япония"
 }
 

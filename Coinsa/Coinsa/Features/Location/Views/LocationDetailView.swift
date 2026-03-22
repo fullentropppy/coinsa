@@ -46,7 +46,7 @@ struct LocationDetailView: View {
 
         _expenses = Query(
             filter: #Predicate<Expense> { $0.location.persistentModelID == locationID },
-            sort: \.date
+            sort: [SortDescriptor(\Expense.date, order: .reverse)]
         )
 
         _viewModel = State(initialValue: nil)
@@ -72,8 +72,11 @@ struct LocationDetailView: View {
 
     // MARK: - Components
 
-    private func detailContent(location: Location, viewModel: LocationDetailViewModel) -> some View {
-        List {
+    private func detailContent(
+        location: Location,
+        viewModel: LocationDetailViewModel
+    ) -> some View {
+        Form {
             Section {
                 LocationHeaderView(
                     data: viewModel.headerData,
@@ -89,14 +92,13 @@ struct LocationDetailView: View {
                 }
             }
         }
-        .navigationTitle(location.name)
+        .toolbarTitleDisplayMode(.inline)
         .toolbar {
             toolbarContent
         }
         .sheet(isPresented: $isShowingLocationEdit) {
             LocationEditView(
-                trip: location.trip,
-                //location: location,
+                location: location,
                 baseCurrency: settingsStore.baseCurrency
             )
         }
@@ -152,6 +154,13 @@ struct LocationDetailView: View {
 
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
+        ToolbarItem(placement: .principal) {
+            ContextToolbarTitleView(
+                title: location!.name,
+                subtitle: location!.trip.name
+            )
+        }
+        
         ToolbarItemGroup(placement: .topBarTrailing) {
             ButtonView.edit {
                 isShowingLocationEdit = true

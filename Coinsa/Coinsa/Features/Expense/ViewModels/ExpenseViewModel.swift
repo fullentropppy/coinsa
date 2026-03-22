@@ -38,8 +38,8 @@ final class ExpenseViewModel {
     var navigationTitle: String {
         String(
             localized: isEditing
-            ? "expense.navigationTitle.create"
-            : "expense.navigationTitle.edit"
+            ? "expense.navigationTitle.edit"
+            : "expense.navigationTitle.create"
         )
     }
 

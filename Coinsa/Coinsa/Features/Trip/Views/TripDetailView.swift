@@ -89,7 +89,7 @@ struct TripDetailView: View {
                 }
             }
         }
-        .navigationTitle(trip.name)
+        .toolbarTitleDisplayMode(.inline)
         .toolbar {
             toolbarContent
         }
@@ -145,6 +145,10 @@ struct TripDetailView: View {
     
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
+        ToolbarItem(placement: .principal) {
+            ContextToolbarTitleView(title: trip!.name)
+        }
+        
         ToolbarItemGroup(placement: .topBarTrailing) {
             ButtonView.edit {
                 isShowingTripEdit = true

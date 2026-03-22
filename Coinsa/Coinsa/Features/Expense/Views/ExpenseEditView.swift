@@ -46,27 +46,29 @@ struct ExpenseEditView: View {
     // MARK: - Body
     
     var body: some View {
-        Form {
-            mainDataSection
-            amountSection
-            commentSection
-            actionsSection
-        }
-        .toolbarTitleDisplayMode(.inline)
-        .toolbar {
-            toolbarContent
-        }
-        .deleteConfirmationAlert(
-            isPresented: $deletionHandler.isShowingDeleteConfirmation,
-            message: "expense.delete.message",
-            onConfirm: {
-                confirmDelete()
-                dismiss()
-            },
-            onCancel: {
-                cancelDelete()
+        NavigationStack {
+            Form {
+                mainDataSection
+                amountSection
+                commentSection
+                actionsSection
             }
-        )
+            .toolbarTitleDisplayMode(.inline)
+            .toolbar {
+                toolbarContent
+            }
+            .deleteConfirmationAlert(
+                isPresented: $deletionHandler.isShowingDeleteConfirmation,
+                message: "expense.delete.message",
+                onConfirm: {
+                    confirmDelete()
+                    dismiss()
+                },
+                onCancel: {
+                    cancelDelete()
+                }
+            )
+        }
     }
 
     // MARK: - Components
@@ -119,6 +121,7 @@ struct ExpenseEditView: View {
             }
         } footer: {
             Text(viewModel.convertedAmountText)
+                .multilineTextAlignment(.center)
                 .frame(maxWidth: .infinity, alignment: .center)
         }
     }
@@ -142,11 +145,9 @@ struct ExpenseEditView: View {
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
         ToolbarItem(placement: .principal) {
-            EventToolbarTitleView(
+            ContextToolbarTitleView(
                 title: viewModel.navigationTitle,
-                eventName: viewModel.location.name,
-                startDate: viewModel.location.startDate,
-                endDate: viewModel.location.endDate
+                subtitle: viewModel.location.name
             )
         }
         
@@ -193,7 +194,7 @@ private extension ExpenseEditView {
         let location = builder.fetchLocation(from: container)
         let expense = withExpense ? builder.fetchExpense(from: container) : nil
 
-        return NavigationStack {
+        return Group {
             if let expense {
                 ExpenseEditView(expense: expense, baseCurrency: Currency.rub)
             } else {

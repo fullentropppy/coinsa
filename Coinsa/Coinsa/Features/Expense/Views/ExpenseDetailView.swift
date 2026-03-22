@@ -37,6 +37,7 @@ struct ExpenseDetailView: View {
                 commentSection(comment: comment)
             }
         }
+        .toolbarTitleDisplayMode(.inline)
         .toolbar {
             toolbarContent
         }
@@ -106,11 +107,9 @@ struct ExpenseDetailView: View {
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
         ToolbarItem(placement: .principal) {
-            EventToolbarTitleView(
+            ContextToolbarTitleView(
                 title: expense.category.localizedDisplayName,
-                eventName: expense.location.name,
-                startDate: expense.location.startDate,
-                endDate: expense.location.endDate
+                subtitle: expense.location.name
             )
         }
         
