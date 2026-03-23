@@ -81,7 +81,7 @@ struct TripDetailView: View {
                 )
             }
 
-            Section(header: Text("trip.detail.locations.header")) {
+            Section(header: Text("trip.locations")) {
                 if locations.isEmpty {
                     emptyLocationListContent
                 } else {
@@ -136,9 +136,9 @@ struct TripDetailView: View {
     private var emptyLocationListContent: some View {
         EmptyStateView(
             imageName: "mappin.and.ellipse",
-            title: "location.list.empty.title",
-            description: "location.list.empty.desctiption",
-            buttonLabel: "location.list.addLocation",
+            title: "location.emptyState.title",
+            description: "location.emptyState.description",
+            buttonLabel: "location.add",
             onAddAction: { isShowingLocationAdd = true }
         )
     }

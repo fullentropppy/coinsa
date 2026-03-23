@@ -40,9 +40,9 @@ private extension EmptyStateView {
     static func tripPreview(locale: Locale, colorScheme: ColorScheme) -> some View {
         EmptyStateView(
             imageName: "suitcase",
-            title: "trip.list.empty.title",
-            description: "trip.list.empty.desctiption",
-            buttonLabel: "trip.list.addTrip",
+            title: "trip.emptyState.title",
+            description: "trip.emptyState.desctiption",
+            buttonLabel: "trip.add",
             onAddAction: {}
         )
         .environment(\.locale, locale)
@@ -52,9 +52,9 @@ private extension EmptyStateView {
     static func locationPreview(locale: Locale, colorScheme: ColorScheme) -> some View {
         EmptyStateView(
             imageName: "mappin.and.ellipse",
-            title: "location.list.empty.title",
-            description: "location.list.empty.desctiption",
-            buttonLabel: "location.list.addLocation",
+            title: "location.emptyState.title",
+            description: "location.emptyState.description",
+            buttonLabel: "location.add",
             onAddAction: {}
         )
         .environment(\.locale, locale)

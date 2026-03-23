@@ -51,14 +51,14 @@ class Location: DateRangeProviding, EventStatusProviding {
 
     func calculatePlannedAmount(inBaseCurrency: Bool) -> Double {
         budgets.reduce(0) {
-            let exchangeRate = inBaseCurrency ? rateToBaseCurrency : 1
+            let exchangeRate = inBaseCurrency ? 1 : rateToBaseCurrency
             return $0 + $1.amountInBaseCurrency * exchangeRate
         }
     }
 
     func calculateActualAmount(inBaseCurrency: Bool) -> Double {
         expenses.reduce(0) {
-            let exchangeRate = inBaseCurrency ? $1.rateToBaseCurrency : 1
+            let exchangeRate = inBaseCurrency ? 1 : $1.rateToBaseCurrency
             return $0 + $1.amountInLocalCurrency * exchangeRate
         }
     }

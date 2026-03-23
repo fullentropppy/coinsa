@@ -58,9 +58,9 @@ struct TripEditView: View {
     
     private var mainDataSection: some View {
         Section {
-            TextField("trip.editing.name.title", text: $viewModel.name)
-            DatePicker("trip.editing.startDate.title", selection: $viewModel.startDate, displayedComponents: .date)
-            DatePicker("trip.editing.endDate.title", selection: $viewModel.endDate, displayedComponents: .date)
+            TextField("trip.name", text: $viewModel.name)
+            DatePicker("trip.startDate", selection: $viewModel.startDate, displayedComponents: .date)
+            DatePicker("trip.endDate", selection: $viewModel.endDate, displayedComponents: .date)
         }
     }
     

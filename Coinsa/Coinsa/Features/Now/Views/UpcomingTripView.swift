@@ -38,7 +38,7 @@ struct UpcomingTripView: View {
                     imageName: "calendar",
                     title: "now.upcoming.empty.title",
                     description: "now.upcoming.empty.description",
-                    buttonLabel: "trip.list.addTrip",
+                    buttonLabel: "trip.add",
                     onAddAction: { isShowingTripAdd = true }
                 )
             }

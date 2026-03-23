@@ -964,6 +964,23 @@
         }
       }
     },
+    "location.add" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add location"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Добавить локацию"
+          }
+        }
+      }
+    },
     "location.budget" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1134,6 +1151,40 @@
         }
       }
     },
+    "location.emptyState.description" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add a location to start tracking your expenses"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Добавьте локацию чтобы начать отслеживать свои траты"
+          }
+        }
+      }
+    },
+    "location.emptyState.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No locations yet"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Локаций еще нет"
+          }
+        }
+      }
+    },
     "location.endDate" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1181,57 +1232,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Количество основной валюты %1$@, соответствующее 1 единице валюты локации %2$@"
-          }
-        }
-      }
-    },
-    "location.list.addLocation" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Add location"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Добавить локацию"
-          }
-        }
-      }
-    },
-    "location.list.empty.desctiption" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Add a location to start tracking your expenses"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Добавьте локацию чтобы начать отслеживать свои траты"
-          }
-        }
-      }
-    },
-    "location.list.empty.title" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No locations yet"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Локаций еще нет"
           }
         }
       }
@@ -1389,24 +1389,7 @@
         }
       }
     },
-    "settings.baseCurrency.footer" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "The default currency for displaying amounts in trips, locations, expenses, and for budget planning. It cannot be changed."
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Валюта по умолчанию для отображения сумм в поездках, локациях, тратах и для планирования бюджета. Не может быть изменена."
-          }
-        }
-      }
-    },
-    "settings.baseCurrency.title" : {
+    "settings.baseCurrency" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -1419,6 +1402,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Осн. валюта"
+          }
+        }
+      }
+    },
+    "settings.baseCurrency.hint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The default currency for displaying amounts in trips, locations, expenses, and for budget planning. It cannot be changed."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Валюта по умолчанию для отображения сумм в поездках, локациях, тратах и для планирования бюджета. Не может быть изменена."
           }
         }
       }
@@ -1436,6 +1436,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Настройки"
+          }
+        }
+      }
+    },
+    "settings.theme" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Appearance"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Тема оформления"
           }
         }
       }
@@ -1491,23 +1508,6 @@
         }
       }
     },
-    "settings.theme.title" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Appearance"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Тема оформления"
-          }
-        }
-      }
-    },
     "tab.now" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1559,6 +1559,23 @@
         }
       }
     },
+    "trip.add" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add trip"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Добавить поездку"
+          }
+        }
+      }
+    },
     "trip.delete.message" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1572,23 +1589,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Вы уверены что хотите удалить поездку?"
-          }
-        }
-      }
-    },
-    "trip.detail.locations.header" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Locations"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Локации"
           }
         }
       }
@@ -1610,75 +1610,7 @@
         }
       }
     },
-    "trip.editing.endDate.title" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ends"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Завершается"
-          }
-        }
-      }
-    },
-    "trip.editing.name.title" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Name"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Название"
-          }
-        }
-      }
-    },
-    "trip.editing.startDate.title" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Starts"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Начинается"
-          }
-        }
-      }
-    },
-    "trip.list.addTrip" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Add trip"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Добавить поездку"
-          }
-        }
-      }
-    },
-    "trip.list.empty.desctiption" : {
+    "trip.emptyState.desctiption" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -1695,7 +1627,7 @@
         }
       }
     },
-    "trip.list.empty.title" : {
+    "trip.emptyState.title" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -1708,6 +1640,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Поездок еще нет"
+          }
+        }
+      }
+    },
+    "trip.endDate" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ends"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Завершается"
           }
         }
       }
@@ -1725,6 +1674,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Поездки"
+          }
+        }
+      }
+    },
+    "trip.locations" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Locations"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Локации"
+          }
+        }
+      }
+    },
+    "trip.name" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Название"
           }
         }
       }
@@ -1759,6 +1742,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Изменение поездки"
+          }
+        }
+      }
+    },
+    "trip.startDate" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Starts"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Начинается"
           }
         }
       }

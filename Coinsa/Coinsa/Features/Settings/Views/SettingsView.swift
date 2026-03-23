@@ -29,17 +29,19 @@ struct SettingsView: View {
 
     private var baseCurrencySection: some View {
         Section {
-            LabeledContent("settings.baseCurrency.title") {
+            LabeledContent("settings.baseCurrency") {
                 Text(appSettingsStore.baseCurrency.localizedKey)
             }
         } footer: {
-            Text("settings.baseCurrency.footer")
+            Text("settings.baseCurrency.hint")
+                .multilineTextAlignment(.center)
+                .frame(maxWidth: .infinity, alignment: .center)
         }
     }
 
     private var themeSection: some View {
         Section {
-            Picker("settings.theme.title", selection: themeBinding) {
+            Picker("settings.theme", selection: themeBinding) {
                 ForEach(AppTheme.allCases) { theme in
                     Text(theme.localizedKey)
                         .tag(theme)

@@ -11,31 +11,31 @@ import SwiftData
 struct NowView: View {
     // MARK: - Stored Properties
 
-    @Query(sort: \Trip.startDate) private var trips: [Trip]
+    @Query(sort: \Location.startDate) private var location: [Location]
 
 
     // MARK: - Computed Properties
 
-    private var currentTrip: Trip? {
+    private var currentLocation: Location? {
         let today = Date.now
-        return trips.first { $0.startDate <= today && $0.endDate >= today }
+        return location.first { $0.startDate <= today && $0.endDate >= today }
     }
 
-    private var upcomingTrip: Trip? {
+    private var upcomingLocation: Location? {
         let today = Date.now
-        return trips.first { $0.startDate > today }
+        return location.first { $0.startDate > today }
     }
 
     // MARK: - Body
 
     var body: some View {
         NavigationStack {
-            if let currentTrip {
-                TripDetailView(tripID: currentTrip.persistentModelID)
+            if let currentLocation {
+                LocationDetailView(locationID: currentLocation.persistentModelID)
             } else {
-                UpcomingTripView(trip: upcomingTrip)
-                    .navigationTitle("now.navigationTitle")
-                    .navigationBarTitleDisplayMode(.large)
+//                UpcomingTripView(trip: upcomingLocation)
+//                    .navigationTitle("now.navigationTitle")
+//                    .navigationBarTitleDisplayMode(.large)
             }
         }
     }
