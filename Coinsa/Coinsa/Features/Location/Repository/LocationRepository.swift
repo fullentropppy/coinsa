@@ -20,8 +20,8 @@ struct LocationRepository {
         name: String,
         startDate: Date,
         endDate: Date,
-        currency: Currency,
-        rateToBaseCurrency: Double,
+        currencyLocal: Currency,
+        rateBaseToLocal: Double,
         trip: Trip,
         budgetsByCategory: [ExpenseCategory: Double]
     ) {
@@ -29,8 +29,8 @@ struct LocationRepository {
             name: name,
             startDate: startDate,
             endDate: endDate,
-            currencyCode: currency.code,
-            rateToBaseCurrency: rateToBaseCurrency,
+            currencyCodeLocal: currencyLocal.code,
+            rateBaseToLocal: rateBaseToLocal,
             trip: trip,
             budgets: [],
             expenses: []
@@ -46,15 +46,15 @@ struct LocationRepository {
         name: String,
         startDate: Date,
         endDate: Date,
-        currency: Currency,
-        rateToBaseCurrency: Double,
+        currencyLocal: Currency,
+        rateBaseToLocal: Double,
         budgetsByCategory: [ExpenseCategory: Double]
     ) {
         location.name = name
         location.startDate = startDate
         location.endDate = endDate
-        location.currencyCode = currency.code
-        location.rateToBaseCurrency = rateToBaseCurrency
+        location.currencyCodeLocal = currencyLocal.code
+        location.rateBaseToLocal = rateBaseToLocal
 
         applyBudgets(budgetsByCategory, to: location)
         try? context.save()
@@ -78,11 +78,12 @@ struct LocationRepository {
         for (category, amount) in budgetsByCategory {
             if amount > 0 {
                 if let budget = existingBudgets[category] {
-                    budget.amountInBaseCurrency = amount
+                    budget.amountBase = amount
                 } else {
                     let budget = Budget(
                         category: category,
-                        amountInBaseCurrency: amount,
+                        amountBase: amount,
+                        rateBaseToLocal: 1,
                         location: location
                     )
                     location.budgets.append(budget)

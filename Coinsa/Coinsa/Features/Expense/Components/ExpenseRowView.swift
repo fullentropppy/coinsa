@@ -26,12 +26,12 @@ struct ExpenseRowView: View {
                 Spacer()
                 VStack(alignment: .trailing, spacing: 10) {
                     AmountText(
-                        expense.amountInBaseCurrency,
+                        expense.amountBase,
                         currency: baseCurrency
                     )
                     AmountText(
-                        expense.amountInLocalCurrency,
-                        currency: Currency.from(expense.location.currencyCode),
+                        expense.amountBase,
+                        currency: Currency.from(expense.location.currencyCodeLocal),
                         style: .secondary
                     )
                 }

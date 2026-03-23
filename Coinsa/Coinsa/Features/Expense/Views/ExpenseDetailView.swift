@@ -24,7 +24,7 @@ struct ExpenseDetailView: View {
     }
     
     private var localCurrency: Currency {
-        Currency.from(expense.location.currencyCode)
+        Currency.from(expense.location.currencyCodeLocal)
     }
     
     // MARK: - Body
@@ -59,7 +59,7 @@ struct ExpenseDetailView: View {
                 Spacer()
 
                 AmountText(
-                    expense.amountInLocalCurrency,
+                    expense.amountBase,
                     currency: localCurrency
                 )
                 .scaleEffect(2.2)
@@ -69,7 +69,7 @@ struct ExpenseDetailView: View {
                 
                 VStack(spacing: 14) {
                     AmountText(
-                        expense.amountInBaseCurrency,
+                        expense.amountBase,
                         currency: baseCurrency,
                         style: .secondary
                     )
@@ -78,7 +78,7 @@ struct ExpenseDetailView: View {
                     ExchangeRateText(
                         from: localCurrency,
                         to: baseCurrency,
-                        rate: expense.rateToBaseCurrency,
+                        rate: expense.rateBaseToLocal,
                         style: .secondary)
                 }
                 

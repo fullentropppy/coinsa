@@ -1,5 +1,5 @@
 //
-//  PreviewDataBuilder.swift
+//  PreviewBuilder.swift
 //  Coinsa
 //
 //  Created by Daniil Gritsenko on 27.02.2026.

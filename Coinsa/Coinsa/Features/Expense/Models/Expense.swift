@@ -13,31 +13,25 @@ class Expense {
     // MARK: - Stored Properties
     
     var date: Date
-    var amountInLocalCurrency: Double
-    var rateToBaseCurrency: Double
+    var amountBase: Double
+    var rateBaseToLocal: Double
     var category: ExpenseCategory
     var location: Location
     var comment: String?
-
-    // MARK: - Computed Properties
-    
-    var amountInBaseCurrency: Double {
-        amountInLocalCurrency * rateToBaseCurrency
-    }
 
     // MARK: - Initialization
     
     init(
         date: Date = .now,
-        amountInLocalCurrency: Double,
-        rateToBaseCurrency: Double,
+        amountBase: Double,
+        rateBaseToLocal: Double,
         category: ExpenseCategory,
         location: Location,
         comment: String? = nil
     ) {
         self.date = date
-        self.amountInLocalCurrency = amountInLocalCurrency
-        self.rateToBaseCurrency = rateToBaseCurrency
+        self.amountBase = amountBase
+        self.rateBaseToLocal = rateBaseToLocal
         self.category = category
         self.location = location
         self.comment = comment

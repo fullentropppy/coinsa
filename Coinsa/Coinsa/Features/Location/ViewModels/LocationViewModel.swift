@@ -21,7 +21,7 @@ final class LocationViewModel {
     var name: String
     var startDate: Date
     var endDate: Date
-    var locationCurrency: Currency
+    var localCurrency: Currency
     var rateToBaseCurrency: Double
     var budgetAmounts: [ExpenseCategory: Double]
 
@@ -70,20 +70,20 @@ final class LocationViewModel {
             name = location.name
             startDate = location.startDate
             endDate = location.endDate
-            locationCurrency = Currency.from(location.currencyCode)
-            rateToBaseCurrency = location.rateToBaseCurrency
+            localCurrency = Currency.from(location.currencyCodeLocal)
+            rateToBaseCurrency = location.rateBaseToLocal
         } else {
             name = ""
             startDate = trip.startDate
             endDate = trip.endDate
-            locationCurrency = baseCurrency
+            localCurrency = baseCurrency
             rateToBaseCurrency = 1.0
         }
 
         budgetAmounts = Dictionary(uniqueKeysWithValues: ExpenseCategory.allCases.map { ($0, 0) })
         if let location {
             for budget in location.budgets {
-                budgetAmounts[budget.category] = budget.amountInBaseCurrency
+                budgetAmounts[budget.category] = budget.amountBase
             }
         }
     }
@@ -103,8 +103,8 @@ final class LocationViewModel {
                 name: name,
                 startDate: startDate,
                 endDate: endDate,
-                currency: locationCurrency,
-                rateToBaseCurrency: rateToBaseCurrency,
+                currencyLocal: localCurrency,
+                rateBaseToLocal: rateToBaseCurrency,
                 budgetsByCategory: budgetAmounts
             )
         } else {
@@ -112,8 +112,8 @@ final class LocationViewModel {
                 name: name,
                 startDate: startDate,
                 endDate: endDate,
-                currency: locationCurrency,
-                rateToBaseCurrency: rateToBaseCurrency,
+                currencyLocal: localCurrency,
+                rateBaseToLocal: rateToBaseCurrency,
                 trip: trip,
                 budgetsByCategory: budgetAmounts
             )

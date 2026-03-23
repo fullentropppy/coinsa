@@ -1,5 +1,5 @@
 //
-//  PreviewSamples.swift
+//  PreviewGenerator.swift
 //  Coinsa
 //
 //  Created by Daniil Gritsenko on 03.03.2026.
@@ -76,8 +76,8 @@ enum PreviewGenerator {
             name: istanbulData.rawValue,
             startDate: trip.startDate,
             endDate: trip.endDate,
-            currencyCode: istanbulData.currencyCode,
-            rateToBaseCurrency: istanbulData.exchangeRateToBaseCurrency,
+            currencyCodeLocal: istanbulData.currencyCode,
+            rateBaseToLocal: istanbulData.exchangeRate,
             trip: trip
         )
 
@@ -93,71 +93,71 @@ enum PreviewGenerator {
     }
 
     private static func makeIstanbulBudgets(location: Location) -> [Budget] {
-        let exchangeRate = PreviewLocation.istanbul.exchangeRateFromBaseCurrency
+        let exchangeRate = PreviewLocation.istanbul.exchangeRate
 
         return [
-            Budget(category: .food, amountInBaseCurrency: exchangeRate * 21000, location: location),
-            Budget(category: .transport, amountInBaseCurrency: exchangeRate * 3600, location: location),
-            Budget(category: .activity, amountInBaseCurrency: exchangeRate * 8200, location: location),
-            Budget(category: .shopping, amountInBaseCurrency: exchangeRate * 6800, location: location),
-            Budget(category: .other, amountInBaseCurrency: exchangeRate * 4200, location: location)
+            Budget(category: .food, amountBase: 21000, rateBaseToLocal: exchangeRate, location: location),
+            Budget(category: .transport, amountBase: 3600, rateBaseToLocal: exchangeRate, location: location),
+            Budget(category: .activity, amountBase: 8200, rateBaseToLocal: exchangeRate, location: location),
+            Budget(category: .shopping, amountBase: 6800, rateBaseToLocal: exchangeRate, location: location),
+            Budget(category: .other, amountBase: 4200, rateBaseToLocal: exchangeRate, location: location)
         ]
     }
 
     private static func makeIstanbulExpenses(location: Location) -> [Expense] {
-        let exchangeRate = location.rateToBaseCurrency
+        let exchangeRate = location.rateBaseToLocal
 
         return [
             Expense(
                 date: now.addingTimeInterval(-day * 97 + hour * 8),
-                amountInLocalCurrency: 720,
-                rateToBaseCurrency: exchangeRate,
+                amountBase: 720,
+                rateBaseToLocal: exchangeRate,
                 category: .food,
                 location: location,
                 comment: PreviewExpenseComment.breakfast.rawValue
             ),
             Expense(
                 date: now.addingTimeInterval(-day * 97 + hour * 19),
-                amountInLocalCurrency: 2100,
-                rateToBaseCurrency: exchangeRate,
+                amountBase: 2100,
+                rateBaseToLocal: exchangeRate,
                 category: .activity,
                 location: location
             ),
             Expense(
                 date: now.addingTimeInterval(-day * 96 + hour * 11),
-                amountInLocalCurrency: 140,
-                rateToBaseCurrency: exchangeRate,
+                amountBase: 140,
+                rateBaseToLocal: exchangeRate,
                 category: .transport,
                 location: location,
                 comment: PreviewExpenseComment.bus.rawValue
             ),
             Expense(
                 date: now.addingTimeInterval(-day * 95 + hour * 18),
-                amountInLocalCurrency: 680,
-                rateToBaseCurrency: exchangeRate,
+                amountBase: 680,
+                rateBaseToLocal: exchangeRate,
                 category: .transport,
                 location: location,
                 comment: PreviewExpenseComment.taxi.rawValue
             ),
             Expense(
                 date: now.addingTimeInterval(-day * 94 + hour * 12),
-                amountInLocalCurrency: 1450,
-                rateToBaseCurrency: exchangeRate,
+                amountBase: 1450,
+                rateBaseToLocal: exchangeRate,
                 category: .shopping,
                 location: location
             ),
             Expense(
                 date: now.addingTimeInterval(-day * 93 + hour * 20),
-                amountInLocalCurrency: 980,
-                rateToBaseCurrency: exchangeRate,
+                amountBase: 980,
+                rateBaseToLocal: exchangeRate,
                 category: .food,
                 location: location,
                 comment: PreviewExpenseComment.lunch.rawValue
             ),
             Expense(
                 date: now.addingTimeInterval(-day * 91 + hour * 9),
-                amountInLocalCurrency: 2350,
-                rateToBaseCurrency: exchangeRate,
+                amountBase: 2350,
+                rateBaseToLocal: exchangeRate,
                 category: .other,
                 location: location
             )
@@ -201,8 +201,8 @@ enum PreviewGenerator {
             name: seoulData.rawValue,
             startDate: startDate,
             endDate: endDate,
-            currencyCode: seoulData.currencyCode,
-            rateToBaseCurrency: seoulData.exchangeRateToBaseCurrency,
+            currencyCodeLocal: seoulData.currencyCode,
+            rateBaseToLocal: seoulData.exchangeRate,
             trip: trip
         )
 
@@ -229,8 +229,8 @@ enum PreviewGenerator {
             name: busanData.rawValue,
             startDate: startDate,
             endDate: endDate,
-            currencyCode: busanData.currencyCode,
-            rateToBaseCurrency: busanData.exchangeRateToBaseCurrency,
+            currencyCodeLocal: busanData.currencyCode,
+            rateBaseToLocal: busanData.exchangeRate,
             trip: trip
         )
 
@@ -246,106 +246,106 @@ enum PreviewGenerator {
     }
 
     private static func makeSeoulBudgets(location: Location) -> [Budget] {
-        let exchangeRate = PreviewLocation.seoul.exchangeRateFromBaseCurrency
+        let exchangeRate = PreviewLocation.seoul.exchangeRate
 
         return [
-            Budget(category: .food, amountInBaseCurrency: exchangeRate * 24000, location: location),
-            Budget(category: .transport, amountInBaseCurrency: exchangeRate * 5200, location: location),
-            Budget(category: .activity, amountInBaseCurrency: exchangeRate * 11000, location: location),
-            Budget(category: .shopping, amountInBaseCurrency: exchangeRate * 8500, location: location)
+            Budget(category: .food, amountBase: 24000, rateBaseToLocal: exchangeRate, location: location),
+            Budget(category: .transport, amountBase: 5200, rateBaseToLocal: exchangeRate, location: location),
+            Budget(category: .activity, amountBase: 11000, rateBaseToLocal: exchangeRate, location: location),
+            Budget(category: .shopping, amountBase: 8500, rateBaseToLocal: exchangeRate, location: location)
         ]
     }
 
     private static func makeBusanBudgets(location: Location) -> [Budget] {
-        let exchangeRate = PreviewLocation.busan.exchangeRateFromBaseCurrency
+        let exchangeRate = PreviewLocation.busan.exchangeRate
 
         return [
-            Budget(category: .food, amountInBaseCurrency: exchangeRate * 12000, location: location),
-            Budget(category: .transport, amountInBaseCurrency: exchangeRate * 2800, location: location),
-            Budget(category: .other, amountInBaseCurrency: exchangeRate * 2600, location: location)
+            Budget(category: .food, amountBase: 12000, rateBaseToLocal: exchangeRate, location: location),
+            Budget(category: .transport, amountBase: 2800, rateBaseToLocal: exchangeRate, location: location),
+            Budget(category: .other, amountBase: 2600, rateBaseToLocal: exchangeRate, location: location)
         ]
     }
 
     private static func makeSeoulExpenses(location: Location, startDate: Date) -> [Expense] {
-        let exchangeRate = location.rateToBaseCurrency
+        let exchangeRate = location.rateBaseToLocal
 
         return [
             Expense(
                 date: startDate.addingTimeInterval(hour * 8),
-                amountInLocalCurrency: 9500,
-                rateToBaseCurrency: exchangeRate,
+                amountBase: 9500,
+                rateBaseToLocal: exchangeRate,
                 category: .food,
                 location: location,
                 comment: PreviewExpenseComment.breakfast.rawValue
             ),
             Expense(
                 date: startDate.addingTimeInterval(hour * 13),
-                amountInLocalCurrency: 17000,
-                rateToBaseCurrency: exchangeRate,
+                amountBase: 17000,
+                rateBaseToLocal: exchangeRate,
                 category: .food,
                 location: location,
                 comment: PreviewExpenseComment.lunch.rawValue
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 1 + hour * 9),
-                amountInLocalCurrency: 1600,
-                rateToBaseCurrency: exchangeRate,
+                amountBase: 1600,
+                rateBaseToLocal: exchangeRate,
                 category: .transport,
                 location: location,
                 comment: PreviewExpenseComment.subway.rawValue
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 1 + hour * 19),
-                amountInLocalCurrency: 22500,
-                rateToBaseCurrency: exchangeRate,
+                amountBase: 22500,
+                rateBaseToLocal: exchangeRate,
                 category: .shopping,
                 location: location,
                 comment: PreviewExpenseComment.souvenirs.rawValue
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 2 + hour * 11),
-                amountInLocalCurrency: 13000,
-                rateToBaseCurrency: exchangeRate,
+                amountBase: 13000,
+                rateBaseToLocal: exchangeRate,
                 category: .food,
                 location: location,
                 comment: PreviewExpenseComment.streetFood.rawValue
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 2 + hour * 17),
-                amountInLocalCurrency: 28000,
-                rateToBaseCurrency: exchangeRate,
+                amountBase: 28000,
+                rateBaseToLocal: exchangeRate,
                 category: .activity,
                 location: location,
                 comment: PreviewExpenseComment.museum.rawValue
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 3 + hour * 14),
-                amountInLocalCurrency: 6200,
-                rateToBaseCurrency: exchangeRate,
+                amountBase: 6200,
+                rateBaseToLocal: exchangeRate,
                 category: .medicine,
                 location: location,
                 comment: PreviewExpenseComment.pharmacy.rawValue
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 3 + hour * 20),
-                amountInLocalCurrency: 52000,
-                rateToBaseCurrency: exchangeRate,
+                amountBase: 52000,
+                rateBaseToLocal: exchangeRate,
                 category: .shopping,
                 location: location,
                 comment: PreviewExpenseComment.clothes.rawValue
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 4 + hour * 12),
-                amountInLocalCurrency: 3100,
-                rateToBaseCurrency: exchangeRate,
+                amountBase: 3100,
+                rateBaseToLocal: exchangeRate,
                 category: .transport,
                 location: location,
                 comment: PreviewExpenseComment.bus.rawValue
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 5 + hour * 18),
-                amountInLocalCurrency: 8900,
-                rateToBaseCurrency: exchangeRate,
+                amountBase: 8900,
+                rateBaseToLocal: exchangeRate,
                 category: .other,
                 location: location,
                 comment: PreviewExpenseComment.miscellaneous.rawValue
@@ -354,45 +354,45 @@ enum PreviewGenerator {
     }
 
     private static func makeBusanExpenses(location: Location, startDate: Date) -> [Expense] {
-        let exchangeRate = location.rateToBaseCurrency
+        let exchangeRate = location.rateBaseToLocal
 
         return [
             Expense(
                 date: startDate.addingTimeInterval(hour * 10),
-                amountInLocalCurrency: 12500,
-                rateToBaseCurrency: exchangeRate,
+                amountBase: 12500,
+                rateBaseToLocal: exchangeRate,
                 category: .food,
                 location: location,
                 comment: PreviewExpenseComment.streetFood.rawValue
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 1 + hour * 9),
-                amountInLocalCurrency: 1800,
-                rateToBaseCurrency: exchangeRate,
+                amountBase: 1800,
+                rateBaseToLocal: exchangeRate,
                 category: .transport,
                 location: location,
                 comment: PreviewExpenseComment.bus.rawValue
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 2 + hour * 15),
-                amountInLocalCurrency: 29500,
-                rateToBaseCurrency: exchangeRate,
+                amountBase: 29500,
+                rateBaseToLocal: exchangeRate,
                 category: .activity,
                 location: location,
                 comment: PreviewExpenseComment.temple.rawValue
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 2 + hour * 20),
-                amountInLocalCurrency: 14000,
-                rateToBaseCurrency: exchangeRate,
+                amountBase: 14000,
+                rateBaseToLocal: exchangeRate,
                 category: .shopping,
                 location: location,
                 comment: PreviewExpenseComment.souvenirs.rawValue
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 3 + hour * 12),
-                amountInLocalCurrency: 5200,
-                rateToBaseCurrency: exchangeRate,
+                amountBase: 5200,
+                rateBaseToLocal: exchangeRate,
                 category: .other,
                 location: location,
                 comment: PreviewExpenseComment.miscellaneous.rawValue
@@ -440,8 +440,8 @@ enum PreviewGenerator {
             name: tokyoData.rawValue,
             startDate: startDate,
             endDate: endDate,
-            currencyCode: tokyoData.currencyCode,
-            rateToBaseCurrency: tokyoData.exchangeRateToBaseCurrency,
+            currencyCodeLocal: tokyoData.currencyCode,
+            rateBaseToLocal: tokyoData.exchangeRate,
             trip: trip
         )
 
@@ -468,8 +468,8 @@ enum PreviewGenerator {
             name: kyotoData.rawValue,
             startDate: startDate,
             endDate: endDate,
-            currencyCode: kyotoData.currencyCode,
-            rateToBaseCurrency: kyotoData.exchangeRateToBaseCurrency,
+            currencyCodeLocal: kyotoData.currencyCode,
+            rateBaseToLocal: kyotoData.exchangeRate,
             trip: trip
         )
 
@@ -496,8 +496,8 @@ enum PreviewGenerator {
             name: osakaData.rawValue,
             startDate: startDate,
             endDate: endDate,
-            currencyCode: osakaData.currencyCode,
-            rateToBaseCurrency: osakaData.exchangeRateToBaseCurrency,
+            currencyCodeLocal: osakaData.currencyCode,
+            rateBaseToLocal: osakaData.exchangeRate,
             trip: trip
         )
 
@@ -513,96 +513,96 @@ enum PreviewGenerator {
     }
 
     private static func makeTokyoBudgets(location: Location) -> [Budget] {
-        let exchangeRate = PreviewLocation.tokyo.exchangeRateFromBaseCurrency
+        let exchangeRate = PreviewLocation.tokyo.exchangeRate
 
         return [
-            Budget(category: .food, amountInBaseCurrency: exchangeRate * 30000, location: location),
-            Budget(category: .transport, amountInBaseCurrency: exchangeRate * 7200, location: location),
-            Budget(category: .activity, amountInBaseCurrency: exchangeRate * 13500, location: location),
-            Budget(category: .shopping, amountInBaseCurrency: exchangeRate * 10500, location: location),
-            Budget(category: .medicine, amountInBaseCurrency: exchangeRate * 4200, location: location),
-            Budget(category: .other, amountInBaseCurrency: exchangeRate * 6500, location: location)
+            Budget(category: .food, amountBase: 30000, rateBaseToLocal: exchangeRate, location: location),
+            Budget(category: .transport, amountBase: 7200, rateBaseToLocal: exchangeRate, location: location),
+            Budget(category: .activity, amountBase: 13500, rateBaseToLocal: exchangeRate, location: location),
+            Budget(category: .shopping, amountBase: 10500, rateBaseToLocal: exchangeRate, location: location),
+            Budget(category: .medicine, amountBase: 4200, rateBaseToLocal: exchangeRate, location: location),
+            Budget(category: .other, amountBase: 6500, rateBaseToLocal: exchangeRate, location: location)
         ]
     }
 
     private static func makeKyotoBudgets(location: Location) -> [Budget] {
-        let exchangeRate = PreviewLocation.kyoto.exchangeRateFromBaseCurrency
+        let exchangeRate = PreviewLocation.kyoto.exchangeRate
 
         return [
-            Budget(category: .food, amountInBaseCurrency: exchangeRate * 15000, location: location),
-            Budget(category: .activity, amountInBaseCurrency: exchangeRate * 6200, location: location)
+            Budget(category: .food, amountBase: 15000, rateBaseToLocal: exchangeRate, location: location),
+            Budget(category: .activity, amountBase: 6200, rateBaseToLocal: exchangeRate, location: location)
         ]
     }
 
     private static func makeOsakaBudgets(location: Location) -> [Budget] {
-        let exchangeRate = PreviewLocation.osaka.exchangeRateFromBaseCurrency
+        let exchangeRate = PreviewLocation.osaka.exchangeRate
 
         return [
-            Budget(category: .food, amountInBaseCurrency: exchangeRate * 9000, location: location)
+            Budget(category: .food, amountBase: 9000, rateBaseToLocal: exchangeRate, location: location)
         ]
     }
 
     private static func makeTokyoExpenses(location: Location, startDate: Date) -> [Expense] {
-        let exchangeRate = location.rateToBaseCurrency
+        let exchangeRate = location.rateBaseToLocal
 
         return [
             Expense(
                 date: startDate.addingTimeInterval(hour * 8),
-                amountInLocalCurrency: 980,
-                rateToBaseCurrency: exchangeRate,
+                amountBase: 980,
+                rateBaseToLocal: exchangeRate,
                 category: .food,
                 location: location,
                 comment: PreviewExpenseComment.breakfast.rawValue
             ),
             Expense(
                 date: startDate.addingTimeInterval(hour * 13),
-                amountInLocalCurrency: 1750,
-                rateToBaseCurrency: exchangeRate,
+                amountBase: 1750,
+                rateBaseToLocal: exchangeRate,
                 category: .food,
                 location: location
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 1 + hour * 10),
-                amountInLocalCurrency: 380,
-                rateToBaseCurrency: exchangeRate,
+                amountBase: 380,
+                rateBaseToLocal: exchangeRate,
                 category: .transport,
                 location: location,
                 comment: PreviewExpenseComment.subway.rawValue
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 2 + hour * 15),
-                amountInLocalCurrency: 2100,
-                rateToBaseCurrency: exchangeRate,
+                amountBase: 2100,
+                rateBaseToLocal: exchangeRate,
                 category: .activity,
                 location: location,
                 comment: PreviewExpenseComment.museum.rawValue
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 2 + hour * 20),
-                amountInLocalCurrency: 5400,
-                rateToBaseCurrency: exchangeRate,
+                amountBase: 5400,
+                rateBaseToLocal: exchangeRate,
                 category: .shopping,
                 location: location,
                 comment: PreviewExpenseComment.clothes.rawValue
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 3 + hour * 11),
-                amountInLocalCurrency: 1200,
-                rateToBaseCurrency: exchangeRate,
+                amountBase: 1200,
+                rateBaseToLocal: exchangeRate,
                 category: .medicine,
                 location: location
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 4 + hour * 14),
-                amountInLocalCurrency: 700,
-                rateToBaseCurrency: exchangeRate,
+                amountBase: 700,
+                rateBaseToLocal: exchangeRate,
                 category: .transport,
                 location: location
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 5 + hour * 19),
-                amountInLocalCurrency: 2600,
-                rateToBaseCurrency: exchangeRate,
+                amountBase: 2600,
+                rateBaseToLocal: exchangeRate,
                 category: .other,
                 location: location,
                 comment: PreviewExpenseComment.miscellaneous.rawValue
@@ -611,36 +611,36 @@ enum PreviewGenerator {
     }
 
     private static func makeKyotoExpenses(location: Location, startDate: Date) -> [Expense] {
-        let exchangeRate = location.rateToBaseCurrency
+        let exchangeRate = location.rateBaseToLocal
 
         return [
             Expense(
                 date: startDate.addingTimeInterval(hour * 9),
-                amountInLocalCurrency: 980,
-                rateToBaseCurrency: exchangeRate,
+                amountBase: 980,
+                rateBaseToLocal: exchangeRate,
                 category: .food,
                 location: location,
                 comment: PreviewExpenseComment.snacks.rawValue
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 1 + hour * 12),
-                amountInLocalCurrency: 720,
-                rateToBaseCurrency: exchangeRate,
+                amountBase: 720,
+                rateBaseToLocal: exchangeRate,
                 category: .transport,
                 location: location,
                 comment: PreviewExpenseComment.bus.rawValue
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 2 + hour * 16),
-                amountInLocalCurrency: 2100,
-                rateToBaseCurrency: exchangeRate,
+                amountBase: 2100,
+                rateBaseToLocal: exchangeRate,
                 category: .activity,
                 location: location
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 3 + hour * 19),
-                amountInLocalCurrency: 2600,
-                rateToBaseCurrency: exchangeRate,
+                amountBase: 2600,
+                rateBaseToLocal: exchangeRate,
                 category: .shopping,
                 location: location,
                 comment: PreviewExpenseComment.souvenirs.rawValue
@@ -649,51 +649,51 @@ enum PreviewGenerator {
     }
 
     private static func makeOsakaExpenses(location: Location, startDate: Date) -> [Expense] {
-        let exchangeRate = location.rateToBaseCurrency
+        let exchangeRate = location.rateBaseToLocal
 
         return [
             Expense(
                 date: startDate.addingTimeInterval(hour * 8),
-                amountInLocalCurrency: 920,
-                rateToBaseCurrency: exchangeRate,
+                amountBase: 920,
+                rateBaseToLocal: exchangeRate,
                 category: .food,
                 location: location
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 1 + hour * 10),
-                amountInLocalCurrency: 780,
-                rateToBaseCurrency: exchangeRate,
+                amountBase: 780,
+                rateBaseToLocal: exchangeRate,
                 category: .transport,
                 location: location,
                 comment: PreviewExpenseComment.train.rawValue
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 2 + hour * 13),
-                amountInLocalCurrency: 2400,
-                rateToBaseCurrency: exchangeRate,
+                amountBase: 2400,
+                rateBaseToLocal: exchangeRate,
                 category: .activity,
                 location: location,
                 comment: PreviewExpenseComment.museum.rawValue
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 2 + hour * 19),
-                amountInLocalCurrency: 5200,
-                rateToBaseCurrency: exchangeRate,
+                amountBase: 5200,
+                rateBaseToLocal: exchangeRate,
                 category: .shopping,
                 location: location,
                 comment: PreviewExpenseComment.clothes.rawValue
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 3 + hour * 9),
-                amountInLocalCurrency: 880,
-                rateToBaseCurrency: exchangeRate,
+                amountBase: 880,
+                rateBaseToLocal: exchangeRate,
                 category: .medicine,
                 location: location
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 3 + hour * 18),
-                amountInLocalCurrency: 1900,
-                rateToBaseCurrency: exchangeRate,
+                amountBase: 1900,
+                rateBaseToLocal: exchangeRate,
                 category: .other,
                 location: location
             )

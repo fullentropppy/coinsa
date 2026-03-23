@@ -1,5 +1,5 @@
 //
-//  PreviewDataDefinitions.swift
+//  PreviewDefinitions.swift
 //  Coinsa
 //
 //  Created by Daniil Gritsenko on 03.03.2026.
@@ -29,12 +29,8 @@ enum PreviewLocation: String {
         }
     }
 
-    var exchangeRateToBaseCurrency: Double {
-        PreviewCurrency.exchangeRate(from: currencyCode, to: Currency.defaultCurrencyCode)
-    }
-
-    var exchangeRateFromBaseCurrency: Double {
-        PreviewCurrency.exchangeRate(from: Currency.defaultCurrencyCode, to: currencyCode)
+    var exchangeRate: Double {
+        PreviewCurrency.exchangeRate(forCode: currencyCode)
     }
 }
 
@@ -56,19 +52,15 @@ enum PreviewExpenseComment: String {
 }
 
 private enum PreviewCurrency {
-    static let exchangeRates: [String: [String: Double]] = [
-        Currency.try.code: [Currency.usd.code: 0.022, Currency.rub.code: 1.8],
-        Currency.krw.code: [Currency.usd.code: 0.00075, Currency.rub.code: 0.065],
-        Currency.jpy.code: [Currency.usd.code: 0.007, Currency.rub.code: 0.6]
+    static let exchangeRates: [String: Double] = [
+        Currency.try.code: 1.8,
+        Currency.krw.code: 0.065,
+        Currency.jpy.code: 0.6
     ]
 
-    static func exchangeRate(from: String, to: String) -> Double {
-        if let directRate = exchangeRates[from]?[to] {
-            return directRate
-        }
-
-        if let reverseRate = exchangeRates[to]?[from] {
-            return round(1 / reverseRate * 1000) / 1000
+    static func exchangeRate(forCode: String) -> Double {
+        if let rate = exchangeRates[forCode] {
+            return rate
         }
 
         return 1.0

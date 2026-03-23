@@ -20,8 +20,8 @@ final class ExpenseViewModel {
     let baseCurrency: Currency
 
     var date: Date
-    var amountInLocalCurrency: Double
-    var rateToBaseCurrency: Double
+    var amountBase: Double
+    var rateBaseToLocal: Double
     var category: ExpenseCategory
     var comment: String
 
@@ -42,13 +42,14 @@ final class ExpenseViewModel {
             : "expense.navigationTitle.create"
         )
     }
-
-    var amountInBaseCurrency: Double {
-        amountInLocalCurrency * rateToBaseCurrency
+    
+    var rateBaseToLocalText: String {
+        String(format: String(localized: "expense.exchangeRate"), localCurrency.code)
     }
-
-    var convertedAmountText: String {
-        "\(amountInLocalCurrency) \(localCurrency.code) = \(amountInBaseCurrency) \(baseCurrency.code)"
+    
+    var amountLocal: Double {
+        guard rateBaseToLocal > 0 else { return 0 }
+        return (amountBase / rateBaseToLocal).rounded()
     }
     
     // MARK: - Initialization
@@ -64,19 +65,19 @@ final class ExpenseViewModel {
     init(location: Location, expense: Expense?, baseCurrency: Currency) {
         self.location = expense?.location ?? location
         self.expense = expense
-        self.localCurrency = Currency.from(self.location.currencyCode)
+        self.localCurrency = Currency.from(self.location.currencyCodeLocal)
         self.baseCurrency = baseCurrency
 
         if let expense {
             date = expense.date
-            amountInLocalCurrency = expense.amountInLocalCurrency
-            rateToBaseCurrency = expense.rateToBaseCurrency
+            amountBase = expense.amountBase
+            rateBaseToLocal = expense.rateBaseToLocal
             category = expense.category
             comment = expense.comment ?? ""
         } else {
             date = .now
-            amountInLocalCurrency = 0
-            rateToBaseCurrency = self.location.rateToBaseCurrency
+            amountBase = 0
+            rateBaseToLocal = self.location.rateBaseToLocal
             category = .food
             comment = ""
         }
@@ -92,16 +93,16 @@ final class ExpenseViewModel {
             repository.update(
                 expense,
                 date: date,
-                amountInLocalCurrency: amountInLocalCurrency,
-                rateToBaseCurrency: rateToBaseCurrency,
+                amountInLocalCurrency: amountBase,
+                rateToBaseCurrency: rateBaseToLocal,
                 category: category,
                 comment: comment
             )
         } else {
             repository.add(
                 date: date,
-                amountInLocalCurrency: amountInLocalCurrency,
-                rateToBaseCurrency: rateToBaseCurrency,
+                amountInLocalCurrency: amountBase,
+                rateToBaseCurrency: rateBaseToLocal,
                 category: category,
                 location: location,
                 comment: comment

@@ -16,6 +16,7 @@ struct ExpenseEditView: View {
 
     @State private var viewModel: ExpenseViewModel
     @State private var deletionHandler = DeletionHandler<Expense>()
+    @State private var inputCurrency: InputCurrency = .location
 
     // MARK: - Computed Properties
 
@@ -94,13 +95,24 @@ struct ExpenseEditView: View {
 
     private var amountSection: some View {
         Section {
+            LabeledContent("") {
+                Picker("", selection: $inputCurrency) {
+                    Text(viewModel.localCurrency.code)
+                        .tag(InputCurrency.location)
+                    Text(viewModel.baseCurrency.code)
+                        .tag(InputCurrency.base)
+                }
+                .pickerStyle(.segmented)
+            }
+            .listRowSeparator(.hidden)
+
             LabeledContent {
                 HStack {
-                    TextField("", value: $viewModel.amountInLocalCurrency, format: .number)
+                    TextField("", value: amountInputBinding, format: .number)
                         .keyboardType(.decimalPad)
                         .multilineTextAlignment(.trailing)
                     
-                    CurrencyCodeText(viewModel.localCurrency)
+                    CurrencyCodeText(amountInputCurrencyValue)
                         .frame(width: 40, alignment: .center)
                 }
             } label: {
@@ -109,7 +121,7 @@ struct ExpenseEditView: View {
             
             LabeledContent {
                 HStack {
-                    TextField("", value: $viewModel.rateToBaseCurrency, format: .number)
+                    TextField("", value: $viewModel.rateBaseToLocal, format: .number)
                         .keyboardType(.decimalPad)
                         .multilineTextAlignment(.trailing)
                     
@@ -117,12 +129,8 @@ struct ExpenseEditView: View {
                         .frame(width: 40, alignment: .center)
                 }
             } label: {
-                Text("expense.exchangeRate")
+                Text(viewModel.rateBaseToLocalText)
             }
-        } footer: {
-            Text(viewModel.convertedAmountText)
-                .multilineTextAlignment(.center)
-                .frame(maxWidth: .infinity, alignment: .center)
         }
     }
 
@@ -166,6 +174,33 @@ struct ExpenseEditView: View {
     }
 
     // MARK: - Actions
+
+    private var amountInputCurrencyValue: Currency {
+        switch inputCurrency {
+        case .base: viewModel.baseCurrency
+        case .location: viewModel.localCurrency
+        }
+    }
+
+    private var amountInputBinding: Binding<Double> {
+        Binding(
+            get: {
+                switch inputCurrency {
+                case .base: viewModel.amountBase
+                case .location: viewModel.amountLocal
+                }
+            },
+            set: { newValue in
+                switch inputCurrency {
+                case .base:
+                    viewModel.amountBase = newValue
+                case .location:
+                    guard viewModel.rateBaseToLocal > 0 else { return }
+                    viewModel.amountBase = newValue * viewModel.rateBaseToLocal
+                }
+            }
+        )
+    }
 
     private func requestDelete() {
         guard let expense = viewModel.expenseToEdit else { return }

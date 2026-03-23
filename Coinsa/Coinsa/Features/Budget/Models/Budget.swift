@@ -13,14 +13,21 @@ class Budget {
     // MARK: - Stored Properties
     
     var category: ExpenseCategory
-    var amountInBaseCurrency: Double
+    var amountBase: Double
+    var rateBaseToLocal: Double
     var location: Location
     
     // MARK: - Initialization
     
-    init(category: ExpenseCategory, amountInBaseCurrency: Double, location: Location) {
+    init(
+        category: ExpenseCategory,
+        amountBase: Double,
+        rateBaseToLocal: Double,
+        location: Location,
+    ) {
         self.category = category
-        self.amountInBaseCurrency = amountInBaseCurrency
+        self.amountBase = amountBase
+        self.rateBaseToLocal = rateBaseToLocal
         self.location = location
     }
 }

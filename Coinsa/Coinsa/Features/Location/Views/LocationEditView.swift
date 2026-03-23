@@ -16,7 +16,7 @@ struct LocationEditView: View {
 
     @State private var viewModel: LocationViewModel
     @State private var deletionHandler = DeletionHandler<Location>()
-    @State private var budgetInputCurrency: BudgetInputCurrency = .base
+    @State private var inputCurrency: InputCurrency = .base
 
     // MARK: - Computed Properties
 
@@ -84,7 +84,7 @@ struct LocationEditView: View {
 
     private var currencySection: some View {
         Section {
-            Picker("location.currency", selection: locationCurrencyBinding) {
+            Picker("location.currency", selection: localCurrencyBinding) {
                 ForEach(Currency.allCasesSortedByName) { option in
                     Text(option.localizedDisplayName)
                         .tag(option)
@@ -106,7 +106,7 @@ struct LocationEditView: View {
                 String(
                     format: String(localized: "location.exchangeRate.hint"),
                     viewModel.baseCurrency.code,
-                    viewModel.locationCurrency.code
+                    viewModel.localCurrency.code
                 )
             )
             .multilineTextAlignment(.center)
@@ -117,12 +117,12 @@ struct LocationEditView: View {
     private var budgetsSection: some View {
         Section("location.budget") {
             LabeledContent("") {
-                Picker("", selection: $budgetInputCurrency) {
+                Picker("", selection: $inputCurrency) {
                     Text(viewModel.baseCurrency.code)
-                        .tag(BudgetInputCurrency.base)
+                        .tag(InputCurrency.base)
                     
-                    Text(viewModel.locationCurrency.code)
-                        .tag(BudgetInputCurrency.location)
+                    Text(viewModel.localCurrency.code)
+                        .tag(InputCurrency.location)
                 }
                 .pickerStyle(.segmented)
             }
@@ -198,36 +198,36 @@ struct LocationEditView: View {
     // MARK: - Actions
 
     private var budgetInputCurrencyValue: Currency {
-        switch budgetInputCurrency {
+        switch inputCurrency {
         case .base: viewModel.baseCurrency
-        case .location: viewModel.locationCurrency
+        case .location: viewModel.localCurrency
         }
     }
 
     private var budgetTotalValue: Double {
-        switch budgetInputCurrency {
+        switch inputCurrency {
         case .base: viewModel.plannedTotalBase
         case .location: viewModel.plannedTotalLocal
         }
     }
     
-    private var locationCurrencyBinding: Binding<Currency> {
+    private var localCurrencyBinding: Binding<Currency> {
         Binding(
-            get: { viewModel.locationCurrency },
-            set: { viewModel.locationCurrency = $0 }
+            get: { viewModel.localCurrency },
+            set: { viewModel.localCurrency = $0 }
         )
     }
     
     private func budgetInputBinding(for category: ExpenseCategory) -> Binding<Double> {
         Binding(
             get: {
-                switch budgetInputCurrency {
+                switch inputCurrency {
                 case .base: viewModel.budgetAmounts[category] ?? 0
                 case .location: viewModel.plannedLocalAmount(for: category)
                 }
             },
             set: { newValue in
-                switch budgetInputCurrency {
+                switch inputCurrency {
                 case .base: viewModel.budgetAmounts[category] = newValue
                 case .location:
                     guard viewModel.rateToBaseCurrency > 0 else { return }
@@ -250,13 +250,6 @@ struct LocationEditView: View {
     private func cancelDelete() {
         deletionHandler.cancel()
     }
-}
-
-// MARK: - Supporting Types
-
-private enum BudgetInputCurrency {
-    case base
-    case location
 }
 
 // MARK: - Previews

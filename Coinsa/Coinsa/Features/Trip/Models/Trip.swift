@@ -43,13 +43,13 @@ class Trip: DateRangeProviding, EventStatusProviding {
 
     func calculatePlannedAmount(inBase: Bool) -> Double {
         locations.reduce(0) {
-            $0 + $1.calculatePlannedAmount(inBaseCurrency: inBase)
+            $0 + $1.calculatePlannedAmount(asBaseCurrency: inBase)
         }
     }
     
     func calculateActualAmount(inBase: Bool) -> Double {
         locations.reduce(0) {
-            $0 + $1.calculateActualAmount(inBaseCurrency: inBase)
+            $0 + $1.calculateActualAmount(asBaseCurrency: inBase)
         }
     }
 }

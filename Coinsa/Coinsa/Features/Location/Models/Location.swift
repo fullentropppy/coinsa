@@ -15,8 +15,8 @@ class Location: DateRangeProviding, EventStatusProviding {
     var name: String
     var startDate: Date
     var endDate: Date
-    var currencyCode: String
-    var rateToBaseCurrency: Double
+    var currencyCodeLocal: String
+    var rateBaseToLocal: Double
     var trip: Trip
     
     @Relationship(deleteRule: .cascade, inverse: \Budget.location)
@@ -31,8 +31,8 @@ class Location: DateRangeProviding, EventStatusProviding {
         name: String,
         startDate: Date,
         endDate: Date,
-        currencyCode: String,
-        rateToBaseCurrency: Double,
+        currencyCodeLocal: String,
+        rateBaseToLocal: Double,
         trip: Trip,
         budgets: [Budget] = [],
         expenses: [Expense] = []
@@ -40,8 +40,8 @@ class Location: DateRangeProviding, EventStatusProviding {
         self.name = name
         self.startDate = startDate
         self.endDate = endDate
-        self.currencyCode = currencyCode
-        self.rateToBaseCurrency = rateToBaseCurrency
+        self.currencyCodeLocal = currencyCodeLocal
+        self.rateBaseToLocal = rateBaseToLocal
         self.trip = trip
         self.budgets = budgets
         self.expenses = expenses
@@ -49,17 +49,17 @@ class Location: DateRangeProviding, EventStatusProviding {
     
     // MARK: - Public Methods
 
-    func calculatePlannedAmount(inBaseCurrency: Bool) -> Double {
+    func calculatePlannedAmount(asBaseCurrency: Bool = true) -> Double {
         budgets.reduce(0) {
-            let exchangeRate = inBaseCurrency ? 1 : rateToBaseCurrency
-            return $0 + $1.amountInBaseCurrency * exchangeRate
+            let exchangeRate = asBaseCurrency ? 1 : rateBaseToLocal
+            return $0 + $1.amountBase * exchangeRate
         }
     }
 
-    func calculateActualAmount(inBaseCurrency: Bool) -> Double {
+    func calculateActualAmount(asBaseCurrency: Bool = true) -> Double {
         expenses.reduce(0) {
-            let exchangeRate = inBaseCurrency ? 1 : $1.rateToBaseCurrency
-            return $0 + $1.amountInLocalCurrency * exchangeRate
+            let exchangeRate = asBaseCurrency ? 1 : $1.rateBaseToLocal
+            return $0 + $1.amountBase * exchangeRate
         }
     }
 }

@@ -17,10 +17,10 @@ struct LocationDetailViewModel {
     // MARK: - Computed Properties
 
     var headerData: LocationDetailHeaderData {
-        let plannedAmountBase = location.calculatePlannedAmount(inBaseCurrency: true)
-        let plannedAmountLocal = location.calculatePlannedAmount(inBaseCurrency: false)
-        let actualAmountBase = location.calculateActualAmount(inBaseCurrency: true)
-        let actualAmountLocal = location.calculateActualAmount(inBaseCurrency: false)
+        let plannedAmountBase = location.calculatePlannedAmount(asBaseCurrency: true)
+        let plannedAmountLocal = location.calculatePlannedAmount(asBaseCurrency: false)
+        let actualAmountBase = location.calculateActualAmount(asBaseCurrency: true)
+        let actualAmountLocal = location.calculateActualAmount(asBaseCurrency: false)
 
         return LocationDetailHeaderData(
             status: location.status,
@@ -43,7 +43,7 @@ struct LocationDetailViewModel {
     init(location: Location, baseCurrency: Currency) {
         self.location = location
         self.baseCurrency = baseCurrency
-        self.localCurrency = Currency.from(location.currencyCode)
+        self.localCurrency = Currency.from(location.currencyCodeLocal)
     }
 }
 
