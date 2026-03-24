@@ -14,6 +14,7 @@ final class ExpenseViewModel {
     // MARK: - Stored Properties
 
     private let expense: Expense?
+    private let initialSnapshot: Snapshot
 
     let location: Location
     let localCurrency: Currency
@@ -51,36 +52,64 @@ final class ExpenseViewModel {
         guard rateBaseToLocal > 0 else { return 0 }
         return (amountBase / rateBaseToLocal).rounded()
     }
+
+    var canSave: Bool {
+        amountBase > 0 && rateBaseToLocal > 0
+    }
+
+    var hasChanges: Bool {
+        Snapshot(viewModel: self) != initialSnapshot
+    }
     
     // MARK: - Initialization
 
     convenience init(location: Location, baseCurrency: Currency) {
-        self.init(location: location, expense: nil, baseCurrency: baseCurrency)
+        self.init(expense: nil, location: location, baseCurrency: baseCurrency)
     }
 
     convenience init(expense: Expense, baseCurrency: Currency) {
-        self.init(location: expense.location, expense: expense, baseCurrency: baseCurrency)
+        self.init(expense: expense, location: expense.location, baseCurrency: baseCurrency)
     }
 
-    init(location: Location, expense: Expense?, baseCurrency: Currency) {
+    private init(expense: Expense?, location: Location, baseCurrency: Currency) {
         self.location = expense?.location ?? location
         self.expense = expense
         self.localCurrency = Currency.from(self.location.currencyCodeLocal)
         self.baseCurrency = baseCurrency
 
+        let resolvedDate: Date
+        let resolvedAmountBase: Double
+        let resolvedRateBaseToLocal: Double
+        let resolvedCategory: ExpenseCategory
+        let resolvedComment: String
+
         if let expense {
-            date = expense.date
-            amountBase = expense.amountBase
-            rateBaseToLocal = expense.rateBaseToLocal
-            category = expense.category
-            comment = expense.comment ?? ""
+            resolvedDate = expense.date
+            resolvedAmountBase = expense.amountBase
+            resolvedRateBaseToLocal = expense.rateBaseToLocal
+            resolvedCategory = expense.category
+            resolvedComment = expense.comment ?? ""
         } else {
-            date = .now
-            amountBase = 0
-            rateBaseToLocal = self.location.rateBaseToLocal
-            category = .food
-            comment = ""
+            resolvedDate = .now
+            resolvedAmountBase = 0
+            resolvedRateBaseToLocal = self.location.rateBaseToLocal
+            resolvedCategory = .food
+            resolvedComment = ""
         }
+
+        date = resolvedDate
+        amountBase = resolvedAmountBase
+        rateBaseToLocal = resolvedRateBaseToLocal
+        category = resolvedCategory
+        comment = resolvedComment
+
+        initialSnapshot = Snapshot(
+            date: resolvedDate,
+            amountBase: resolvedAmountBase,
+            rateBaseToLocal: resolvedRateBaseToLocal,
+            category: resolvedCategory,
+            comment: resolvedComment
+        )
     }
 
     // MARK: - Public Methods
@@ -109,4 +138,63 @@ final class ExpenseViewModel {
             )
         }
     }
+
+    func currency(for inputCurrency: InputCurrency) -> Currency {
+        switch inputCurrency {
+        case .base:
+            baseCurrency
+        case .location:
+            localCurrency
+        }
+    }
+
+    func amount(for inputCurrency: InputCurrency) -> Double {
+        switch inputCurrency {
+        case .base:
+            amountBase
+        case .location:
+            amountLocal
+        }
+    }
+
+    func updateAmount(_ newValue: Double, for inputCurrency: InputCurrency) {
+        switch inputCurrency {
+        case .base:
+            amountBase = newValue
+        case .location:
+            guard rateBaseToLocal > 0 else { return }
+            amountBase = newValue * rateBaseToLocal
+        }
+    }
 }
+
+// MARK: - Snapshot
+
+private extension ExpenseViewModel {
+    struct Snapshot: Equatable {
+        let date: Date
+        let amountBase: Double
+        let rateBaseToLocal: Double
+        let category: ExpenseCategory
+        let comment: String
+
+        init(date: Date, amountBase: Double, rateBaseToLocal: Double, category: ExpenseCategory, comment: String) {
+            self.date = date
+            self.amountBase = amountBase.rounded()
+            self.rateBaseToLocal = rateBaseToLocal.rounded(to: 6)
+            self.category = category
+            self.comment = comment.trimmingCharacters(in: .whitespacesAndNewlines)
+        }
+
+        init(viewModel: ExpenseViewModel) {
+            self.init(
+                date: viewModel.date,
+                amountBase: viewModel.amountBase,
+                rateBaseToLocal: viewModel.rateBaseToLocal,
+                category: viewModel.category,
+                comment: viewModel.comment
+            )
+        }
+    }
+}
+

@@ -15,8 +15,11 @@ struct ExpenseEditView: View {
     @Environment(\.dismiss) private var dismiss
 
     @State private var viewModel: ExpenseViewModel
-    @State private var deletionHandler = DeletionHandler<Expense>()
     @State private var inputCurrency: InputCurrency = .location
+    @State private var deletionHandler = DeletionHandler<Expense>()
+    @State private var isShowingDiscardAlert = false
+
+    private let onDelete: (() -> Void)?
 
     // MARK: - Computed Properties
 
@@ -27,21 +30,41 @@ struct ExpenseEditView: View {
     // MARK: - Initialization
 
     init(location: Location, baseCurrency: Currency) {
-        _viewModel = State(
-            initialValue: ExpenseViewModel(
-                location: location,
-                baseCurrency: baseCurrency
-            )
+        self.init(
+            expense: nil,
+            location: location,
+            baseCurrency: baseCurrency,
+            onDelete: nil
         )
     }
 
-    init(expense: Expense, baseCurrency: Currency) {
-        _viewModel = State(
-            initialValue: ExpenseViewModel(
-                expense: expense,
-                baseCurrency: baseCurrency
-            )
+    init(
+        expense: Expense,
+        baseCurrency: Currency,
+        onDelete: (() -> Void)? = nil
+    ) {
+        self.init(
+            expense: expense,
+            location: expense.location,
+            baseCurrency: baseCurrency,
+            onDelete: onDelete
         )
+    }
+
+    private init(
+        expense: Expense?,
+        location: Location,
+        baseCurrency: Currency,
+        onDelete: (() -> Void)? = nil
+    ) {
+        let viewModel: ExpenseViewModel
+        if let expense {
+            viewModel = ExpenseViewModel(expense: expense, baseCurrency: baseCurrency)
+        } else {
+            viewModel = ExpenseViewModel(location: location, baseCurrency: baseCurrency)
+        }
+        _viewModel = State(initialValue: viewModel)
+        self.onDelete = onDelete
     }
     
     // MARK: - Body
@@ -58,6 +81,7 @@ struct ExpenseEditView: View {
             .toolbar {
                 toolbarContent
             }
+            .interactiveDismissDisabled(hasChanges)
             .deleteConfirmationAlert(
                 isPresented: $deletionHandler.isShowingDeleteConfirmation,
                 message: "expense.delete.message",
@@ -69,6 +93,12 @@ struct ExpenseEditView: View {
                     cancelDelete()
                 }
             )
+            .discardConfirmationAlert(
+                isPresented: $isShowingDiscardAlert,
+                onConfirm: {
+                    dismiss()
+                }
+            )
         }
     }
 
@@ -76,7 +106,11 @@ struct ExpenseEditView: View {
     
     private var mainDataSection: some View {
         Section {
-            DatePicker("expense.date", selection: $viewModel.date)
+            DatePicker(
+                "expense.date",
+                selection: $viewModel.date,
+                in: viewModel.location.range
+            )
             
             HStack {
                 Picker("expense.category", selection: $viewModel.category) {
@@ -95,22 +129,18 @@ struct ExpenseEditView: View {
 
     private var amountSection: some View {
         Section {
-            LabeledContent("") {
-                Picker("", selection: $inputCurrency) {
-                    Text(viewModel.localCurrency.code)
-                        .tag(InputCurrency.location)
-                    Text(viewModel.baseCurrency.code)
-                        .tag(InputCurrency.base)
-                }
-                .pickerStyle(.segmented)
+            Picker("", selection: $inputCurrency) {
+                Text(viewModel.localCurrency.code)
+                    .tag(InputCurrency.location)
+                Text(viewModel.baseCurrency.code)
+                    .tag(InputCurrency.base)
             }
+            .pickerStyle(.segmented)
             .listRowSeparator(.hidden)
 
             LabeledContent {
                 HStack {
-                    TextField("", value: amountInputBinding, format: .number)
-                        .keyboardType(.decimalPad)
-                        .multilineTextAlignment(.trailing)
+                    AmountTextField(value: amountInputBinding)
                     
                     CurrencyCodeText(amountInputCurrencyValue)
                         .frame(width: 40, alignment: .center)
@@ -121,9 +151,7 @@ struct ExpenseEditView: View {
             
             LabeledContent {
                 HStack {
-                    TextField("", value: $viewModel.rateBaseToLocal, format: .number)
-                        .keyboardType(.decimalPad)
-                        .multilineTextAlignment(.trailing)
+                    AmountTextField(value: $viewModel.rateBaseToLocal)
                     
                     CurrencyCodeText(viewModel.baseCurrency)
                         .frame(width: 40, alignment: .center)
@@ -161,7 +189,7 @@ struct ExpenseEditView: View {
         
         ToolbarItemGroup(placement: .topBarLeading) {
             ButtonView.close {
-                dismiss()
+                handleClose()
             }
         }
 
@@ -170,36 +198,41 @@ struct ExpenseEditView: View {
                 viewModel.save(using: repository)
                 dismiss()
             }
+            .disabled(!canSave)
         }
     }
 
     // MARK: - Actions
 
     private var amountInputCurrencyValue: Currency {
-        switch inputCurrency {
-        case .base: viewModel.baseCurrency
-        case .location: viewModel.localCurrency
-        }
+        viewModel.currency(for: inputCurrency)
     }
 
     private var amountInputBinding: Binding<Double> {
         Binding(
             get: {
-                switch inputCurrency {
-                case .base: viewModel.amountBase
-                case .location: viewModel.amountLocal
-                }
+                viewModel.amount(for: inputCurrency)
             },
             set: { newValue in
-                switch inputCurrency {
-                case .base:
-                    viewModel.amountBase = newValue
-                case .location:
-                    guard viewModel.rateBaseToLocal > 0 else { return }
-                    viewModel.amountBase = newValue * viewModel.rateBaseToLocal
-                }
+                viewModel.updateAmount(newValue, for: inputCurrency)
             }
         )
+    }
+
+    private var canSave: Bool {
+        viewModel.canSave
+    }
+
+    private var hasChanges: Bool {
+        viewModel.hasChanges
+    }
+
+    private func handleClose() {
+        if hasChanges {
+            isShowingDiscardAlert = true
+        } else {
+            dismiss()
+        }
     }
 
     private func requestDelete() {
@@ -209,6 +242,7 @@ struct ExpenseEditView: View {
 
     private func confirmDelete() {
         deletionHandler.confirm { repository.delete($0) }
+        onDelete?()
     }
 
     private func cancelDelete() {

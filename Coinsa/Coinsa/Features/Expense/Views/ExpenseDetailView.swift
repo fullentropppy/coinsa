@@ -12,6 +12,7 @@ struct ExpenseDetailView: View {
     // MARK: - Stored Properties
 
     @Environment(AppSettingsStore.self) private var settingsStore
+    @Environment(\.dismiss) private var dismiss
     
     @State private var isShowingExpenseEdit = false
 
@@ -44,7 +45,11 @@ struct ExpenseDetailView: View {
         .sheet(isPresented: $isShowingExpenseEdit) {
             ExpenseEditView(
                 expense: expense,
-                baseCurrency: baseCurrency
+                baseCurrency: baseCurrency,
+                onDelete: {
+                    isShowingExpenseEdit = false
+                    dismiss()
+                }
             )
         }
     }

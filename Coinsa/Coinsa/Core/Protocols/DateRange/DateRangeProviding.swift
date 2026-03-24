@@ -21,4 +21,8 @@ extension DateRangeProviding {
         let difference = (endDate.timeIntervalSince(startDate) / 86400).rounded()
         return difference == 0 ? 1 : Int(difference)
     }
+    
+    var range: ClosedRange<Date> {
+        startDate...endDate
+    }
 }
