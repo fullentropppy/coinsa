@@ -5,15 +5,18 @@
 //  Created by Daniil Gritsenko on 24.03.2026.
 //
 
-// AmountTextField.swift
 import SwiftUI
 
 struct AmountTextField: View {
+    // MARK: - Stored Properties
+    
     @Binding var value: Double
     @State private var text: String = ""
     @FocusState private var isFocused: Bool
     
-    private static let parsingFormatter: NumberFormatter = {
+    // MARK: - Computed Properties
+    
+    private let parsingFormatter: NumberFormatter = {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
         formatter.minimumFractionDigits = 0
@@ -22,7 +25,7 @@ struct AmountTextField: View {
         return formatter
     }()
 
-    private static let displayFormatter: NumberFormatter = {
+    private let displayFormatter: NumberFormatter = {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
         formatter.minimumFractionDigits = 2
@@ -32,15 +35,27 @@ struct AmountTextField: View {
     }()
 
     private var placeholder: String {
-        let separator = Self.displayFormatter.decimalSeparator ?? ","
+        let separator = displayFormatter.decimalSeparator ?? ","
         return "0\(separator)00"
     }
+    
+    // MARK: - Body
     
     var body: some View {
         TextField(placeholder, text: $text)
             .focused($isFocused)
             .keyboardType(.decimalPad)
             .multilineTextAlignment(.trailing)
+            .toolbar {
+                ToolbarItemGroup(placement: .keyboard) {
+                    Spacer()
+                    Button {
+                        isFocused = false
+                    } label: {
+                        Image(systemName: "checkmark")
+                    }
+                }
+            }
             .onAppear {
                 syncFromValue()
             }
@@ -58,11 +73,13 @@ struct AmountTextField: View {
             }
     }
 
+    // MARK: - Actions
+    
     private func syncFromValue() {
         if value == 0 {
             text = ""
         } else {
-            text = Self.displayFormatter.string(from: NSNumber(value: value)) ?? ""
+            text = displayFormatter.string(from: NSNumber(value: value)) ?? ""
         }
     }
 
@@ -74,41 +91,38 @@ struct AmountTextField: View {
             return
         }
 
-        let groupingSeparator = Self.parsingFormatter.groupingSeparator ?? ""
+        let groupingSeparator = parsingFormatter.groupingSeparator ?? ""
         let cleaned = trimmed.replacingOccurrences(of: groupingSeparator, with: "")
-        let number = Self.parsingFormatter.number(from: cleaned) ?? 0
+        let number = parsingFormatter.number(from: cleaned) ?? 0
+        
         value = number.doubleValue
-        text = Self.displayFormatter.string(from: number) ?? cleaned
+        text = displayFormatter.string(from: number) ?? cleaned
     }
 }
 
 // MARK: - Previews
 
-#Preview("Light - RU") {
-    Form {
-        Section {
-            LabeledContent {
-                AmountTextField(value: .constant(1234))
-            } label: {
-                Text("expense.amount")
+private extension AmountTextField {
+    static func preview(
+        locale: Locale,
+        colorScheme: ColorScheme
+    ) -> some View {
+        Form {
+            LabeledContent("") {
+                AmountTextField(value: .constant(1234.56))
             }
         }
+        .environment(\.locale, locale)
+        .preferredColorScheme(colorScheme)
     }
-    .environment(\.locale, PreviewLocale.ru.locale)
-    .preferredColorScheme(.light)
+}
+
+#Preview("Light - RU") {
+    AmountTextField.preview(locale: PreviewLocale.ru.locale, colorScheme: .light)
 }
 
 #Preview("Dark - EN") {
-    Form {
-        Section {
-            LabeledContent {
-                AmountTextField(value: .constant(9876.5))
-            } label: {
-                Text("expense.amount")
-            }
-        }
-    }
-    .environment(\.locale, PreviewLocale.en.locale)
-    .preferredColorScheme(.dark)
+    AmountTextField.preview(locale: PreviewLocale.en.locale, colorScheme: .dark)
 }
+
 

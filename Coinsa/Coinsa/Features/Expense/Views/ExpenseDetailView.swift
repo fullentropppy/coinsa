@@ -33,7 +33,6 @@ struct ExpenseDetailView: View {
     var body: some View {
         List {
             mainSection
-            
             if let comment = expense.comment {
                 commentSection(comment: comment)
             }
@@ -64,7 +63,7 @@ struct ExpenseDetailView: View {
                 Spacer()
 
                 AmountText(
-                    expense.amountBase,
+                    expense.amountLocal,
                     currency: localCurrency
                 )
                 .scaleEffect(2.2)

@@ -13,9 +13,9 @@ import Observation
 final class ExpenseViewModel {
     // MARK: - Stored Properties
 
-    private let expense: Expense?
     private let initialSnapshot: Snapshot
 
+    let expense: Expense?
     let location: Location
     let localCurrency: Currency
     let baseCurrency: Currency
@@ -30,10 +30,6 @@ final class ExpenseViewModel {
 
     var isEditing: Bool {
         expense != nil
-    }
-
-    var expenseToEdit: Expense? {
-        expense
     }
 
     var navigationTitle: String {
@@ -53,12 +49,12 @@ final class ExpenseViewModel {
         return (amountBase / rateBaseToLocal).rounded()
     }
 
-    var canSave: Bool {
-        amountBase > 0 && rateBaseToLocal > 0
-    }
-
     var hasChanges: Bool {
         Snapshot(viewModel: self) != initialSnapshot
+    }
+    
+    var canSave: Bool {
+        amountBase > 0 && rateBaseToLocal > 0
     }
     
     // MARK: - Initialization
@@ -113,7 +109,35 @@ final class ExpenseViewModel {
     }
 
     // MARK: - Public Methods
-
+    
+    func currency(for inputCurrency: InputCurrency) -> Currency {
+        switch inputCurrency {
+        case .base:
+            baseCurrency
+        case .location:
+            localCurrency
+        }
+    }
+    
+    func amount(for inputCurrency: InputCurrency) -> Double {
+        switch inputCurrency {
+        case .base:
+            amountBase
+        case .location:
+            amountLocal
+        }
+    }
+    
+    func updateAmount(_ newValue: Double, for inputCurrency: InputCurrency) {
+        switch inputCurrency {
+        case .base:
+            amountBase = newValue
+        case .location:
+            guard rateBaseToLocal > 0 else { return }
+            amountBase = newValue * rateBaseToLocal
+        }
+    }
+    
     func save(using repository: ExpenseRepository) {
         let normalizedComment = comment.trimmingCharacters(in: .whitespacesAndNewlines)
         let comment = normalizedComment.isEmpty ? nil : normalizedComment
@@ -138,47 +162,29 @@ final class ExpenseViewModel {
             )
         }
     }
-
-    func currency(for inputCurrency: InputCurrency) -> Currency {
-        switch inputCurrency {
-        case .base:
-            baseCurrency
-        case .location:
-            localCurrency
-        }
-    }
-
-    func amount(for inputCurrency: InputCurrency) -> Double {
-        switch inputCurrency {
-        case .base:
-            amountBase
-        case .location:
-            amountLocal
-        }
-    }
-
-    func updateAmount(_ newValue: Double, for inputCurrency: InputCurrency) {
-        switch inputCurrency {
-        case .base:
-            amountBase = newValue
-        case .location:
-            guard rateBaseToLocal > 0 else { return }
-            amountBase = newValue * rateBaseToLocal
-        }
-    }
 }
 
 // MARK: - Snapshot
 
 private extension ExpenseViewModel {
     struct Snapshot: Equatable {
+        // MARK: - Stored Properties
+        
         let date: Date
         let amountBase: Double
         let rateBaseToLocal: Double
         let category: ExpenseCategory
         let comment: String
 
-        init(date: Date, amountBase: Double, rateBaseToLocal: Double, category: ExpenseCategory, comment: String) {
+        // MARK: - Initialization
+        
+        init(
+            date: Date,
+            amountBase: Double,
+            rateBaseToLocal: Double,
+            category: ExpenseCategory,
+            comment: String
+        ) {
             self.date = date
             self.amountBase = amountBase.rounded()
             self.rateBaseToLocal = rateBaseToLocal.rounded(to: 6)

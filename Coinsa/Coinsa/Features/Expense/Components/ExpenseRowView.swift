@@ -21,17 +21,19 @@ struct ExpenseRowView: View {
             HStack {
                 VStack(alignment: .leading, spacing: 10) {
                     ExpenseCategoryLabel(category: expense.category)
-                    DateLabel(single: expense.date)
+                    DateLabel(single: expense.date, style: .secondary)
                 }
+                
                 Spacer()
+                
                 VStack(alignment: .trailing, spacing: 10) {
                     AmountText(
-                        expense.amountBase,
-                        currency: baseCurrency
+                        expense.amountLocal,
+                        currency: Currency.from(expense.location.currencyCodeLocal)
                     )
                     AmountText(
                         expense.amountBase,
-                        currency: Currency.from(expense.location.currencyCodeLocal),
+                        currency: baseCurrency,
                         style: .secondary
                     )
                 }
@@ -39,8 +41,6 @@ struct ExpenseRowView: View {
         }
     }
 }
-
-// MARK: - Previews
 
 // MARK: - Previews
 

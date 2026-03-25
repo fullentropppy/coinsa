@@ -27,6 +27,21 @@ struct ExpenseEditView: View {
         ExpenseRepository(context: context)
     }
     
+    private var amountInputCurrencyValue: Currency {
+        viewModel.currency(for: inputCurrency)
+    }
+
+    private var amountInputBinding: Binding<Double> {
+        Binding(
+            get: {
+                viewModel.amount(for: inputCurrency)
+            },
+            set: { newValue in
+                viewModel.updateAmount(newValue, for: inputCurrency)
+            }
+        )
+    }
+    
     // MARK: - Initialization
 
     init(location: Location, baseCurrency: Currency) {
@@ -81,7 +96,14 @@ struct ExpenseEditView: View {
             .toolbar {
                 toolbarContent
             }
-            .interactiveDismissDisabled(hasChanges)
+            .scrollDismissesKeyboard(.interactively)
+            .interactiveDismissDisabled(viewModel.hasChanges)
+            .discardConfirmationAlert(
+                isPresented: $isShowingDiscardAlert,
+                onConfirm: {
+                    dismiss()
+                }
+            )
             .deleteConfirmationAlert(
                 isPresented: $deletionHandler.isShowingDeleteConfirmation,
                 message: "expense.delete.message",
@@ -91,12 +113,6 @@ struct ExpenseEditView: View {
                 },
                 onCancel: {
                     cancelDelete()
-                }
-            )
-            .discardConfirmationAlert(
-                isPresented: $isShowingDiscardAlert,
-                onConfirm: {
-                    dismiss()
                 }
             )
         }
@@ -115,7 +131,8 @@ struct ExpenseEditView: View {
             HStack {
                 Picker("expense.category", selection: $viewModel.category) {
                     ForEach(ExpenseCategory.allCases, id: \.id) { category in
-                        Text(category.localizedKey).tag(category)
+                        Text(category.localizedKey)
+                            .tag(category)
                     }
                 }
                 .pickerStyle(.menu)
@@ -138,33 +155,27 @@ struct ExpenseEditView: View {
             .pickerStyle(.segmented)
             .listRowSeparator(.hidden)
 
-            LabeledContent {
+            LabeledContent("expense.amount") {
                 HStack {
                     AmountTextField(value: amountInputBinding)
-                    
                     CurrencyCodeText(amountInputCurrencyValue)
                         .frame(width: 40, alignment: .center)
                 }
-            } label: {
-                Text("expense.amount")
             }
             
-            LabeledContent {
+            LabeledContent(viewModel.rateBaseToLocalText) {
                 HStack {
                     AmountTextField(value: $viewModel.rateBaseToLocal)
-                    
                     CurrencyCodeText(viewModel.baseCurrency)
                         .frame(width: 40, alignment: .center)
                 }
-            } label: {
-                Text(viewModel.rateBaseToLocalText)
             }
         }
     }
 
     private var commentSection: some View {
         Section {
-            TextField("expense.comment", text: $viewModel.comment, axis: .vertical)
+            TextField("expense.comment", text: $viewModel.comment)
         }
     }
 
@@ -198,37 +209,14 @@ struct ExpenseEditView: View {
                 viewModel.save(using: repository)
                 dismiss()
             }
-            .disabled(!canSave)
+            .disabled(!viewModel.canSave)
         }
     }
 
     // MARK: - Actions
-
-    private var amountInputCurrencyValue: Currency {
-        viewModel.currency(for: inputCurrency)
-    }
-
-    private var amountInputBinding: Binding<Double> {
-        Binding(
-            get: {
-                viewModel.amount(for: inputCurrency)
-            },
-            set: { newValue in
-                viewModel.updateAmount(newValue, for: inputCurrency)
-            }
-        )
-    }
-
-    private var canSave: Bool {
-        viewModel.canSave
-    }
-
-    private var hasChanges: Bool {
-        viewModel.hasChanges
-    }
-
+    
     private func handleClose() {
-        if hasChanges {
+        if viewModel.hasChanges {
             isShowingDiscardAlert = true
         } else {
             dismiss()
@@ -236,7 +224,7 @@ struct ExpenseEditView: View {
     }
 
     private func requestDelete() {
-        guard let expense = viewModel.expenseToEdit else { return }
+        guard let expense = viewModel.expense else { return }
         deletionHandler.request(for: [expense])
     }
 

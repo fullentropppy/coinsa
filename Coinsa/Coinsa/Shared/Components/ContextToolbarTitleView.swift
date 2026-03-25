@@ -18,7 +18,7 @@ struct ContextToolbarTitleView: View {
     }
     
     private var minYPadding: Double {
-        subtitle == nil ? 6 : 0
+        subtitle == nil ? 8 : 0
     }
     
     // MARK: - Initialization
