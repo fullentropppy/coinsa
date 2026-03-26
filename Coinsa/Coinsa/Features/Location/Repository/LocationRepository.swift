@@ -83,7 +83,6 @@ struct LocationRepository {
                     let budget = Budget(
                         category: category,
                         amountBase: amount,
-                        rateBaseToLocal: 1,
                         location: location
                     )
                     location.budgets.append(budget)

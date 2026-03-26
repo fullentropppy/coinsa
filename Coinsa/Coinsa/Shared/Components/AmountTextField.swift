@@ -46,16 +46,6 @@ struct AmountTextField: View {
             .focused($isFocused)
             .keyboardType(.decimalPad)
             .multilineTextAlignment(.trailing)
-            .toolbar {
-                ToolbarItemGroup(placement: .keyboard) {
-                    Spacer()
-                    Button {
-                        isFocused = false
-                    } label: {
-                        Image(systemName: "checkmark")
-                    }
-                }
-            }
             .onAppear {
                 syncFromValue()
             }

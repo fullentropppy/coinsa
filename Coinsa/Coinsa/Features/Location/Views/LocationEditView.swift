@@ -14,9 +14,10 @@ struct LocationEditView: View {
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
 
-    @State private var viewModel: LocationViewModel
+    @State private var viewModel: LocationEditViewModel
     @State private var deletionHandler = DeletionHandler<Location>()
     @State private var inputCurrency: InputCurrency = .base
+    @State private var isShowingDiscardAlert = false
 
     // MARK: - Computed Properties
 
@@ -24,11 +25,61 @@ struct LocationEditView: View {
         LocationRepository(context: context)
     }
 
+    private var localCurrencyBinding: Binding<Currency> {
+        Binding(get: {
+                viewModel.localCurrency
+            },
+            set: {
+                viewModel.localCurrency = $0
+            }
+        )
+    }
+    
+    private var budgetInputCurrencyValue: Currency {
+        switch inputCurrency {
+        case .base:
+            viewModel.baseCurrency
+        case .location:
+            viewModel.localCurrency
+        }
+    }
+
+    private func budgetInputBinding(for category: ExpenseCategory) -> Binding<Double> {
+        Binding(
+            get: {
+                switch inputCurrency {
+                case .base:
+                    viewModel.budgetAmounts[category] ?? 0
+                case .location:
+                    viewModel.plannedLocalAmount(for: category)
+                }
+            },
+            set: { newValue in
+                switch inputCurrency {
+                case .base:
+                    viewModel.budgetAmounts[category] = newValue
+                case .location:
+                    guard viewModel.rateToBaseCurrency > 0 else { return }
+                    viewModel.budgetAmounts[category] = newValue * viewModel.rateToBaseCurrency
+                }
+            }
+        )
+    }
+    
+    private var budgetTotalValue: Double {
+        switch inputCurrency {
+        case .base:
+            viewModel.plannedTotalBase
+        case .location:
+            viewModel.plannedTotalLocal
+        }
+    }
+    
     // MARK: - Initialization
 
     init(trip: Trip, baseCurrency: Currency) {
         _viewModel = State(
-            initialValue: LocationViewModel(
+            initialValue: LocationEditViewModel(
                 trip: trip,
                 baseCurrency: baseCurrency
             )
@@ -37,7 +88,7 @@ struct LocationEditView: View {
     
     init(location: Location, baseCurrency: Currency) {
         _viewModel = State(
-            initialValue: LocationViewModel(
+            initialValue: LocationEditViewModel(
                 location: location,
                 baseCurrency: baseCurrency
             )
@@ -58,6 +109,14 @@ struct LocationEditView: View {
             .toolbar {
                 toolbarContent
             }
+            .scrollDismissesKeyboard(.interactively)
+            .interactiveDismissDisabled(viewModel.hasChanges)
+            .discardConfirmationAlert(
+                isPresented: $isShowingDiscardAlert,
+                onConfirm: {
+                    dismiss()
+                }
+            )
             .deleteConfirmationAlert(
                 isPresented: $deletionHandler.isShowingDeleteConfirmation,
                 message: "location.delete.message",
@@ -77,65 +136,59 @@ struct LocationEditView: View {
     private var mainDataSection: some View {
         Section {
             TextField("location.name", text: $viewModel.name)
-            DatePicker("location.startDate", selection: $viewModel.startDate, displayedComponents: .date)
-            DatePicker("location.endDate", selection: $viewModel.endDate, displayedComponents: .date)
+            DatePicker(
+                "trip.startDate",
+                selection: $viewModel.startDate,
+                in: viewModel.trip.range,
+                displayedComponents: .date
+            )
+            DatePicker(
+                "trip.endDate",
+                selection: $viewModel.endDate,
+                in: viewModel.startDate...viewModel.trip.endDate,
+                displayedComponents: .date
+            )
         }
     }
 
     private var currencySection: some View {
         Section {
             Picker("location.currency", selection: localCurrencyBinding) {
-                ForEach(Currency.allCasesSortedByName) { option in
-                    Text(option.localizedDisplayName)
-                        .tag(option)
+                ForEach(Currency.allCasesSortedByName) { currency in
+                    Text(currency.localizedDisplayName)
+                        .tag(currency)
                 }
             }
-            .pickerStyle(.menu)
+            .pickerStyle(.navigationLink)
 
             LabeledContent("location.exchangeRate") {
-                TextField(
-                    "",
-                    value: $viewModel.rateToBaseCurrency,
-                    format: .number
-                )
-                .keyboardType(.decimalPad)
-                .multilineTextAlignment(.trailing)
+                HStack {
+                    AmountTextField(value: $viewModel.rateToBaseCurrency)
+                    CurrencyCodeText(viewModel.baseCurrency)
+                        .frame(width: 40, alignment: .center)
+                }
             }
-        } footer: {
-            Text(
-                String(
-                    format: String(localized: "location.exchangeRate.hint"),
-                    viewModel.baseCurrency.code,
-                    viewModel.localCurrency.code
-                )
-            )
-            .multilineTextAlignment(.center)
-            .frame(maxWidth: .infinity, alignment: .center)
         }
     }
 
     private var budgetsSection: some View {
         Section("location.budget") {
-            LabeledContent("") {
-                Picker("", selection: $inputCurrency) {
-                    Text(viewModel.baseCurrency.code)
-                        .tag(InputCurrency.base)
-                    
-                    Text(viewModel.localCurrency.code)
-                        .tag(InputCurrency.location)
-                }
-                .pickerStyle(.segmented)
+            Picker("", selection: $inputCurrency) {
+                Text(viewModel.baseCurrency.code)
+                    .tag(InputCurrency.base)
+                Text(viewModel.localCurrency.code)
+                    .tag(InputCurrency.location)
             }
+            .pickerStyle(.segmented)
             .listRowSeparator(.hidden)
             
             ForEach(ExpenseCategory.allCases, id: \.id) { (category: ExpenseCategory) in
                 HStack {
                     ExpenseCategoryLabel(category: category)
                     Spacer()
-                    budgetInputRow(
-                        currency: budgetInputCurrencyValue,
-                        value: budgetInputBinding(for: category)
-                    )
+                    AmountTextField(value: budgetInputBinding(for: category))
+                    CurrencyCodeText(budgetInputCurrencyValue)
+                        .frame(width: 40, alignment: .center)
                 }
             }
             HStack {
@@ -150,15 +203,6 @@ struct LocationEditView: View {
                 )
             }
             .listRowSeparatorTint(.gray)
-        }
-    }
-
-    private func budgetInputRow(currency: Currency, value: Binding<Double>) -> some View {
-        HStack(spacing: 6) {
-            TextField("", value: value, format: .number)
-                .keyboardType(.decimalPad)
-                .multilineTextAlignment(.trailing)
-            CurrencyCodeText(currency)
         }
     }
 
@@ -183,7 +227,7 @@ struct LocationEditView: View {
         
         ToolbarItemGroup(placement: .topBarLeading) {
             ButtonView.close {
-                dismiss()
+                handleClose()
             }
         }
         
@@ -192,54 +236,23 @@ struct LocationEditView: View {
                 viewModel.save(using: repository)
                 dismiss()
             }
+            .disabled(!viewModel.canSave)
         }
     }
 
     // MARK: - Actions
 
-    private var budgetInputCurrencyValue: Currency {
-        switch inputCurrency {
-        case .base: viewModel.baseCurrency
-        case .location: viewModel.localCurrency
-        }
-    }
-
-    private var budgetTotalValue: Double {
-        switch inputCurrency {
-        case .base: viewModel.plannedTotalBase
-        case .location: viewModel.plannedTotalLocal
-        }
-    }
-    
-    private var localCurrencyBinding: Binding<Currency> {
-        Binding(
-            get: { viewModel.localCurrency },
-            set: { viewModel.localCurrency = $0 }
-        )
-    }
-    
-    private func budgetInputBinding(for category: ExpenseCategory) -> Binding<Double> {
-        Binding(
-            get: {
-                switch inputCurrency {
-                case .base: viewModel.budgetAmounts[category] ?? 0
-                case .location: viewModel.plannedLocalAmount(for: category)
-                }
-            },
-            set: { newValue in
-                switch inputCurrency {
-                case .base: viewModel.budgetAmounts[category] = newValue
-                case .location:
-                    guard viewModel.rateToBaseCurrency > 0 else { return }
-                    viewModel.budgetAmounts[category] = newValue * viewModel.rateToBaseCurrency
-                }
-            }
-        )
-    }
-
     private func requestDelete() {
-        guard let location = viewModel.locationToEdit else { return }
+        guard let location = viewModel.location else { return }
         deletionHandler.request(for: [location])
+    }
+
+    private func handleClose() {
+        if viewModel.hasChanges {
+            isShowingDiscardAlert = true
+        } else {
+            dismiss()
+        }
     }
 
     private func confirmDelete() {

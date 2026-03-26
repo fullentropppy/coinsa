@@ -14,7 +14,7 @@ struct ExpenseEditView: View {
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
 
-    @State private var viewModel: ExpenseViewModel
+    @State private var viewModel: ExpenseEditViewModel
     @State private var inputCurrency: InputCurrency = .location
     @State private var deletionHandler = DeletionHandler<Expense>()
     @State private var isShowingDiscardAlert = false
@@ -25,6 +25,17 @@ struct ExpenseEditView: View {
 
     private var repository: ExpenseRepository {
         ExpenseRepository(context: context)
+    }
+    
+    private var categoryBinding: Binding<ExpenseCategory> {
+        Binding(
+            get: {
+                viewModel.category
+            },
+            set: {
+                viewModel.category = $0
+            }
+        )
     }
     
     private var amountInputCurrencyValue: Currency {
@@ -72,11 +83,11 @@ struct ExpenseEditView: View {
         baseCurrency: Currency,
         onDelete: (() -> Void)? = nil
     ) {
-        let viewModel: ExpenseViewModel
+        let viewModel: ExpenseEditViewModel
         if let expense {
-            viewModel = ExpenseViewModel(expense: expense, baseCurrency: baseCurrency)
+            viewModel = ExpenseEditViewModel(expense: expense, baseCurrency: baseCurrency)
         } else {
-            viewModel = ExpenseViewModel(location: location, baseCurrency: baseCurrency)
+            viewModel = ExpenseEditViewModel(location: location, baseCurrency: baseCurrency)
         }
         _viewModel = State(initialValue: viewModel)
         self.onDelete = onDelete
@@ -128,19 +139,13 @@ struct ExpenseEditView: View {
                 in: viewModel.location.range
             )
             
-            HStack {
-                Picker("expense.category", selection: $viewModel.category) {
-                    ForEach(ExpenseCategory.allCases, id: \.id) { category in
-                        Text(category.localizedKey)
-                            .tag(category)
-                    }
+            Picker("expense.category", selection: categoryBinding) {
+                ForEach(ExpenseCategory.allCases, id: \.id) { category in
+                    ExpenseCategoryLabel(category: category)
+                        .tag(category)
                 }
-                .pickerStyle(.menu)
-                
-                Image(systemName: viewModel.category.symbolName)
-                    .foregroundStyle(.secondary)
-                    .frame(width: 40, alignment: .center)
             }
+            .pickerStyle(.navigationLink)
         }
     } 
 
@@ -163,7 +168,7 @@ struct ExpenseEditView: View {
                 }
             }
             
-            LabeledContent(viewModel.rateBaseToLocalText) {
+            LabeledContent("expense.exchangeRate") {
                 HStack {
                     AmountTextField(value: $viewModel.rateBaseToLocal)
                     CurrencyCodeText(viewModel.baseCurrency)

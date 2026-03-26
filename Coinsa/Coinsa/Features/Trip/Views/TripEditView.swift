@@ -14,8 +14,9 @@ struct TripEditView: View {
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
 
-    @State private var viewModel: TripViewModel
+    @State private var viewModel: TripEditViewModel
     @State private var deletionHandler = DeletionHandler<Trip>()
+    @State private var isShowingDiscardAlert = false
         
     // MARK: - Computed properties
     
@@ -26,7 +27,7 @@ struct TripEditView: View {
     // MARK: - Initialization
     
     init(trip: Trip? = nil) {
-        _viewModel = State(initialValue: TripViewModel(trip: trip))
+        _viewModel = State(initialValue: TripEditViewModel(trip: trip))
     }
     
     // MARK: - Body
@@ -41,6 +42,14 @@ struct TripEditView: View {
             .toolbar {
                 toolbarContent
             }
+            .scrollDismissesKeyboard(.interactively)
+            .interactiveDismissDisabled(viewModel.hasChanges)
+            .discardConfirmationAlert(
+                isPresented: $isShowingDiscardAlert,
+                onConfirm: {
+                    dismiss()
+                }
+            )
             .deleteConfirmationAlert(
                 isPresented: $deletionHandler.isShowingDeleteConfirmation,
                 message: "trip.delete.message",
@@ -60,8 +69,17 @@ struct TripEditView: View {
     private var mainDataSection: some View {
         Section {
             TextField("trip.name", text: $viewModel.name)
-            DatePicker("trip.startDate", selection: $viewModel.startDate, displayedComponents: .date)
-            DatePicker("trip.endDate", selection: $viewModel.endDate, displayedComponents: .date)
+            DatePicker(
+                "trip.startDate",
+                selection: $viewModel.startDate,
+                displayedComponents: .date
+            )
+            DatePicker(
+                "trip.endDate",
+                selection: $viewModel.endDate,
+                in: viewModel.startDate...,
+                displayedComponents: .date
+            )
         }
     }
     
@@ -83,7 +101,7 @@ struct TripEditView: View {
         
         ToolbarItemGroup(placement: .topBarLeading) {
             ButtonView.close {
-                dismiss()
+                handleClose()
             }
         }
 
@@ -92,6 +110,7 @@ struct TripEditView: View {
                 viewModel.save(using: repository)
                 dismiss()
             }
+            .disabled(!viewModel.canSave)
         }
     }
     
@@ -100,6 +119,14 @@ struct TripEditView: View {
     private func requestDelete() {
         guard let trip = viewModel.tripToEdit else { return }
         deletionHandler.request(for: [trip])
+    }
+
+    private func handleClose() {
+        if viewModel.hasChanges {
+            isShowingDiscardAlert = true
+        } else {
+            dismiss()
+        }
     }
 
     private func confirmDelete() {

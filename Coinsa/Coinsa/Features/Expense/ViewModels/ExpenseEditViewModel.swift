@@ -1,5 +1,5 @@
 //
-//  ExpenseViewModel.swift
+//  ExpenseEditViewModel.swift
 //  Coinsa
 //
 //  Created by Daniil Gritsenko on 24.03.2026.
@@ -10,7 +10,7 @@ import Observation
 
 @MainActor
 @Observable
-final class ExpenseViewModel {
+final class ExpenseEditViewModel {
     // MARK: - Stored Properties
 
     private let initialSnapshot: Snapshot
@@ -38,10 +38,6 @@ final class ExpenseViewModel {
             ? "expense.navigationTitle.edit"
             : "expense.navigationTitle.create"
         )
-    }
-    
-    var rateBaseToLocalText: String {
-        String(format: String(localized: "expense.exchangeRate"), localCurrency.code)
     }
     
     var amountLocal: Double {
@@ -166,7 +162,7 @@ final class ExpenseViewModel {
 
 // MARK: - Snapshot
 
-private extension ExpenseViewModel {
+private extension ExpenseEditViewModel {
     struct Snapshot: Equatable {
         // MARK: - Stored Properties
         
@@ -192,7 +188,7 @@ private extension ExpenseViewModel {
             self.comment = comment.trimmingCharacters(in: .whitespacesAndNewlines)
         }
 
-        init(viewModel: ExpenseViewModel) {
+        init(viewModel: ExpenseEditViewModel) {
             self.init(
                 date: viewModel.date,
                 amountBase: viewModel.amountBase,

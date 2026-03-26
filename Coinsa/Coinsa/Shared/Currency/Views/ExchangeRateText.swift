@@ -32,7 +32,7 @@ struct ExchangeRateText: View {
     // MARK: - Body
     
     var body: some View {
-        Text("1 \(fromCurrency.code) = \(String(format: "%.4f", rate)) \(toCurrency.code)")
+        Text("1 \(fromCurrency.code) = \(String(format: "%g", rate)) \(toCurrency.code)")
             .font(styleFont)
             .foregroundStyle(styleColor)
     }
@@ -68,7 +68,7 @@ private extension ExchangeRateText {
     static func preview(locale: Locale, colorScheme: ColorScheme) -> some View {
         let from = Currency.usd
         let to = Currency.rub
-        let rate = 80.0
+        let rate = 80.08
         
         return VStack(spacing: 20) {
            ExchangeRateText(from: from, to: to, rate: rate)

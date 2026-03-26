@@ -93,14 +93,12 @@ enum PreviewGenerator {
     }
 
     private static func makeIstanbulBudgets(location: Location) -> [Budget] {
-        let exchangeRate = PreviewLocation.istanbul.exchangeRate
-
-        return [
-            Budget(category: .food, amountBase: 21000, rateBaseToLocal: exchangeRate, location: location),
-            Budget(category: .transport, amountBase: 3600, rateBaseToLocal: exchangeRate, location: location),
-            Budget(category: .activity, amountBase: 8200, rateBaseToLocal: exchangeRate, location: location),
-            Budget(category: .shopping, amountBase: 6800, rateBaseToLocal: exchangeRate, location: location),
-            Budget(category: .other, amountBase: 4200, rateBaseToLocal: exchangeRate, location: location)
+        [
+            Budget(category: .food, amountBase: 21000, location: location),
+            Budget(category: .transport, amountBase: 3600, location: location),
+            Budget(category: .activity, amountBase: 8200, location: location),
+            Budget(category: .shopping, amountBase: 6800, location: location),
+            Budget(category: .other, amountBase: 4200, location: location)
         ]
     }
 
@@ -246,23 +244,19 @@ enum PreviewGenerator {
     }
 
     private static func makeSeoulBudgets(location: Location) -> [Budget] {
-        let exchangeRate = PreviewLocation.seoul.exchangeRate
-
-        return [
-            Budget(category: .food, amountBase: 24000, rateBaseToLocal: exchangeRate, location: location),
-            Budget(category: .transport, amountBase: 5200, rateBaseToLocal: exchangeRate, location: location),
-            Budget(category: .activity, amountBase: 11000, rateBaseToLocal: exchangeRate, location: location),
-            Budget(category: .shopping, amountBase: 8500, rateBaseToLocal: exchangeRate, location: location)
+        [
+            Budget(category: .food, amountBase: 24000, location: location),
+            Budget(category: .transport, amountBase: 5200, location: location),
+            Budget(category: .activity, amountBase: 11000, location: location),
+            Budget(category: .shopping, amountBase: 8500, location: location)
         ]
     }
 
     private static func makeBusanBudgets(location: Location) -> [Budget] {
-        let exchangeRate = PreviewLocation.busan.exchangeRate
-
-        return [
-            Budget(category: .food, amountBase: 12000, rateBaseToLocal: exchangeRate, location: location),
-            Budget(category: .transport, amountBase: 2800, rateBaseToLocal: exchangeRate, location: location),
-            Budget(category: .other, amountBase: 2600, rateBaseToLocal: exchangeRate, location: location)
+        [
+            Budget(category: .food, amountBase: 12000, location: location),
+            Budget(category: .transport, amountBase: 2800, location: location),
+            Budget(category: .other, amountBase: 2600, location: location)
         ]
     }
 
@@ -513,32 +507,26 @@ enum PreviewGenerator {
     }
 
     private static func makeTokyoBudgets(location: Location) -> [Budget] {
-        let exchangeRate = PreviewLocation.tokyo.exchangeRate
-
-        return [
-            Budget(category: .food, amountBase: 30000, rateBaseToLocal: exchangeRate, location: location),
-            Budget(category: .transport, amountBase: 7200, rateBaseToLocal: exchangeRate, location: location),
-            Budget(category: .activity, amountBase: 13500, rateBaseToLocal: exchangeRate, location: location),
-            Budget(category: .shopping, amountBase: 10500, rateBaseToLocal: exchangeRate, location: location),
-            Budget(category: .medicine, amountBase: 4200, rateBaseToLocal: exchangeRate, location: location),
-            Budget(category: .other, amountBase: 6500, rateBaseToLocal: exchangeRate, location: location)
+        [
+            Budget(category: .food, amountBase: 30000, location: location),
+            Budget(category: .transport, amountBase: 7200, location: location),
+            Budget(category: .activity, amountBase: 13500, location: location),
+            Budget(category: .shopping, amountBase: 10500, location: location),
+            Budget(category: .medicine, amountBase: 4200, location: location),
+            Budget(category: .other, amountBase: 6500, location: location)
         ]
     }
 
     private static func makeKyotoBudgets(location: Location) -> [Budget] {
-        let exchangeRate = PreviewLocation.kyoto.exchangeRate
-
-        return [
-            Budget(category: .food, amountBase: 15000, rateBaseToLocal: exchangeRate, location: location),
-            Budget(category: .activity, amountBase: 6200, rateBaseToLocal: exchangeRate, location: location)
+        [
+            Budget(category: .food, amountBase: 15000, location: location),
+            Budget(category: .activity, amountBase: 6200, location: location)
         ]
     }
 
     private static func makeOsakaBudgets(location: Location) -> [Budget] {
-        let exchangeRate = PreviewLocation.osaka.exchangeRate
-
-        return [
-            Budget(category: .food, amountBase: 9000, rateBaseToLocal: exchangeRate, location: location)
+        [
+            Budget(category: .food, amountBase: 9000, location: location)
         ]
     }
 
