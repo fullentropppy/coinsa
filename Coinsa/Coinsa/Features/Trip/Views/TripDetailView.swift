@@ -89,7 +89,8 @@ struct TripDetailView: View {
                 }
             }
         }
-        .toolbarTitleDisplayMode(.inline)
+        .navigationTitle(trip.name)
+        .toolbarTitleDisplayMode(.large)
         .toolbar {
             toolbarContent
         }
@@ -102,12 +103,17 @@ struct TripDetailView: View {
                 baseCurrency: viewModel.baseCurrency
             )
         }
-        .overlay(alignment: .bottomTrailing) {
+        .safeAreaInset(edge: .bottom) {
             if !locations.isEmpty {
-                ButtonView.add {
-                    isShowingLocationAdd = true
+                HStack {
+                    Spacer()
+                    ButtonView.add {
+                        isShowingLocationAdd = true
+                    }
+                    .buttonStyle(PrimaryButtonStyle())
+                    .padding(.trailing, 16)
+                    .padding(.bottom, 8)
                 }
-                .buttonStyle(PrimaryButtonStyle())
             }
         }
         .deleteConfirmationAlert(
@@ -145,10 +151,6 @@ struct TripDetailView: View {
     
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
-        ToolbarItem(placement: .principal) {
-            ContextToolbarTitleView(title: trip!.name)
-        }
-        
         ToolbarItemGroup(placement: .topBarTrailing) {
             ButtonView.edit {
                 isShowingTripEdit = true

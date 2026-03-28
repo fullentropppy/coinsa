@@ -105,12 +105,14 @@ struct LocationEditView: View {
                 budgetsSection
                 actionsSection
             }
+            .navigationTitle(viewModel.navigationTitle)
+            .navigationSubtitle(viewModel.trip.screenContextSubtitle)
             .toolbarTitleDisplayMode(.inline)
             .toolbar {
                 toolbarContent
             }
+            .interactiveDismissDisabled(true)
             .scrollDismissesKeyboard(.interactively)
-            .interactiveDismissDisabled(viewModel.hasChanges)
             .discardConfirmationAlert(
                 isPresented: $isShowingDiscardAlert,
                 onConfirm: {
@@ -218,13 +220,6 @@ struct LocationEditView: View {
 
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
-        ToolbarItem(placement: .principal) {
-            ContextToolbarTitleView(
-                title: viewModel.navigationTitle,
-                subtitle: viewModel.trip.name
-            )
-        }
-        
         ToolbarItemGroup(placement: .topBarLeading) {
             ButtonView.close {
                 handleClose()

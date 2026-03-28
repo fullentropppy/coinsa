@@ -92,7 +92,9 @@ struct LocationDetailView: View {
                 }
             }
         }
-        .toolbarTitleDisplayMode(.inline)
+        .navigationTitle(viewModel.location.name)
+        .navigationSubtitle(viewModel.location.trip.screenContextSubtitle)
+        .toolbarTitleDisplayMode(.large)
         .toolbar {
             toolbarContent
         }
@@ -108,12 +110,17 @@ struct LocationDetailView: View {
                 baseCurrency: settingsStore.baseCurrency
             )
         }
-        .overlay(alignment: .bottomTrailing) {
+        .safeAreaInset(edge: .bottom) {
             if !expenses.isEmpty {
-                ButtonView.add {
-                    isShowingExpenseAdd = true
+                HStack {
+                    Spacer()
+                    ButtonView.add {
+                        isShowingExpenseAdd = true
+                    }
+                    .buttonStyle(PrimaryButtonStyle())
+                    .padding(.trailing, 16)
+                    .padding(.bottom, 8)
                 }
-                .buttonStyle(PrimaryButtonStyle())
             }
         }
         .deleteConfirmationAlert(
@@ -154,13 +161,6 @@ struct LocationDetailView: View {
 
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
-        ToolbarItem(placement: .principal) {
-            ContextToolbarTitleView(
-                title: location!.name,
-                subtitle: location!.trip.name
-            )
-        }
-        
         ToolbarItemGroup(placement: .topBarTrailing) {
             ButtonView.edit {
                 isShowingLocationEdit = true

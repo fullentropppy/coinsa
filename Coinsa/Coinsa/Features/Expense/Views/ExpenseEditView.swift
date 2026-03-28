@@ -116,12 +116,14 @@ struct ExpenseEditView: View {
                 commentSection
                 actionsSection
             }
+            .navigationTitle(viewModel.navigationTitle)
+            .navigationSubtitle(viewModel.location.screenContextSubtitle)
             .toolbarTitleDisplayMode(.inline)
             .toolbar {
                 toolbarContent
             }
+            .interactiveDismissDisabled(true)
             .scrollDismissesKeyboard(.interactively)
-            .interactiveDismissDisabled(viewModel.hasChanges)
             .discardConfirmationAlert(
                 isPresented: $isShowingDiscardAlert,
                 onConfirm: {
@@ -209,12 +211,12 @@ struct ExpenseEditView: View {
 
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
-        ToolbarItem(placement: .principal) {
-            ContextToolbarTitleView(
-                title: viewModel.navigationTitle,
-                subtitle: viewModel.location.name
-            )
-        }
+//        ToolbarItem(placement: .principal) {
+//            ContextToolbarTitleView(
+//                title: viewModel.navigationTitle,
+//                subtitle: viewModel.location.name
+//            )
+//        }
         
         ToolbarItemGroup(placement: .topBarLeading) {
             ButtonView.close {

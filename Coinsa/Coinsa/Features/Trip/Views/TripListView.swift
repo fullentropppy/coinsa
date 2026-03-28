@@ -29,16 +29,27 @@ struct TripListView: View {
     var body: some View {
         NavigationStack {
             tripListContent
-                .toolbarTitleDisplayMode(.inline)
+                .navigationTitle("trip.list.navigationTitle")
+                .toolbarTitleDisplayMode(.large)
                 .sheet(isPresented: $isShowingTripEdit) {
                     TripEditView(trip: nil)
-                }
-                .toolbar {
-                    toolbarContent
                 }
                 .overlay {
                     if trips.isEmpty {
                         emptyTripListContent
+                    }
+                }
+                .safeAreaInset(edge: .bottom) {
+                    if !trips.isEmpty {
+                        HStack {
+                            Spacer()
+                            ButtonView.add {
+                                isShowingTripEdit = true
+                            }
+                            .buttonStyle(PrimaryButtonStyle())
+                            .padding(.trailing, 16)
+                            .padding(.bottom, 8)
+                        }
                     }
                 }
                 .deleteConfirmationAlert(
@@ -77,19 +88,6 @@ struct TripListView: View {
             buttonLabel: "trip.add",
             onAddAction: { isShowingTripEdit = true }
         )
-    }
-    
-    @ToolbarContentBuilder
-    private var toolbarContent: some ToolbarContent {
-        ToolbarItem(placement: .principal) {
-            ContextToolbarTitleView(title: String(localized: "trip.list.navigationTitle"))
-        }
-        
-        ToolbarItem(placement: .topBarTrailing) {
-            ButtonView.add {
-                isShowingTripEdit = true
-            }
-        }
     }
     
     // MARK: - Actions

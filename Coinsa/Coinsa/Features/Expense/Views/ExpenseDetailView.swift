@@ -37,7 +37,9 @@ struct ExpenseDetailView: View {
                 commentSection(comment: comment)
             }
         }
-        .toolbarTitleDisplayMode(.inline)
+        .navigationTitle(expense.category.localizedKey)
+        .navigationSubtitle(expense.location.screenContextSubtitle)
+        .toolbarTitleDisplayMode(.large)
         .toolbar {
             toolbarContent
         }
@@ -110,13 +112,6 @@ struct ExpenseDetailView: View {
     
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
-        ToolbarItem(placement: .principal) {
-            ContextToolbarTitleView(
-                title: expense.category.localizedDisplayName,
-                subtitle: expense.location.name
-            )
-        }
-        
         ToolbarItemGroup(placement: .topBarTrailing) {
             ButtonView.edit {
                 isShowingExpenseEdit = true
