@@ -90,7 +90,7 @@ final class LocationEditViewModel {
             resolvedStartDate = location.startDate
             resolvedEndDate = location.endDate
             resolvedLocalCurrency = Currency.from(location.currencyCodeLocal)
-            resolvedRateToBaseCurrency = location.rateBaseToLocal
+            resolvedRateToBaseCurrency = location.rateLocalToBase
         } else {
             resolvedName = ""
             resolvedStartDate = trip.startDate
@@ -141,7 +141,7 @@ final class LocationEditViewModel {
                 startDate: startDate,
                 endDate: endDate,
                 currencyLocal: localCurrency,
-                rateBaseToLocal: rateToBaseCurrency,
+                rateLocalToBase: rateToBaseCurrency,
                 budgetsByCategory: budgetAmounts
             )
         } else {
@@ -150,7 +150,7 @@ final class LocationEditViewModel {
                 startDate: startDate,
                 endDate: endDate,
                 currencyLocal: localCurrency,
-                rateBaseToLocal: rateToBaseCurrency,
+                rateLocalToBase: rateToBaseCurrency,
                 trip: trip,
                 budgetsByCategory: budgetAmounts
             )

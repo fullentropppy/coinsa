@@ -53,6 +53,19 @@ struct ExpenseEditView: View {
         )
     }
     
+    private var rateInputBinding: Binding<Double> {
+        Binding(
+            get: {
+                viewModel.rateLocalToBase
+            },
+            set: { newValue in
+                viewModel.rateLocalToBase = newValue
+                let currentAmount = viewModel.amount(for: inputCurrency)
+                viewModel.updateAmount(currentAmount, for: inputCurrency)
+            }
+        )
+    }
+    
     // MARK: - Initialization
 
     init(location: Location, baseCurrency: Currency) {
@@ -170,7 +183,7 @@ struct ExpenseEditView: View {
             
             LabeledContent("expense.exchangeRate") {
                 HStack {
-                    AmountTextField(value: $viewModel.rateBaseToLocal)
+                    AmountTextField(value: rateInputBinding, fractionDigits: 4)
                     CurrencyCodeText(viewModel.baseCurrency)
                         .frame(width: 40, alignment: .center)
                 }

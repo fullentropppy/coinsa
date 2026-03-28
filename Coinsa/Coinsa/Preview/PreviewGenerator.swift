@@ -77,7 +77,7 @@ enum PreviewGenerator {
             startDate: trip.startDate,
             endDate: trip.endDate,
             currencyCodeLocal: istanbulData.currencyCode,
-            rateBaseToLocal: istanbulData.exchangeRate,
+            rateLocalToBase: istanbulData.exchangeRate,
             trip: trip
         )
 
@@ -103,13 +103,13 @@ enum PreviewGenerator {
     }
 
     private static func makeIstanbulExpenses(location: Location) -> [Expense] {
-        let exchangeRate = location.rateBaseToLocal
+        let exchangeRate = location.rateLocalToBase
 
         return [
             Expense(
                 date: now.addingTimeInterval(-day * 97 + hour * 8),
                 amountBase: 720,
-                rateBaseToLocal: exchangeRate,
+                rateLocalToBase: exchangeRate,
                 category: .food,
                 location: location,
                 comment: PreviewExpenseComment.breakfast.rawValue
@@ -117,14 +117,14 @@ enum PreviewGenerator {
             Expense(
                 date: now.addingTimeInterval(-day * 97 + hour * 19),
                 amountBase: 2100,
-                rateBaseToLocal: exchangeRate,
+                rateLocalToBase: exchangeRate,
                 category: .activity,
                 location: location
             ),
             Expense(
                 date: now.addingTimeInterval(-day * 96 + hour * 11),
                 amountBase: 140,
-                rateBaseToLocal: exchangeRate,
+                rateLocalToBase: exchangeRate,
                 category: .transport,
                 location: location,
                 comment: PreviewExpenseComment.bus.rawValue
@@ -132,7 +132,7 @@ enum PreviewGenerator {
             Expense(
                 date: now.addingTimeInterval(-day * 95 + hour * 18),
                 amountBase: 680,
-                rateBaseToLocal: exchangeRate,
+                rateLocalToBase: exchangeRate,
                 category: .transport,
                 location: location,
                 comment: PreviewExpenseComment.taxi.rawValue
@@ -140,14 +140,14 @@ enum PreviewGenerator {
             Expense(
                 date: now.addingTimeInterval(-day * 94 + hour * 12),
                 amountBase: 1450,
-                rateBaseToLocal: exchangeRate,
+                rateLocalToBase: exchangeRate,
                 category: .shopping,
                 location: location
             ),
             Expense(
                 date: now.addingTimeInterval(-day * 93 + hour * 20),
                 amountBase: 980,
-                rateBaseToLocal: exchangeRate,
+                rateLocalToBase: exchangeRate,
                 category: .food,
                 location: location,
                 comment: PreviewExpenseComment.lunch.rawValue
@@ -155,7 +155,7 @@ enum PreviewGenerator {
             Expense(
                 date: now.addingTimeInterval(-day * 91 + hour * 9),
                 amountBase: 2350,
-                rateBaseToLocal: exchangeRate,
+                rateLocalToBase: exchangeRate,
                 category: .other,
                 location: location
             )
@@ -200,7 +200,7 @@ enum PreviewGenerator {
             startDate: startDate,
             endDate: endDate,
             currencyCodeLocal: seoulData.currencyCode,
-            rateBaseToLocal: seoulData.exchangeRate,
+            rateLocalToBase: seoulData.exchangeRate,
             trip: trip
         )
 
@@ -228,7 +228,7 @@ enum PreviewGenerator {
             startDate: startDate,
             endDate: endDate,
             currencyCodeLocal: busanData.currencyCode,
-            rateBaseToLocal: busanData.exchangeRate,
+            rateLocalToBase: busanData.exchangeRate,
             trip: trip
         )
 
@@ -261,13 +261,13 @@ enum PreviewGenerator {
     }
 
     private static func makeSeoulExpenses(location: Location, startDate: Date) -> [Expense] {
-        let exchangeRate = location.rateBaseToLocal
+        let exchangeRate = location.rateLocalToBase
 
         return [
             Expense(
                 date: startDate.addingTimeInterval(hour * 8),
                 amountBase: 9500,
-                rateBaseToLocal: exchangeRate,
+                rateLocalToBase: exchangeRate,
                 category: .food,
                 location: location,
                 comment: PreviewExpenseComment.breakfast.rawValue
@@ -275,7 +275,7 @@ enum PreviewGenerator {
             Expense(
                 date: startDate.addingTimeInterval(hour * 13),
                 amountBase: 17000,
-                rateBaseToLocal: exchangeRate,
+                rateLocalToBase: exchangeRate,
                 category: .food,
                 location: location,
                 comment: PreviewExpenseComment.lunch.rawValue
@@ -283,7 +283,7 @@ enum PreviewGenerator {
             Expense(
                 date: startDate.addingTimeInterval(day * 1 + hour * 9),
                 amountBase: 1600,
-                rateBaseToLocal: exchangeRate,
+                rateLocalToBase: exchangeRate,
                 category: .transport,
                 location: location,
                 comment: PreviewExpenseComment.subway.rawValue
@@ -291,7 +291,7 @@ enum PreviewGenerator {
             Expense(
                 date: startDate.addingTimeInterval(day * 1 + hour * 19),
                 amountBase: 22500,
-                rateBaseToLocal: exchangeRate,
+                rateLocalToBase: exchangeRate,
                 category: .shopping,
                 location: location,
                 comment: PreviewExpenseComment.souvenirs.rawValue
@@ -299,7 +299,7 @@ enum PreviewGenerator {
             Expense(
                 date: startDate.addingTimeInterval(day * 2 + hour * 11),
                 amountBase: 13000,
-                rateBaseToLocal: exchangeRate,
+                rateLocalToBase: exchangeRate,
                 category: .food,
                 location: location,
                 comment: PreviewExpenseComment.streetFood.rawValue
@@ -307,7 +307,7 @@ enum PreviewGenerator {
             Expense(
                 date: startDate.addingTimeInterval(day * 2 + hour * 17),
                 amountBase: 28000,
-                rateBaseToLocal: exchangeRate,
+                rateLocalToBase: exchangeRate,
                 category: .activity,
                 location: location,
                 comment: PreviewExpenseComment.museum.rawValue
@@ -315,7 +315,7 @@ enum PreviewGenerator {
             Expense(
                 date: startDate.addingTimeInterval(day * 3 + hour * 14),
                 amountBase: 6200,
-                rateBaseToLocal: exchangeRate,
+                rateLocalToBase: exchangeRate,
                 category: .medicine,
                 location: location,
                 comment: PreviewExpenseComment.pharmacy.rawValue
@@ -323,7 +323,7 @@ enum PreviewGenerator {
             Expense(
                 date: startDate.addingTimeInterval(day * 3 + hour * 20),
                 amountBase: 52000,
-                rateBaseToLocal: exchangeRate,
+                rateLocalToBase: exchangeRate,
                 category: .shopping,
                 location: location,
                 comment: PreviewExpenseComment.clothes.rawValue
@@ -331,7 +331,7 @@ enum PreviewGenerator {
             Expense(
                 date: startDate.addingTimeInterval(day * 4 + hour * 12),
                 amountBase: 3100,
-                rateBaseToLocal: exchangeRate,
+                rateLocalToBase: exchangeRate,
                 category: .transport,
                 location: location,
                 comment: PreviewExpenseComment.bus.rawValue
@@ -339,7 +339,7 @@ enum PreviewGenerator {
             Expense(
                 date: startDate.addingTimeInterval(day * 5 + hour * 18),
                 amountBase: 8900,
-                rateBaseToLocal: exchangeRate,
+                rateLocalToBase: exchangeRate,
                 category: .other,
                 location: location,
                 comment: PreviewExpenseComment.miscellaneous.rawValue
@@ -348,13 +348,13 @@ enum PreviewGenerator {
     }
 
     private static func makeBusanExpenses(location: Location, startDate: Date) -> [Expense] {
-        let exchangeRate = location.rateBaseToLocal
+        let exchangeRate = location.rateLocalToBase
 
         return [
             Expense(
                 date: startDate.addingTimeInterval(hour * 10),
                 amountBase: 12500,
-                rateBaseToLocal: exchangeRate,
+                rateLocalToBase: exchangeRate,
                 category: .food,
                 location: location,
                 comment: PreviewExpenseComment.streetFood.rawValue
@@ -362,7 +362,7 @@ enum PreviewGenerator {
             Expense(
                 date: startDate.addingTimeInterval(day * 1 + hour * 9),
                 amountBase: 1800,
-                rateBaseToLocal: exchangeRate,
+                rateLocalToBase: exchangeRate,
                 category: .transport,
                 location: location,
                 comment: PreviewExpenseComment.bus.rawValue
@@ -370,7 +370,7 @@ enum PreviewGenerator {
             Expense(
                 date: startDate.addingTimeInterval(day * 2 + hour * 15),
                 amountBase: 29500,
-                rateBaseToLocal: exchangeRate,
+                rateLocalToBase: exchangeRate,
                 category: .activity,
                 location: location,
                 comment: PreviewExpenseComment.temple.rawValue
@@ -378,7 +378,7 @@ enum PreviewGenerator {
             Expense(
                 date: startDate.addingTimeInterval(day * 2 + hour * 20),
                 amountBase: 14000,
-                rateBaseToLocal: exchangeRate,
+                rateLocalToBase: exchangeRate,
                 category: .shopping,
                 location: location,
                 comment: PreviewExpenseComment.souvenirs.rawValue
@@ -386,7 +386,7 @@ enum PreviewGenerator {
             Expense(
                 date: startDate.addingTimeInterval(day * 3 + hour * 12),
                 amountBase: 5200,
-                rateBaseToLocal: exchangeRate,
+                rateLocalToBase: exchangeRate,
                 category: .other,
                 location: location,
                 comment: PreviewExpenseComment.miscellaneous.rawValue
@@ -435,7 +435,7 @@ enum PreviewGenerator {
             startDate: startDate,
             endDate: endDate,
             currencyCodeLocal: tokyoData.currencyCode,
-            rateBaseToLocal: tokyoData.exchangeRate,
+            rateLocalToBase: tokyoData.exchangeRate,
             trip: trip
         )
 
@@ -463,7 +463,7 @@ enum PreviewGenerator {
             startDate: startDate,
             endDate: endDate,
             currencyCodeLocal: kyotoData.currencyCode,
-            rateBaseToLocal: kyotoData.exchangeRate,
+            rateLocalToBase: kyotoData.exchangeRate,
             trip: trip
         )
 
@@ -491,7 +491,7 @@ enum PreviewGenerator {
             startDate: startDate,
             endDate: endDate,
             currencyCodeLocal: osakaData.currencyCode,
-            rateBaseToLocal: osakaData.exchangeRate,
+            rateLocalToBase: osakaData.exchangeRate,
             trip: trip
         )
 
@@ -531,13 +531,13 @@ enum PreviewGenerator {
     }
 
     private static func makeTokyoExpenses(location: Location, startDate: Date) -> [Expense] {
-        let exchangeRate = location.rateBaseToLocal
+        let exchangeRate = location.rateLocalToBase
 
         return [
             Expense(
                 date: startDate.addingTimeInterval(hour * 8),
                 amountBase: 980,
-                rateBaseToLocal: exchangeRate,
+                rateLocalToBase: exchangeRate,
                 category: .food,
                 location: location,
                 comment: PreviewExpenseComment.breakfast.rawValue
@@ -545,14 +545,14 @@ enum PreviewGenerator {
             Expense(
                 date: startDate.addingTimeInterval(hour * 13),
                 amountBase: 1750,
-                rateBaseToLocal: exchangeRate,
+                rateLocalToBase: exchangeRate,
                 category: .food,
                 location: location
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 1 + hour * 10),
                 amountBase: 380,
-                rateBaseToLocal: exchangeRate,
+                rateLocalToBase: exchangeRate,
                 category: .transport,
                 location: location,
                 comment: PreviewExpenseComment.subway.rawValue
@@ -560,7 +560,7 @@ enum PreviewGenerator {
             Expense(
                 date: startDate.addingTimeInterval(day * 2 + hour * 15),
                 amountBase: 2100,
-                rateBaseToLocal: exchangeRate,
+                rateLocalToBase: exchangeRate,
                 category: .activity,
                 location: location,
                 comment: PreviewExpenseComment.museum.rawValue
@@ -568,7 +568,7 @@ enum PreviewGenerator {
             Expense(
                 date: startDate.addingTimeInterval(day * 2 + hour * 20),
                 amountBase: 5400,
-                rateBaseToLocal: exchangeRate,
+                rateLocalToBase: exchangeRate,
                 category: .shopping,
                 location: location,
                 comment: PreviewExpenseComment.clothes.rawValue
@@ -576,21 +576,21 @@ enum PreviewGenerator {
             Expense(
                 date: startDate.addingTimeInterval(day * 3 + hour * 11),
                 amountBase: 1200,
-                rateBaseToLocal: exchangeRate,
+                rateLocalToBase: exchangeRate,
                 category: .medicine,
                 location: location
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 4 + hour * 14),
                 amountBase: 700,
-                rateBaseToLocal: exchangeRate,
+                rateLocalToBase: exchangeRate,
                 category: .transport,
                 location: location
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 5 + hour * 19),
                 amountBase: 2600,
-                rateBaseToLocal: exchangeRate,
+                rateLocalToBase: exchangeRate,
                 category: .other,
                 location: location,
                 comment: PreviewExpenseComment.miscellaneous.rawValue
@@ -599,13 +599,13 @@ enum PreviewGenerator {
     }
 
     private static func makeKyotoExpenses(location: Location, startDate: Date) -> [Expense] {
-        let exchangeRate = location.rateBaseToLocal
+        let exchangeRate = location.rateLocalToBase
 
         return [
             Expense(
                 date: startDate.addingTimeInterval(hour * 9),
                 amountBase: 980,
-                rateBaseToLocal: exchangeRate,
+                rateLocalToBase: exchangeRate,
                 category: .food,
                 location: location,
                 comment: PreviewExpenseComment.snacks.rawValue
@@ -613,7 +613,7 @@ enum PreviewGenerator {
             Expense(
                 date: startDate.addingTimeInterval(day * 1 + hour * 12),
                 amountBase: 720,
-                rateBaseToLocal: exchangeRate,
+                rateLocalToBase: exchangeRate,
                 category: .transport,
                 location: location,
                 comment: PreviewExpenseComment.bus.rawValue
@@ -621,14 +621,14 @@ enum PreviewGenerator {
             Expense(
                 date: startDate.addingTimeInterval(day * 2 + hour * 16),
                 amountBase: 2100,
-                rateBaseToLocal: exchangeRate,
+                rateLocalToBase: exchangeRate,
                 category: .activity,
                 location: location
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 3 + hour * 19),
                 amountBase: 2600,
-                rateBaseToLocal: exchangeRate,
+                rateLocalToBase: exchangeRate,
                 category: .shopping,
                 location: location,
                 comment: PreviewExpenseComment.souvenirs.rawValue
@@ -637,20 +637,20 @@ enum PreviewGenerator {
     }
 
     private static func makeOsakaExpenses(location: Location, startDate: Date) -> [Expense] {
-        let exchangeRate = location.rateBaseToLocal
+        let exchangeRate = location.rateLocalToBase
 
         return [
             Expense(
                 date: startDate.addingTimeInterval(hour * 8),
                 amountBase: 920,
-                rateBaseToLocal: exchangeRate,
+                rateLocalToBase: exchangeRate,
                 category: .food,
                 location: location
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 1 + hour * 10),
                 amountBase: 780,
-                rateBaseToLocal: exchangeRate,
+                rateLocalToBase: exchangeRate,
                 category: .transport,
                 location: location,
                 comment: PreviewExpenseComment.train.rawValue
@@ -658,7 +658,7 @@ enum PreviewGenerator {
             Expense(
                 date: startDate.addingTimeInterval(day * 2 + hour * 13),
                 amountBase: 2400,
-                rateBaseToLocal: exchangeRate,
+                rateLocalToBase: exchangeRate,
                 category: .activity,
                 location: location,
                 comment: PreviewExpenseComment.museum.rawValue
@@ -666,7 +666,7 @@ enum PreviewGenerator {
             Expense(
                 date: startDate.addingTimeInterval(day * 2 + hour * 19),
                 amountBase: 5200,
-                rateBaseToLocal: exchangeRate,
+                rateLocalToBase: exchangeRate,
                 category: .shopping,
                 location: location,
                 comment: PreviewExpenseComment.clothes.rawValue
@@ -674,14 +674,14 @@ enum PreviewGenerator {
             Expense(
                 date: startDate.addingTimeInterval(day * 3 + hour * 9),
                 amountBase: 880,
-                rateBaseToLocal: exchangeRate,
+                rateLocalToBase: exchangeRate,
                 category: .medicine,
                 location: location
             ),
             Expense(
                 date: startDate.addingTimeInterval(day * 3 + hour * 18),
                 amountBase: 1900,
-                rateBaseToLocal: exchangeRate,
+                rateLocalToBase: exchangeRate,
                 category: .other,
                 location: location
             )

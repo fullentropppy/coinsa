@@ -8,15 +8,15 @@
 import Foundation
 
 extension Trip {
-    func calculatePlannedAmount(inBase: Bool = true) -> Double {
+    func calculatePlannedAmount(asBaseCurrency: Bool = true) -> Double {
         locations.reduce(0) {
-            $0 + $1.calculatePlannedAmount(asBaseCurrency: inBase)
+            $0 + $1.calculatePlannedAmount(asBaseCurrency: asBaseCurrency)
         }
     }
     
-    func calculateActualAmount(inBase: Bool = true) -> Double {
+    func calculateActualAmount(asBaseCurrency: Bool = true) -> Double {
         locations.reduce(0) {
-            $0 + $1.calculateActualAmount(asBaseCurrency: inBase)
+            $0 + $1.calculateActualAmount(asBaseCurrency: asBaseCurrency)
         }
     }
 }

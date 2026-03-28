@@ -27,7 +27,7 @@ struct ExpenseRepository {
         let expense = Expense(
             date: date,
             amountBase: max(0, amountInLocalCurrency),
-            rateBaseToLocal: max(0, rateToBaseCurrency),
+            rateLocalToBase: max(0, rateToBaseCurrency),
             category: category,
             location: location,
             comment: comment
@@ -46,7 +46,7 @@ struct ExpenseRepository {
     ) {
         expense.date = date
         expense.amountBase = max(0, amountInLocalCurrency)
-        expense.rateBaseToLocal = max(0, rateToBaseCurrency)
+        expense.rateLocalToBase = max(0, rateToBaseCurrency)
         expense.category = category
         expense.comment = comment
         try? context.save()

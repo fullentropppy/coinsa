@@ -11,32 +11,46 @@ struct AmountTextField: View {
     // MARK: - Stored Properties
     
     @Binding var value: Double
+    private let fractionDigits: Int
+    
     @State private var text: String = ""
     @FocusState private var isFocused: Bool
     
     // MARK: - Computed Properties
     
-    private let parsingFormatter: NumberFormatter = {
+    private var parsingFormatter: NumberFormatter {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
         formatter.minimumFractionDigits = 0
-        formatter.maximumFractionDigits = 2
+        formatter.maximumFractionDigits = fractionDigits
         formatter.usesGroupingSeparator = true
         return formatter
-    }()
+    }
 
-    private let displayFormatter: NumberFormatter = {
+    private var displayFormatter: NumberFormatter {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
-        formatter.minimumFractionDigits = 2
-        formatter.maximumFractionDigits = 2
+        formatter.minimumFractionDigits = fractionDigits
+        formatter.maximumFractionDigits = fractionDigits
         formatter.usesGroupingSeparator = true
         return formatter
-    }()
+    }
 
     private var placeholder: String {
+        guard fractionDigits > 0 else {
+            return "0"
+        }
+        
         let separator = displayFormatter.decimalSeparator ?? ","
-        return "0\(separator)00"
+        let zeros = String(repeating: "0", count: fractionDigits)
+        return "0\(separator)\(zeros)"
+    }
+    
+    // MARK: - Initialization
+    
+    init(value: Binding<Double>, fractionDigits: Int = 2) {
+        self._value = value
+        self.fractionDigits = fractionDigits
     }
     
     // MARK: - Body
@@ -114,5 +128,4 @@ private extension AmountTextField {
 #Preview("Dark - EN") {
     AmountTextField.preview(locale: PreviewLocale.en.locale, colorScheme: .dark)
 }
-
 

@@ -22,7 +22,8 @@ final class ExpenseEditViewModel {
 
     var date: Date
     var amountBase: Double
-    var rateBaseToLocal: Double
+    var rateLocalToBase: Double
+    var amountLocal: Double
     var category: ExpenseCategory
     var comment: String
 
@@ -39,18 +40,13 @@ final class ExpenseEditViewModel {
             : "expense.navigationTitle.create"
         )
     }
-    
-    var amountLocal: Double {
-        guard rateBaseToLocal > 0 else { return 0 }
-        return (amountBase / rateBaseToLocal).rounded()
-    }
 
     var hasChanges: Bool {
         Snapshot(viewModel: self) != initialSnapshot
     }
     
     var canSave: Bool {
-        amountBase > 0 && rateBaseToLocal > 0
+        amountBase > 0 && rateLocalToBase > 0
     }
     
     // MARK: - Initialization
@@ -71,34 +67,38 @@ final class ExpenseEditViewModel {
 
         let resolvedDate: Date
         let resolvedAmountBase: Double
-        let resolvedRateBaseToLocal: Double
+        let resolvedRateLocalToBase: Double
+        let resolvedAmountLocal: Double
         let resolvedCategory: ExpenseCategory
         let resolvedComment: String
 
         if let expense {
             resolvedDate = expense.date
             resolvedAmountBase = expense.amountBase
-            resolvedRateBaseToLocal = expense.rateBaseToLocal
+            resolvedRateLocalToBase = expense.rateLocalToBase
+            resolvedAmountLocal = expense.amountLocal
             resolvedCategory = expense.category
             resolvedComment = expense.comment ?? ""
         } else {
             resolvedDate = .now
             resolvedAmountBase = 0
-            resolvedRateBaseToLocal = self.location.rateBaseToLocal
+            resolvedRateLocalToBase = self.location.rateLocalToBase
+            resolvedAmountLocal = 0
             resolvedCategory = .food
             resolvedComment = ""
         }
 
         date = resolvedDate
         amountBase = resolvedAmountBase
-        rateBaseToLocal = resolvedRateBaseToLocal
+        rateLocalToBase = resolvedRateLocalToBase
+        amountLocal = resolvedAmountLocal
         category = resolvedCategory
         comment = resolvedComment
 
         initialSnapshot = Snapshot(
             date: resolvedDate,
             amountBase: resolvedAmountBase,
-            rateBaseToLocal: resolvedRateBaseToLocal,
+            rateLocalToBase: resolvedRateLocalToBase,
             category: resolvedCategory,
             comment: resolvedComment
         )
@@ -128,9 +128,10 @@ final class ExpenseEditViewModel {
         switch inputCurrency {
         case .base:
             amountBase = newValue
+            amountLocal = rateLocalToBase > 0 ? (newValue / rateLocalToBase).rounded(to: 2) : 0
         case .location:
-            guard rateBaseToLocal > 0 else { return }
-            amountBase = newValue * rateBaseToLocal
+            amountLocal = newValue
+            amountBase = newValue * rateLocalToBase
         }
     }
     
@@ -143,7 +144,7 @@ final class ExpenseEditViewModel {
                 expense,
                 date: date,
                 amountInLocalCurrency: amountBase,
-                rateToBaseCurrency: rateBaseToLocal,
+                rateToBaseCurrency: rateLocalToBase,
                 category: category,
                 comment: comment
             )
@@ -151,7 +152,7 @@ final class ExpenseEditViewModel {
             repository.add(
                 date: date,
                 amountInLocalCurrency: amountBase,
-                rateToBaseCurrency: rateBaseToLocal,
+                rateToBaseCurrency: rateLocalToBase,
                 category: category,
                 location: location,
                 comment: comment
@@ -168,7 +169,7 @@ private extension ExpenseEditViewModel {
         
         let date: Date
         let amountBase: Double
-        let rateBaseToLocal: Double
+        let rateLocalToBase: Double
         let category: ExpenseCategory
         let comment: String
 
@@ -177,13 +178,13 @@ private extension ExpenseEditViewModel {
         init(
             date: Date,
             amountBase: Double,
-            rateBaseToLocal: Double,
+            rateLocalToBase: Double,
             category: ExpenseCategory,
             comment: String
         ) {
             self.date = date
             self.amountBase = amountBase.rounded()
-            self.rateBaseToLocal = rateBaseToLocal.rounded(to: 6)
+            self.rateLocalToBase = rateLocalToBase.rounded(to: 4)
             self.category = category
             self.comment = comment.trimmingCharacters(in: .whitespacesAndNewlines)
         }
@@ -192,11 +193,10 @@ private extension ExpenseEditViewModel {
             self.init(
                 date: viewModel.date,
                 amountBase: viewModel.amountBase,
-                rateBaseToLocal: viewModel.rateBaseToLocal,
+                rateLocalToBase: viewModel.rateLocalToBase,
                 category: viewModel.category,
                 comment: viewModel.comment
             )
         }
     }
 }
-

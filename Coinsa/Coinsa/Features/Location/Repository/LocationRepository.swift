@@ -21,7 +21,7 @@ struct LocationRepository {
         startDate: Date,
         endDate: Date,
         currencyLocal: Currency,
-        rateBaseToLocal: Double,
+        rateLocalToBase: Double,
         trip: Trip,
         budgetsByCategory: [ExpenseCategory: Double]
     ) {
@@ -30,7 +30,7 @@ struct LocationRepository {
             startDate: startDate,
             endDate: endDate,
             currencyCodeLocal: currencyLocal.code,
-            rateBaseToLocal: rateBaseToLocal,
+            rateLocalToBase: rateLocalToBase,
             trip: trip,
             budgets: [],
             expenses: []
@@ -47,14 +47,14 @@ struct LocationRepository {
         startDate: Date,
         endDate: Date,
         currencyLocal: Currency,
-        rateBaseToLocal: Double,
+        rateLocalToBase: Double,
         budgetsByCategory: [ExpenseCategory: Double]
     ) {
         location.name = name
         location.startDate = startDate
         location.endDate = endDate
         location.currencyCodeLocal = currencyLocal.code
-        location.rateBaseToLocal = rateBaseToLocal
+        location.rateLocalToBase = rateLocalToBase
 
         applyBudgets(budgetsByCategory, to: location)
         try? context.save()

@@ -39,7 +39,6 @@ struct AmountText: View {
             
             if let currency {
                 CurrencyCodeText(currency, style: style, tint: tint)
-                    .frame(width: 40, alignment: .center)
             }
         }
     }

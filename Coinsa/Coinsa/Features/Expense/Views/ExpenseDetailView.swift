@@ -82,7 +82,7 @@ struct ExpenseDetailView: View {
                     ExchangeRateText(
                         from: localCurrency,
                         to: baseCurrency,
-                        rate: expense.rateBaseToLocal,
+                        rate: expense.rateLocalToBase,
                         style: .secondary)
                 }
                 

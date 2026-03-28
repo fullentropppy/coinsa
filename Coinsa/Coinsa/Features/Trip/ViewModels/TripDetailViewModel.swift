@@ -16,8 +16,8 @@ struct TripDetailViewModel {
     // MARK: - Computed Properties
 
     var headerData: TripDetailHeaderData {
-        let plannedAmount = trip.calculatePlannedAmount(inBase: true)
-        let actualAmount = trip.calculateActualAmount(inBase: true)
+        let plannedAmount = trip.calculatePlannedAmount(asBaseCurrency: true)
+        let actualAmount = trip.calculateActualAmount(asBaseCurrency: true)
         
         return TripDetailHeaderData(
             status: trip.status,

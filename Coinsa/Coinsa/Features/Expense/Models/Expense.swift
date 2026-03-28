@@ -14,7 +14,7 @@ class Expense {
     
     var date: Date
     var amountBase: Double
-    var rateBaseToLocal: Double
+    var rateLocalToBase: Double
     var category: ExpenseCategory
     var location: Location
     var comment: String?
@@ -24,14 +24,14 @@ class Expense {
     init(
         date: Date = .now,
         amountBase: Double,
-        rateBaseToLocal: Double,
+        rateLocalToBase: Double,
         category: ExpenseCategory,
         location: Location,
         comment: String? = nil
     ) {
         self.date = date
         self.amountBase = amountBase
-        self.rateBaseToLocal = rateBaseToLocal
+        self.rateLocalToBase = rateLocalToBase
         self.category = category
         self.location = location
         self.comment = comment

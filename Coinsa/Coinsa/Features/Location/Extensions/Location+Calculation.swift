@@ -8,6 +8,14 @@
 import Foundation
 
 extension Location {
+    // MARK: - Computed Properties
+    
+    var rateBaseToLocal: Double {
+        rateLocalToBase > 0 ? (1 / rateLocalToBase).rounded(to: 4) : 0
+    }
+    
+    // MARK: - Public Methods
+    
     func calculatePlannedAmount(asBaseCurrency: Bool = true) -> Double {
         budgets.reduce(0) {
             let exchangeRate = asBaseCurrency ? 1 : rateBaseToLocal
