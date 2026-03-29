@@ -82,7 +82,7 @@ struct TripListView: View {
     
     private var emptyTripListContent: some View {
         EmptyStateView(
-            imageName: "suitcase",
+            imageName: Trip.icon,
             title: "trip.emptyState.title",
             description: "trip.emptyState.desctiption",
             buttonLabel: "trip.add",

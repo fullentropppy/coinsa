@@ -20,8 +20,8 @@ struct ExpenseRowView: View {
         VStack(alignment: .leading) {
             HStack {
                 VStack(alignment: .leading, spacing: 10) {
-                    ExpenseCategoryLabel(category: expense.category)
-                    DateLabel(single: expense.date, style: .secondary)
+                    categoryBadge
+                    DateLabel(single: expense.date, style: .tertiary)
                 }
                 
                 Spacer()
@@ -34,11 +34,25 @@ struct ExpenseRowView: View {
                     AmountText(
                         expense.amountBase,
                         currency: baseCurrency,
-                        style: .secondary
+                        style: .tertiary
                     )
                 }
             }
         }
+    }
+    
+    // MARK: - Components
+    
+    private var categoryBadge: some View {
+        HStack {
+            Image(systemName: expense.category.badgeIcon)
+            Text(expense.category.localizedKey)
+        }
+        .font(.caption.weight(.semibold))
+        .foregroundStyle(.background)
+        .padding(.horizontal, 8)
+        .padding(.vertical, 4)
+        .background(expense.category.badgeColor, in: .capsule)
     }
 }
 

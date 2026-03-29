@@ -10,13 +10,13 @@ import SwiftUI
 struct ButtonView: View {
     // MARK: - Stored Properties
     
-    private let symbolName: String
+    private let icon: String
     private let action: () -> Void
     
     // MARK: - Initialization
     
-    private init(symbolName: String, action: @escaping () -> Void) {
-        self.symbolName = symbolName
+    private init(icon: String, action: @escaping () -> Void) {
+        self.icon = icon
         self.action = action
     }
     
@@ -24,7 +24,7 @@ struct ButtonView: View {
     
     var body: some View {
         Button(action: action) {
-            Image(systemName: symbolName)
+            Image(systemName: icon)
         }
     }
 }
@@ -33,27 +33,27 @@ struct ButtonView: View {
 
 extension ButtonView {
     static func add(action: @escaping () -> Void) -> ButtonView {
-        ButtonView(symbolName: "plus", action: action)
+        ButtonView(icon: "plus", action: action)
     }
     
     static func edit(action: @escaping () -> Void) -> ButtonView {
-        ButtonView(symbolName: "pencil", action: action)
+        ButtonView(icon: "pencil", action: action)
     }
     
     static func save(action: @escaping () -> Void) -> ButtonView {
-        ButtonView(symbolName: "checkmark", action: action)
+        ButtonView(icon: "checkmark", action: action)
     }
     
     static func delete(action: @escaping () -> Void) -> ButtonView {
-        ButtonView(symbolName: "trash", action: action)
+        ButtonView(icon: "trash", action: action)
     }
     
     static func close(action: @escaping () -> Void) -> ButtonView {
-        ButtonView(symbolName: "xmark", action: action)
+        ButtonView(icon: "xmark", action: action)
     }
         
     static func settings(action: @escaping () -> Void) -> ButtonView {
-        ButtonView(symbolName: "gear", action: action)
+        ButtonView(icon: "gear", action: action)
     }
 }
 

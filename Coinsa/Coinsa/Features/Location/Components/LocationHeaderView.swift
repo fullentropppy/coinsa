@@ -12,19 +12,15 @@ struct LocationHeaderView: View {
 
     let data: LocationDetailHeaderData
     let showsSummary: Bool
-    
-    // MARK: - Computed Properties
-
-    private var differenceTint: Color {
-        data.amountDifferenceBase >= 0 ? .green : .red
-    }
 
     // MARK: - Body
 
     var body: some View {
         VStack(spacing: 14) {
             headerContent
-            summaryContent
+            if showsSummary {
+                summaryContent
+            }
         }
     }
 
@@ -32,17 +28,17 @@ struct LocationHeaderView: View {
 
     private var headerContent: some View {
         HStack {
+            eventSymbol
             EventStatusLabel(data.status)
             Spacer()
-            DateLabel(from: data.startDate, to: data.endDate, style: .secondary)
-            Spacer()
-            DurationLabel(days: data.durationDays)
+            DateLabel(from: data.startDate, to: data.endDate, style: .tertiary)
+            DurationLabel(days: data.durationDays, style: .tertiary)
         }
     }
 
     private var summaryContent: some View {
         VStack(spacing: 14) {
-            HStack(spacing: 14) {
+            HStack {
                 LocationAmountCardView(
                     title: "amount.planned",
                     localAmount: data.plannedAmountLocal,
@@ -61,15 +57,30 @@ struct LocationHeaderView: View {
                 )
             }
 
-            LocationAmountCardView(
-                title: "amount.difference",
-                localAmount: data.amountDifferenceLocal,
-                localCurrency: data.localCurrency,
-                baseAmount: data.amountDifferenceBase,
-                baseCurrency: data.baseCurrency,
-                tint: differenceTint
-            )
+            HStack(alignment: .center) {
+                Text("amount.difference").font(.footnote).foregroundStyle(.secondary)
+                Spacer()
+                AmountText(data.amountDifferenceLocal, currency: data.localCurrency, style: .tertiary)
+                Text("•").foregroundStyle(.secondary)
+                AmountText(data.amountDifferenceBase, currency: data.baseCurrency, style: .tertiary)
+                differencySymbol
+            }
         }
+    }
+    
+    private var eventSymbol: some View {
+        Image(systemName: "mappin.and.ellipse.circle.fill")
+            .foregroundStyle(.teal)
+            .imageScale(.large)
+    }
+    
+    private var differencySymbol: some View {
+        let symbolName = data.amountDifferenceBase >= 0 ? "arrowshape.up.circle.fill" : "arrowshape.down.circle.fill"
+        let symbolTint = data.amountDifferenceBase >= 0 ? Color.green : Color.red
+        
+        return Image(systemName: symbolName)
+            .foregroundStyle(symbolTint)
+            .imageScale(.small)
     }
 }
 
@@ -87,16 +98,14 @@ struct LocationAmountCardView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text(title).font(.caption).foregroundStyle(.secondary)
-            AmountText(baseAmount, currency: baseCurrency)
-            AmountText(localAmount, currency: localCurrency, style: .secondary)
+            Text(title).font(.footnote).foregroundStyle(.secondary)
+            AmountText(localAmount, currency: localCurrency)
+            Divider()
+            AmountText(baseAmount, currency: baseCurrency, style: .tertiary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(10)
-        .background(
-            RoundedRectangle(cornerRadius: 15, style: .continuous)
-                .fill(tint.opacity(0.4).gradient)
-        )
+        .glassEffect(.regular, in: .containerRelative)
     }
 }
 

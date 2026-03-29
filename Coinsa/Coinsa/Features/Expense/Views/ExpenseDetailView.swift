@@ -31,7 +31,7 @@ struct ExpenseDetailView: View {
     // MARK: - Body
 
     var body: some View {
-        List {
+        Form {
             mainSection
             if let comment = expense.comment {
                 commentSection(comment: comment)
@@ -90,7 +90,7 @@ struct ExpenseDetailView: View {
                 
                 amountSectionDevider
                 
-                Image(systemName: expense.category.symbolName)
+                Image(systemName: expense.category.badgeIcon)
                     .foregroundStyle(.accent)
                     .scaleEffect(1.2)
                 

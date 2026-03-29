@@ -211,13 +211,6 @@ struct ExpenseEditView: View {
 
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
-//        ToolbarItem(placement: .principal) {
-//            ContextToolbarTitleView(
-//                title: viewModel.navigationTitle,
-//                subtitle: viewModel.location.name
-//            )
-//        }
-        
         ToolbarItemGroup(placement: .topBarLeading) {
             ButtonView.close {
                 handleClose()

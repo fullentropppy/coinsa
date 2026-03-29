@@ -12,31 +12,31 @@ struct DateLabel: View {
     
     private let date1: Date
     private let date2: Date?
-    private let showsSymbol: Bool
+    private let showsIcon: Bool
     private let style: ComponentStyle
     
     // MARK: - Initialization
     
     init(
         single date: Date,
-        showsSymbol: Bool = false,
+        showsIcon: Bool = false,
         style: ComponentStyle = .default
     ) {
         self.date1 = date
         self.date2 = nil
-        self.showsSymbol = showsSymbol
+        self.showsIcon = showsIcon
         self.style = style
     }
     
     init(
         from date1: Date,
         to date2: Date,
-        showsSymbol: Bool = false,
+        showsIcon: Bool = false,
         style: ComponentStyle = .default
     ) {
         self.date1 = date1
         self.date2 = date2
-        self.showsSymbol = showsSymbol
+        self.showsIcon = showsIcon
         self.style = style
     }
     
@@ -44,15 +44,17 @@ struct DateLabel: View {
     
     var body: some View {
         HStack {
-            if showsSymbol {
-                Image(systemName: "calendar").foregroundStyle(.secondary)
+            if showsIcon {
+                Image(systemName: "calendar")
+                    .imageScale(.small)
+                    .foregroundStyle(.secondary)
             }
             
             Group {
                 if let endDate = date2 {
-                    Text(date1..<endDate, format: Date.intervalFormat)
+                    Text(DateDisplayFormatter.formatRange(startDate: date1, endDate: endDate))
                 } else {
-                    Text(date1, format: Date.displayFormatWithTime)
+                    Text(DateDisplayFormatter.format(date1))
                 }
             }
             .foregroundStyle(styleColor)
@@ -101,10 +103,10 @@ private extension DateLabel {
             }
             
             VStack(spacing: 20) {
-                DateLabel(single: now, showsSymbol: true)
-                DateLabel(single: now, showsSymbol: true, style: .primary)
-                DateLabel(single: now, showsSymbol: true, style: .secondary)
-                DateLabel(single: now, showsSymbol: true, style: .tertiary)
+                DateLabel(single: now, showsIcon: true)
+                DateLabel(single: now, showsIcon: true, style: .primary)
+                DateLabel(single: now, showsIcon: true, style: .secondary)
+                DateLabel(single: now, showsIcon: true, style: .tertiary)
             }
             
             VStack(spacing: 20) {
@@ -115,10 +117,10 @@ private extension DateLabel {
             }
             
             VStack(spacing: 20) {
-                DateLabel(from: now, to: weekAhead, showsSymbol: true)
-                DateLabel(from: now, to: weekAhead, showsSymbol: true, style: .primary)
-                DateLabel(from: now, to: weekAhead, showsSymbol: true, style: .secondary)
-                DateLabel(from: now, to: weekAhead, showsSymbol: true, style: .tertiary)
+                DateLabel(from: now, to: weekAhead, showsIcon: true)
+                DateLabel(from: now, to: weekAhead, showsIcon: true, style: .primary)
+                DateLabel(from: now, to: weekAhead, showsIcon: true, style: .secondary)
+                DateLabel(from: now, to: weekAhead, showsIcon: true, style: .tertiary)
             }
         }
         .environment(\.locale, locale)

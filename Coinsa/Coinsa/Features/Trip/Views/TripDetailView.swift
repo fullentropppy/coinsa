@@ -141,7 +141,7 @@ struct TripDetailView: View {
     
     private var emptyLocationListContent: some View {
         EmptyStateView(
-            imageName: "mappin.and.ellipse",
+            imageName: Location.icon,
             title: "location.emptyState.title",
             description: "location.emptyState.description",
             buttonLabel: "location.add",

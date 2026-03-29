@@ -22,12 +22,11 @@ struct EventStatusLabel: View {
     
     var body: some View {
         Text(status.localizedKey)
-            .font(.caption).foregroundStyle(status.color)
-            .padding(.horizontal, 10).padding(.vertical, 5)
-            .overlay(
-                RoundedRectangle(cornerRadius: 100)
-                    .stroke(status.color, lineWidth: 2)
-            )
+            .font(.caption.weight(.semibold))
+            .foregroundStyle(.background)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 4)
+            .background(status.color, in: .capsule)
     }
 }
 

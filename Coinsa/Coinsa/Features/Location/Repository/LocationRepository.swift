@@ -72,7 +72,9 @@ struct LocationRepository {
         to location: Location
     ) {
         let existingBudgets = Dictionary(
-            uniqueKeysWithValues: location.budgets.map { ($0.category, $0) }
+            uniqueKeysWithValues: location.budgets.map {
+                ($0.category, $0)
+            }
         )
 
         for (category, amount) in budgetsByCategory {

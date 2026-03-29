@@ -39,7 +39,7 @@ struct EmptyStateView: View {
 private extension EmptyStateView {
     static func tripPreview(locale: Locale, colorScheme: ColorScheme) -> some View {
         EmptyStateView(
-            imageName: "suitcase",
+            imageName: Trip.icon,
             title: "trip.emptyState.title",
             description: "trip.emptyState.desctiption",
             buttonLabel: "trip.add",
@@ -51,7 +51,7 @@ private extension EmptyStateView {
     
     static func locationPreview(locale: Locale, colorScheme: ColorScheme) -> some View {
         EmptyStateView(
-            imageName: "mappin.and.ellipse",
+            imageName: Location.icon,
             title: "location.emptyState.title",
             description: "location.emptyState.description",
             buttonLabel: "location.add",

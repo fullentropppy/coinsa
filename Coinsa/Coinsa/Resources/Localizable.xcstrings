@@ -4,6 +4,9 @@
     "" : {
       "shouldTranslate" : false
     },
+    "•" : {
+
+    },
     "1 %@ = %@ %@" : {
       "localizations" : {
         "en" : {
@@ -44,7 +47,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Разиница"
+            "value" : "Разница"
           }
         }
       }

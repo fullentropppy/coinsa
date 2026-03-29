@@ -16,7 +16,7 @@ struct ExpenseCategoryLabel: View {
     
     var body: some View {
         HStack {
-            Image(systemName: category.symbolName)
+            Image(systemName: category.badgeIcon)
                 .foregroundStyle(.secondary)
                 .frame(width: 24)
             Text(category.localizedKey)

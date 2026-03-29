@@ -21,7 +21,8 @@ struct EventStatusImage: View {
     // MARK: - Body
     
     var body: some View {
-        Image(systemName: "circle.fill").foregroundStyle(status.color)
+        Image(systemName: "circle.fill")
+            .foregroundStyle(status.color)
     }
 }
 
