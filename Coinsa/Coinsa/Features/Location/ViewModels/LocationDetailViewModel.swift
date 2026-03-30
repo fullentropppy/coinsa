@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 struct LocationDetailViewModel {
     // MARK: - Stored Properties
@@ -16,25 +17,28 @@ struct LocationDetailViewModel {
 
     // MARK: - Computed Properties
 
-    var headerData: LocationDetailHeaderData {
+    var eventHeaderData: EventHeaderData {
         let plannedAmountBase = location.calculatePlannedAmount(asBaseCurrency: true)
         let plannedAmountLocal = location.calculatePlannedAmount(asBaseCurrency: false)
         let actualAmountBase = location.calculateActualAmount(asBaseCurrency: true)
         let actualAmountLocal = location.calculateActualAmount(asBaseCurrency: false)
+        let hasLocalAmounts = localCurrency != baseCurrency && location.rateLocalToBase > 0
 
-        return LocationDetailHeaderData(
+        return EventHeaderData(
             status: location.status,
             startDate: location.startDate,
             endDate: location.endDate,
             durationDays: location.durationInDays,
-            plannedAmountLocal: plannedAmountLocal,
             plannedAmountBase: plannedAmountBase,
-            actualAmountLocal: actualAmountLocal,
             actualAmountBase: actualAmountBase,
-            amountDifferenceLocal: plannedAmountLocal - actualAmountLocal,
             amountDifferenceBase: plannedAmountBase - actualAmountBase,
-            localCurrency: localCurrency,
-            baseCurrency: baseCurrency
+            baseCurrency: baseCurrency,
+            plannedAmountLocal: hasLocalAmounts ? plannedAmountLocal : nil,
+            actualAmountLocal: hasLocalAmounts ? actualAmountLocal : nil,
+            amountDifferenceLocal: hasLocalAmounts ? plannedAmountLocal - actualAmountLocal : nil,
+            localCurrency: hasLocalAmounts ? localCurrency : nil,
+            badgeIcon: Location.badgeIcon,
+            badgeColor: Location.badgeColor
         )
     }
 
@@ -45,19 +49,4 @@ struct LocationDetailViewModel {
         self.baseCurrency = baseCurrency
         self.localCurrency = Currency.from(location.currencyCodeLocal)
     }
-}
-
-struct LocationDetailHeaderData {
-    let status: EventStatus
-    let startDate: Date
-    let endDate: Date
-    let durationDays: Int
-    let plannedAmountLocal: Double
-    let plannedAmountBase: Double
-    let actualAmountLocal: Double
-    let actualAmountBase: Double
-    let amountDifferenceLocal: Double
-    let amountDifferenceBase: Double
-    let localCurrency: Currency
-    let baseCurrency: Currency
 }

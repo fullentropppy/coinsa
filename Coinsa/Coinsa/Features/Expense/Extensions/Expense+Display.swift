@@ -12,11 +12,11 @@ extension Expense {
         "creditcard"
     }
     
-    var badgeIcon: String {
+    static var badgeIcon: String {
         "creditcard.circle.fill"
     }
     
-    var badgeColor: Color {
+    static var badgeColor: Color {
         .orange
     }
 }

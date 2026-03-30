@@ -12,11 +12,11 @@ extension Location {
         "mappin.and.ellipse"
     }
     
-    var badgeIcon: String {
+    static var badgeIcon: String {
         "mappin.and.ellipse.circle.fill"
     }
     
-    var badgeColor: Color {
+    static var badgeColor: Color {
         .teal
     }
 }

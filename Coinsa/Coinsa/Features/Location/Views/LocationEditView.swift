@@ -18,6 +18,8 @@ struct LocationEditView: View {
     @State private var deletionHandler = DeletionHandler<Location>()
     @State private var inputCurrency: InputCurrency = .base
     @State private var isShowingDiscardAlert = false
+    
+    private let onDelete: (() -> Void)?
 
     // MARK: - Computed Properties
 
@@ -77,22 +79,24 @@ struct LocationEditView: View {
     
     // MARK: - Initialization
 
-    init(trip: Trip, baseCurrency: Currency) {
+    init(trip: Trip, baseCurrency: Currency, onDelete: (() -> Void)? = nil) {
         _viewModel = State(
             initialValue: LocationEditViewModel(
                 trip: trip,
                 baseCurrency: baseCurrency
             )
         )
+        self.onDelete = onDelete
     }
     
-    init(location: Location, baseCurrency: Currency) {
+    init(location: Location, baseCurrency: Currency, onDelete: (() -> Void)? = nil) {
         _viewModel = State(
             initialValue: LocationEditViewModel(
                 location: location,
                 baseCurrency: baseCurrency
             )
         )
+        self.onDelete = onDelete
     }
 
     // MARK: - Body
@@ -107,7 +111,7 @@ struct LocationEditView: View {
             }
             .navigationTitle(viewModel.navigationTitle)
             .navigationSubtitle(viewModel.trip.screenContextSubtitle)
-            .toolbarTitleDisplayMode(.inline)
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 toolbarContent
             }
@@ -124,7 +128,6 @@ struct LocationEditView: View {
                 message: "location.delete.message",
                 onConfirm: {
                     confirmDelete()
-                    dismiss()
                 },
                 onCancel: {
                     cancelDelete()
@@ -253,6 +256,7 @@ struct LocationEditView: View {
     private func confirmDelete() {
         deletionHandler.confirm { repository.delete($0) }
         dismiss()
+        onDelete?()
     }
 
     private func cancelDelete() {

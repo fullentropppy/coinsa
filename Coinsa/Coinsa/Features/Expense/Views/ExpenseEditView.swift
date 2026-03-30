@@ -118,7 +118,7 @@ struct ExpenseEditView: View {
             }
             .navigationTitle(viewModel.navigationTitle)
             .navigationSubtitle(viewModel.location.screenContextSubtitle)
-            .toolbarTitleDisplayMode(.inline)
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 toolbarContent
             }

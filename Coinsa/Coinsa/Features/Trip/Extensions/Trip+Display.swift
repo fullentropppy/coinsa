@@ -12,11 +12,11 @@ extension Trip {
         "suitcase"
     }
     
-    var badgeIcon: String {
-        "suitcase.circle.filll"
+    static var badgeIcon: String {
+        "suitcase.circle.fill"
     }
     
-    var badgeColor: Color {
+    static var badgeColor: Color {
         .indigo
     }
 }

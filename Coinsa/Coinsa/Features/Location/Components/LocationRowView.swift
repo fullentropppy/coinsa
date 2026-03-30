@@ -14,18 +14,16 @@ struct LocationRowView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            HStack {
+            HStack(spacing: 10) {
                 EventStatusImage(location.status)
                 TitleText(location.name)
             }
-            .padding(2)
             
-            HStack {
-                DateLabel(from: location.startDate, to: location.endDate, style: .secondary)
+            HStack(spacing: 10) {
+                DateLabel(from: location.startDate, to: location.endDate, style: .tertiary)
                 Spacer()
-                DurationLabel(days: location.durationInDays)
+                DurationLabel(days: location.durationInDays, style: .tertiary)
             }
-            .padding(2)
         }
     }
 }

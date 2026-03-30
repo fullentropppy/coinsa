@@ -8,10 +8,6 @@
 import SwiftUI
 
 extension ExpenseCategory {
-    static var icon: String {
-        "tag"
-    }
-    
     var badgeIcon: String {
         switch self {
         case .food:

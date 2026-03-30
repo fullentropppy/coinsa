@@ -77,7 +77,7 @@ struct DateLabel: View {
         }
     }
     
-    var styleColor: Color {
+    private var styleColor: Color {
         switch style {
         case .default, .primary:
             return .primary

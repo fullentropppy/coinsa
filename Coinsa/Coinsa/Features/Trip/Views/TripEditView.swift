@@ -17,6 +17,8 @@ struct TripEditView: View {
     @State private var viewModel: TripEditViewModel
     @State private var deletionHandler = DeletionHandler<Trip>()
     @State private var isShowingDiscardAlert = false
+    
+    private let onDelete: (() -> Void)?
         
     // MARK: - Computed properties
     
@@ -26,8 +28,9 @@ struct TripEditView: View {
 
     // MARK: - Initialization
     
-    init(trip: Trip? = nil) {
+    init(trip: Trip? = nil, onDelete: (() -> Void)? = nil) {
         _viewModel = State(initialValue: TripEditViewModel(trip: trip))
+        self.onDelete = onDelete
     }
     
     // MARK: - Body
@@ -39,7 +42,7 @@ struct TripEditView: View {
                 actionsSection
             }
             .navigationTitle(viewModel.navigationTitle)
-            .toolbarTitleDisplayMode(.inline)
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 toolbarContent
             }
@@ -56,7 +59,6 @@ struct TripEditView: View {
                 message: "trip.delete.message",
                 onConfirm: {
                     confirmDelete()
-                    dismiss()
                 },
                 onCancel: {
                     cancelDelete()
@@ -129,6 +131,7 @@ struct TripEditView: View {
     private func confirmDelete() {
         deletionHandler.confirm { repository.delete($0) }
         dismiss()
+        onDelete?()
     }
 
     private func cancelDelete() {

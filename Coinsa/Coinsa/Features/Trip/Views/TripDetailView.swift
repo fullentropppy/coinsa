@@ -12,6 +12,7 @@ struct TripDetailView: View {
     // MARK: - Stored Properties
 
     @Environment(\.modelContext) private var context
+    @Environment(\.dismiss) private var dismiss
     @Environment(AppSettingsStore.self) private var settingsStore
     
     @Query private var trips: [Trip]
@@ -75,8 +76,8 @@ struct TripDetailView: View {
     private func detailContent(trip: Trip, viewModel: TripDetailViewModel) -> some View {
         List {
             Section {
-                TripHeaderView(
-                    data: viewModel.headerData,
+                EventHeaderView(
+                    data: viewModel.eventHeaderData,
                     showsSummary: !locations.isEmpty
                 )
             }
@@ -95,7 +96,10 @@ struct TripDetailView: View {
             toolbarContent
         }
         .sheet(isPresented: $isShowingTripEdit) {
-            TripEditView(trip: trip)
+            TripEditView(
+                trip: trip,
+                onDelete: { dismiss() }
+            )
         }
         .sheet(isPresented: $isShowingLocationAdd) {
             LocationEditView(

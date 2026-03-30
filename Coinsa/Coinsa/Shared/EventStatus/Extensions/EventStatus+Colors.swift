@@ -10,9 +10,9 @@ import SwiftUI
 extension EventStatus {
     var color: Color {
         switch self {
-        case .upcoming: .yellow
-        case .ongoing: .cyan
-        case .completed: .green
+        case .upcoming: .green
+        case .ongoing: .blue
+        case .completed: .gray
         }
     }
 }

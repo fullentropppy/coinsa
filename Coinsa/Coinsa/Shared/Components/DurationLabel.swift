@@ -44,7 +44,7 @@ struct DurationLabel: View {
         }
     }
     
-    var styleColor: Color {
+    private var styleColor: Color {
         switch style {
         case .primary:
             return .primary

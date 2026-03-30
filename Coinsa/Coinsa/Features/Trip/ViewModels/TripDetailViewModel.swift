@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 struct TripDetailViewModel {
     // MARK: - Stored Properties
@@ -15,19 +16,25 @@ struct TripDetailViewModel {
 
     // MARK: - Computed Properties
 
-    var headerData: TripDetailHeaderData {
+    var eventHeaderData: EventHeaderData {
         let plannedAmount = trip.calculatePlannedAmount(asBaseCurrency: true)
         let actualAmount = trip.calculateActualAmount(asBaseCurrency: true)
-        
-        return TripDetailHeaderData(
+
+        return EventHeaderData(
             status: trip.status,
             startDate: trip.startDate,
             endDate: trip.endDate,
             durationDays: trip.durationInDays,
-            plannedAmount: plannedAmount,
-            actualAmount: actualAmount,
-            amountDifference: plannedAmount - actualAmount,
-            currency: baseCurrency
+            plannedAmountBase: plannedAmount,
+            actualAmountBase: actualAmount,
+            amountDifferenceBase: plannedAmount - actualAmount,
+            baseCurrency: baseCurrency,
+            plannedAmountLocal: nil,
+            actualAmountLocal: nil,
+            amountDifferenceLocal: nil,
+            localCurrency: nil,
+            badgeIcon: Trip.badgeIcon,
+            badgeColor: Trip.badgeColor
         )
     }
     
@@ -37,17 +44,4 @@ struct TripDetailViewModel {
         self.trip = trip
         self.baseCurrency = baseCurrency
     }
-}
-
-// MARK: - Supporting Types
-
-struct TripDetailHeaderData {
-    let status: EventStatus
-    let startDate: Date
-    let endDate: Date
-    let durationDays: Int
-    let plannedAmount: Double
-    let actualAmount: Double
-    let amountDifference: Double
-    let currency: Currency
 }

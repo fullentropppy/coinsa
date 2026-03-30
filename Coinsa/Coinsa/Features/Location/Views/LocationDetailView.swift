@@ -12,6 +12,7 @@ struct LocationDetailView: View {
     // MARK: - Stored Properties
 
     @Environment(\.modelContext) private var context
+    @Environment(\.dismiss) private var dismiss
     @Environment(AppSettingsStore.self) private var settingsStore
 
     @Query private var locations: [Location]
@@ -78,8 +79,8 @@ struct LocationDetailView: View {
     ) -> some View {
         Form {
             Section {
-                LocationHeaderView(
-                    data: viewModel.headerData,
+                EventHeaderView(
+                    data: viewModel.eventHeaderData,
                     showsSummary: !expenses.isEmpty
                 )
             }
@@ -94,14 +95,15 @@ struct LocationDetailView: View {
         }
         .navigationTitle(viewModel.location.name)
         .navigationSubtitle(viewModel.location.trip.screenContextSubtitle)
-        .toolbarTitleDisplayMode(.large)
+        .navigationBarTitleDisplayMode(.large)
         .toolbar {
             toolbarContent
         }
         .sheet(isPresented: $isShowingLocationEdit) {
             LocationEditView(
                 location: location,
-                baseCurrency: settingsStore.baseCurrency
+                baseCurrency: settingsStore.baseCurrency,
+                onDelete: { dismiss() }
             )
         }
         .sheet(isPresented: $isShowingExpenseAdd) {

@@ -16,19 +16,17 @@ struct TripRowView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            HStack {
+            HStack(spacing: 10) {
                 EventStatusImage(trip.status)
                 TitleText(trip.name)
             }
-            .padding(2)
             
-            HStack {
-                DateLabel(from: trip.startDate, to: trip.endDate, style: .secondary)
+            HStack(spacing: 10) {
+                DateLabel(from: trip.startDate, to: trip.endDate, style: .tertiary)
                 Spacer()
-                DurationLabel(days: trip.durationInDays)
-                TripLocationCountLabel(count: trip.locationsCount)
+                DurationLabel(days: trip.durationInDays, style: .tertiary)
+                TripLocationCountLabel(count: trip.locationsCount, style: .tertiary)
             }
-            .padding(2)
         }
     }
 }

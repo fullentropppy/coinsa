@@ -30,7 +30,7 @@ struct TripListView: View {
         NavigationStack {
             tripListContent
                 .navigationTitle("trip.list.navigationTitle")
-                .toolbarTitleDisplayMode(.large)
+                .navigationBarTitleDisplayMode(.large)
                 .sheet(isPresented: $isShowingTripEdit) {
                     TripEditView(trip: nil)
                 }

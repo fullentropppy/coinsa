@@ -12,7 +12,15 @@ import SwiftUI
 struct TripLocationCountLabel: View {
     // MARK: - Stored Properties
     
-    let count: Int
+    private let count: Int
+    private let style: ComponentStyle
+    
+    // MARK: - Initialization
+    
+    init(count: Int, style: ComponentStyle = .default) {
+        self.count = count
+        self.style = style
+    }
     
     // MARK: - Body
     
@@ -21,8 +29,30 @@ struct TripLocationCountLabel: View {
             Image(systemName: "mappin.and.ellipse")
             Text(String(count))
         }
-        .font(.subheadline)
-        .foregroundStyle(.secondary)
+        .font(styleFont)
+        .foregroundStyle(styleColor)
+    }
+    
+    // MARK: - Components
+    
+    private var styleFont: Font {
+        switch style {
+        case .primary:
+            return .headline
+        case .default, .secondary:
+            return .subheadline
+        case .tertiary:
+            return .footnote
+        }
+    }
+    
+    private var styleColor: Color {
+        switch style {
+        case .primary:
+            return .primary
+        default:
+            return .secondary
+        }
     }
 }
 
@@ -31,9 +61,10 @@ struct TripLocationCountLabel: View {
 private extension TripLocationCountLabel {
     static func preview(colorScheme: ColorScheme) -> some View {
         VStack(spacing: 20) {
-            TripLocationCountLabel(count: 1)
-            TripLocationCountLabel(count: 5)
-            TripLocationCountLabel(count: 10)
+            TripLocationCountLabel(count: 4)
+            TripLocationCountLabel(count: 4, style: .primary)
+            TripLocationCountLabel(count: 4, style: .secondary)
+            TripLocationCountLabel(count: 4, style: .tertiary)
         }
         .preferredColorScheme(colorScheme)
     }
