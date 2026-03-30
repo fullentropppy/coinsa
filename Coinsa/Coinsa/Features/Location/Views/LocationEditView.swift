@@ -168,7 +168,7 @@ struct LocationEditView: View {
 
             LabeledContent("location.exchangeRate") {
                 HStack {
-                    AmountTextField(value: $viewModel.rateToBaseCurrency)
+                    AmountTextField(value: $viewModel.rateToBaseCurrency, fractionDigits: 4)
                     CurrencyCodeText(viewModel.baseCurrency)
                         .frame(width: 40, alignment: .center)
                 }

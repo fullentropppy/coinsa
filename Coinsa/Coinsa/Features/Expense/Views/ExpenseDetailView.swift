@@ -60,44 +60,59 @@ struct ExpenseDetailView: View {
     private var mainSection: some View {
         Section {
             VStack(spacing: 16) {
-                DateLabel(single: expense.date, style: .secondary)
-                
-                Spacer()
-
-                AmountText(
-                    expense.amountLocal,
-                    currency: localCurrency
-                )
-                .scaleEffect(2.2)
-                .frame(height: 40)
-                
-                amountSectionDevider
-                
-                VStack(spacing: 14) {
-                    AmountText(
-                        expense.amountBase,
-                        currency: baseCurrency,
-                        style: .secondary
-                    )
-                    .scaleEffect(1.6)
-                    
-                    ExchangeRateText(
-                        from: localCurrency,
-                        to: baseCurrency,
-                        rate: expense.rateLocalToBase,
-                        style: .secondary)
+                HStack {
+                    Image(systemName: Expense.badgeIcon)
+                        .foregroundStyle(Expense.badgeColor)
+                        .imageScale(.large)
+                    categoryBadge
+                    Spacer()
+                    DateLabel(single: expense.date, style: .tertiary)
                 }
                 
-                amountSectionDevider
-                
-                Image(systemName: expense.category.badgeIcon)
-                    .foregroundStyle(.accent)
-                    .scaleEffect(1.2)
-                
-                Spacer()
+                VStack(alignment: .center, spacing: 6) {
+                    AmountText(
+                        expense.amountLocal,
+                        currency: localCurrency
+                    )
+                    .padding(40)
+                    .scaleEffect(2)
+                    
+                    
+                    Divider()
+                    HStack {
+                        AmountText(
+                            expense.amountBase,
+                            currency: baseCurrency,
+                            style: .secondary
+                        )
+                        
+                        Text("•").foregroundStyle(.secondary)
+                        
+                        ExchangeRateText(
+                            from: localCurrency,
+                            to: baseCurrency,
+                            rate: expense.rateLocalToBase,
+                            style: .secondary)
+                    }
+                    .padding(10)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(10)
+                .glassEffect(.regular, in: .containerRelative)
             }
-            .frame(maxWidth: .infinity, minHeight: 300, alignment: .top)
         }
+    }
+    
+    private var categoryBadge: some View {
+        HStack {
+            Image(systemName: expense.category.badgeIcon)
+            //Text(expense.category.localizedKey)
+        }
+        .font(.caption.weight(.semibold))
+        .foregroundStyle(.background)
+        .padding(.horizontal, 8)
+        .padding(.vertical, 4)
+        .background(expense.category.badgeColor, in: .capsule)
     }
     
     private var amountSectionDevider: some View {

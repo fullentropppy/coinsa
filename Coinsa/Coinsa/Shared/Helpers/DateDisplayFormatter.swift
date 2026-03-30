@@ -8,30 +8,49 @@
 import Foundation
 
 struct DateDisplayFormatter {
+    // MARK: - Stored Properties
+    
     static let calendar = Calendar.current
 
+    // MARK: - Public Methods
+    
     static func format(_ date: Date, showsTime: Bool = true) -> String {
-        let year = calendar.component(.year, from: date)
-        let currentYear = calendar.component(.year, from: Date())
-        let formatter = Foundation.DateFormatter()
-
-        formatter.calendar = calendar
-        let dateTemplate = year == currentYear ? "dMMM" : "dMMMy"
-        formatter.setLocalizedDateFormatFromTemplate(showsTime ? "\(dateTemplate)jm" : dateTemplate)
-
-        return formatter.string(from: date)
+        let dateTemplate = isInCurrentYear(date) ? "dMMM" : "dMMMy"
+        return makeDateFormatter(dateTemplate: dateTemplate, showsTime: showsTime).string(from: date)
     }
 
     static func formatRange(startDate: Date, endDate: Date, showsTime: Bool = false) -> String {
-        let startYear = calendar.component(.year, from: startDate)
-        let endYear = calendar.component(.year, from: endDate)
-        let currentYear = calendar.component(.year, from: Date())
-        let formatter = DateIntervalFormatter()
+        let dateTemplate = isSameYear(startDate, endDate) ? "dMMM" : "dMy"
+        return makeIntervalFormatter(dateTemplate: dateTemplate, showsTime: showsTime).string(from: startDate, to: endDate)
+    }
 
+    // MARK: - Private Methods
+    
+    private static func isSameYear(_ lhs: Date, _ rhs: Date) -> Bool {
+        calendar.component(.year, from: lhs) == calendar.component(.year, from: rhs)
+    }
+
+    private static func isInCurrentYear(_ date: Date) -> Bool {
+        calendar.component(.year, from: date) == calendar.component(.year, from: Date())
+    }
+
+    private static func templateWithOptionalTime(dateTemplate: String, showsTime: Bool) -> String {
+        showsTime ? "\(dateTemplate)jm" : dateTemplate
+    }
+
+    private static func makeDateFormatter(dateTemplate: String, showsTime: Bool) -> Foundation.DateFormatter {
+        let formatter = Foundation.DateFormatter()
         formatter.calendar = calendar
-        let dateTemplate = (startYear == endYear && startYear == currentYear) ? "dMMM" : "dMMMy"
-        formatter.dateTemplate = showsTime ? "\(dateTemplate)jm" : dateTemplate
+        formatter.setLocalizedDateFormatFromTemplate(
+            templateWithOptionalTime(dateTemplate: dateTemplate, showsTime: showsTime)
+        )
+        return formatter
+    }
 
-        return formatter.string(from: startDate, to: endDate)
+    private static func makeIntervalFormatter(dateTemplate: String, showsTime: Bool) -> DateIntervalFormatter {
+        let formatter = DateIntervalFormatter()
+        formatter.calendar = calendar
+        formatter.dateTemplate = templateWithOptionalTime(dateTemplate: dateTemplate, showsTime: showsTime)
+        return formatter
     }
 }

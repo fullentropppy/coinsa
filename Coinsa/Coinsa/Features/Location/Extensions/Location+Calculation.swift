@@ -11,7 +11,7 @@ extension Location {
     // MARK: - Computed Properties
     
     var rateBaseToLocal: Double {
-        rateLocalToBase > 0 ? (1 / rateLocalToBase).rounded(to: 4) : 0
+        rateLocalToBase > 0 ? (1 / rateLocalToBase) : 0
     }
     
     // MARK: - Public Methods

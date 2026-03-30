@@ -21,7 +21,7 @@ struct TitleText: View {
     // MARK: - Body
     
     var body: some View {
-        Text(title).font(.title2).fontWeight(.semibold)
+        Text(title).fontWeight(.semibold)
     }
 }
 

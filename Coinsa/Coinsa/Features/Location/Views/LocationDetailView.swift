@@ -81,11 +81,11 @@ struct LocationDetailView: View {
             Section {
                 EventHeaderView(
                     data: viewModel.eventHeaderData,
-                    showsSummary: !expenses.isEmpty
+                    showsSummary: true
                 )
             }
 
-            Section(header: Text("location.detail.expenses.header")) {
+            Section("location.detail.expenses.header") {
                 if expenses.isEmpty {
                     emptyExpenseListContent
                 } else {

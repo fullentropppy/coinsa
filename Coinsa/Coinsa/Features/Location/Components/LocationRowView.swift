@@ -14,7 +14,7 @@ struct LocationRowView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            HStack(spacing: 10) {
+            HStack(spacing: 4) {
                 EventStatusImage(location.status)
                 TitleText(location.name)
             }

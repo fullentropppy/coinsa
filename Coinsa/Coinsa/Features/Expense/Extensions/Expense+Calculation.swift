@@ -9,10 +9,10 @@ import Foundation
 
 extension Expense {
     var amountLocal: Double {
-        amountBase * rateLocalToBase
+        amountBase * rateBaseToLocal
     }
     
     var rateBaseToLocal: Double {
-        rateLocalToBase > 0 ? (1 / rateLocalToBase).rounded(to: 4) : 0
+        rateLocalToBase > 0 ? (1 / rateLocalToBase) : 0
     }
 }
