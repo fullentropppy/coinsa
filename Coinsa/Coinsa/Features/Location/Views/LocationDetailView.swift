@@ -153,7 +153,7 @@ struct LocationDetailView: View {
 
     private var emptyExpenseListContent: some View {
         EmptyStateView(
-            imageName: Expense.icon,
+            imageName: Expense.primaryIcon,
             title: "expense.list.empty.title",
             description: "expense.list.empty.description",
             buttonLabel: "expense.list.addExpense",

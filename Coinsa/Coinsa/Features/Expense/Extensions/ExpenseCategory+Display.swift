@@ -8,7 +8,7 @@
 import SwiftUI
 
 extension ExpenseCategory {
-    var badgeIcon: String {
+    var labelIcon: String {
         switch self {
         case .food:
             "fork.knife"
@@ -22,6 +22,23 @@ extension ExpenseCategory {
             "pills"
         case .other:
             "circle.grid.2x2"
+        }
+    }
+    
+    var badgeIcon: String {
+        switch self {
+        case .food:
+            "fork.knife"
+        case .transport:
+            "car.fill"
+        case .activity:
+            "sparkles.2"
+        case .shopping:
+            "bag.fill"
+        case .medicine:
+            "pills.fill"
+        case .other:
+            "circle.grid.2x2.fill"
         }
     }
     

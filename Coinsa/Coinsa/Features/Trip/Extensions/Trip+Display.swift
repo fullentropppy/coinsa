@@ -8,12 +8,12 @@
 import SwiftUI
 
 extension Trip {
-    static var icon: String {
+    static var primaryIcon: String {
         "suitcase"
     }
     
     static var badgeIcon: String {
-        "suitcase.circle.fill"
+        "suitcase.fill"
     }
     
     static var badgeColor: Color {

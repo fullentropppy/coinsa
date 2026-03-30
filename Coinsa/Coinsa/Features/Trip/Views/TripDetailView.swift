@@ -145,7 +145,7 @@ struct TripDetailView: View {
     
     private var emptyLocationListContent: some View {
         EmptyStateView(
-            imageName: Location.icon,
+            imageName: Location.primaryIcon,
             title: "location.emptyState.title",
             description: "location.emptyState.description",
             buttonLabel: "location.add",

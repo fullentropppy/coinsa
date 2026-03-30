@@ -8,12 +8,12 @@
 import SwiftUI
 
 extension Location {
-    static var icon: String {
+    static var primaryIcon: String {
         "mappin.and.ellipse"
     }
     
     static var badgeIcon: String {
-        "mappin.and.ellipse.circle.fill"
+        "mappin.and.ellipse"
     }
     
     static var badgeColor: Color {

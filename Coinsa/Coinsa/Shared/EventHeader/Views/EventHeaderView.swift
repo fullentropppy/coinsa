@@ -28,7 +28,7 @@ struct EventHeaderView: View {
 
     private var headerContent: some View {
         HStack {
-            eventBadge
+            BadgeView(fillColor: data.badgeColor, icon: data.badgeIcon)
             EventStatusLabel(data.status)
             Spacer()
             DateLabel(from: data.startDate, to: data.endDate, style: .tertiary)
@@ -65,18 +65,12 @@ struct EventHeaderView: View {
                 }
 
                 AmountText(data.amountDifferenceBase, currency: data.baseCurrency, style: .tertiary)
-                differencySymbol
+                differencyIcon
             }
         }
     }
 
-    private var eventBadge: some View {
-        Image(systemName: data.badgeIcon)
-            .foregroundStyle(data.badgeColor)
-            .imageScale(.large)
-    }
-
-    private var differencySymbol: some View {
+    private var differencyIcon: some View {
         let symbolName = data.amountDifferenceBase >= 0 ? "plus.circle.fill" : "minus.circle.fill"
         let color = data.amountDifferenceBase >= 0 ? Color.green : Color.red
         

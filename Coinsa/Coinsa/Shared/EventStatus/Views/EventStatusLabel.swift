@@ -21,12 +21,7 @@ struct EventStatusLabel: View {
     // MARK: - Body
     
     var body: some View {
-        Text(status.localizedKey)
-            .font(.caption.weight(.semibold))
-            .foregroundStyle(.background)
-            .padding(.horizontal, 8)
-            .padding(.vertical, 4)
-            .background(status.color, in: .capsule)
+        BadgeView(fillColor: status.color, title: status.localizedKey)
     }
 }
 

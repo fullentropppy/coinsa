@@ -61,10 +61,14 @@ struct ExpenseDetailView: View {
         Section {
             VStack(spacing: 16) {
                 HStack {
-                    Image(systemName: Expense.badgeIcon)
-                        .foregroundStyle(Expense.badgeColor)
-                        .imageScale(.large)
-                    categoryBadge
+                    BadgeView(
+                        fillColor: Expense.badgeColor,
+                        icon: Expense.badgeIcon
+                    )
+                    BadgeView(
+                        fillColor: expense.category.badgeColor,
+                        icon: expense.category.badgeIcon
+                    )
                     Spacer()
                     DateLabel(single: expense.date, style: .tertiary)
                 }
@@ -76,7 +80,6 @@ struct ExpenseDetailView: View {
                     )
                     .padding(40)
                     .scaleEffect(2)
-                    
                     
                     Divider()
                     HStack {
@@ -101,22 +104,6 @@ struct ExpenseDetailView: View {
                 .glassEffect(.regular, in: .containerRelative)
             }
         }
-    }
-    
-    private var categoryBadge: some View {
-        HStack {
-            Image(systemName: expense.category.badgeIcon)
-            //Text(expense.category.localizedKey)
-        }
-        .font(.caption.weight(.semibold))
-        .foregroundStyle(.background)
-        .padding(.horizontal, 8)
-        .padding(.vertical, 4)
-        .background(expense.category.badgeColor, in: .capsule)
-    }
-    
-    private var amountSectionDevider: some View {
-        Divider().frame(maxWidth: 160, maxHeight: 10)
     }
     
     private func commentSection(comment: String) -> some View {
