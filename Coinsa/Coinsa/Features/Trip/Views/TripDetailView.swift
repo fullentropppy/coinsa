@@ -109,26 +109,17 @@ struct TripDetailView: View {
         }
         .safeAreaInset(edge: .bottom) {
             if !locations.isEmpty {
-                HStack {
-                    Spacer()
-                    ButtonView.add {
-                        isShowingLocationAdd = true
-                    }
-                    .buttonStyle(PrimaryButtonStyle())
-                    .padding(.trailing, 16)
-                    .padding(.bottom, 8)
-                }
+                PrimaryAddButtonView(
+                    action: { isShowingLocationAdd = true },
+                    isOnLeft: settingsStore.isPrimaryAddButtonOnLeft
+                )
             }
         }
         .deleteConfirmationAlert(
             isPresented: $deletionHandler.isShowingDeleteConfirmation,
             message: "location.delete.message",
-            onConfirm: {
-                confirmDelete()
-            },
-            onCancel: {
-                cancelDelete()
-            }
+            onConfirm: { confirmDelete() },
+            onCancel: { cancelDelete() }
         )
     }
 
@@ -156,7 +147,7 @@ struct TripDetailView: View {
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
         ToolbarItemGroup(placement: .topBarTrailing) {
-            ButtonView.edit {
+            ToolbarButtonView.edit {
                 isShowingTripEdit = true
             }
         }

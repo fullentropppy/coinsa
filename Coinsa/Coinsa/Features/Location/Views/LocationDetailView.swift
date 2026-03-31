@@ -114,26 +114,17 @@ struct LocationDetailView: View {
         }
         .safeAreaInset(edge: .bottom) {
             if !expenses.isEmpty {
-                HStack {
-                    Spacer()
-                    ButtonView.add {
-                        isShowingExpenseAdd = true
-                    }
-                    .buttonStyle(PrimaryButtonStyle())
-                    .padding(.trailing, 16)
-                    .padding(.bottom, 8)
-                }
+                PrimaryAddButtonView(
+                    action: { isShowingExpenseAdd = true },
+                    isOnLeft: settingsStore.isPrimaryAddButtonOnLeft
+                )
             }
         }
         .deleteConfirmationAlert(
             isPresented: $deletionHandler.isShowingDeleteConfirmation,
             message: "expense.delete.message",
-            onConfirm: {
-                confirmDelete()
-            },
-            onCancel: {
-                cancelDelete()
-            }
+            onConfirm: { confirmDelete() },
+            onCancel: { cancelDelete() }
         )
     }
     
@@ -164,7 +155,7 @@ struct LocationDetailView: View {
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
         ToolbarItemGroup(placement: .topBarTrailing) {
-            ButtonView.edit {
+            ToolbarButtonView.edit {
                 isShowingLocationEdit = true
             }
         }

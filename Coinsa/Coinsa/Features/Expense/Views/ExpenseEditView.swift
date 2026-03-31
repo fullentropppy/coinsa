@@ -212,13 +212,13 @@ struct ExpenseEditView: View {
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
         ToolbarItemGroup(placement: .topBarLeading) {
-            ButtonView.close {
+            ToolbarButtonView.close {
                 handleClose()
             }
         }
 
         ToolbarItemGroup(placement: .topBarTrailing) {
-            ButtonView.save {
+            ToolbarButtonView.save {
                 viewModel.save(using: repository)
                 dismiss()
             }

@@ -101,7 +101,10 @@ struct ExpenseDetailView: View {
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(10)
-                .glassEffect(.regular, in: .containerRelative)
+                .glassEffect(
+                    .regular,
+                    in: RoundedRectangle(cornerRadius: 12, style: .continuous)
+                )
             }
         }
     }
@@ -115,7 +118,7 @@ struct ExpenseDetailView: View {
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
         ToolbarItemGroup(placement: .topBarTrailing) {
-            ButtonView.edit {
+            ToolbarButtonView.edit {
                 isShowingExpenseEdit = true
             }
         }

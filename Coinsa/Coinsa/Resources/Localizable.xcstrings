@@ -5,7 +5,7 @@
       "shouldTranslate" : false
     },
     "•" : {
-
+      "shouldTranslate" : false
     },
     "1 %@ = %@ %@" : {
       "localizations" : {
@@ -69,6 +69,57 @@
         }
       }
     },
+    "app.author" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gritsenko Daniil"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Гриценко Даниил"
+          }
+        }
+      }
+    },
+    "app.version" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Version %1$@ (%2$@)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Версия %1$@ (%2$@)"
+          }
+        }
+      }
+    },
+    "common.add" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Добавить"
+          }
+        }
+      }
+    },
     "common.cancel" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -116,23 +167,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Изменить"
-          }
-        }
-      }
-    },
-    "common.mode.edit" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Editing"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Изменение"
           }
         }
       }
@@ -1290,23 +1324,6 @@
         }
       }
     },
-    "location.exchangeRate.hint" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Amount of base currency %1$@ that corresponds to 1 unit of the location currency %2$@"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Количество основной валюты %1$@, соответствующее 1 единице валюты локации %2$@"
-          }
-        }
-      }
-    },
     "location.list.navigationTitle" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1483,13 +1500,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The default currency for displaying amounts in trips, locations, expenses, and for budget planning. It cannot be changed."
+            "value" : "The base currency for keeping records of expenses and displaying amounts in trips, locations, budgets and expenses. It cannot be changed."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Валюта по умолчанию для отображения сумм в поездках, локациях, тратах и для планирования бюджета. Не может быть изменена."
+            "value" : "Основная валюта ведения учета трат и отображения сумм в поездках, локациях, бюджетах  и тратах. Не может быть изменена."
           }
         }
       }
@@ -1507,6 +1524,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Настройки"
+          }
+        }
+      }
+    },
+    "settings.primaryAddButtonPosition" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "\"Add\" button on the left"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Кнопка \"Добавить\" слева"
           }
         }
       }

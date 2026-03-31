@@ -12,6 +12,7 @@ struct TripListView: View {
     // MARK: - Stored Properties
     
     @Environment(\.modelContext) private var context
+    @Environment(AppSettingsStore.self) private var settingsStore
     
     @Query(sort: \Trip.startDate) private var trips: [Trip]
 
@@ -41,26 +42,17 @@ struct TripListView: View {
                 }
                 .safeAreaInset(edge: .bottom) {
                     if !trips.isEmpty {
-                        HStack {
-                            Spacer()
-                            ButtonView.add {
-                                isShowingTripEdit = true
-                            }
-                            .buttonStyle(PrimaryButtonStyle())
-                            .padding(.trailing, 16)
-                            .padding(.bottom, 8)
-                        }
+                        PrimaryAddButtonView(
+                            action: { isShowingTripEdit = true },
+                            isOnLeft: settingsStore.isPrimaryAddButtonOnLeft
+                        )
                     }
                 }
                 .deleteConfirmationAlert(
                     isPresented: $deletionHandler.isShowingDeleteConfirmation,
                     message: "trip.delete.message",
-                    onConfirm: {
-                        confirmDelete()
-                    },
-                    onCancel: {
-                        cancelDelete()
-                    }
+                    onConfirm: { confirmDelete() },
+                    onCancel: { cancelDelete() }
                 )
         }
     }

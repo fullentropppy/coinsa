@@ -17,16 +17,25 @@ struct SettingsView: View {
 
     var body: some View {
         NavigationStack {
-            Form {
-                baseCurrencySection
-                themeSection
-            }
+            content
             .navigationTitle("settings.navigationTitle")
+            .safeAreaInset(edge: .bottom) {
+                appInfo
+            }
         }
     }
 
-    // MARK: - Components
+    // MARK: - Content
 
+    private var content: some View {
+        Form {
+            baseCurrencySection
+            appearanceSection
+        }
+    }
+    
+    // MARK: - Sections
+    
     private var baseCurrencySection: some View {
         Section {
             LabeledContent("settings.baseCurrency") {
@@ -34,12 +43,11 @@ struct SettingsView: View {
             }
         } footer: {
             Text("settings.baseCurrency.hint")
-                .multilineTextAlignment(.center)
-                .frame(maxWidth: .infinity, alignment: .center)
+                .multilineTextAlignment(.leading)
         }
     }
 
-    private var themeSection: some View {
+    private var appearanceSection: some View {
         Section {
             Picker("settings.theme", selection: themeBinding) {
                 ForEach(AppTheme.allCases) { theme in
@@ -47,8 +55,33 @@ struct SettingsView: View {
                         .tag(theme)
                 }
             }
-            .pickerStyle(.menu)
+            .pickerStyle(.navigationLink)
+            
+            Toggle("settings.primaryAddButtonPosition", isOn: primaryAddButtonPositionBinding)
+                .tint(.accent)
         }
+    }
+    
+    // MARK: - Components
+    
+    private var appInfo: some View {
+        VStack(alignment: .center) {
+            Text(AppInfo.appName)
+            Text(
+                String(
+                    format: NSLocalizedString("app.version", comment: ""),
+                    AppInfo.version,
+                    AppInfo.build
+                )
+            )
+            HStack {
+                Text(AppInfo.copyrightYears)
+                Text(AppInfo.authorName)
+            }
+        }
+        .font(.footnote)
+        .foregroundStyle(.gray)
+        .padding(.bottom, 24)
     }
 
     // MARK: - Bindings
@@ -59,13 +92,20 @@ struct SettingsView: View {
             set: { appSettingsStore.selectedTheme = $0 }
         )
     }
+    
+    private var primaryAddButtonPositionBinding: Binding<Bool> {
+        Binding(
+            get: { appSettingsStore.isPrimaryAddButtonOnLeft },
+            set: { appSettingsStore.isPrimaryAddButtonOnLeft = $0 }
+        )
+    }
 }
 
 // MARK: - Previews
 
 private extension SettingsView {
     static func preview(locale: Locale, colorScheme: ColorScheme) -> some View {
-        let container = PreviewBuilder.builder().buildContainer()
+        let container = PreviewBuilder.builder().withTrips(false).buildContainer()
         let store = AppSettingsStore(context: container.mainContext)
         
         return SettingsView()

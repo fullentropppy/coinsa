@@ -21,6 +21,9 @@ final class AppSettingsStore {
     private let settings: AppSettings
 
     @ObservationIgnored
+    private let primaryAddButtonPositionKey = "primaryAddButtonPosition"
+    
+    @ObservationIgnored
     private let themeKey = "appTheme"
 
     @ObservationIgnored
@@ -34,6 +37,12 @@ final class AppSettingsStore {
 
     var baseCurrency: Currency {
         Currency.from(baseCurrencyCode)
+    }
+    
+    var isPrimaryAddButtonOnLeft: Bool {
+        didSet {
+            defaults.set(String(isPrimaryAddButtonOnLeft), forKey: primaryAddButtonPositionKey)
+        }
     }
     
     var selectedTheme: AppTheme {
@@ -50,12 +59,18 @@ final class AppSettingsStore {
         if let storedSettings = try? context.fetch(FetchDescriptor<AppSettings>()).first {
             settings = storedSettings
         } else {
-            let newSettings = AppSettings(baseCurrencyCode: Currency.defaultCurrencyCode)
+            let newSettings = AppSettings(
+                baseCurrencyCode: Currency.defaultCurrencyCode,
+                isPrimaryAddButtonOnLeft: false
+            )
             context.insert(newSettings)
             settings = newSettings
         }
 
+        let rawPrimaryAddPosition = defaults.string(forKey: primaryAddButtonPositionKey) ?? AppTheme.system.rawValue
         let rawTheme = defaults.string(forKey: themeKey) ?? AppTheme.system.rawValue
+        
+        isPrimaryAddButtonOnLeft = Bool(rawPrimaryAddPosition) ?? false
         selectedTheme = AppTheme(rawValue: rawTheme) ?? .system
     }
 }

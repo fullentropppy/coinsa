@@ -55,7 +55,7 @@ struct EventHeaderView: View {
                 )
             }
 
-            HStack(alignment: .center) {
+            HStack(alignment: .lastTextBaseline) {
                 Text("amount.difference").font(.footnote).foregroundStyle(.secondary)
                 Spacer()
 
@@ -71,11 +71,23 @@ struct EventHeaderView: View {
     }
 
     private var differencyIcon: some View {
-        let symbolName = data.amountDifferenceBase >= 0 ? "plus.circle.fill" : "minus.circle.fill"
-        let color = data.amountDifferenceBase >= 0 ? Color.green : Color.red
+        let icon: String
+        let fillColor: Color
         
-        return Image(systemName: symbolName)
-            .foregroundStyle(color)
+        if data.amountDifferenceBase == 0 {
+            icon = "chart.line.flattrend.xyaxis"
+            fillColor = .yellow
+        } else if data.amountDifferenceBase > 0 {
+            icon = "chart.line.uptrend.xyaxis"
+            fillColor = .green
+        } else {
+            icon = "chart.line.downtrend.xyaxis"
+            fillColor = .red
+        }
+        
+        return Image(systemName: icon)
+            .fontWeight(.semibold)
+            .foregroundStyle(fillColor)
             .imageScale(.small)
     }
 }
@@ -105,7 +117,10 @@ private struct LocationAmountCardView: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(10)
-        .glassEffect(.regular, in: .containerRelative)
+        .glassEffect(
+            .regular,
+            in: RoundedRectangle(cornerRadius: 12, style: .continuous)
+        )
     }
 }
 
