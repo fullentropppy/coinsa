@@ -13,15 +13,10 @@ final class AppSettings {
     // MARK: - Stored Properties
 
     var baseCurrencyCode: String
-    var isPrimaryAddButtonOnLeft: Bool
     
     // MARK: - Initialization
 
-    init(
-        baseCurrencyCode: String,
-        isPrimaryAddButtonOnLeft: Bool
-    ) {
+    init(baseCurrencyCode: String) {
         self.baseCurrencyCode = baseCurrencyCode
-        self.isPrimaryAddButtonOnLeft = isPrimaryAddButtonOnLeft
     }
 }

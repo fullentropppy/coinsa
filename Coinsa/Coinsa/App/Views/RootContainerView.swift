@@ -23,7 +23,7 @@ struct RootContainerView: View {
             if let settingsStore {
                 RootTabView()
                     .environment(settingsStore)
-                    .preferredColorScheme(settingsStore.selectedTheme.colorScheme)
+                    .preferredColorScheme(settingsStore.appAppearance.colorScheme)
             } else {
                 ProgressView()
             }

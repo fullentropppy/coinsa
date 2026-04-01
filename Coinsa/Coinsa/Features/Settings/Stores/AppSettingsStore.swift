@@ -5,7 +5,7 @@
 //  Created by Daniil Gritsenko on 08.03.2026.
 //
 
-import SwiftUI
+import Foundation
 import SwiftData
 import Observation
 
@@ -18,36 +18,26 @@ final class AppSettingsStore {
     private let context: ModelContext
 
     @ObservationIgnored
-    private let settings: AppSettings
-
-    @ObservationIgnored
-    private let primaryAddButtonPositionKey = "primaryAddButtonPosition"
+    private let defaults = UserDefaults.standard
     
     @ObservationIgnored
-    private let themeKey = "appTheme"
-
-    @ObservationIgnored
-    private let defaults = UserDefaults.standard
+    private let settings: AppSettings
 
     // MARK: - Computed Properties
     
-    private var baseCurrencyCode: String {
-        settings.baseCurrencyCode
-    }
-
     var baseCurrency: Currency {
-        Currency.from(baseCurrencyCode)
+        Currency.from(settings.baseCurrencyCode)
     }
     
-    var isPrimaryAddButtonOnLeft: Bool {
+    var isAddButtonOnLeft: Bool {
         didSet {
-            defaults.set(String(isPrimaryAddButtonOnLeft), forKey: primaryAddButtonPositionKey)
+            defaults.set(isAddButtonOnLeft, forKey: UserDefaultsKey.isAddButtonOnLeft.rawValue)
         }
     }
     
-    var selectedTheme: AppTheme {
+    var appAppearance: AppAppearance {
         didSet {
-            defaults.set(selectedTheme.rawValue, forKey: themeKey)
+            defaults.set(appAppearance.rawValue, forKey: UserDefaultsKey.appAppearance.rawValue)
         }
     }
 
@@ -59,18 +49,20 @@ final class AppSettingsStore {
         if let storedSettings = try? context.fetch(FetchDescriptor<AppSettings>()).first {
             settings = storedSettings
         } else {
-            let newSettings = AppSettings(
-                baseCurrencyCode: Currency.defaultCurrencyCode,
-                isPrimaryAddButtonOnLeft: false
-            )
+            let newSettings = AppSettings(baseCurrencyCode: Currency.defaultCurrencyCode)
             context.insert(newSettings)
             settings = newSettings
         }
 
-        let rawPrimaryAddPosition = defaults.string(forKey: primaryAddButtonPositionKey) ?? AppTheme.system.rawValue
-        let rawTheme = defaults.string(forKey: themeKey) ?? AppTheme.system.rawValue
-        
-        isPrimaryAddButtonOnLeft = Bool(rawPrimaryAddPosition) ?? false
-        selectedTheme = AppTheme(rawValue: rawTheme) ?? .system
+        isAddButtonOnLeft = defaults.bool(forKey: UserDefaultsKey.isAddButtonOnLeft.rawValue)
+        appAppearance = defaults.string(forKey: UserDefaultsKey.appAppearance.rawValue)
+            .flatMap { AppAppearance(rawValue: $0) } ?? .system
     }
+}
+
+// MARK: - Private Types
+
+private enum UserDefaultsKey: String, CaseIterable {
+    case isAddButtonOnLeft
+    case appAppearance
 }

@@ -1,11 +1,11 @@
 //
-//  AppTheme.swift
+//  AppAppearance.swift
 //  Coinsa
 //
 //  Created by Daniil Gritsenko on 08.03.2026.
 //
 
-enum AppTheme: String, CaseIterable, Identifiable {
+enum AppAppearance: String, CaseIterable, Identifiable {
     // MARK: - Cases
     
     case system

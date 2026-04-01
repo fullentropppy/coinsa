@@ -109,10 +109,9 @@ struct TripDetailView: View {
         }
         .safeAreaInset(edge: .bottom) {
             if !locations.isEmpty {
-                PrimaryAddButtonView(
-                    action: { isShowingLocationAdd = true },
-                    isOnLeft: settingsStore.isPrimaryAddButtonOnLeft
-                )
+                PrimaryAddButtonView(isOnLeft: settingsStore.isAddButtonOnLeft) {
+                    isShowingLocationAdd = true
+                }
             }
         }
         .deleteConfirmationAlert(

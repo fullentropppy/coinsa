@@ -114,10 +114,9 @@ struct LocationDetailView: View {
         }
         .safeAreaInset(edge: .bottom) {
             if !expenses.isEmpty {
-                PrimaryAddButtonView(
-                    action: { isShowingExpenseAdd = true },
-                    isOnLeft: settingsStore.isPrimaryAddButtonOnLeft
-                )
+                PrimaryAddButtonView(isOnLeft: settingsStore.isAddButtonOnLeft) {
+                    isShowingExpenseAdd = true
+                }
             }
         }
         .deleteConfirmationAlert(

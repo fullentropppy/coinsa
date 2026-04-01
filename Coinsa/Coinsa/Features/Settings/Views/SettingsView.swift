@@ -17,17 +17,18 @@ struct SettingsView: View {
 
     var body: some View {
         NavigationStack {
-            content
-            .navigationTitle("settings.navigationTitle")
-            .safeAreaInset(edge: .bottom) {
-                appInfo
-            }
+            settingsForm
+                .navigationTitle(.settingsNavigationTitle)
+                .navigationBarTitleDisplayMode(.large)
+                .safeAreaInset(edge: .bottom) {
+                    appInfoFooter
+                }
         }
     }
 
     // MARK: - Content
 
-    private var content: some View {
+    private var settingsForm: some View {
         Form {
             baseCurrencySection
             appearanceSection
@@ -38,45 +39,39 @@ struct SettingsView: View {
     
     private var baseCurrencySection: some View {
         Section {
-            LabeledContent("settings.baseCurrency") {
+            LabeledContent(.settingsBaseCurrency) {
                 Text(appSettingsStore.baseCurrency.localizedKey)
             }
         } footer: {
-            Text("settings.baseCurrency.hint")
+            Text(.settingsBaseCurrencyHint)
                 .multilineTextAlignment(.leading)
         }
     }
 
     private var appearanceSection: some View {
         Section {
-            Picker("settings.theme", selection: themeBinding) {
-                ForEach(AppTheme.allCases) { theme in
-                    Text(theme.localizedKey)
+            Picker(.settingsAppAppearance, selection: selectedAppAppearance) {
+                ForEach(AppAppearance.allCases) { theme in
+                    Text(theme.localized)
                         .tag(theme)
                 }
             }
             .pickerStyle(.navigationLink)
             
-            Toggle("settings.primaryAddButtonPosition", isOn: primaryAddButtonPositionBinding)
+            Toggle(.settingsIsAddButtonOnLeft, isOn: isAddButtonOnLeftBinding)
                 .tint(.accent)
         }
     }
     
     // MARK: - Components
     
-    private var appInfo: some View {
+    private var appInfoFooter: some View {
         VStack(alignment: .center) {
             Text(AppInfo.appName)
-            Text(
-                String(
-                    format: NSLocalizedString("app.version", comment: ""),
-                    AppInfo.version,
-                    AppInfo.build
-                )
-            )
+            Text(.appVersion(AppInfo.version, AppInfo.build))
             HStack {
                 Text(AppInfo.copyrightYears)
-                Text(AppInfo.authorName)
+                Text(.appAuthor)
             }
         }
         .font(.footnote)
@@ -86,17 +81,17 @@ struct SettingsView: View {
 
     // MARK: - Bindings
 
-    private var themeBinding: Binding<AppTheme> {
+    private var selectedAppAppearance: Binding<AppAppearance> {
         Binding(
-            get: { appSettingsStore.selectedTheme },
-            set: { appSettingsStore.selectedTheme = $0 }
+            get: { appSettingsStore.appAppearance },
+            set: { appSettingsStore.appAppearance = $0 }
         )
     }
     
-    private var primaryAddButtonPositionBinding: Binding<Bool> {
+    private var isAddButtonOnLeftBinding: Binding<Bool> {
         Binding(
-            get: { appSettingsStore.isPrimaryAddButtonOnLeft },
-            set: { appSettingsStore.isPrimaryAddButtonOnLeft = $0 }
+            get: { appSettingsStore.isAddButtonOnLeft },
+            set: { appSettingsStore.isAddButtonOnLeft = $0 }
         )
     }
 }
@@ -104,7 +99,7 @@ struct SettingsView: View {
 // MARK: - Previews
 
 private extension SettingsView {
-    static func preview(locale: Locale, colorScheme: ColorScheme) -> some View {
+    static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
         let container = PreviewBuilder.builder().withTrips(false).buildContainer()
         let store = AppSettingsStore(context: container.mainContext)
         
@@ -117,9 +112,9 @@ private extension SettingsView {
 }
 
 #Preview("Light - RU") {
-    SettingsView.preview(locale: PreviewLocale.ru.locale, colorScheme: .light)
+    SettingsView.makePreview(locale: PreviewLocale.ru.locale, colorScheme: .light)
 }
 
 #Preview("Dark - EN") {
-    SettingsView.preview(locale: PreviewLocale.en.locale, colorScheme: .dark)
+    SettingsView.makePreview(locale: PreviewLocale.en.locale, colorScheme: .dark)
 }

@@ -23,7 +23,9 @@ struct ToolbarButtonView: View {
     // MARK: - Body
     
     var body: some View {
-        Button(action: action) {
+        Button {
+            action()
+        } label: {
             Image(systemName: icon)
         }
     }
@@ -60,23 +62,23 @@ extension ToolbarButtonView {
 // MARK: - Previews
 
 private extension ToolbarButtonView {
-    static func preview(colorScheme: ColorScheme) -> some View {
+    static func makePreview(colorScheme: ColorScheme) -> some View {
         VStack(spacing: 20) {
-            ToolbarButtonView.add(action: {})
-            ToolbarButtonView.edit(action: {})
-            ToolbarButtonView.save(action: {})
-            ToolbarButtonView.delete(action: {})
-            ToolbarButtonView.close(action: {})
-            ToolbarButtonView.settings(action: {})
+            ToolbarButtonView.add {}
+            ToolbarButtonView.edit {}
+            ToolbarButtonView.save {}
+            ToolbarButtonView.delete {}
+            ToolbarButtonView.close {}
+            ToolbarButtonView.settings {}
         }
         .preferredColorScheme(colorScheme)
     }
 }
 
 #Preview("Light") {
-    ToolbarButtonView.preview(colorScheme: .light)
+    ToolbarButtonView.makePreview(colorScheme: .light)
 }
 
 #Preview("dark") {
-    ToolbarButtonView.preview(colorScheme: .dark)
+    ToolbarButtonView.makePreview(colorScheme: .dark)
 }

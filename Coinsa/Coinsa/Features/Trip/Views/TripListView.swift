@@ -42,10 +42,9 @@ struct TripListView: View {
                 }
                 .safeAreaInset(edge: .bottom) {
                     if !trips.isEmpty {
-                        PrimaryAddButtonView(
-                            action: { isShowingTripEdit = true },
-                            isOnLeft: settingsStore.isPrimaryAddButtonOnLeft
-                        )
+                        PrimaryAddButtonView(isOnLeft: settingsStore.isAddButtonOnLeft) {
+                            isShowingTripEdit = true
+                        }                        
                     }
                 }
                 .deleteConfirmationAlert(

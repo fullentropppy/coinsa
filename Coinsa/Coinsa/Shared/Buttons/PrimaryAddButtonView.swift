@@ -1,5 +1,5 @@
 //
-//  PrimaryButtonView.swift
+//  PrimaryAddButtonView.swift
 //  Coinsa
 //
 //  Created by Daniil Gritsenko on 31.03.2026.
@@ -10,8 +10,8 @@ import SwiftUI
 struct PrimaryAddButtonView: View {
     // MARK: - Stored Properties
     
-    let action: () -> Void
     let isOnLeft: Bool
+    let action: () -> Void
     
     // MARK: - Body
     
@@ -38,18 +38,24 @@ struct PrimaryAddButtonView: View {
         .padding(.horizontal, 16)
         .padding(.bottom, 16)
     }
-    
-    // MARK: - Components
-    
-    
 }
 
 // MARK: - Previews
 
+private extension PrimaryAddButtonView {
+    static func makePreview(colorScheme: ColorScheme) -> some View {
+        HStack {
+            PrimaryAddButtonView(isOnLeft: true) {}
+            PrimaryAddButtonView(isOnLeft: false) {}
+        }
+        .preferredColorScheme(colorScheme)
+    }
+}
+
 #Preview("Light") {
-    PrimaryAddButtonView(action: {}, isOnLeft: true).preferredColorScheme(.light)
+    PrimaryAddButtonView.makePreview(colorScheme: .light)
 }
 
 #Preview("Dark") {
-    PrimaryAddButtonView(action: {}, isOnLeft: false).preferredColorScheme(.dark)
+    PrimaryAddButtonView.makePreview(colorScheme: .dark)
 }
