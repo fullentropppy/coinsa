@@ -130,7 +130,7 @@ struct LocationDetailView: View {
     private var expenseListContent: some View {
         ForEach(expenses) { expense in
             NavigationLink {
-                ExpenseDetailView(expense: expense)
+                ExpenseDetailView(expenseID: expense.persistentModelID)
             } label: {
                 ExpenseRowView(
                     expense: expense,
@@ -144,11 +144,12 @@ struct LocationDetailView: View {
     private var emptyExpenseListContent: some View {
         EmptyStateView(
             imageName: Expense.primaryIcon,
-            title: "expense.list.empty.title",
-            description: "expense.list.empty.description",
-            buttonLabel: "expense.list.addExpense",
-            onAddAction: { isShowingExpenseAdd = true }
-        )
+            title: .expenseEmptyStateTitle,
+            description: .expenseEmptyStateDescription,
+            buttonLabel: .expenseAdd
+        ) {
+            isShowingExpenseAdd = true
+        }
     }
 
     @ToolbarContentBuilder

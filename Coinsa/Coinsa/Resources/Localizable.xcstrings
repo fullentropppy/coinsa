@@ -7,17 +7,6 @@
     "•" : {
       "shouldTranslate" : false
     },
-    "1 %@ = %@ %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "1 %1$@ = %2$@ %3$@"
-          }
-        }
-      },
-      "shouldTranslate" : false
-    },
     "amount.actual" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -256,40 +245,6 @@
         }
       }
     },
-    "currency.name.amd" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Armenian Dram (AMD)"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Армянский драм (AMD)"
-          }
-        }
-      }
-    },
-    "currency.name.azn" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Azerbaijani Manat (AZN)"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Азербайджанский манат (AZN)"
-          }
-        }
-      }
-    },
     "currency.name.byn" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -337,74 +292,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Евро (EUR)"
-          }
-        }
-      }
-    },
-    "currency.name.gbp" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "British Pound Sterling (GBP)"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Британский фунт стерлингов (GBP)"
-          }
-        }
-      }
-    },
-    "currency.name.gel" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Georgian Lari (GEL)"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Грузинский лари (GEL)"
-          }
-        }
-      }
-    },
-    "currency.name.hkd" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Hong Kong Dollar (HKD)"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Гонконгский доллар (HKD)"
-          }
-        }
-      }
-    },
-    "currency.name.idr" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Indonesian Rupiah (IDR)"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Индонезийская рупия (IDR)"
           }
         }
       }
@@ -460,40 +347,6 @@
         }
       }
     },
-    "currency.name.mop" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Macanese Pataca (MOP)"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Патака Макао (MOP)"
-          }
-        }
-      }
-    },
-    "currency.name.myr" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Malaysian Ringgit (MYR)"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Малайзийский ринггит (MYR)"
-          }
-        }
-      }
-    },
     "currency.name.rub" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -507,40 +360,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Российский рубль (RUB)"
-          }
-        }
-      }
-    },
-    "currency.name.sgd" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Singapore Dollar (SGD)"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Сингапурский доллар (SGD)"
-          }
-        }
-      }
-    },
-    "currency.name.thb" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Thai Baht (THB)"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Тайский бат (THB)"
           }
         }
       }
@@ -575,40 +394,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Доллар США (USD)"
-          }
-        }
-      }
-    },
-    "currency.name.uzs" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Uzbekistani Som (UZS)"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Узбекский сум (UZS)"
-          }
-        }
-      }
-    },
-    "currency.name.vnd" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Vietnamese Dong (VND)"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Вьетнамский донг (VND)"
           }
         }
       }
@@ -760,6 +545,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Предстоящая"
+          }
+        }
+      }
+    },
+    "expense.add" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add expense"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Добавить трату"
           }
         }
       }
@@ -1018,41 +820,7 @@
         }
       }
     },
-    "expense.exchangeRate" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Exchange rate"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Курс обмена"
-          }
-        }
-      }
-    },
-    "expense.list.addExpense" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Add expense"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Добавить трату"
-          }
-        }
-      }
-    },
-    "expense.list.empty.description" : {
+    "expense.emptyState.description" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -1069,7 +837,7 @@
         }
       }
     },
-    "expense.list.empty.title" : {
+    "expense.emptyState.title" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -1082,6 +850,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Трат еще нет"
+          }
+        }
+      }
+    },
+    "expense.exchangeRate" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exchange rate"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Курс обмена"
           }
         }
       }

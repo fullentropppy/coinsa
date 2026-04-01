@@ -136,11 +136,12 @@ struct TripDetailView: View {
     private var emptyLocationListContent: some View {
         EmptyStateView(
             imageName: Location.primaryIcon,
-            title: "location.emptyState.title",
-            description: "location.emptyState.description",
-            buttonLabel: "location.add",
-            onAddAction: { isShowingLocationAdd = true }
-        )
+            title: .locationEmptyStateTitle,
+            description: .locationEmptyStateDescription,
+            buttonLabel: .locationAdd,
+        ) {
+            isShowingLocationAdd = true
+        }
     }
     
     @ToolbarContentBuilder

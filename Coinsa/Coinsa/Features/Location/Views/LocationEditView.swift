@@ -160,7 +160,7 @@ struct LocationEditView: View {
         Section {
             Picker("location.currency", selection: localCurrencyBinding) {
                 ForEach(Currency.allCasesSortedByName) { currency in
-                    Text(currency.localizedDisplayName)
+                    Text(currency.localized)
                         .tag(currency)
                 }
             }
@@ -202,7 +202,7 @@ struct LocationEditView: View {
                     .frame(width: 24)
                 Text("location.budget.total")
                 Spacer()
-                AmountText(
+                AmountText.standard(
                     budgetTotalValue,
                     currency: budgetInputCurrencyValue
                 )

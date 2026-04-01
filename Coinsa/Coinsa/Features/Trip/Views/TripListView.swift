@@ -44,7 +44,7 @@ struct TripListView: View {
                     if !trips.isEmpty {
                         PrimaryAddButtonView(isOnLeft: settingsStore.isAddButtonOnLeft) {
                             isShowingTripEdit = true
-                        }                        
+                        }
                     }
                 }
                 .deleteConfirmationAlert(
@@ -74,11 +74,12 @@ struct TripListView: View {
     private var emptyTripListContent: some View {
         EmptyStateView(
             imageName: Trip.primaryIcon,
-            title: "trip.emptyState.title",
-            description: "trip.emptyState.desctiption",
-            buttonLabel: "trip.add",
-            onAddAction: { isShowingTripEdit = true }
-        )
+            title: .tripEmptyStateTitle,
+            description: .tripEmptyStateDesctiption,
+            buttonLabel: .tripAdd,
+        ) {
+            isShowingTripEdit = true
+        }
     }
     
     // MARK: - Actions

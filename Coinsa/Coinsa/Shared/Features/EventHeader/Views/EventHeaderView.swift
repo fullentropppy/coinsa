@@ -31,7 +31,7 @@ struct EventHeaderView: View {
             BadgeView(fillColor: data.badgeColor, icon: data.badgeIcon)
             EventStatusLabel(data.status)
             Spacer()
-            DateLabel(from: data.startDate, to: data.endDate, style: .tertiary)
+            DateLabel.secondarySmall(from: data.startDate, to: data.endDate)
             DurationLabel(days: data.durationDays, style: .tertiary)
         }
     }
@@ -60,11 +60,11 @@ struct EventHeaderView: View {
                 Spacer()
 
                 if let amountDifferenceLocal = data.amountDifferenceLocal, let localCurrency = data.localCurrency {
-                    AmountText(amountDifferenceLocal, currency: localCurrency, style: .tertiary)
+                    AmountText.secondarySmall(amountDifferenceLocal, currency: localCurrency)
                     Text("•").foregroundStyle(.secondary)
                 }
 
-                AmountText(data.amountDifferenceBase, currency: data.baseCurrency, style: .tertiary)
+                AmountText.secondarySmall(data.amountDifferenceBase, currency: data.baseCurrency)
                 differencyIcon
             }
         }
@@ -108,11 +108,11 @@ private struct LocationAmountCardView: View {
             Text(title).font(.footnote).foregroundStyle(.secondary)
 
             if let localAmount, let localCurrency {
-                AmountText(localAmount, currency: localCurrency)
+                AmountText.standard(localAmount, currency: localCurrency)
                 Divider()
-                AmountText(baseAmount, currency: baseCurrency, style: .tertiary)
+                AmountText.secondarySmall(baseAmount, currency: baseCurrency)
             } else {
-                AmountText(baseAmount, currency: baseCurrency)
+                AmountText.standard(baseAmount, currency: baseCurrency)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)

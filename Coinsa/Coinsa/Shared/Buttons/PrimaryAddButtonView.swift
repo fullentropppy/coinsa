@@ -24,7 +24,7 @@ struct PrimaryAddButtonView: View {
             Button {
                 action()
             } label: {
-                Image(systemName: "text.badge.plus")
+                Image(systemName: "plus")
                     .font(.title.weight(.semibold))
             }
             .padding(16)

@@ -23,23 +23,22 @@ struct ExpenseRowView: View {
                     BadgeView(
                         fillColor: expense.category.badgeColor,
                         icon: expense.category.badgeIcon,
-                        title: expense.category.localizedKey
+                        title: expense.category.localized
                     )
-                    DateLabel(single: expense.date, style: .tertiary)
+                    DateLabel.secondarySmall(expense.date)
                 }
                 
                 Spacer()
                 
                 VStack(alignment: .trailing, spacing: 10) {
-                    AmountText(
+                    AmountText.standard(
                         expense.amountLocal,
                         currency: Currency.from(expense.location.currencyCodeLocal)
                     )
                     
-                    AmountText(
+                    AmountText.secondarySmall(
                         expense.amountBase,
-                        currency: baseCurrency,
-                        style: .tertiary
+                        currency: baseCurrency
                     )
                 }
             }

@@ -5,8 +5,14 @@
 //  Created by Daniil Gritsenko on 09.03.2026.
 //
 
-extension EventStatus: LocalizationKeyProviding {
-    static var localizationKeyPrefix: String {
-        "event.status"
+import SwiftUI
+
+extension EventStatus {
+    var localized: LocalizedStringResource {
+        switch self {
+        case .upcoming: .eventStatusUpcoming
+        case .ongoing: .eventStatusOngoing
+        case .completed: .eventStatusCompleted
+        }
     }
 }

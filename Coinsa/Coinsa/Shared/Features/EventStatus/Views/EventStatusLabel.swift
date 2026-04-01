@@ -21,14 +21,14 @@ struct EventStatusLabel: View {
     // MARK: - Body
     
     var body: some View {
-        BadgeView(fillColor: status.color, title: status.localizedKey)
+        BadgeView(fillColor: status.color, title: status.localized)
     }
 }
 
 // MARK: - Previews
 
 private extension EventStatusLabel {
-    static func preview(locale: Locale, colorScheme: ColorScheme) -> some View {
+    static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
         VStack(spacing: 20) {
             EventStatusLabel(.upcoming)
             EventStatusLabel(.ongoing)
@@ -40,9 +40,9 @@ private extension EventStatusLabel {
 }
 
 #Preview("Light - RU") {
-    EventStatusLabel.preview(locale: PreviewLocale.ru.locale, colorScheme: .light)
+    EventStatusLabel.makePreview(locale: PreviewLocale.ru.locale, colorScheme: .light)
 }
 
 #Preview("Dark - EN") {
-    EventStatusLabel.preview(locale: PreviewLocale.en.locale, colorScheme: .dark)
+    EventStatusLabel.makePreview(locale: PreviewLocale.en.locale, colorScheme: .dark)
 }

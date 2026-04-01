@@ -12,14 +12,14 @@ struct BadgeView: View {
     
     private let fillColor: Color
     private let icon: String?
-    private let title: LocalizedStringKey?
+    private let title: LocalizedStringResource?
     
     // MARK: - Initialization
     
     init(
         fillColor: Color,
         icon: String? = nil,
-        title: LocalizedStringKey? = nil
+        title: LocalizedStringResource? = nil
     ) {
         self.fillColor = fillColor
         self.icon = icon
@@ -32,13 +32,13 @@ struct BadgeView: View {
         if icon == nil && title == nil {
             EmptyView()
         } else {
-            content
+            badgeContent
         }
     }
     
     // MARK: - Components
     
-    private var content: some View {
+    private var badgeContent: some View {
         HStack(alignment: .center, spacing: 4) {
             if let icon {
                 Image(systemName: icon)
@@ -59,46 +59,20 @@ struct BadgeView: View {
 // MARK: - Previews
 
 private extension BadgeView {
-    static func preview(locale: Locale, colorScheme: ColorScheme) -> some View {
+    static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
         VStack(spacing: 20) {
             BadgeView(
                 fillColor: Trip.badgeColor,
                 icon: Trip.badgeIcon
             )
             BadgeView(
-                fillColor: Location.badgeColor,
-                icon: Location.badgeIcon
-            )
-            BadgeView(
-                fillColor: Expense.badgeColor,
-                icon: Expense.badgeIcon
-            )
-            BadgeView(
                 fillColor: ExpenseCategory.food.badgeColor,
                 icon: ExpenseCategory.food.badgeIcon,
-                title: ExpenseCategory.food.localizedKey
-            )
-            BadgeView(
-                fillColor: ExpenseCategory.shopping.badgeColor,
-                icon: ExpenseCategory.shopping.badgeIcon,
-                title: ExpenseCategory.shopping.localizedKey
-            )
-            BadgeView(
-                fillColor: ExpenseCategory.other.badgeColor,
-                icon: ExpenseCategory.other.badgeIcon,
-                title: ExpenseCategory.other.localizedKey
+                title: ExpenseCategory.food.localized
             )
             BadgeView(
                 fillColor: EventStatus.upcoming.color,
-                title: EventStatus.upcoming.localizedKey
-            )
-            BadgeView(
-                fillColor: EventStatus.ongoing.color,
-                title: EventStatus.ongoing.localizedKey
-            )
-            BadgeView(
-                fillColor: EventStatus.completed.color,
-                title: EventStatus.completed.localizedKey
+                title: EventStatus.upcoming.localized
             )
         }
         .environment(\.locale, locale)
@@ -107,9 +81,9 @@ private extension BadgeView {
 }
 
 #Preview("Light - RU") {
-    BadgeView.preview(locale: PreviewLocale.ru.locale, colorScheme: .light)
+    BadgeView.makePreview(locale: PreviewLocale.ru.locale, colorScheme: .light)
 }
 
 #Preview("Dark - EN") {
-    BadgeView.preview(locale: PreviewLocale.en.locale, colorScheme: .dark)
+    BadgeView.makePreview(locale: PreviewLocale.en.locale, colorScheme: .dark)
 }

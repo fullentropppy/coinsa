@@ -1,5 +1,5 @@
 //
-//  EventStatusImage.swift
+//  EventStatusBadge.swift
 //  Coinsa
 //
 //  Created by Daniil Gritsenko on 06.03.2026.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct EventStatusImage: View {
+struct EventStatusBadge: View {
     // MARK: - Stored Properties
 
     private var status: EventStatus
@@ -29,21 +29,21 @@ struct EventStatusImage: View {
 
 // MARK: - Previews
 
-private extension EventStatusImage {
-    static func preview(colorScheme: ColorScheme) -> some View {
+private extension EventStatusBadge {
+    static func makePreview(colorScheme: ColorScheme) -> some View {
         VStack(spacing: 20) {
-            EventStatusImage(.upcoming)
-            EventStatusImage(.ongoing)
-            EventStatusImage(.completed)
+            EventStatusBadge(.upcoming)
+            EventStatusBadge(.ongoing)
+            EventStatusBadge(.completed)
         }
         .preferredColorScheme(colorScheme)
     }
 }
 
 #Preview("Light") {
-    EventStatusImage.preview(colorScheme: .light)
+    EventStatusBadge.makePreview(colorScheme: .light)
 }
 
 #Preview("Dark") {
-    EventStatusImage.preview(colorScheme: .dark)
+    EventStatusBadge.makePreview(colorScheme: .dark)
 }

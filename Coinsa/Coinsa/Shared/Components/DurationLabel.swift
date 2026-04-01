@@ -35,7 +35,7 @@ struct DurationLabel: View {
     
     private var styleFont: Font {
         switch style {
-        case .primary:
+        case .title:
             return .headline
         case .default, .secondary:
             return .subheadline
@@ -46,7 +46,7 @@ struct DurationLabel: View {
     
     private var styleColor: Color {
         switch style {
-        case .primary:
+        case .title:
             return .primary
         default:
             return .secondary
@@ -60,7 +60,7 @@ private extension DurationLabel {
     static func preview(colorScheme: ColorScheme) -> some View {
         VStack(spacing: 20) {
             DurationLabel(days: 14)
-            DurationLabel(days: 14, style: .primary)
+            DurationLabel(days: 14, style: .title)
             DurationLabel(days: 14, style: .secondary)
             DurationLabel(days: 14, style: .tertiary)
         }

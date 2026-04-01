@@ -12,38 +12,49 @@ struct DateLabel: View {
     
     private let date1: Date
     private let date2: Date?
+    private let font: Font
+    private let color: Color
     private let showsIcon: Bool
-    private let style: ComponentStyle
     
     // MARK: - Initialization
     
     init(
-        single date: Date,
-        showsIcon: Bool = false,
-        style: ComponentStyle = .default
+        _ date: Date,
+        font: Font = .body,
+        color: Color = .primary,
+        showsIcon: Bool = false
     ) {
-        self.date1 = date
-        self.date2 = nil
-        self.showsIcon = showsIcon
-        self.style = style
+        self.init(date1: date, font: font, color: color, showsIcon: showsIcon)
     }
     
     init(
         from date1: Date,
         to date2: Date,
-        showsIcon: Bool = false,
-        style: ComponentStyle = .default
+        font: Font = .body,
+        color: Color = .primary,
+        showsIcon: Bool = false
+    ) {
+        self.init(date1: date1, date2: date2, font: font, color: color, showsIcon: showsIcon)
+    }
+    
+    private init(
+        date1: Date,
+        date2: Date? = nil,
+        font: Font = .body,
+        color: Color = .primary,
+        showsIcon: Bool = false
     ) {
         self.date1 = date1
         self.date2 = date2
+        self.font = font
+        self.color = color
         self.showsIcon = showsIcon
-        self.style = style
     }
     
     // MARK: - Body
     
     var body: some View {
-        HStack {
+        HStack(spacing: 4) {
             if showsIcon {
                 Image(systemName: "calendar")
                     .imageScale(.small)
@@ -57,34 +68,23 @@ struct DateLabel: View {
                     Text(DateDisplayFormatter.format(date1))
                 }
             }
-            .foregroundStyle(styleColor)
+            .foregroundStyle(color)
         }
-        .font(styleFont)
+        .font(font)
+    }
+}
+
+// MARK: - Presets
+
+extension DateLabel {
+    static func secondarySmall(_ date: Date, showsIcon: Bool = false) -> DateLabel {
+        DateLabel(date, font: .footnote, color: .secondary, showsIcon: showsIcon)
     }
     
-    // MARK: - Components
-    
-    private var styleFont: Font {
-        switch style {
-        case .default:
-            return .body
-        case .primary:
-            return .headline
-        case .secondary:
-            return .subheadline
-        case .tertiary:
-            return .footnote
-        }
+    static func secondarySmall(from date1: Date, to date2: Date, showsIcon: Bool = false) -> DateLabel {
+        DateLabel(from: date1, to: date2, font: .footnote, color: .secondary, showsIcon: showsIcon)
     }
-    
-    private var styleColor: Color {
-        switch style {
-        case .default, .primary:
-            return .primary
-        default:
-            return .secondary
-        }
-    }
+
 }
 
 // MARK: - Previews
@@ -93,34 +93,24 @@ private extension DateLabel {
     static func preview(locale: Locale, colorScheme: ColorScheme) -> some View {
         let now = Date.now
         let weekAhead = now.addingTimeInterval(604800)
+        let yearAhead = now.addingTimeInterval(31536000)
         
         return VStack(spacing: 40) {
             VStack(spacing: 20) {
-                DateLabel(single: now)
-                DateLabel(single: now, style: .primary)
-                DateLabel(single: now, style: .secondary)
-                DateLabel(single: now, style: .tertiary)
+                DateLabel(now, showsIcon: true)
+                DateLabel(from: now, to: weekAhead, showsIcon: true)
             }
-            
             VStack(spacing: 20) {
-                DateLabel(single: now, showsIcon: true)
-                DateLabel(single: now, showsIcon: true, style: .primary)
-                DateLabel(single: now, showsIcon: true, style: .secondary)
-                DateLabel(single: now, showsIcon: true, style: .tertiary)
+                DateLabel(now)
+                DateLabel(yearAhead, font: .footnote, color: .accent)
             }
-            
             VStack(spacing: 20) {
                 DateLabel(from: now, to: weekAhead)
-                DateLabel(from: now, to: weekAhead, style: .primary)
-                DateLabel(from: now, to: weekAhead, style: .secondary)
-                DateLabel(from: now, to: weekAhead, style: .tertiary)
+                DateLabel(from: now, to: yearAhead, font: .footnote, color: .accent)
             }
-            
             VStack(spacing: 20) {
-                DateLabel(from: now, to: weekAhead, showsIcon: true)
-                DateLabel(from: now, to: weekAhead, showsIcon: true, style: .primary)
-                DateLabel(from: now, to: weekAhead, showsIcon: true, style: .secondary)
-                DateLabel(from: now, to: weekAhead, showsIcon: true, style: .tertiary)
+                DateLabel.secondarySmall(yearAhead)
+                DateLabel.secondarySmall(from: now, to: yearAhead)
             }
         }
         .environment(\.locale, locale)

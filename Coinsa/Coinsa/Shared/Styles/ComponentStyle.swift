@@ -8,8 +8,8 @@
 import Foundation
 
 enum ComponentStyle {
-    case `default`
-    case primary
+    case title
     case secondary
     case tertiary
+    case `default`
 }

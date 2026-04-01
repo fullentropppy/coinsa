@@ -5,8 +5,21 @@
 //  Created by Daniil Gritsenko on 09.03.2026.
 //
 
-extension Currency: LocalizationKeyProviding {
-    static var localizationKeyPrefix: String {
-        "currency.name"
+import SwiftUI
+
+extension Currency {
+    var localized: LocalizedStringResource {
+        switch self {
+        case .aed: .currencyNameAed
+        case .byn: .currencyNameByn
+        case .cny: .currencyNameCny
+        case .eur: .currencyNameEur
+        case .jpy: .currencyNameJpy
+        case .krw: .currencyNameKrw
+        case .kzt: .currencyNameKzt
+        case .rub: .currencyNameRub
+        case .try: .currencyNameTry
+        case .usd: .currencyNameUsd
+        }
     }
 }

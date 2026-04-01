@@ -11,9 +11,9 @@ struct EmptyStateView: View {
     // MARK: - Stored Properties
     
     let imageName: String
-    let title: LocalizedStringKey
-    let description: LocalizedStringKey
-    let buttonLabel: LocalizedStringKey
+    let title: LocalizedStringResource
+    let description: LocalizedStringResource
+    let buttonLabel: LocalizedStringResource
     let onAddAction: () -> Void
     
     // MARK: - Body
@@ -37,24 +37,12 @@ struct EmptyStateView: View {
 // MARK: - Previews
 
 private extension EmptyStateView {
-    static func tripPreview(locale: Locale, colorScheme: ColorScheme) -> some View {
+    static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
         EmptyStateView(
             imageName: Trip.primaryIcon,
-            title: "trip.emptyState.title",
-            description: "trip.emptyState.desctiption",
-            buttonLabel: "trip.add",
-            onAddAction: {}
-        )
-        .environment(\.locale, locale)
-        .preferredColorScheme(colorScheme)
-    }
-    
-    static func locationPreview(locale: Locale, colorScheme: ColorScheme) -> some View {
-        EmptyStateView(
-            imageName: Location.primaryIcon,
-            title: "location.emptyState.title",
-            description: "location.emptyState.description",
-            buttonLabel: "location.add",
+            title: .tripEmptyStateTitle,
+            description: .tripEmptyStateDesctiption,
+            buttonLabel: .tripAdd,
             onAddAction: {}
         )
         .environment(\.locale, locale)
@@ -62,18 +50,10 @@ private extension EmptyStateView {
     }
 }
 
-#Preview("Trip. Light - RU") {
-    EmptyStateView.tripPreview(locale: PreviewLocale.ru.locale, colorScheme: .light)
+#Preview("Light - RU") {
+    EmptyStateView.makePreview(locale: PreviewLocale.ru.locale, colorScheme: .light)
 }
 
-#Preview("Trip. Dark - EN") {
-    EmptyStateView.tripPreview(locale: PreviewLocale.en.locale, colorScheme: .dark)
-}
-
-#Preview("Location. Light - RU") {
-    EmptyStateView.locationPreview(locale: PreviewLocale.ru.locale, colorScheme: .light)
-}
-
-#Preview("Location. Dark - EN") {
-    EmptyStateView.locationPreview(locale: PreviewLocale.en.locale, colorScheme: .dark)
+#Preview("Dark - EN") {
+    EmptyStateView.makePreview(locale: PreviewLocale.en.locale, colorScheme: .dark)
 }

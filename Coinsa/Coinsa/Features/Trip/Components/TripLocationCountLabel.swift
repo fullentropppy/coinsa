@@ -37,7 +37,7 @@ struct TripLocationCountLabel: View {
     
     private var styleFont: Font {
         switch style {
-        case .primary:
+        case .title:
             return .headline
         case .default, .secondary:
             return .subheadline
@@ -48,7 +48,7 @@ struct TripLocationCountLabel: View {
     
     private var styleColor: Color {
         switch style {
-        case .primary:
+        case .title:
             return .primary
         default:
             return .secondary
@@ -62,7 +62,7 @@ private extension TripLocationCountLabel {
     static func preview(colorScheme: ColorScheme) -> some View {
         VStack(spacing: 20) {
             TripLocationCountLabel(count: 4)
-            TripLocationCountLabel(count: 4, style: .primary)
+            TripLocationCountLabel(count: 4, style: .title)
             TripLocationCountLabel(count: 4, style: .secondary)
             TripLocationCountLabel(count: 4, style: .tertiary)
         }
