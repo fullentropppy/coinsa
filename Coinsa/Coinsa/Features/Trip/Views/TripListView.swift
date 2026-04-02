@@ -62,7 +62,7 @@ struct TripListView: View {
         List {
             ForEach(trips) { trip in
                 NavigationLink {
-                    TripDetailView(tripID: trip.persistentModelID)
+                    TripDetailView(trip: trip)
                 } label: {
                     TripRowView(trip: trip)
                 }

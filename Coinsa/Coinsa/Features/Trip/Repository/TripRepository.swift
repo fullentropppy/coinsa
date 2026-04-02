@@ -31,7 +31,6 @@ struct TripRepository {
         trip.name = name
         trip.startDate = startDate
         trip.endDate = endDate
-        trip.locations = []
         try? context.save()
     }
 

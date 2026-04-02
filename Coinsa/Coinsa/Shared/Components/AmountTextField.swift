@@ -67,7 +67,7 @@ struct AmountTextField: View {
                 syncFromValue()
             }
             .onChange(of: value) {
-                if isFocused {
+                if !isFocused {
                     syncFromValue()
                 }
             }

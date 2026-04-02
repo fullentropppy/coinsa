@@ -33,12 +33,8 @@ final class ExpenseEditViewModel {
         expense != nil
     }
 
-    var navigationTitle: String {
-        String(
-            localized: isEditing
-            ? "expense.navigationTitle.edit"
-            : "expense.navigationTitle.create"
-        )
+    var navigationTitle: LocalizedStringResource {
+        isEditing ? .expenseNavigationTitleEdit : .expenseNavigationTitleCreate
     }
 
     var hasChanges: Bool {
@@ -108,19 +104,15 @@ final class ExpenseEditViewModel {
     
     func currency(for inputCurrency: InputCurrency) -> Currency {
         switch inputCurrency {
-        case .base:
-            baseCurrency
-        case .location:
-            localCurrency
+        case .base: baseCurrency
+        case .location: localCurrency
         }
     }
     
     func amount(for inputCurrency: InputCurrency) -> Double {
         switch inputCurrency {
-        case .base:
-            amountBase
-        case .location:
-            amountLocal
+        case .base: amountBase
+        case .location: amountLocal
         }
     }
     

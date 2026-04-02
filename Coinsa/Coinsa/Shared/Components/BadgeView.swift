@@ -51,6 +51,7 @@ struct BadgeView: View {
         .foregroundStyle(.background)
         .padding(.horizontal, 8)
         .padding(.vertical, 4)
+        .frame(minWidth: 36)
         .frame(height: 22)
         .background(fillColor, in: .capsule)
     }
@@ -60,7 +61,7 @@ struct BadgeView: View {
 
 private extension BadgeView {
     static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
-        VStack(spacing: 20) {
+        VStack(spacing: 40) {
             BadgeView(
                 fillColor: Trip.badgeColor,
                 icon: Trip.badgeIcon

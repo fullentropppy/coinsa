@@ -17,31 +17,37 @@ struct ExpenseRowView: View {
     // MARK: - Body
     
     var body: some View {
-        VStack(alignment: .leading) {
-            HStack {
-                VStack(alignment: .leading, spacing: 10) {
-                    BadgeView(
-                        fillColor: expense.category.badgeColor,
-                        icon: expense.category.badgeIcon,
-                        title: expense.category.localized
-                    )
-                    DateLabel.secondarySmall(expense.date)
-                }
-                
-                Spacer()
-                
-                VStack(alignment: .trailing, spacing: 10) {
-                    AmountText.standard(
-                        expense.amountLocal,
-                        currency: Currency.from(expense.location.currencyCodeLocal)
-                    )
-                    
-                    AmountText.secondarySmall(
-                        expense.amountBase,
-                        currency: baseCurrency
-                    )
-                }
-            }
+        HStack {
+            leftStack
+            Spacer()
+            rightStack
+        }
+    }
+    
+    // MARK: - Components
+    
+    private var leftStack: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            BadgeView(
+                fillColor: expense.category.badgeColor,
+                icon: expense.category.badgeIcon,
+                title: expense.category.localized
+            )
+            DateLabel.secondarySmall(expense.date)
+        }
+    }
+    
+    private var rightStack: some View {
+        VStack(alignment: .trailing, spacing: 10) {
+            AmountText.standard(
+                expense.amountLocal,
+                currency: Currency.from(expense.location.currencyCodeLocal)
+            )
+            
+            AmountText.secondarySmall(
+                expense.amountBase,
+                currency: baseCurrency
+            )
         }
     }
 }
@@ -49,7 +55,7 @@ struct ExpenseRowView: View {
 // MARK: - Previews
 
 private extension ExpenseRowView {
-    static func preview(locale: Locale, colorScheme: ColorScheme) -> some View {
+    static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
         let builder = PreviewBuilder.builder().withBudgets(false)
         let data = builder.buildData()
         let expense = builder.getExpense(from: data)
@@ -66,9 +72,9 @@ private extension ExpenseRowView {
 }
 
 #Preview("Light - RU") {
-    ExpenseRowView.preview(locale: PreviewLocale.ru.locale, colorScheme: .light)
+    ExpenseRowView.makePreview(locale: PreviewLocale.ru.locale, colorScheme: .light)
 }
 
 #Preview("Dark - EN") {
-    ExpenseRowView.preview(locale: PreviewLocale.en.locale, colorScheme: .dark)
+    ExpenseRowView.makePreview(locale: PreviewLocale.en.locale, colorScheme: .dark)
 }

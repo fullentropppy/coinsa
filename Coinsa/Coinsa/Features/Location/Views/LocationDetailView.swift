@@ -15,7 +15,6 @@ struct LocationDetailView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(AppSettingsStore.self) private var settingsStore
 
-    @Query private var locations: [Location]
     @Query private var expenses: [Expense]
 
     @State private var viewModel: LocationDetailViewModel?
@@ -24,13 +23,9 @@ struct LocationDetailView: View {
     @State private var isShowingLocationEdit = false
     @State private var isShowingExpenseAdd = false
     
-    let locationID: PersistentIdentifier
+    private let location: Location
 
     // MARK: - Computed Properties
-
-    private var location: Location? {
-        locations.first
-    }
 
     private var repository: ExpenseRepository {
         ExpenseRepository(context: context)
@@ -38,18 +33,17 @@ struct LocationDetailView: View {
 
     // MARK: - Initialization
 
-    init(locationID: PersistentIdentifier) {
-        self.locationID = locationID
-
-        _locations = Query(
-            filter: #Predicate<Location> { $0.persistentModelID == locationID }
-        )
-
+    init(location: Location) {
+        self.location = location
+        
+        let locationID = location.persistentModelID
         _expenses = Query(
-            filter: #Predicate<Expense> { $0.location.persistentModelID == locationID },
-            sort: [SortDescriptor(\Expense.date, order: .reverse)]
+            filter: #Predicate<Expense> { expense in
+                expense.location.persistentModelID == locationID
+            },
+            sort: \Expense.date, order: .reverse
         )
-
+        
         _viewModel = State(initialValue: nil)
     }
 
@@ -57,8 +51,8 @@ struct LocationDetailView: View {
 
     var body: some View {
         Group {
-            if let location, let viewModel {
-                detailContent(location: location, viewModel: viewModel)
+            if let viewModel {
+                detailContent(viewModel: viewModel)
             } else {
                 ProgressView()
             }
@@ -66,17 +60,11 @@ struct LocationDetailView: View {
         .onAppear {
             updateViewModel()
         }
-        .onChange(of: locations.count) { _, _ in
-            updateViewModel()
-        }
     }
 
     // MARK: - Components
 
-    private func detailContent(
-        location: Location,
-        viewModel: LocationDetailViewModel
-    ) -> some View {
+    private func detailContent(viewModel: LocationDetailViewModel) -> some View {
         Form {
             Section {
                 EventHeaderView(
@@ -130,7 +118,7 @@ struct LocationDetailView: View {
     private var expenseListContent: some View {
         ForEach(expenses) { expense in
             NavigationLink {
-                ExpenseDetailView(expenseID: expense.persistentModelID)
+                ExpenseDetailView(expense: expense)
             } label: {
                 ExpenseRowView(
                     expense: expense,
@@ -164,10 +152,6 @@ struct LocationDetailView: View {
     // MARK: - Actions
 
     private func updateViewModel() {
-        guard let location else {
-            viewModel = nil
-            return
-        }
         viewModel = LocationDetailViewModel(
             location: location,
             baseCurrency: settingsStore.baseCurrency
@@ -198,10 +182,10 @@ private extension LocationDetailView {
         let builder = PreviewBuilder.builder().withExpenses(withExpenses)
         let container = builder.buildContainer()
         let settingsStore = AppSettingsStore(context: container.mainContext)
-        let locationID = builder.fetchLocation(from: container).persistentModelID
+        let location = builder.fetchLocation(from: container)
 
         return NavigationStack {
-            LocationDetailView(locationID: locationID)
+            LocationDetailView(location: location)
         }
         .modelContainer(container)
         .environment(settingsStore)

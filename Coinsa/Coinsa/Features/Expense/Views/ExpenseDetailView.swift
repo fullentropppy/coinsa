@@ -14,37 +14,26 @@ struct ExpenseDetailView: View {
     @Environment(AppSettingsStore.self) private var settingsStore
     @Environment(\.dismiss) private var dismiss
     
-    @Query private var expenses: [Expense]
-
     @State private var isShowingExpenseEdit = false
 
-    let expenseID: PersistentIdentifier
+    private let expense: Expense
 
+    // MARK: - Computed Properties
+    
+    private var localCurrency: Currency {
+        Currency.from(expense.location.currencyCodeLocal)
+    }
+    
     // MARK: - Initialization
 
-    init(expenseID: PersistentIdentifier) {
-        self.expenseID = expenseID
-        _expenses = Query(
-            filter: #Predicate<Expense> { $0.persistentModelID == expenseID }
-        )
+    init(expense: Expense) {
+        self.expense = expense
     }
     
     // MARK: - Body
 
     var body: some View {
-        Group {
-            if let expense = expenses.first {
-                expenseDetailContent(expense: expense)
-            } else {
-                ProgressView()
-            }
-        }
-    }
-
-    // MARK: - Content
-    
-    private func expenseDetailContent(expense: Expense) -> some View {
-        expenseDetailForm(expense: expense)
+        expenseDetailForm
             .navigationTitle(expense.category.localized)
             .navigationSubtitle(expense.location.screenContextSubtitle)
             .navigationBarTitleDisplayMode(.large)
@@ -56,15 +45,16 @@ struct ExpenseDetailView: View {
                     expense: expense,
                     baseCurrency: settingsStore.baseCurrency
                 ) {
-                    isShowingExpenseEdit = false
                     dismiss()
                 }
             }
     }
+
+    // MARK: - Content
     
-    private func expenseDetailForm(expense: Expense) -> some View {
+    private var expenseDetailForm: some View {
         Form {
-            mainSection(expense: expense)
+            mainSection
             if let comment = expense.comment {
                 commentSection(comment: comment)
             }
@@ -73,11 +63,11 @@ struct ExpenseDetailView: View {
     
     // MARK: - Sections
 
-    private func mainSection(expense: Expense) -> some View {
+    private var mainSection: some View {
         Section {
             VStack(spacing: 14) {
-                headerContent(expense: expense)
-                cardContent(expense: expense)
+                headerContent
+                cardContent
             }
         }
     }
@@ -90,7 +80,7 @@ struct ExpenseDetailView: View {
     
     // MARK: - Components
     
-    private func headerContent(expense: Expense) -> some View {
+    private var headerContent: some View {
         HStack {
             BadgeView(
                 fillColor: Expense.badgeColor,
@@ -107,10 +97,8 @@ struct ExpenseDetailView: View {
         }
     }
     
-    private func cardContent(expense: Expense) -> some View {
-        let localCurrency = Currency.from(expense.location.currencyCodeLocal)
-
-        return VStack(alignment: .center) {
+    private var cardContent: some View {
+        VStack(alignment: .center) {
             AmountText(
                 expense.amountLocal,
                 font: .title,
@@ -120,7 +108,7 @@ struct ExpenseDetailView: View {
             
             Divider()
             
-            amountAdditionalInfo(expense: expense, localCurrency: localCurrency)
+            amountAdditionalInfo
                 .padding(14)
         }
         .padding(10)
@@ -130,12 +118,13 @@ struct ExpenseDetailView: View {
         )
     }
     
-    private func amountAdditionalInfo(expense: Expense, localCurrency: Currency) -> some View {
+    private var amountAdditionalInfo: some View {
         let baseCurrencyCode = settingsStore.baseCurrency.code
-        
-        let info = "\(expense.amountBase) \(baseCurrencyCode)"
-        + "  •  "
-        + "1 \(baseCurrencyCode) = \(String(format: "%g", expense.rateLocalToBase)) \(localCurrency.code)"
+        let parts = [
+            "\(expense.amountBase) \(baseCurrencyCode)",
+            "1 \(baseCurrencyCode) = \(String(format: "%g", expense.rateLocalToBase)) \(localCurrency.code)"
+        ]
+        let info = parts.joined(separator: "  •  ")
 
         return Text(info)
             .font(.subheadline)
@@ -159,10 +148,10 @@ private extension ExpenseDetailView {
         let builder = PreviewBuilder.builder().withBudgets(false)
         let container = builder.buildContainer()
         let settingsStore = AppSettingsStore(context: container.mainContext)
-        let expenseID = builder.fetchExpense(from: container).persistentModelID
+        let expense = builder.fetchExpense(from: container)
         
         return NavigationStack {
-            ExpenseDetailView(expenseID: expenseID)
+            ExpenseDetailView(expense: expense)
         }
         .modelContainer(container)
         .environment(settingsStore)

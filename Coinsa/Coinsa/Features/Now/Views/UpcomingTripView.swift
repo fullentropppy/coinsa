@@ -25,7 +25,7 @@ struct UpcomingTripView: View {
                         .font(.headline)
 
                     NavigationLink {
-                        TripDetailView(tripID: trip.persistentModelID)
+                        TripDetailView(trip: trip)
                     } label: {
                         TripRowView(trip: trip)
                     }

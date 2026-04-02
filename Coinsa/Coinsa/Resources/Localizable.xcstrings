@@ -399,6 +399,7 @@
       }
     },
     "delete.confirm" : {
+      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -415,6 +416,7 @@
       }
     },
     "delete.title" : {
+      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -425,7 +427,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Подтверждение удаление"
+            "value" : "Подтверждение удаления"
           }
         }
       }
@@ -754,6 +756,7 @@
       }
     },
     "expense.comment" : {
+      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {

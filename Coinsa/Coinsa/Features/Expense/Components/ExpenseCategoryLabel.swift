@@ -27,7 +27,7 @@ struct ExpenseCategoryLabel: View {
 // MARK: - Previews
 
 private extension ExpenseCategoryLabel {
-    static func preview(locale: Locale, colorScheme: ColorScheme) -> some View {
+    static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
         VStack(alignment: .leading, spacing: 20) {
             ForEach(ExpenseCategory.allCases, id: \.id) { (category: ExpenseCategory) in
                 ExpenseCategoryLabel(category: category)
@@ -39,9 +39,9 @@ private extension ExpenseCategoryLabel {
 }
 
 #Preview("Light - RU") {
-    ExpenseCategoryLabel.preview(locale: PreviewLocale.ru.locale, colorScheme: .light)
+    ExpenseCategoryLabel.makePreview(locale: PreviewLocale.ru.locale, colorScheme: .light)
 }
 
 #Preview("Dark - EN") {
-    ExpenseCategoryLabel.preview(locale: PreviewLocale.en.locale, colorScheme: .dark)
+    ExpenseCategoryLabel.makePreview(locale: PreviewLocale.en.locale, colorScheme: .dark)
 }

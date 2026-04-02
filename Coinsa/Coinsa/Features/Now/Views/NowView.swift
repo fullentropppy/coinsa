@@ -31,7 +31,7 @@ struct NowView: View {
     var body: some View {
         NavigationStack {
             if let currentLocation {
-                LocationDetailView(locationID: currentLocation.persistentModelID)
+                LocationDetailView(location: currentLocation)
             } else {
 //                UpcomingTripView(trip: upcomingLocation)
 //                    .navigationTitle("now.navigationTitle")

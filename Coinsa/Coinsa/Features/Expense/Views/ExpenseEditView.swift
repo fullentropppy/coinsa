@@ -27,45 +27,10 @@ struct ExpenseEditView: View {
         ExpenseRepository(context: context)
     }
     
-    private var categoryBinding: Binding<ExpenseCategory> {
-        Binding(
-            get: {
-                viewModel.category
-            },
-            set: {
-                viewModel.category = $0
-            }
-        )
-    }
-    
     private var amountInputCurrencyValue: Currency {
         viewModel.currency(for: inputCurrency)
     }
 
-    private var amountInputBinding: Binding<Double> {
-        Binding(
-            get: {
-                viewModel.amount(for: inputCurrency)
-            },
-            set: { newValue in
-                viewModel.updateAmount(newValue, for: inputCurrency)
-            }
-        )
-    }
-    
-    private var rateInputBinding: Binding<Double> {
-        Binding(
-            get: {
-                viewModel.rateLocalToBase
-            },
-            set: { newValue in
-                viewModel.rateLocalToBase = newValue
-                let currentAmount = viewModel.amount(for: inputCurrency)
-                viewModel.updateAmount(currentAmount, for: inputCurrency)
-            }
-        )
-    }
-    
     // MARK: - Initialization
 
     init(location: Location, baseCurrency: Currency) {
@@ -110,51 +75,57 @@ struct ExpenseEditView: View {
     
     var body: some View {
         NavigationStack {
-            Form {
-                mainDataSection
-                amountSection
-                commentSection
-                actionsSection
-            }
-            .navigationTitle(viewModel.navigationTitle)
-            .navigationSubtitle(viewModel.location.screenContextSubtitle)
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                toolbarContent
-            }
-            .interactiveDismissDisabled(true)
-            .scrollDismissesKeyboard(.interactively)
-            .discardConfirmationAlert(
-                isPresented: $isShowingDiscardAlert,
-                onConfirm: {
-                    dismiss()
+            expenseEditForm
+                .navigationTitle(viewModel.navigationTitle)
+                .navigationSubtitle(viewModel.location.screenContextSubtitle)
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    toolbarContent
                 }
-            )
-            .deleteConfirmationAlert(
-                isPresented: $deletionHandler.isShowingDeleteConfirmation,
-                message: "expense.delete.message",
-                onConfirm: {
-                    confirmDelete()
-                    dismiss()
-                },
-                onCancel: {
-                    cancelDelete()
-                }
-            )
+                .interactiveDismissDisabled(true)
+                .scrollDismissesKeyboard(.interactively)
+                .discardConfirmationAlert(
+                    isPresented: $isShowingDiscardAlert,
+                    onConfirm: {
+                        dismiss()
+                    }
+                )
+                .deleteConfirmationAlert(
+                    isPresented: $deletionHandler.isShowingDeleteConfirmation,
+                    message: .expenseDeleteMessage,
+                    onConfirm: {
+                        confirmDelete()
+                        dismiss()
+                    },
+                    onCancel: {
+                        cancelDelete()
+                    }
+                )
         }
     }
 
-    // MARK: - Components
+    // MARK: - Content
+    
+    private var expenseEditForm: some View {
+        Form {
+            mainDataSection
+            amountSection
+            commentSection
+            actionsSection
+        }
+    }
+    
+    // MARK: - Sections
     
     private var mainDataSection: some View {
         Section {
             DatePicker(
-                "expense.date",
+                .expenseDate,
                 selection: $viewModel.date,
                 in: viewModel.location.range
             )
             
-            Picker("expense.category", selection: categoryBinding) {
+            Picker(.expenseCategory, selection: categoryBinding) {
                 ForEach(ExpenseCategory.allCases, id: \.id) { category in
                     ExpenseCategoryLabel(category: category)
                         .tag(category)
@@ -162,8 +133,8 @@ struct ExpenseEditView: View {
             }
             .pickerStyle(.navigationLink)
         }
-    } 
-
+    }
+    
     private var amountSection: some View {
         Section {
             Picker("", selection: $inputCurrency) {
@@ -175,7 +146,7 @@ struct ExpenseEditView: View {
             .pickerStyle(.segmented)
             .listRowSeparator(.hidden)
 
-            LabeledContent("expense.amount") {
+            LabeledContent(.expenseAmount) {
                 HStack {
                     AmountTextField(amountInputBinding)
                     CurrencyCodeText(amountInputCurrencyValue)
@@ -183,7 +154,7 @@ struct ExpenseEditView: View {
                 }
             }
             
-            LabeledContent("expense.exchangeRate") {
+            LabeledContent(.expenseExchangeRate) {
                 HStack {
                     AmountTextField(rateInputBinding, fractionDigits: 4)
                     CurrencyCodeText(viewModel.baseCurrency)
@@ -195,20 +166,22 @@ struct ExpenseEditView: View {
 
     private var commentSection: some View {
         Section {
-            TextField("expense.comment", text: $viewModel.comment)
+            TextField(.expenseComment, text: $viewModel.comment)
         }
     }
 
     private var actionsSection: some View {
         Section {
             if viewModel.isEditing {
-                Button("expense.delete", role: .destructive) {
+                Button(.expenseDelete, role: .destructive) {
                     requestDelete()
                 }
             }
         }
     }
 
+    // MARK: - Components
+    
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
         ToolbarItemGroup(placement: .topBarLeading) {
@@ -226,6 +199,35 @@ struct ExpenseEditView: View {
         }
     }
 
+    // MARK: - Bindings
+    
+    private var categoryBinding: Binding<ExpenseCategory> {
+        Binding(
+            get: { viewModel.category },
+            set: { viewModel.category = $0 }
+        )
+    }
+    
+    private var amountInputBinding: Binding<Double> {
+        Binding(
+            get: { viewModel.amount(for: inputCurrency) },
+            set: { newValue in
+                viewModel.updateAmount(newValue, for: inputCurrency)
+            }
+        )
+    }
+    
+    private var rateInputBinding: Binding<Double> {
+        Binding(
+            get: { viewModel.rateLocalToBase },
+            set: { newValue in
+                viewModel.rateLocalToBase = newValue
+                let currentAmount = viewModel.amount(for: inputCurrency)
+                viewModel.updateAmount(currentAmount, for: inputCurrency)
+            }
+        )
+    }
+    
     // MARK: - Actions
     
     private func handleClose() {
@@ -254,7 +256,7 @@ struct ExpenseEditView: View {
 // MARK: - Previews
 
 private extension ExpenseEditView {
-    static func preview(
+    static func makePreview(
         withExpense: Bool,
         locale: Locale,
         colorScheme: ColorScheme
@@ -278,17 +280,17 @@ private extension ExpenseEditView {
 }
 
 #Preview("Light - RU") {
-    ExpenseEditView.preview(withExpense: true, locale: PreviewLocale.ru.locale, colorScheme: .light)
+    ExpenseEditView.makePreview(withExpense: true, locale: PreviewLocale.ru.locale, colorScheme: .light)
 }
 
 #Preview("Dark - EN") {
-    ExpenseEditView.preview(withExpense: true, locale: PreviewLocale.en.locale, colorScheme: .dark)
+    ExpenseEditView.makePreview(withExpense: true, locale: PreviewLocale.en.locale, colorScheme: .dark)
 }
 
 #Preview("New Expense. Light - RU") {
-    ExpenseEditView.preview(withExpense: false, locale: PreviewLocale.ru.locale, colorScheme: .light)
+    ExpenseEditView.makePreview(withExpense: false, locale: PreviewLocale.ru.locale, colorScheme: .light)
 }
 
 #Preview("New Expense. Dark - EN") {
-    ExpenseEditView.preview(withExpense: false, locale: PreviewLocale.en.locale, colorScheme: .dark)
+    ExpenseEditView.makePreview(withExpense: false, locale: PreviewLocale.en.locale, colorScheme: .dark)
 }
