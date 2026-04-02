@@ -25,7 +25,7 @@ struct PrimaryAddButtonView: View {
                 action()
             } label: {
                 Image(systemName: "plus")
-                    .font(.title.weight(.semibold))
+                    .font(.title)
             }
             .padding(16)
             .contentShape(Circle())

@@ -24,8 +24,8 @@ struct TripRowView: View {
             HStack(spacing: 10) {
                 DateLabel.secondarySmall(from: trip.startDate, to: trip.endDate)
                 Spacer()
-                DurationLabel(days: trip.durationInDays, style: .tertiary)
-                TripLocationCountLabel(count: trip.locationsCount, style: .tertiary)
+                CountLabel.secondarySmall(trip.locationsCount, icon: Location.primaryIcon)
+                CountLabel.daysSecondarySmall(trip.durationInDays)
             }
         }
     }

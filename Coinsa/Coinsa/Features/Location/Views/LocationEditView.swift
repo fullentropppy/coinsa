@@ -168,7 +168,7 @@ struct LocationEditView: View {
 
             LabeledContent("location.exchangeRate") {
                 HStack {
-                    AmountTextField(value: $viewModel.rateToBaseCurrency, fractionDigits: 4)
+                    AmountTextField($viewModel.rateToBaseCurrency, fractionDigits: 4)
                     CurrencyCodeText(viewModel.baseCurrency)
                         .frame(width: 40, alignment: .center)
                 }
@@ -191,7 +191,7 @@ struct LocationEditView: View {
                 HStack {
                     ExpenseCategoryLabel(category: category)
                     Spacer()
-                    AmountTextField(value: budgetInputBinding(for: category))
+                    AmountTextField(budgetInputBinding(for: category))
                     CurrencyCodeText(budgetInputCurrencyValue)
                         .frame(width: 40, alignment: .center)
                 }

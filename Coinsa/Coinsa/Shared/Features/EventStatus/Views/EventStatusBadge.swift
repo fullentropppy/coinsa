@@ -22,8 +22,8 @@ struct EventStatusBadge: View {
     
     var body: some View {
         Image(systemName: "circle.fill")
-            .foregroundStyle(status.color)
             .imageScale(.small)
+            .foregroundStyle(status.color)
     }
 }
 

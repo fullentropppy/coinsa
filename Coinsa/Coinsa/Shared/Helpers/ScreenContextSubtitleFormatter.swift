@@ -2,7 +2,7 @@
 //  ScreenContextSubtitleFormatter.swift
 //  Coinsa
 //
-//  Created by Codex on 28.03.2026.
+//  Created by Daniil Gritsenko on 28.03.2026.
 //
 
 import Foundation

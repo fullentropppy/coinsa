@@ -1,0 +1,86 @@
+//
+//  CountLabel.swift
+//  Coinsa
+//
+//  Created by Daniil Gritsenko on 02.04.2026.
+//
+
+import SwiftUI
+
+struct CountLabel: View {
+    // MARK: - Stored Properties
+    
+    private let count: Int
+    private let font: Font
+    private let color: Color
+    private let icon: String
+    
+    // MARK: - Initialization
+    
+    init(
+        _ count: Int,
+        font: Font = .body,
+        color: Color = .primary,
+        icon: String = "number"
+    ) {
+        self.count = count
+        self.font = font
+        self.color = color
+        self.icon = icon
+    }
+    
+    // MARK: - Body
+    var body: some View {
+        HStack(spacing: 2) {
+            Image(systemName: icon)
+                .imageScale(.small)
+            Text(String(count))
+        }
+        .font(font)
+        .foregroundStyle(color)
+    }
+}
+
+// MARK: - Presets
+extension CountLabel {
+    static func secondarySmall(_ count: Int, icon: String = "number") -> CountLabel {
+        CountLabel(count, font: .footnote, color: .secondary, icon: icon)
+    }
+    
+    static func days(_ days: Int, font: Font = .body, color: Color = .primary) -> CountLabel {
+        CountLabel(days, font: font, color: color, icon: "clock")
+    }
+    
+    static func daysSecondarySmall(_ days: Int) -> CountLabel {
+        CountLabel.days(days, font: .footnote, color: .secondary)
+    }
+}
+
+// MARK: - Previews
+
+private extension CountLabel {
+    static func makePreview(colorScheme: ColorScheme) -> some View {
+        let count = 14
+        
+        return VStack(spacing: 40) {
+            VStack(spacing: 20) {
+                CountLabel(count)
+                CountLabel(count, font: .footnote, color: .accent)
+                CountLabel.secondarySmall(count)
+            }
+            VStack(spacing: 20) {
+                CountLabel.days(count)
+                CountLabel.daysSecondarySmall(count)
+            }
+        }
+        .preferredColorScheme(colorScheme)
+    }
+}
+
+#Preview("Light") {
+    CountLabel.makePreview(colorScheme: .light)
+}
+
+#Preview("Dark") {
+    CountLabel.makePreview(colorScheme: .dark)
+}

@@ -14,75 +14,66 @@ struct DateLabel: View {
     private let date2: Date?
     private let font: Font
     private let color: Color
-    private let showsIcon: Bool
+    
+    // MARK: - Computed Properties
+    
+    private var labelText: String {
+        if let endDate = date2 {
+            DateDisplayFormatter.formatRange(startDate: date1, endDate: endDate)
+        } else {
+            DateDisplayFormatter.format(date1)
+        }
+    }
     
     // MARK: - Initialization
     
     init(
         _ date: Date,
         font: Font = .body,
-        color: Color = .primary,
-        showsIcon: Bool = false
+        color: Color = .primary
     ) {
-        self.init(date1: date, font: font, color: color, showsIcon: showsIcon)
+        self.init(date1: date, font: font, color: color)
     }
     
     init(
         from date1: Date,
         to date2: Date,
         font: Font = .body,
-        color: Color = .primary,
-        showsIcon: Bool = false
+        color: Color = .primary
     ) {
-        self.init(date1: date1, date2: date2, font: font, color: color, showsIcon: showsIcon)
+        self.init(date1: date1, date2: date2, font: font, color: color)
     }
     
     private init(
         date1: Date,
         date2: Date? = nil,
         font: Font = .body,
-        color: Color = .primary,
-        showsIcon: Bool = false
+        color: Color = .primary
     ) {
         self.date1 = date1
         self.date2 = date2
         self.font = font
         self.color = color
-        self.showsIcon = showsIcon
     }
     
     // MARK: - Body
     
     var body: some View {
-        HStack(spacing: 4) {
-            if showsIcon {
-                Image(systemName: "calendar")
-                    .imageScale(.small)
-                    .foregroundStyle(.secondary)
-            }
-            
-            Group {
-                if let endDate = date2 {
-                    Text(DateDisplayFormatter.formatRange(startDate: date1, endDate: endDate))
-                } else {
-                    Text(DateDisplayFormatter.format(date1))
-                }
-            }
+        Text(labelText)
+            .font(font)
             .foregroundStyle(color)
-        }
-        .font(font)
     }
 }
 
 // MARK: - Presets
 
 extension DateLabel {
-    static func secondarySmall(_ date: Date, showsIcon: Bool = false) -> DateLabel {
-        DateLabel(date, font: .footnote, color: .secondary, showsIcon: showsIcon)
+    static func secondarySmall(_ date: Date) -> DateLabel {
+        DateLabel(date, font: .footnote, color: .secondary)
     }
     
-    static func secondarySmall(from date1: Date, to date2: Date, showsIcon: Bool = false) -> DateLabel {
-        DateLabel(from: date1, to: date2, font: .footnote, color: .secondary, showsIcon: showsIcon)
+    static func secondarySmall(from date1: Date, to date2: Date) -> DateLabel {
+        DateLabel(from: date1, to: date2, font: .footnote, color: .secondary)
     }
 
 }
@@ -96,10 +87,6 @@ private extension DateLabel {
         let yearAhead = now.addingTimeInterval(31536000)
         
         return VStack(spacing: 40) {
-            VStack(spacing: 20) {
-                DateLabel(now, showsIcon: true)
-                DateLabel(from: now, to: weekAhead, showsIcon: true)
-            }
             VStack(spacing: 20) {
                 DateLabel(now)
                 DateLabel(yearAhead, font: .footnote, color: .accent)

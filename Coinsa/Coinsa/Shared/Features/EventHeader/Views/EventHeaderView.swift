@@ -32,7 +32,7 @@ struct EventHeaderView: View {
             EventStatusLabel(data.status)
             Spacer()
             DateLabel.secondarySmall(from: data.startDate, to: data.endDate)
-            DurationLabel(days: data.durationDays, style: .tertiary)
+            CountLabel.daysSecondarySmall(data.durationDays)
         }
     }
 

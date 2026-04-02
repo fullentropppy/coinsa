@@ -177,7 +177,7 @@ struct ExpenseEditView: View {
 
             LabeledContent("expense.amount") {
                 HStack {
-                    AmountTextField(value: amountInputBinding)
+                    AmountTextField(amountInputBinding)
                     CurrencyCodeText(amountInputCurrencyValue)
                         .frame(width: 40, alignment: .center)
                 }
@@ -185,7 +185,7 @@ struct ExpenseEditView: View {
             
             LabeledContent("expense.exchangeRate") {
                 HStack {
-                    AmountTextField(value: rateInputBinding, fractionDigits: 4)
+                    AmountTextField(rateInputBinding, fractionDigits: 4)
                     CurrencyCodeText(viewModel.baseCurrency)
                         .frame(width: 40, alignment: .center)
                 }

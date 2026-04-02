@@ -11,10 +11,12 @@ struct AmountTextField: View {
     // MARK: - Stored Properties
     
     @Binding var value: Double
-    private let fractionDigits: Int
     
     @State private var text: String = ""
+    
     @FocusState private var isFocused: Bool
+    
+    private let fractionDigits: Int
     
     // MARK: - Computed Properties
     
@@ -43,12 +45,13 @@ struct AmountTextField: View {
         
         let separator = displayFormatter.decimalSeparator ?? ","
         let zeros = String(repeating: "0", count: fractionDigits)
+        
         return "0\(separator)\(zeros)"
     }
     
     // MARK: - Initialization
     
-    init(value: Binding<Double>, fractionDigits: Int = 2) {
+    init(_ value: Binding<Double>, fractionDigits: Int = 2) {
         self._value = value
         self.fractionDigits = fractionDigits
     }
@@ -63,9 +66,10 @@ struct AmountTextField: View {
             .onAppear {
                 syncFromValue()
             }
-            .onChange(of: value) { _, _ in
-                guard !isFocused else { return }
-                syncFromValue()
+            .onChange(of: value) {
+                if isFocused {
+                    syncFromValue()
+                }
             }
             .onChange(of: isFocused) { _, focused in
                 if !focused {
@@ -80,15 +84,12 @@ struct AmountTextField: View {
     // MARK: - Actions
     
     private func syncFromValue() {
-        if value == 0 {
-            text = ""
-        } else {
-            text = displayFormatter.string(from: NSNumber(value: value)) ?? ""
-        }
+        text = value == 0 ? "" : displayFormatter.string(from: NSNumber(value: value)) ?? ""
     }
 
     private func commit() {
         let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        
         guard !trimmed.isEmpty else {
             value = 0
             text = ""
@@ -107,13 +108,10 @@ struct AmountTextField: View {
 // MARK: - Previews
 
 private extension AmountTextField {
-    static func preview(
-        locale: Locale,
-        colorScheme: ColorScheme
-    ) -> some View {
+    static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
         Form {
-            LabeledContent("") {
-                AmountTextField(value: .constant(1234.56))
+            LabeledContent(.expenseAmount) {
+                AmountTextField(.constant(1234.56))
             }
         }
         .environment(\.locale, locale)
@@ -122,10 +120,10 @@ private extension AmountTextField {
 }
 
 #Preview("Light - RU") {
-    AmountTextField.preview(locale: PreviewLocale.ru.locale, colorScheme: .light)
+    AmountTextField.makePreview(locale: PreviewLocale.ru.locale, colorScheme: .light)
 }
 
 #Preview("Dark - EN") {
-    AmountTextField.preview(locale: PreviewLocale.en.locale, colorScheme: .dark)
+    AmountTextField.makePreview(locale: PreviewLocale.en.locale, colorScheme: .dark)
 }
 

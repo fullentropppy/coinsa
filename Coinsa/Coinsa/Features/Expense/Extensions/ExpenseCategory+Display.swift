@@ -1,5 +1,5 @@
 //
-//  ExpenseCategory+Label.swift
+//  ExpenseCategory+Display.swift
 //  Coinsa
 //
 //  Created by Daniil Gritsenko on 29.03.2026.
