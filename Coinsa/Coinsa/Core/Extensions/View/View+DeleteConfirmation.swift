@@ -14,7 +14,7 @@ extension View {
         onConfirm: @escaping () -> Void,
         onCancel: @escaping () -> Void
     ) -> some View {
-        self.alert(.deleteTitle, isPresented: isPresented) {
+        self.alert(.commonConfirmTitle, isPresented: isPresented) {
             Button(.deleteConfirm, role: .destructive) {
                 onConfirm()
             }

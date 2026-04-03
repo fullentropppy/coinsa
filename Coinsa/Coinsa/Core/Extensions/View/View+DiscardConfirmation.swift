@@ -12,13 +12,13 @@ extension View {
         isPresented: Binding<Bool>,
         onConfirm: @escaping () -> Void
     ) -> some View {
-        self.alert("discard.title", isPresented: isPresented) {
-            Button("discard.confirm", role: .destructive) {
+        self.alert(.discardTitle, isPresented: isPresented) {
+            Button(.discardConfirm, role: .destructive) {
                 onConfirm()
             }
-            Button("discard.keepEditing", role: .cancel) { }
+            Button(.discardKeepEditing, role: .cancel) {}
         } message: {
-            Text("discard.message")
+            Text(.discardMessage)
         }
     }
 }

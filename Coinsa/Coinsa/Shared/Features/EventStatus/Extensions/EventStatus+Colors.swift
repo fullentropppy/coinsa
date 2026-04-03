@@ -8,7 +8,7 @@
 import SwiftUI
 
 extension EventStatus {
-    var color: Color {
+    var badgeColor: Color {
         switch self {
         case .upcoming: .green
         case .ongoing: .blue

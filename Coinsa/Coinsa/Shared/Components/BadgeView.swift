@@ -62,19 +62,66 @@ struct BadgeView: View {
 private extension BadgeView {
     static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
         VStack(spacing: 40) {
-            BadgeView(
-                fillColor: Trip.badgeColor,
-                icon: Trip.badgeIcon
-            )
-            BadgeView(
-                fillColor: ExpenseCategory.food.badgeColor,
-                icon: ExpenseCategory.food.badgeIcon,
-                title: ExpenseCategory.food.localized
-            )
-            BadgeView(
-                fillColor: EventStatus.upcoming.color,
-                title: EventStatus.upcoming.localized
-            )
+            VStack(spacing: 20) {
+                BadgeView(
+                    fillColor: Trip.badgeColor,
+                    icon: Trip.badgeIcon
+                )
+                BadgeView(
+                    fillColor: Location.badgeColor,
+                    icon: Location.badgeIcon
+                )
+                BadgeView(
+                    fillColor: Expense.badgeColor,
+                    icon: Expense.badgeIcon
+                )
+            }
+            VStack(spacing: 20) {
+                BadgeView(
+                    fillColor: EventStatus.upcoming.badgeColor,
+                    title: EventStatus.upcoming.localized
+                )
+                BadgeView(
+                    fillColor: EventStatus.ongoing.badgeColor,
+                    title: EventStatus.ongoing.localized
+                )
+                BadgeView(
+                    fillColor: EventStatus.completed.badgeColor,
+                    title: EventStatus.completed.localized
+                )
+            }
+            VStack(spacing: 20) {
+                BadgeView(
+                    fillColor: ExpenseCategory.food.badgeColor,
+                    icon: ExpenseCategory.food.badgeIcon,
+                    title: ExpenseCategory.food.localized
+                )
+                BadgeView(
+                    fillColor: ExpenseCategory.transport.badgeColor,
+                    icon: ExpenseCategory.transport.badgeIcon,
+                    title: ExpenseCategory.transport.localized
+                )
+                BadgeView(
+                    fillColor: ExpenseCategory.activity.badgeColor,
+                    icon: ExpenseCategory.activity.badgeIcon,
+                    title: ExpenseCategory.activity.localized
+                )
+                BadgeView(
+                    fillColor: ExpenseCategory.shopping.badgeColor,
+                    icon: ExpenseCategory.shopping.badgeIcon,
+                    title: ExpenseCategory.shopping.localized
+                )
+                BadgeView(
+                    fillColor: ExpenseCategory.medicine.badgeColor,
+                    icon: ExpenseCategory.medicine.badgeIcon,
+                    title: ExpenseCategory.medicine.localized
+                )
+                BadgeView(
+                    fillColor: ExpenseCategory.other.badgeColor,
+                    icon: ExpenseCategory.other.badgeIcon,
+                    title: ExpenseCategory.other.localized
+                )
+            }
         }
         .environment(\.locale, locale)
         .preferredColorScheme(colorScheme)

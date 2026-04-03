@@ -11,8 +11,17 @@ import SwiftData
 struct SettingsView: View {
     // MARK: - Stored Properties
 
+    @Environment(\.modelContext) private var context
     @Environment(AppSettingsStore.self) private var appSettingsStore
-
+    
+    // MARK: - Computed Properties
+    
+#if DEBUG
+    private var demoDataService: DemoDataService {
+        DemoDataService(context: context)
+    }
+#endif
+    
     // MARK: - Body
 
     var body: some View {
@@ -32,6 +41,9 @@ struct SettingsView: View {
         Form {
             baseCurrencySection
             appearanceSection
+#if DEBUG
+            SettingsDebugSectionView(demoDataService: demoDataService)
+#endif
         }
     }
     
