@@ -27,7 +27,7 @@ struct DateDisplayFormatter {
     }
 
     static func formatRange(startDate: Date, endDate: Date, showsTime: Bool = false) -> String {
-        let dateTemplate = isSameYear(startDate, endDate) ? "dMMM" : "dMy"
+        let dateTemplate = isSameYear(startDate, endDate) && isSameYear(.now, startDate) ? "dMMM" : "dMy"
         
         let formatter = DateIntervalFormatter()
         formatter.calendar = calendar

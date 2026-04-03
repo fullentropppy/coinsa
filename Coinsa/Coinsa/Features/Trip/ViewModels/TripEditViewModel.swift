@@ -19,12 +19,17 @@ final class TripEditViewModel {
     var name: String
     var startDate: Date {
         didSet {
+            startDate = startDate.startOfDay
             if endDate < startDate {
                 endDate = startDate
             }
         }
     }
-    var endDate: Date
+    var endDate: Date {
+        didSet {
+            endDate = endDate.endOfDay
+        }
+    }
     var locations: [Location]
 
     // MARK: - Computed Properties

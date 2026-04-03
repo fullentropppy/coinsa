@@ -8,24 +8,27 @@
 import Foundation
 
 enum PreviewTrip: String {
-    case turkey = "Турция"
-    case southKorea = "Южная Корея"
     case japan = "Япония"
+    case russia = "Россия"
+    case southKorea = "Южная Корея"
+    case turkey = "Турция"
 }
 
 enum PreviewLocation: String {
-    case istanbul = "Стамбул"
-    case seoul = "Сеул"
-    case busan = "Пусан"
     case tokyo = "Токио"
     case kyoto = "Киото"
     case osaka = "Осака"
+    case saintp = "Санкт-Петербург"
+    case seoul = "Сеул"
+    case busan = "Пусан"
+    case istanbul = "Стамбул"
 
     var currencyCode: String {
         switch self {
-        case .istanbul: Currency.try.code
-        case .seoul, .busan: Currency.krw.code
         case .tokyo, .kyoto, .osaka: Currency.jpy.code
+        case .saintp: Currency.rub.code
+        case .seoul, .busan: Currency.krw.code
+        case .istanbul: Currency.try.code
         }
     }
 
@@ -53,9 +56,10 @@ enum PreviewExpenseComment: String {
 
 private enum PreviewCurrency {
     static let exchangeRates: [String: Double] = [
-        Currency.try.code: 1.8,
+        Currency.jpy.code: 0.6,
+        Currency.rub.code: 1.0,
         Currency.krw.code: 0.065,
-        Currency.jpy.code: 0.6
+        Currency.try.code: 1.8
     ]
 
     static func exchangeRate(forCode: String) -> Double {
