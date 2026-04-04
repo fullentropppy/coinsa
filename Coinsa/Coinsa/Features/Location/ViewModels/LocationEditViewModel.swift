@@ -22,19 +22,20 @@ final class LocationEditViewModel {
     var name: String
     var startDate: Date {
         didSet {
-            startDate = startDate.startOfDay
             if endDate < startDate {
                 endDate = startDate
             }
         }
     }
-    var endDate: Date {
+    var endDate: Date
+    var localCurrency: Currency {
         didSet {
-            endDate = endDate.endOfDay
+            if isHomeLocation {
+                rateLocalToBase = 1
+            }
         }
     }
-    var localCurrency: Currency
-    var rateToBaseCurrency: Double
+    var rateLocalToBase: Double
     var budgetAmounts: [ExpenseCategory: Double]
 
     // MARK: - Computed Properties
@@ -55,8 +56,8 @@ final class LocationEditViewModel {
     }
 
     var plannedTotalLocal: Double {
-        guard rateToBaseCurrency > 0 else { return 0 }
-        return (plannedTotalBase / rateToBaseCurrency).rounded()
+        guard rateLocalToBase > 0 else { return 0 }
+        return (plannedTotalBase / rateLocalToBase).rounded()
     }
 
     var hasChanges: Bool {
@@ -66,9 +67,13 @@ final class LocationEditViewModel {
     var canSave: Bool {
         !name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
         && startDate <= endDate
-        && rateToBaseCurrency > 0
+        && rateLocalToBase > 0
     }
 
+    var isHomeLocation: Bool {
+        baseCurrency == localCurrency
+    }
+    
     // MARK: - Initialization
 
     convenience init(trip: Trip, baseCurrency: Currency) {
@@ -94,7 +99,7 @@ final class LocationEditViewModel {
             resolvedName = location.name
             resolvedStartDate = location.startDate
             resolvedEndDate = location.endDate
-            resolvedLocalCurrency = Currency.from(location.currencyCodeLocal)
+            resolvedLocalCurrency = Currency.from(location.localCurrencyCode)
             resolvedRateToBaseCurrency = location.rateLocalToBase
         } else {
             resolvedName = ""
@@ -109,7 +114,7 @@ final class LocationEditViewModel {
         )
         if let location {
             for budget in location.budgets {
-                resolvedBudgetAmounts[budget.category] = budget.amountBase
+                resolvedBudgetAmounts[budget.category] = budget.baseAmount
             }
         }
 
@@ -117,7 +122,7 @@ final class LocationEditViewModel {
         startDate = resolvedStartDate
         endDate = resolvedEndDate
         localCurrency = resolvedLocalCurrency
-        rateToBaseCurrency = resolvedRateToBaseCurrency
+        rateLocalToBase = resolvedRateToBaseCurrency
         budgetAmounts = resolvedBudgetAmounts
 
         initialSnapshot = Snapshot(
@@ -125,7 +130,7 @@ final class LocationEditViewModel {
             startDate: resolvedStartDate,
             endDate: resolvedEndDate,
             localCurrency: resolvedLocalCurrency,
-            rateToBaseCurrency: resolvedRateToBaseCurrency,
+            rateLocalToBase: resolvedRateToBaseCurrency,
             budgetAmounts: resolvedBudgetAmounts
         )
     }
@@ -133,7 +138,7 @@ final class LocationEditViewModel {
     // MARK: - Public Methods
 
     func plannedLocalAmount(for category: ExpenseCategory) -> Double {
-        let rate = rateToBaseCurrency
+        let rate = rateLocalToBase
         guard rate > 0 else { return 0 }
         return ((budgetAmounts[category] ?? 0) / rate).rounded()
     }
@@ -145,8 +150,8 @@ final class LocationEditViewModel {
                 name: name,
                 startDate: startDate,
                 endDate: endDate,
-                currencyLocal: localCurrency,
-                rateLocalToBase: rateToBaseCurrency,
+                localCurrency: localCurrency,
+                rateLocalToBase: rateLocalToBase,
                 budgetsByCategory: budgetAmounts
             )
         } else {
@@ -154,8 +159,8 @@ final class LocationEditViewModel {
                 name: name,
                 startDate: startDate,
                 endDate: endDate,
-                currencyLocal: localCurrency,
-                rateLocalToBase: rateToBaseCurrency,
+                localCurrency: localCurrency,
+                rateLocalToBase: rateLocalToBase,
                 trip: trip,
                 budgetsByCategory: budgetAmounts
             )
@@ -173,7 +178,7 @@ private extension LocationEditViewModel {
         let startDate: Date
         let endDate: Date
         let localCurrency: Currency
-        let rateToBaseCurrency: Double
+        let rateLocalToBase: Double
         let budgetAmounts: [ExpenseCategory: Double]
 
         // MARK: - Initialization
@@ -183,14 +188,14 @@ private extension LocationEditViewModel {
             startDate: Date,
             endDate: Date,
             localCurrency: Currency,
-            rateToBaseCurrency: Double,
+            rateLocalToBase: Double,
             budgetAmounts: [ExpenseCategory: Double]
         ) {
             self.name = name.trimmingCharacters(in: .whitespacesAndNewlines)
             self.startDate = startDate
             self.endDate = endDate
             self.localCurrency = localCurrency
-            self.rateToBaseCurrency = rateToBaseCurrency.rounded(to: 6)
+            self.rateLocalToBase = rateLocalToBase.rounded(to: 6)
             self.budgetAmounts = Dictionary(
                 uniqueKeysWithValues: ExpenseCategory.allCases.map { category in
                     (category, (budgetAmounts[category] ?? 0).rounded())
@@ -204,7 +209,7 @@ private extension LocationEditViewModel {
                 startDate: viewModel.startDate,
                 endDate: viewModel.endDate,
                 localCurrency: viewModel.localCurrency,
-                rateToBaseCurrency: viewModel.rateToBaseCurrency,
+                rateLocalToBase: viewModel.rateLocalToBase,
                 budgetAmounts: viewModel.budgetAmounts
             )
         }

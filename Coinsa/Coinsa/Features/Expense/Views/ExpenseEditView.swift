@@ -15,8 +15,8 @@ struct ExpenseEditView: View {
     @Environment(\.dismiss) private var dismiss
 
     @State private var viewModel: ExpenseEditViewModel
-    @State private var inputCurrency: InputCurrency = .location
     @State private var deletionHandler = DeletionHandler<Expense>()
+    @State private var inputCurrency: InputCurrency
     @State private var isShowingDiscardAlert = false
 
     private let onDelete: (() -> Void)?
@@ -27,10 +27,6 @@ struct ExpenseEditView: View {
         ExpenseRepository(context: context)
     }
     
-    private var amountInputCurrencyValue: Currency {
-        viewModel.currency(for: inputCurrency)
-    }
-
     // MARK: - Initialization
 
     init(location: Location, baseCurrency: Currency) {
@@ -68,6 +64,9 @@ struct ExpenseEditView: View {
             viewModel = ExpenseEditViewModel(location: location, baseCurrency: baseCurrency)
         }
         _viewModel = State(initialValue: viewModel)
+        _inputCurrency = State(
+            initialValue: viewModel.baseCurrency == viewModel.localCurrency ? .base : .local
+        )
         self.onDelete = onDelete
     }
     
@@ -137,28 +136,32 @@ struct ExpenseEditView: View {
     
     private var amountSection: some View {
         Section {
-            Picker("", selection: $inputCurrency) {
-                Text(viewModel.localCurrency.code)
-                    .tag(InputCurrency.location)
-                Text(viewModel.baseCurrency.code)
-                    .tag(InputCurrency.base)
+            if !viewModel.isHomeLocation {
+                Picker("", selection: $inputCurrency) {
+                    Text(viewModel.localCurrency.code)
+                        .tag(InputCurrency.local)
+                    Text(viewModel.baseCurrency.code)
+                        .tag(InputCurrency.base)
+                }
+                .pickerStyle(.segmented)
+                .listRowSeparator(.hidden)
             }
-            .pickerStyle(.segmented)
-            .listRowSeparator(.hidden)
-
+            
             LabeledContent(.expenseAmount) {
                 HStack {
                     AmountTextField(amountInputBinding)
-                    CurrencyCodeText(amountInputCurrencyValue)
+                    CurrencyCodeText(viewModel.currency(for: inputCurrency))
                         .frame(width: 40, alignment: .center)
                 }
             }
             
-            LabeledContent(.expenseExchangeRate) {
-                HStack {
-                    AmountTextField(rateInputBinding, fractionDigits: 4)
-                    CurrencyCodeText(viewModel.baseCurrency)
-                        .frame(width: 40, alignment: .center)
+            if !viewModel.isHomeLocation {
+                LabeledContent(.expenseExchangeRate) {
+                    HStack {
+                        AmountTextField(rateInputBinding, fractionDigits: 4)
+                        CurrencyCodeText(viewModel.baseCurrency)
+                            .frame(width: 40, alignment: .center)
+                    }
                 }
             }
         }

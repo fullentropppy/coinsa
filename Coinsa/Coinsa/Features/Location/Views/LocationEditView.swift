@@ -41,7 +41,7 @@ struct LocationEditView: View {
         switch inputCurrency {
         case .base:
             viewModel.baseCurrency
-        case .location:
+        case .local:
             viewModel.localCurrency
         }
     }
@@ -52,7 +52,7 @@ struct LocationEditView: View {
                 switch inputCurrency {
                 case .base:
                     viewModel.budgetAmounts[category] ?? 0
-                case .location:
+                case .local:
                     viewModel.plannedLocalAmount(for: category)
                 }
             },
@@ -60,9 +60,9 @@ struct LocationEditView: View {
                 switch inputCurrency {
                 case .base:
                     viewModel.budgetAmounts[category] = newValue
-                case .location:
-                    guard viewModel.rateToBaseCurrency > 0 else { return }
-                    viewModel.budgetAmounts[category] = newValue * viewModel.rateToBaseCurrency
+                case .local:
+                    guard viewModel.rateLocalToBase > 0 else { return }
+                    viewModel.budgetAmounts[category] = newValue * viewModel.rateLocalToBase
                 }
             }
         )
@@ -72,7 +72,7 @@ struct LocationEditView: View {
         switch inputCurrency {
         case .base:
             viewModel.plannedTotalBase
-        case .location:
+        case .local:
             viewModel.plannedTotalLocal
         }
     }
@@ -143,13 +143,19 @@ struct LocationEditView: View {
             TextField("location.name", text: $viewModel.name)
             DatePicker(
                 "trip.startDate",
-                selection: $viewModel.startDate,
+                selection: Binding(
+                    get: { viewModel.startDate },
+                    set: { viewModel.startDate = $0.startOfDay }
+                ),
                 in: viewModel.trip.range,
                 displayedComponents: .date
             )
             DatePicker(
                 "trip.endDate",
-                selection: $viewModel.endDate,
+                selection: Binding(
+                    get: { viewModel.endDate },
+                    set: { viewModel.endDate = $0.endOfDay }
+                ),
                 in: viewModel.startDate...viewModel.trip.endDate,
                 displayedComponents: .date
             )
@@ -166,11 +172,13 @@ struct LocationEditView: View {
             }
             .pickerStyle(.navigationLink)
 
-            LabeledContent("location.exchangeRate") {
-                HStack {
-                    AmountTextField($viewModel.rateToBaseCurrency, fractionDigits: 4)
-                    CurrencyCodeText(viewModel.baseCurrency)
-                        .frame(width: 40, alignment: .center)
+            if !viewModel.isHomeLocation {
+                LabeledContent("location.exchangeRate") {
+                    HStack {
+                        AmountTextField($viewModel.rateLocalToBase, fractionDigits: 4)
+                        CurrencyCodeText(viewModel.baseCurrency)
+                            .frame(width: 40, alignment: .center)
+                    }
                 }
             }
         }
@@ -178,14 +186,16 @@ struct LocationEditView: View {
 
     private var budgetsSection: some View {
         Section("location.budget") {
-            Picker("", selection: $inputCurrency) {
-                Text(viewModel.baseCurrency.code)
-                    .tag(InputCurrency.base)
-                Text(viewModel.localCurrency.code)
-                    .tag(InputCurrency.location)
+            if !viewModel.isHomeLocation {
+                Picker("", selection: $inputCurrency) {
+                    Text(viewModel.baseCurrency.code)
+                        .tag(InputCurrency.base)
+                    Text(viewModel.localCurrency.code)
+                        .tag(InputCurrency.local)
+                }
+                .pickerStyle(.segmented)
+                .listRowSeparator(.hidden)
             }
-            .pickerStyle(.segmented)
-            .listRowSeparator(.hidden)
             
             ForEach(ExpenseCategory.allCases, id: \.id) { (category: ExpenseCategory) in
                 HStack {

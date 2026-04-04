@@ -92,7 +92,7 @@ enum PreviewGenerator {
             name: tokyoData.rawValue,
             startDate: startDate,
             endDate: endDate,
-            currencyCodeLocal: tokyoData.currencyCode,
+            localCurrencyCode: tokyoData.currencyCode,
             rateLocalToBase: tokyoData.exchangeRate,
             trip: trip
         )
@@ -120,7 +120,7 @@ enum PreviewGenerator {
             name: kyotoData.rawValue,
             startDate: startDate,
             endDate: endDate,
-            currencyCodeLocal: kyotoData.currencyCode,
+            localCurrencyCode: kyotoData.currencyCode,
             rateLocalToBase: kyotoData.exchangeRate,
             trip: trip
         )
@@ -148,7 +148,7 @@ enum PreviewGenerator {
             name: osakaData.rawValue,
             startDate: startDate,
             endDate: endDate,
-            currencyCodeLocal: osakaData.currencyCode,
+            localCurrencyCode: osakaData.currencyCode,
             rateLocalToBase: osakaData.exchangeRate,
             trip: trip
         )
@@ -166,25 +166,25 @@ enum PreviewGenerator {
 
     private static func makeTokyoBudgets(location: Location) -> [Budget] {
         [
-            Budget(category: .food, amountBase: 30000, location: location),
-            Budget(category: .transport, amountBase: 7200, location: location),
-            Budget(category: .activity, amountBase: 13500, location: location),
-            Budget(category: .shopping, amountBase: 10500, location: location),
-            Budget(category: .medicine, amountBase: 4200, location: location),
-            Budget(category: .other, amountBase: 6500, location: location)
+            Budget(category: .food, baseAmount: 30000, location: location),
+            Budget(category: .transport, baseAmount: 7200, location: location),
+            Budget(category: .activity, baseAmount: 13500, location: location),
+            Budget(category: .shopping, baseAmount: 10500, location: location),
+            Budget(category: .medicine, baseAmount: 4200, location: location),
+            Budget(category: .other, baseAmount: 6500, location: location)
         ]
     }
 
     private static func makeKyotoBudgets(location: Location) -> [Budget] {
         [
-            Budget(category: .food, amountBase: 15000, location: location),
-            Budget(category: .activity, amountBase: 6200, location: location)
+            Budget(category: .food, baseAmount: 15000, location: location),
+            Budget(category: .activity, baseAmount: 6200, location: location)
         ]
     }
 
     private static func makeOsakaBudgets(location: Location) -> [Budget] {
         [
-            Budget(category: .food, amountBase: 9000, location: location)
+            Budget(category: .food, baseAmount: 9000, location: location)
         ]
     }
 
@@ -194,7 +194,7 @@ enum PreviewGenerator {
         return [
             Expense(
                 date: startDate.adding(hours: 8, minutes: 45),
-                amountBase: 980,
+                baseAmount: 980,
                 rateLocalToBase: exchangeRate,
                 category: .food,
                 location: location,
@@ -202,14 +202,14 @@ enum PreviewGenerator {
             ),
             Expense(
                 date: startDate.adding(hours: 13, minutes: 20),
-                amountBase: 1750,
+                baseAmount: 1750,
                 rateLocalToBase: exchangeRate,
                 category: .food,
                 location: location
             ),
             Expense(
                 date: startDate.adding(days: 1, hours: 10, minutes: 4),
-                amountBase: 380,
+                baseAmount: 380,
                 rateLocalToBase: exchangeRate,
                 category: .transport,
                 location: location,
@@ -217,7 +217,7 @@ enum PreviewGenerator {
             ),
             Expense(
                 date: startDate.adding(days: 2, hours: 15, minutes: 58),
-                amountBase: 2100,
+                baseAmount: 2100,
                 rateLocalToBase: exchangeRate,
                 category: .activity,
                 location: location,
@@ -225,7 +225,7 @@ enum PreviewGenerator {
             ),
             Expense(
                 date: startDate.adding(days: 2, hours: 20, minutes: 52),
-                amountBase: 5400,
+                baseAmount: 5400,
                 rateLocalToBase: exchangeRate,
                 category: .shopping,
                 location: location,
@@ -233,21 +233,21 @@ enum PreviewGenerator {
             ),
             Expense(
                 date: startDate.adding(days: 3, hours: 11, minutes: 15),
-                amountBase: 1200,
+                baseAmount: 1200,
                 rateLocalToBase: exchangeRate,
                 category: .medicine,
                 location: location
             ),
             Expense(
                 date: startDate.adding(days: 4, hours: 14, minutes: 19),
-                amountBase: 700,
+                baseAmount: 700,
                 rateLocalToBase: exchangeRate,
                 category: .transport,
                 location: location
             ),
             Expense(
                 date: startDate.adding(days: 5, hours: 19, minutes: 30),
-                amountBase: 2600,
+                baseAmount: 2600,
                 rateLocalToBase: exchangeRate,
                 category: .other,
                 location: location,
@@ -262,7 +262,7 @@ enum PreviewGenerator {
         return [
             Expense(
                 date: startDate.adding(hours: 9, minutes: 10),
-                amountBase: 980,
+                baseAmount: 980,
                 rateLocalToBase: exchangeRate,
                 category: .food,
                 location: location,
@@ -270,7 +270,7 @@ enum PreviewGenerator {
             ),
             Expense(
                 date: startDate.adding(days: 1, hours: 12, minutes: 14),
-                amountBase: 720,
+                baseAmount: 720,
                 rateLocalToBase: exchangeRate,
                 category: .transport,
                 location: location,
@@ -278,14 +278,14 @@ enum PreviewGenerator {
             ),
             Expense(
                 date: startDate.adding(days: 2, hours: 16, minutes: 48),
-                amountBase: 2100,
+                baseAmount: 2100,
                 rateLocalToBase: exchangeRate,
                 category: .activity,
                 location: location
             ),
             Expense(
                 date: startDate.adding(days: 3, hours: 19),
-                amountBase: 2600,
+                baseAmount: 2600,
                 rateLocalToBase: exchangeRate,
                 category: .shopping,
                 location: location,
@@ -300,14 +300,14 @@ enum PreviewGenerator {
         return [
             Expense(
                 date: startDate.adding(hours: 8, minutes: 2),
-                amountBase: 920,
+                baseAmount: 920,
                 rateLocalToBase: exchangeRate,
                 category: .food,
                 location: location
             ),
             Expense(
                 date: startDate.adding(days: 1, hours: 10, minutes: 27),
-                amountBase: 780,
+                baseAmount: 780,
                 rateLocalToBase: exchangeRate,
                 category: .transport,
                 location: location,
@@ -315,7 +315,7 @@ enum PreviewGenerator {
             ),
             Expense(
                 date: startDate.adding(days: 2, hours: 13, minutes: 13),
-                amountBase: 2400,
+                baseAmount: 2400,
                 rateLocalToBase: exchangeRate,
                 category: .activity,
                 location: location,
@@ -323,7 +323,7 @@ enum PreviewGenerator {
             ),
             Expense(
                 date: startDate.adding(days: 2, hours: 19),
-                amountBase: 5200,
+                baseAmount: 5200,
                 rateLocalToBase: exchangeRate,
                 category: .shopping,
                 location: location,
@@ -331,14 +331,14 @@ enum PreviewGenerator {
             ),
             Expense(
                 date: startDate.adding(days: 3, hours: 9, minutes: 1),
-                amountBase: 880,
+                baseAmount: 880,
                 rateLocalToBase: exchangeRate,
                 category: .medicine,
                 location: location
             ),
             Expense(
                 date: startDate.adding(days: 3, hours: 18, minutes: 50),
-                amountBase: 1900,
+                baseAmount: 1900,
                 rateLocalToBase: exchangeRate,
                 category: .other,
                 location: location
@@ -381,7 +381,7 @@ enum PreviewGenerator {
             name: saintpData.rawValue,
             startDate: startDate,
             endDate: endDate,
-            currencyCodeLocal: saintpData.currencyCode,
+            localCurrencyCode: saintpData.currencyCode,
             rateLocalToBase: saintpData.exchangeRate,
             trip: trip
         )
@@ -399,10 +399,10 @@ enum PreviewGenerator {
     
     private static func makeSaintpBudgets(location: Location) -> [Budget] {
         [
-            Budget(category: .food, amountBase: 7500, location: location),
-            Budget(category: .transport, amountBase: 1500, location: location),
-            Budget(category: .activity, amountBase: 4900, location: location),
-            Budget(category: .other, amountBase: 2000, location: location)
+            Budget(category: .food, baseAmount: 7500, location: location),
+            Budget(category: .transport, baseAmount: 1500, location: location),
+            Budget(category: .activity, baseAmount: 4900, location: location),
+            Budget(category: .other, baseAmount: 2000, location: location)
         ]
     }
     
@@ -412,14 +412,14 @@ enum PreviewGenerator {
         return [
             Expense(
                 date: startDate.adding(hours: 10, minutes: 19),
-                amountBase: 2150,
+                baseAmount: 2150,
                 rateLocalToBase: exchangeRate,
                 category: .food,
                 location: location,
             ),
             Expense(
                 date: startDate.adding(hours: 13),
-                amountBase: 950,
+                baseAmount: 950,
                 rateLocalToBase: exchangeRate,
                 category: .transport,
                 location: location,
@@ -427,7 +427,7 @@ enum PreviewGenerator {
             ),
             Expense(
                 date: startDate.adding(hours: 16, minutes: 17),
-                amountBase: 2200,
+                baseAmount: 2200,
                 rateLocalToBase: exchangeRate,
                 category: .activity,
                 location: location,
@@ -435,7 +435,7 @@ enum PreviewGenerator {
             ),
             Expense(
                 date: startDate.adding(days: 21, hours: 33),
-                amountBase: 1300,
+                baseAmount: 1300,
                 rateLocalToBase: exchangeRate,
                 category: .food,
                 location: location,
@@ -480,7 +480,7 @@ enum PreviewGenerator {
             name: seoulData.rawValue,
             startDate: startDate,
             endDate: endDate,
-            currencyCodeLocal: seoulData.currencyCode,
+            localCurrencyCode: seoulData.currencyCode,
             rateLocalToBase: seoulData.exchangeRate,
             trip: trip
         )
@@ -508,7 +508,7 @@ enum PreviewGenerator {
             name: busanData.rawValue,
             startDate: startDate,
             endDate: endDate,
-            currencyCodeLocal: busanData.currencyCode,
+            localCurrencyCode: busanData.currencyCode,
             rateLocalToBase: busanData.exchangeRate,
             trip: trip
         )
@@ -522,18 +522,18 @@ enum PreviewGenerator {
 
     private static func makeSeoulBudgets(location: Location) -> [Budget] {
         [
-            Budget(category: .food, amountBase: 24000, location: location),
-            Budget(category: .transport, amountBase: 5200, location: location),
-            Budget(category: .activity, amountBase: 11000, location: location),
-            Budget(category: .shopping, amountBase: 8500, location: location)
+            Budget(category: .food, baseAmount: 24000, location: location),
+            Budget(category: .transport, baseAmount: 5200, location: location),
+            Budget(category: .activity, baseAmount: 11000, location: location),
+            Budget(category: .shopping, baseAmount: 8500, location: location)
         ]
     }
 
     private static func makeBusanBudgets(location: Location) -> [Budget] {
         [
-            Budget(category: .food, amountBase: 12000, location: location),
-            Budget(category: .transport, amountBase: 2800, location: location),
-            Budget(category: .other, amountBase: 2600, location: location)
+            Budget(category: .food, baseAmount: 12000, location: location),
+            Budget(category: .transport, baseAmount: 2800, location: location),
+            Budget(category: .other, baseAmount: 2600, location: location)
         ]
     }
 
@@ -543,7 +543,7 @@ enum PreviewGenerator {
         return [
             Expense(
                 date: startDate.adding(hours: 8, minutes: 15),
-                amountBase: 9500,
+                baseAmount: 9500,
                 rateLocalToBase: exchangeRate,
                 category: .food,
                 location: location,
@@ -551,7 +551,7 @@ enum PreviewGenerator {
             ),
             Expense(
                 date: startDate.adding(hours: 13, minutes: 31),
-                amountBase: 17000,
+                baseAmount: 17000,
                 rateLocalToBase: exchangeRate,
                 category: .food,
                 location: location,
@@ -559,7 +559,7 @@ enum PreviewGenerator {
             ),
             Expense(
                 date: startDate.adding(days: 1, hours: 9, minutes: 42),
-                amountBase: 1600,
+                baseAmount: 1600,
                 rateLocalToBase: exchangeRate,
                 category: .transport,
                 location: location,
@@ -567,7 +567,7 @@ enum PreviewGenerator {
             ),
             Expense(
                 date: startDate.adding(days: 1, hours: 19, minutes: 10),
-                amountBase: 22500,
+                baseAmount: 22500,
                 rateLocalToBase: exchangeRate,
                 category: .shopping,
                 location: location,
@@ -575,7 +575,7 @@ enum PreviewGenerator {
             ),
             Expense(
                 date: startDate.adding(days: 2, hours: 11),
-                amountBase: 13000,
+                baseAmount: 13000,
                 rateLocalToBase: exchangeRate,
                 category: .food,
                 location: location,
@@ -583,7 +583,7 @@ enum PreviewGenerator {
             ),
             Expense(
                 date: startDate.adding(days: 2, hours: 17, minutes: 59),
-                amountBase: 28000,
+                baseAmount: 28000,
                 rateLocalToBase: exchangeRate,
                 category: .activity,
                 location: location,
@@ -591,7 +591,7 @@ enum PreviewGenerator {
             ),
             Expense(
                 date: Date().startOfMinute,
-                amountBase: 6200,
+                baseAmount: 6200,
                 rateLocalToBase: exchangeRate,
                 category: .medicine,
                 location: location,
@@ -629,7 +629,7 @@ enum PreviewGenerator {
             name: istanbulData.rawValue,
             startDate: trip.startDate,
             endDate: trip.endDate,
-            currencyCodeLocal: istanbulData.currencyCode,
+            localCurrencyCode: istanbulData.currencyCode,
             rateLocalToBase: istanbulData.exchangeRate,
             trip: trip
         )
@@ -643,11 +643,11 @@ enum PreviewGenerator {
 
     private static func makeIstanbulBudgets(location: Location) -> [Budget] {
         [
-            Budget(category: .food, amountBase: 21000, location: location),
-            Budget(category: .transport, amountBase: 3600, location: location),
-            Budget(category: .activity, amountBase: 8200, location: location),
-            Budget(category: .shopping, amountBase: 6800, location: location),
-            Budget(category: .other, amountBase: 4200, location: location)
+            Budget(category: .food, baseAmount: 21000, location: location),
+            Budget(category: .transport, baseAmount: 3600, location: location),
+            Budget(category: .activity, baseAmount: 8200, location: location),
+            Budget(category: .shopping, baseAmount: 6800, location: location),
+            Budget(category: .other, baseAmount: 4200, location: location)
         ]
     }
 }

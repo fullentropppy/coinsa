@@ -7,5 +7,5 @@
 
 enum InputCurrency {
     case base
-    case location
+    case local
 }

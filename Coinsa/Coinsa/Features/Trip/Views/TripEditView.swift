@@ -74,12 +74,18 @@ struct TripEditView: View {
             TextField("trip.name", text: $viewModel.name)
             DatePicker(
                 "trip.startDate",
-                selection: $viewModel.startDate,
+                selection: Binding(
+                    get: { viewModel.startDate },
+                    set: { viewModel.startDate = $0.startOfDay }
+                ),
                 displayedComponents: .date
             )
             DatePicker(
                 "trip.endDate",
-                selection: $viewModel.endDate,
+                selection: Binding(
+                    get: { viewModel.endDate },
+                    set: { viewModel.endDate = $0.endOfDay }
+                ),
                 in: viewModel.startDate...,
                 displayedComponents: .date
             )

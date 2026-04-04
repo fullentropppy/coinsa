@@ -19,14 +19,14 @@ extension Location {
     func calculatePlannedAmount(asBaseCurrency: Bool = true) -> Double {
         budgets.reduce(0) {
             let exchangeRate = asBaseCurrency ? 1 : rateBaseToLocal
-            return $0 + $1.amountBase * exchangeRate
+            return $0 + $1.baseAmount * exchangeRate
         }
     }
 
     func calculateActualAmount(asBaseCurrency: Bool = true) -> Double {
         expenses.reduce(0) {
             let exchangeRate = asBaseCurrency ? 1 : $1.rateBaseToLocal
-            return $0 + $1.amountBase * exchangeRate
+            return $0 + $1.baseAmount * exchangeRate
         }
     }
 }

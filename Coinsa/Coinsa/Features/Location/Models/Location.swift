@@ -15,7 +15,7 @@ class Location: DateRangeProviding, EventStatusProviding {
     var name: String
     var startDate: Date
     var endDate: Date
-    var currencyCodeLocal: String
+    var localCurrencyCode: String
     var rateLocalToBase: Double
     var trip: Trip
     
@@ -31,7 +31,7 @@ class Location: DateRangeProviding, EventStatusProviding {
         name: String,
         startDate: Date,
         endDate: Date,
-        currencyCodeLocal: String,
+        localCurrencyCode: String,
         rateLocalToBase: Double,
         trip: Trip,
         budgets: [Budget] = [],
@@ -40,7 +40,7 @@ class Location: DateRangeProviding, EventStatusProviding {
         self.name = name
         self.startDate = startDate
         self.endDate = endDate
-        self.currencyCodeLocal = currencyCodeLocal
+        self.localCurrencyCode = localCurrencyCode
         self.rateLocalToBase = rateLocalToBase
         self.trip = trip
         self.budgets = budgets

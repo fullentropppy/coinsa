@@ -17,12 +17,6 @@ struct ExpenseDetailView: View {
     @State private var isShowingExpenseEdit = false
 
     private let expense: Expense
-
-    // MARK: - Computed Properties
-    
-    private var localCurrency: Currency {
-        Currency.from(expense.location.currencyCodeLocal)
-    }
     
     // MARK: - Initialization
 
@@ -90,39 +84,41 @@ struct ExpenseDetailView: View {
                 fillColor: expense.category.badgeColor,
                 icon: expense.category.badgeIcon
             )
-            
             Spacer()
-    
             DateLabel.secondarySmall(expense.date)
         }
     }
     
     private var cardContent: some View {
         VStack(alignment: .center) {
-            AmountText(
-                expense.amountLocal,
-                font: .title,
-                currency: localCurrency
-            )
-            .padding(28)
-            
-            Divider()
-            
-            amountAdditionalInfo
-                .padding(14)
+            if settingsStore.baseCurrency == expense.localCurrency {
+                amountText(expense.baseAmount, currency: settingsStore.baseCurrency)
+                    .padding(28)
+            } else {
+                amountText(expense.localAmount, currency: expense.localCurrency)
+                    .padding(28)
+                Divider()
+                amountAdditionalInfo
+                    .padding(14)
+            }
         }
         .padding(10)
+        .frame(maxWidth: .infinity)
         .glassEffect(
             .regular,
             in: RoundedRectangle(cornerRadius: 12, style: .continuous)
         )
     }
     
+    private func amountText(_ amount: Double, currency: Currency) -> some View {
+        AmountText(amount, font: .title, currency: currency, currencyColor: .secondary)
+    }
+    
     private var amountAdditionalInfo: some View {
         let baseCurrencyCode = settingsStore.baseCurrency.code
         let parts = [
-            "\(expense.amountBase) \(baseCurrencyCode)",
-            "1 \(baseCurrencyCode) = \(String(format: "%g", expense.rateLocalToBase)) \(localCurrency.code)"
+            "\(expense.baseAmount) \(baseCurrencyCode)",
+            "1 \(baseCurrencyCode) = \(String(format: "%g", expense.rateLocalToBase)) \(expense.localCurrency.code)"
         ]
         let info = parts.joined(separator: "  •  ")
 

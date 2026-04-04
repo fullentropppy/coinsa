@@ -18,16 +18,16 @@ struct ExpenseRepository {
 
     func add(
         date: Date,
-        amountInLocalCurrency: Double,
-        rateToBaseCurrency: Double,
+        localAmount: Double,
+        rateLocalToBase: Double,
         category: ExpenseCategory,
         location: Location,
         comment: String?
     ) {
         let expense = Expense(
             date: date,
-            amountBase: max(0, amountInLocalCurrency),
-            rateLocalToBase: max(0, rateToBaseCurrency),
+            baseAmount: max(0, localAmount),
+            rateLocalToBase: max(0, rateLocalToBase),
             category: category,
             location: location,
             comment: comment
@@ -39,14 +39,14 @@ struct ExpenseRepository {
     func update(
         _ expense: Expense,
         date: Date,
-        amountInLocalCurrency: Double,
-        rateToBaseCurrency: Double,
+        localAmount: Double,
+        rateLocalToBase: Double,
         category: ExpenseCategory,
         comment: String?
     ) {
         expense.date = date
-        expense.amountBase = max(0, amountInLocalCurrency)
-        expense.rateLocalToBase = max(0, rateToBaseCurrency)
+        expense.baseAmount = max(0, localAmount)
+        expense.rateLocalToBase = max(0, rateLocalToBase)
         expense.category = category
         expense.comment = comment
         try? context.save()

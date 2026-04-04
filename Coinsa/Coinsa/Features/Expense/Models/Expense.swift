@@ -13,7 +13,7 @@ class Expense {
     // MARK: - Stored Properties
     
     var date: Date
-    var amountBase: Double
+    var baseAmount: Double
     var rateLocalToBase: Double
     var category: ExpenseCategory
     var location: Location
@@ -23,14 +23,14 @@ class Expense {
     
     init(
         date: Date = .now,
-        amountBase: Double,
+        baseAmount: Double,
         rateLocalToBase: Double,
         category: ExpenseCategory,
         location: Location,
         comment: String? = nil
     ) {
         self.date = date
-        self.amountBase = amountBase
+        self.baseAmount = baseAmount
         self.rateLocalToBase = rateLocalToBase
         self.category = category
         self.location = location

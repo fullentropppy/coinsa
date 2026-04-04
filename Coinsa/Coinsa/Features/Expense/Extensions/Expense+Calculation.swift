@@ -8,8 +8,8 @@
 import Foundation
 
 extension Expense {
-    var amountLocal: Double {
-        amountBase * rateBaseToLocal
+    var localAmount: Double {
+        baseAmount * rateBaseToLocal
     }
     
     var rateBaseToLocal: Double {

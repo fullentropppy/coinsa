@@ -20,7 +20,7 @@ struct LocationRepository {
         name: String,
         startDate: Date,
         endDate: Date,
-        currencyLocal: Currency,
+        localCurrency: Currency,
         rateLocalToBase: Double,
         trip: Trip,
         budgetsByCategory: [ExpenseCategory: Double]
@@ -29,7 +29,7 @@ struct LocationRepository {
             name: name,
             startDate: startDate,
             endDate: endDate,
-            currencyCodeLocal: currencyLocal.code,
+            localCurrencyCode: localCurrency.code,
             rateLocalToBase: rateLocalToBase,
             trip: trip,
             budgets: [],
@@ -46,14 +46,14 @@ struct LocationRepository {
         name: String,
         startDate: Date,
         endDate: Date,
-        currencyLocal: Currency,
+        localCurrency: Currency,
         rateLocalToBase: Double,
         budgetsByCategory: [ExpenseCategory: Double]
     ) {
         location.name = name
         location.startDate = startDate
         location.endDate = endDate
-        location.currencyCodeLocal = currencyLocal.code
+        location.localCurrencyCode = localCurrency.code
         location.rateLocalToBase = rateLocalToBase
 
         applyBudgets(budgetsByCategory, to: location)
@@ -80,11 +80,11 @@ struct LocationRepository {
         for (category, amount) in budgetsByCategory {
             if amount > 0 {
                 if let budget = existingBudgets[category] {
-                    budget.amountBase = amount
+                    budget.baseAmount = amount
                 } else {
                     let budget = Budget(
                         category: category,
-                        amountBase: amount,
+                        baseAmount: amount,
                         location: location
                     )
                     location.budgets.append(budget)
