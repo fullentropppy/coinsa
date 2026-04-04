@@ -14,8 +14,9 @@ final class TripEditViewModel {
     // MARK: - Stored Properties
 
     private let initialSnapshot: Snapshot
-    private let trip: Trip?
-
+    
+    let trip: Trip?
+    
     var name: String
     var startDate: Date {
         didSet {
@@ -33,12 +34,8 @@ final class TripEditViewModel {
         trip != nil
     }
 
-    var tripToEdit: Trip? {
-        trip
-    }
-
-    var navigationTitle: String {
-        String(localized: isEditing ? "trip.navigationTitle.edit" : "trip.navigationTitle.create")
+    var navigationTitle: LocalizedStringResource {
+        isEditing ? .tripNavigationTitleEdit : .tripNavigationTitleCreate
     }
 
     var hasChanges: Bool {
@@ -46,8 +43,7 @@ final class TripEditViewModel {
     }
 
     var canSave: Bool {
-        !name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-            && startDate <= endDate
+        !name.isBlank && startDate <= endDate
     }
 
     // MARK: - Initialization
@@ -117,7 +113,7 @@ private extension TripEditViewModel {
         // MARK: - Initialization
 
         init(name: String, startDate: Date, endDate: Date) {
-            self.name = name.trimmingCharacters(in: .whitespacesAndNewlines)
+            self.name = name.trimmed
             self.startDate = startDate
             self.endDate = endDate
         }

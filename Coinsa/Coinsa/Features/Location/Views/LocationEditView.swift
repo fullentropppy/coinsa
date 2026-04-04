@@ -27,53 +27,17 @@ struct LocationEditView: View {
         LocationRepository(context: context)
     }
 
-    private var localCurrencyBinding: Binding<Currency> {
-        Binding(get: {
-                viewModel.localCurrency
-            },
-            set: {
-                viewModel.localCurrency = $0
-            }
-        )
-    }
-    
     private var budgetInputCurrencyValue: Currency {
         switch inputCurrency {
-        case .base:
-            viewModel.baseCurrency
-        case .local:
-            viewModel.localCurrency
+        case .base: viewModel.baseCurrency
+        case .local: viewModel.localCurrency
         }
     }
 
-    private func budgetInputBinding(for category: ExpenseCategory) -> Binding<Double> {
-        Binding(
-            get: {
-                switch inputCurrency {
-                case .base:
-                    viewModel.budgetAmounts[category] ?? 0
-                case .local:
-                    viewModel.plannedLocalAmount(for: category)
-                }
-            },
-            set: { newValue in
-                switch inputCurrency {
-                case .base:
-                    viewModel.budgetAmounts[category] = newValue
-                case .local:
-                    guard viewModel.rateLocalToBase > 0 else { return }
-                    viewModel.budgetAmounts[category] = newValue * viewModel.rateLocalToBase
-                }
-            }
-        )
-    }
-    
     private var budgetTotalValue: Double {
         switch inputCurrency {
-        case .base:
-            viewModel.plannedTotalBase
-        case .local:
-            viewModel.plannedTotalLocal
+        case .base: viewModel.plannedBaseTotal
+        case .local: viewModel.plannedLocalTotal
         }
     }
     
@@ -103,46 +67,52 @@ struct LocationEditView: View {
 
     var body: some View {
         NavigationStack {
-            Form {
-                mainDataSection
-                currencySection
-                budgetsSection
-                actionsSection
-            }
-            .navigationTitle(viewModel.navigationTitle)
-            .navigationSubtitle(viewModel.trip.screenContextSubtitle)
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                toolbarContent
-            }
-            .interactiveDismissDisabled(true)
-            .scrollDismissesKeyboard(.interactively)
-            .discardConfirmationAlert(
-                isPresented: $isShowingDiscardAlert,
-                onConfirm: {
-                    dismiss()
+            locationEditForm
+                .navigationTitle(viewModel.navigationTitle)
+                .navigationSubtitle(viewModel.trip.screenContextSubtitle)
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    toolbarContent
                 }
-            )
-            .deleteConfirmationAlert(
-                isPresented: $deletionHandler.isShowingDeleteConfirmation,
-                message: "location.delete.message",
-                onConfirm: {
-                    confirmDelete()
-                },
-                onCancel: {
-                    cancelDelete()
-                }
-            )
+                .interactiveDismissDisabled(true)
+                .scrollDismissesKeyboard(.interactively)
+                .discardConfirmationAlert(
+                    isPresented: $isShowingDiscardAlert,
+                    onConfirm: {
+                        dismiss()
+                    }
+                )
+                .deleteConfirmationAlert(
+                    isPresented: $deletionHandler.isShowingDeleteConfirmation,
+                    message: .locationDeleteMessage,
+                    onConfirm: {
+                        confirmDelete()
+                    },
+                    onCancel: {
+                        cancelDelete()
+                    }
+                )
         }
     }
 
-    // MARK: - Components
-
+    // MARK: - Content
+    
+    private var locationEditForm: some View {
+        Form {
+            mainDataSection
+            currencySection
+            budgetsSection
+            actionsSection
+        }
+    }
+    
+    // MARK: - Sections
+    
     private var mainDataSection: some View {
         Section {
-            TextField("location.name", text: $viewModel.name)
+            TextField(.locationName, text: $viewModel.name)
             DatePicker(
-                "trip.startDate",
+                .locationStartDate,
                 selection: Binding(
                     get: { viewModel.startDate },
                     set: { viewModel.startDate = $0.startOfDay }
@@ -151,7 +121,7 @@ struct LocationEditView: View {
                 displayedComponents: .date
             )
             DatePicker(
-                "trip.endDate",
+                .locationEndDate,
                 selection: Binding(
                     get: { viewModel.endDate },
                     set: { viewModel.endDate = $0.endOfDay }
@@ -161,10 +131,10 @@ struct LocationEditView: View {
             )
         }
     }
-
+    
     private var currencySection: some View {
         Section {
-            Picker("location.currency", selection: localCurrencyBinding) {
+            Picker(.locationCurrency, selection: localCurrencyBinding) {
                 ForEach(Currency.allCasesSortedByName) { currency in
                     Text(currency.localized)
                         .tag(currency)
@@ -173,7 +143,7 @@ struct LocationEditView: View {
             .pickerStyle(.navigationLink)
 
             if !viewModel.isHomeLocation {
-                LabeledContent("location.exchangeRate") {
+                LabeledContent(.locationExchangeRate) {
                     HStack {
                         AmountTextField($viewModel.rateLocalToBase, fractionDigits: 4)
                         CurrencyCodeText(viewModel.baseCurrency)
@@ -183,9 +153,9 @@ struct LocationEditView: View {
             }
         }
     }
-
+    
     private var budgetsSection: some View {
-        Section("location.budget") {
+        Section(.locationBudget) {
             if !viewModel.isHomeLocation {
                 Picker("", selection: $inputCurrency) {
                     Text(viewModel.baseCurrency.code)
@@ -206,16 +176,16 @@ struct LocationEditView: View {
                         .frame(width: 40, alignment: .center)
                 }
             }
+            
             HStack {
                 Image(systemName: "sum")
                     .foregroundStyle(.secondary)
                     .frame(width: 24)
-                Text("location.budget.total")
+                Text(.locationBudgetTotal)
                 Spacer()
-                AmountText.standard(
-                    budgetTotalValue,
-                    currency: budgetInputCurrencyValue
-                )
+                AmountText.standard(budgetTotalValue)
+                CurrencyCodeText(budgetInputCurrencyValue)
+                    .frame(width: 40, alignment: .center)
             }
             .listRowSeparatorTint(.gray)
         }
@@ -224,12 +194,14 @@ struct LocationEditView: View {
     private var actionsSection: some View {
         Section {
             if viewModel.isEditing {
-                Button("location.delete", role: .destructive) {
+                Button(.locationDelete, role: .destructive) {
                     requestDelete()
                 }
             }
         }
     }
+    
+    // MARK: - Components
 
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
@@ -248,12 +220,35 @@ struct LocationEditView: View {
         }
     }
 
-    // MARK: - Actions
-
-    private func requestDelete() {
-        guard let location = viewModel.location else { return }
-        deletionHandler.request(for: [location])
+    // MARK: - Bindings
+    
+    private var localCurrencyBinding: Binding<Currency> {
+        Binding(
+            get: { viewModel.localCurrency },
+            set: { viewModel.localCurrency = $0 }
+        )
     }
+    
+    private func budgetInputBinding(for category: ExpenseCategory) -> Binding<Double> {
+        Binding(
+            get: {
+                switch inputCurrency {
+                case .base: viewModel.budgetAmounts[category] ?? 0
+                case .local: viewModel.plannedLocalAmount(for: category)
+                }
+            },
+            set: { newValue in
+                switch inputCurrency {
+                case .base: viewModel.budgetAmounts[category] = newValue
+                case .local:
+                    guard viewModel.rateLocalToBase > 0 else { return }
+                    viewModel.budgetAmounts[category] = newValue * viewModel.rateLocalToBase
+                }
+            }
+        )
+    }
+    
+    // MARK: - Actions
 
     private func handleClose() {
         if viewModel.hasChanges {
@@ -261,6 +256,11 @@ struct LocationEditView: View {
         } else {
             dismiss()
         }
+    }
+    
+    private func requestDelete() {
+        guard let location = viewModel.location else { return }
+        deletionHandler.request(for: [location])
     }
 
     private func confirmDelete() {
@@ -277,7 +277,7 @@ struct LocationEditView: View {
 // MARK: - Previews
 
 private extension LocationEditView {
-    static func preview(
+    static func makePreview(
         withLocation: Bool,
         locale: Locale,
         colorScheme: ColorScheme
@@ -285,23 +285,13 @@ private extension LocationEditView {
         let builder = PreviewBuilder.builder()
         let container = builder.buildContainer()
         let trip = builder.fetchTrip(from: container)
-        var location: Location? = nil
-        
-        if withLocation {
-            location = builder.fetchLocation(from: container)
-        }
+        let location = withLocation ? builder.fetchLocation(from: container) : nil
         
         return Group {
             if let location {
-                LocationEditView(
-                    location: location,
-                    baseCurrency: Currency.defaultOption
-                )
+                LocationEditView(location: location, baseCurrency: Currency.defaultOption)
             } else {
-                LocationEditView(
-                    trip: trip,
-                    baseCurrency: Currency.defaultOption
-                )
+                LocationEditView(trip: trip, baseCurrency: Currency.defaultOption)
             }
         }
         .modelContainer(container)
@@ -311,25 +301,25 @@ private extension LocationEditView {
 }
 
 #Preview("Light - RU") {
-    LocationEditView.preview(
+    LocationEditView.makePreview(
         withLocation: true, locale: PreviewLocale.ru.locale, colorScheme: .light
     )
 }
 
 #Preview("Dark - EN") {
-    LocationEditView.preview(
+    LocationEditView.makePreview(
         withLocation: true, locale: PreviewLocale.en.locale, colorScheme: .dark
     )
 }
 
 #Preview("New Location. Light - RU") {
-    LocationEditView.preview(
+    LocationEditView.makePreview(
         withLocation: false, locale: PreviewLocale.ru.locale, colorScheme: .light
     )
 }
 
 #Preview("New Location. Dark - EN") {
-    LocationEditView.preview(
+    LocationEditView.makePreview(
         withLocation: false, locale: PreviewLocale.en.locale, colorScheme: .dark
     )
 }

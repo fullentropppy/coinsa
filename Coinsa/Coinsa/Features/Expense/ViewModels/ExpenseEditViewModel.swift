@@ -132,7 +132,7 @@ final class ExpenseEditViewModel {
     }
     
     func save(using repository: ExpenseRepository) {
-        let normalizedComment = comment.trimmingCharacters(in: .whitespacesAndNewlines)
+        let normalizedComment = comment.trimmed
         let comment = normalizedComment.isEmpty ? nil : normalizedComment
 
         if let expense {
@@ -182,7 +182,7 @@ private extension ExpenseEditViewModel {
             self.baseAmount = baseAmount.rounded()
             self.rateLocalToBase = rateLocalToBase.rounded(to: 4)
             self.category = category
-            self.comment = comment.trimmingCharacters(in: .whitespacesAndNewlines)
+            self.comment = comment.trimmed
         }
 
         init(viewModel: ExpenseEditViewModel) {

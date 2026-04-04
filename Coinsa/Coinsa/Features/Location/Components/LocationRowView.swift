@@ -13,17 +13,26 @@ struct LocationRowView: View {
     let location: Location
     
     var body: some View {
-        VStack(alignment: .leading) {
-            HStack(spacing: 4) {
-                EventStatusBadge(location.status)
-                Text(location.name).fontWeight(.semibold)
-            }
-            
-            HStack(spacing: 10) {
-                DateLabel.secondarySmall(from: location.startDate, to: location.endDate)
-                Spacer()
-                CountLabel.daysSecondarySmall(location.durationInDays)
-            }
+        VStack(alignment: .leading, spacing: 10) {
+            upperStack
+            lowerStack
+        }
+    }
+    
+    // MARK: - Components
+    
+    private var upperStack: some View {
+        HStack(spacing: 4) {
+            EventStatusBadge(location.status)
+            Text(location.name).fontWeight(.semibold)
+        }
+    }
+    
+    private var lowerStack: some View {
+        HStack(spacing: 10) {
+            DateLabel.secondarySmall(from: location.startDate, to: location.endDate)
+            Spacer()
+            CountLabel.daysSecondarySmall(location.durationInDays)
         }
     }
 }
@@ -31,12 +40,8 @@ struct LocationRowView: View {
 // MARK: - Previews
 
 private extension LocationRowView {
-    static func preview(locale: Locale, colorScheme: ColorScheme) -> some View {
-        let builder = PreviewBuilder
-            .builder()
-            .withBudgets(false)
-            .withExpenses(false)
-        
+    static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
+        let builder = PreviewBuilder.builder().withBudgets(false).withExpenses(false)
         let data = builder.buildData()
         let location = builder.getLocation(from: data)
 
@@ -49,9 +54,9 @@ private extension LocationRowView {
 }
 
 #Preview("Light - RU") {
-    LocationRowView.preview(locale: PreviewLocale.ru.locale, colorScheme: .light)
+    LocationRowView.makePreview(locale: PreviewLocale.ru.locale, colorScheme: .light)
 }
 
 #Preview("Dark - EN") {
-    LocationRowView.preview(locale: PreviewLocale.en.locale, colorScheme: .dark)
+    LocationRowView.makePreview(locale: PreviewLocale.en.locale, colorScheme: .dark)
 }

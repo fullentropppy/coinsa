@@ -15,18 +15,27 @@ struct TripRowView: View {
     // MARK: - Body
     
     var body: some View {
-        VStack(alignment: .leading) {
-            HStack(spacing: 4) {
-                EventStatusBadge(trip.status)
-                Text(trip.name).fontWeight(.semibold)
-            }
-            
-            HStack(spacing: 10) {
-                DateLabel.secondarySmall(from: trip.startDate, to: trip.endDate)
-                Spacer()
-                CountLabel.secondarySmall(trip.locationsCount, icon: Location.primaryIcon)
-                CountLabel.daysSecondarySmall(trip.durationInDays)
-            }
+        VStack(alignment: .leading, spacing: 10) {
+            upperStack
+            lowerStack
+        }
+    }
+    
+    // MARK: - Components
+    
+    private var upperStack: some View {
+        HStack(spacing: 4) {
+            EventStatusBadge(trip.status)
+            Text(trip.name).fontWeight(.semibold)
+        }
+    }
+    
+    private var lowerStack: some View {
+        HStack(spacing: 10) {
+            DateLabel.secondarySmall(from: trip.startDate, to: trip.endDate)
+            Spacer()
+            CountLabel.secondarySmall(trip.locations.count, icon: Location.primaryIcon)
+            CountLabel.daysSecondarySmall(trip.durationInDays)
         }
     }
 }
@@ -34,8 +43,8 @@ struct TripRowView: View {
 // MARK: - Previews
 
 private extension TripRowView {
-    static func preview(locale: Locale, colorScheme: ColorScheme) -> some View {
-        let builder = PreviewBuilder.builder()
+    static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
+        let builder = PreviewBuilder.builder().withBudgets(false).withExpenses(false)
         let data = builder.buildData()
         let trip = builder.getTrip(from: data)
 
@@ -48,9 +57,9 @@ private extension TripRowView {
 }
 
 #Preview("Light - RU") {
-    TripRowView.preview(locale: PreviewLocale.ru.locale, colorScheme: .light)
+    TripRowView.makePreview(locale: PreviewLocale.ru.locale, colorScheme: .light)
 }
 
 #Preview("Dark - EN") {
-    TripRowView.preview(locale: PreviewLocale.en.locale, colorScheme: .dark)
+    TripRowView.makePreview(locale: PreviewLocale.en.locale, colorScheme: .dark)
 }

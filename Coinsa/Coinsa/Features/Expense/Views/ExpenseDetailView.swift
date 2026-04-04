@@ -76,14 +76,8 @@ struct ExpenseDetailView: View {
     
     private var headerContent: some View {
         HStack {
-            BadgeView(
-                fillColor: Expense.badgeColor,
-                icon: Expense.badgeIcon
-            )
-            BadgeView(
-                fillColor: expense.category.badgeColor,
-                icon: expense.category.badgeIcon
-            )
+            BadgeView(fillColor: Expense.badgeColor, icon: Expense.badgeIcon)
+            BadgeView(fillColor: expense.category.badgeColor, icon: expense.category.badgeIcon)
             Spacer()
             DateLabel.secondarySmall(expense.date)
         }
@@ -104,10 +98,7 @@ struct ExpenseDetailView: View {
         }
         .padding(10)
         .frame(maxWidth: .infinity)
-        .glassEffect(
-            .regular,
-            in: RoundedRectangle(cornerRadius: 12, style: .continuous)
-        )
+        .glassEffect(.regular, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
     }
     
     private func amountText(_ amount: Double, currency: Currency) -> some View {
@@ -117,7 +108,7 @@ struct ExpenseDetailView: View {
     private var amountAdditionalInfo: some View {
         let baseCurrencyCode = settingsStore.baseCurrency.code
         let parts = [
-            "\(expense.baseAmount) \(baseCurrencyCode)",
+            "\(String(format: "%.2f", expense.baseAmount)) \(baseCurrencyCode)",
             "1 \(baseCurrencyCode) = \(String(format: "%g", expense.rateLocalToBase)) \(expense.localCurrency.code)"
         ]
         let info = parts.joined(separator: "  •  ")

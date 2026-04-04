@@ -32,7 +32,7 @@ struct EventHeaderView: View {
             EventStatusLabel(data.status)
             Spacer()
             DateLabel.secondarySmall(from: data.startDate, to: data.endDate)
-            CountLabel.daysSecondarySmall(data.durationDays)
+            CountLabel.daysSecondarySmall(data.days)
         }
     }
 
@@ -40,44 +40,51 @@ struct EventHeaderView: View {
         VStack(spacing: 14) {
             HStack {
                 LocationAmountCardView(
-                    title: "amount.planned",
-                    localAmount: data.plannedAmountLocal,
+                    title: .amountPlanned,
+                    localAmount: data.plannedLocalAmount,
                     localCurrency: data.localCurrency,
-                    baseAmount: data.plannedAmountBase,
+                    baseAmount: data.plannedBaseAmount,
                     baseCurrency: data.baseCurrency
                 )
                 LocationAmountCardView(
-                    title: "amount.actual",
-                    localAmount: data.actualAmountLocal,
+                    title: .amountActual,
+                    localAmount: data.actualLocalAmount,
                     localCurrency: data.localCurrency,
-                    baseAmount: data.actualAmountBase,
+                    baseAmount: data.actualBaseAmount,
                     baseCurrency: data.baseCurrency
                 )
             }
-
             HStack(alignment: .lastTextBaseline) {
-                Text("amount.difference").font(.footnote).foregroundStyle(.secondary)
+                Text(.amountDifference).font(.footnote).foregroundStyle(.secondary)
                 Spacer()
-
-                if let amountDifferenceLocal = data.amountDifferenceLocal, let localCurrency = data.localCurrency {
-                    AmountText.secondarySmall(amountDifferenceLocal, currency: localCurrency)
-                    Text("•").foregroundStyle(.secondary)
-                }
-
-                AmountText.secondarySmall(data.amountDifferenceBase, currency: data.baseCurrency)
-                differencyIcon
+                differenceInfo
+                differenceIcon
             }
         }
     }
 
-    private var differencyIcon: some View {
+    private var differenceInfo: some View {
+        var parts: [String] = []
+        if let amountDifferenceLocal = data.localAmountDifference,
+           let localCurrency = data.localCurrency {
+            parts.append("\(String(format: "%.2f", amountDifferenceLocal)) \(localCurrency.code)")
+        }
+        parts.append("\(String(format: "%.2f", data.baseAmountDifference)) \(data.baseCurrency.code)")
+        let info = parts.joined(separator: "  •  ")
+        
+        return Text(info)
+            .font(.footnote)
+            .foregroundStyle(.secondary)
+    }
+    
+    private var differenceIcon: some View {
         let icon: String
         let fillColor: Color
         
-        if data.amountDifferenceBase == 0 {
+        if data.baseAmountDifference == 0 {
             icon = "chart.line.flattrend.xyaxis"
             fillColor = .yellow
-        } else if data.amountDifferenceBase > 0 {
+        } else if data.baseAmountDifference > 0 {
             icon = "chart.line.uptrend.xyaxis"
             fillColor = .green
         } else {
@@ -95,7 +102,7 @@ struct EventHeaderView: View {
 private struct LocationAmountCardView: View {
     // MARK: - Stored Properties
 
-    let title: LocalizedStringKey
+    let title: LocalizedStringResource
     let localAmount: Double?
     let localCurrency: Currency?
     let baseAmount: Double
@@ -104,7 +111,7 @@ private struct LocationAmountCardView: View {
     // MARK: - Body
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
+        VStack(alignment: .leading, spacing: 4) {
             Text(title).font(.footnote).foregroundStyle(.secondary)
 
             if let localAmount, let localCurrency {
@@ -117,17 +124,14 @@ private struct LocationAmountCardView: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(10)
-        .glassEffect(
-            .regular,
-            in: RoundedRectangle(cornerRadius: 12, style: .continuous)
-        )
+        .glassEffect(.regular, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
     }
 }
 
 // MARK: - Preview
 
 private extension EventHeaderData {
-    static func tripPreview(
+    static func makeTripPreview(
         showsSummary: Bool,
         locale: Locale,
         colorScheme: ColorScheme
@@ -147,7 +151,7 @@ private extension EventHeaderData {
         .preferredColorScheme(colorScheme)
     }
     
-    static func locationPreview(
+    static func makeLocationPreview(
         showsSummary: Bool,
         locale: Locale,
         colorScheme: ColorScheme
@@ -169,49 +173,49 @@ private extension EventHeaderData {
 }
 
 #Preview("Trip with summary. Light - RU") {
-    EventHeaderData.tripPreview(
+    EventHeaderData.makeTripPreview(
         showsSummary: true, locale: PreviewLocale.ru.locale, colorScheme: .light
     )
 }
 
 #Preview("Trip with summary. Dark - EN") {
-    EventHeaderData.tripPreview(
+    EventHeaderData.makeTripPreview(
         showsSummary: true, locale: PreviewLocale.en.locale, colorScheme: .dark
     )
 }
 
 #Preview("Trip without summary. Light - RU") {
-    EventHeaderData.tripPreview(
+    EventHeaderData.makeTripPreview(
         showsSummary: false, locale: PreviewLocale.ru.locale, colorScheme: .light
     )
 }
 
 #Preview("Trip without summary. Dark - EN") {
-    EventHeaderData.tripPreview(
+    EventHeaderData.makeTripPreview(
         showsSummary: false, locale: PreviewLocale.en.locale, colorScheme: .dark
     )
 }
 
 #Preview("Location with summary. Light - RU") {
-    EventHeaderData.locationPreview(
+    EventHeaderData.makeLocationPreview(
         showsSummary: true, locale: PreviewLocale.ru.locale, colorScheme: .light
     )
 }
 
 #Preview("Location with summary. Dark - EN") {
-    EventHeaderData.locationPreview(
+    EventHeaderData.makeLocationPreview(
         showsSummary: true, locale: PreviewLocale.en.locale, colorScheme: .dark
     )
 }
 
 #Preview("Location without summary. Light - RU") {
-    EventHeaderData.locationPreview(
+    EventHeaderData.makeLocationPreview(
         showsSummary: false, locale: PreviewLocale.ru.locale, colorScheme: .light
     )
 }
 
 #Preview("Location without summary. Dark - EN") {
-    EventHeaderData.locationPreview(
+    EventHeaderData.makeLocationPreview(
         showsSummary: false, locale: PreviewLocale.en.locale, colorScheme: .dark
     )
 }

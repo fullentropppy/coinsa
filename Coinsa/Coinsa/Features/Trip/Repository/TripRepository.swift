@@ -23,6 +23,7 @@ struct TripRepository {
             endDate: endDate,
             locations: []
         )
+        
         context.insert(trip)
         try? context.save()
     }

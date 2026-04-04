@@ -16,9 +16,9 @@ struct TripListView: View {
     
     @Query(sort: \Trip.startDate) private var trips: [Trip]
 
-    @State private var isShowingTripEdit = false
     @State private var deletionHandler = DeletionHandler<Trip>()
-
+    @State private var isShowingTripEdit = false
+    
     // MARK: - Computed Properties
     
     private var repository: TripRepository {
@@ -30,7 +30,7 @@ struct TripListView: View {
     var body: some View {
         NavigationStack {
             tripListContent
-                .navigationTitle("trip.list.navigationTitle")
+                .navigationTitle(.tripNavigationTitleList)
                 .navigationBarTitleDisplayMode(.large)
                 .sheet(isPresented: $isShowingTripEdit) {
                     TripEditView(trip: nil)
@@ -49,14 +49,18 @@ struct TripListView: View {
                 }
                 .deleteConfirmationAlert(
                     isPresented: $deletionHandler.isShowingDeleteConfirmation,
-                    message: "trip.delete.message",
-                    onConfirm: { confirmDelete() },
-                    onCancel: { cancelDelete() }
+                    message: .tripDeleteMessage,
+                    onConfirm: {
+                        confirmDelete()
+                    },
+                    onCancel: {
+                        cancelDelete()
+                    }
                 )
         }
     }
     
-    // MARK: - Components
+    // MARK: - Content
     
     private var tripListContent: some View {
         List {
@@ -70,6 +74,8 @@ struct TripListView: View {
             .onDelete(perform: requestDelete)
         }
     }
+    
+    // MARK: - Components
     
     private var emptyTripListContent: some View {
         EmptyStateView(
@@ -100,7 +106,7 @@ struct TripListView: View {
 // MARK: - Previews
 
 private extension TripListView {
-    static func preview(
+    static func makePreview(
         withTrips: Bool,
         locale: Locale,
         colorScheme: ColorScheme
@@ -108,8 +114,8 @@ private extension TripListView {
         let container = PreviewBuilder.builder()
             .withScenario(.all)
             .withTrips(withTrips)
-            .withExpenses(true)
-            .withBudgets(true)
+            .withExpenses(false)
+            .withBudgets(false)
             .buildContainer()
         
         let settingsStore = AppSettingsStore(context: container.mainContext)
@@ -123,25 +129,25 @@ private extension TripListView {
 }
 
 #Preview("Light - RU") {
-    TripListView.preview(
+    TripListView.makePreview(
         withTrips: true, locale: PreviewLocale.ru.locale, colorScheme: .light
     )
 }
 
 #Preview("Dark - EN") {
-    TripListView.preview(
+    TripListView.makePreview(
         withTrips: true, locale: PreviewLocale.en.locale, colorScheme: .dark
     )
 }
 
 #Preview("Empty List. Light - RU") {
-    TripListView.preview(
+    TripListView.makePreview(
         withTrips: false, locale: PreviewLocale.ru.locale, colorScheme: .light
     )
 }
 
 #Preview("Empty List. Dark - EN") {
-    TripListView.preview(
+    TripListView.makePreview(
         withTrips: false, locale: PreviewLocale.ru.locale, colorScheme: .dark
     )
 }

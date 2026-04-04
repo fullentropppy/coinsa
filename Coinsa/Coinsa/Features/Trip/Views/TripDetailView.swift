@@ -12,14 +12,12 @@ struct TripDetailView: View {
     // MARK: - Stored Properties
 
     @Environment(\.modelContext) private var context
-    @Environment(\.dismiss) private var dismiss
     @Environment(AppSettingsStore.self) private var settingsStore
+    @Environment(\.dismiss) private var dismiss
     
     @Query private var locations: [Location]
-
-    @State private var viewModel: TripDetailViewModel?
-    @State private var deletionHandler = DeletionHandler<Location>()
     
+    @State private var deletionHandler = DeletionHandler<Location>()
     @State private var isShowingTripEdit = false
     @State private var isShowingLocationAdd = false
 
@@ -31,11 +29,16 @@ struct TripDetailView: View {
         LocationRepository(context: context)
     }
     
+    private var viewModel: TripDetailViewModel {
+        TripDetailViewModel(
+            trip: trip,
+            baseCurrency: settingsStore.baseCurrency
+        )
+    }
+    
     // MARK: - Initialization
 
     init(trip: Trip) {
-        self.trip = trip
-
         let tripID = trip.persistentModelID
         _locations = Query(
             filter: #Predicate<Location> { location in
@@ -43,87 +46,80 @@ struct TripDetailView: View {
             },
             sort: \Location.startDate
         )
-        
-        _viewModel = State(initialValue: nil)
+        self.trip = trip
     }
 
     // MARK: - Body
 
     var body: some View {
-        Group {
-            if let viewModel {
-                detailContent(trip: trip, viewModel: viewModel)
-            } else {
-                ProgressView()
+        tripDetailForm
+            .navigationTitle(trip.name)
+            .toolbarTitleDisplayMode(.large)
+            .toolbar {
+                toolbarContent
             }
-        }
-        .onAppear {
-            updateViewModel()
-        }
-    }
-
-    // MARK: - Components
-
-    private func detailContent(trip: Trip, viewModel: TripDetailViewModel) -> some View {
-        List {
-            Section {
-                EventHeaderView(
-                    data: viewModel.eventHeaderData,
-                    showsSummary: !locations.isEmpty
+            .sheet(isPresented: $isShowingTripEdit) {
+                TripEditView(
+                    trip: trip,
+                    onDelete: {
+                        dismiss()
+                    }
                 )
             }
-
-            Section(header: Text("trip.locations")) {
-                if locations.isEmpty {
-                    emptyLocationListContent
-                } else {
-                    locationListContent
+            .sheet(isPresented: $isShowingLocationAdd) {
+                LocationEditView(
+                    trip: trip,
+                    baseCurrency: settingsStore.baseCurrency
+                )
+            }
+            .safeAreaInset(edge: .bottom) {
+                if !locations.isEmpty {
+                    PrimaryAddButtonView(isOnLeft: settingsStore.isAddButtonOnLeft) {
+                        isShowingLocationAdd = true
+                    }
                 }
             }
-        }
-        .navigationTitle(trip.name)
-        .toolbarTitleDisplayMode(.large)
-        .toolbar {
-            toolbarContent
-        }
-        .sheet(isPresented: $isShowingTripEdit) {
-            TripEditView(
-                trip: trip,
-                onDelete: { dismiss() }
-            )
-        }
-        .sheet(isPresented: $isShowingLocationAdd) {
-            LocationEditView(
-                trip: trip,
-                baseCurrency: viewModel.baseCurrency
-            )
-        }
-        .safeAreaInset(edge: .bottom) {
-            if !locations.isEmpty {
-                PrimaryAddButtonView(isOnLeft: settingsStore.isAddButtonOnLeft) {
-                    isShowingLocationAdd = true
+            .deleteConfirmationAlert(
+                isPresented: $deletionHandler.isShowingDeleteConfirmation,
+                message: .locationDeleteMessage,
+                onConfirm: {
+                    confirmDelete()
+                },
+                onCancel: {
+                    cancelDelete()
                 }
-            }
-        }
-        .deleteConfirmationAlert(
-            isPresented: $deletionHandler.isShowingDeleteConfirmation,
-            message: "location.delete.message",
-            onConfirm: { confirmDelete() },
-            onCancel: { cancelDelete() }
-        )
+            )
     }
 
-    private var locationListContent: some View {
-        ForEach(locations) { location in
-            NavigationLink {
-                LocationDetailView(location: location)
-            } label: {
-                LocationRowView(location: location)
-            }
+    // MARK: - Content
+    
+    private var tripDetailForm: some View {
+        Form {
+            headerSection
+            locationsSection
         }
-        .onDelete(perform: requestDelete)
     }
     
+    // MARK: - Sections
+    
+    private var headerSection: some View {
+        Section {
+            EventHeaderView(data: viewModel.eventHeaderData, showsSummary: !locations.isEmpty)
+        }
+    }
+    
+    private var locationsSection: some View {
+        Section(.tripLocations) {
+            if locations.isEmpty {
+                emptyLocationListContent
+            } else {
+                locationListContent
+            }
+        }
+    }
+    
+    // MARK: - Components
+
     private var emptyLocationListContent: some View {
         EmptyStateView(
             imageName: Location.primaryIcon,
@@ -133,6 +129,17 @@ struct TripDetailView: View {
         ) {
             isShowingLocationAdd = true
         }
+    }
+    
+    private var locationListContent: some View {
+        ForEach(locations) { location in
+            NavigationLink {
+                LocationDetailView(location: location)
+            } label: {
+                LocationRowView(location: location)
+            }
+        }
+        .onDelete(perform: requestDelete)
     }
     
     @ToolbarContentBuilder
@@ -145,13 +152,6 @@ struct TripDetailView: View {
     }
 
     // MARK: - Actions
-
-    private func updateViewModel() {
-        viewModel = TripDetailViewModel(
-            trip: trip,
-            baseCurrency: settingsStore.baseCurrency
-        )
-    }
     
     private func requestDelete(at offsets: IndexSet) {
         deletionHandler.request(for: offsets.map { locations[$0] })
@@ -169,7 +169,7 @@ struct TripDetailView: View {
 // MARK: - Previews
 
 private extension TripDetailView {
-    static func preview(
+    static func makePreview(
         withLocations: Bool,
         locale: Locale,
         colorScheme: ColorScheme
@@ -190,25 +190,25 @@ private extension TripDetailView {
 }
 
 #Preview("Light - RU") {
-    TripDetailView.preview(
+    TripDetailView.makePreview(
         withLocations: true, locale: PreviewLocale.ru.locale, colorScheme: .light
     )
 }
 
 #Preview("Dark - EN") {
-    TripDetailView.preview(
+    TripDetailView.makePreview(
         withLocations: true, locale: PreviewLocale.en.locale, colorScheme: .dark
     )
 }
 
 #Preview("Empty List. Light - RU") {
-    TripDetailView.preview(
+    TripDetailView.makePreview(
         withLocations: false, locale: PreviewLocale.ru.locale, colorScheme: .light
     )
 }
 
 #Preview("Empty List. Dark - EN") {
-    TripDetailView.preview(
+    TripDetailView.makePreview(
         withLocations: false, locale: PreviewLocale.ru.locale, colorScheme: .dark
     )
 }

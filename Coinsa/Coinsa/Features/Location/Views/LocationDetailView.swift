@@ -12,14 +12,12 @@ struct LocationDetailView: View {
     // MARK: - Stored Properties
 
     @Environment(\.modelContext) private var context
-    @Environment(\.dismiss) private var dismiss
     @Environment(AppSettingsStore.self) private var settingsStore
-
+    @Environment(\.dismiss) private var dismiss
+    
     @Query private var expenses: [Expense]
 
-    @State private var viewModel: LocationDetailViewModel?
     @State private var deletionHandler = DeletionHandler<Expense>()
-    
     @State private var isShowingLocationEdit = false
     @State private var isShowingExpenseAdd = false
     
@@ -31,11 +29,16 @@ struct LocationDetailView: View {
         ExpenseRepository(context: context)
     }
 
+    private var viewModel: LocationDetailViewModel {
+        LocationDetailViewModel (
+            location: location,
+            baseCurrency: settingsStore.baseCurrency
+        )
+    }
+    
     // MARK: - Initialization
 
     init(location: Location) {
-        self.location = location
-        
         let locationID = location.persistentModelID
         _expenses = Query(
             filter: #Predicate<Expense> { expense in
@@ -43,87 +46,84 @@ struct LocationDetailView: View {
             },
             sort: \Expense.date, order: .reverse
         )
-        
-        _viewModel = State(initialValue: nil)
+        self.location = location
     }
 
     // MARK: - Body
 
     var body: some View {
-        Group {
-            if let viewModel {
-                detailContent(viewModel: viewModel)
-            } else {
-                ProgressView()
+        locationDetailForm
+            .navigationTitle(viewModel.location.name)
+            .navigationSubtitle(viewModel.location.trip.screenContextSubtitle)
+            .navigationBarTitleDisplayMode(.large)
+            .toolbar {
+                toolbarContent
             }
-        }
-        .onAppear {
-            updateViewModel()
-        }
-    }
-
-    // MARK: - Components
-
-    private func detailContent(viewModel: LocationDetailViewModel) -> some View {
-        Form {
-            Section {
-                EventHeaderView(
-                    data: viewModel.eventHeaderData,
-                    showsSummary: true
+            .sheet(isPresented: $isShowingLocationEdit) {
+                LocationEditView(
+                    location: location,
+                    baseCurrency: settingsStore.baseCurrency,
+                    onDelete: {
+                        dismiss()
+                    }
                 )
             }
+            .sheet(isPresented: $isShowingExpenseAdd) {
+                ExpenseEditView(
+                    location: location,
+                    baseCurrency: settingsStore.baseCurrency
+                )
+            }
+            .safeAreaInset(edge: .bottom) {
+                if !expenses.isEmpty {
+                    PrimaryAddButtonView(isOnLeft: settingsStore.isAddButtonOnLeft) {
+                        isShowingExpenseAdd = true
+                    }
+                }
+            }
+            .deleteConfirmationAlert(
+                isPresented: $deletionHandler.isShowingDeleteConfirmation,
+                message: .expenseDeleteMessage,
+                onConfirm: { confirmDelete() },
+                onCancel: { cancelDelete() }
+            )
+    }
 
-            Section("location.detail.expenses.header") {
-                if expenses.isEmpty {
-                    emptyExpenseListContent
-                } else {
-                    expenseListContent
-                }
-            }
+    // MARK: - Content
+    
+    private var locationDetailForm: some View {
+        Form {
+            headerSection
+            locationsSection
         }
-        .navigationTitle(viewModel.location.name)
-        .navigationSubtitle(viewModel.location.trip.screenContextSubtitle)
-        .navigationBarTitleDisplayMode(.large)
-        .toolbar {
-            toolbarContent
-        }
-        .sheet(isPresented: $isShowingLocationEdit) {
-            LocationEditView(
-                location: location,
-                baseCurrency: settingsStore.baseCurrency,
-                onDelete: { dismiss() }
-            )
-        }
-        .sheet(isPresented: $isShowingExpenseAdd) {
-            ExpenseEditView(
-                location: location,
-                baseCurrency: settingsStore.baseCurrency
-            )
-        }
-        .safeAreaInset(edge: .bottom) {
-            if !expenses.isEmpty {
-                PrimaryAddButtonView(isOnLeft: settingsStore.isAddButtonOnLeft) {
-                    isShowingExpenseAdd = true
-                }
-            }
-        }
-        .deleteConfirmationAlert(
-            isPresented: $deletionHandler.isShowingDeleteConfirmation,
-            message: "expense.delete.message",
-            onConfirm: { confirmDelete() },
-            onCancel: { cancelDelete() }
-        )
     }
     
+    // MARK: - Sections
+    
+    private var headerSection: some View {
+        Section {
+            EventHeaderView(data: viewModel.eventHeaderData, showsSummary: true)
+        }
+    }
+    
+    private var locationsSection: some View {
+        Section(.locationExpenses) {
+            if expenses.isEmpty {
+                emptyExpenseListContent
+            } else {
+                expenseListContent
+            }
+        }
+    }
+    
+    // MARK: - Components
+
     private var expenseListContent: some View {
         ForEach(expenses) { expense in
             NavigationLink {
                 ExpenseDetailView(expense: expense)
             } label: {
-                ExpenseRowView(
-                    expense: expense,
-                    baseCurrency: settingsStore.baseCurrency
-                )
+                ExpenseRowView(expense: expense, baseCurrency: settingsStore.baseCurrency)
             }
         }
         .onDelete(perform: requestDelete)
@@ -151,13 +151,6 @@ struct LocationDetailView: View {
 
     // MARK: - Actions
 
-    private func updateViewModel() {
-        viewModel = LocationDetailViewModel(
-            location: location,
-            baseCurrency: settingsStore.baseCurrency
-        )
-    }
-    
     private func requestDelete(at offsets: IndexSet) {
         deletionHandler.request(for: offsets.map { expenses[$0] })
     }
@@ -174,7 +167,7 @@ struct LocationDetailView: View {
 // MARK: - Previews
 
 private extension LocationDetailView {
-    static func preview(
+    static func makePreview(
         withExpenses: Bool,
         locale: Locale,
         colorScheme: ColorScheme
@@ -195,33 +188,25 @@ private extension LocationDetailView {
 }
 
 #Preview("Light - RU") {
-    LocationDetailView.preview(
-        withExpenses: true,
-        locale: PreviewLocale.ru.locale,
-        colorScheme: .light
+    LocationDetailView.makePreview(
+        withExpenses: true, locale: PreviewLocale.ru.locale, colorScheme: .light
     )
 }
 
 #Preview("Dark - EN") {
-    LocationDetailView.preview(
-        withExpenses: true,
-        locale: PreviewLocale.en.locale,
-        colorScheme: .dark
+    LocationDetailView.makePreview(
+        withExpenses: true, locale: PreviewLocale.en.locale, colorScheme: .dark
     )
 }
 
 #Preview("Empty List. Light - RU") {
-    LocationDetailView.preview(
-        withExpenses: false,
-        locale: PreviewLocale.ru.locale,
-        colorScheme: .light
+    LocationDetailView.makePreview(
+        withExpenses: false, locale: PreviewLocale.ru.locale, colorScheme: .light
     )
 }
 
 #Preview("Empty List. Dark - EN") {
-    LocationDetailView.preview(
-        withExpenses: false,
-        locale: PreviewLocale.en.locale,
-        colorScheme: .dark
+    LocationDetailView.makePreview(
+        withExpenses: false, locale: PreviewLocale.en.locale, colorScheme: .dark
     )
 }

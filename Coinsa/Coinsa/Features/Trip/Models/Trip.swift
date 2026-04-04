@@ -19,12 +19,6 @@ class Trip: DateRangeProviding, EventStatusProviding {
     @Relationship(deleteRule: .cascade, inverse: \Location.trip)
     var locations: [Location]
     
-    // MARK: - Computed Properties  
-    
-    var locationsCount: Int {
-        locations.count
-    }
-    
     // MARK: - Initialization
     
     init(

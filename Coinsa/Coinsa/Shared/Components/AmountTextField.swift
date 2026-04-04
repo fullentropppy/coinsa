@@ -88,7 +88,7 @@ struct AmountTextField: View {
     }
 
     private func commit() {
-        let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        let trimmed = text.trimmed
         
         guard !trimmed.isEmpty else {
             value = 0

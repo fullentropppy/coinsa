@@ -9,11 +9,11 @@ import SwiftUI
 
 extension Expense {
     static var primaryIcon: String {
-        "creditcard"
+        "cart"
     }
     
     static var badgeIcon: String {
-        "creditcard.fill"
+        "cart.fill"
     }
     
     static var badgeColor: Color {

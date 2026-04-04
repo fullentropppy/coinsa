@@ -44,20 +44,8 @@ final class LocationEditViewModel {
         location != nil
     }
 
-    var navigationTitle: String {
-        String(localized: isEditing
-            ? "location.navigationTitle.edit"
-            : "location.navigationTitle.create"
-        )
-    }
-
-    var plannedTotalBase: Double {
-        budgetAmounts.values.reduce(0, +)
-    }
-
-    var plannedTotalLocal: Double {
-        guard rateLocalToBase > 0 else { return 0 }
-        return (plannedTotalBase / rateLocalToBase).rounded()
+    var navigationTitle: LocalizedStringResource {
+        isEditing ? .locationNavigationTitleEdit : .locationNavigationTitleCreate
     }
 
     var hasChanges: Bool {
@@ -65,13 +53,19 @@ final class LocationEditViewModel {
     }
 
     var canSave: Bool {
-        !name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-        && startDate <= endDate
-        && rateLocalToBase > 0
+        !name.isBlank && startDate <= endDate && rateLocalToBase > 0
     }
 
     var isHomeLocation: Bool {
         baseCurrency == localCurrency
+    }
+    
+    var plannedBaseTotal: Double {
+        budgetAmounts.values.reduce(0, +)
+    }
+
+    var plannedLocalTotal: Double {
+        return rateLocalToBase > 0 ? (plannedBaseTotal / rateLocalToBase).rounded() : 0
     }
     
     // MARK: - Initialization
@@ -138,9 +132,7 @@ final class LocationEditViewModel {
     // MARK: - Public Methods
 
     func plannedLocalAmount(for category: ExpenseCategory) -> Double {
-        let rate = rateLocalToBase
-        guard rate > 0 else { return 0 }
-        return ((budgetAmounts[category] ?? 0) / rate).rounded()
+        rateLocalToBase > 0 ? ((budgetAmounts[category] ?? 0) / rateLocalToBase).rounded() : 0
     }
 
     func save(using repository: LocationRepository) {
@@ -191,7 +183,7 @@ private extension LocationEditViewModel {
             rateLocalToBase: Double,
             budgetAmounts: [ExpenseCategory: Double]
         ) {
-            self.name = name.trimmingCharacters(in: .whitespacesAndNewlines)
+            self.name = name.trimmed
             self.startDate = startDate
             self.endDate = endDate
             self.localCurrency = localCurrency

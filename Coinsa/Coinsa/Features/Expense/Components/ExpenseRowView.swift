@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import SwiftData
 
 struct ExpenseRowView: View {
     // MARK: - Stored Properties

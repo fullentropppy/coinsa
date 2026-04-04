@@ -11,14 +11,14 @@ struct EventHeaderData {
     let status: EventStatus
     let startDate: Date
     let endDate: Date
-    let durationDays: Int
-    let plannedAmountBase: Double
-    let actualAmountBase: Double
-    let amountDifferenceBase: Double
+    let days: Int
+    let plannedBaseAmount: Double
+    let actualBaseAmount: Double
+    let baseAmountDifference: Double
     let baseCurrency: Currency
-    let plannedAmountLocal: Double?
-    let actualAmountLocal: Double?
-    let amountDifferenceLocal: Double?
+    let plannedLocalAmount: Double?
+    let actualLocalAmount: Double?
+    let localAmountDifference: Double?
     let localCurrency: Currency?
     let badgeIcon: String
     let badgeColor: Color
