@@ -102,7 +102,7 @@ struct LocationDetailView: View {
     
     private var headerSection: some View {
         Section {
-            EventHeaderView(data: viewModel.eventHeaderData, showsSummary: true)
+            EventSummaryView(data: viewModel.eventHeaderData)
         }
     }
     

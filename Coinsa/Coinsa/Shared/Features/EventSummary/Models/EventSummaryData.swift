@@ -1,5 +1,5 @@
 //
-//  EventHeaderData.swift
+//  EventSummaryData.swift
 //  Coinsa
 //
 //  Created by Daniil Gritsenko on 30.03.2026.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct EventHeaderData {
+struct EventSummaryData {
     let status: EventStatus
     let startDate: Date
     let endDate: Date

@@ -289,9 +289,9 @@ private extension LocationEditView {
         
         return Group {
             if let location {
-                LocationEditView(location: location, baseCurrency: Currency.defaultOption)
+                LocationEditView(location: location, baseCurrency: Currency.defaultCurrency)
             } else {
-                LocationEditView(trip: trip, baseCurrency: Currency.defaultOption)
+                LocationEditView(trip: trip, baseCurrency: Currency.defaultCurrency)
             }
         }
         .modelContainer(container)

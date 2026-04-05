@@ -60,7 +60,7 @@ private extension ExpenseRowView {
         return List {
             ExpenseRowView(
                 expense: expense,
-                baseCurrency: Currency.defaultOption
+                baseCurrency: Currency.defaultCurrency
             )
             .environment(\.locale, locale)
             .preferredColorScheme(colorScheme)

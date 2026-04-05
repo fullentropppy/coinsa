@@ -10,9 +10,9 @@ import SwiftUI
 extension EventStatus {
     var badgeColor: Color {
         switch self {
-        case .upcoming: .green
-        case .ongoing: .blue
-        case .completed: .gray
+        case .upcoming: .teal
+        case .ongoing: .green
+        case .completed: .blue
         }
     }
 }

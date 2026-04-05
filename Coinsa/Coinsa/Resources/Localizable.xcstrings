@@ -1347,6 +1347,40 @@
         }
       }
     },
+    "now.emptyState.description" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "There are no locations active for today"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сегодня нет активных локаций"
+          }
+        }
+      }
+    },
+    "now.emptyState.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No current location"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нет активных локаций"
+          }
+        }
+      }
+    },
     "now.navigationTitle" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1360,6 +1394,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Сейчас"
+          }
+        }
+      }
+    },
+    "now.quickExpense" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quick expense"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Быстрая трата"
+          }
+        }
+      }
+    },
+    "now.recentExpenses" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Latest expenses"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Последние траты"
           }
         }
       }

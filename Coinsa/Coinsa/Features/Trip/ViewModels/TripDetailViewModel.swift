@@ -16,11 +16,11 @@ struct TripDetailViewModel {
 
     // MARK: - Computed Properties
 
-    var eventHeaderData: EventHeaderData {
+    var eventHeaderData: EventSummaryData {
         let plannedAmount = trip.calculatePlannedAmount(asBaseCurrency: true)
         let actualAmount = trip.calculateActualAmount(asBaseCurrency: true)
 
-        return EventHeaderData(
+        return EventSummaryData(
             status: trip.status,
             startDate: trip.startDate,
             endDate: trip.endDate,

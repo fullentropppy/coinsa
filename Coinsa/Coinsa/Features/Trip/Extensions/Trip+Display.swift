@@ -17,6 +17,6 @@ extension Trip {
     }
     
     static var badgeColor: Color {
-        .indigo
+        .purple
     }
 }

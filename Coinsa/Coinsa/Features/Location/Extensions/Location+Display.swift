@@ -17,6 +17,6 @@ extension Location {
     }
     
     static var badgeColor: Color {
-        .teal
+        .pink
     }
 }

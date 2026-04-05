@@ -29,11 +29,12 @@ struct ExpenseEditView: View {
     
     // MARK: - Initialization
 
-    init(location: Location, baseCurrency: Currency) {
+    init(location: Location, baseCurrency: Currency, preselectedCategory: ExpenseCategory? = nil) {
         self.init(
             expense: nil,
             location: location,
             baseCurrency: baseCurrency,
+            preselectedCategory: preselectedCategory,
             onDelete: nil
         )
     }
@@ -47,6 +48,7 @@ struct ExpenseEditView: View {
             expense: expense,
             location: expense.location,
             baseCurrency: baseCurrency,
+            preselectedCategory: nil,
             onDelete: onDelete
         )
     }
@@ -55,13 +57,18 @@ struct ExpenseEditView: View {
         expense: Expense?,
         location: Location,
         baseCurrency: Currency,
+        preselectedCategory: ExpenseCategory? = nil,
         onDelete: (() -> Void)? = nil
     ) {
         let viewModel: ExpenseEditViewModel
         if let expense {
             viewModel = ExpenseEditViewModel(expense: expense, baseCurrency: baseCurrency)
         } else {
-            viewModel = ExpenseEditViewModel(location: location, baseCurrency: baseCurrency)
+            viewModel = ExpenseEditViewModel(
+                location: location,
+                baseCurrency: baseCurrency,
+                preselectedCategory: preselectedCategory
+            )
         }
         _viewModel = State(initialValue: viewModel)
         _inputCurrency = State(

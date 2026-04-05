@@ -48,7 +48,7 @@ struct BadgeView: View {
             }
         }
         .font(.caption.weight(.semibold))
-        .foregroundStyle(.background)
+        .foregroundStyle(.windowBackground)
         .padding(.horizontal, 8)
         .padding(.vertical, 4)
         .frame(minWidth: 36)

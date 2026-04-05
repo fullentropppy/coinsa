@@ -51,15 +51,25 @@ final class ExpenseEditViewModel {
     
     // MARK: - Initialization
 
-    convenience init(location: Location, baseCurrency: Currency) {
-        self.init(expense: nil, location: location, baseCurrency: baseCurrency)
+    convenience init(location: Location, baseCurrency: Currency, preselectedCategory: ExpenseCategory? = nil) {
+        self.init(
+            expense: nil,
+            location: location,
+            baseCurrency: baseCurrency,
+            preselectedCategory: preselectedCategory
+        )
     }
 
     convenience init(expense: Expense, baseCurrency: Currency) {
         self.init(expense: expense, location: expense.location, baseCurrency: baseCurrency)
     }
 
-    private init(expense: Expense?, location: Location, baseCurrency: Currency) {
+    private init(
+        expense: Expense?,
+        location: Location,
+        baseCurrency: Currency,
+        preselectedCategory: ExpenseCategory? = nil
+    ) {
         self.location = expense?.location ?? location
         self.expense = expense
         self.localCurrency = Currency.from(self.location.localCurrencyCode)
@@ -84,7 +94,7 @@ final class ExpenseEditViewModel {
             resolvedAmountBase = 0
             resolvedRateLocalToBase = self.location.rateLocalToBase
             resolvedAmountLocal = 0
-            resolvedCategory = .food
+            resolvedCategory = preselectedCategory ?? .food
             resolvedComment = ""
         }
 

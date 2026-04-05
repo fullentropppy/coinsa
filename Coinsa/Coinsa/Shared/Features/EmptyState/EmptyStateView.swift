@@ -10,27 +10,61 @@ import SwiftUI
 struct EmptyStateView: View {
     // MARK: - Stored Properties
     
-    let imageName: String
-    let title: LocalizedStringResource
-    let description: LocalizedStringResource
-    let buttonLabel: LocalizedStringResource
-    let onAddAction: () -> Void
+    private let imageName: String
+    private let title: LocalizedStringResource
+    private let description: LocalizedStringResource
+    private let buttonLabel: LocalizedStringResource?
+    private let onAddAction: (() -> Void)?
+    
+    // MARK: - Initialization
+    
+    init(
+        imageName: String,
+        title: LocalizedStringResource,
+        description: LocalizedStringResource,
+        buttonLabel: LocalizedStringResource? = nil,
+        onAddAction: (() -> Void)? = nil
+    ) {
+        self.imageName = imageName
+        self.title = title
+        self.description = description
+        self.buttonLabel = buttonLabel
+        self.onAddAction = onAddAction
+    }
     
     // MARK: - Body
     
     var body: some View {
-        ContentUnavailableView {
-            Label(title, systemImage: imageName)
-        } description: {
-            Text(description)
-                .padding()
-        } actions: {
-            Button(buttonLabel) {
-                onAddAction()
+        if let buttonLabel, let onAddAction {
+            ContentUnavailableView {
+                titleContent
+            } description: {
+                descriptionContent
+            } actions: {
+                Button(buttonLabel) {
+                    onAddAction()
+                }
+                .buttonStyle(.glassProminent)
+                .controlSize(.large)
             }
-            .buttonStyle(.glassProminent)
-            .controlSize(.large)
+        } else {
+            ContentUnavailableView {
+                titleContent
+            } description: {
+                descriptionContent
+            }
         }
+    }
+    
+    // MARK: - Components
+    
+    private var titleContent: some View {
+        Label(title, systemImage: imageName)
+    }
+    
+    private var descriptionContent: some View {
+        Text(description)
+            .padding()
     }
 }
 

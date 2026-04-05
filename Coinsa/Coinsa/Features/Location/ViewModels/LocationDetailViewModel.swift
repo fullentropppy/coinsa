@@ -17,14 +17,14 @@ struct LocationDetailViewModel {
 
     // MARK: - Computed Properties
 
-    var eventHeaderData: EventHeaderData {
+    var eventHeaderData: EventSummaryData {
         let plannedAmountBase = location.calculatePlannedAmount(asBaseCurrency: true)
         let plannedAmountLocal = location.calculatePlannedAmount(asBaseCurrency: false)
         let actualAmountBase = location.calculateActualAmount(asBaseCurrency: true)
         let actualAmountLocal = location.calculateActualAmount(asBaseCurrency: false)
         let hasLocalAmounts = localCurrency != baseCurrency && location.rateLocalToBase > 0
 
-        return EventHeaderData(
+        return EventSummaryData(
             status: location.status,
             startDate: location.startDate,
             endDate: location.endDate,

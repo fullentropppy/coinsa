@@ -103,8 +103,13 @@ struct TripDetailView: View {
     // MARK: - Sections
     
     private var headerSection: some View {
-        Section {
-            EventHeaderView(data: viewModel.eventHeaderData, showsSummary: !locations.isEmpty)
+        let showsAll = !locations.isEmpty
+        return Section {
+            EventSummaryView(
+                data: viewModel.eventHeaderData,
+                showsAmounts: showsAll,
+                showsDifference: showsAll
+            )
         }
     }
     
