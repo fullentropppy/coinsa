@@ -75,7 +75,7 @@ private extension EmptyStateView {
         EmptyStateView(
             imageName: Trip.primaryIcon,
             title: .tripEmptyStateTitle,
-            description: .tripEmptyStateDesctiption,
+            description: .tripEmptyStateDescription,
             buttonLabel: .tripAdd,
             onAddAction: {}
         )

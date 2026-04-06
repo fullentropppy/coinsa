@@ -10,12 +10,13 @@ import SwiftUI
 extension View {
     func deleteConfirmationAlert(
         isPresented: Binding<Bool>,
+        title: LocalizedStringResource,
         message: LocalizedStringResource,
         onConfirm: @escaping () -> Void,
         onCancel: @escaping () -> Void
     ) -> some View {
-        self.alert(.commonConfirmTitle, isPresented: isPresented) {
-            Button(.deleteConfirm, role: .destructive) {
+        self.alert(title, isPresented: isPresented) {
+            Button(.commonDelete, role: .destructive) {
                 onConfirm()
             }
             Button(.commonCancel, role: .cancel) {

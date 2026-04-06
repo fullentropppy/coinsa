@@ -58,7 +58,7 @@ struct TripDetailView: View {
     var body: some View {
         tripDetailForm
             .navigationTitle(trip.name)
-            .toolbarTitleDisplayMode(.large)
+            .toolbarTitleDisplayMode(.inline)
             .toolbar {
                 toolbarContent
             }
@@ -85,6 +85,7 @@ struct TripDetailView: View {
             }
             .deleteConfirmationAlert(
                 isPresented: $deletionHandler.isShowingDeleteConfirmation,
+                title: .locationDeleteTitle,
                 message: .locationDeleteMessage,
                 onConfirm: {
                     confirmDelete()
@@ -98,7 +99,7 @@ struct TripDetailView: View {
     // MARK: - Content
     
     private var tripDetailForm: some View {
-        Form {
+        List {
             headerSection
             locationsSection
         }

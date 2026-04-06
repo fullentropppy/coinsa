@@ -49,6 +49,7 @@ struct TripListView: View {
                 }
                 .deleteConfirmationAlert(
                     isPresented: $deletionHandler.isShowingDeleteConfirmation,
+                    title: .tripDeleteTitle,
                     message: .tripDeleteMessage,
                     onConfirm: {
                         confirmDelete()
@@ -81,7 +82,7 @@ struct TripListView: View {
         EmptyStateView(
             imageName: Trip.primaryIcon,
             title: .tripEmptyStateTitle,
-            description: .tripEmptyStateDesctiption,
+            description: .tripEmptyStateDescription,
             buttonLabel: .tripAdd,
         ) {
             isShowingTripEdit = true

@@ -98,6 +98,7 @@ struct ExpenseEditView: View {
                 )
                 .deleteConfirmationAlert(
                     isPresented: $deletionHandler.isShowingDeleteConfirmation,
+                    title: .expenseDeleteTitle,
                     message: .expenseDeleteMessage,
                     onConfirm: {
                         confirmDelete()

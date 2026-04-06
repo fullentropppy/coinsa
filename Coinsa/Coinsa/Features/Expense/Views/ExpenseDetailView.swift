@@ -30,7 +30,7 @@ struct ExpenseDetailView: View {
         expenseDetailForm
             .navigationTitle(expense.category.localized)
             .navigationSubtitle(expense.location.screenContextSubtitle)
-            .navigationBarTitleDisplayMode(.large)
+            .toolbarTitleDisplayMode(.inline)
             .toolbar {
                 toolbarContent
             }

@@ -55,7 +55,7 @@ struct LocationDetailView: View {
         locationDetailForm
             .navigationTitle(viewModel.location.name)
             .navigationSubtitle(viewModel.location.trip.screenContextSubtitle)
-            .navigationBarTitleDisplayMode(.large)
+            .toolbarTitleDisplayMode(.inline)
             .toolbar {
                 toolbarContent
             }
@@ -83,6 +83,7 @@ struct LocationDetailView: View {
             }
             .deleteConfirmationAlert(
                 isPresented: $deletionHandler.isShowingDeleteConfirmation,
+                title: .expenseDeleteTitle,
                 message: .expenseDeleteMessage,
                 onConfirm: { confirmDelete() },
                 onCancel: { cancelDelete() }
@@ -92,7 +93,7 @@ struct LocationDetailView: View {
     // MARK: - Content
     
     private var locationDetailForm: some View {
-        Form {
+        List {
             headerSection
             locationsSection
         }

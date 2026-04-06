@@ -53,6 +53,7 @@ struct TripEditView: View {
                 )
                 .deleteConfirmationAlert(
                     isPresented: $deletionHandler.isShowingDeleteConfirmation,
+                    title: .tripDeleteTitle,
                     message: .tripDeleteMessage,
                     onConfirm: {
                         confirmDelete()

@@ -140,23 +140,6 @@
         }
       }
     },
-    "common.add" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Add"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Добавить"
-          }
-        }
-      }
-    },
     "common.cancel" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -174,7 +157,7 @@
         }
       }
     },
-    "common.confirm.title" : {
+    "common.confirmation" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -187,6 +170,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Подтверждение"
+          }
+        }
+      }
+    },
+    "common.delete" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Удалить"
           }
         }
       }
@@ -237,7 +237,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ОК"
+            "value" : "OK"
           }
         }
       }
@@ -350,13 +350,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Japan Yen (JPY)"
+            "value" : "Japanese Yen (JPY)"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Японская Йена (JPY)"
+            "value" : "Японская иена (JPY)"
           }
         }
       }
@@ -373,7 +373,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Южнокорейская Вона (KRW)"
+            "value" : "Южнокорейская вона (KRW)"
           }
         }
       }
@@ -509,7 +509,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ошибка: %(errorDescription)@"
+            "value" : "Ошибка: %1$(errorDescription)@"
           }
         }
       }
@@ -578,40 +578,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Данные загружены"
-          }
-        }
-      }
-    },
-    "delete.confirm" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Delete"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Удалить"
-          }
-        }
-      }
-    },
-    "delete.title" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Deletion confirmation"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Подтверждение удаления"
           }
         }
       }
@@ -747,7 +713,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Добавить трату"
+            "value" : "Создать трату"
           }
         }
       }
@@ -979,7 +945,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Delete expense"
+            "value" : "Delete Expense"
           }
         },
         "ru" : {
@@ -996,13 +962,30 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Are you sure you want to delete the expense?"
+            "value" : "This Expense will be permanently deleted."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Вы уверены что хотите удалить трату?"
+            "value" : "Трата будет безвозвратно удалена."
+          }
+        }
+      }
+    },
+    "expense.delete.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Expense deletion"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Удаление траты"
           }
         }
       }
@@ -1013,13 +996,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Add an expense to start tracking your budget"
+            "value" : "Add your first expense to get started."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Добавьте трату чтобы начать отслеживать свой бюджет"
+            "value" : "Добавьте первую трату, чтобы начать."
           }
         }
       }
@@ -1030,13 +1013,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No expenses yet"
+            "value" : "No Expenses yet"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Трат еще нет"
+            "value" : "Трат пока нет"
           }
         }
       }
@@ -1104,7 +1087,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Добавить локацию"
+            "value" : "Создать локацию"
           }
         }
       }
@@ -1166,7 +1149,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Delete location"
+            "value" : "Delete Location"
           }
         },
         "ru" : {
@@ -1183,13 +1166,30 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Are you sure you want to delete the location?"
+            "value" : "This Location will be permanently deleted."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Вы уверены что хотите удалить локацию?"
+            "value" : "Локация будет безвозвратно удалена."
+          }
+        }
+      }
+    },
+    "location.delete.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Location deletion"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Удаление локации"
           }
         }
       }
@@ -1200,13 +1200,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Add a location to start tracking your expenses"
+            "value" : "Create a location to track expenses."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Добавьте локацию чтобы начать отслеживать свои траты"
+            "value" : "Создайте локацию, чтобы отслеживать расходы."
           }
         }
       }
@@ -1217,13 +1217,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No locations yet"
+            "value" : "No Locations yet"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Локаций еще нет"
+            "value" : "Локаций пока нет"
           }
         }
       }
@@ -1353,13 +1353,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "There are no locations active for today"
+            "value" : "Location will appear automatically on its start date."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Сегодня нет активных локаций"
+            "value" : "Локация появятся автоматически в день своего начала."
           }
         }
       }
@@ -1370,13 +1370,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No current location"
+            "value" : "No active Location"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Нет активных локаций"
+            "value" : "Нет активной локации"
           }
         }
       }
@@ -1597,7 +1597,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Добавить поездку"
+            "value" : "Создать поездку"
           }
         }
       }
@@ -1608,7 +1608,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Delete the trip"
+            "value" : "Delete Trip"
           }
         },
         "ru" : {
@@ -1625,30 +1625,47 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Are you sure you want to delete the trip?"
+            "value" : "This Trip will be permanently deleted."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Вы уверены что хотите удалить поездку?"
+            "value" : "Поездка будет безвозвратно удалена."
           }
         }
       }
     },
-    "trip.emptyState.desctiption" : {
+    "trip.delete.title" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Add a trip to start tracking your expenses"
+            "value" : "Trip deletion"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Добавьте поездку чтобы начать отслеживать свои траты"
+            "value" : "Удаление поездки"
+          }
+        }
+      }
+    },
+    "trip.emptyState.description" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Create a trip to add locations and expenses."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Создайте поездку, чтобы добавлять локации и расходы."
           }
         }
       }
@@ -1659,13 +1676,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No trips yet"
+            "value" : "No Trips yet"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Поездок еще нет"
+            "value" : "Поездок пока нет"
           }
         }
       }

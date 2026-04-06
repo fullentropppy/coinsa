@@ -24,7 +24,7 @@ struct SettingsDebugSectionView: View {
     var body: some View {
         settingsDebugSection
             .alert(
-                .commonConfirmTitle,
+                .commonConfirmation,
                 isPresented: isShowingConfirmation,
                 presenting: pendingAction
             ) { action in
@@ -123,8 +123,8 @@ private enum DebugAction: String, Identifiable {
     
     var confirmationTitle: LocalizedStringResource {
         switch self {
-        case .loadDemoData: .commonConfirmTitle
-        case .deleteAllData: .commonConfirmTitle
+        case .loadDemoData: .debugLoadConfirm
+        case .deleteAllData: .commonDelete
         }
     }
     

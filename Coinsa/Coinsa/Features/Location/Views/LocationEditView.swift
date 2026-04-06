@@ -84,6 +84,7 @@ struct LocationEditView: View {
                 )
                 .deleteConfirmationAlert(
                     isPresented: $deletionHandler.isShowingDeleteConfirmation,
+                    title: .locationDeleteTitle,
                     message: .locationDeleteMessage,
                     onConfirm: {
                         confirmDelete()

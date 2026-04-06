@@ -15,23 +15,26 @@ struct RootContainerView: View {
 
     @State private var settingsStore: AppSettingsStore?
     @State private var hasLoadedSettings = false
+    @State private var showsLaunchContinuation = true
 
     // MARK: - Body
 
     var body: some View {
-        Group {
+        ZStack {
             if let settingsStore {
                 RootTabView()
                     .environment(settingsStore)
                     .preferredColorScheme(settingsStore.appAppearance.colorScheme)
             } else {
                 ProgressView()
+                    .task {
+                        settingsStore = AppSettingsStore(context: context)
+                    }
             }
-        }
-        .task {
-            if !hasLoadedSettings {
-                hasLoadedSettings = true
-                settingsStore = AppSettingsStore(context: context)
+            
+            if showsLaunchContinuation {
+                SplashView { showsLaunchContinuation = false }
+                    .transition(.opacity)
             }
         }
     }
