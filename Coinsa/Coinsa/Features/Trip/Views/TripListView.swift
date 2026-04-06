@@ -29,35 +29,36 @@ struct TripListView: View {
     
     var body: some View {
         NavigationStack {
-            tripListContent
-                .navigationTitle(.tripNavigationTitleList)
-                .navigationBarTitleDisplayMode(.large)
-                .sheet(isPresented: $isShowingTripEdit) {
-                    TripEditView(trip: nil)
+            Group {
+                if trips.isEmpty {
+                    emptyTripListContent
+                } else {
+                    tripListContent
                 }
-                .overlay {
-                    if trips.isEmpty {
-                        emptyTripListContent
+            }
+            .navigationTitle(.tripNavigationTitleList)
+            .navigationBarTitleDisplayMode(.large)
+            .sheet(isPresented: $isShowingTripEdit) {
+                TripEditView(trip: nil)
+            }
+            .safeAreaInset(edge: .bottom) {
+                if !trips.isEmpty {
+                    PrimaryAddButtonView(isOnLeft: settingsStore.isAddButtonOnLeft) {
+                        isShowingTripEdit = true
                     }
                 }
-                .safeAreaInset(edge: .bottom) {
-                    if !trips.isEmpty {
-                        PrimaryAddButtonView(isOnLeft: settingsStore.isAddButtonOnLeft) {
-                            isShowingTripEdit = true
-                        }
-                    }
+            }
+            .deleteConfirmationAlert(
+                isPresented: $deletionHandler.isShowingDeleteConfirmation,
+                title: .tripDeleteTitle,
+                message: .tripDeleteMessage,
+                onConfirm: {
+                    confirmDelete()
+                },
+                onCancel: {
+                    cancelDelete()
                 }
-                .deleteConfirmationAlert(
-                    isPresented: $deletionHandler.isShowingDeleteConfirmation,
-                    title: .tripDeleteTitle,
-                    message: .tripDeleteMessage,
-                    onConfirm: {
-                        confirmDelete()
-                    },
-                    onCancel: {
-                        cancelDelete()
-                    }
-                )
+            )
         }
     }
     

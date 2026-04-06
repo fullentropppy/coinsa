@@ -12,6 +12,9 @@ import SwiftData
 class Location: DateRangeProviding, EventStatusProviding {
     // MARK: - Stored Properties
     
+    @Attribute(.unique)
+    var id: UUID
+    
     var name: String
     var startDate: Date
     var endDate: Date
@@ -37,6 +40,7 @@ class Location: DateRangeProviding, EventStatusProviding {
         budgets: [Budget] = [],
         expenses: [Expense] = []
     ) {
+        self.id = UUID()
         self.name = name
         self.startDate = startDate
         self.endDate = endDate

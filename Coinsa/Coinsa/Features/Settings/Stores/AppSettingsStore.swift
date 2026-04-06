@@ -29,18 +29,25 @@ final class AppSettingsStore {
         Currency.from(settings.baseCurrencyCode)
     }
     
+    var appAppearance: AppAppearance {
+        didSet {
+            defaults.set(appAppearance.rawValue, forKey: UserDefaultsKey.appAppearance.rawValue)
+        }
+    }
+    
     var isAddButtonOnLeft: Bool {
         didSet {
             defaults.set(isAddButtonOnLeft, forKey: UserDefaultsKey.isAddButtonOnLeft.rawValue)
         }
     }
     
-    var appAppearance: AppAppearance {
+    var selectedCurrentLocation: Location? {
         didSet {
-            defaults.set(appAppearance.rawValue, forKey: UserDefaultsKey.appAppearance.rawValue)
+            let idString = selectedCurrentLocation?.id.uuidString
+            defaults.set(idString, forKey: UserDefaultsKey.selectedCurrentLocation.rawValue)
         }
     }
-
+    
     // MARK: - Initialization
 
     init(context: ModelContext) {
@@ -54,15 +61,34 @@ final class AppSettingsStore {
             settings = newSettings
         }
 
-        isAddButtonOnLeft = defaults.bool(forKey: UserDefaultsKey.isAddButtonOnLeft.rawValue)
         appAppearance = defaults.string(forKey: UserDefaultsKey.appAppearance.rawValue)
             .flatMap { AppAppearance(rawValue: $0) } ?? .system
+        
+        isAddButtonOnLeft = defaults.bool(forKey: UserDefaultsKey.isAddButtonOnLeft.rawValue)
+        
+        selectedCurrentLocation = loadLocation(context: context)
+    }
+        
+    // MARK: - Private Methods
+    
+    private func loadLocation(context: ModelContext) -> Location? {
+        guard
+            let idString = defaults.string(forKey: UserDefaultsKey.selectedCurrentLocation.rawValue),
+            let uuid = UUID(uuidString: idString)
+        else { return nil }
+
+        let descriptor = FetchDescriptor<Location>(
+            predicate: #Predicate { $0.id == uuid }
+        )
+
+        return try? context.fetch(descriptor).first
     }
 }
 
 // MARK: - Private Types
 
 private enum UserDefaultsKey: String, CaseIterable {
-    case isAddButtonOnLeft
     case appAppearance
+    case isAddButtonOnLeft
+    case selectedCurrentLocation
 }

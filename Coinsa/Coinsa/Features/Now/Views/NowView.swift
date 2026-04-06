@@ -15,7 +15,6 @@ struct NowView: View {
 
     @Query(sort: \Location.startDate) private var locations: [Location]
 
-    @State private var selectedLocationID: PersistentIdentifier?
     @State private var selectedQuickCategory: ExpenseCategory?
 
     // MARK: - Computed Properties
@@ -27,15 +26,16 @@ struct NowView: View {
             .sorted { $0.endDate < $1.endDate }
     }
 
-    private var currentLocationIDs: [PersistentIdentifier] {
-        currentLocations.map(\.persistentModelID)
+    private var currentLocationIDs: [UUID] {
+        currentLocations.map(\.id)
     }
 
     private var selectedLocation: Location? {
-        if let selectedLocationID {
-            currentLocations.first(where: { $0.persistentModelID == selectedLocationID }) ?? currentLocations.first
+        if let selectedCurrentLocation = settingsStore.selectedCurrentLocation {
+            return currentLocations.first(where: { $0.id == selectedCurrentLocation.id })
+            ?? currentLocations.first
         } else {
-            currentLocations.first
+            return currentLocations.first
         }
     }
 
@@ -79,7 +79,7 @@ struct NowView: View {
     // MARK: - Content
 
     private func nowForm(location: Location) -> some View {
-        Form {
+        List {
             locationSection(location: location)
             quickExpenseSection
             recentExpensesSection
@@ -137,10 +137,10 @@ struct NowView: View {
     @ViewBuilder
     private func locationPickerContent(location: Location) -> some View {
         if currentLocations.count > 1 {
-            Picker("", selection: selectedLocationBinding(fallbackID: location.persistentModelID)) {
+            Picker("", selection: selectedLocationBinding(location: location)) {
                 ForEach(currentLocations) { currentLocation in
                     Text(currentLocation.name)
-                        .tag(currentLocation.persistentModelID)
+                        .tag(currentLocation.id)
                 }
             }
             .pickerStyle(.segmented)
@@ -194,10 +194,12 @@ struct NowView: View {
     
     // MARK: - Bindings
 
-    private func selectedLocationBinding(fallbackID: PersistentIdentifier) -> Binding<PersistentIdentifier> {
+    private func selectedLocationBinding(location: Location) -> Binding<UUID> {
         Binding(
-            get: { selectedLocationID ?? fallbackID },
-            set: { selectedLocationID = $0 }
+            get: { settingsStore.selectedCurrentLocation?.id ?? location.id },
+            set: { selectedID in
+                settingsStore.selectedCurrentLocation = currentLocations.first(where: { $0.id == selectedID })
+            }
         )
     }
 
@@ -205,16 +207,16 @@ struct NowView: View {
 
     private func updateSelectedLocationIfNeeded() {
         guard !currentLocations.isEmpty else {
-            selectedLocationID = nil
+            settingsStore.selectedCurrentLocation = nil
             return
         }
 
-        if let selectedLocationID,
-            currentLocations.contains(where: { $0.persistentModelID == selectedLocationID }) {
+        if let selectedCurrentLocation = settingsStore.selectedCurrentLocation,
+            currentLocations.contains(where: { $0.id == selectedCurrentLocation.id }) {
             return
         }
 
-        selectedLocationID = currentLocations.first?.persistentModelID
+        settingsStore.selectedCurrentLocation = currentLocations.first
     }
 }
 

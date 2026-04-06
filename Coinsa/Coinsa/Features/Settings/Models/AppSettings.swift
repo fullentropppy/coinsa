@@ -13,7 +13,7 @@ final class AppSettings {
     // MARK: - Stored Properties
 
     var baseCurrencyCode: String
-    
+
     // MARK: - Initialization
 
     init(baseCurrencyCode: String) {
