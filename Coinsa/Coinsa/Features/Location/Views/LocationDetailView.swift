@@ -168,9 +168,9 @@ struct LocationDetailView: View {
 
 private extension LocationDetailView {
     static func makePreview(
-        withExpenses: Bool,
         locale: Locale,
-        colorScheme: ColorScheme
+        colorScheme: ColorScheme,
+        withExpenses: Bool = true
     ) -> some View {
         let builder = PreviewBuilder.builder().withExpenses(withExpenses)
         let container = builder.buildContainer()
@@ -188,25 +188,18 @@ private extension LocationDetailView {
 }
 
 #Preview("Light - RU") {
-    LocationDetailView.makePreview(
-        withExpenses: true, locale: PreviewLocale.ru.locale, colorScheme: .light
-    )
+    LocationDetailView.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
 }
 
 #Preview("Dark - EN") {
-    LocationDetailView.makePreview(
-        withExpenses: true, locale: PreviewLocale.en.locale, colorScheme: .dark
+    LocationDetailView.makePreview(locale: PreviewLocale.en, colorScheme: .dark
     )
 }
 
-#Preview("Empty List. Light - RU") {
-    LocationDetailView.makePreview(
-        withExpenses: false, locale: PreviewLocale.ru.locale, colorScheme: .light
-    )
+#Preview("No expenses. Light - RU") {
+    LocationDetailView.makePreview(locale: PreviewLocale.ru, colorScheme: .light, withExpenses: false)
 }
 
-#Preview("Empty List. Dark - EN") {
-    LocationDetailView.makePreview(
-        withExpenses: false, locale: PreviewLocale.en.locale, colorScheme: .dark
-    )
+#Preview("No expenses. Dark - EN") {
+    LocationDetailView.makePreview(locale: PreviewLocale.en, colorScheme: .dark, withExpenses: false)
 }

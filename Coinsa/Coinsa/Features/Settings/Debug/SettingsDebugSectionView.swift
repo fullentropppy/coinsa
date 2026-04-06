@@ -153,11 +153,11 @@ private extension SettingsDebugSectionView {
 }
 
 #Preview("Light - RU") {
-    SettingsDebugSectionView.makePreview(locale: PreviewLocale.ru.locale, colorScheme: .light)
+    SettingsDebugSectionView.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
 }
 
 #Preview("Dark - EN") {
-    SettingsDebugSectionView.makePreview(locale: PreviewLocale.en.locale, colorScheme: .dark)
+    SettingsDebugSectionView.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
 }
 
 #endif

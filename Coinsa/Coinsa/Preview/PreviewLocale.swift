@@ -7,15 +7,12 @@
 
 import Foundation
 
-enum PreviewLocale: String {
-    // MARK: - Cases
+enum PreviewLocale {
+    static var en: Locale {
+        Locale(identifier: "en")
+    }
     
-    case en = "en" // English
-    case ru = "ru" // Russian
-    
-    // MARK: - Computed Properties
-    
-    var locale: Locale {
-        Locale(identifier: rawValue)
+    static var ru: Locale {
+        Locale(identifier: "ru")
     }
 }

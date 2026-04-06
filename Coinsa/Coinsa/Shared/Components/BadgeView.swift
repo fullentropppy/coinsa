@@ -129,9 +129,9 @@ private extension BadgeView {
 }
 
 #Preview("Light - RU") {
-    BadgeView.makePreview(locale: PreviewLocale.ru.locale, colorScheme: .light)
+    BadgeView.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
 }
 
 #Preview("Dark - EN") {
-    BadgeView.makePreview(locale: PreviewLocale.en.locale, colorScheme: .dark)
+    BadgeView.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
 }

@@ -112,10 +112,10 @@ private extension EventAmountDifferenceView {
 }
 
 #Preview("Light - RU") {
-    EventAmountDifferenceView.makePreview(locale: PreviewLocale.ru.locale, colorScheme: .light)
+    EventAmountDifferenceView.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
 }
 
 #Preview("Dark - EN") {
-    EventAmountDifferenceView.makePreview(locale: PreviewLocale.en.locale, colorScheme: .dark)
+    EventAmountDifferenceView.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
 }
 

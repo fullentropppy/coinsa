@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum ExpenseCategory: String, Codable, CaseIterable {
+enum ExpenseCategory: String, Codable, CaseIterable, Identifiable {
     // MARK: - Cases
     
     case food

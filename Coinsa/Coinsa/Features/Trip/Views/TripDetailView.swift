@@ -36,6 +36,10 @@ struct TripDetailView: View {
         )
     }
     
+    private var showsFullHeader: Bool {
+        !locations.isEmpty
+    }
+    
     // MARK: - Initialization
 
     init(trip: Trip) {
@@ -103,12 +107,11 @@ struct TripDetailView: View {
     // MARK: - Sections
     
     private var headerSection: some View {
-        let showsAll = !locations.isEmpty
-        return Section {
+        Section {
             EventSummaryView(
                 data: viewModel.eventHeaderData,
-                showsAmounts: showsAll,
-                showsDifference: showsAll
+                showsAmounts: showsFullHeader,
+                showsDifference: showsFullHeader
             )
         }
     }
@@ -175,9 +178,9 @@ struct TripDetailView: View {
 
 private extension TripDetailView {
     static func makePreview(
-        withLocations: Bool,
         locale: Locale,
-        colorScheme: ColorScheme
+        colorScheme: ColorScheme,
+        withLocations: Bool = true
     ) -> some View {
         let builder = PreviewBuilder.builder().withLocations(withLocations)
         let container = builder.buildContainer()
@@ -195,25 +198,17 @@ private extension TripDetailView {
 }
 
 #Preview("Light - RU") {
-    TripDetailView.makePreview(
-        withLocations: true, locale: PreviewLocale.ru.locale, colorScheme: .light
-    )
+    TripDetailView.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
 }
 
 #Preview("Dark - EN") {
-    TripDetailView.makePreview(
-        withLocations: true, locale: PreviewLocale.en.locale, colorScheme: .dark
-    )
+    TripDetailView.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
 }
 
-#Preview("Empty List. Light - RU") {
-    TripDetailView.makePreview(
-        withLocations: false, locale: PreviewLocale.ru.locale, colorScheme: .light
-    )
+#Preview("No Locations. Light - RU") {
+    TripDetailView.makePreview(locale: PreviewLocale.ru, colorScheme: .light, withLocations: false)
 }
 
-#Preview("Empty List. Dark - EN") {
-    TripDetailView.makePreview(
-        withLocations: false, locale: PreviewLocale.ru.locale, colorScheme: .dark
-    )
+#Preview("No Locations. Dark - EN") {
+    TripDetailView.makePreview(locale: PreviewLocale.ru, colorScheme: .dark, withLocations: false)
 }

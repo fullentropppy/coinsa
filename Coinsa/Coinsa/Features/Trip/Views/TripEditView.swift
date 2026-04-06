@@ -98,9 +98,10 @@ struct TripEditView: View {
         }
     }
     
+    @ViewBuilder
     private var actionsSection: some View {
-        Section {
-            if viewModel.isEditing {
+        if viewModel.isEditing {
+            Section {
                 Button(.tripDelete, role: .destructive) {
                     requestDelete()
                 }
@@ -138,8 +139,10 @@ struct TripEditView: View {
     }
     
     private func requestDelete() {
-        guard let trip = viewModel.trip else { return }
-        deletionHandler.request(for: [trip])
+        if let trip = viewModel.trip {
+            deletionHandler.request(for: [trip])
+        }
+        
     }
 
     private func confirmDelete() {
@@ -157,13 +160,13 @@ struct TripEditView: View {
 
 private extension TripEditView {
     static func makePreview(
-        withTrip: Bool,
         locale: Locale,
-        colorScheme: ColorScheme
+        colorScheme: ColorScheme,
+        withNewTrip: Bool = false
     ) -> some View {
         var trip: Trip? = nil
         
-        if withTrip {
+        if !withNewTrip {
             let builder = PreviewBuilder.builder().withLocations(false)
             let data = builder.buildData()
             trip = builder.getTrip(from: data)
@@ -175,18 +178,18 @@ private extension TripEditView {
     }
 }
 
-#Preview("Light - RU") {
-    TripEditView.makePreview(withTrip: true, locale: PreviewLocale.ru.locale, colorScheme: .light)
+#Preview("Edit. Light - RU") {
+    TripEditView.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
 }
 
-#Preview("Dark - EN") {
-    TripEditView.makePreview(withTrip: true, locale: PreviewLocale.en.locale, colorScheme: .dark)
+#Preview("Edit. Dark - EN") {
+    TripEditView.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
 }
 
-#Preview("New Trip. Light - RU") {
-    TripEditView.makePreview(withTrip: false, locale: PreviewLocale.ru.locale, colorScheme: .light)
+#Preview("Create. Light - RU") {
+    TripEditView.makePreview(locale: PreviewLocale.ru, colorScheme: .light, withNewTrip: true)
 }
 
-#Preview("New Trip. Dark - EN") {
-    TripEditView.makePreview(withTrip: false, locale: PreviewLocale.en.locale, colorScheme: .dark)
+#Preview("Create. Dark - EN") {
+    TripEditView.makePreview(locale: PreviewLocale.en, colorScheme: .dark, withNewTrip: true)
 }

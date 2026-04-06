@@ -119,9 +119,9 @@ private extension AmountText {
 }
 
 #Preview("Light - RU") {
-    AmountText.makePreview(locale: PreviewLocale.ru.locale, colorScheme: .light)
+    AmountText.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
 }
 
 #Preview("Dark - EN") {
-    AmountText.makePreview(locale: PreviewLocale.en.locale, colorScheme: .dark)
+    AmountText.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
 }

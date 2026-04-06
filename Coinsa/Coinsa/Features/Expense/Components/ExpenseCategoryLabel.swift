@@ -39,9 +39,9 @@ private extension ExpenseCategoryLabel {
 }
 
 #Preview("Light - RU") {
-    ExpenseCategoryLabel.makePreview(locale: PreviewLocale.ru.locale, colorScheme: .light)
+    ExpenseCategoryLabel.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
 }
 
 #Preview("Dark - EN") {
-    ExpenseCategoryLabel.makePreview(locale: PreviewLocale.en.locale, colorScheme: .dark)
+    ExpenseCategoryLabel.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
 }

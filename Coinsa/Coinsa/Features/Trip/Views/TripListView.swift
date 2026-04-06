@@ -107,9 +107,9 @@ struct TripListView: View {
 
 private extension TripListView {
     static func makePreview(
-        withTrips: Bool,
         locale: Locale,
-        colorScheme: ColorScheme
+        colorScheme: ColorScheme,
+        withTrips: Bool = true
     ) -> some View {
         let container = PreviewBuilder.builder()
             .withScenario(.all)
@@ -129,25 +129,17 @@ private extension TripListView {
 }
 
 #Preview("Light - RU") {
-    TripListView.makePreview(
-        withTrips: true, locale: PreviewLocale.ru.locale, colorScheme: .light
-    )
+    TripListView.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
 }
 
 #Preview("Dark - EN") {
-    TripListView.makePreview(
-        withTrips: true, locale: PreviewLocale.en.locale, colorScheme: .dark
-    )
+    TripListView.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
 }
 
-#Preview("Empty List. Light - RU") {
-    TripListView.makePreview(
-        withTrips: false, locale: PreviewLocale.ru.locale, colorScheme: .light
-    )
+#Preview("Empty. Light - RU") {
+    TripListView.makePreview(locale: PreviewLocale.ru, colorScheme: .light, withTrips: false)
 }
 
-#Preview("Empty List. Dark - EN") {
-    TripListView.makePreview(
-        withTrips: false, locale: PreviewLocale.ru.locale, colorScheme: .dark
-    )
+#Preview("Empty. Dark - EN") {
+    TripListView.makePreview(locale: PreviewLocale.ru, colorScheme: .dark, withTrips: false)
 }

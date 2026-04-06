@@ -129,10 +129,10 @@ private extension EventSummaryData {
 }
 
 #Preview("Light - RU") {
-    EventSummaryData.makePreview(locale: PreviewLocale.ru.locale, colorScheme: .light)
+    EventSummaryData.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
 }
 
 #Preview("Dark - EN") {
-    EventSummaryData.makePreview(locale: PreviewLocale.en.locale, colorScheme: .dark)
+    EventSummaryData.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
 }
 

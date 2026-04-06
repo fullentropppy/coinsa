@@ -16,13 +16,13 @@ struct RootTabView: View {
 
     var body: some View {
         TabView(selection: $selection) {
-            Tab("tab.now", systemImage: "clock", value: .now) {
+            Tab(.tabNow, systemImage: Location.primaryIcon, value: .now) {
                 NowView()
             }
-            Tab("tab.trips", systemImage: "suitcase", value: .trips) {
+            Tab(.tabTrips, systemImage: Trip.primaryIcon, value: .trips) {
                 TripListView()
             }
-            Tab("tab.settings", systemImage: "gearshape", value: .settings) {
+            Tab(.tabSettings, systemImage: AppSettings.primaryIcon, value: .settings) {
                 SettingsView()
             }
         }

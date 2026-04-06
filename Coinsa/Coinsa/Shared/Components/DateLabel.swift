@@ -106,9 +106,9 @@ private extension DateLabel {
 }
 
 #Preview("Light - RU") {
-    DateLabel.preview(locale: PreviewLocale.ru.locale, colorScheme: .light)
+    DateLabel.preview(locale: PreviewLocale.ru, colorScheme: .light)
 }
 
 #Preview("Dark - EN") {
-    DateLabel.preview(locale: PreviewLocale.en.locale, colorScheme: .dark)
+    DateLabel.preview(locale: PreviewLocale.en, colorScheme: .dark)
 }

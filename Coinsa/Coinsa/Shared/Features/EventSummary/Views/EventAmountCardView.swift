@@ -78,9 +78,9 @@ private extension EventAmountCardView {
 }
 
 #Preview("Light - RU") {
-    EventAmountCardView.makePreview(locale: PreviewLocale.ru.locale, colorScheme: .light)
+    EventAmountCardView.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
 }
 
 #Preview("Dark - EN") {
-    EventAmountCardView.makePreview(locale: PreviewLocale.en.locale, colorScheme: .dark)
+    EventAmountCardView.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
 }

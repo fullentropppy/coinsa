@@ -49,9 +49,7 @@ struct ExpenseDetailView: View {
     private var expenseDetailForm: some View {
         Form {
             mainSection
-            if let comment = expense.comment {
-                commentSection(comment: comment)
-            }
+            commentSection
         }
     }
     
@@ -66,9 +64,12 @@ struct ExpenseDetailView: View {
         }
     }
     
-    private func commentSection(comment: String) -> some View {
-        Section {
-            Text(comment)
+    @ViewBuilder
+    private var commentSection: some View {
+        if let comment = expense.comment {
+            Section {
+                Text(comment)
+            }
         }
     }
     
@@ -148,9 +149,9 @@ private extension ExpenseDetailView {
 }
 
 #Preview("Light - RU") {
-    ExpenseDetailView.makePreview(locale: PreviewLocale.ru.locale, colorScheme: .light)
+    ExpenseDetailView.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
 }
 
 #Preview("Dark - EN") {
-    ExpenseDetailView.makePreview(locale: PreviewLocale.en.locale, colorScheme: .dark)
+    ExpenseDetailView.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
 }

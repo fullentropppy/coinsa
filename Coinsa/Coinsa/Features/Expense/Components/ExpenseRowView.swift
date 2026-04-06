@@ -69,9 +69,9 @@ private extension ExpenseRowView {
 }
 
 #Preview("Light - RU") {
-    ExpenseRowView.makePreview(locale: PreviewLocale.ru.locale, colorScheme: .light)
+    ExpenseRowView.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
 }
 
 #Preview("Dark - EN") {
-    ExpenseRowView.makePreview(locale: PreviewLocale.en.locale, colorScheme: .dark)
+    ExpenseRowView.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
 }

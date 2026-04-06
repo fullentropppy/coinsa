@@ -191,9 +191,10 @@ struct LocationEditView: View {
         }
     }
 
+    @ViewBuilder
     private var actionsSection: some View {
-        Section {
-            if viewModel.isEditing {
+        if viewModel.isEditing {
+            Section {
                 Button(.locationDelete, role: .destructive) {
                     requestDelete()
                 }
@@ -259,8 +260,9 @@ struct LocationEditView: View {
     }
     
     private func requestDelete() {
-        guard let location = viewModel.location else { return }
-        deletionHandler.request(for: [location])
+        if let location = viewModel.location {
+            deletionHandler.request(for: [location])
+        }
     }
 
     private func confirmDelete() {
@@ -278,14 +280,14 @@ struct LocationEditView: View {
 
 private extension LocationEditView {
     static func makePreview(
-        withLocation: Bool,
         locale: Locale,
-        colorScheme: ColorScheme
+        colorScheme: ColorScheme,
+        withNewLocation: Bool = false
     ) -> some View {
         let builder = PreviewBuilder.builder()
         let container = builder.buildContainer()
         let trip = builder.fetchTrip(from: container)
-        let location = withLocation ? builder.fetchLocation(from: container) : nil
+        let location = withNewLocation ? nil : builder.fetchLocation(from: container)
         
         return Group {
             if let location {
@@ -300,26 +302,18 @@ private extension LocationEditView {
     }
 }
 
-#Preview("Light - RU") {
-    LocationEditView.makePreview(
-        withLocation: true, locale: PreviewLocale.ru.locale, colorScheme: .light
-    )
+#Preview("Edit. Light - RU") {
+    LocationEditView.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
 }
 
-#Preview("Dark - EN") {
-    LocationEditView.makePreview(
-        withLocation: true, locale: PreviewLocale.en.locale, colorScheme: .dark
-    )
+#Preview("Edit. Dark - EN") {
+    LocationEditView.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
 }
 
-#Preview("New Location. Light - RU") {
-    LocationEditView.makePreview(
-        withLocation: false, locale: PreviewLocale.ru.locale, colorScheme: .light
-    )
+#Preview("Create. Light - RU") {
+    LocationEditView.makePreview(locale: PreviewLocale.ru, colorScheme: .light, withNewLocation: true)
 }
 
-#Preview("New Location. Dark - EN") {
-    LocationEditView.makePreview(
-        withLocation: false, locale: PreviewLocale.en.locale, colorScheme: .dark
-    )
+#Preview("Create. Dark - EN") {
+    LocationEditView.makePreview(locale: PreviewLocale.en, colorScheme: .dark, withNewLocation: true)
 }

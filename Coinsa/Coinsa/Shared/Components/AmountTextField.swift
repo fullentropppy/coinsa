@@ -120,10 +120,10 @@ private extension AmountTextField {
 }
 
 #Preview("Light - RU") {
-    AmountTextField.makePreview(locale: PreviewLocale.ru.locale, colorScheme: .light)
+    AmountTextField.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
 }
 
 #Preview("Dark - EN") {
-    AmountTextField.makePreview(locale: PreviewLocale.en.locale, colorScheme: .dark)
+    AmountTextField.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
 }
 

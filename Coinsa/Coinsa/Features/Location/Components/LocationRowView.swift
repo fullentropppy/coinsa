@@ -54,9 +54,9 @@ private extension LocationRowView {
 }
 
 #Preview("Light - RU") {
-    LocationRowView.makePreview(locale: PreviewLocale.ru.locale, colorScheme: .light)
+    LocationRowView.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
 }
 
 #Preview("Dark - EN") {
-    LocationRowView.makePreview(locale: PreviewLocale.en.locale, colorScheme: .dark)
+    LocationRowView.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
 }

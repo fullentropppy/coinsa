@@ -40,9 +40,9 @@ private extension EventStatusLabel {
 }
 
 #Preview("Light - RU") {
-    EventStatusLabel.makePreview(locale: PreviewLocale.ru.locale, colorScheme: .light)
+    EventStatusLabel.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
 }
 
 #Preview("Dark - EN") {
-    EventStatusLabel.makePreview(locale: PreviewLocale.en.locale, colorScheme: .dark)
+    EventStatusLabel.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
 }

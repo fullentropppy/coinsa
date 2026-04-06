@@ -57,9 +57,9 @@ private extension TripRowView {
 }
 
 #Preview("Light - RU") {
-    TripRowView.makePreview(locale: PreviewLocale.ru.locale, colorScheme: .light)
+    TripRowView.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
 }
 
 #Preview("Dark - EN") {
-    TripRowView.makePreview(locale: PreviewLocale.en.locale, colorScheme: .dark)
+    TripRowView.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
 }

@@ -180,9 +180,10 @@ struct ExpenseEditView: View {
         }
     }
 
+    @ViewBuilder
     private var actionsSection: some View {
-        Section {
-            if viewModel.isEditing {
+        if viewModel.isEditing {
+            Section {
                 Button(.expenseDelete, role: .destructive) {
                     requestDelete()
                 }
@@ -249,8 +250,9 @@ struct ExpenseEditView: View {
     }
 
     private func requestDelete() {
-        guard let expense = viewModel.expense else { return }
-        deletionHandler.request(for: [expense])
+        if let expense = viewModel.expense {
+            deletionHandler.request(for: [expense])
+        }
     }
 
     private func confirmDelete() {
@@ -267,14 +269,14 @@ struct ExpenseEditView: View {
 
 private extension ExpenseEditView {
     static func makePreview(
-        withExpense: Bool,
         locale: Locale,
-        colorScheme: ColorScheme
+        colorScheme: ColorScheme,
+        withNewExpense: Bool = false
     ) -> some View {
         let builder = PreviewBuilder.builder().withBudgets(false)
         let container = builder.buildContainer()
         let location = builder.fetchLocation(from: container)
-        let expense = withExpense ? builder.fetchExpense(from: container) : nil
+        let expense = withNewExpense ? nil : builder.fetchExpense(from: container)
 
         return Group {
             if let expense {
@@ -289,18 +291,18 @@ private extension ExpenseEditView {
     }
 }
 
-#Preview("Light - RU") {
-    ExpenseEditView.makePreview(withExpense: true, locale: PreviewLocale.ru.locale, colorScheme: .light)
+#Preview("Edit. Light - RU") {
+    ExpenseEditView.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
 }
 
-#Preview("Dark - EN") {
-    ExpenseEditView.makePreview(withExpense: true, locale: PreviewLocale.en.locale, colorScheme: .dark)
+#Preview("Edit. Dark - EN") {
+    ExpenseEditView.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
 }
 
-#Preview("New Expense. Light - RU") {
-    ExpenseEditView.makePreview(withExpense: false, locale: PreviewLocale.ru.locale, colorScheme: .light)
+#Preview("Create. Light - RU") {
+    ExpenseEditView.makePreview(locale: PreviewLocale.ru, colorScheme: .light, withNewExpense: true)
 }
 
-#Preview("New Expense. Dark - EN") {
-    ExpenseEditView.makePreview(withExpense: false, locale: PreviewLocale.en.locale, colorScheme: .dark)
+#Preview("Create. Dark - EN") {
+    ExpenseEditView.makePreview(locale: PreviewLocale.en, colorScheme: .dark, withNewExpense: true)
 }

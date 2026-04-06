@@ -85,9 +85,9 @@ private extension EmptyStateView {
 }
 
 #Preview("Light - RU") {
-    EmptyStateView.makePreview(locale: PreviewLocale.ru.locale, colorScheme: .light)
+    EmptyStateView.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
 }
 
 #Preview("Dark - EN") {
-    EmptyStateView.makePreview(locale: PreviewLocale.en.locale, colorScheme: .dark)
+    EmptyStateView.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
 }

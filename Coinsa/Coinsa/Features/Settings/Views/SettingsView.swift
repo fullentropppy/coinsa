@@ -124,9 +124,9 @@ private extension SettingsView {
 }
 
 #Preview("Light - RU") {
-    SettingsView.makePreview(locale: PreviewLocale.ru.locale, colorScheme: .light)
+    SettingsView.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
 }
 
 #Preview("Dark - EN") {
-    SettingsView.makePreview(locale: PreviewLocale.en.locale, colorScheme: .dark)
+    SettingsView.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
 }

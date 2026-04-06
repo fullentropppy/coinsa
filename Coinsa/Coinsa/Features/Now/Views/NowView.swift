@@ -17,7 +17,6 @@ struct NowView: View {
 
     @State private var selectedLocationID: PersistentIdentifier?
     @State private var selectedQuickCategory: ExpenseCategory?
-    @State private var isShowingExpenseAdd = false
 
     // MARK: - Computed Properties
 
@@ -58,11 +57,11 @@ struct NowView: View {
             Group {
                 if let selectedLocation {
                     nowForm(location: selectedLocation)
-                        .sheet(isPresented: $isShowingExpenseAdd) {
+                        .sheet(item: $selectedQuickCategory) { selectedCategory in
                             ExpenseEditView(
                                 location: selectedLocation,
                                 baseCurrency: settingsStore.baseCurrency,
-                                preselectedCategory: selectedQuickCategory
+                                preselectedCategory: selectedCategory
                             )
                         }
                 } else {
@@ -100,29 +99,8 @@ struct NowView: View {
     private func locationSection(location: Location) -> some View {
         Section {
             VStack(spacing: 14) {
-                if currentLocations.count > 1 {
-                    Picker("", selection: selectedLocationBinding(fallbackID: location.persistentModelID)) {
-                        ForEach(currentLocations) { currentLocation in
-                            Text(currentLocation.name)
-                                .tag(currentLocation.persistentModelID)
-                        }
-                    }
-                    .pickerStyle(.segmented)
-                }
-                
-                NavigationLink {
-                    LocationDetailView(location: location)
-                } label: {
-                    HStack {
-                        if currentLocations.count == 1 {
-                            Text(location.name)
-                                .fontWeight(.semibold)
-                            Spacer()
-                        }
-                        DateLabel.secondarySmall(from: location.startDate, to: location.endDate)
-                        CountLabel.daysSecondarySmall(location.durationInDays)
-                    }
-                }
+                locationPickerContent(location: location)
+                locationHeaderContent(location: location)
                 locationSummaryContent(location: location)
             }
         }
@@ -132,32 +110,17 @@ struct NowView: View {
         Section(.nowQuickExpense) {
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 140), spacing: 10)], spacing: 10) {
                 ForEach(ExpenseCategory.allCases, id: \.id) { category in
-                    Button {
-                        prepareQuickExpenseCreation(for: category)
-                    } label: {
-                        HStack {
-                            Image(systemName: category.badgeIcon)
-                                .frame(width: 20)
-                            Text(category.localized)
-                                
-                        }
-                        .foregroundStyle(.windowBackground)
-                        .font(.subheadline.weight(.semibold))
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 4)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    }
-                    .buttonStyle(.glassProminent)
-                    .tint(category.badgeColor)
+                    quickExpenseButton(category: category)
                 }
             }
             .padding(.vertical, 2)
         }
     }
-
+    
+    @ViewBuilder
     private var recentExpensesSection: some View {
-        Section(.nowRecentExpenses) {
-            if !recentExpenses.isEmpty {
+        if !recentExpenses.isEmpty {
+            Section(.nowRecentExpenses) {
                 ForEach(recentExpenses) { expense in
                     NavigationLink {
                         ExpenseDetailView(expense: expense)
@@ -171,6 +134,35 @@ struct NowView: View {
 
     // MARK: - Components
     
+    @ViewBuilder
+    private func locationPickerContent(location: Location) -> some View {
+        if currentLocations.count > 1 {
+            Picker("", selection: selectedLocationBinding(fallbackID: location.persistentModelID)) {
+                ForEach(currentLocations) { currentLocation in
+                    Text(currentLocation.name)
+                        .tag(currentLocation.persistentModelID)
+                }
+            }
+            .pickerStyle(.segmented)
+        }
+    }
+    
+    private func locationHeaderContent(location: Location) -> some View {
+        NavigationLink {
+            LocationDetailView(location: location)
+        } label: {
+            HStack {
+                if currentLocations.count == 1 {
+                    Text(location.name)
+                        .fontWeight(.semibold)
+                    Spacer()
+                }
+                DateLabel.secondarySmall(from: location.startDate, to: location.endDate)
+                CountLabel.daysSecondarySmall(location.durationInDays)
+            }
+        }
+    }
+    
     private func locationSummaryContent(location: Location) -> some View {
         let viewModel = LocationDetailViewModel(
             location: location,
@@ -178,6 +170,26 @@ struct NowView: View {
         )
 
         return EventSummaryView(data: viewModel.eventHeaderData, showsHeader: false)
+    }
+    
+    private func quickExpenseButton(category: ExpenseCategory) -> some View {
+        Button {
+            selectedQuickCategory = category
+        } label: {
+            HStack {
+                Image(systemName: category.badgeIcon)
+                    .frame(width: 20)
+                Text(category.localized)
+                    
+            }
+            .foregroundStyle(.windowBackground)
+            .font(.subheadline.weight(.semibold))
+            .padding(.horizontal, 8)
+            .padding(.vertical, 4)
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .buttonStyle(.glassProminent)
+        .tint(category.badgeColor)
     }
     
     // MARK: - Bindings
@@ -198,27 +210,60 @@ struct NowView: View {
         }
 
         if let selectedLocationID,
-           currentLocations.contains(where: { $0.persistentModelID == selectedLocationID }) {
+            currentLocations.contains(where: { $0.persistentModelID == selectedLocationID }) {
             return
         }
 
         selectedLocationID = currentLocations.first?.persistentModelID
     }
-
-    private func prepareQuickExpenseCreation(for category: ExpenseCategory) {
-        selectedQuickCategory = category
-        isShowingExpenseAdd = true
-    }
 }
 
 // MARK: - Previews
 
+private extension NowView {
+    static func makePreview(
+        locale: Locale,
+        colorScheme: ColorScheme,
+        withLocation: Bool = true,
+        withExpenses: Bool = true
+    ) -> some View {
+        var builder = PreviewBuilder.builder()
+        if withLocation {
+            builder = builder.withScenario(.southKorea).withExpenses(withExpenses)
+        } else {
+            builder = builder.withTrips(false)
+        }
+        let container = builder.buildContainer()
+        let settingsStore = AppSettingsStore(context: container.mainContext)
+
+        return NowView()
+            .modelContainer(container)
+            .environment(settingsStore)
+            .environment(\.locale, locale)
+            .preferredColorScheme(colorScheme)
+    }
+}
+
 #Preview("Light - RU") {
-    let container = PreviewBuilder.builder().withScenario(.southKorea).buildContainer()
-    let settingsStore = AppSettingsStore(context: container.mainContext)
-    return NowView()
-        .modelContainer(container)
-        .environment(settingsStore)
-        .environment(\.locale, Locale(identifier: "ru"))
-        .preferredColorScheme(.light)
+    NowView.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
+}
+
+#Preview("Dark - EN") {
+    NowView.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
+}
+
+#Preview("No Expenses. Light - RU") {
+    NowView.makePreview(locale: PreviewLocale.ru, colorScheme: .light, withExpenses: false)
+}
+
+#Preview("No Expenses. Dark - EN") {
+    NowView.makePreview(locale: PreviewLocale.en, colorScheme: .dark, withExpenses: false)
+}
+
+#Preview("Empty. Light - RU") {
+    NowView.makePreview(locale: PreviewLocale.ru, colorScheme: .light, withLocation: false, withExpenses: false)
+}
+
+#Preview("Empty. Dark - EN") {
+    NowView.makePreview(locale: PreviewLocale.en, colorScheme: .dark, withLocation: false, withExpenses: false)
 }

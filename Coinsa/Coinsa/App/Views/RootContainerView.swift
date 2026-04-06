@@ -29,9 +29,10 @@ struct RootContainerView: View {
             }
         }
         .task {
-            guard !hasLoadedSettings else { return }
-            hasLoadedSettings = true
-            settingsStore = AppSettingsStore(context: context)
+            if !hasLoadedSettings {
+                hasLoadedSettings = true
+                settingsStore = AppSettingsStore(context: context)
+            }
         }
     }
 }
