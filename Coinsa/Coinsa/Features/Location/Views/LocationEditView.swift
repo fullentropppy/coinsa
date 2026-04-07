@@ -93,6 +93,16 @@ struct LocationEditView: View {
                         cancelDelete()
                     }
                 )
+                .notificationAlert(
+                    isPresented: rateErrorBinding,
+                    title: .exchangeRateLoadingErrorTitle,
+                    message: .exchangeRateLoadingErrorMessage(
+                        errorDescription: viewModel.rateLoadingError?.errorDescription ?? String(localized: .errorUnknown)
+                        )
+                    )
+                .task {
+                    viewModel.loadInitialRateIfNeeded()
+                }
         }
     }
 
@@ -142,13 +152,19 @@ struct LocationEditView: View {
                 }
             }
             .pickerStyle(.navigationLink)
-
+            
             if !viewModel.isHomeLocation {
                 LabeledContent(.locationExchangeRate) {
                     HStack {
                         AmountTextField($viewModel.rateLocalToBase, fractionDigits: 4)
+                            .opacity(viewModel.isRateLoading ? 0.5 : 1)
+                            .disabled(viewModel.isRateLoading)
                         CurrencyCodeText(viewModel.baseCurrency)
-                            .frame(width: 40, alignment: .center)
+
+                        ExchangeRateRefreshButton(
+                            isLoading: viewModel.isRateLoading,
+                            onRefresh: viewModel.requestRateRefresh
+                        )
                     }
                 }
             }
@@ -174,7 +190,6 @@ struct LocationEditView: View {
                     Spacer()
                     AmountTextField(budgetInputBinding(for: category))
                     CurrencyCodeText(budgetInputCurrencyValue)
-                        .frame(width: 40, alignment: .center)
                 }
             }
             
@@ -186,10 +201,10 @@ struct LocationEditView: View {
                 Spacer()
                 AmountText.standard(budgetTotalValue)
                 CurrencyCodeText(budgetInputCurrencyValue)
-                    .frame(width: 40, alignment: .center)
             }
             .listRowSeparatorTint(.gray)
         }
+        
     }
 
     @ViewBuilder
@@ -228,6 +243,17 @@ struct LocationEditView: View {
         Binding(
             get: { viewModel.localCurrency },
             set: { viewModel.localCurrency = $0 }
+        )
+    }
+    
+    private var rateErrorBinding: Binding<Bool> {
+        Binding(
+            get: { viewModel.rateLoadingError != nil },
+            set: { shouldShow in
+                if !shouldShow {
+                    viewModel.rateLoadingError = nil
+                }
+            }
         )
     }
     

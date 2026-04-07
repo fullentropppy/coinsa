@@ -1,5 +1,5 @@
 //
-//  View+DiscardConfirmation.swift
+//  View+DiscardConfirmationAlert.swift
 //  Coinsa
 //
 //  Created by Daniil Gritsenko on 24.03.2026.

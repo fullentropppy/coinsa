@@ -100,7 +100,7 @@ struct SettingsDebugSectionView: View {
                 resultMessage = .debugDeleteResult
             }
         } catch {
-            resultMessage = .debugError(errorDescription: error.localizedDescription)
+            resultMessage = .errorMessage(errorDescription: error.localizedDescription)
         }
 
         isShowingResultAlert = true

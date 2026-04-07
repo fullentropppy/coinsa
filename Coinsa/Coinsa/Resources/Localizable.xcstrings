@@ -497,23 +497,6 @@
         }
       }
     },
-    "debug.error" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Error: %1$(errorDescription)@"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ошибка: %1$(errorDescription)@"
-          }
-        }
-      }
-    },
     "debug.load" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -650,6 +633,40 @@
         }
       }
     },
+    "error.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Error: %1$(errorDescription)@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ошибка: %1$(errorDescription)@"
+          }
+        }
+      }
+    },
+    "error.unknown" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unknown error"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Неизвестная ошибка"
+          }
+        }
+      }
+    },
     "event.status.completed" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -697,6 +714,57 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Предстоящая"
+          }
+        }
+      }
+    },
+    "exchangeRateLoading.error.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couldn't load the currency exchange rate: %1$(errorDescription)@. Please try again."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось загрузить курс валюты: %(errorDescription)@. Пожалуйста, попробуйте снова."
+          }
+        }
+      }
+    },
+    "exchangeRateLoading.error.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loading error"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ошибка загрузки"
+          }
+        }
+      }
+    },
+    "exchangeRateLoading.Exception" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Error fetching exchange rates from provider"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ошибка при получении курсов валют от провайдера"
           }
         }
       }
@@ -1581,6 +1649,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Поездки"
+          }
+        }
+      }
+    },
+    "timeoutException" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Operation interrupted due to timeout"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Операция прервана по истечении времени ожидания"
           }
         }
       }
