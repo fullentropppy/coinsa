@@ -14,7 +14,13 @@ final class ExpenseEditViewModel {
     // MARK: - Stored Properties
 
     private let initialSnapshot: Snapshot
-
+    private let exchangeRateProvider: ExchangeRateProvider
+    private var rateRefreshTask: Task<Void, Never>?
+    private var didLoadInitialRate = false
+    
+    var isRateLoading = false
+    var rateLoadingError: ExchangeRateLoadingError?
+    
     let expense: Expense?
     let location: Location
     let localCurrency: Currency
@@ -52,24 +58,34 @@ final class ExpenseEditViewModel {
     // MARK: - Initialization
 
     convenience init(location: Location, baseCurrency: Currency, preselectedCategory: ExpenseCategory? = nil) {
+        let exchangeRateProvider = ExchangeRateProvider(service: HexarateService())
         self.init(
             expense: nil,
             location: location,
             baseCurrency: baseCurrency,
+            exchangeRateProvider: exchangeRateProvider,
             preselectedCategory: preselectedCategory
         )
     }
 
     convenience init(expense: Expense, baseCurrency: Currency) {
-        self.init(expense: expense, location: expense.location, baseCurrency: baseCurrency)
+        let exchangeRateProvider = ExchangeRateProvider(service: HexarateService())
+        self.init(
+            expense: expense,
+            location: expense.location,
+            baseCurrency: baseCurrency,
+            exchangeRateProvider: exchangeRateProvider
+        )
     }
 
     private init(
         expense: Expense?,
         location: Location,
         baseCurrency: Currency,
-        preselectedCategory: ExpenseCategory? = nil
+        exchangeRateProvider: ExchangeRateProvider,
+        preselectedCategory: ExpenseCategory? = nil,
     ) {
+        self.exchangeRateProvider = exchangeRateProvider
         self.location = expense?.location ?? location
         self.expense = expense
         self.localCurrency = Currency.from(self.location.localCurrencyCode)
@@ -115,6 +131,19 @@ final class ExpenseEditViewModel {
     }
 
     // MARK: - Public Methods
+    
+    func loadInitialRateIfNeeded() {
+        if !isEditing && !isHomeLocation && !didLoadInitialRate {
+            requestRateRefresh()
+        }
+    }
+
+    func requestRateRefresh() {
+        rateRefreshTask?.cancel()
+        rateRefreshTask = Task {
+            await refreshRate()
+        }
+    }
     
     func currency(for inputCurrency: InputCurrency) -> Currency {
         switch inputCurrency {
@@ -164,6 +193,37 @@ final class ExpenseEditViewModel {
                 comment: comment
             )
         }
+    }
+    
+    // MARK: - Private Methods
+    
+    private func refreshRate() async {
+        guard !isHomeLocation else {
+            rateLocalToBase = 1
+            rateLoadingError = nil
+            return
+        }
+        
+        isRateLoading = true
+
+        do {
+            let rate = try await exchangeRateProvider.getRate(
+                from: localCurrency,
+                to: baseCurrency
+            )
+            try Task.checkCancellation()
+            rateLocalToBase = rate
+            rateLoadingError = nil
+        } catch is CancellationError {
+            return
+        } catch let error as ExchangeRateLoadingError {
+            rateLoadingError = error
+        } catch {
+            rateLoadingError = ExchangeRateLoadingError()
+        }
+        
+        isRateLoading = false
+        
     }
 }
 

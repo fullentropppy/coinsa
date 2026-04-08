@@ -60,7 +60,7 @@ extension AmountText {
         _ amount: Double,
         fractionLength: Int = 2,
         currency: Currency? = nil
-    ) -> AmountText {
+    ) -> some View {
         AmountText(
             amount,
             fractionLength: fractionLength,
@@ -73,7 +73,7 @@ extension AmountText {
         _ amount: Double,
         fractionLength: Int = 2,
         currency: Currency? = nil
-    ) -> AmountText {
+    ) -> some View {
         AmountText(
             amount,
             fractionLength: fractionLength,

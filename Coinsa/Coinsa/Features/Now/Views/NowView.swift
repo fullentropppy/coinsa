@@ -43,7 +43,7 @@ struct NowView: View {
         if let selectedLocation {
             selectedLocation.expenses
                 .sorted { $0.date > $1.date }
-                .prefix(3)
+                .prefix(5)
                 .map { $0 }
         } else {
             []

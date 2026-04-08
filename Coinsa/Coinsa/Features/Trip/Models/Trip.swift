@@ -12,6 +12,9 @@ import SwiftData
 class Trip: DateRangeProviding, EventStatusProviding {
     // MARK: - Stored Properties
     
+    @Attribute(.unique)
+    var id: UUID
+    
     var name: String
     var startDate: Date
     var endDate: Date
@@ -27,6 +30,7 @@ class Trip: DateRangeProviding, EventStatusProviding {
         endDate: Date,
         locations: [Location] = []
     ) {
+        self.id = UUID()
         self.name = name
         self.startDate = startDate
         self.endDate = endDate

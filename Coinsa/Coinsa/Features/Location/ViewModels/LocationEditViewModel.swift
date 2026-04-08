@@ -229,7 +229,6 @@ final class LocationEditViewModel {
         }
         
         isRateLoading = false
-        
     }
 }
 

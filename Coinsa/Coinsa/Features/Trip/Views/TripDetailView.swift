@@ -78,7 +78,7 @@ struct TripDetailView: View {
             }
             .safeAreaInset(edge: .bottom) {
                 if !locations.isEmpty {
-                    PrimaryAddButtonView(isOnLeft: settingsStore.isAddButtonOnLeft) {
+                    PrimaryAddButton(isOnLeft: settingsStore.isAddButtonOnLeft) {
                         isShowingLocationAdd = true
                     }
                 }
@@ -154,7 +154,7 @@ struct TripDetailView: View {
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
         ToolbarItemGroup(placement: .topBarTrailing) {
-            ToolbarButtonView.edit {
+            ToolbarButton.edit {
                 isShowingTripEdit = true
             }
         }

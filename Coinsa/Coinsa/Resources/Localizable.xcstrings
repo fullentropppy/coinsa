@@ -486,13 +486,30 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Data deleted"
+            "value" : "Data successfully deleted"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Данные удалены"
+            "value" : "Данные успешно удалены"
+          }
+        }
+      }
+    },
+    "debug.delete.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete all data?"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Удалить все данные?"
           }
         }
       }
@@ -537,13 +554,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "All current data will be deleted and replaced with demo data."
+            "value" : "All current data will be permanently deleted and replaced with demo data."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Все текущие данные будут удалены и заменены демо-данными."
+            "value" : "Все текущие данные будут безвозвратно удалены и заменены демо-данными."
           }
         }
       }
@@ -554,13 +571,30 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Data loaded"
+            "value" : "Data successfully loaded"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Данные загружены"
+            "value" : "Данные успешно загружены"
+          }
+        }
+      }
+    },
+    "debug.load.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Load demo data?"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Загрузить демо-данные?"
           }
         }
       }
@@ -571,7 +605,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Discard Changes"
+            "value" : "Discard changes"
           }
         },
         "ru" : {
@@ -588,7 +622,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Keep Editing"
+            "value" : "Keep editing"
           }
         },
         "ru" : {
@@ -605,13 +639,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "If you discard now, your changes will be lost."
+            "value" : "Any unsaved changes will be permanently lost."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Если вы сейчас закроете экран, изменения будут потеряны."
+            "value" : "Несохраненные изменения будут безвозвратно потеряны."
           }
         }
       }
@@ -622,7 +656,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Discard Changes?"
+            "value" : "Discard changes?"
           }
         },
         "ru" : {
@@ -775,7 +809,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Add expense"
+            "value" : "Add Expense"
           }
         },
         "ru" : {
@@ -1047,13 +1081,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Expense deletion"
+            "value" : "Delete Expense?"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Удаление траты"
+            "value" : "Удалить трату?"
           }
         }
       }
@@ -1064,7 +1098,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Add your first expense to get started."
+            "value" : "Add your first Expense to get started."
           }
         },
         "ru" : {
@@ -1149,7 +1183,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Add location"
+            "value" : "Add Location"
           }
         },
         "ru" : {
@@ -1251,13 +1285,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Location deletion"
+            "value" : "Delete Location?"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Удаление локации"
+            "value" : "Удалить локацию?"
           }
         }
       }
@@ -1268,7 +1302,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Create a location to track expenses."
+            "value" : "Create a Location to track expenses."
           }
         },
         "ru" : {
@@ -1540,7 +1574,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The base currency for keeping records of expenses and displaying amounts in trips, locations, budgets and expenses. It cannot be changed."
+            "value" : "The base currency for keeping records of expenses and displaying amounts in Trips, Locations, Budgets and Expenses. It cannot be changed."
           }
         },
         "ru" : {
@@ -1676,7 +1710,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Add trip"
+            "value" : "Add Trip"
           }
         },
         "ru" : {
@@ -1727,13 +1761,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Trip deletion"
+            "value" : "Delete Trip?"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Удаление поездки"
+            "value" : "Удалить поездку?"
           }
         }
       }
@@ -1744,7 +1778,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Create a trip to add locations and expenses."
+            "value" : "Create a Trip to add locations and expenses."
           }
         },
         "ru" : {

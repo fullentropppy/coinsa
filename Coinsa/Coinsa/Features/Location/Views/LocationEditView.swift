@@ -18,6 +18,8 @@ struct LocationEditView: View {
     @State private var deletionHandler = DeletionHandler<Location>()
     @State private var inputCurrency: InputCurrency = .base
     @State private var isShowingDiscardAlert = false
+
+    @FocusState private var focusedField: NumericEditField?
     
     private let onDelete: (() -> Void)?
 
@@ -156,9 +158,14 @@ struct LocationEditView: View {
             if !viewModel.isHomeLocation {
                 LabeledContent(.locationExchangeRate) {
                     HStack {
-                        AmountTextField($viewModel.rateLocalToBase, fractionDigits: 4)
-                            .opacity(viewModel.isRateLoading ? 0.5 : 1)
-                            .disabled(viewModel.isRateLoading)
+                        NumericInputField(
+                            $viewModel.rateLocalToBase,
+                            focusedField: $focusedField,
+                            focusId: .exchangeRate,
+                            fractionDigits: 4,
+                        )
+                        .opacity(viewModel.isRateLoading ? 0.5 : 1)
+                        .disabled(viewModel.isRateLoading)
                         CurrencyCodeText(viewModel.baseCurrency)
 
                         ExchangeRateRefreshButton(
@@ -188,7 +195,11 @@ struct LocationEditView: View {
                 HStack {
                     ExpenseCategoryLabel(category: category)
                     Spacer()
-                    AmountTextField(budgetInputBinding(for: category))
+                    NumericInputField(
+                        budgetInputBinding(for: category),
+                        focusedField: $focusedField,
+                        focusId: .budget(category.id)
+                    )
                     CurrencyCodeText(budgetInputCurrencyValue)
                 }
             }
@@ -223,17 +234,26 @@ struct LocationEditView: View {
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
         ToolbarItemGroup(placement: .topBarLeading) {
-            ToolbarButtonView.close {
+            ToolbarButton.close {
                 handleClose()
             }
         }
         
         ToolbarItemGroup(placement: .topBarTrailing) {
-            ToolbarButtonView.save {
+            ToolbarButton.ok {
                 viewModel.save(using: repository)
                 dismiss()
             }
             .disabled(!viewModel.canSave)
+        }
+
+        ToolbarItemGroup(placement: .keyboard) {
+            if focusedField != nil {
+                Spacer()
+                ToolbarButton.ok {
+                    focusedField = nil
+                }
+            }
         }
     }
 

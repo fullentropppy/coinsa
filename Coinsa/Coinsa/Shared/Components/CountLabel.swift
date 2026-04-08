@@ -43,15 +43,15 @@ struct CountLabel: View {
 
 // MARK: - Presets
 extension CountLabel {
-    static func secondarySmall(_ count: Int, icon: String = "number") -> CountLabel {
+    static func secondarySmall(_ count: Int, icon: String = "number") -> some View {
         CountLabel(count, font: .footnote, color: .secondary, icon: icon)
     }
     
-    static func days(_ days: Int, font: Font = .body, color: Color = .primary) -> CountLabel {
+    static func days(_ days: Int, font: Font = .body, color: Color = .primary) -> some View {
         CountLabel(days, font: font, color: color, icon: "clock")
     }
     
-    static func daysSecondarySmall(_ days: Int) -> CountLabel {
+    static func daysSecondarySmall(_ days: Int) -> some View {
         CountLabel.days(days, font: .footnote, color: .secondary)
     }
 }

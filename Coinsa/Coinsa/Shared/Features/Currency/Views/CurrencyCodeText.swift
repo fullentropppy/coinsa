@@ -38,11 +38,11 @@ struct CurrencyCodeText: View {
 // MARK: - Presets
 
 extension CurrencyCodeText {
-    static func standard(_ currency: Currency) -> CurrencyCodeText {
+    static func standard(_ currency: Currency) -> some View {
         CurrencyCodeText(currency, color: .secondary)
     }
     
-    static func secondarySmall(_ currency: Currency) -> CurrencyCodeText {
+    static func secondarySmall(_ currency: Currency) -> some View {
         CurrencyCodeText(currency, font: .footnote, color: .secondary)
     }
 }

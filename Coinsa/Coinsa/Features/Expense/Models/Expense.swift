@@ -12,6 +12,9 @@ import SwiftData
 class Expense {
     // MARK: - Stored Properties
     
+    @Attribute(.unique)
+    var id: UUID
+    
     var date: Date
     var baseAmount: Double
     var rateLocalToBase: Double
@@ -29,6 +32,7 @@ class Expense {
         location: Location,
         comment: String? = nil
     ) {
+        self.id = UUID()
         self.date = date
         self.baseAmount = baseAmount
         self.rateLocalToBase = rateLocalToBase

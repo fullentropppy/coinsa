@@ -76,7 +76,7 @@ struct LocationDetailView: View {
             }
             .safeAreaInset(edge: .bottom) {
                 if !expenses.isEmpty {
-                    PrimaryAddButtonView(isOnLeft: settingsStore.isAddButtonOnLeft) {
+                    PrimaryAddButton(isOnLeft: settingsStore.isAddButtonOnLeft) {
                         isShowingExpenseAdd = true
                     }
                 }
@@ -144,7 +144,7 @@ struct LocationDetailView: View {
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
         ToolbarItemGroup(placement: .topBarTrailing) {
-            ToolbarButtonView.edit {
+            ToolbarButton.edit {
                 isShowingLocationEdit = true
             }
         }

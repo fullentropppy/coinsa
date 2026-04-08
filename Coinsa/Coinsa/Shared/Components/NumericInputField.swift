@@ -1,5 +1,5 @@
 //
-//  AmountTextField.swift
+//  NumericInputField.swift
 //  Coinsa
 //
 //  Created by Daniil Gritsenko on 24.03.2026.
@@ -7,15 +7,21 @@
 
 import SwiftUI
 
-struct AmountTextField: View {
+enum NumericEditField: Hashable {
+    case amount
+    case exchangeRate
+    case budget(String)
+}
+
+struct NumericInputField: View {
     // MARK: - Stored Properties
-    
-    @Binding var value: Double
     
     @State private var text: String = ""
     
-    @FocusState private var isFocused: Bool
+    @Binding var value: Double
     
+    private let focusedField: FocusState<NumericEditField?>.Binding
+    private let focusId: NumericEditField
     private let fractionDigits: Int
     
     // MARK: - Computed Properties
@@ -51,8 +57,15 @@ struct AmountTextField: View {
     
     // MARK: - Initialization
     
-    init(_ value: Binding<Double>, fractionDigits: Int = 2) {
+    init(
+        _ value: Binding<Double>,
+        focusedField: FocusState<NumericEditField?>.Binding,
+        focusId: NumericEditField,
+        fractionDigits: Int = 2,
+    ) {
         self._value = value
+        self.focusedField = focusedField
+        self.focusId = focusId
         self.fractionDigits = fractionDigits
     }
     
@@ -60,19 +73,17 @@ struct AmountTextField: View {
     
     var body: some View {
         TextField(placeholder, text: $text)
-            .focused($isFocused)
+            .focused(focusedField, equals: focusId)
             .keyboardType(.decimalPad)
             .multilineTextAlignment(.trailing)
-            .onAppear {
-                syncFromValue()
-            }
-            .onChange(of: value) {
-                if !isFocused {
+            .onAppear { syncFromValue() }
+            .onChange(of: value) { _, _ in
+                if focusedField.wrappedValue != focusId {
                     syncFromValue()
                 }
             }
-            .onChange(of: isFocused) { _, focused in
-                if !focused {
+            .onChange(of: focusedField.wrappedValue) { _, newId in
+                if newId != focusId {
                     commit()
                 }
             }
@@ -107,23 +118,35 @@ struct AmountTextField: View {
 
 // MARK: - Previews
 
-private extension AmountTextField {
+private extension NumericInputField {
     static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
+        NumericInputFieldPreview()
+            .environment(\.locale, locale)
+            .preferredColorScheme(colorScheme)
+    }
+}
+
+private struct NumericInputFieldPreview: View {
+    @State private var amount: Double = 1234.56
+    @FocusState private var focusedField: NumericEditField?
+
+    var body: some View {
         Form {
             LabeledContent(.expenseAmount) {
-                AmountTextField(.constant(1234.56))
+                NumericInputField(
+                    $amount,
+                    focusedField: $focusedField,
+                    focusId: .amount
+                )
             }
         }
-        .environment(\.locale, locale)
-        .preferredColorScheme(colorScheme)
     }
 }
 
 #Preview("Light - RU") {
-    AmountTextField.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
+    NumericInputField.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
 }
 
 #Preview("Dark - EN") {
-    AmountTextField.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
+    NumericInputField.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
 }
-

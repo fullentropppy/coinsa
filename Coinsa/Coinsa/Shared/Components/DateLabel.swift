@@ -68,11 +68,11 @@ struct DateLabel: View {
 // MARK: - Presets
 
 extension DateLabel {
-    static func secondarySmall(_ date: Date) -> DateLabel {
+    static func secondarySmall(_ date: Date) -> some View {
         DateLabel(date, font: .footnote, color: .secondary)
     }
     
-    static func secondarySmall(from date1: Date, to date2: Date) -> DateLabel {
+    static func secondarySmall(from date1: Date, to date2: Date) -> some View {
         DateLabel(from: date1, to: date2, font: .footnote, color: .secondary)
     }
 

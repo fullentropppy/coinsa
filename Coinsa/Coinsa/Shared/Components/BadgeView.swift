@@ -53,7 +53,7 @@ struct BadgeView: View {
         .padding(.vertical, 4)
         .frame(minWidth: 36)
         .frame(height: 22)
-        .background(fillColor, in: .capsule)
+        .background(fillColor.gradient, in: .capsule)
     }
 }
 

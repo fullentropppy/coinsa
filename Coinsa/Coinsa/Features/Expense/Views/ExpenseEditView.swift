@@ -19,6 +19,8 @@ struct ExpenseEditView: View {
     @State private var inputCurrency: InputCurrency
     @State private var isShowingDiscardAlert = false
 
+    @FocusState private var focusedField: NumericEditField?
+    
     private let onDelete: (() -> Void)?
 
     // MARK: - Computed Properties
@@ -108,6 +110,9 @@ struct ExpenseEditView: View {
                         cancelDelete()
                     }
                 )
+                .task {
+                    viewModel.loadInitialRateIfNeeded()
+                }
         }
     }
 
@@ -157,18 +162,32 @@ struct ExpenseEditView: View {
             
             LabeledContent(.expenseAmount) {
                 HStack {
-                    AmountTextField(amountInputBinding)
+                    NumericInputField(
+                        amountInputBinding,
+                        focusedField: $focusedField,
+                        focusId: .amount
+                    )
                     CurrencyCodeText(viewModel.currency(for: inputCurrency))
-                        .frame(width: 40, alignment: .center)
                 }
             }
             
             if !viewModel.isHomeLocation {
                 LabeledContent(.expenseExchangeRate) {
                     HStack {
-                        AmountTextField(rateInputBinding, fractionDigits: 4)
+                        NumericInputField(
+                            rateInputBinding,
+                            focusedField: $focusedField,
+                            focusId: .exchangeRate,
+                            fractionDigits: 4,
+                        )
+                        .opacity(viewModel.isRateLoading ? 0.5 : 1)
+                        .disabled(viewModel.isRateLoading)
                         CurrencyCodeText(viewModel.baseCurrency)
-                            .frame(width: 40, alignment: .center)
+
+                        ExchangeRateRefreshButton(
+                            isLoading: viewModel.isRateLoading,
+                            onRefresh: viewModel.requestRateRefresh
+                        )
                     }
                 }
             }
@@ -197,17 +216,26 @@ struct ExpenseEditView: View {
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
         ToolbarItemGroup(placement: .topBarLeading) {
-            ToolbarButtonView.close {
+            ToolbarButton.close {
                 handleClose()
             }
         }
 
         ToolbarItemGroup(placement: .topBarTrailing) {
-            ToolbarButtonView.save {
+            ToolbarButton.ok {
                 viewModel.save(using: repository)
                 dismiss()
             }
             .disabled(!viewModel.canSave)
+        }
+        
+        ToolbarItemGroup(placement: .keyboard) {
+            if focusedField != nil {
+                Spacer()
+                ToolbarButton.ok {
+                    focusedField = nil
+                }
+            }
         }
     }
 

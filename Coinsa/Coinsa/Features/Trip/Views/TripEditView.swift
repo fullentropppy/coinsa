@@ -115,13 +115,13 @@ struct TripEditView: View {
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
         ToolbarItemGroup(placement: .topBarLeading) {
-            ToolbarButtonView.close {
+            ToolbarButton.close {
                 handleClose()
             }
         }
 
         ToolbarItemGroup(placement: .topBarTrailing) {
-            ToolbarButtonView.save {
+            ToolbarButton.ok {
                 viewModel.save(using: repository)
                 dismiss()
             }
