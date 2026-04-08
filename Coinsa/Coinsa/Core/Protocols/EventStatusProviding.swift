@@ -17,11 +17,10 @@ protocol EventStatusProviding: DateRangeProviding {
 
 extension EventStatusProviding {
     var status: EventStatus {
-        let calendar = Calendar.current
-        let today = calendar.startOfDay(for: Date())
+        let today = Date().startOfDay
         
-        let startDay = calendar.startOfDay(for: startDate)
-        let endDay = calendar.startOfDay(for: endDate)
+        let startDay = startDate.startOfDay
+        let endDay = endDate.endOfDay
         
         if today > endDay {
             return .completed

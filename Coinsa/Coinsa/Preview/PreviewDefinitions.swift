@@ -7,6 +7,8 @@
 
 import Foundation
 
+// MARK: - Public Types
+
 enum PreviewTrip: String {
     case japan = "Япония"
     case russia = "Россия"
@@ -53,6 +55,8 @@ enum PreviewExpenseComment: String {
     case pharmacy = "Лекарства"
     case miscellaneous = "Разное"
 }
+
+// MARK: - Private Types
 
 private enum PreviewCurrency {
     static let exchangeRates: [String: Double] = [

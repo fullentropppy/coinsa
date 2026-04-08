@@ -10,7 +10,7 @@ import SwiftData
 
 @MainActor
 struct PreviewBuilder {
-    // MARK: - Nested Types
+    // MARK: - Builder
 
     final class Builder {
         // MARK: - Stored Properties
@@ -121,13 +121,13 @@ struct PreviewBuilder {
         }
     }
 
-    // MARK: - Public Static Methods
+    // MARK: - Public Methods
 
     static func builder() -> Builder {
         Builder()
     }
 
-    // MARK: - Private Static Methods. Container
+    // MARK: - Private Methods
 
     private static func makeContainer(with trips: [Trip]) -> ModelContainer {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)

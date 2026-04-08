@@ -1,5 +1,5 @@
 //
-//  Trip+​Screen​Context​Subtitle​.swift
+//  Trip+ScreenContextSubtitle.swift
 //  Coinsa
 //
 //  Created by Daniil Gritsenko on 28.03.2026.

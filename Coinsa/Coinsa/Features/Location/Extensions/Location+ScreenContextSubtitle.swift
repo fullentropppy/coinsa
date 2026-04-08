@@ -1,5 +1,5 @@
 //
-//  Location​+​Screen​Context​Subtitle​.swift
+//  Location+ScreenContextSubtitle.swift
 //  Coinsa
 //
 //  Created by Daniil Gritsenko on 28.03.2026.
