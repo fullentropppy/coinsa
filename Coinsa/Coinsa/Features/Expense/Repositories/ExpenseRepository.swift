@@ -18,7 +18,7 @@ struct ExpenseRepository {
 
     func add(
         date: Date,
-        localAmount: Double,
+        baseAmount: Double,
         rateLocalToBase: Double,
         category: ExpenseCategory,
         location: Location,
@@ -26,11 +26,11 @@ struct ExpenseRepository {
     ) {
         let expense = Expense(
             date: date,
-            baseAmount: max(0, localAmount),
-            rateLocalToBase: max(0, rateLocalToBase),
+            baseAmount: normalizeBaseAmount(baseAmount),
+            rateLocalToBase: normalizeRateLocalToBase(rateLocalToBase),
             category: category,
             location: location,
-            comment: comment
+            comment: normalizeComment(comment)
         )
         context.insert(expense)
         try? context.save()
@@ -39,21 +39,35 @@ struct ExpenseRepository {
     func update(
         _ expense: Expense,
         date: Date,
-        localAmount: Double,
+        baseAmount: Double,
         rateLocalToBase: Double,
         category: ExpenseCategory,
         comment: String?
     ) {
         expense.date = date
-        expense.baseAmount = max(0, localAmount)
-        expense.rateLocalToBase = max(0, rateLocalToBase)
+        expense.baseAmount = normalizeBaseAmount(baseAmount)
+        expense.rateLocalToBase = normalizeRateLocalToBase(rateLocalToBase)
         expense.category = category
-        expense.comment = comment
+        expense.comment = normalizeComment(comment)
         try? context.save()
     }
 
     func delete(_ expense: Expense) {
         context.delete(expense)
         try? context.save()
+    }
+    
+    // MARK: - Private Methods
+    
+    private func normalizeBaseAmount(_ amount: Double) -> Double {
+        amount > 0 ? amount.rounded(to: 2) : 0
+    }
+    
+    private func normalizeRateLocalToBase(_ rate: Double) -> Double {
+        rate > 0 ? rate.rounded(to: 4) : 0
+    }
+    
+    private func normalizeComment(_ comment: String?) -> String? {
+        comment == nil ? nil : comment?.trimmed
     }
 }

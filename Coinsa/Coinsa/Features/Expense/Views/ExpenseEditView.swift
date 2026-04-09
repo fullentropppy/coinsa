@@ -110,6 +110,13 @@ struct ExpenseEditView: View {
                         cancelDelete()
                     }
                 )
+                .notificationAlert(
+                    isPresented: rateErrorBinding,
+                    title: .exchangeRateLoadingErrorTitle,
+                    message: .exchangeRateLoadingErrorMessage(
+                        errorDescription: viewModel.rateLoadingError?.errorDescription ?? String(localized: .errorUnknown)
+                    )
+                )
                 .task {
                     viewModel.loadInitialRateIfNeeded()
                 }
@@ -180,8 +187,7 @@ struct ExpenseEditView: View {
                             focusId: .exchangeRate,
                             fractionDigits: 4,
                         )
-                        .opacity(viewModel.isRateLoading ? 0.5 : 1)
-                        .disabled(viewModel.isRateLoading)
+                        .loadingState(viewModel.isRateLoading)
                         CurrencyCodeText(viewModel.baseCurrency)
 
                         ExchangeRateRefreshButton(
@@ -264,6 +270,17 @@ struct ExpenseEditView: View {
                 viewModel.rateLocalToBase = newValue
                 let currentAmount = viewModel.amount(for: inputCurrency)
                 viewModel.updateAmount(currentAmount, for: inputCurrency)
+            }
+        )
+    }
+    
+    private var rateErrorBinding: Binding<Bool> {
+        Binding(
+            get: { viewModel.rateLoadingError != nil },
+            set: { shouldShow in
+                if !shouldShow {
+                    viewModel.rateLoadingError = nil
+                }
             }
         )
     }

@@ -13,13 +13,10 @@ import Observation
 final class LocationEditViewModel {
     // MARK: - Stored Properties
 
-    private let initialSnapshot: Snapshot
-    private let exchangeRateProvider: ExchangeRateProvider
-    private var rateRefreshTask: Task<Void, Never>?
-    private var didLoadInitialRate = false
-    
-    var isRateLoading = false
-    var rateLoadingError: ExchangeRateLoadingError?
+    private let exchangeRateManager: ExchangeRateManager
+
+    private var initialSnapshot: Snapshot
+    private var hasLoadedInitialRate = false
     
     let location: Location?
     let trip: Trip
@@ -37,10 +34,8 @@ final class LocationEditViewModel {
     var localCurrency: Currency {
         didSet {
             if isHomeLocation {
-                rateRefreshTask?.cancel()
-                rateLoadingError = nil
+                exchangeRateManager.cancelRefresh()
                 rateLocalToBase = 1
-                isRateLoading = false
             } else if localCurrency != oldValue {
                 requestRateRefresh()
             }
@@ -79,6 +74,15 @@ final class LocationEditViewModel {
         return rateLocalToBase > 0 ? (plannedBaseTotal / rateLocalToBase).rounded() : 0
     }
     
+    var isRateLoading: Bool {
+        exchangeRateManager.isRateLoading
+    }
+    
+    var rateLoadingError: ExchangeRateLoadingError? {
+        get { exchangeRateManager.rateLoadingError }
+        set { exchangeRateManager.rateLoadingError = newValue }
+    }
+    
     // MARK: - Initialization
 
     convenience init(trip: Trip, baseCurrency: Currency) {
@@ -107,7 +111,7 @@ final class LocationEditViewModel {
         baseCurrency: Currency,
         exchangeRateProvider: ExchangeRateProvider
     ) {
-        self.exchangeRateProvider = exchangeRateProvider
+        self.exchangeRateManager = ExchangeRateManager(provider: exchangeRateProvider)
         self.location = location
         self.trip = location?.trip ?? trip
         self.baseCurrency = baseCurrency
@@ -141,12 +145,12 @@ final class LocationEditViewModel {
             }
         }
 
-        name = resolvedName
-        startDate = resolvedStartDate
-        endDate = resolvedEndDate
-        localCurrency = resolvedLocalCurrency
-        rateLocalToBase = resolvedRateToBaseCurrency
-        budgetAmounts = resolvedBudgetAmounts
+        self.name = resolvedName
+        self.startDate = resolvedStartDate
+        self.endDate = resolvedEndDate
+        self.localCurrency = resolvedLocalCurrency
+        self.rateLocalToBase = resolvedRateToBaseCurrency
+        self.budgetAmounts = resolvedBudgetAmounts
 
         initialSnapshot = Snapshot(
             name: resolvedName,
@@ -161,15 +165,34 @@ final class LocationEditViewModel {
     // MARK: - Public Methods
 
     func loadInitialRateIfNeeded() {
-        if !isEditing && !isHomeLocation && !didLoadInitialRate {
-            requestRateRefresh()
+        guard !hasLoadedInitialRate && !isEditing && !isHomeLocation else { return }
+        
+        hasLoadedInitialRate = true
+    
+        exchangeRateManager.requestRefresh(
+            from: localCurrency,
+            to: baseCurrency
+        ) { [weak self] rate in
+            guard let self else { return }
+            
+            rateLocalToBase = rate
+            initialSnapshot = Snapshot(
+                name: initialSnapshot.name,
+                startDate: initialSnapshot.startDate,
+                endDate: initialSnapshot.endDate,
+                localCurrency: initialSnapshot.localCurrency,
+                rateLocalToBase: rateLocalToBase,
+                budgetAmounts: initialSnapshot.budgetAmounts
+            )
         }
     }
 
     func requestRateRefresh() {
-        rateRefreshTask?.cancel()
-        rateRefreshTask = Task {
-            await refreshRate()
+        exchangeRateManager.requestRefresh(
+            from: localCurrency,
+            to: baseCurrency
+        ) { [weak self] rate in
+            self?.rateLocalToBase = rate
         }
     }
     
@@ -202,34 +225,6 @@ final class LocationEditViewModel {
     }
     
     // MARK: - Private Methods
-    
-    private func refreshRate() async {
-        guard !isHomeLocation else {
-            rateLocalToBase = 1
-            rateLoadingError = nil
-            return
-        }
-        
-        isRateLoading = true
-
-        do {
-            let rate = try await exchangeRateProvider.getRate(
-                from: localCurrency,
-                to: baseCurrency
-            )
-            try Task.checkCancellation()
-            rateLocalToBase = rate
-            rateLoadingError = nil
-        } catch is CancellationError {
-            return
-        } catch let error as ExchangeRateLoadingError {
-            rateLoadingError = error
-        } catch {
-            rateLoadingError = ExchangeRateLoadingError()
-        }
-        
-        isRateLoading = false
-    }
 }
 
 // MARK: - Snapshot
@@ -259,7 +254,7 @@ private extension LocationEditViewModel {
             self.startDate = startDate
             self.endDate = endDate
             self.localCurrency = localCurrency
-            self.rateLocalToBase = rateLocalToBase.rounded(to: 6)
+            self.rateLocalToBase = rateLocalToBase
             self.budgetAmounts = Dictionary(
                 uniqueKeysWithValues: ExpenseCategory.allCases.map { category in
                     (category, (budgetAmounts[category] ?? 0).rounded())

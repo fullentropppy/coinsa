@@ -8,8 +8,6 @@
 import Foundation
 
 struct AsyncTimeout {
-    // MARK: - Public Methods
-    
     static func run<T>(
         seconds: TimeInterval,
         operation: @escaping () async throws -> T

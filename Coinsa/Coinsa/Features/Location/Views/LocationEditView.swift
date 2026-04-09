@@ -164,8 +164,7 @@ struct LocationEditView: View {
                             focusId: .exchangeRate,
                             fractionDigits: 4,
                         )
-                        .opacity(viewModel.isRateLoading ? 0.5 : 1)
-                        .disabled(viewModel.isRateLoading)
+                        .loadingState(viewModel.isRateLoading)
                         CurrencyCodeText(viewModel.baseCurrency)
 
                         ExchangeRateRefreshButton(

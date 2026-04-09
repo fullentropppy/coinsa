@@ -30,7 +30,7 @@ struct LocationRepository {
             startDate: startDate,
             endDate: endDate,
             localCurrencyCode: localCurrency.code,
-            rateLocalToBase: rateLocalToBase,
+            rateLocalToBase: normalizeRateLocalToBase(rateLocalToBase),
             trip: trip,
             budgets: [],
             expenses: []
@@ -54,7 +54,7 @@ struct LocationRepository {
         location.startDate = startDate
         location.endDate = endDate
         location.localCurrencyCode = localCurrency.code
-        location.rateLocalToBase = rateLocalToBase
+        location.rateLocalToBase = normalizeRateLocalToBase(rateLocalToBase)
 
         applyBudgets(budgetsByCategory, to: location)
         try? context.save()
@@ -78,11 +78,11 @@ struct LocationRepository {
         for (category, amount) in budgetsByCategory {
             if amount > 0 {
                 if let budget = existingBudgets[category] {
-                    budget.baseAmount = amount
+                    budget.baseAmount = normalizeBaseAmount(amount)
                 } else {
                     let budget = Budget(
                         category: category,
-                        baseAmount: amount,
+                        baseAmount: normalizeBaseAmount(amount),
                         location: location
                     )
                     location.budgets.append(budget)
@@ -92,5 +92,13 @@ struct LocationRepository {
                 context.delete(budget)
             }
         }
+    }
+        
+    private func normalizeBaseAmount(_ amount: Double) -> Double {
+        amount > 0 ? amount.rounded(to: 2) : 0
+    }
+    
+    private func normalizeRateLocalToBase(_ rate: Double) -> Double {
+        rate > 0 ? rate.rounded(to: 4) : 0
     }
 }

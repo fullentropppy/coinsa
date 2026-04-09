@@ -12,9 +12,7 @@ final class HexarateService: ExchangeRateService {
     
     func fetchRate(from: Currency, to: Currency) async throws -> Double {
         let url = URL(string: "https://hexarate.paikama.co/api/rates/\(from.code)/\(to.code)/latest")!
-        
         let (data, _) = try await URLSession.shared.data(from: url)
-        
         let response = try JSONDecoder().decode(Response.self, from: data)
         return response.data.mid
     }

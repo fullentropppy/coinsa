@@ -22,7 +22,7 @@ final class ExchangeRateProvider {
     
     func getRate(from: Currency, to: Currency) async throws -> Double {
         try await AsyncTimeout.run(seconds: 5) {
-            try await self.service.fetchRate(from: from, to: to)
+            try await self.service.fetchRate(from: from, to: to).rounded(to: 4)
         }
     }
 }
@@ -30,7 +30,23 @@ final class ExchangeRateProvider {
 // MARK: - Errors
 
 struct ExchangeRateLoadingError: LocalizedError {
+    // MARK: - Stored Properties
+    
+    let details: String?
+    
+    // MARK: - Computed Properties
+    
     var errorDescription: String? {
-        String(localized: .exchangeRateLoadingException)
+        if let details, !details.isBlank {
+            details
+        } else {
+            String(localized: .exchangeRateLoadingException)
+        }
+    }
+    
+    // MARK: - Initialization
+    
+    init(details: String? = nil) {
+        self.details = details
     }
 }

@@ -13,13 +13,10 @@ import Observation
 final class ExpenseEditViewModel {
     // MARK: - Stored Properties
 
-    private let initialSnapshot: Snapshot
-    private let exchangeRateProvider: ExchangeRateProvider
-    private var rateRefreshTask: Task<Void, Never>?
-    private var didLoadInitialRate = false
+    private let exchangeRateManager: ExchangeRateManager
     
-    var isRateLoading = false
-    var rateLoadingError: ExchangeRateLoadingError?
+    private var initialSnapshot: Snapshot
+    private var hasLoadedInitialRate = false
     
     let expense: Expense?
     let location: Location
@@ -34,7 +31,7 @@ final class ExpenseEditViewModel {
     var comment: String
 
     // MARK: - Computed Properties
-
+    
     var isEditing: Bool {
         expense != nil
     }
@@ -53,6 +50,15 @@ final class ExpenseEditViewModel {
     
     var isHomeLocation: Bool {
         baseCurrency == localCurrency
+    }
+    
+    var isRateLoading: Bool {
+        exchangeRateManager.isRateLoading
+    }
+    
+    var rateLoadingError: ExchangeRateLoadingError? {
+        get { exchangeRateManager.rateLoadingError }
+        set { exchangeRateManager.rateLoadingError = newValue }
     }
     
     // MARK: - Initialization
@@ -85,7 +91,7 @@ final class ExpenseEditViewModel {
         exchangeRateProvider: ExchangeRateProvider,
         preselectedCategory: ExpenseCategory? = nil,
     ) {
-        self.exchangeRateProvider = exchangeRateProvider
+        self.exchangeRateManager = ExchangeRateManager(provider: exchangeRateProvider)
         self.location = expense?.location ?? location
         self.expense = expense
         self.localCurrency = Currency.from(self.location.localCurrencyCode)
@@ -114,12 +120,12 @@ final class ExpenseEditViewModel {
             resolvedComment = ""
         }
 
-        date = resolvedDate
-        baseAmount = resolvedAmountBase
-        rateLocalToBase = resolvedRateLocalToBase
-        localAmount = resolvedAmountLocal
-        category = resolvedCategory
-        comment = resolvedComment
+        self.date = resolvedDate
+        self.baseAmount = resolvedAmountBase
+        self.rateLocalToBase = resolvedRateLocalToBase
+        self.localAmount = resolvedAmountLocal
+        self.category = resolvedCategory
+        self.comment = resolvedComment
 
         initialSnapshot = Snapshot(
             date: resolvedDate,
@@ -133,15 +139,33 @@ final class ExpenseEditViewModel {
     // MARK: - Public Methods
     
     func loadInitialRateIfNeeded() {
-        if !isEditing && !isHomeLocation && !didLoadInitialRate {
-            requestRateRefresh()
+        guard !hasLoadedInitialRate && !isEditing && !isHomeLocation else { return }
+            
+        hasLoadedInitialRate = true
+    
+        exchangeRateManager.requestRefresh(
+            from: localCurrency,
+            to: baseCurrency
+        ) { [weak self] rate in
+            guard let self else { return }
+            
+            rateLocalToBase = rate
+            initialSnapshot = Snapshot(
+                date: initialSnapshot.date,
+                baseAmount: initialSnapshot.baseAmount,
+                rateLocalToBase: rateLocalToBase,
+                category: initialSnapshot.category,
+                comment: initialSnapshot.comment
+            )
         }
     }
 
     func requestRateRefresh() {
-        rateRefreshTask?.cancel()
-        rateRefreshTask = Task {
-            await refreshRate()
+        exchangeRateManager.requestRefresh(
+            from: localCurrency,
+            to: baseCurrency
+        ) { [weak self] rate in
+            self?.rateLocalToBase = rate
         }
     }
     
@@ -166,7 +190,7 @@ final class ExpenseEditViewModel {
             localAmount = rateLocalToBase > 0 ? (newValue / rateLocalToBase).rounded(to: 2) : 0
         case .local:
             localAmount = newValue
-            baseAmount = newValue * rateLocalToBase
+            baseAmount = (newValue * rateLocalToBase).rounded(to: 2)
         }
     }
     
@@ -178,7 +202,7 @@ final class ExpenseEditViewModel {
             repository.update(
                 expense,
                 date: date,
-                localAmount: baseAmount,
+                baseAmount: baseAmount,
                 rateLocalToBase: rateLocalToBase,
                 category: category,
                 comment: comment
@@ -186,7 +210,7 @@ final class ExpenseEditViewModel {
         } else {
             repository.add(
                 date: date,
-                localAmount: baseAmount,
+                baseAmount: baseAmount,
                 rateLocalToBase: rateLocalToBase,
                 category: category,
                 location: location,
@@ -195,36 +219,6 @@ final class ExpenseEditViewModel {
         }
     }
     
-    // MARK: - Private Methods
-    
-    private func refreshRate() async {
-        guard !isHomeLocation else {
-            rateLocalToBase = 1
-            rateLoadingError = nil
-            return
-        }
-        
-        isRateLoading = true
-
-        do {
-            let rate = try await exchangeRateProvider.getRate(
-                from: localCurrency,
-                to: baseCurrency
-            )
-            try Task.checkCancellation()
-            rateLocalToBase = rate
-            rateLoadingError = nil
-        } catch is CancellationError {
-            return
-        } catch let error as ExchangeRateLoadingError {
-            rateLoadingError = error
-        } catch {
-            rateLoadingError = ExchangeRateLoadingError()
-        }
-        
-        isRateLoading = false
-        
-    }
 }
 
 // MARK: - Snapshot
@@ -249,10 +243,10 @@ private extension ExpenseEditViewModel {
             comment: String
         ) {
             self.date = date
-            self.baseAmount = baseAmount.rounded()
-            self.rateLocalToBase = rateLocalToBase.rounded(to: 4)
+            self.baseAmount = baseAmount
+            self.rateLocalToBase = rateLocalToBase
             self.category = category
-            self.comment = comment.trimmed
+            self.comment = comment
         }
 
         init(viewModel: ExpenseEditViewModel) {

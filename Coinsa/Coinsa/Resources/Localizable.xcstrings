@@ -758,13 +758,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Couldn't load the currency exchange rate: %1$(errorDescription)@. Please try again."
+            "value" : "Couldn't load the currency exchange rate: %1$(errorDescription)@ Please try again."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Не удалось загрузить курс валюты: %(errorDescription)@. Пожалуйста, попробуйте снова."
+            "value" : "Не удалось загрузить курс валюты: %(errorDescription)@ Пожалуйста, попробуйте снова."
           }
         }
       }
@@ -792,13 +792,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Error fetching exchange rates from provider"
+            "value" : "Error fetching exchange rates from provider."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ошибка при получении курсов валют от провайдера"
+            "value" : "Ошибка при получении курсов валют от провайдера."
           }
         }
       }
@@ -1693,13 +1693,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Operation interrupted due to timeout"
+            "value" : "Operation interrupted due to timeout."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Операция прервана по истечении времени ожидания"
+            "value" : "Операция прервана по истечении времени ожидания."
           }
         }
       }
