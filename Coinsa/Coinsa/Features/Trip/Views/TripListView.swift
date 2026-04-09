@@ -25,6 +25,23 @@ struct TripListView: View {
         TripRepository(context: context)
     }
     
+    private var groupedTrips: [(status: EventStatus, trips: [Trip])] {
+        let grouped = Dictionary(grouping: trips) { $0.status }
+        let statusOrder: [EventStatus] = [.ongoing, .upcoming, .completed]
+        
+        return statusOrder.compactMap { status in
+            guard var tripsForStatus = grouped[status] else { return nil }
+            
+            switch status {
+            case .ongoing: tripsForStatus.sort { $0.startDate > $1.startDate }
+            case .upcoming: tripsForStatus.sort { $0.startDate < $1.startDate }
+            case .completed: tripsForStatus.sort { $0.endDate > $1.endDate }
+            }
+            
+            return (status, tripsForStatus)
+        }
+    }
+    
     // MARK: - Body
     
     var body: some View {
@@ -66,15 +83,25 @@ struct TripListView: View {
     
     private var tripListContent: some View {
         List {
-            ForEach(trips) { trip in
-                NavigationLink {
-                    TripDetailView(trip: trip)
-                } label: {
-                    TripRowView(trip: trip)
+            ForEach(Array(groupedTrips.enumerated()), id: \.offset) { _, group in
+                Section {
+                    ForEach(group.trips) { trip in
+                        NavigationLink {
+                            TripDetailView(trip: trip)
+                        } label: {
+                            TripRowView(trip: trip)
+                        }
+                    }
+                    .onDelete { indexSet in
+                        let tripsToDelete = indexSet.map { group.trips[$0] }
+                        deletionHandler.request(for: tripsToDelete)
+                    }
+                } header: {
+                    Text(group.status.localized)
                 }
             }
-            .onDelete(perform: requestDelete)
         }
+        .listStyle(.insetGrouped)
     }
     
     // MARK: - Components

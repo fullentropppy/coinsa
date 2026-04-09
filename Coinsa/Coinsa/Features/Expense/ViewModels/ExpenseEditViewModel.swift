@@ -12,8 +12,9 @@ import Observation
 @Observable
 final class ExpenseEditViewModel {
     // MARK: - Stored Properties
-
-    private let exchangeRateManager: ExchangeRateManager
+    
+    private let currencyConverter: CurrencyConverter
+    private let amountManager: AmountManager
     
     private var initialSnapshot: Snapshot
     private var hasLoadedInitialRate = false
@@ -24,9 +25,6 @@ final class ExpenseEditViewModel {
     let baseCurrency: Currency
 
     var date: Date
-    var baseAmount: Double
-    var rateLocalToBase: Double
-    var localAmount: Double
     var category: ExpenseCategory
     var comment: String
 
@@ -53,12 +51,30 @@ final class ExpenseEditViewModel {
     }
     
     var isRateLoading: Bool {
-        exchangeRateManager.isRateLoading
+        currencyConverter.isRateLoading
     }
     
     var rateLoadingError: ExchangeRateLoadingError? {
-        get { exchangeRateManager.rateLoadingError }
-        set { exchangeRateManager.rateLoadingError = newValue }
+        get { currencyConverter.rateLoadingError }
+        set { currencyConverter.rateLoadingError = newValue }
+    }
+    
+    var baseAmount: Double {
+        get { amountManager.baseAmount }
+        set { amountManager.updateBaseAmount(newValue) }
+    }
+    
+    var localAmount: Double {
+        get { amountManager.localAmount }
+        set { amountManager.updateLocalAmount(newValue) }
+    }
+    
+    var rateLocalToBase: Double {
+        get { currencyConverter.rateLocalToBase }
+        set {
+            currencyConverter.updateRate(newValue)
+            amountManager.updateFromRateChange(currentInput: .base)
+        }
     }
     
     // MARK: - Initialization
@@ -91,7 +107,6 @@ final class ExpenseEditViewModel {
         exchangeRateProvider: ExchangeRateProvider,
         preselectedCategory: ExpenseCategory? = nil,
     ) {
-        self.exchangeRateManager = ExchangeRateManager(provider: exchangeRateProvider)
         self.location = expense?.location ?? location
         self.expense = expense
         self.localCurrency = Currency.from(self.location.localCurrencyCode)
@@ -121,12 +136,22 @@ final class ExpenseEditViewModel {
         }
 
         self.date = resolvedDate
-        self.baseAmount = resolvedAmountBase
-        self.rateLocalToBase = resolvedRateLocalToBase
-        self.localAmount = resolvedAmountLocal
         self.category = resolvedCategory
         self.comment = resolvedComment
 
+        self.currencyConverter = CurrencyConverter(
+            baseCurrency: baseCurrency,
+            localCurrency: self.localCurrency,
+            initialRate: resolvedRateLocalToBase,
+            exchangeRateProvider: exchangeRateProvider
+        )
+        
+        self.amountManager = AmountManager(
+            converter: currencyConverter,
+            baseAmount: resolvedAmountBase,
+            localAmount: resolvedAmountLocal
+        )
+        
         initialSnapshot = Snapshot(
             date: resolvedDate,
             baseAmount: resolvedAmountBase,
@@ -143,10 +168,7 @@ final class ExpenseEditViewModel {
             
         hasLoadedInitialRate = true
     
-        exchangeRateManager.requestRefresh(
-            from: localCurrency,
-            to: baseCurrency
-        ) { [weak self] rate in
+        currencyConverter.requestRateRefresh { [weak self] rate in
             guard let self else { return }
             
             rateLocalToBase = rate
@@ -161,11 +183,8 @@ final class ExpenseEditViewModel {
     }
 
     func requestRateRefresh() {
-        exchangeRateManager.requestRefresh(
-            from: localCurrency,
-            to: baseCurrency
-        ) { [weak self] rate in
-            self?.rateLocalToBase = rate
+        currencyConverter.requestRateRefresh { [weak self] _ in
+            self?.amountManager.updateFromRateChange(currentInput: .base)
         }
     }
     
@@ -177,21 +196,11 @@ final class ExpenseEditViewModel {
     }
     
     func amount(for inputCurrency: InputCurrency) -> Double {
-        switch inputCurrency {
-        case .base: baseAmount
-        case .local: localAmount
-        }
+        amountManager.amount(for: inputCurrency)
     }
     
     func updateAmount(_ newValue: Double, for inputCurrency: InputCurrency) {
-        switch inputCurrency {
-        case .base:
-            baseAmount = newValue
-            localAmount = rateLocalToBase > 0 ? (newValue / rateLocalToBase).rounded(to: 2) : 0
-        case .local:
-            localAmount = newValue
-            baseAmount = (newValue * rateLocalToBase).rounded(to: 2)
-        }
+        amountManager.updateAmount(newValue, for: inputCurrency)
     }
     
     func save(using repository: ExpenseRepository) {

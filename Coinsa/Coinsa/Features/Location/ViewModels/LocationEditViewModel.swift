@@ -12,16 +12,17 @@ import Observation
 @Observable
 final class LocationEditViewModel {
     // MARK: - Stored Properties
-
-    private let exchangeRateManager: ExchangeRateManager
-
+    
+    private let currencyConverter: CurrencyConverter
+    private let budgetManager: BudgetManager
+    
     private var initialSnapshot: Snapshot
     private var hasLoadedInitialRate = false
     
     let location: Location?
     let trip: Trip
     let baseCurrency: Currency
-
+    
     var name: String
     var startDate: Date {
         didSet {
@@ -31,60 +32,60 @@ final class LocationEditViewModel {
         }
     }
     var endDate: Date
-    var localCurrency: Currency {
-        didSet {
-            if isHomeLocation {
-                exchangeRateManager.cancelRefresh()
-                rateLocalToBase = 1
-            } else if localCurrency != oldValue {
-                requestRateRefresh()
-            }
-        }
-    }
-    var rateLocalToBase: Double
-    var budgetAmounts: [ExpenseCategory: Double]
-
+    
     // MARK: - Computed Properties
-
+    
     var isEditing: Bool {
         location != nil
     }
-
+    
     var navigationTitle: LocalizedStringResource {
         isEditing ? .locationNavigationTitleEdit : .locationNavigationTitleCreate
     }
-
+    
     var hasChanges: Bool {
         Snapshot(viewModel: self) != initialSnapshot
     }
-
+    
     var canSave: Bool {
         !name.isBlank && startDate <= endDate && rateLocalToBase > 0
     }
-
+    
     var isHomeLocation: Bool {
         baseCurrency == localCurrency
     }
     
-    var plannedBaseTotal: Double {
-        budgetAmounts.values.reduce(0, +)
-    }
-
-    var plannedLocalTotal: Double {
-        return rateLocalToBase > 0 ? (plannedBaseTotal / rateLocalToBase).rounded() : 0
-    }
-    
-    var isRateLoading: Bool {
-        exchangeRateManager.isRateLoading
-    }
+    var isRateLoading: Bool { currencyConverter.isRateLoading }
     
     var rateLoadingError: ExchangeRateLoadingError? {
-        get { exchangeRateManager.rateLoadingError }
-        set { exchangeRateManager.rateLoadingError = newValue }
+        get { currencyConverter.rateLoadingError }
+        set { currencyConverter.rateLoadingError = newValue }
+    }
+    
+    var localCurrency: Currency {
+        get { currencyConverter.localCurrency }
+        set { currencyConverter.updateLocalCurrency(newValue) }
+    }
+    
+    var rateLocalToBase: Double {
+        get { currencyConverter.rateLocalToBase }
+        set { currencyConverter.updateRate(newValue) }
+    }
+    
+    var plannedBaseTotal: Double {
+        budgetManager.totalBaseAmount
+    }
+    
+    var plannedLocalTotal: Double {
+        currencyConverter.convertToLocal(fromBase: plannedBaseTotal).rounded()
+    }
+    
+    var budgetAmounts: [ExpenseCategory: Double] {
+        budgetManager.budgetsBase
     }
     
     // MARK: - Initialization
-
+    
     convenience init(trip: Trip, baseCurrency: Currency) {
         let exchangeRateProvider = ExchangeRateProvider(service: HexarateService())
         self.init(
@@ -94,7 +95,7 @@ final class LocationEditViewModel {
             exchangeRateProvider: exchangeRateProvider
         )
     }
-
+    
     convenience init(location: Location, baseCurrency: Currency) {
         let exchangeRateProvider = ExchangeRateProvider(service: HexarateService())
         self.init(
@@ -111,17 +112,16 @@ final class LocationEditViewModel {
         baseCurrency: Currency,
         exchangeRateProvider: ExchangeRateProvider
     ) {
-        self.exchangeRateManager = ExchangeRateManager(provider: exchangeRateProvider)
         self.location = location
         self.trip = location?.trip ?? trip
         self.baseCurrency = baseCurrency
-
+        
         let resolvedName: String
         let resolvedStartDate: Date
         let resolvedEndDate: Date
         let resolvedLocalCurrency: Currency
         let resolvedRateToBaseCurrency: Double
-
+        
         if let location {
             resolvedName = location.name
             resolvedStartDate = location.startDate
@@ -135,7 +135,7 @@ final class LocationEditViewModel {
             resolvedLocalCurrency = baseCurrency
             resolvedRateToBaseCurrency = 1.0
         }
-
+        
         var resolvedBudgetAmounts = Dictionary(
             uniqueKeysWithValues: ExpenseCategory.allCases.map { ($0, 0.0) }
         )
@@ -144,14 +144,30 @@ final class LocationEditViewModel {
                 resolvedBudgetAmounts[budget.category] = budget.baseAmount
             }
         }
-
+        
         self.name = resolvedName
         self.startDate = resolvedStartDate
         self.endDate = resolvedEndDate
-        self.localCurrency = resolvedLocalCurrency
-        self.rateLocalToBase = resolvedRateToBaseCurrency
-        self.budgetAmounts = resolvedBudgetAmounts
-
+        
+        self.currencyConverter = CurrencyConverter(
+            baseCurrency: baseCurrency,
+            localCurrency: resolvedLocalCurrency,
+            initialRate: resolvedRateToBaseCurrency,
+            exchangeRateProvider: exchangeRateProvider
+        )
+        
+        var initialBudgets: [ExpenseCategory: Double] = [:]
+        if let location {
+            for budget in location.budgets {
+                initialBudgets[budget.category] = budget.baseAmount
+            }
+        }
+        
+        self.budgetManager = BudgetManager(
+            converter: currencyConverter,
+            initialBudgets: initialBudgets
+        )
+        
         initialSnapshot = Snapshot(
             name: resolvedName,
             startDate: resolvedStartDate,
@@ -166,13 +182,10 @@ final class LocationEditViewModel {
 
     func loadInitialRateIfNeeded() {
         guard !hasLoadedInitialRate && !isEditing && !isHomeLocation else { return }
-        
+            
         hasLoadedInitialRate = true
     
-        exchangeRateManager.requestRefresh(
-            from: localCurrency,
-            to: baseCurrency
-        ) { [weak self] rate in
+        currencyConverter.requestRateRefresh { [weak self] rate in
             guard let self else { return }
             
             rateLocalToBase = rate
@@ -188,16 +201,19 @@ final class LocationEditViewModel {
     }
 
     func requestRateRefresh() {
-        exchangeRateManager.requestRefresh(
-            from: localCurrency,
-            to: baseCurrency
-        ) { [weak self] rate in
-            self?.rateLocalToBase = rate
-        }
+        currencyConverter.requestRateRefresh()
     }
     
-    func plannedLocalAmount(for category: ExpenseCategory) -> Double {
-        rateLocalToBase > 0 ? ((budgetAmounts[category] ?? 0) / rateLocalToBase).rounded() : 0
+    func budgetBaseAmount(for category: ExpenseCategory) -> Double {
+        budgetManager.budgetBase(for: category)
+    }
+    
+    func budgetLocalAmount(for category: ExpenseCategory) -> Double {
+        budgetManager.budgetLocal(for: category)
+    }
+    
+    func updateBudget(_ amount: Double, for category: ExpenseCategory, in inputCurrency: InputCurrency) {
+        budgetManager.updateBudget(amount, for: category, in: inputCurrency)
     }
 
     func save(using repository: LocationRepository) {

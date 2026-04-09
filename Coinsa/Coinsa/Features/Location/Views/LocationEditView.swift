@@ -280,17 +280,14 @@ struct LocationEditView: View {
         Binding(
             get: {
                 switch inputCurrency {
-                case .base: viewModel.budgetAmounts[category] ?? 0
-                case .local: viewModel.plannedLocalAmount(for: category)
+                case .base:
+                    return viewModel.budgetBaseAmount(for: category)
+                case .local:
+                    return viewModel.budgetLocalAmount(for: category)
                 }
             },
             set: { newValue in
-                switch inputCurrency {
-                case .base: viewModel.budgetAmounts[category] = newValue
-                case .local:
-                    guard viewModel.rateLocalToBase > 0 else { return }
-                    viewModel.budgetAmounts[category] = newValue * viewModel.rateLocalToBase
-                }
+                viewModel.updateBudget(newValue, for: category, in: inputCurrency)
             }
         )
     }
