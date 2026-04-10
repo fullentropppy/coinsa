@@ -14,7 +14,7 @@ extension View {
         message: LocalizedStringResource
     ) -> some View {
         self.alert(title, isPresented: isPresented) {
-            Button(.commonOk, role: .cancel) {}
+            Button(.ok, role: .cancel) {}
         } message: {
             Text(message)
         }

@@ -11,14 +11,25 @@ import SwiftData
 struct NowView: View {
     // MARK: - Stored Properties
     
+    @Environment(\.modelContext) private var context
     @Environment(AppSettingsStore.self) private var settingsStore
 
     @Query(sort: \Location.startDate) private var locations: [Location]
 
+    @State private var deletionHandler = DeletionHandler<Expense>()
     @State private var selectedQuickCategory: ExpenseCategory?
-
+    @State private var expenseToEdit: Expense?
+    
     // MARK: - Computed Properties
 
+    private var repository: ExpenseRepository {
+        ExpenseRepository(context: context)
+    }
+    
+    private var navigationSubtitle: String {
+        DateDisplayFormatter.format(.now, showsTime: false)
+    }
+    
     private var currentLocations: [Location] {
         let today = Date.now
         return locations
@@ -39,15 +50,13 @@ struct NowView: View {
         }
     }
 
-    private var recentExpenses: [Expense] {
-        if let selectedLocation {
-            selectedLocation.expenses
-                .sorted { $0.date > $1.date }
-                .prefix(5)
-                .map { $0 }
-        } else {
-            []
-        }
+    private var todayExpenses: [Expense] {
+        guard let selectedLocation else { return [] }
+        
+        let today = Date()
+        return selectedLocation.expenses
+            .filter { $0.date >= today.startOfDay && $0.date < today.endOfDay }
+            .sorted { $0.date > $1.date }
     }
 
     // MARK: - Body
@@ -69,7 +78,22 @@ struct NowView: View {
                 }
             }
             .navigationTitle(.nowNavigationTitle)
+            .navigationSubtitle(navigationSubtitle)
             .navigationBarTitleDisplayMode(.large)
+            .sheet(item: $expenseToEdit) { expense in
+                ExpenseEditView(expense: expense, baseCurrency: settingsStore.baseCurrency)
+            }
+            .deleteConfirmationAlert(
+                isPresented: $deletionHandler.isShowingDeleteConfirmation,
+                title: .expenseDeleteTitle,
+                message: .expenseDeleteMessage,
+                onConfirm: {
+                    confirmDelete()
+                },
+                onCancel: {
+                    cancelDelete()
+                }
+            )
         }
         .task(id: currentLocationIDs) {
             updateSelectedLocationIfNeeded()
@@ -82,7 +106,7 @@ struct NowView: View {
         List {
             locationSection(location: location)
             quickExpenseSection
-            recentExpensesSection
+            todayExpensesSection
         }
     }
     
@@ -118,16 +142,13 @@ struct NowView: View {
     }
     
     @ViewBuilder
-    private var recentExpensesSection: some View {
-        if !recentExpenses.isEmpty {
-            Section(.nowRecentExpenses) {
-                ForEach(recentExpenses) { expense in
-                    NavigationLink {
-                        ExpenseDetailView(expense: expense)
-                    } label: {
-                        ExpenseRowView(expense: expense, baseCurrency: settingsStore.baseCurrency)
-                    }
-                }
+    private var todayExpensesSection: some View {
+        Group {
+            if todayExpenses.isEmpty {
+                GroupHeaderView(title: .nowNoTodayExpense, icon: Expense.primaryIcon)
+                    .listRowBackground(Color.clear)
+            } else {
+                todayExpenseListContent
             }
         }
     }
@@ -192,6 +213,24 @@ struct NowView: View {
         .tint(category.badgeColor)
     }
     
+    private var todayExpenseListContent: some View {
+        Section(.nowTodayExpenses) {
+            ForEach(todayExpenses) { expense in
+                NavigationLink {
+                    ExpenseDetailView(expense: expense)
+                } label: {
+                    ExpenseRowView(expense: expense, baseCurrency: settingsStore.baseCurrency)
+                }
+                .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                    SwipeActions(
+                        onDelete: { requestDelete(for: [expense]) },
+                        onEdit: { expenseToEdit = expense }
+                    )
+                }
+            }
+        }
+    }
+    
     // MARK: - Bindings
 
     private func selectedLocationBinding(location: Location) -> Binding<UUID> {
@@ -217,6 +256,18 @@ struct NowView: View {
         }
 
         settingsStore.selectedCurrentLocation = currentLocations.first
+    }
+    
+    private func requestDelete(for expenses: [Expense]) {
+        deletionHandler.request(for: expenses)
+    }
+
+    private func confirmDelete() {
+        deletionHandler.confirm { repository.delete($0) }
+    }
+
+    private func cancelDelete() {
+        deletionHandler.cancel()
     }
 }
 

@@ -81,7 +81,7 @@ extension DateLabel {
 // MARK: - Previews
 
 private extension DateLabel {
-    static func preview(locale: Locale, colorScheme: ColorScheme) -> some View {
+    static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
         let now = Date.now
         let weekAhead = now.addingTimeInterval(604800)
         let yearAhead = now.addingTimeInterval(31536000)
@@ -106,9 +106,9 @@ private extension DateLabel {
 }
 
 #Preview("Light - RU") {
-    DateLabel.preview(locale: PreviewLocale.ru, colorScheme: .light)
+    DateLabel.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
 }
 
 #Preview("Dark - EN") {
-    DateLabel.preview(locale: PreviewLocale.en, colorScheme: .dark)
+    DateLabel.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
 }

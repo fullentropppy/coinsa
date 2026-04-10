@@ -14,8 +14,20 @@ struct DateDisplayFormatter {
 
     // MARK: - Public Methods
     
+    static func formatRelative(_ date: Date, showsTime: Bool = true) -> String {
+        if date.isTomorrow {
+            String(localized: .tomorrow)
+        } else if date.isToday {
+            String(localized: .today)
+        } else if date.isYesterday {
+            String(localized: .yesterday)
+        } else {
+            format(date, showsTime: showsTime)
+        }
+    }
+    
     static func format(_ date: Date, showsTime: Bool = true) -> String {
-        let dateTemplate = isSameYear(.now, date) ? "dMMM" : "dMMMy"
+        let dateTemplate = isSameYear(.now, date) ? "dMMMM" : "dMMMMy"
         
         let formatter = Foundation.DateFormatter()
         formatter.calendar = calendar
@@ -27,7 +39,7 @@ struct DateDisplayFormatter {
     }
 
     static func formatRange(startDate: Date, endDate: Date, showsTime: Bool = false) -> String {
-        let dateTemplate = isSameYear(startDate, endDate) && isSameYear(.now, startDate) ? "dMMM" : "dMy"
+        let dateTemplate = isSameYear(startDate, endDate) && isSameYear(.now, startDate) ? "dMMMM" : "dMy"
         
         let formatter = DateIntervalFormatter()
         formatter.calendar = calendar

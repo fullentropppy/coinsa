@@ -16,10 +16,10 @@ extension View {
         onCancel: @escaping () -> Void
     ) -> some View {
         self.alert(title, isPresented: isPresented) {
-            Button(.commonDelete, role: .destructive) {
+            Button(.delete, role: .destructive) {
                 onConfirm()
             }
-            Button(.commonCancel, role: .cancel) {
+            Button(.cancel, role: .cancel) {
                 onCancel()
             }
         } message: {

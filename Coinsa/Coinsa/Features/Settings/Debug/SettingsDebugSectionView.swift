@@ -24,19 +24,19 @@ struct SettingsDebugSectionView: View {
     var body: some View {
         settingsDebugSection
             .alert(
-                pendingAction?.alertTitle ?? .commonConfirmation,
+                pendingAction?.alertTitle ?? .confirmation,
                 isPresented: isShowingConfirmation,
                 presenting: pendingAction
             ) { action in
                 Button(action.alertConfirm, role: .destructive) {
                     perform(action)
                 }
-                Button(.commonCancel, role: .cancel) {}
+                Button(.cancel, role: .cancel) {}
             } message: { action in
                 Text(action.alertMessage)
             }
             .alert(resultMessage, isPresented: $isShowingResultAlert) {
-                Button(.commonOk, role: .cancel) {}
+                Button(.ok, role: .cancel) {}
             }
     }
 
@@ -136,7 +136,7 @@ private enum DebugAction: String, Identifiable {
     var alertConfirm: LocalizedStringResource {
         switch self {
         case .loadDemoData: .debugLoadConfirm
-        case .deleteAllData: .commonDelete
+        case .deleteAllData: .delete
         }
     }
 }

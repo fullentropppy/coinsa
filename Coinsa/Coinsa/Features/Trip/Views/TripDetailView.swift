@@ -19,7 +19,8 @@ struct TripDetailView: View {
     
     @State private var deletionHandler = DeletionHandler<Location>()
     @State private var isShowingTripEdit = false
-    @State private var isShowingLocationAdd = false
+    @State private var isShowingLocationCreate = false
+    @State private var locationToEdit: Location?
 
     private let trip: Trip
 
@@ -36,6 +37,23 @@ struct TripDetailView: View {
         )
     }
     
+    private var groupedLocations: [(status: EventStatus, locations: [Location])] {
+        let grouped = Dictionary(grouping: locations) { $0.status }
+        let statusOrder: [EventStatus] = [.ongoing, .upcoming, .completed]
+        
+        return statusOrder.compactMap { status in
+            guard var locationsForStatus = grouped[status] else { return nil }
+            
+            switch status {
+            case .ongoing: locationsForStatus.sort { $0.startDate > $1.startDate }
+            case .upcoming: locationsForStatus.sort { $0.startDate < $1.startDate }
+            case .completed: locationsForStatus.sort { $0.endDate > $1.endDate }
+            }
+            
+            return (status, locationsForStatus)
+        }
+    }
+    
     private var showsFullHeader: Bool {
         !locations.isEmpty
     }
@@ -47,8 +65,7 @@ struct TripDetailView: View {
         _locations = Query(
             filter: #Predicate<Location> { location in
                 location.trip.persistentModelID == tripID
-            },
-            sort: \Location.startDate
+            }
         )
         self.trip = trip
     }
@@ -63,23 +80,18 @@ struct TripDetailView: View {
                 toolbarContent
             }
             .sheet(isPresented: $isShowingTripEdit) {
-                TripEditView(
-                    trip: trip,
-                    onDelete: {
-                        dismiss()
-                    }
-                )
+                TripEditView( trip: trip, onDelete: { dismiss() } )
             }
-            .sheet(isPresented: $isShowingLocationAdd) {
-                LocationEditView(
-                    trip: trip,
-                    baseCurrency: settingsStore.baseCurrency
-                )
+            .sheet(isPresented: $isShowingLocationCreate) {
+                LocationEditView( trip: trip, baseCurrency: settingsStore.baseCurrency)
+            }
+            .sheet(item: $locationToEdit) { location in
+                LocationEditView(location: location, baseCurrency: settingsStore.baseCurrency)
             }
             .safeAreaInset(edge: .bottom) {
                 if !locations.isEmpty {
                     PrimaryAddButton(isOnLeft: settingsStore.isAddButtonOnLeft) {
-                        isShowingLocationAdd = true
+                        isShowingLocationCreate = true
                     }
                 }
             }
@@ -118,7 +130,7 @@ struct TripDetailView: View {
     }
     
     private var locationsSection: some View {
-        Section(.tripLocations) {
+        Group {
             if locations.isEmpty {
                 emptyLocationListContent
             } else {
@@ -136,19 +148,34 @@ struct TripDetailView: View {
             description: .locationEmptyStateDescription,
             buttonLabel: .locationAdd,
         ) {
-            isShowingLocationAdd = true
+            isShowingLocationCreate = true
         }
+        .listRowBackground(Color.clear)
     }
     
     private var locationListContent: some View {
-        ForEach(locations) { location in
-            NavigationLink {
-                LocationDetailView(location: location)
-            } label: {
-                LocationRowView(location: location)
+        Group {
+            GroupHeaderView(title: .tripLocations, icon: Location.primaryIcon)
+                .listRowBackground(Color.clear)
+            
+            ForEach(Array(groupedLocations.enumerated()), id: \.offset) { _, group in
+                Section(group.status.localizedPlural) {
+                    ForEach(group.locations) { location in
+                        NavigationLink {
+                            LocationDetailView(location: location)
+                        } label: {
+                            LocationRowView(location: location)
+                        }
+                        .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                            SwipeActions(
+                                onDelete: { requestDelete(for: [location]) },
+                                onEdit: { locationToEdit = location }
+                            )
+                        }
+                    }
+                }
             }
         }
-        .onDelete(perform: requestDelete)
     }
     
     @ToolbarContentBuilder
@@ -162,8 +189,8 @@ struct TripDetailView: View {
 
     // MARK: - Actions
     
-    private func requestDelete(at offsets: IndexSet) {
-        deletionHandler.request(for: offsets.map { locations[$0] })
+    private func requestDelete(for locations: [Location]) {
+        deletionHandler.request(for: locations)
     }
 
     private func confirmDelete() {

@@ -19,7 +19,8 @@ struct LocationDetailView: View {
 
     @State private var deletionHandler = DeletionHandler<Expense>()
     @State private var isShowingLocationEdit = false
-    @State private var isShowingExpenseAdd = false
+    @State private var isShowingExpenseCreate = false
+    @State private var expenseToEdit: Expense?
     
     private let location: Location
 
@@ -36,6 +37,43 @@ struct LocationDetailView: View {
         )
     }
     
+    private var groupedExpenses: [(date: Date, expenses: [Expense])] {
+        let today = Date().startOfDay
+        let yesterday = today.adding(days: -1)
+        
+        var grouped: [Date: [Expense]] = [:]
+        
+        for expense in expenses {
+            grouped[expense.date.startOfDay, default: []].append(expense)
+        }
+        
+        for (day, _) in grouped {
+            grouped[day] = grouped[day]?.sorted { $0.date > $1.date }
+        }
+        
+        var result: [(date: Date, expenses: [Expense])] = []
+        
+        if let todayExpenses = grouped[today] {
+            result.append((date: today, expenses: todayExpenses))
+        }
+        
+        if let yesterdayExpenses = grouped[yesterday] {
+            result.append((date: yesterday, expenses: yesterdayExpenses))
+        }
+        
+        let otherDates = grouped.keys
+            .filter { $0 != today && $0 != yesterday }
+            .sorted(by: >)
+        
+        for date in otherDates {
+            if let expensesForDate = grouped[date] {
+                result.append((date: date, expenses: expensesForDate))
+            }
+        }
+        
+        return result
+    }
+    
     // MARK: - Initialization
 
     init(location: Location) {
@@ -43,8 +81,7 @@ struct LocationDetailView: View {
         _expenses = Query(
             filter: #Predicate<Expense> { expense in
                 expense.location.persistentModelID == locationID
-            },
-            sort: \Expense.date, order: .reverse
+            }
         )
         self.location = location
     }
@@ -68,16 +105,16 @@ struct LocationDetailView: View {
                     }
                 )
             }
-            .sheet(isPresented: $isShowingExpenseAdd) {
-                ExpenseEditView(
-                    location: location,
-                    baseCurrency: settingsStore.baseCurrency
-                )
+            .sheet(isPresented: $isShowingExpenseCreate) {
+                ExpenseEditView(location: location, baseCurrency: settingsStore.baseCurrency)
+            }
+            .sheet(item: $expenseToEdit) { expense in
+                ExpenseEditView(expense: expense, baseCurrency: settingsStore.baseCurrency)
             }
             .safeAreaInset(edge: .bottom) {
                 if !expenses.isEmpty {
                     PrimaryAddButton(isOnLeft: settingsStore.isAddButtonOnLeft) {
-                        isShowingExpenseAdd = true
+                        isShowingExpenseCreate = true
                     }
                 }
             }
@@ -108,7 +145,7 @@ struct LocationDetailView: View {
     }
     
     private var locationsSection: some View {
-        Section(.locationExpenses) {
+        Group {
             if expenses.isEmpty {
                 emptyExpenseListContent
             } else {
@@ -120,16 +157,30 @@ struct LocationDetailView: View {
     // MARK: - Components
 
     private var expenseListContent: some View {
-        ForEach(expenses) { expense in
-            NavigationLink {
-                ExpenseDetailView(expense: expense)
-            } label: {
-                ExpenseRowView(expense: expense, baseCurrency: settingsStore.baseCurrency)
+        Group {
+            GroupHeaderView(title: .locationExpenses, icon: Expense.primaryIcon)
+                .listRowBackground(Color.clear)
+            
+            ForEach(Array(groupedExpenses.enumerated()), id: \.offset) { _, group in
+                Section(DateDisplayFormatter.formatRelative(group.date, showsTime: false)) {
+                    ForEach(group.expenses) { expense in
+                        NavigationLink {
+                            ExpenseDetailView(expense: expense)
+                        } label: {
+                            ExpenseRowView(expense: expense, baseCurrency: settingsStore.baseCurrency)
+                        }
+                        .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                            SwipeActions(
+                                onDelete: { requestDelete(for: [expense]) },
+                                onEdit: { expenseToEdit = expense }
+                            )
+                        }
+                    }
+                }
             }
         }
-        .onDelete(perform: requestDelete)
     }
-
+    
     private var emptyExpenseListContent: some View {
         EmptyStateView(
             imageName: Expense.primaryIcon,
@@ -137,8 +188,9 @@ struct LocationDetailView: View {
             description: .expenseEmptyStateDescription,
             buttonLabel: .expenseAdd
         ) {
-            isShowingExpenseAdd = true
+            isShowingExpenseCreate = true
         }
+        .listRowBackground(Color.clear)
     }
 
     @ToolbarContentBuilder
@@ -152,8 +204,8 @@ struct LocationDetailView: View {
 
     // MARK: - Actions
 
-    private func requestDelete(at offsets: IndexSet) {
-        deletionHandler.request(for: offsets.map { expenses[$0] })
+    private func requestDelete(for expenses: [Expense]) {
+        deletionHandler.request(for: expenses)
     }
 
     private func confirmDelete() {

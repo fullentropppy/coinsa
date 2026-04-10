@@ -14,10 +14,11 @@ struct TripListView: View {
     @Environment(\.modelContext) private var context
     @Environment(AppSettingsStore.self) private var settingsStore
     
-    @Query(sort: \Trip.startDate) private var trips: [Trip]
+    @Query private var trips: [Trip]
 
     @State private var deletionHandler = DeletionHandler<Trip>()
-    @State private var isShowingTripEdit = false
+    @State private var isShowingTripCreate = false
+    @State private var tripToEdit: Trip?
     
     // MARK: - Computed Properties
     
@@ -55,13 +56,16 @@ struct TripListView: View {
             }
             .navigationTitle(.tripNavigationTitleList)
             .navigationBarTitleDisplayMode(.large)
-            .sheet(isPresented: $isShowingTripEdit) {
+            .sheet(isPresented: $isShowingTripCreate) {
                 TripEditView(trip: nil)
+            }
+            .sheet(item: $tripToEdit) { trip in
+                TripEditView(trip: trip)
             }
             .safeAreaInset(edge: .bottom) {
                 if !trips.isEmpty {
                     PrimaryAddButton(isOnLeft: settingsStore.isAddButtonOnLeft) {
-                        isShowingTripEdit = true
+                        isShowingTripCreate = true
                     }
                 }
             }
@@ -84,24 +88,23 @@ struct TripListView: View {
     private var tripListContent: some View {
         List {
             ForEach(Array(groupedTrips.enumerated()), id: \.offset) { _, group in
-                Section {
+                Section(group.status.localizedPlural) {
                     ForEach(group.trips) { trip in
                         NavigationLink {
                             TripDetailView(trip: trip)
                         } label: {
                             TripRowView(trip: trip)
                         }
+                        .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                            SwipeActions(
+                                onDelete: { requestDelete(for: [trip]) },
+                                onEdit: { tripToEdit = trip }
+                            )
+                        }
                     }
-                    .onDelete { indexSet in
-                        let tripsToDelete = indexSet.map { group.trips[$0] }
-                        deletionHandler.request(for: tripsToDelete)
-                    }
-                } header: {
-                    Text(group.status.localized)
                 }
             }
         }
-        .listStyle(.insetGrouped)
     }
     
     // MARK: - Components
@@ -113,14 +116,14 @@ struct TripListView: View {
             description: .tripEmptyStateDescription,
             buttonLabel: .tripAdd,
         ) {
-            isShowingTripEdit = true
+            isShowingTripCreate = true
         }
     }
     
     // MARK: - Actions
 
-    private func requestDelete(at offsets: IndexSet) {
-        deletionHandler.request(for: offsets.map { trips[$0] })
+    private func requestDelete(for trips: [Trip]) {
+        deletionHandler.request(for: trips)
     }
 
     private func confirmDelete() {

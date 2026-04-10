@@ -15,4 +15,12 @@ extension EventStatus {
         case .completed: .eventStatusCompleted
         }
     }
+    
+    var localizedPlural: LocalizedStringResource {
+        switch self {
+        case .upcoming: .eventStatusUpcomingPlural
+        case .ongoing: .eventStatusOngoingPlural
+        case .completed: .eventStatusCompletedPlural
+        }
+    }
 }

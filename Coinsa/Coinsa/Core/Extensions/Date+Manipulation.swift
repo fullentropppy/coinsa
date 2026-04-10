@@ -8,6 +8,16 @@
 import Foundation
 
 extension Date {
+    // MARK: - Computed Properties
+    
+    var yesterday: Date {
+        adding(days: -1)
+    }
+    
+    var tomorrow: Date {
+        adding(days: 1)
+    }
+    
     // MARK: - Public Methods
     
     func adding(seconds: Int) -> Date {
