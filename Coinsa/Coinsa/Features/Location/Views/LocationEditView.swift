@@ -47,20 +47,14 @@ struct LocationEditView: View {
 
     init(trip: Trip, baseCurrency: Currency, onDelete: (() -> Void)? = nil) {
         _viewModel = State(
-            initialValue: LocationEditViewModel(
-                trip: trip,
-                baseCurrency: baseCurrency
-            )
+            initialValue: LocationEditViewModel(trip: trip, baseCurrency: baseCurrency)
         )
         self.onDelete = onDelete
     }
     
     init(location: Location, baseCurrency: Currency, onDelete: (() -> Void)? = nil) {
         _viewModel = State(
-            initialValue: LocationEditViewModel(
-                location: location,
-                baseCurrency: baseCurrency
-            )
+            initialValue: LocationEditViewModel(location: location, baseCurrency: baseCurrency)
         )
         self.onDelete = onDelete
     }
@@ -80,20 +74,14 @@ struct LocationEditView: View {
                 .scrollDismissesKeyboard(.interactively)
                 .discardConfirmationAlert(
                     isPresented: $isShowingDiscardAlert,
-                    onConfirm: {
-                        dismiss()
-                    }
+                    onConfirm: { dismiss() }
                 )
                 .deleteConfirmationAlert(
                     isPresented: $deletionHandler.isShowingDeleteConfirmation,
                     title: .locationDeleteTitle,
                     message: .locationDeleteMessage,
-                    onConfirm: {
-                        confirmDelete()
-                    },
-                    onCancel: {
-                        cancelDelete()
-                    }
+                    onConfirm: { confirmDelete() },
+                    onCancel: { cancelDelete() }
                 )
                 .notificationAlert(
                     isPresented: rateErrorBinding,
@@ -280,10 +268,8 @@ struct LocationEditView: View {
         Binding(
             get: {
                 switch inputCurrency {
-                case .base:
-                    return viewModel.budgetBaseAmount(for: category)
-                case .local:
-                    return viewModel.budgetLocalAmount(for: category)
+                case .base: viewModel.budgetBaseAmount(for: category)
+                case .local: viewModel.budgetLocalAmount(for: category)
                 }
             },
             set: { newValue in

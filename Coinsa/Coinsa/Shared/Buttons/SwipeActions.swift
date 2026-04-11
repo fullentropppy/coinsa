@@ -31,11 +31,12 @@ struct SwipeActions: View {
         } else {
             Group {
                 if let onDelete {
-                    Button(role: .destructive) {
+                    Button {
                         onDelete()
                     } label: {
                         Label(.delete, systemImage: "trash")
                     }
+                    .tint(.red)
                 }
                 if let onEdit {
                     Button {

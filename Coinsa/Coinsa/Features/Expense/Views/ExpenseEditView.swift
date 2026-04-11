@@ -94,9 +94,7 @@ struct ExpenseEditView: View {
                 .scrollDismissesKeyboard(.interactively)
                 .discardConfirmationAlert(
                     isPresented: $isShowingDiscardAlert,
-                    onConfirm: {
-                        dismiss()
-                    }
+                    onConfirm: { dismiss() }
                 )
                 .deleteConfirmationAlert(
                     isPresented: $deletionHandler.isShowingDeleteConfirmation,
@@ -106,9 +104,7 @@ struct ExpenseEditView: View {
                         confirmDelete()
                         dismiss()
                     },
-                    onCancel: {
-                        cancelDelete()
-                    }
+                    onCancel: { cancelDelete() }
                 )
                 .notificationAlert(
                     isPresented: rateErrorBinding,

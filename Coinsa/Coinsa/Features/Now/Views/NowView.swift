@@ -14,7 +14,7 @@ struct NowView: View {
     @Environment(\.modelContext) private var context
     @Environment(AppSettingsStore.self) private var settingsStore
 
-    @Query(sort: \Location.startDate) private var locations: [Location]
+    @Query private var locations: [Location]
 
     @State private var deletionHandler = DeletionHandler<Expense>()
     @State private var selectedQuickCategory: ExpenseCategory?
@@ -87,12 +87,8 @@ struct NowView: View {
                 isPresented: $deletionHandler.isShowingDeleteConfirmation,
                 title: .expenseDeleteTitle,
                 message: .expenseDeleteMessage,
-                onConfirm: {
-                    confirmDelete()
-                },
-                onCancel: {
-                    cancelDelete()
-                }
+                onConfirm: { confirmDelete() },
+                onCancel: { cancelDelete() }
             )
         }
         .task(id: currentLocationIDs) {

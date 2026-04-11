@@ -47,19 +47,14 @@ struct TripEditView: View {
                 .scrollDismissesKeyboard(.interactively)
                 .discardConfirmationAlert(
                     isPresented: $isShowingDiscardAlert,
-                    onConfirm: {
-                        dismiss()
-                    }
+                    onConfirm: { dismiss() }
                 )
                 .deleteConfirmationAlert(
                     isPresented: $deletionHandler.isShowingDeleteConfirmation,
                     title: .tripDeleteTitle,
                     message: .tripDeleteMessage,
-                    onConfirm: {
-                        confirmDelete()
-                    },
-                    onCancel: {
-                        cancelDelete()
+                    onConfirm: { confirmDelete() },
+                    onCancel: { cancelDelete()
                     }
                 )
         }

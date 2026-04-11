@@ -129,13 +129,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Version %1$@ (%2$@)"
+            "value" : "Version"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Версия %1$@ (%2$@)"
+            "value" : "Версия"
           }
         }
       }
@@ -1585,6 +1585,23 @@
         }
       }
     },
+    "settings.about" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "About"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "О приложении"
+          }
+        }
+      }
+    },
     "settings.appAppearance" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1687,6 +1704,23 @@
         }
       }
     },
+    "settings.thirdPartyAPIs" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Third party API’s"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сторонние API"
+          }
+        }
+      }
+    },
     "tab.now" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1734,6 +1768,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Поездки"
+          }
+        }
+      }
+    },
+    "thirdParty.hexarate" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HexaRate"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HexaRate"
+          }
+        }
+      }
+    },
+    "thirdParty.hexarate.description" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Currency exchange rates"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Курсы обмена валют"
           }
         }
       }

@@ -15,8 +15,6 @@ struct TripDetailView: View {
     @Environment(AppSettingsStore.self) private var settingsStore
     @Environment(\.dismiss) private var dismiss
     
-    @Query private var locations: [Location]
-    
     @State private var deletionHandler = DeletionHandler<Location>()
     @State private var isShowingTripEdit = false
     @State private var isShowingLocationCreate = false
@@ -31,29 +29,13 @@ struct TripDetailView: View {
     }
     
     private var viewModel: TripDetailViewModel {
-        TripDetailViewModel(
-            trip: trip,
-            baseCurrency: settingsStore.baseCurrency
-        )
+        TripDetailViewModel(trip: trip, baseCurrency: settingsStore.baseCurrency)
     }
     
-    private var groupedLocations: [(status: EventStatus, locations: [Location])] {
-        let grouped = Dictionary(grouping: locations) { $0.status }
-        let statusOrder: [EventStatus] = [.ongoing, .upcoming, .completed]
-        
-        return statusOrder.compactMap { status in
-            guard var locationsForStatus = grouped[status] else { return nil }
-            
-            switch status {
-            case .ongoing: locationsForStatus.sort { $0.startDate > $1.startDate }
-            case .upcoming: locationsForStatus.sort { $0.startDate < $1.startDate }
-            case .completed: locationsForStatus.sort { $0.endDate > $1.endDate }
-            }
-            
-            return (status, locationsForStatus)
-        }
+    private var locations: [Location] {
+        trip.locations
     }
-    
+
     private var showsFullHeader: Bool {
         !locations.isEmpty
     }
@@ -61,12 +43,6 @@ struct TripDetailView: View {
     // MARK: - Initialization
 
     init(trip: Trip) {
-        let tripID = trip.persistentModelID
-        _locations = Query(
-            filter: #Predicate<Location> { location in
-                location.trip.persistentModelID == tripID
-            }
-        )
         self.trip = trip
     }
 
@@ -99,12 +75,8 @@ struct TripDetailView: View {
                 isPresented: $deletionHandler.isShowingDeleteConfirmation,
                 title: .locationDeleteTitle,
                 message: .locationDeleteMessage,
-                onConfirm: {
-                    confirmDelete()
-                },
-                onCancel: {
-                    cancelDelete()
-                }
+                onConfirm: { confirmDelete() },
+                onCancel: { cancelDelete() }
             )
     }
 
@@ -122,7 +94,7 @@ struct TripDetailView: View {
     private var headerSection: some View {
         Section {
             EventSummaryView(
-                data: viewModel.eventHeaderData,
+                data: viewModel.eventHeaderData(locations: locations),
                 showsAmounts: showsFullHeader,
                 showsDifference: showsFullHeader
             )
@@ -158,7 +130,7 @@ struct TripDetailView: View {
             GroupHeaderView(title: .tripLocations, icon: Location.primaryIcon)
                 .listRowBackground(Color.clear)
             
-            ForEach(Array(groupedLocations.enumerated()), id: \.offset) { _, group in
+            ForEach(viewModel.groupedLocations(from: locations), id: \.status) { group in
                 Section(group.status.localizedPlural) {
                     ForEach(group.locations) { location in
                         NavigationLink {

@@ -13,13 +13,24 @@ struct TripDetailViewModel {
 
     let trip: Trip
     let baseCurrency: Currency
+    
+    // MARK: - Initialization
 
-    // MARK: - Computed Properties
-
-    var eventHeaderData: EventSummaryData {
-        let plannedAmount = trip.calculatePlannedAmount(asBaseCurrency: true)
-        let actualAmount = trip.calculateActualAmount(asBaseCurrency: true)
-
+    init(trip: Trip, baseCurrency: Currency) {
+        self.trip = trip
+        self.baseCurrency = baseCurrency
+    }
+    
+    // MARK: - Public Methods
+    
+    func eventHeaderData(locations: [Location]) -> EventSummaryData {
+        let plannedAmount = locations.reduce(0) { total, location in
+            total + location.calculatePlannedAmount(asBaseCurrency: true)
+        }
+        let actualAmount = locations.reduce(0) { total, location in
+            total + location.calculateActualAmount(asBaseCurrency: true)
+        }
+        
         return EventSummaryData(
             status: trip.status,
             startDate: trip.startDate,
@@ -38,10 +49,20 @@ struct TripDetailViewModel {
         )
     }
     
-    // MARK: - Initialization
-
-    init(trip: Trip, baseCurrency: Currency) {
-        self.trip = trip
-        self.baseCurrency = baseCurrency
+    func groupedLocations(from locations: [Location]) -> [(status: EventStatus, locations: [Location])] {
+        let grouped = Dictionary(grouping: locations) { $0.status }
+        let statusOrder: [EventStatus] = [.ongoing, .upcoming, .completed]
+        
+        return statusOrder.compactMap { status in
+            guard var locationsForStatus = grouped[status] else { return nil }
+            
+            switch status {
+            case .ongoing: locationsForStatus.sort { $0.startDate > $1.startDate }
+            case .upcoming: locationsForStatus.sort { $0.startDate < $1.startDate }
+            case .completed: locationsForStatus.sort { $0.endDate > $1.endDate }
+            }
+            
+            return (status, locationsForStatus)
+        }
     }
 }

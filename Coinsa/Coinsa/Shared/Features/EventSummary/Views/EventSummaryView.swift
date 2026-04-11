@@ -111,16 +111,16 @@ private extension EventSummaryData {
         
         return Form {
             Section {
-                EventSummaryView(data: tripViewModel.eventHeaderData, showsAmounts: false, showsDifference: false)
+                EventSummaryView(data: tripViewModel.eventHeaderData(locations: trip.locations), showsAmounts: false, showsDifference: false)
             }
             Section {
-                EventSummaryView(data: tripViewModel.eventHeaderData)
+                EventSummaryView(data: tripViewModel.eventHeaderData(locations: trip.locations))
             }
             Section {
-                EventSummaryView(data: locationViewModel.eventHeaderData)
+                EventSummaryView(data: locationViewModel.eventHeaderData(expenses: location.expenses))
             }
             Section {
-                EventSummaryView(data: locationViewModel.eventHeaderData, showsHeader: false)
+                EventSummaryView(data: locationViewModel.eventHeaderData(expenses: location.expenses), showsHeader: false)
             }
         }
         .environment(\.locale, locale)

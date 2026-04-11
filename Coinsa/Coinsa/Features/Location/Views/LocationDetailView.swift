@@ -37,50 +37,13 @@ struct LocationDetailView: View {
         )
     }
     
-    private var groupedExpenses: [(date: Date, expenses: [Expense])] {
-        let today = Date().startOfDay
-        let yesterday = today.adding(days: -1)
-        
-        var grouped: [Date: [Expense]] = [:]
-        
-        for expense in expenses {
-            grouped[expense.date.startOfDay, default: []].append(expense)
-        }
-        
-        for (day, _) in grouped {
-            grouped[day] = grouped[day]?.sorted { $0.date > $1.date }
-        }
-        
-        var result: [(date: Date, expenses: [Expense])] = []
-        
-        if let todayExpenses = grouped[today] {
-            result.append((date: today, expenses: todayExpenses))
-        }
-        
-        if let yesterdayExpenses = grouped[yesterday] {
-            result.append((date: yesterday, expenses: yesterdayExpenses))
-        }
-        
-        let otherDates = grouped.keys
-            .filter { $0 != today && $0 != yesterday }
-            .sorted(by: >)
-        
-        for date in otherDates {
-            if let expensesForDate = grouped[date] {
-                result.append((date: date, expenses: expensesForDate))
-            }
-        }
-        
-        return result
-    }
-    
     // MARK: - Initialization
 
     init(location: Location) {
-        let locationID = location.persistentModelID
+        let locationID = location.id
         _expenses = Query(
             filter: #Predicate<Expense> { expense in
-                expense.location.persistentModelID == locationID
+                expense.location.id == locationID
             }
         )
         self.location = location
@@ -100,9 +63,7 @@ struct LocationDetailView: View {
                 LocationEditView(
                     location: location,
                     baseCurrency: settingsStore.baseCurrency,
-                    onDelete: {
-                        dismiss()
-                    }
+                    onDelete: { dismiss() }
                 )
             }
             .sheet(isPresented: $isShowingExpenseCreate) {
@@ -140,7 +101,7 @@ struct LocationDetailView: View {
     
     private var headerSection: some View {
         Section {
-            EventSummaryView(data: viewModel.eventHeaderData)
+            EventSummaryView(data: viewModel.eventHeaderData(expenses: expenses))
         }
     }
     
@@ -161,7 +122,7 @@ struct LocationDetailView: View {
             GroupHeaderView(title: .locationExpenses, icon: Expense.primaryIcon)
                 .listRowBackground(Color.clear)
             
-            ForEach(Array(groupedExpenses.enumerated()), id: \.offset) { _, group in
+            ForEach(viewModel.groupedExpenses(from: expenses), id: \.date) { group in
                 Section(DateDisplayFormatter.formatRelative(group.date, showsTime: false)) {
                     ForEach(group.expenses) { expense in
                         NavigationLink {

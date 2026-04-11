@@ -26,21 +26,8 @@ struct TripListView: View {
         TripRepository(context: context)
     }
     
-    private var groupedTrips: [(status: EventStatus, trips: [Trip])] {
-        let grouped = Dictionary(grouping: trips) { $0.status }
-        let statusOrder: [EventStatus] = [.ongoing, .upcoming, .completed]
-        
-        return statusOrder.compactMap { status in
-            guard var tripsForStatus = grouped[status] else { return nil }
-            
-            switch status {
-            case .ongoing: tripsForStatus.sort { $0.startDate > $1.startDate }
-            case .upcoming: tripsForStatus.sort { $0.startDate < $1.startDate }
-            case .completed: tripsForStatus.sort { $0.endDate > $1.endDate }
-            }
-            
-            return (status, tripsForStatus)
-        }
+    private var viewModel: TripListViewModel {
+        TripListViewModel()
     }
     
     // MARK: - Body
@@ -73,12 +60,8 @@ struct TripListView: View {
                 isPresented: $deletionHandler.isShowingDeleteConfirmation,
                 title: .tripDeleteTitle,
                 message: .tripDeleteMessage,
-                onConfirm: {
-                    confirmDelete()
-                },
-                onCancel: {
-                    cancelDelete()
-                }
+                onConfirm: { confirmDelete() },
+                onCancel: { cancelDelete() }
             )
         }
     }
@@ -87,7 +70,7 @@ struct TripListView: View {
     
     private var tripListContent: some View {
         List {
-            ForEach(Array(groupedTrips.enumerated()), id: \.offset) { _, group in
+            ForEach(viewModel.groupedTrips(from: trips), id: \.status) { group in
                 Section(group.status.localizedPlural) {
                     ForEach(group.trips) { trip in
                         NavigationLink {

@@ -29,9 +29,6 @@ struct SettingsView: View {
             settingsForm
                 .navigationTitle(.settingsNavigationTitle)
                 .navigationBarTitleDisplayMode(.large)
-                .safeAreaInset(edge: .bottom) {
-                    appInfoFooter
-                }
         }
     }
 
@@ -41,6 +38,7 @@ struct SettingsView: View {
         Form {
             baseCurrencySection
             appearanceSection
+            aboutSection
 #if DEBUG
             SettingsDebugSectionView(demoDataService: demoDataService)
 #endif
@@ -75,22 +73,14 @@ struct SettingsView: View {
         }
     }
     
-    // MARK: - Components
-    
-    private var appInfoFooter: some View {
-        VStack(alignment: .center) {
-            Text(AppInfo.appName)
-            Text(.appVersion(AppInfo.version, AppInfo.build))
-            HStack {
-                Text(AppInfo.copyrightYears)
-                Text(.appAuthor)
+    private var aboutSection: some View {
+        Section {
+            NavigationLink(.settingsAbout) {
+                AboutView()
             }
         }
-        .font(.footnote)
-        .foregroundStyle(.gray)
-        .padding(.bottom, 24)
     }
-
+    
     // MARK: - Bindings
 
     private var selectedAppAppearance: Binding<AppAppearance> {
