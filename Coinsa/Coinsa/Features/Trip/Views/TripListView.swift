@@ -34,39 +34,43 @@ struct TripListView: View {
     
     var body: some View {
         NavigationStack {
-            Group {
-                if trips.isEmpty {
-                    emptyTripListContent
-                } else {
-                    tripListContent
+            tripListForm
+                .navigationTitle(.tripNavigationTitleList)
+                .navigationBarTitleDisplayMode(.large)
+                .sheet(isPresented: $isShowingTripCreate) {
+                    TripEditView(trip: nil)
                 }
-            }
-            .navigationTitle(.tripNavigationTitleList)
-            .navigationBarTitleDisplayMode(.large)
-            .sheet(isPresented: $isShowingTripCreate) {
-                TripEditView(trip: nil)
-            }
-            .sheet(item: $tripToEdit) { trip in
-                TripEditView(trip: trip)
-            }
-            .safeAreaInset(edge: .bottom) {
-                if !trips.isEmpty {
-                    PrimaryAddButton(isOnLeft: settingsStore.isAddButtonOnLeft) {
-                        isShowingTripCreate = true
+                .sheet(item: $tripToEdit) { trip in
+                    TripEditView(trip: trip)
+                }
+                .safeAreaInset(edge: .bottom) {
+                    if !trips.isEmpty {
+                        PrimaryAddButton(isOnLeft: settingsStore.isAddButtonOnLeft) {
+                            isShowingTripCreate = true
+                        }
                     }
                 }
-            }
-            .deleteConfirmationAlert(
-                isPresented: $deletionHandler.isShowingDeleteConfirmation,
-                title: .tripDeleteTitle,
-                message: .tripDeleteMessage,
-                onConfirm: { confirmDelete() },
-                onCancel: { cancelDelete() }
-            )
+                .deleteConfirmationAlert(
+                    isPresented: $deletionHandler.isShowingDeleteConfirmation,
+                    title: .tripDeleteTitle,
+                    message: .tripDeleteMessage,
+                    onConfirm: { confirmDelete() },
+                    onCancel: { cancelDelete() }
+                )
         }
     }
     
     // MARK: - Content
+    
+    private var tripListForm: some View {
+        Group {
+            if trips.isEmpty {
+                emptyTripListContent
+            } else {
+                tripListContent
+            }
+        }
+    }
     
     private var tripListContent: some View {
         List {
@@ -89,8 +93,6 @@ struct TripListView: View {
             }
         }
     }
-    
-    // MARK: - Components
     
     private var emptyTripListContent: some View {
         EmptyStateView(

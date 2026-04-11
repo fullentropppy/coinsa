@@ -12,7 +12,7 @@ extension EventStatus {
         switch self {
         case .upcoming: .teal
         case .ongoing: .green
-        case .completed: .blue
+        case .completed: .gray
         }
     }
 }

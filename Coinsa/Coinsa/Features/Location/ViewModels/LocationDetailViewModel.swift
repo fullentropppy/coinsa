@@ -26,64 +26,36 @@ struct LocationDetailViewModel {
     // MARK: - Computed Properties
 
     var eventHeaderData: EventSummaryData {
+        let isHomeLocation = localCurrency == baseCurrency
+        
         let plannedAmountBase = location.calculatePlannedAmount(asBaseCurrency: true)
-        let plannedAmountLocal = location.calculatePlannedAmount(asBaseCurrency: false)
+        let plannedAmountLocal = isHomeLocation ? nil : location.calculatePlannedAmount(asBaseCurrency: false)
         let actualAmountBase = location.calculateActualAmount(asBaseCurrency: true)
-        let actualAmountLocal = location.calculateActualAmount(asBaseCurrency: false)
-        let hasLocalAmounts = localCurrency != baseCurrency && location.rateLocalToBase > 0
+        let actualAmountLocal = isHomeLocation ? nil : location.calculateActualAmount(asBaseCurrency: false)
+        let localCurrency = isHomeLocation ? nil : localCurrency
 
         return EventSummaryData(
+            badgeIcon: Location.badgeIcon,
+            badgeColor: Location.badgeColor,
             status: location.status,
             startDate: location.startDate,
             endDate: location.endDate,
-            days: location.durationInDays,
             plannedBaseAmount: plannedAmountBase,
             actualBaseAmount: actualAmountBase,
-            baseAmountDifference: plannedAmountBase - actualAmountBase,
             baseCurrency: baseCurrency,
-            plannedLocalAmount: hasLocalAmounts ? plannedAmountLocal : nil,
-            actualLocalAmount: hasLocalAmounts ? actualAmountLocal : nil,
-            localAmountDifference: hasLocalAmounts ? plannedAmountLocal - actualAmountLocal : nil,
-            localCurrency: hasLocalAmounts ? localCurrency : nil,
-            badgeIcon: Location.badgeIcon,
-            badgeColor: Location.badgeColor
+            plannedLocalAmount: plannedAmountLocal,
+            actualLocalAmount: actualAmountLocal,
+            localCurrency: localCurrency
         )
     }
     
-    // MARK: - Public Methods
-    
-    func eventHeaderData(expenses: [Expense]) -> EventSummaryData {
-        let plannedAmountBase = location.calculatePlannedAmount(asBaseCurrency: true)
-        let plannedAmountLocal = location.calculatePlannedAmount(asBaseCurrency: false)
-        let actualAmountBase = expenses.reduce(0) { $0 + $1.baseAmount }
-        let actualAmountLocal = expenses.reduce(0) { $0 + $1.localAmount }
-        let hasLocalAmounts = localCurrency != baseCurrency && location.rateLocalToBase > 0
-        
-        return EventSummaryData(
-            status: location.status,
-            startDate: location.startDate,
-            endDate: location.endDate,
-            days: location.durationInDays,
-            plannedBaseAmount: plannedAmountBase,
-            actualBaseAmount: actualAmountBase,
-            baseAmountDifference: plannedAmountBase - actualAmountBase,
-            baseCurrency: baseCurrency,
-            plannedLocalAmount: hasLocalAmounts ? plannedAmountLocal : nil,
-            actualLocalAmount: hasLocalAmounts ? actualAmountLocal : nil,
-            localAmountDifference: hasLocalAmounts ? plannedAmountLocal - actualAmountLocal : nil,
-            localCurrency: hasLocalAmounts ? localCurrency : nil,
-            badgeIcon: Location.badgeIcon,
-            badgeColor: Location.badgeColor
-        )
-    }
-    
-    func groupedExpenses(from expenses: [Expense]) -> [(date: Date, expenses: [Expense])] {
+    var groupedExpenses: [(date: Date, expenses: [Expense])] {
         let today = Date().startOfDay
         let yesterday = today.adding(days: -1)
         
         var grouped: [Date: [Expense]] = [:]
         
-        for expense in expenses {
+        for expense in location.expenses {
             grouped[expense.date.startOfDay, default: []].append(expense)
         }
         

@@ -37,7 +37,13 @@ struct DemoDataService {
     }
 
     func deleteAllData() throws {
-        try context.delete(model: Trip.self)
+        let descriptor = FetchDescriptor<Trip>()
+        let trips = try context.fetch(descriptor)
+        
+        for trip in trips {
+            context.delete(trip)
+        }
+        
         try context.save()
     }
 }

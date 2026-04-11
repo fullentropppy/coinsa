@@ -15,6 +15,25 @@ struct EventSummaryView: View {
     let showsAmounts: Bool
     let showsDifference: Bool
     
+    // MARK: - Computed Properties
+    
+    private var days: Int {
+        let difference = data.endDate.days(from: data.startDate)
+        return difference == 0 ? 1 : Int(difference)
+    }
+    
+    private var baseAmountDifference: Double {
+        data.plannedBaseAmount - data.actualBaseAmount
+    }
+    
+    private var localAmountDifference: Double {
+        if let planned = data.plannedLocalAmount, let actual = data.actualLocalAmount {
+            planned - actual
+        } else {
+            0
+        }
+    }
+    
     // MARK: - Initialization
     
     init(
@@ -57,7 +76,7 @@ struct EventSummaryView: View {
             EventStatusLabel(data.status)
             Spacer()
             DateLabel.secondarySmall(from: data.startDate, to: data.endDate)
-            CountLabel.daysSecondarySmall(data.days)
+            CountLabel.daysSecondarySmall(days)
         }
     }
 
@@ -82,9 +101,9 @@ struct EventSummaryView: View {
     
     private var differenceContent: some View {
         EventAmountDifferenceView(
-            baseAmountDifference: data.baseAmountDifference,
+            baseAmountDifference: baseAmountDifference,
             baseCurrency: data.baseCurrency,
-            localAmountDifference: data.localAmountDifference,
+            localAmountDifference: localAmountDifference,
             localCurrency: data.localCurrency
         )
     }
@@ -111,16 +130,16 @@ private extension EventSummaryData {
         
         return Form {
             Section {
-                EventSummaryView(data: tripViewModel.eventHeaderData(locations: trip.locations), showsAmounts: false, showsDifference: false)
+                EventSummaryView(data: tripViewModel.eventHeaderData, showsAmounts: false, showsDifference: false)
             }
             Section {
-                EventSummaryView(data: tripViewModel.eventHeaderData(locations: trip.locations))
+                EventSummaryView(data: tripViewModel.eventHeaderData)
             }
             Section {
-                EventSummaryView(data: locationViewModel.eventHeaderData(expenses: location.expenses))
+                EventSummaryView(data: locationViewModel.eventHeaderData)
             }
             Section {
-                EventSummaryView(data: locationViewModel.eventHeaderData(expenses: location.expenses), showsHeader: false)
+                EventSummaryView(data: locationViewModel.eventHeaderData, showsHeader: false)
             }
         }
         .environment(\.locale, locale)

@@ -772,7 +772,7 @@ enum PreviewGenerator {
                 comment: PreviewExpenseComment.museum.rawValue
             ),
             Expense(
-                date: startDate.adding(days: 21, hours: 33),
+                date: startDate.adding(hours: 21, minutes: 33),
                 baseAmount: 1800,
                 rateLocalToBase: exchangeRate,
                 category: .food,

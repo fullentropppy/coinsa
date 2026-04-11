@@ -14,7 +14,7 @@ struct NowView: View {
     @Environment(\.modelContext) private var context
     @Environment(AppSettingsStore.self) private var settingsStore
 
-    @Query private var locations: [Location]
+    @Query private var currentLocations: [Location]
 
     @State private var deletionHandler = DeletionHandler<Expense>()
     @State private var selectedQuickCategory: ExpenseCategory?
@@ -26,79 +26,74 @@ struct NowView: View {
         ExpenseRepository(context: context)
     }
     
-    private var navigationSubtitle: String {
-        DateDisplayFormatter.format(.now, showsTime: false)
+    private var viewModel: NowViewModel {
+        NowViewModel(
+            currentLocations: currentLocations,
+            selectedLocationID: settingsStore.selectedCurrentLocation?.id,
+            baseCurrency: settingsStore.baseCurrency
+        )
     }
     
-    private var currentLocations: [Location] {
+    // MARK: - Initialization
+    
+    init() {
         let today = Date.now
-        return locations
-            .filter { $0.startDate <= today && $0.endDate >= today }
-            .sorted { $0.endDate < $1.endDate }
-    }
-
-    private var currentLocationIDs: [UUID] {
-        currentLocations.map(\.id)
-    }
-
-    private var selectedLocation: Location? {
-        if let selectedCurrentLocation = settingsStore.selectedCurrentLocation {
-            return currentLocations.first(where: { $0.id == selectedCurrentLocation.id })
-            ?? currentLocations.first
-        } else {
-            return currentLocations.first
-        }
-    }
-
-    private var todayExpenses: [Expense] {
-        guard let selectedLocation else { return [] }
-        
-        let today = Date()
-        return selectedLocation.expenses
-            .filter { $0.date >= today.startOfDay && $0.date < today.endOfDay }
-            .sorted { $0.date > $1.date }
+        _currentLocations = Query(
+            filter: #Predicate<Location> { location in
+                location.startDate <= today && location.endDate >= today
+            },
+            sort: \.endDate,
+            order: .forward
+        )
     }
 
     // MARK: - Body
 
     var body: some View {
         NavigationStack {
-            Group {
-                if let selectedLocation {
-                    nowForm(location: selectedLocation)
-                        .sheet(item: $selectedQuickCategory) { selectedCategory in
-                            ExpenseEditView(
-                                location: selectedLocation,
-                                baseCurrency: settingsStore.baseCurrency,
-                                preselectedCategory: selectedCategory
-                            )
-                        }
-                } else {
-                    emptyCurrentLocationView
-                }
-            }
-            .navigationTitle(.nowNavigationTitle)
-            .navigationSubtitle(navigationSubtitle)
-            .navigationBarTitleDisplayMode(.large)
-            .sheet(item: $expenseToEdit) { expense in
-                ExpenseEditView(expense: expense, baseCurrency: settingsStore.baseCurrency)
-            }
-            .deleteConfirmationAlert(
-                isPresented: $deletionHandler.isShowingDeleteConfirmation,
-                title: .expenseDeleteTitle,
-                message: .expenseDeleteMessage,
-                onConfirm: { confirmDelete() },
-                onCancel: { cancelDelete() }
-            )
-        }
-        .task(id: currentLocationIDs) {
-            updateSelectedLocationIfNeeded()
+            nowForm
+                .navigationTitle(.nowNavigationTitle)
+                .navigationSubtitle(DateDisplayFormatter.format(.now, showsTime: false))
+                .navigationBarTitleDisplayMode(.large)
         }
     }
 
     // MARK: - Content
 
-    private func nowForm(location: Location) -> some View {
+    private var nowForm: some View {
+        Group {
+            if let selectedLocation = viewModel.selectedLocation {
+                nowFormContent(location: selectedLocation)
+                    .sheet(item: $selectedQuickCategory) { selectedCategory in
+                        ExpenseEditView(
+                            location: selectedLocation,
+                            baseCurrency: settingsStore.baseCurrency,
+                            preselectedCategory: selectedCategory
+                        )
+                    }
+                    .sheet(item: $expenseToEdit) { expense in
+                        ExpenseEditView(expense: expense, baseCurrency: settingsStore.baseCurrency)
+                    }
+                    .deleteConfirmationAlert(
+                        isPresented: $deletionHandler.isShowingDeleteConfirmation,
+                        title: .expenseDeleteTitle,
+                        message: .expenseDeleteMessage,
+                        onConfirm: { confirmDelete() },
+                        onCancel: { cancelDelete() }
+                    )
+                    .onAppear {
+                        updateSelectedLocationIfNeeded()
+                    }
+                    .onChange(of: currentLocations) { _, _ in
+                        updateSelectedLocationIfNeeded()
+                    }
+            } else {
+                emptyCurrentLocationView
+            }
+        }
+    }
+    
+    private func nowFormContent(location: Location) -> some View {
         List {
             locationSection(location: location)
             quickExpenseSection
@@ -140,7 +135,7 @@ struct NowView: View {
     @ViewBuilder
     private var todayExpensesSection: some View {
         Group {
-            if todayExpenses.isEmpty {
+            if viewModel.todayExpenses.isEmpty {
                 GroupHeaderView(title: .nowNoTodayExpense, icon: Expense.primaryIcon)
                     .listRowBackground(Color.clear)
             } else {
@@ -153,9 +148,9 @@ struct NowView: View {
     
     @ViewBuilder
     private func locationPickerContent(location: Location) -> some View {
-        if currentLocations.count > 1 {
+        if viewModel.hasMultipleLocations {
             Picker("", selection: selectedLocationBinding(location: location)) {
-                ForEach(currentLocations) { currentLocation in
+                ForEach(viewModel.currentLocations) { currentLocation in
                     Text(currentLocation.name)
                         .tag(currentLocation.id)
                 }
@@ -169,7 +164,7 @@ struct NowView: View {
             LocationDetailView(location: location)
         } label: {
             HStack {
-                if currentLocations.count == 1 {
+                if !viewModel.hasMultipleLocations {
                     Text(location.name)
                         .fontWeight(.semibold)
                     Spacer()
@@ -181,12 +176,7 @@ struct NowView: View {
     }
     
     private func locationSummaryContent(location: Location) -> some View {
-        let viewModel = LocationDetailViewModel(
-            location: location,
-            baseCurrency: settingsStore.baseCurrency
-        )
-
-        return EventSummaryView(data: viewModel.eventHeaderData, showsHeader: false)
+        EventSummaryView(data: viewModel.eventSummaryData(for: location), showsHeader: false)
     }
     
     private func quickExpenseButton(category: ExpenseCategory) -> some View {
@@ -211,7 +201,7 @@ struct NowView: View {
     
     private var todayExpenseListContent: some View {
         Section(.nowTodayExpenses) {
-            ForEach(todayExpenses) { expense in
+            ForEach(viewModel.todayExpenses) { expense in
                 NavigationLink {
                     ExpenseDetailView(expense: expense)
                 } label: {
@@ -231,9 +221,9 @@ struct NowView: View {
 
     private func selectedLocationBinding(location: Location) -> Binding<UUID> {
         Binding(
-            get: { settingsStore.selectedCurrentLocation?.id ?? location.id },
+            get: { viewModel.selectedLocation?.id ?? location.id },
             set: { selectedID in
-                settingsStore.selectedCurrentLocation = currentLocations.first(where: { $0.id == selectedID })
+                settingsStore.selectedCurrentLocation = viewModel.currentLocations.first(where: { $0.id == selectedID })
             }
         )
     }
@@ -241,17 +231,9 @@ struct NowView: View {
     // MARK: - Actions
 
     private func updateSelectedLocationIfNeeded() {
-        guard !currentLocations.isEmpty else {
-            settingsStore.selectedCurrentLocation = nil
-            return
-        }
-
-        if let selectedCurrentLocation = settingsStore.selectedCurrentLocation,
-            currentLocations.contains(where: { $0.id == selectedCurrentLocation.id }) {
-            return
-        }
-
-        settingsStore.selectedCurrentLocation = currentLocations.first
+        settingsStore.selectedCurrentLocation = viewModel.validSelectedLocation(
+            from: settingsStore.selectedCurrentLocation
+        )
     }
     
     private func requestDelete(for expenses: [Expense]) {

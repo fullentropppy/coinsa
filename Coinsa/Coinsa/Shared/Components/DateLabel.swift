@@ -83,8 +83,8 @@ extension DateLabel {
 private extension DateLabel {
     static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
         let now = Date.now
-        let weekAhead = now.addingTimeInterval(604800)
-        let yearAhead = now.addingTimeInterval(31536000)
+        let weekAhead = now.adding(weeks: 1)
+        let yearAhead = now.adding(years: 1)
         
         return VStack(spacing: 40) {
             VStack(spacing: 20) {

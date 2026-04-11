@@ -42,6 +42,9 @@ struct ExpenseDetailView: View {
                     dismiss()
                 }
             }
+            .onAppear {
+                checkIfDeleted()
+            }
     }
 
     // MARK: - Content
@@ -125,6 +128,14 @@ struct ExpenseDetailView: View {
             ToolbarButton.edit {
                 isShowingExpenseEdit = true
             }
+        }
+    }
+    
+    // MARK: - Actions
+    
+    private func checkIfDeleted() {
+        if expense.modelContext == nil {
+            dismiss()
         }
     }
 }

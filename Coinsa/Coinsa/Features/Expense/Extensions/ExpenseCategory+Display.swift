@@ -33,7 +33,7 @@ extension ExpenseCategory {
     var badgeColor: Color {
         switch self {
         case .food: .mint
-        case .transport: .indigo
+        case .transport: .blue
         case .activity: .yellow
         case .shopping: .red
         case .medicine: .cyan

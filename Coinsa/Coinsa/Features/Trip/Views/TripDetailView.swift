@@ -32,12 +32,8 @@ struct TripDetailView: View {
         TripDetailViewModel(trip: trip, baseCurrency: settingsStore.baseCurrency)
     }
     
-    private var locations: [Location] {
-        trip.locations
-    }
-
     private var showsFullHeader: Bool {
-        !locations.isEmpty
+        !trip.locations.isEmpty
     }
     
     // MARK: - Initialization
@@ -65,7 +61,7 @@ struct TripDetailView: View {
                 LocationEditView(location: location, baseCurrency: settingsStore.baseCurrency)
             }
             .safeAreaInset(edge: .bottom) {
-                if !locations.isEmpty {
+                if !trip.locations.isEmpty {
                     PrimaryAddButton(isOnLeft: settingsStore.isAddButtonOnLeft) {
                         isShowingLocationCreate = true
                     }
@@ -78,8 +74,11 @@ struct TripDetailView: View {
                 onConfirm: { confirmDelete() },
                 onCancel: { cancelDelete() }
             )
+            .onAppear {
+                checkIfDeleted()
+            }
     }
-
+    
     // MARK: - Content
     
     private var tripDetailForm: some View {
@@ -94,7 +93,7 @@ struct TripDetailView: View {
     private var headerSection: some View {
         Section {
             EventSummaryView(
-                data: viewModel.eventHeaderData(locations: locations),
+                data: viewModel.eventHeaderData,
                 showsAmounts: showsFullHeader,
                 showsDifference: showsFullHeader
             )
@@ -103,7 +102,7 @@ struct TripDetailView: View {
     
     private var locationsSection: some View {
         Group {
-            if locations.isEmpty {
+            if trip.locations.isEmpty {
                 emptyLocationListContent
             } else {
                 locationListContent
@@ -130,7 +129,7 @@ struct TripDetailView: View {
             GroupHeaderView(title: .tripLocations, icon: Location.primaryIcon)
                 .listRowBackground(Color.clear)
             
-            ForEach(viewModel.groupedLocations(from: locations), id: \.status) { group in
+            ForEach(viewModel.groupedLocations, id: \.status) { group in
                 Section(group.status.localizedPlural) {
                     ForEach(group.locations) { location in
                         NavigationLink {
@@ -171,6 +170,12 @@ struct TripDetailView: View {
 
     private func cancelDelete() {
         deletionHandler.cancel()
+    }
+    
+    private func checkIfDeleted() {
+        if trip.modelContext == nil {
+            dismiss()
+        }
     }
 }
 

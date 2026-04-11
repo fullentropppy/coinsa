@@ -18,7 +18,7 @@ protocol DateRangeProviding {
 
 extension DateRangeProviding {
     var durationInDays: Int {
-        let difference = (endDate.timeIntervalSince(startDate) / 86400).rounded()
+        let difference = endDate.days(from: startDate)
         return difference == 0 ? 1 : Int(difference)
     }
     

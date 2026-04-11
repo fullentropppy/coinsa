@@ -21,36 +21,26 @@ struct TripDetailViewModel {
         self.baseCurrency = baseCurrency
     }
     
-    // MARK: - Public Methods
+    // MARK: - Computed Properties
     
-    func eventHeaderData(locations: [Location]) -> EventSummaryData {
-        let plannedAmount = locations.reduce(0) { total, location in
-            total + location.calculatePlannedAmount(asBaseCurrency: true)
-        }
-        let actualAmount = locations.reduce(0) { total, location in
-            total + location.calculateActualAmount(asBaseCurrency: true)
-        }
+    var eventHeaderData: EventSummaryData {
+        let plannedAmount = trip.calculatePlannedAmount(asBaseCurrency: true)
+        let actualAmount = trip.calculateActualAmount(asBaseCurrency: true)
         
         return EventSummaryData(
+            badgeIcon: Trip.badgeIcon,
+            badgeColor: Trip.badgeColor,
             status: trip.status,
             startDate: trip.startDate,
             endDate: trip.endDate,
-            days: trip.durationInDays,
             plannedBaseAmount: plannedAmount,
             actualBaseAmount: actualAmount,
-            baseAmountDifference: plannedAmount - actualAmount,
-            baseCurrency: baseCurrency,
-            plannedLocalAmount: nil,
-            actualLocalAmount: nil,
-            localAmountDifference: nil,
-            localCurrency: nil,
-            badgeIcon: Trip.badgeIcon,
-            badgeColor: Trip.badgeColor
+            baseCurrency: baseCurrency
         )
     }
     
-    func groupedLocations(from locations: [Location]) -> [(status: EventStatus, locations: [Location])] {
-        let grouped = Dictionary(grouping: locations) { $0.status }
+    var groupedLocations: [(status: EventStatus, locations: [Location])] {
+        let grouped = Dictionary(grouping: trip.locations) { $0.status }
         let statusOrder: [EventStatus] = [.ongoing, .upcoming, .completed]
         
         return statusOrder.compactMap { status in

@@ -15,8 +15,6 @@ struct LocationDetailView: View {
     @Environment(AppSettingsStore.self) private var settingsStore
     @Environment(\.dismiss) private var dismiss
     
-    @Query private var expenses: [Expense]
-
     @State private var deletionHandler = DeletionHandler<Expense>()
     @State private var isShowingLocationEdit = false
     @State private var isShowingExpenseCreate = false
@@ -31,21 +29,12 @@ struct LocationDetailView: View {
     }
 
     private var viewModel: LocationDetailViewModel {
-        LocationDetailViewModel (
-            location: location,
-            baseCurrency: settingsStore.baseCurrency
-        )
+        LocationDetailViewModel (location: location, baseCurrency: settingsStore.baseCurrency)
     }
     
     // MARK: - Initialization
 
     init(location: Location) {
-        let locationID = location.id
-        _expenses = Query(
-            filter: #Predicate<Expense> { expense in
-                expense.location.id == locationID
-            }
-        )
         self.location = location
     }
 
@@ -73,7 +62,7 @@ struct LocationDetailView: View {
                 ExpenseEditView(expense: expense, baseCurrency: settingsStore.baseCurrency)
             }
             .safeAreaInset(edge: .bottom) {
-                if !expenses.isEmpty {
+                if !location.expenses.isEmpty {
                     PrimaryAddButton(isOnLeft: settingsStore.isAddButtonOnLeft) {
                         isShowingExpenseCreate = true
                     }
@@ -86,8 +75,11 @@ struct LocationDetailView: View {
                 onConfirm: { confirmDelete() },
                 onCancel: { cancelDelete() }
             )
+            .onAppear {
+                checkIfDeleted()
+            }
     }
-
+    
     // MARK: - Content
     
     private var locationDetailForm: some View {
@@ -101,13 +93,13 @@ struct LocationDetailView: View {
     
     private var headerSection: some View {
         Section {
-            EventSummaryView(data: viewModel.eventHeaderData(expenses: expenses))
+            EventSummaryView(data: viewModel.eventHeaderData)
         }
     }
     
     private var locationsSection: some View {
         Group {
-            if expenses.isEmpty {
+            if location.expenses.isEmpty {
                 emptyExpenseListContent
             } else {
                 expenseListContent
@@ -117,12 +109,24 @@ struct LocationDetailView: View {
     
     // MARK: - Components
 
+    private var emptyExpenseListContent: some View {
+        EmptyStateView(
+            imageName: Expense.primaryIcon,
+            title: .expenseEmptyStateTitle,
+            description: .expenseEmptyStateDescription,
+            buttonLabel: .expenseAdd
+        ) {
+            isShowingExpenseCreate = true
+        }
+        .listRowBackground(Color.clear)
+    }
+    
     private var expenseListContent: some View {
         Group {
             GroupHeaderView(title: .locationExpenses, icon: Expense.primaryIcon)
                 .listRowBackground(Color.clear)
             
-            ForEach(viewModel.groupedExpenses(from: expenses), id: \.date) { group in
+            ForEach(viewModel.groupedExpenses, id: \.date) { group in
                 Section(DateDisplayFormatter.formatRelative(group.date, showsTime: false)) {
                     ForEach(group.expenses) { expense in
                         NavigationLink {
@@ -140,18 +144,6 @@ struct LocationDetailView: View {
                 }
             }
         }
-    }
-    
-    private var emptyExpenseListContent: some View {
-        EmptyStateView(
-            imageName: Expense.primaryIcon,
-            title: .expenseEmptyStateTitle,
-            description: .expenseEmptyStateDescription,
-            buttonLabel: .expenseAdd
-        ) {
-            isShowingExpenseCreate = true
-        }
-        .listRowBackground(Color.clear)
     }
 
     @ToolbarContentBuilder
@@ -175,6 +167,12 @@ struct LocationDetailView: View {
 
     private func cancelDelete() {
         deletionHandler.cancel()
+    }
+    
+    private func checkIfDeleted() {
+        if location.modelContext == nil {
+            dismiss()
+        }
     }
 }
 
