@@ -22,6 +22,7 @@ struct LocationRepository {
         endDate: Date,
         localCurrency: Currency,
         rateLocalToBase: Double,
+        exchangeAdjustmentPercentage: Double,
         trip: Trip,
         budgetsByCategory: [ExpenseCategory: Double]
     ) {
@@ -31,6 +32,7 @@ struct LocationRepository {
             endDate: endDate,
             localCurrencyCode: localCurrency.code,
             rateLocalToBase: normalizeRateLocalToBase(rateLocalToBase),
+            exchangeAdjustmentPercentage: normalizeExchangeAdjustmentPercentage(exchangeAdjustmentPercentage),
             trip: trip,
             budgets: [],
             expenses: []
@@ -48,6 +50,7 @@ struct LocationRepository {
         endDate: Date,
         localCurrency: Currency,
         rateLocalToBase: Double,
+        exchangeAdjustmentPercentage: Double,
         budgetsByCategory: [ExpenseCategory: Double]
     ) {
         location.name = name
@@ -55,6 +58,7 @@ struct LocationRepository {
         location.endDate = endDate
         location.localCurrencyCode = localCurrency.code
         location.rateLocalToBase = normalizeRateLocalToBase(rateLocalToBase)
+        location.exchangeAdjustmentPercentage = normalizeExchangeAdjustmentPercentage(exchangeAdjustmentPercentage)
 
         applyBudgets(budgetsByCategory, to: location)
         try? context.save()
@@ -100,5 +104,9 @@ struct LocationRepository {
     
     private func normalizeRateLocalToBase(_ rate: Double) -> Double {
         rate > 0 ? rate.rounded(to: 4) : 0
+    }
+    
+    private func normalizeExchangeAdjustmentPercentage(_ percentage: Double) -> Double {
+        max(0, percentage)
     }
 }

@@ -20,6 +20,7 @@ class Location: DateRangeProviding, EventStatusProviding {
     var endDate: Date
     var localCurrencyCode: String
     var rateLocalToBase: Double
+    var exchangeAdjustmentPercentage: Double
     var trip: Trip
     
     @Relationship(deleteRule: .cascade, inverse: \Budget.location)
@@ -36,6 +37,7 @@ class Location: DateRangeProviding, EventStatusProviding {
         endDate: Date,
         localCurrencyCode: String,
         rateLocalToBase: Double,
+        exchangeAdjustmentPercentage: Double,
         trip: Trip,
         budgets: [Budget] = [],
         expenses: [Expense] = []
@@ -46,6 +48,7 @@ class Location: DateRangeProviding, EventStatusProviding {
         self.endDate = endDate
         self.localCurrencyCode = localCurrencyCode
         self.rateLocalToBase = rateLocalToBase
+        self.exchangeAdjustmentPercentage = exchangeAdjustmentPercentage
         self.trip = trip
         self.budgets = budgets
         self.expenses = expenses

@@ -137,7 +137,7 @@ struct LocationEditView: View {
         Section {
             Picker(.locationCurrency, selection: localCurrencyBinding) {
                 ForEach(Currency.allCasesSortedByName) { currency in
-                    Text(currency.localized)
+                    Text(currency.localizedResource)
                         .tag(currency)
                 }
             }
@@ -159,6 +159,19 @@ struct LocationEditView: View {
                             isLoading: viewModel.isRateLoading,
                             onRefresh: viewModel.requestRateRefresh
                         )
+                    }
+                }
+                LabeledContent(.locationExchangeAdjustmentPercentage) {
+                    HStack {
+                        NumericInputField(
+                            exchangeAdjustmentInputBinding,
+                            focusedField: $focusedField,
+                            focusId: .exchangeAdjustmentPercentage
+                        )
+                        Image(systemName: "percent")
+                            .fontWeight(.semibold)
+                            .imageScale(.small)
+                            .foregroundStyle(.tertiary)
                     }
                 }
             }
@@ -250,6 +263,15 @@ struct LocationEditView: View {
         Binding(
             get: { viewModel.localCurrency },
             set: { viewModel.localCurrency = $0 }
+        )
+    }
+
+    private var exchangeAdjustmentInputBinding: Binding<Double> {
+        Binding(
+            get: { viewModel.exchangeAdjustmentPercentage },
+            set: { newValue in
+                viewModel.updateExchangeAdjustmentPercentage(newValue)
+            }
         )
     }
     

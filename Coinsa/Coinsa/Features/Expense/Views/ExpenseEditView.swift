@@ -147,6 +147,14 @@ struct ExpenseEditView: View {
                 }
             }
             .pickerStyle(.navigationLink)
+
+            Picker(.expensePaymentMethod, selection: paymentMethodBinding) {
+                ForEach(PaymentMethod.allCases, id: \.self) { paymentMethod in
+                    Text(paymentMethod.localizedResource)
+                        .tag(paymentMethod)
+                }
+            }
+            .pickerStyle(.segmented)
         }
     }
     
@@ -188,8 +196,23 @@ struct ExpenseEditView: View {
 
                         ExchangeRateRefreshButton(
                             isLoading: viewModel.isRateLoading,
-                            onRefresh: viewModel.requestRateRefresh
+                            onRefresh: { viewModel.requestRateRefresh(currentInput: inputCurrency) }
                         )
+                    }
+                }
+                if !viewModel.shouldHideExchangeAdjustmentInput {
+                    LabeledContent(.locationExchangeAdjustmentPercentage) {
+                        HStack {
+                            NumericInputField(
+                                exchangeAdjustmentInputBinding,
+                                focusedField: $focusedField,
+                                focusId: .exchangeAdjustmentPercentage
+                            )
+                            Image(systemName: "percent")
+                                .fontWeight(.semibold)
+                                .imageScale(.small)
+                                .foregroundStyle(.tertiary)
+                        }
                     }
                 }
             }
@@ -249,6 +272,15 @@ struct ExpenseEditView: View {
             set: { viewModel.category = $0 }
         )
     }
+
+    private var paymentMethodBinding: Binding<PaymentMethod> {
+        Binding(
+            get: { viewModel.paymentMethod },
+            set: { newMethod in
+                viewModel.updatePaymentMethod(newMethod, currentInput: inputCurrency)
+            }
+        )
+    }
     
     private var amountInputBinding: Binding<Double> {
         Binding(
@@ -263,9 +295,16 @@ struct ExpenseEditView: View {
         Binding(
             get: { viewModel.rateLocalToBase },
             set: { newValue in
-                viewModel.rateLocalToBase = newValue
-                let currentAmount = viewModel.amount(for: inputCurrency)
-                viewModel.updateAmount(currentAmount, for: inputCurrency)
+                viewModel.updateRate(newValue, currentInput: inputCurrency)
+            }
+        )
+    }
+
+    private var exchangeAdjustmentInputBinding: Binding<Double> {
+        Binding(
+            get: { viewModel.exchangeAdjustmentPercentage },
+            set: { newValue in
+                viewModel.updateExchangeAdjustmentPercentage(newValue, currentInput: inputCurrency)
             }
         )
     }

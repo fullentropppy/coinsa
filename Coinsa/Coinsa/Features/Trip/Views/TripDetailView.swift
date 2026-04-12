@@ -130,7 +130,7 @@ struct TripDetailView: View {
                 .listRowBackground(Color.clear)
             
             ForEach(viewModel.groupedLocations, id: \.status) { group in
-                Section(group.status.localizedPlural) {
+                Section(group.status.localizedResource) {
                     ForEach(group.locations) { location in
                         NavigationLink {
                             LocationDetailView(location: location)
@@ -165,7 +165,9 @@ struct TripDetailView: View {
     }
 
     private func confirmDelete() {
-        deletionHandler.confirm { repository.delete($0) }
+        withAnimation {
+            deletionHandler.confirm { repository.delete($0) }
+        }
     }
 
     private func cancelDelete() {

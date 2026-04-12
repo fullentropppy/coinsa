@@ -186,7 +186,7 @@ struct NowView: View {
             HStack {
                 Image(systemName: category.badgeIcon)
                     .frame(width: 20)
-                Text(category.localized)
+                Text(category.localizedResource)
                     
             }
             .foregroundStyle(.windowBackground)
@@ -241,7 +241,9 @@ struct NowView: View {
     }
 
     private func confirmDelete() {
-        deletionHandler.confirm { repository.delete($0) }
+        withAnimation {
+            deletionHandler.confirm { repository.delete($0) }
+        }
     }
 
     private func cancelDelete() {

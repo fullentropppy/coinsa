@@ -75,7 +75,7 @@ struct TripListView: View {
     private var tripListContent: some View {
         List {
             ForEach(viewModel.groupedTrips(from: trips), id: \.status) { group in
-                Section(group.status.localizedPlural) {
+                Section(group.status.localizedResourcePlural) {
                     ForEach(group.trips) { trip in
                         NavigationLink {
                             TripDetailView(trip: trip)
@@ -112,7 +112,9 @@ struct TripListView: View {
     }
 
     private func confirmDelete() {
-        deletionHandler.confirm { repository.delete($0) }
+        withAnimation {
+            deletionHandler.confirm { repository.delete($0) }
+        }
     }
 
     private func cancelDelete() {

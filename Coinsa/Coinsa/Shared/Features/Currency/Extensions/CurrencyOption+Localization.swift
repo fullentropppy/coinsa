@@ -8,7 +8,7 @@
 import SwiftUI
 
 extension Currency {
-    var localized: LocalizedStringResource {
+    var localizedResource: LocalizedStringResource {
         switch self {
         case .aed: .currencyNameAed
         case .byn: .currencyNameByn

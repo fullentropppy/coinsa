@@ -8,7 +8,7 @@
 import SwiftUI
 
 extension AppAppearance {
-    var localized: LocalizedStringResource {
+    var localizedResource: LocalizedStringResource {
         switch self {
         case .system: .appAppearanceSystem
         case .light: .appAppearanceLight

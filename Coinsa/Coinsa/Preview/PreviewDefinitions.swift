@@ -37,6 +37,15 @@ enum PreviewLocation: String {
     var exchangeRate: Double {
         PreviewCurrency.exchangeRate(forCode: currencyCode)
     }
+    
+    var exchangeAdjustmentPercentage: Double {
+        switch self {
+        case .tokyo, .kyoto, .osaka: 5
+        case .saintp: 0
+        case .seoul, .busan: 4
+        case .istanbul: 3
+        }
+    }
 }
 
 enum PreviewExpenseComment: String {
@@ -59,11 +68,11 @@ enum PreviewExpenseComment: String {
 // MARK: - Private Types
 
 private enum PreviewCurrency {
-    static let exchangeRates: [String: Double] = [
-        Currency.jpy.code: 0.6,
+    private static let exchangeRates: [String: Double] = [
+        Currency.jpy.code: 0.48,
         Currency.rub.code: 1.0,
-        Currency.krw.code: 0.065,
-        Currency.try.code: 1.8
+        Currency.krw.code: 0.05,
+        Currency.try.code: 1.73
     ]
 
     static func exchangeRate(forCode: String) -> Double {

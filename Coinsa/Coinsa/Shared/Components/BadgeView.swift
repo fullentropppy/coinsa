@@ -79,47 +79,47 @@ private extension BadgeView {
             VStack(spacing: 20) {
                 BadgeView(
                     fillColor: EventStatus.upcoming.badgeColor,
-                    title: EventStatus.upcoming.localized
+                    title: EventStatus.upcoming.localizedResource
                 )
                 BadgeView(
                     fillColor: EventStatus.ongoing.badgeColor,
-                    title: EventStatus.ongoing.localized
+                    title: EventStatus.ongoing.localizedResource
                 )
                 BadgeView(
                     fillColor: EventStatus.completed.badgeColor,
-                    title: EventStatus.completed.localized
+                    title: EventStatus.completed.localizedResource
                 )
             }
             VStack(spacing: 20) {
                 BadgeView(
                     fillColor: ExpenseCategory.food.badgeColor,
                     icon: ExpenseCategory.food.badgeIcon,
-                    title: ExpenseCategory.food.localized
+                    title: ExpenseCategory.food.localizedResource
                 )
                 BadgeView(
                     fillColor: ExpenseCategory.transport.badgeColor,
                     icon: ExpenseCategory.transport.badgeIcon,
-                    title: ExpenseCategory.transport.localized
+                    title: ExpenseCategory.transport.localizedResource
                 )
                 BadgeView(
                     fillColor: ExpenseCategory.activity.badgeColor,
                     icon: ExpenseCategory.activity.badgeIcon,
-                    title: ExpenseCategory.activity.localized
+                    title: ExpenseCategory.activity.localizedResource
                 )
                 BadgeView(
                     fillColor: ExpenseCategory.shopping.badgeColor,
                     icon: ExpenseCategory.shopping.badgeIcon,
-                    title: ExpenseCategory.shopping.localized
+                    title: ExpenseCategory.shopping.localizedResource
                 )
                 BadgeView(
                     fillColor: ExpenseCategory.medicine.badgeColor,
                     icon: ExpenseCategory.medicine.badgeIcon,
-                    title: ExpenseCategory.medicine.localized
+                    title: ExpenseCategory.medicine.localizedResource
                 )
                 BadgeView(
                     fillColor: ExpenseCategory.other.badgeColor,
                     icon: ExpenseCategory.other.badgeIcon,
-                    title: ExpenseCategory.other.localized
+                    title: ExpenseCategory.other.localizedResource
                 )
             }
         }

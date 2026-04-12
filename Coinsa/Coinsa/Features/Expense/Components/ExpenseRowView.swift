@@ -30,7 +30,7 @@ struct ExpenseRowView: View {
             BadgeView(
                 fillColor: expense.category.badgeColor,
                 icon: expense.category.badgeIcon,
-                title: expense.category.localized
+                title: expense.category.localizedResource
             )
             DateLabel.secondarySmall(expense.date)
         }

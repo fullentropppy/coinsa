@@ -8,7 +8,7 @@
 import SwiftUI
 
 extension ExpenseCategory {
-    var localized: LocalizedStringResource {
+    var localizedResource: LocalizedStringResource {
         switch self {
         case .food: .expenseCategoryFood
         case .transport: .expenseCategoryTransport

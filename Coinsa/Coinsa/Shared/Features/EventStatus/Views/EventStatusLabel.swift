@@ -21,7 +21,7 @@ struct EventStatusLabel: View {
     // MARK: - Body
     
     var body: some View {
-        BadgeView(fillColor: status.badgeColor, title: status.localized)
+        BadgeView(fillColor: status.badgeColor, title: status.localizedResource)
     }
 }
 

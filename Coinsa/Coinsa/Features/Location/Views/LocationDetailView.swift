@@ -162,7 +162,9 @@ struct LocationDetailView: View {
     }
 
     private func confirmDelete() {
-        deletionHandler.confirm { context.delete($0) }
+        withAnimation {
+            deletionHandler.confirm { repository.delete($0) }
+        }
     }
 
     private func cancelDelete() {

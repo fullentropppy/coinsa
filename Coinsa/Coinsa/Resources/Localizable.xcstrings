@@ -1126,6 +1126,23 @@
         }
       }
     },
+    "expense.exchangeAdjustmentPercentage" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fee"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Комиссия"
+          }
+        }
+      }
+    },
     "expense.exchangeRate" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1173,6 +1190,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Изменение траты"
+          }
+        }
+      }
+    },
+    "expense.paymentMethod" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Payment method"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Способ оплаты"
           }
         }
       }
@@ -1343,6 +1377,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Завершается"
+          }
+        }
+      }
+    },
+    "location.exchangeAdjustmentPercentage" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fee"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Комиссия"
           }
         }
       }
@@ -1564,6 +1615,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "OK"
+          }
+        }
+      }
+    },
+    "paymentMethod.card" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Card"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Карта"
+          }
+        }
+      }
+    },
+    "paymentMethod.cash" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cash"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Наличные"
           }
         }
       }

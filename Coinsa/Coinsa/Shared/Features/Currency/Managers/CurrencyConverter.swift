@@ -17,6 +17,7 @@ final class CurrencyConverter {
     private(set) var baseCurrency: Currency
     private(set) var localCurrency: Currency
     private(set) var rateLocalToBase: Double
+    private(set) var exchangeAdjustmentPercentage: Double
     
     // MARK: - Computed Properties
     
@@ -36,15 +37,17 @@ final class CurrencyConverter {
     // MARK: - Initialization
     
     init(
+        exchangeRateProvider: ExchangeRateProvider,
         baseCurrency: Currency,
         localCurrency: Currency,
-        initialRate: Double = 1.0,
-        exchangeRateProvider: ExchangeRateProvider
+        rateLocalToBase: Double = 1,
+        exchangeAdjustmentPercentage: Double = 0
     ) {
+        self.exchangeRateManager = ExchangeRateManager(provider: exchangeRateProvider)
         self.baseCurrency = baseCurrency
         self.localCurrency = localCurrency
-        self.rateLocalToBase = initialRate
-        self.exchangeRateManager = ExchangeRateManager(provider: exchangeRateProvider)
+        self.rateLocalToBase = rateLocalToBase
+        self.exchangeAdjustmentPercentage = max(0, exchangeAdjustmentPercentage)
     }
     
     // MARK: - Public Methods
@@ -76,6 +79,10 @@ final class CurrencyConverter {
     func updateRate(_ newRate: Double) {
         rateLocalToBase = newRate
     }
+
+    func updateExchangeAdjustmentPercentage(_ newPercentage: Double) {
+        exchangeAdjustmentPercentage = max(0, newPercentage)
+    }
     
     func requestRateRefresh(completion: ((Double) -> Void)? = nil) {
         exchangeRateManager.requestRefresh(
@@ -88,13 +95,15 @@ final class CurrencyConverter {
     }
     
     func convertToBase(fromLocal amount: Double) -> Double {
-        guard rateLocalToBase > 0 else { return 0 }
-        return (amount * rateLocalToBase).rounded(to: 2)
+        let effectiveRate = effectiveRateLocalToBase
+        guard effectiveRate > 0 else { return 0 }
+        return (amount * effectiveRate).rounded(to: 2)
     }
     
     func convertToLocal(fromBase amount: Double) -> Double {
-        guard rateLocalToBase > 0 else { return 0 }
-        return (amount / rateLocalToBase).rounded(to: 2)
+        let effectiveRate = effectiveRateLocalToBase
+        guard effectiveRate > 0 else { return 0 }
+        return (amount / effectiveRate).rounded(to: 2)
     }
     
     func convertAmount(_ amount: Double, from source: InputCurrency, to target: InputCurrency) -> Double {
@@ -103,5 +112,11 @@ final class CurrencyConverter {
         case (.local, .base): convertToBase(fromLocal: amount)
         default: amount
         }
+    }
+
+    // MARK: - Private Methods
+
+    private var effectiveRateLocalToBase: Double {
+        rateLocalToBase * (1 + (exchangeAdjustmentPercentage / 100))
     }
 }

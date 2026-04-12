@@ -50,7 +50,7 @@ struct SettingsView: View {
     private var baseCurrencySection: some View {
         Section {
             LabeledContent(.settingsBaseCurrency) {
-                Text(appSettingsStore.baseCurrency.localized)
+                Text(appSettingsStore.baseCurrency.localizedResource)
             }
         } footer: {
             Text(.settingsBaseCurrencyHint)
@@ -62,7 +62,7 @@ struct SettingsView: View {
         Section {
             Picker(.settingsAppAppearance, selection: selectedAppAppearance) {
                 ForEach(AppAppearance.allCases) { theme in
-                    Text(theme.localized)
+                    Text(theme.localizedResource)
                         .tag(theme)
                 }
             }
