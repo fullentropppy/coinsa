@@ -56,9 +56,9 @@ final class AmountManager {
         baseAmount = converter.convertToBase(fromLocal: newValue)
     }
     
-    func updateFromRateChange(currentInput: InputCurrency) {
-        let currentAmount = amount(for: currentInput)
-        updateAmount(currentAmount, for: currentInput)
+    func updateFromRateChange(inputCurrency: InputCurrency) {
+        let currentAmount = amount(for: inputCurrency)
+        updateAmount(currentAmount, for: inputCurrency)
     }
     
     func reset() {

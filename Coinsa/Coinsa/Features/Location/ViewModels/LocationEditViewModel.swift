@@ -32,6 +32,7 @@ final class LocationEditViewModel {
         }
     }
     var endDate: Date
+    var exchangeAdjustmentPercentage: Double
     
     // MARK: - Computed Properties
     
@@ -72,7 +73,9 @@ final class LocationEditViewModel {
         set { currencyConverter.updateRate(newValue) }
     }
     
-    var exchangeAdjustmentPercentage: Double
+    private var effectiveExchangeAdjustmentPercentage: Double {
+        isHomeLocation ? 0 : max(0, exchangeAdjustmentPercentage)
+    }
     
     var plannedBaseTotal: Double {
         budgetManager.totalBaseAmount
@@ -220,12 +223,6 @@ final class LocationEditViewModel {
 
     func updateLocalCurrency(_ newCurrency: Currency) {
         currencyConverter.updateLocalCurrency(newCurrency)
-
-        if isHomeLocation {
-            exchangeAdjustmentPercentage = 0
-        }
-
-        currencyConverter.updateExchangeAdjustmentPercentage(effectiveExchangeAdjustmentPercentage)
     }
 
     func updateExchangeAdjustmentPercentage(_ newPercentage: Double) {
@@ -272,10 +269,6 @@ final class LocationEditViewModel {
     }
     
     // MARK: - Private Methods
-
-    private var effectiveExchangeAdjustmentPercentage: Double {
-        isHomeLocation ? 0 : max(0, exchangeAdjustmentPercentage)
-    }
 
     private static func normalizedExchangeAdjustmentPercentage(
         _ percentage: Double,

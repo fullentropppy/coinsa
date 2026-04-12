@@ -7,7 +7,13 @@
 
 import Foundation
 
-enum PaymentMethod: String, Codable, CaseIterable {
+enum PaymentMethod: String, Codable, CaseIterable, Identifiable {
+    // MARK: - Cases
+    
     case cash
     case card
+    
+    // MARK: - Computed Properties
+    
+    var id: String { rawValue }
 }

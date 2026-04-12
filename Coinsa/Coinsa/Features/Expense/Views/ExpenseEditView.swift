@@ -9,38 +9,27 @@ import SwiftUI
 import SwiftData
 
 struct ExpenseEditView: View {
-    // MARK: - Stored Properties
-
+    // MARK: - Environment
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
 
+    // MARK: - State Properties
     @State private var viewModel: ExpenseEditViewModel
     @State private var deletionHandler = DeletionHandler<Expense>()
     @State private var inputCurrency: InputCurrency
     @State private var isShowingDiscardAlert = false
-
+    
     @FocusState private var focusedField: NumericEditField?
     
+    // MARK: - Dependencies
     private let onDelete: (() -> Void)?
 
-    // MARK: - Computed Properties
-
+    // MARK: - Infrastructure
     private var repository: ExpenseRepository {
         ExpenseRepository(context: context)
     }
     
-    // MARK: - Initialization
-
-    init(location: Location, baseCurrency: Currency, preselectedCategory: ExpenseCategory? = nil) {
-        self.init(
-            expense: nil,
-            location: location,
-            baseCurrency: baseCurrency,
-            preselectedCategory: preselectedCategory,
-            onDelete: nil
-        )
-    }
-
+    // MARK: - Initializers
     init(
         expense: Expense,
         baseCurrency: Currency,
@@ -52,6 +41,21 @@ struct ExpenseEditView: View {
             baseCurrency: baseCurrency,
             preselectedCategory: nil,
             onDelete: onDelete
+        )
+    }
+
+    
+    init(
+        location: Location,
+        baseCurrency: Currency,
+        preselectedCategory: ExpenseCategory? = nil
+    ) {
+        self.init(
+            expense: nil,
+            location: location,
+            baseCurrency: baseCurrency,
+            preselectedCategory: preselectedCategory,
+            onDelete: nil
         )
     }
 
@@ -80,7 +84,6 @@ struct ExpenseEditView: View {
     }
     
     // MARK: - Body
-    
     var body: some View {
         NavigationStack {
             expenseEditForm
@@ -90,8 +93,16 @@ struct ExpenseEditView: View {
                 .toolbar {
                     toolbarContent
                 }
-                .interactiveDismissDisabled(true)
+                .interactiveDismissDisabled(viewModel.hasChanges)
                 .scrollDismissesKeyboard(.interactively)
+                .notificationAlert(
+                    isPresented: rateErrorBinding,
+                    title: .exchangeRateLoadingErrorTitle,
+                    message: .exchangeRateLoadingErrorMessage(
+                        errorDescription: viewModel.rateLoadingError?.errorDescription
+                        ?? String(localized: .errorUnknown)
+                    )
+                )
                 .discardConfirmationAlert(
                     isPresented: $isShowingDiscardAlert,
                     onConfirm: { dismiss() }
@@ -106,71 +117,72 @@ struct ExpenseEditView: View {
                     },
                     onCancel: { cancelDelete() }
                 )
-                .notificationAlert(
-                    isPresented: rateErrorBinding,
-                    title: .exchangeRateLoadingErrorTitle,
-                    message: .exchangeRateLoadingErrorMessage(
-                        errorDescription: viewModel.rateLoadingError?.errorDescription ?? String(localized: .errorUnknown)
-                    )
-                )
                 .task {
                     viewModel.loadInitialRateIfNeeded()
                 }
         }
     }
 
-    // MARK: - Content
-    
+    // MARK: Form Content
     private var expenseEditForm: some View {
         Form {
-            mainDataSection
+            dateSection
+            specificationsSection
             amountSection
             commentSection
             actionsSection
         }
     }
     
-    // MARK: - Sections
-    
-    private var mainDataSection: some View {
+    // MARK: - Section. Date
+    private var dateSection: some View {
         Section {
             DatePicker(
                 .expenseDate,
                 selection: $viewModel.date,
                 in: viewModel.location.range
             )
-            
-            Picker(.expenseCategory, selection: categoryBinding) {
-                ForEach(ExpenseCategory.allCases, id: \.id) { category in
-                    ExpenseCategoryLabel(category: category)
-                        .tag(category)
-                }
-            }
-            .pickerStyle(.navigationLink)
-
-            Picker(.expensePaymentMethod, selection: paymentMethodBinding) {
-                ForEach(PaymentMethod.allCases, id: \.self) { paymentMethod in
-                    Text(paymentMethod.localizedResource)
-                        .tag(paymentMethod)
-                }
-            }
-            .pickerStyle(.segmented)
         }
     }
     
-    private var amountSection: some View {
+    // MARK: - Section. Specification
+    private var specificationsSection: some View {
         Section {
-            if !viewModel.isHomeLocation {
-                Picker("", selection: $inputCurrency) {
-                    Text(viewModel.localCurrency.code)
-                        .tag(InputCurrency.local)
-                    Text(viewModel.baseCurrency.code)
-                        .tag(InputCurrency.base)
+            HStack {
+                Picker(.expenseCategory, selection: categoryBinding) {
+                    ForEach(ExpenseCategory.allCases, id: \.id) { category in
+                        ExpenseCategoryLabel(category: category)
+                            .tag(category)
+                    }
                 }
-                .pickerStyle(.segmented)
-                .listRowSeparator(.hidden)
+                .pickerStyle(.navigationLink)
+                .navigationLinkIndicatorVisibility(.hidden)
+                Image(systemName: "chevron.right")
+                    .fontWeight(.semibold)
+                    .imageScale(.small)
+                    .foregroundStyle(.accent)
             }
             
+            HStack {
+                Picker(.expensePaymentMethod, selection: paymentMethodBinding) {
+                    ForEach(PaymentMethod.allCases, id: \.id) { method in
+                        PaymentMethodLabel(method: method)
+                            .tag(method)
+                    }
+                }
+                .pickerStyle(.navigationLink)
+                .navigationLinkIndicatorVisibility(.hidden)
+                Image(systemName: "chevron.right")
+                    .fontWeight(.semibold)
+                    .imageScale(.small)
+                    .foregroundStyle(.accent)
+            }
+        }
+    }
+    
+    // MARK: - Section. Amount
+    private var amountSection: some View {
+        Section {
             LabeledContent(.expenseAmount) {
                 HStack {
                     NumericInputField(
@@ -179,46 +191,44 @@ struct ExpenseEditView: View {
                         focusId: .amount
                     )
                     CurrencyCodeText(viewModel.currency(for: inputCurrency))
+                    if !viewModel.isHomeLocation {
+                        InputCurrencySwitchButton(action: switchInputCurrency)
+                    }
                 }
             }
             
             if !viewModel.isHomeLocation {
-                LabeledContent(.expenseExchangeRate) {
+                LabeledContent(.expenseExchangeRate(localCurrencyCode: viewModel.localCurrency.code)) {
+                    ExchangeRateInputField(
+                        rateInputBinding,
+                        currency: viewModel.baseCurrency,
+                        isLoading: viewModel.isRateLoading,
+                        focusedField: $focusedField,
+                        focusId: .exchangeRate,
+                        onRefresh: { viewModel.requestRateRefresh(for: inputCurrency) }
+                    )
+                }
+            }
+            
+            if viewModel.showsExchangeAdjustmentInput {
+                LabeledContent(.locationExchangeAdjustmentPercentage) {
                     HStack {
                         NumericInputField(
-                            rateInputBinding,
+                            exchangeAdjustmentInputBinding,
                             focusedField: $focusedField,
-                            focusId: .exchangeRate,
-                            fractionDigits: 4,
+                            focusId: .exchangeAdjustmentPercentage
                         )
-                        .loadingState(viewModel.isRateLoading)
-                        CurrencyCodeText(viewModel.baseCurrency)
-
-                        ExchangeRateRefreshButton(
-                            isLoading: viewModel.isRateLoading,
-                            onRefresh: { viewModel.requestRateRefresh(currentInput: inputCurrency) }
-                        )
-                    }
-                }
-                if !viewModel.shouldHideExchangeAdjustmentInput {
-                    LabeledContent(.locationExchangeAdjustmentPercentage) {
-                        HStack {
-                            NumericInputField(
-                                exchangeAdjustmentInputBinding,
-                                focusedField: $focusedField,
-                                focusId: .exchangeAdjustmentPercentage
-                            )
-                            Image(systemName: "percent")
-                                .fontWeight(.semibold)
-                                .imageScale(.small)
-                                .foregroundStyle(.tertiary)
-                        }
+                        Image(systemName: "percent")
+                            .fontWeight(.semibold)
+                            .imageScale(.small)
+                            .foregroundStyle(.tertiary)
                     }
                 }
             }
         }
     }
-
+    
+    // MARK: - Section. Additional
     private var commentSection: some View {
         Section {
             TextField(.expenseComment, text: $viewModel.comment)
@@ -227,7 +237,7 @@ struct ExpenseEditView: View {
 
     @ViewBuilder
     private var actionsSection: some View {
-        if viewModel.isEditing {
+        if viewModel.isEdit {
             Section {
                 Button(.expenseDelete, role: .destructive) {
                     requestDelete()
@@ -236,8 +246,7 @@ struct ExpenseEditView: View {
         }
     }
 
-    // MARK: - Components
-    
+    // MARK: - Toolbar
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
         ToolbarItemGroup(placement: .topBarLeading) {
@@ -265,7 +274,6 @@ struct ExpenseEditView: View {
     }
 
     // MARK: - Bindings
-    
     private var categoryBinding: Binding<ExpenseCategory> {
         Binding(
             get: { viewModel.category },
@@ -321,6 +329,12 @@ struct ExpenseEditView: View {
     }
     
     // MARK: - Actions
+    private func switchInputCurrency() {
+        switch inputCurrency {
+        case .base: inputCurrency = .local
+        case .local: inputCurrency = .base
+        }
+    }
     
     private func handleClose() {
         if viewModel.hasChanges {
@@ -346,8 +360,7 @@ struct ExpenseEditView: View {
     }
 }
 
-// MARK: - Previews
-
+// MARK: - Preview
 private extension ExpenseEditView {
     static func makePreview(
         locale: Locale,

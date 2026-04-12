@@ -1024,6 +1024,23 @@
         }
       }
     },
+    "expense.currency" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Currency"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Валюта"
+          }
+        }
+      }
+    },
     "expense.date" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1149,13 +1166,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Exchange rate"
+            "value" : "Exchange rate of %1$(localCurrencyCode)@"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Курс обмена"
+            "value" : "Курс обмена %(localCurrencyCode)@"
           }
         }
       }
@@ -1393,7 +1410,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Комиссия"
+            "value" : "Комиссия по карте"
           }
         }
       }

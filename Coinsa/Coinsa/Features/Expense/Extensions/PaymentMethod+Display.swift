@@ -14,4 +14,11 @@ extension PaymentMethod {
         case .card: "creditcard"
         }
     }
+    
+    var BadgeIcon: String {
+        switch self {
+        case .cash: "banknote.fill"
+        case .card: "creditcard.fill"
+        }
+    }
 }

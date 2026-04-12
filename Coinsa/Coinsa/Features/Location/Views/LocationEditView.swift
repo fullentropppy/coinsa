@@ -145,21 +145,14 @@ struct LocationEditView: View {
             
             if !viewModel.isHomeLocation {
                 LabeledContent(.locationExchangeRate) {
-                    HStack {
-                        NumericInputField(
-                            $viewModel.rateLocalToBase,
-                            focusedField: $focusedField,
-                            focusId: .exchangeRate,
-                            fractionDigits: 4,
-                        )
-                        .loadingState(viewModel.isRateLoading)
-                        CurrencyCodeText(viewModel.baseCurrency)
-
-                        ExchangeRateRefreshButton(
-                            isLoading: viewModel.isRateLoading,
-                            onRefresh: viewModel.requestRateRefresh
-                        )
-                    }
+                    ExchangeRateInputField(
+                        $viewModel.rateLocalToBase,
+                        currency: viewModel.baseCurrency,
+                        isLoading: viewModel.isRateLoading,
+                        focusedField: $focusedField,
+                        focusId: .exchangeRate,
+                        onRefresh: { viewModel.requestRateRefresh() }
+                    )
                 }
                 LabeledContent(.locationExchangeAdjustmentPercentage) {
                     HStack {

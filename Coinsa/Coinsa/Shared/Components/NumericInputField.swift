@@ -125,20 +125,20 @@ private extension NumericInputField {
             .environment(\.locale, locale)
             .preferredColorScheme(colorScheme)
     }
-}
+    
+    private struct NumericInputFieldPreview: View {
+        @State private var amount: Double = 1234.56
+        @FocusState private var focusedField: NumericEditField?
 
-private struct NumericInputFieldPreview: View {
-    @State private var amount: Double = 1234.56
-    @FocusState private var focusedField: NumericEditField?
-
-    var body: some View {
-        Form {
-            LabeledContent(.expenseAmount) {
-                NumericInputField(
-                    $amount,
-                    focusedField: $focusedField,
-                    focusId: .amount
-                )
+        var body: some View {
+            Form {
+                LabeledContent(.expenseAmount) {
+                    NumericInputField(
+                        $amount,
+                        focusedField: $focusedField,
+                        focusId: .amount
+                    )
+                }
             }
         }
     }
