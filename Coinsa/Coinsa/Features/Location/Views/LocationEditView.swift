@@ -9,11 +9,11 @@ import SwiftUI
 import SwiftData
 
 struct LocationEditView: View {
-    // MARK: - Stored Properties
-
+    // MARK: - Environment
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
 
+    // MARK: - State Properties
     @State private var viewModel: LocationEditViewModel
     @State private var deletionHandler = DeletionHandler<Location>()
     @State private var inputCurrency: InputCurrency = .base
@@ -21,10 +21,10 @@ struct LocationEditView: View {
 
     @FocusState private var focusedField: NumericEditField?
     
+    // MARK: - Dependencies
     private let onDelete: (() -> Void)?
 
-    // MARK: - Computed Properties
-
+    // MARK: - Infrastructure
     private var repository: LocationRepository {
         LocationRepository(context: context)
     }
@@ -43,8 +43,14 @@ struct LocationEditView: View {
         }
     }
     
-    // MARK: - Initialization
-
+    // MARK: - Initializers
+    init(location: Location, baseCurrency: Currency, onDelete: (() -> Void)? = nil) {
+        _viewModel = State(
+            initialValue: LocationEditViewModel(location: location, baseCurrency: baseCurrency)
+        )
+        self.onDelete = onDelete
+    }
+    
     init(trip: Trip, baseCurrency: Currency, onDelete: (() -> Void)? = nil) {
         _viewModel = State(
             initialValue: LocationEditViewModel(trip: trip, baseCurrency: baseCurrency)
@@ -52,15 +58,7 @@ struct LocationEditView: View {
         self.onDelete = onDelete
     }
     
-    init(location: Location, baseCurrency: Currency, onDelete: (() -> Void)? = nil) {
-        _viewModel = State(
-            initialValue: LocationEditViewModel(location: location, baseCurrency: baseCurrency)
-        )
-        self.onDelete = onDelete
-    }
-
     // MARK: - Body
-
     var body: some View {
         NavigationStack {
             locationEditForm
@@ -70,8 +68,16 @@ struct LocationEditView: View {
                 .toolbar {
                     toolbarContent
                 }
-                .interactiveDismissDisabled(true)
+                .interactiveDismissDisabled(viewModel.hasChanges)
                 .scrollDismissesKeyboard(.interactively)
+                .notificationAlert(
+                    isPresented: rateErrorBinding,
+                    title: .exchangeRateLoadingErrorTitle,
+                    message: .exchangeRateLoadingErrorMessage(
+                        errorDescription: viewModel.rateLoadingError?.errorDescription
+                        ?? String(localized: .errorUnknown)
+                    )
+                )
                 .discardConfirmationAlert(
                     isPresented: $isShowingDiscardAlert,
                     onConfirm: { dismiss() }
@@ -83,21 +89,13 @@ struct LocationEditView: View {
                     onConfirm: { confirmDelete() },
                     onCancel: { cancelDelete() }
                 )
-                .notificationAlert(
-                    isPresented: rateErrorBinding,
-                    title: .exchangeRateLoadingErrorTitle,
-                    message: .exchangeRateLoadingErrorMessage(
-                        errorDescription: viewModel.rateLoadingError?.errorDescription ?? String(localized: .errorUnknown)
-                        )
-                    )
                 .task {
                     viewModel.loadInitialRateIfNeeded()
                 }
         }
     }
 
-    // MARK: - Content
-    
+    // MARK: Form Content
     private var locationEditForm: some View {
         Form {
             mainDataSection
@@ -107,8 +105,7 @@ struct LocationEditView: View {
         }
     }
     
-    // MARK: - Sections
-    
+    // MARK: - Section. Main
     private var mainDataSection: some View {
         Section {
             TextField(.locationName, text: $viewModel.name)
@@ -133,15 +130,16 @@ struct LocationEditView: View {
         }
     }
     
+    // MARK: - Section. Currency & Payment
     private var currencySection: some View {
         Section {
-            Picker(.locationCurrency, selection: localCurrencyBinding) {
-                ForEach(Currency.allCasesSortedByName) { currency in
-                    Text(currency.localizedResource)
-                        .tag(currency)
-                }
+            LabeledPicker(
+                title: .locationCurrency,
+                selection: localCurrencyBinding,
+                options: Currency.allCasesSortedByName
+            ) { currency in
+                CurrencyLabel(currency)
             }
-            .pickerStyle(.navigationLink)
             
             if !viewModel.isHomeLocation {
                 LabeledContent(.locationExchangeRate) {
@@ -154,6 +152,7 @@ struct LocationEditView: View {
                         onRefresh: { viewModel.requestRateRefresh() }
                     )
                 }
+                
                 LabeledContent(.locationExchangeAdjustmentPercentage) {
                     HStack {
                         NumericInputField(
@@ -164,7 +163,7 @@ struct LocationEditView: View {
                         Image(systemName: "percent")
                             .fontWeight(.semibold)
                             .imageScale(.small)
-                            .foregroundStyle(.tertiary)
+                            .foregroundStyle(.secondary)
                     }
                 }
             }
@@ -172,18 +171,7 @@ struct LocationEditView: View {
     }
     
     private var budgetsSection: some View {
-        Section(.locationBudget) {
-            if !viewModel.isHomeLocation {
-                Picker("", selection: $inputCurrency) {
-                    Text(viewModel.baseCurrency.code)
-                        .tag(InputCurrency.base)
-                    Text(viewModel.localCurrency.code)
-                        .tag(InputCurrency.local)
-                }
-                .pickerStyle(.segmented)
-                .listRowSeparator(.hidden)
-            }
-            
+        Section {
             ForEach(ExpenseCategory.allCases, id: \.id) { (category: ExpenseCategory) in
                 HStack {
                     ExpenseCategoryLabel(category: category)
@@ -193,7 +181,6 @@ struct LocationEditView: View {
                         focusedField: $focusedField,
                         focusId: .budget(category.id)
                     )
-                    CurrencyCodeText(budgetInputCurrencyValue)
                 }
             }
             
@@ -204,16 +191,24 @@ struct LocationEditView: View {
                 Text(.locationBudgetTotal)
                 Spacer()
                 AmountText.standard(budgetTotalValue)
-                CurrencyCodeText(budgetInputCurrencyValue)
             }
             .listRowSeparatorTint(.gray)
+        } header: {
+            HStack {
+                Text(.locationBudget)
+                if !viewModel.isHomeLocation {
+                    Spacer()
+                    CurrencyCodeText(budgetInputCurrencyValue)
+                    InputCurrencySwitchButton(action: switchInputCurrency)
+                }
+            }
         }
-        
     }
 
+    // MARK: - Section. Additional
     @ViewBuilder
     private var actionsSection: some View {
-        if viewModel.isEditing {
+        if viewModel.isEdit {
             Section {
                 Button(.locationDelete, role: .destructive) {
                     requestDelete()
@@ -222,8 +217,7 @@ struct LocationEditView: View {
         }
     }
     
-    // MARK: - Components
-
+    // MARK: - Toolbar
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
         ToolbarItemGroup(placement: .topBarLeading) {
@@ -251,7 +245,6 @@ struct LocationEditView: View {
     }
 
     // MARK: - Bindings
-    
     private var localCurrencyBinding: Binding<Currency> {
         Binding(
             get: { viewModel.localCurrency },
@@ -259,15 +252,6 @@ struct LocationEditView: View {
         )
     }
 
-    private var exchangeAdjustmentInputBinding: Binding<Double> {
-        Binding(
-            get: { viewModel.exchangeAdjustmentPercentage },
-            set: { newValue in
-                viewModel.updateExchangeAdjustmentPercentage(newValue)
-            }
-        )
-    }
-    
     private var rateErrorBinding: Binding<Bool> {
         Binding(
             get: { viewModel.rateLoadingError != nil },
@@ -275,6 +259,15 @@ struct LocationEditView: View {
                 if !shouldShow {
                     viewModel.rateLoadingError = nil
                 }
+            }
+        )
+    }
+    
+    private var exchangeAdjustmentInputBinding: Binding<Double> {
+        Binding(
+            get: { viewModel.exchangeAdjustmentPercentage },
+            set: { newValue in
+                viewModel.updateExchangeAdjustmentPercentage(newValue)
             }
         )
     }
@@ -294,7 +287,13 @@ struct LocationEditView: View {
     }
     
     // MARK: - Actions
-
+    private func switchInputCurrency() {
+        switch inputCurrency {
+        case .base: inputCurrency = .local
+        case .local: inputCurrency = .base
+        }
+    }
+    
     private func handleClose() {
         if viewModel.hasChanges {
             isShowingDiscardAlert = true
@@ -320,8 +319,7 @@ struct LocationEditView: View {
     }
 }
 
-// MARK: - Previews
-
+// MARK: - Preview
 private extension LocationEditView {
     static func makePreview(
         locale: Locale,

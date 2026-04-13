@@ -148,34 +148,19 @@ struct ExpenseEditView: View {
     // MARK: - Section. Specification
     private var specificationsSection: some View {
         Section {
-            HStack {
-                Picker(.expenseCategory, selection: categoryBinding) {
-                    ForEach(ExpenseCategory.allCases, id: \.id) { category in
-                        ExpenseCategoryLabel(category: category)
-                            .tag(category)
-                    }
-                }
-                .pickerStyle(.navigationLink)
-                .navigationLinkIndicatorVisibility(.hidden)
-                Image(systemName: "chevron.right")
-                    .fontWeight(.semibold)
-                    .imageScale(.small)
-                    .foregroundStyle(.accent)
+            LabeledPicker(
+                title: .expenseCategory,
+                selection: categoryBinding,
+                options: ExpenseCategory.allCases
+            ) { category in
+                ExpenseCategoryLabel(category: category)
             }
-            
-            HStack {
-                Picker(.expensePaymentMethod, selection: paymentMethodBinding) {
-                    ForEach(PaymentMethod.allCases, id: \.id) { method in
-                        PaymentMethodLabel(method: method)
-                            .tag(method)
-                    }
-                }
-                .pickerStyle(.navigationLink)
-                .navigationLinkIndicatorVisibility(.hidden)
-                Image(systemName: "chevron.right")
-                    .fontWeight(.semibold)
-                    .imageScale(.small)
-                    .foregroundStyle(.accent)
+            LabeledPicker(
+                title: .expensePaymentMethod,
+                selection: paymentMethodBinding,
+                options: PaymentMethod.allCases
+            ) { method in
+                PaymentMethodLabel(method: method)
             }
         }
     }
@@ -221,7 +206,7 @@ struct ExpenseEditView: View {
                         Image(systemName: "percent")
                             .fontWeight(.semibold)
                             .imageScale(.small)
-                            .foregroundStyle(.tertiary)
+                            .foregroundStyle(.secondary)
                     }
                 }
             }
@@ -307,15 +292,6 @@ struct ExpenseEditView: View {
             }
         )
     }
-
-    private var exchangeAdjustmentInputBinding: Binding<Double> {
-        Binding(
-            get: { viewModel.exchangeAdjustmentPercentage },
-            set: { newValue in
-                viewModel.updateExchangeAdjustmentPercentage(newValue, currentInput: inputCurrency)
-            }
-        )
-    }
     
     private var rateErrorBinding: Binding<Bool> {
         Binding(
@@ -324,6 +300,15 @@ struct ExpenseEditView: View {
                 if !shouldShow {
                     viewModel.rateLoadingError = nil
                 }
+            }
+        )
+    }
+    
+    private var exchangeAdjustmentInputBinding: Binding<Double> {
+        Binding(
+            get: { viewModel.exchangeAdjustmentPercentage },
+            set: { newValue in
+                viewModel.updateExchangeAdjustmentPercentage(newValue, currentInput: inputCurrency)
             }
         )
     }

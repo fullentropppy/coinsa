@@ -180,13 +180,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "UAE Dirham (AED)"
+            "value" : "UAE Dirham"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Дирхам ОАЭ (AED)"
+            "value" : "Дирхам ОАЭ"
           }
         }
       }
@@ -197,13 +197,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Belarusian Ruble (BYN)"
+            "value" : "Belarusian Ruble"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Белорусский рубль (BYN)"
+            "value" : "Белорусский рубль"
           }
         }
       }
@@ -214,13 +214,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Chinese Yuan (CNY)"
+            "value" : "Chinese Yuan"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Китайский юань (CNY)"
+            "value" : "Китайский юань"
           }
         }
       }
@@ -231,13 +231,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Euro (EUR)"
+            "value" : "Euro"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Евро (EUR)"
+            "value" : "Евро"
           }
         }
       }
@@ -248,13 +248,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Japanese Yen (JPY)"
+            "value" : "Japanese Yen"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Японская иена (JPY)"
+            "value" : "Японская иена"
           }
         }
       }
@@ -265,13 +265,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "South Korean Won (KRW)"
+            "value" : "South Korean Won"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Южнокорейская вона (KRW)"
+            "value" : "Южнокорейская вона"
           }
         }
       }
@@ -282,13 +282,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kazakhstani Tenge (KZT)"
+            "value" : "Kazakhstani Tenge"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Казахстанский тенге (KZT)"
+            "value" : "Казахстанский тенге"
           }
         }
       }
@@ -299,13 +299,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Russian Ruble (RUB)"
+            "value" : "Russian Ruble"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Российский рубль (RUB)"
+            "value" : "Российский рубль"
           }
         }
       }
@@ -316,13 +316,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Turkish Lira (TRY)"
+            "value" : "Turkish Lira"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Турецкая лира (TRY)"
+            "value" : "Турецкая лира"
           }
         }
       }
@@ -333,13 +333,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "US Dollar (USD)"
+            "value" : "US Dollar"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Доллар США (USD)"
+            "value" : "Доллар США"
           }
         }
       }

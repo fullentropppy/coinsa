@@ -12,7 +12,7 @@ struct SettingsView: View {
     // MARK: - Stored Properties
 
     @Environment(\.modelContext) private var context
-    @Environment(AppSettingsStore.self) private var appSettingsStore
+    @Environment(AppSettingsStore.self) private var settingsStore
     
     // MARK: - Computed Properties
     
@@ -50,7 +50,7 @@ struct SettingsView: View {
     private var baseCurrencySection: some View {
         Section {
             LabeledContent(.settingsBaseCurrency) {
-                Text(appSettingsStore.baseCurrency.localizedResource)
+                CurrencyLabel(settingsStore.baseCurrency)
             }
         } footer: {
             Text(.settingsBaseCurrencyHint)
@@ -85,15 +85,15 @@ struct SettingsView: View {
 
     private var selectedAppAppearance: Binding<AppAppearance> {
         Binding(
-            get: { appSettingsStore.appAppearance },
-            set: { appSettingsStore.appAppearance = $0 }
+            get: { settingsStore.appAppearance },
+            set: { settingsStore.appAppearance = $0 }
         )
     }
     
     private var isAddButtonOnLeftBinding: Binding<Bool> {
         Binding(
-            get: { appSettingsStore.isAddButtonOnLeft },
-            set: { appSettingsStore.isAddButtonOnLeft = $0 }
+            get: { settingsStore.isAddButtonOnLeft },
+            set: { settingsStore.isAddButtonOnLeft = $0 }
         )
     }
 }

@@ -11,37 +11,30 @@ import Observation
 @MainActor
 @Observable
 final class LocationEditViewModel {
-    // MARK: - Stored Properties
-    
+    // MARK: - Dependencies
     private let currencyConverter: CurrencyConverter
     private let budgetManager: BudgetManager
-    
-    private var initialSnapshot: Snapshot
-    private var hasLoadedInitialRate = false
     
     let location: Location?
     let trip: Trip
     let baseCurrency: Currency
     
-    var name: String
-    var startDate: Date {
-        didSet {
-            if endDate < startDate {
-                endDate = startDate
-            }
-        }
-    }
-    var endDate: Date
-    var exchangeAdjustmentPercentage: Double
+    // MARK: - Internal State
+    private var initialSnapshot: Snapshot
+    private var hasLoadedInitialRate = false
     
-    // MARK: - Computed Properties
+    // MARK: - UI State. Screen Behavior & Appearance
     
-    var isEditing: Bool {
+    var isEdit: Bool {
         location != nil
     }
     
+    var isHomeLocation: Bool {
+        baseCurrency == localCurrency
+    }
+    
     var navigationTitle: LocalizedStringResource {
-        isEditing ? .locationNavigationTitleEdit : .locationNavigationTitleCreate
+        isEdit ? .locationNavigationTitleEdit : .locationNavigationTitleCreate
     }
     
     var hasChanges: Bool {
@@ -52,8 +45,21 @@ final class LocationEditViewModel {
         !name.isBlank && startDate <= endDate && rateLocalToBase > 0
     }
     
-    var isHomeLocation: Bool {
-        baseCurrency == localCurrency
+    // MARK: - UI State. Common Data
+    var name: String
+    var startDate: Date {
+        didSet {
+            if endDate < startDate {
+                endDate = startDate
+            }
+        }
+    }
+    var endDate: Date
+    
+    // MARK: - UI State. Exchange Rate
+    var rateLocalToBase: Double {
+        get { currencyConverter.rateLocalToBase }
+        set { currencyConverter.updateRate(newValue) }
     }
     
     var isRateLoading: Bool { currencyConverter.isRateLoading }
@@ -68,13 +74,12 @@ final class LocationEditViewModel {
         set { updateLocalCurrency(newValue) }
     }
     
-    var rateLocalToBase: Double {
-        get { currencyConverter.rateLocalToBase }
-        set { currencyConverter.updateRate(newValue) }
-    }
+    // MARK: - UI State. Payment
+    var exchangeAdjustmentPercentage: Double
     
-    private var effectiveExchangeAdjustmentPercentage: Double {
-        isHomeLocation ? 0 : max(0, exchangeAdjustmentPercentage)
+    // MARK: - UI State. Budget
+    var budgetAmounts: [ExpenseCategory: Double] {
+        budgetManager.budgetsBase
     }
     
     var plannedBaseTotal: Double {
@@ -85,27 +90,23 @@ final class LocationEditViewModel {
         currencyConverter.convertToLocal(fromBase: plannedBaseTotal).rounded()
     }
     
-    var budgetAmounts: [ExpenseCategory: Double] {
-        budgetManager.budgetsBase
-    }
-    
-    // MARK: - Initialization
-    
-    convenience init(trip: Trip, baseCurrency: Currency) {
-        let exchangeRateProvider = ExchangeRateProvider(service: HexarateService())
-        self.init(
-            trip: trip,
-            location: nil,
-            baseCurrency: baseCurrency,
-            exchangeRateProvider: exchangeRateProvider
-        )
-    }
+    // MARK: - Initializers
     
     convenience init(location: Location, baseCurrency: Currency) {
         let exchangeRateProvider = ExchangeRateProvider(service: HexarateService())
         self.init(
             trip: location.trip,
             location: location,
+            baseCurrency: baseCurrency,
+            exchangeRateProvider: exchangeRateProvider
+        )
+    }
+    
+    convenience init(trip: Trip, baseCurrency: Currency) {
+        let exchangeRateProvider = ExchangeRateProvider(service: HexarateService())
+        self.init(
+            trip: trip,
+            location: nil,
             baseCurrency: baseCurrency,
             exchangeRateProvider: exchangeRateProvider
         )
@@ -147,28 +148,24 @@ final class LocationEditViewModel {
         var resolvedBudgetAmounts = Dictionary(
             uniqueKeysWithValues: ExpenseCategory.allCases.map { ($0, 0.0) }
         )
+        
         if let location {
             for budget in location.budgets {
                 resolvedBudgetAmounts[budget.category] = budget.baseAmount
             }
         }
         
-        let normalizedExchangeAdjustmentPercentage = Self.normalizedExchangeAdjustmentPercentage(
-            resolvedExchangeAdjustmentPercentage,
-            isHomeLocation: resolvedLocalCurrency == baseCurrency
-        )
-
         self.name = resolvedName
         self.startDate = resolvedStartDate
         self.endDate = resolvedEndDate
-        self.exchangeAdjustmentPercentage = normalizedExchangeAdjustmentPercentage
+        self.exchangeAdjustmentPercentage = resolvedExchangeAdjustmentPercentage
         
         self.currencyConverter = CurrencyConverter(
             exchangeRateProvider: exchangeRateProvider,
             baseCurrency: baseCurrency,
             localCurrency: resolvedLocalCurrency,
             rateLocalToBase: resolvedRateLocalToBase,
-            exchangeAdjustmentPercentage: normalizedExchangeAdjustmentPercentage
+            exchangeAdjustmentPercentage: resolvedExchangeAdjustmentPercentage
         )
         
         var initialBudgets: [ExpenseCategory: Double] = [:]
@@ -189,15 +186,23 @@ final class LocationEditViewModel {
             endDate: resolvedEndDate,
             localCurrency: resolvedLocalCurrency,
             rateLocalToBase: resolvedRateLocalToBase,
-            exchangeAdjustmentPercentage: normalizedExchangeAdjustmentPercentage,
+            exchangeAdjustmentPercentage: resolvedExchangeAdjustmentPercentage,
             budgetAmounts: resolvedBudgetAmounts
         )
     }
 
-    // MARK: - Public Methods
-
+    // MARK: - Currency Operations
+    func updateLocalCurrency(_ newCurrency: Currency) {
+        currencyConverter.updateLocalCurrency(newCurrency)
+    }
+    
+    // MARK: - Exchange Rate Operations
+    func requestRateRefresh() {
+        currencyConverter.requestRateRefresh()
+    }
+    
     func loadInitialRateIfNeeded() {
-        guard !hasLoadedInitialRate && !isEditing && !isHomeLocation else { return }
+        guard !hasLoadedInitialRate && !isEdit && !isHomeLocation else { return }
             
         hasLoadedInitialRate = true
     
@@ -217,17 +222,15 @@ final class LocationEditViewModel {
         }
     }
 
-    func requestRateRefresh() {
-        currencyConverter.requestRateRefresh()
-    }
-
-    func updateLocalCurrency(_ newCurrency: Currency) {
-        currencyConverter.updateLocalCurrency(newCurrency)
-    }
-
+    // MARK: - Payment Operations
     func updateExchangeAdjustmentPercentage(_ newPercentage: Double) {
         exchangeAdjustmentPercentage = max(0, newPercentage)
-        currencyConverter.updateExchangeAdjustmentPercentage(effectiveExchangeAdjustmentPercentage)
+        currencyConverter.updateExchangeAdjustmentPercentage(exchangeAdjustmentPercentage)
+    }
+    
+    // MARK: - Budget Operations
+    func updateBudget(_ amount: Double, for category: ExpenseCategory, in inputCurrency: InputCurrency) {
+        budgetManager.updateBudget(amount, for: category, in: inputCurrency)
     }
     
     func budgetBaseAmount(for category: ExpenseCategory) -> Double {
@@ -238,10 +241,7 @@ final class LocationEditViewModel {
         budgetManager.budgetLocal(for: category)
     }
     
-    func updateBudget(_ amount: Double, for category: ExpenseCategory, in inputCurrency: InputCurrency) {
-        budgetManager.updateBudget(amount, for: category, in: inputCurrency)
-    }
-
+    // MARK: - Persistance
     func save(using repository: LocationRepository) {
         if let location {
             repository.update(
@@ -251,7 +251,7 @@ final class LocationEditViewModel {
                 endDate: endDate,
                 localCurrency: localCurrency,
                 rateLocalToBase: rateLocalToBase,
-                exchangeAdjustmentPercentage: effectiveExchangeAdjustmentPercentage,
+                exchangeAdjustmentPercentage: exchangeAdjustmentPercentage,
                 budgetsByCategory: budgetAmounts
             )
         } else {
@@ -261,29 +261,17 @@ final class LocationEditViewModel {
                 endDate: endDate,
                 localCurrency: localCurrency,
                 rateLocalToBase: rateLocalToBase,
-                exchangeAdjustmentPercentage: effectiveExchangeAdjustmentPercentage,
+                exchangeAdjustmentPercentage: exchangeAdjustmentPercentage,
                 trip: trip,
                 budgetsByCategory: budgetAmounts
             )
         }
     }
-    
-    // MARK: - Private Methods
-
-    private static func normalizedExchangeAdjustmentPercentage(
-        _ percentage: Double,
-        isHomeLocation: Bool
-    ) -> Double {
-        isHomeLocation ? 0 : max(0, percentage)
-    }
 }
 
-// MARK: - Snapshot
-
+// MARK: - Internal Types
 private extension LocationEditViewModel {
     struct Snapshot: Equatable {
-        // MARK: - Stored Properties
-
         let name: String
         let startDate: Date
         let endDate: Date
@@ -292,8 +280,19 @@ private extension LocationEditViewModel {
         let exchangeAdjustmentPercentage: Double
         let budgetAmounts: [ExpenseCategory: Double]
 
-        // MARK: - Initialization
-
+        // MARK: - Initializers
+        init(viewModel: LocationEditViewModel) {
+            self.init(
+                name: viewModel.name,
+                startDate: viewModel.startDate,
+                endDate: viewModel.endDate,
+                localCurrency: viewModel.localCurrency,
+                rateLocalToBase: viewModel.rateLocalToBase,
+                exchangeAdjustmentPercentage: viewModel.exchangeAdjustmentPercentage,
+                budgetAmounts: viewModel.budgetAmounts
+            )
+        }
+        
         init(
             name: String,
             startDate: Date,
@@ -313,18 +312,6 @@ private extension LocationEditViewModel {
                 uniqueKeysWithValues: ExpenseCategory.allCases.map { category in
                     (category, (budgetAmounts[category] ?? 0).rounded())
                 }
-            )
-        }
-
-        init(viewModel: LocationEditViewModel) {
-            self.init(
-                name: viewModel.name,
-                startDate: viewModel.startDate,
-                endDate: viewModel.endDate,
-                localCurrency: viewModel.localCurrency,
-                rateLocalToBase: viewModel.rateLocalToBase,
-                exchangeAdjustmentPercentage: viewModel.effectiveExchangeAdjustmentPercentage,
-                budgetAmounts: viewModel.budgetAmounts
             )
         }
     }

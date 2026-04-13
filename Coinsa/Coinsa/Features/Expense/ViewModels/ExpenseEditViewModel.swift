@@ -284,7 +284,6 @@ final class ExpenseEditViewModel {
 }
 
 // MARK: - Internal Types
-
 private extension ExpenseEditViewModel {
     struct Snapshot: Equatable {
         let date: Date
