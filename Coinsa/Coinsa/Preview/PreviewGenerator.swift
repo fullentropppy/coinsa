@@ -7,12 +7,7 @@
 
 import Foundation
 
-struct PreviewOptions {
-    var includeTrips = true
-    var includeLocations = true
-    var includeBudgets = true
-    var includeExpenses = true
-}
+// MARK: - Публичные типы для генератора превью-данных
 
 enum PreviewScenario: CaseIterable {
     case japan
@@ -22,13 +17,22 @@ enum PreviewScenario: CaseIterable {
     case all
 }
 
+struct PreviewOptions {
+    var includeTrips = true
+    var includeLocations = true
+    var includeBudgets = true
+    var includeExpenses = true
+}
+
+// MARK: - Генерартор превью-данных
+
 enum PreviewGenerator {
-    // MARK: - Stored Properties
-
+    // MARK: - Свойства
+    
     private static let now = Date().startOfDay
-
-    // MARK: - Public Methods
-
+    
+    // MARK: - Публичные методы
+    
     static func makeTrips(for scenario: PreviewScenario, options: PreviewOptions) -> [Trip] {
         var trips: [Trip] = []
         
@@ -50,35 +54,41 @@ enum PreviewGenerator {
         
         return trips
     }
+}
 
-    // MARK: - Japan Trip Making
+// MARK: - Создание поездки: Япония
 
+private extension PreviewGenerator {
+    // MARK: - Создание поездки
+    
     private static func makeJapanTrip(options: PreviewOptions) -> Trip {
         let startDate = now.adding(months: -14)
         let endDate = startDate.adding(days: 14)
-
+        
         let japanTrip = Trip(
             name: PreviewTrip.japan.rawValue,
             startDate: startDate,
             endDate: endDate
         )
-
+        
         guard options.includeLocations else {
             return japanTrip
         }
-
+        
         let tokyoEndDate = startDate.adding(days: 6)
         let kyotoEndDate = tokyoEndDate.adding(days: 4)
-
+        
         let tokyo = makeTokyoLocation(trip: japanTrip, startDate: startDate, endDate: tokyoEndDate, options: options)
         let kyoto = makeKyotoLocation(trip: japanTrip, startDate: tokyoEndDate, endDate: kyotoEndDate, options: options)
         let osaka = makeOsakaLocation(trip: japanTrip, startDate: kyotoEndDate, endDate: endDate, options: options)
-
+        
         japanTrip.locations = [tokyo, kyoto, osaka]
-
+        
         return japanTrip
     }
-
+    
+    // MARK: - Создание локаций
+    
     private static func makeTokyoLocation(
         trip: Trip,
         startDate: Date,
@@ -86,7 +96,7 @@ enum PreviewGenerator {
         options: PreviewOptions
     ) -> Location {
         let tokyoData = PreviewLocation.tokyo
-
+        
         let tokyo = Location(
             name: tokyoData.rawValue,
             startDate: startDate,
@@ -96,17 +106,17 @@ enum PreviewGenerator {
             exchangeAdjustmentPercentage: tokyoData.exchangeAdjustmentPercentage,
             trip: trip
         )
-
+        
         if options.includeBudgets {
             tokyo.budgets = makeTokyoBudgets(location: tokyo)
         }
         if options.includeExpenses {
             tokyo.expenses = makeTokyoExpenses(location: tokyo, startDate: startDate)
         }
-
+        
         return tokyo
     }
-
+    
     private static func makeKyotoLocation(
         trip: Trip,
         startDate: Date,
@@ -114,7 +124,7 @@ enum PreviewGenerator {
         options: PreviewOptions
     ) -> Location {
         let kyotoData = PreviewLocation.kyoto
-
+        
         let kyoto = Location(
             name: kyotoData.rawValue,
             startDate: startDate,
@@ -124,17 +134,17 @@ enum PreviewGenerator {
             exchangeAdjustmentPercentage: kyotoData.exchangeAdjustmentPercentage,
             trip: trip
         )
-
+        
         if options.includeBudgets {
             kyoto.budgets = makeKyotoBudgets(location: kyoto)
         }
         if options.includeExpenses {
             kyoto.expenses = makeKyotoExpenses(location: kyoto, startDate: startDate)
         }
-
+        
         return kyoto
     }
-
+    
     private static func makeOsakaLocation(
         trip: Trip,
         startDate: Date,
@@ -142,7 +152,7 @@ enum PreviewGenerator {
         options: PreviewOptions
     ) -> Location {
         let osakaData = PreviewLocation.osaka
-
+        
         let osaka = Location(
             name: osakaData.rawValue,
             startDate: startDate,
@@ -152,17 +162,19 @@ enum PreviewGenerator {
             exchangeAdjustmentPercentage: osakaData.exchangeAdjustmentPercentage,
             trip: trip
         )
-
+        
         if options.includeBudgets {
             osaka.budgets = makeOsakaBudgets(location: osaka)
         }
         if options.includeExpenses {
             osaka.expenses = makeOsakaExpenses(location: osaka, startDate: startDate)
         }
-
+        
         return osaka
     }
-
+    
+    // MARK: - Создание бюджетов
+    
     private static func makeTokyoBudgets(location: Location) -> [Budget] {
         [
             Budget(category: .food, baseAmount: 22000, location: location),
@@ -173,7 +185,7 @@ enum PreviewGenerator {
             Budget(category: .other, baseAmount: 9490, location: location)
         ]
     }
-
+    
     private static func makeKyotoBudgets(location: Location) -> [Budget] {
         [
             Budget(category: .food, baseAmount: 18000, location: location),
@@ -182,7 +194,7 @@ enum PreviewGenerator {
             Budget(category: .other, baseAmount: 20500, location: location)
         ]
     }
-
+    
     private static func makeOsakaBudgets(location: Location) -> [Budget] {
         [
             Budget(category: .food, baseAmount: 14000, location: location),
@@ -190,10 +202,12 @@ enum PreviewGenerator {
             Budget(category: .other, baseAmount: 30000, location: location)
         ]
     }
-
+    
+    // MARK: - Создание трат
+    
     private static func makeTokyoExpenses(location: Location, startDate: Date) -> [Expense] {
         let exchangeRate = location.rateLocalToBase
-
+        
         return [
             Expense(
                 date: startDate.adding(hours: 8, minutes: 45),
@@ -460,10 +474,10 @@ enum PreviewGenerator {
             ),
         ]
     }
-
+    
     private static func makeKyotoExpenses(location: Location, startDate: Date) -> [Expense] {
         let exchangeRate = location.rateLocalToBase
-
+        
         return [
             Expense(
                 date: startDate.adding(hours: 8, minutes: 14),
@@ -640,10 +654,10 @@ enum PreviewGenerator {
             )
         ]
     }
-
+    
     private static func makeOsakaExpenses(location: Location, startDate: Date) -> [Expense] {
         let exchangeRate = location.rateLocalToBase
-
+        
         return [
             Expense(
                 date: startDate.adding(hours: 11, minutes: 49),
@@ -815,8 +829,12 @@ enum PreviewGenerator {
             )
         ]
     }
-    
-    // MARK: - Russia Trip Making
+}
+
+// MARK: - Создание поездки: Россия
+
+private extension PreviewGenerator {
+    // MARK: - Создание поездки
     
     private static func makeRussiaTrip(options: PreviewOptions) -> Trip {
         let startDate = now.adding(months: -2)
@@ -839,6 +857,8 @@ enum PreviewGenerator {
         return russiaTrip
     }
     
+    // MARK: - Создание локаций
+    
     private static func makeSaintpLocation(
         trip: Trip,
         startDate: Date,
@@ -846,7 +866,7 @@ enum PreviewGenerator {
         options: PreviewOptions
     ) -> Location {
         let saintpData = PreviewLocation.saintp
-
+        
         let saintp = Location(
             name: saintpData.rawValue,
             startDate: startDate,
@@ -856,7 +876,7 @@ enum PreviewGenerator {
             exchangeAdjustmentPercentage: saintpData.exchangeAdjustmentPercentage,
             trip: trip
         )
-
+        
         if options.includeBudgets {
             saintp.budgets = makeSaintpBudgets(location: saintp)
         }
@@ -867,6 +887,8 @@ enum PreviewGenerator {
         return saintp
     }
     
+    // MARK: - Создание бюджетов
+    
     private static func makeSaintpBudgets(location: Location) -> [Budget] {
         [
             Budget(category: .food, baseAmount: 7000, location: location),
@@ -876,9 +898,11 @@ enum PreviewGenerator {
         ]
     }
     
+    // MARK: - Создание трат
+    
     private static func makeSaintpExpenses(location: Location, startDate: Date) -> [Expense] {
         let exchangeRate = location.rateLocalToBase
-
+        
         return [
             Expense(
                 date: startDate.adding(hours: 10, minutes: 19),
@@ -920,32 +944,38 @@ enum PreviewGenerator {
             )
         ]
     }
-    
-    // MARK: - South Korea Trip Making
+}
 
+// MARK: - Создание поездки: Южная Корея
+
+private extension PreviewGenerator {
+    // MARK: - Создание поездки
+    
     private static func makeSouthKoreaTrip(options: PreviewOptions) -> Trip {
         let startDate = now.adding(days: -3)
         let endDate = startDate.adding(days: 10)
-
+        
         let southKoreaTrip = Trip(
             name: PreviewTrip.southKorea.rawValue,
             startDate: startDate,
             endDate: endDate
         )
-
+        
         guard options.includeLocations else {
             return southKoreaTrip
         }
-
+        
         let seoulEndDate = startDate.adding(days: 6)
         let seoul = makeSeoulLocation(trip: southKoreaTrip, startDate: startDate, endDate: seoulEndDate, options: options)
         let busan = makeBusanLocation(trip: southKoreaTrip, startDate: seoulEndDate, endDate: endDate, options: options)
-
+        
         southKoreaTrip.locations = [seoul, busan]
-
+        
         return southKoreaTrip
     }
-
+    
+    // MARK: - Создание локаций
+    
     private static func makeSeoulLocation(
         trip: Trip,
         startDate: Date,
@@ -953,7 +983,7 @@ enum PreviewGenerator {
         options: PreviewOptions
     ) -> Location {
         let seoulData = PreviewLocation.seoul
-
+        
         let seoul = Location(
             name: seoulData.rawValue,
             startDate: startDate,
@@ -963,18 +993,17 @@ enum PreviewGenerator {
             exchangeAdjustmentPercentage: seoulData.exchangeAdjustmentPercentage,
             trip: trip
         )
-
+        
         if options.includeBudgets {
             seoul.budgets = makeSeoulBudgets(location: seoul)
         }
-
         if options.includeExpenses {
             seoul.expenses = makeSeoulExpenses(location: seoul, startDate: startDate)
         }
-
+        
         return seoul
     }
-
+    
     private static func makeBusanLocation(
         trip: Trip,
         startDate: Date,
@@ -982,7 +1011,7 @@ enum PreviewGenerator {
         options: PreviewOptions
     ) -> Location {
         let busanData = PreviewLocation.busan
-
+        
         let busan = Location(
             name: busanData.rawValue,
             startDate: startDate,
@@ -992,14 +1021,16 @@ enum PreviewGenerator {
             exchangeAdjustmentPercentage: busanData.exchangeAdjustmentPercentage,
             trip: trip
         )
-
+        
         if options.includeBudgets {
             busan.budgets = makeBusanBudgets(location: busan)
         }
-
+        
         return busan
     }
-
+    
+    // MARK: - Создание бюджетов
+    
     private static func makeSeoulBudgets(location: Location) -> [Budget] {
         [
             Budget(category: .food, baseAmount: 24000, location: location),
@@ -1008,7 +1039,7 @@ enum PreviewGenerator {
             Budget(category: .shopping, baseAmount: 20000, location: location)
         ]
     }
-
+    
     private static func makeBusanBudgets(location: Location) -> [Budget] {
         [
             Budget(category: .food, baseAmount: 12000, location: location),
@@ -1016,10 +1047,12 @@ enum PreviewGenerator {
             Budget(category: .other, baseAmount: 15000, location: location)
         ]
     }
-
+    
+    // MARK: - Создание трат
+    
     private static func makeSeoulExpenses(location: Location, startDate: Date) -> [Expense] {
         let exchangeRate = location.rateLocalToBase
-
+        
         return [
             Expense(
                 date: startDate.adding(hours: 8, minutes: 15),
@@ -1210,9 +1243,13 @@ enum PreviewGenerator {
             )
         ]
     }
-    
-    // MARK: - Turkey Trip Making
+}
 
+// MARK: - Создание поездки: Турция
+
+private extension PreviewGenerator {
+    // MARK: - Создание поездки
+    
     private static func makeTurkeyTrip(options: PreviewOptions) -> Trip {
         let startDate = now.adding(months: 3)
         let endDate = startDate.adding(days: 7)
@@ -1233,6 +1270,8 @@ enum PreviewGenerator {
         return turkeyTrip
     }
 
+    // MARK: - Создание локаций
+    
     private static func makeIstanbulLocation(trip: Trip, options: PreviewOptions) -> Location {
         let istanbulData = PreviewLocation.istanbul
 
@@ -1253,6 +1292,8 @@ enum PreviewGenerator {
         return istanbul
     }
 
+    // MARK: - Создание бюджетов
+    
     private static func makeIstanbulBudgets(location: Location) -> [Budget] {
         [
             Budget(category: .food, baseAmount: 21000, location: location),

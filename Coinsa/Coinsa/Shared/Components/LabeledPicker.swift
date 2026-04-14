@@ -8,13 +8,15 @@
 import SwiftUI
 
 struct LabeledPicker<SelectionValue: Hashable, Content: View>: View {
-    // MARK: - Properties
+    // MARK: - Свойства
+    
     let title: LocalizedStringResource
     let selection: Binding<SelectionValue>
     let options: [SelectionValue]
     @ViewBuilder let content: (SelectionValue) -> Content
     
-    // MARK: - Initializers
+    // MARK: - Инициализация
+    
     init(
         title: LocalizedStringResource,
         selection: Binding<SelectionValue>,
@@ -27,7 +29,8 @@ struct LabeledPicker<SelectionValue: Hashable, Content: View>: View {
         self.content = content
     }
     
-    // MARK: - Body
+    // MARK: - Тело View
+    
     var body: some View {
         HStack {
             Picker(title, selection: selection) {
@@ -40,9 +43,47 @@ struct LabeledPicker<SelectionValue: Hashable, Content: View>: View {
             .navigationLinkIndicatorVisibility(.hidden)
             
             Image(systemName: "chevron.right")
-                .fontWeight(.semibold)
                 .imageScale(.small)
+                .fontWeight(.semibold)
                 .foregroundStyle(.accent)
         }
     }
+}
+
+// MARK: - Превью
+
+#Preview("Light - RU") {
+    @Previewable @State var selectedCategory = ExpenseCategory.food
+    
+    NavigationStack {
+        List {
+            LabeledPicker(
+                title: .expenseCategory,
+                selection: $selectedCategory,
+                options: ExpenseCategory.allCases
+            ) { category in
+                ExpenseCategoryLabel(category: category)
+            }
+        }
+    }
+    .environment(\.locale, PreviewLocale.ru)
+    .preferredColorScheme(.light)
+}
+
+#Preview("Dark - EN") {
+    @Previewable @State var selectedCategory = ExpenseCategory.food
+    
+    NavigationStack {
+        List {
+            LabeledPicker(
+                title: .expenseCategory,
+                selection: $selectedCategory,
+                options: ExpenseCategory.allCases
+            ) { category in
+                ExpenseCategoryLabel(category: category)
+            }
+        }
+    }
+    .environment(\.locale, PreviewLocale.en)
+    .preferredColorScheme(.dark)
 }

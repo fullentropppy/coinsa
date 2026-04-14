@@ -8,7 +8,7 @@
 import Foundation
 
 extension Date {
-    // MARK: - Computed Properties
+    // MARK: - Смежные дни
     
     var yesterday: Date {
         adding(days: -1)
@@ -18,7 +18,7 @@ extension Date {
         adding(days: 1)
     }
     
-    // MARK: - Public Methods
+    // MARK: - Добавление компонентов
     
     func adding(seconds: Int) -> Date {
         adding(seconds, .second)
@@ -69,7 +69,7 @@ extension Date {
         return Calendar.current.date(byAdding: dateComponents, to: self) ?? self
     }
     
-    // MARK: - Private Methods
+    // MARK: - Внутренние методы
     
     private func adding(_ value: Int, _ component: Calendar.Component) -> Date {
         Calendar.current.date(byAdding: component, value: value, to: self) ?? self

@@ -8,17 +8,17 @@
 import Foundation
 
 final class ExchangeRateProvider {
-    // MARK: - Public Methods
+    // MARK: - Свойства
     
     private let service: ExchangeRateService
     
-    // MARK: - Initialization
+    // MARK: - Инициализация
     
     init(service: ExchangeRateService) {
         self.service = service
     }
     
-    // MARK: - Public Methods
+    // MARK: - Публичные методы
     
     func getRate(from: Currency, to: Currency) async throws -> Double {
         try await AsyncTimeout.run(seconds: 5) {
@@ -27,14 +27,12 @@ final class ExchangeRateProvider {
     }
 }
 
-// MARK: - Errors
+// MARK: - Ошибки
 
 struct ExchangeRateLoadingError: LocalizedError {
-    // MARK: - Stored Properties
+    // MARK: - Свойства
     
     let details: String?
-    
-    // MARK: - Computed Properties
     
     var errorDescription: String? {
         if let details, !details.isBlank {
@@ -44,7 +42,7 @@ struct ExchangeRateLoadingError: LocalizedError {
         }
     }
     
-    // MARK: - Initialization
+    // MARK: - Инициализация
     
     init(details: String? = nil) {
         self.details = details

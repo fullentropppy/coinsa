@@ -103,7 +103,7 @@ struct NowView: View {
     
     private var emptyCurrentLocationView: some View {
         EmptyStateView(
-            imageName: Location.primaryIcon,
+            icon: Location.primaryIcon,
             title: .nowEmptyStateTitle,
             description: .nowEmptyStateDescription
         )
@@ -136,7 +136,7 @@ struct NowView: View {
     private var todayExpensesSection: some View {
         Group {
             if viewModel.todayExpenses.isEmpty {
-                GroupHeaderView(title: .nowNoTodayExpense, icon: Expense.primaryIcon)
+                LabeledHeader(title: .nowNoTodayExpense, icon: Expense.primaryIcon)
                     .listRowBackground(Color.clear)
             } else {
                 todayExpenseListContent

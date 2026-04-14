@@ -19,9 +19,8 @@ struct CurrencyLabel: View {
     // MARK: - Body
     var body: some View {
         HStack {
-            Text(currency.code)
-                .foregroundStyle(.secondary)
-                .frame(width: 38)
+            CurrencyCodeText.standard(currency)
+                .frame(width: 32)
             Text(currency.localizedResource)
         }
     }

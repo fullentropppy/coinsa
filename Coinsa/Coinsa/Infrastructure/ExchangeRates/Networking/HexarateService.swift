@@ -8,7 +8,7 @@
 import Foundation
 
 final class HexarateService: ExchangeRateService {
-    // MARK: - Public Methods
+    // MARK: - Публичные методы
     
     func fetchRate(from: Currency, to: Currency) async throws -> Double {
         let url = URL(string: "https://hexarate.paikama.co/api/rates/\(from.code)/\(to.code)/latest")!
@@ -18,7 +18,7 @@ final class HexarateService: ExchangeRateService {
     }
 }
 
-// MARK: - Hexarate Response Components
+// MARK: - Внутренние типы составляющие ответ Hexarate
 
 private struct Response: Decodable {
     let data: RateData

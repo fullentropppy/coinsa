@@ -8,12 +8,12 @@
 import SwiftUI
 
 struct SwipeActions: View {
-    // MARK: - Stored Properties
+    // MARK: - Свойства
     
     private let onDelete: (() -> Void)?
     private let onEdit: (() -> Void)?
     
-    // MARK: - Initialization
+    // MARK: - Инициализация
     
     init(
         onDelete: (() -> Void)? = nil,
@@ -23,7 +23,7 @@ struct SwipeActions: View {
         self.onEdit = onEdit
     }
     
-    // MARK: - Body
+    // MARK: - Тело View
     
     var body: some View {
         if onDelete == nil && onEdit == nil {
@@ -51,7 +51,7 @@ struct SwipeActions: View {
     }
 }
 
-// MARK: - Previews
+// MARK: - Превью
 
 private extension SwipeActions {
     static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
@@ -78,11 +78,11 @@ private extension SwipeActions {
     }
 }
 
-#Preview("Light") {
+#Preview("Light - RU") {
     SwipeActions.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
 }
 
-#Preview("dark") {
+#Preview("Dark - EN") {
     SwipeActions.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
 }
 

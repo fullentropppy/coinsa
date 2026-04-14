@@ -7,19 +7,19 @@
 
 import Foundation
 
-// MARK: - Protocol
+// MARK: - Протокол
 
 protocol DateRangeProviding {
     var startDate: Date { get }
     var endDate: Date { get }
 }
 
-// MARK: - Default Implementation
+// MARK: - Стандартная реализация
 
 extension DateRangeProviding {
     var durationInDays: Int {
-        let difference = endDate.days(from: startDate)
-        return difference == 0 ? 1 : Int(difference)
+        let duration = endDate.days(from: startDate)
+        return duration == 0 ? 1 : Int(duration)
     }
     
     var range: ClosedRange<Date> {

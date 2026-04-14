@@ -64,7 +64,9 @@ extension AmountText {
         AmountText(
             amount,
             fractionLength: fractionLength,
+            font: .body.monospacedDigit(),
             currency: currency,
+            currencyFont: .body.monospaced().weight(.medium),
             currencyColor: .secondary
         )
     }
@@ -77,9 +79,10 @@ extension AmountText {
         AmountText(
             amount,
             fractionLength: fractionLength,
-            font: .footnote,
+            font: .footnote.monospacedDigit(),
             color: .secondary,
-            currency: currency
+            currency: currency,
+            currencyFont: .footnote.monospaced().weight(.medium)
         )
     }
 }

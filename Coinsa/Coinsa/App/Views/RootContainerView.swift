@@ -9,16 +9,16 @@ import SwiftUI
 import SwiftData
 
 struct RootContainerView: View {
-    // MARK: - Stored Properties
-
+    // MARK: - Свойства
+    
     @Environment(\.modelContext) private var context
-
+    
     @State private var settingsStore: AppSettingsStore?
     @State private var hasLoadedSettings = false
     @State private var showsLaunchContinuation = true
 
-    // MARK: - Body
-
+    // MARK: - Тело View
+    
     var body: some View {
         ZStack {
             if let settingsStore {
@@ -28,10 +28,12 @@ struct RootContainerView: View {
             } else {
                 ProgressView()
                     .task {
-                        settingsStore = AppSettingsStore(context: context)
+                        if !hasLoadedSettings {
+                            settingsStore = AppSettingsStore(context: context)
+                            hasLoadedSettings = true
+                        }
                     }
             }
-            
             if showsLaunchContinuation {
                 SplashView { showsLaunchContinuation = false }
                     .transition(.opacity)

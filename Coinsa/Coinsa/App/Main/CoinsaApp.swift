@@ -10,7 +10,7 @@ import SwiftData
 
 @main
 struct CoinsaApp: App {
-    // MARK: - Stored Properties
+    // MARK: - Свойства
     
     private let modelTypes: [any PersistentModel.Type] =
     [
@@ -21,7 +21,7 @@ struct CoinsaApp: App {
         AppSettings.self
     ]
     
-    // MARK: - Body
+    // MARK: - Тело View
     
     var body: some Scene {
         WindowGroup {

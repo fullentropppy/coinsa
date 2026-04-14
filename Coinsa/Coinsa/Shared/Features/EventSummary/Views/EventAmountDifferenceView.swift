@@ -41,16 +41,13 @@ struct EventAmountDifferenceView: View {
     }
     
     private var differenceInfo: some View {
-        var parts: [String] = []
-        if let localAmountDifference, let localCurrency {
-            parts.append("\(String(format: "%.2f", localAmountDifference)) \(localCurrency.code)")
+        HStack(alignment: .firstTextBaseline, spacing: 4) {
+            if let localAmountDifference, let localCurrency {
+                AmountText.secondarySmall(localAmountDifference, currency: localCurrency)
+                Text("•").foregroundStyle(.secondary)
+            }
+            AmountText.secondarySmall(baseAmountDifference, currency: baseCurrency)
         }
-        parts.append("\(String(format: "%.2f", baseAmountDifference)) \(baseCurrency.code)")
-        let info = parts.joined(separator: "  •  ")
-        
-        return Text(info)
-            .font(.footnote)
-            .foregroundStyle(.secondary)
     }
     
     private var differenceIcon: some View {

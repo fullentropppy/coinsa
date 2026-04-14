@@ -8,55 +8,39 @@
 import SwiftUI
 
 struct DateLabel: View {
-    // MARK: - Stored Properties
+    // MARK: - Свойства
     
     private let date1: Date
     private let date2: Date?
     private let font: Font
     private let color: Color
     
-    // MARK: - Computed Properties
-    
     private var labelText: String {
-        if let endDate = date2 {
-            DateDisplayFormatter.formatRange(startDate: date1, endDate: endDate)
+        if let date2 {
+            DateDisplayFormatter.formatRange(startDate: date1, endDate: date2)
         } else {
             DateDisplayFormatter.format(date1)
         }
     }
     
-    // MARK: - Initialization
+    // MARK: - Инициализация
     
-    init(
-        _ date: Date,
-        font: Font = .body,
-        color: Color = .primary
-    ) {
+    init(_ date: Date, font: Font = .body, color: Color = .primary) {
         self.init(date1: date, font: font, color: color)
     }
     
-    init(
-        from date1: Date,
-        to date2: Date,
-        font: Font = .body,
-        color: Color = .primary
-    ) {
+    init(from date1: Date, to date2: Date, font: Font = .body, color: Color = .primary) {
         self.init(date1: date1, date2: date2, font: font, color: color)
     }
     
-    private init(
-        date1: Date,
-        date2: Date? = nil,
-        font: Font = .body,
-        color: Color = .primary
-    ) {
+    private init(date1: Date, date2: Date? = nil, font: Font = .body, color: Color = .primary) {
         self.date1 = date1
         self.date2 = date2
         self.font = font
         self.color = color
     }
     
-    // MARK: - Body
+    // MARK: - Тело View
     
     var body: some View {
         Text(labelText)
@@ -65,7 +49,7 @@ struct DateLabel: View {
     }
 }
 
-// MARK: - Presets
+// MARK: - Предопределенные варианты
 
 extension DateLabel {
     static func secondarySmall(_ date: Date) -> some View {
@@ -78,7 +62,7 @@ extension DateLabel {
 
 }
 
-// MARK: - Previews
+// MARK: - Превью
 
 private extension DateLabel {
     static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {

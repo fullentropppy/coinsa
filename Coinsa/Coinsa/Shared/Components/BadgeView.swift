@@ -8,13 +8,13 @@
 import SwiftUI
 
 struct BadgeView: View {
-    // MARK: - Stored Properties
+    // MARK: - Свойства
     
     private let fillColor: Color
     private let icon: String?
     private let title: LocalizedStringResource?
     
-    // MARK: - Initialization
+    // MARK: - Инициализация
     
     init(
         fillColor: Color,
@@ -26,7 +26,7 @@ struct BadgeView: View {
         self.title = title
     }
     
-    // MARK: - Body
+    // MARK: - Тело View
     
     var body: some View {
         if icon == nil && title == nil {
@@ -36,7 +36,7 @@ struct BadgeView: View {
         }
     }
     
-    // MARK: - Components
+    // MARK: - Компоненты
     
     private var badgeContent: some View {
         HStack(alignment: .center, spacing: 4) {
@@ -57,71 +57,24 @@ struct BadgeView: View {
     }
 }
 
-// MARK: - Previews
+// MARK: - Превью
 
 private extension BadgeView {
     static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
-        VStack(spacing: 40) {
-            VStack(spacing: 20) {
-                BadgeView(
-                    fillColor: Trip.badgeColor,
-                    icon: Trip.badgeIcon
-                )
-                BadgeView(
-                    fillColor: Location.badgeColor,
-                    icon: Location.badgeIcon
-                )
-                BadgeView(
-                    fillColor: Expense.badgeColor,
-                    icon: Expense.badgeIcon
-                )
-            }
-            VStack(spacing: 20) {
-                BadgeView(
-                    fillColor: EventStatus.upcoming.badgeColor,
-                    title: EventStatus.upcoming.localizedResource
-                )
-                BadgeView(
-                    fillColor: EventStatus.ongoing.badgeColor,
-                    title: EventStatus.ongoing.localizedResource
-                )
-                BadgeView(
-                    fillColor: EventStatus.completed.badgeColor,
-                    title: EventStatus.completed.localizedResource
-                )
-            }
-            VStack(spacing: 20) {
-                BadgeView(
-                    fillColor: ExpenseCategory.food.badgeColor,
-                    icon: ExpenseCategory.food.badgeIcon,
-                    title: ExpenseCategory.food.localizedResource
-                )
-                BadgeView(
-                    fillColor: ExpenseCategory.transport.badgeColor,
-                    icon: ExpenseCategory.transport.badgeIcon,
-                    title: ExpenseCategory.transport.localizedResource
-                )
-                BadgeView(
-                    fillColor: ExpenseCategory.activity.badgeColor,
-                    icon: ExpenseCategory.activity.badgeIcon,
-                    title: ExpenseCategory.activity.localizedResource
-                )
-                BadgeView(
-                    fillColor: ExpenseCategory.shopping.badgeColor,
-                    icon: ExpenseCategory.shopping.badgeIcon,
-                    title: ExpenseCategory.shopping.localizedResource
-                )
-                BadgeView(
-                    fillColor: ExpenseCategory.medicine.badgeColor,
-                    icon: ExpenseCategory.medicine.badgeIcon,
-                    title: ExpenseCategory.medicine.localizedResource
-                )
-                BadgeView(
-                    fillColor: ExpenseCategory.other.badgeColor,
-                    icon: ExpenseCategory.other.badgeIcon,
-                    title: ExpenseCategory.other.localizedResource
-                )
-            }
+        VStack(spacing: 20) {
+            BadgeView(
+                fillColor: Trip.badgeColor,
+                icon: Trip.badgeIcon
+            )
+            BadgeView(
+                fillColor: EventStatus.ongoing.badgeColor,
+                title: EventStatus.ongoing.localizedResource
+            )
+            BadgeView(
+                fillColor: ExpenseCategory.activity.badgeColor,
+                icon: ExpenseCategory.activity.badgeIcon,
+                title: ExpenseCategory.activity.localizedResource
+            )
         }
         .environment(\.locale, locale)
         .preferredColorScheme(colorScheme)

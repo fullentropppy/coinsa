@@ -8,21 +8,16 @@
 import SwiftUI
 
 struct CountLabel: View {
-    // MARK: - Stored Properties
+    // MARK: - Свойства
     
     private let count: Int
     private let font: Font
     private let color: Color
     private let icon: String
     
-    // MARK: - Initialization
+    // MARK: - Инициализация
     
-    init(
-        _ count: Int,
-        font: Font = .body,
-        color: Color = .primary,
-        icon: String = "number"
-    ) {
+    init(_ count: Int, font: Font = .body, color: Color = .primary, icon: String = "number") {
         self.count = count
         self.font = font
         self.color = color
@@ -41,7 +36,8 @@ struct CountLabel: View {
     }
 }
 
-// MARK: - Presets
+// MARK: - Предопределенные варианты
+
 extension CountLabel {
     static func secondarySmall(_ count: Int, icon: String = "number") -> some View {
         CountLabel(count, font: .footnote, color: .secondary, icon: icon)
@@ -56,7 +52,7 @@ extension CountLabel {
     }
 }
 
-// MARK: - Previews
+// MARK: - Превью
 
 private extension CountLabel {
     static func makePreview(colorScheme: ColorScheme) -> some View {
@@ -66,7 +62,6 @@ private extension CountLabel {
             VStack(spacing: 20) {
                 CountLabel(count)
                 CountLabel(count, font: .footnote, color: .accent)
-                CountLabel.secondarySmall(count)
             }
             VStack(spacing: 20) {
                 CountLabel.days(count)

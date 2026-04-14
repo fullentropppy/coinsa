@@ -11,7 +11,7 @@ import Observation
 @MainActor
 @Observable
 final class ExchangeRateManager {
-    // MARK: - Stored Properties
+    // MARK: - Свойства
     
     private let provider: ExchangeRateProvider
     private var refreshTask: Task<Void, Never>?
@@ -19,13 +19,13 @@ final class ExchangeRateManager {
     var isRateLoading = false
     var rateLoadingError: ExchangeRateLoadingError?
     
-    // MARK: - Initialization
+    // MARK: - Инициализация
     
     init(provider: ExchangeRateProvider) {
         self.provider = provider
     }
     
-    // MARK: - Public Methods
+    // MARK: - Публичные методы
     
     func requestRefresh(
         from: Currency,
@@ -46,7 +46,7 @@ final class ExchangeRateManager {
         rateLoadingError = nil
     }
     
-    // MARK: - Private Methods
+    // MARK: - Приватные методы
     
     private func refreshRate(
         from: Currency,
@@ -54,15 +54,12 @@ final class ExchangeRateManager {
         onRateUpdate: @escaping @MainActor (Double) -> Void
     ) async {
         isRateLoading = true
+        rateLoadingError = nil
         
         do {
-            let rate = try await provider.getRate(
-                from: from,
-                to: to
-            )
+            let rate = try await provider.getRate(from: from, to: to)
             try Task.checkCancellation()
             onRateUpdate(rate)
-            rateLoadingError = nil
         } catch is CancellationError {
             return
         } catch let error as TimeoutError {

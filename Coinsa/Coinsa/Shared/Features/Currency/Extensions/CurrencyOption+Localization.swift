@@ -5,7 +5,7 @@
 //  Created by Daniil Gritsenko on 09.03.2026.
 //
 
-import SwiftUI
+import Foundation
 
 extension Currency {
     var localizedResource: LocalizedStringResource {

@@ -111,7 +111,7 @@ struct LocationDetailView: View {
 
     private var emptyExpenseListContent: some View {
         EmptyStateView(
-            imageName: Expense.primaryIcon,
+            icon: Expense.primaryIcon,
             title: .expenseEmptyStateTitle,
             description: .expenseEmptyStateDescription,
             buttonLabel: .expenseAdd
@@ -123,7 +123,7 @@ struct LocationDetailView: View {
     
     private var expenseListContent: some View {
         Group {
-            GroupHeaderView(title: .locationExpenses, icon: Expense.primaryIcon)
+            LabeledHeader(title: .locationExpenses, icon: Expense.primaryIcon)
                 .listRowBackground(Color.clear)
             
             ForEach(viewModel.groupedExpenses, id: \.date) { group in

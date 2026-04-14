@@ -7,13 +7,13 @@
 
 import Foundation
 
-// MARK: - Protocol
+// MARK: - Протокол
 
 protocol EventStatusProviding: DateRangeProviding {
     var status: EventStatus { get }
 }
 
-// MARK: - Default Implementation
+// MARK: - Стандартная реализация
 
 extension EventStatusProviding {
     var status: EventStatus {
@@ -24,7 +24,7 @@ extension EventStatusProviding {
         
         if today > endDay {
             return .completed
-        } else if today >= startDay && today <= endDay {
+        } else if today.isBetween(startDay, and: endDay) {
             return .ongoing
         } else {
             return .upcoming

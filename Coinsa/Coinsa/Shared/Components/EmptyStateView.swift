@@ -8,31 +8,31 @@
 import SwiftUI
 
 struct EmptyStateView: View {
-    // MARK: - Stored Properties
+    // MARK: - Свойства
     
-    private let imageName: String
+    private let icon: String
     private let title: LocalizedStringResource
     private let description: LocalizedStringResource
     private let buttonLabel: LocalizedStringResource?
     private let onAddAction: (() -> Void)?
     
-    // MARK: - Initialization
+    // MARK: - Инициализация
     
     init(
-        imageName: String,
+        icon: String,
         title: LocalizedStringResource,
         description: LocalizedStringResource,
         buttonLabel: LocalizedStringResource? = nil,
         onAddAction: (() -> Void)? = nil
     ) {
-        self.imageName = imageName
+        self.icon = icon
         self.title = title
         self.description = description
         self.buttonLabel = buttonLabel
         self.onAddAction = onAddAction
     }
     
-    // MARK: - Body
+    // MARK: - Тело View
     
     var body: some View {
         if let buttonLabel, let onAddAction {
@@ -56,10 +56,10 @@ struct EmptyStateView: View {
         }
     }
     
-    // MARK: - Components
+    // MARK: - Компоненты
     
     private var titleContent: some View {
-        Label(title, systemImage: imageName)
+        Label(title, systemImage: icon)
     }
     
     private var descriptionContent: some View {
@@ -68,12 +68,12 @@ struct EmptyStateView: View {
     }
 }
 
-// MARK: - Previews
+// MARK: - Превью
 
 private extension EmptyStateView {
     static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
         EmptyStateView(
-            imageName: Trip.primaryIcon,
+            icon: Trip.primaryIcon,
             title: .tripEmptyStateTitle,
             description: .tripEmptyStateDescription,
             buttonLabel: .tripAdd,

@@ -8,19 +8,19 @@
 import SwiftUI
 
 struct ToolbarButton: View {
-    // MARK: - Stored Properties
+    // MARK: - Свойства
     
     private let icon: String
     private let action: () -> Void
     
-    // MARK: - Initialization
+    // MARK: - Инициализация
     
     private init(icon: String, action: @escaping () -> Void) {
         self.icon = icon
         self.action = action
     }
     
-    // MARK: - Body
+    // MARK: - Тело View
     
     var body: some View {
         Button {
@@ -31,7 +31,7 @@ struct ToolbarButton: View {
     }
 }
 
-// MARK: - Presets
+// MARK: - Предопределенные варианты
 
 extension ToolbarButton {
     static func ok(action: @escaping () -> Void) -> some View {
@@ -59,7 +59,7 @@ extension ToolbarButton {
     }
 }
 
-// MARK: - Previews
+// MARK: - Превью
 
 private extension ToolbarButton {
     static func makePreview(colorScheme: ColorScheme) -> some View {

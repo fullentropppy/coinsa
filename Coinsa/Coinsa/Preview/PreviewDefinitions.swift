@@ -7,7 +7,7 @@
 
 import Foundation
 
-// MARK: - Public Types
+// MARK: - Наборы превью-данных
 
 enum PreviewTrip: String {
     case japan = "Япония"
@@ -65,7 +65,7 @@ enum PreviewExpenseComment: String {
     case miscellaneous = "Разное"
 }
 
-// MARK: - Private Types
+// MARK: - Приватные типы
 
 private enum PreviewCurrency {
     private static let exchangeRates: [String: Double] = [
@@ -77,9 +77,9 @@ private enum PreviewCurrency {
 
     static func exchangeRate(forCode: String) -> Double {
         if let rate = exchangeRates[forCode] {
-            return rate
+            rate
+        } else {
+            1.0
         }
-
-        return 1.0
     }
 }

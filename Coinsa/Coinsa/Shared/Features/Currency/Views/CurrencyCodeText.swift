@@ -39,11 +39,11 @@ struct CurrencyCodeText: View {
 
 extension CurrencyCodeText {
     static func standard(_ currency: Currency) -> some View {
-        CurrencyCodeText(currency, color: .secondary)
+        CurrencyCodeText(currency, font: .body.monospaced().weight(.medium), color: .secondary)
     }
     
     static func secondarySmall(_ currency: Currency) -> some View {
-        CurrencyCodeText(currency, font: .footnote, color: .secondary)
+        CurrencyCodeText(currency, font: .footnote.monospaced().weight(.medium), color: .secondary)
     }
 }
 

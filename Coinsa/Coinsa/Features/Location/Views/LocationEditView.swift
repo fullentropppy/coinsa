@@ -142,8 +142,8 @@ struct LocationEditView: View {
             }
             
             if !viewModel.isHomeLocation {
-                LabeledContent(.locationExchangeRate) {
-                    ExchangeRateInputField(
+                LabeledContent(.locationExchangeRate(localCurrencyCode: viewModel.localCurrency.code)) {
+                    ExchangeRateInputField.standard(
                         $viewModel.rateLocalToBase,
                         currency: viewModel.baseCurrency,
                         isLoading: viewModel.isRateLoading,
@@ -155,10 +155,11 @@ struct LocationEditView: View {
                 
                 LabeledContent(.locationExchangeAdjustmentPercentage) {
                     HStack {
-                        NumericInputField(
+                        NumericInputField.standard(
                             exchangeAdjustmentInputBinding,
                             focusedField: $focusedField,
-                            focusId: .exchangeAdjustmentPercentage
+                            focusId: .exchangeAdjustmentPercentage,
+                            fractionDigits: 2
                         )
                         Image(systemName: "percent")
                             .fontWeight(.semibold)
@@ -176,10 +177,11 @@ struct LocationEditView: View {
                 HStack {
                     ExpenseCategoryLabel(category: category)
                     Spacer()
-                    NumericInputField(
+                    NumericInputField.standard(
                         budgetInputBinding(for: category),
                         focusedField: $focusedField,
-                        focusId: .budget(category.id)
+                        focusId: .budget(category.id),
+                        fractionDigits: 2
                     )
                 }
             }
@@ -196,9 +198,9 @@ struct LocationEditView: View {
         } header: {
             HStack {
                 Text(.locationBudget)
+                Spacer()
+                CurrencyCodeText.standard(budgetInputCurrencyValue)
                 if !viewModel.isHomeLocation {
-                    Spacer()
-                    CurrencyCodeText(budgetInputCurrencyValue)
                     InputCurrencySwitchButton(action: switchInputCurrency)
                 }
             }

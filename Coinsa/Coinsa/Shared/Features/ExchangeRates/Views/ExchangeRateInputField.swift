@@ -14,6 +14,7 @@ struct ExchangeRateInputField: View {
     private let isLoading: Bool
     private let focusedField: FocusState<NumericEditField?>.Binding
     private let focusId: NumericEditField
+    private let font: Font
     private let onRefresh: () -> Void
     
     // MARK: - Initializers
@@ -23,6 +24,7 @@ struct ExchangeRateInputField: View {
         isLoading: Bool,
         focusedField: FocusState<NumericEditField?>.Binding,
         focusId: NumericEditField,
+        font: Font,
         onRefresh: @escaping () -> Void
     ) {
         self.value = value
@@ -30,6 +32,7 @@ struct ExchangeRateInputField: View {
         self.isLoading = isLoading
         self.focusedField = focusedField
         self.focusId = focusId
+        self.font = font
         self.onRefresh = onRefresh
     }
     
@@ -37,7 +40,7 @@ struct ExchangeRateInputField: View {
     var body: some View {
         HStack {
             inputField
-            CurrencyCodeText(currency)
+            CurrencyCodeText.standard(currency)
             refreshButton
         }
     }
@@ -49,6 +52,7 @@ struct ExchangeRateInputField: View {
             focusedField: focusedField,
             focusId: .exchangeRate,
             fractionDigits: 4,
+            font: font
         )
         .loadingState(isLoading)
     }
@@ -70,6 +74,28 @@ struct ExchangeRateInputField: View {
         }
         .buttonStyle(.borderless)
         .disabled(isLoading)
+    }
+}
+
+// MARK: - Presets
+extension ExchangeRateInputField {
+    static func standard(
+        _ value: Binding<Double>,
+        currency: Currency,
+        isLoading: Bool,
+        focusedField: FocusState<NumericEditField?>.Binding,
+        focusId: NumericEditField,
+        onRefresh: @escaping () -> Void
+    ) -> some View {
+        ExchangeRateInputField(
+            value,
+            currency: currency,
+            isLoading: isLoading,
+            focusedField: focusedField,
+            focusId: focusId,
+            font: .body.monospacedDigit(),
+            onRefresh: onRefresh
+        )
     }
 }
 
@@ -103,6 +129,7 @@ private extension ExchangeRateInputField {
                     isLoading: isLoading,
                     focusedField: $focusedField,
                     focusId: .exchangeRate,
+                    font: .body,
                     onRefresh: {}
                 )
             }

@@ -28,7 +28,7 @@ struct AsyncTimeout {
     }
 }
 
-// MARK: - Errors
+// MARK: - Ошибки
 
 struct TimeoutError: LocalizedError {
     var errorDescription: String? {

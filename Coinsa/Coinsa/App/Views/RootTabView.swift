@@ -8,12 +8,12 @@
 import SwiftUI
 
 struct RootTabView: View {
-    // MARK: - Stored Properties
-
+    // MARK: - Свойства
+    
     @State private var selection: RootTab = .now
 
-    // MARK: - Body
-
+    // MARK: - Тело View
+    
     var body: some View {
         TabView(selection: $selection) {
             Tab(.tabNow, systemImage: Location.primaryIcon, value: .now) {
@@ -29,7 +29,7 @@ struct RootTabView: View {
     }
 }
 
-// MARK: - Supporting Types
+// MARK: - Внутренние типы
 
 private enum RootTab: Hashable {
     case now

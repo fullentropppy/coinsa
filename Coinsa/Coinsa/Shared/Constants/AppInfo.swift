@@ -8,8 +8,20 @@
 import SwiftUI
 
 struct AppInfo {
+    // MARK: - Правовая информация
+    
     private static var firstSupportedYear: Int { 2026 }
     private static var lastSupportedYear: Int { 2026 }
+    
+    static var copyrightYears: String {
+        if firstSupportedYear == lastSupportedYear {
+            "© \(lastSupportedYear)"
+        } else {
+            "© \(firstSupportedYear)-\(lastSupportedYear)"
+        }
+    }
+    
+    // MARK: - Информация о приложении
     
     static var appName: String {
         Bundle.main.infoDictionary?["CFBundleDisplayName"] as? String ?? "Coinsa"
@@ -21,13 +33,5 @@ struct AppInfo {
 
     static var build: String {
         Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "None"
-    }
-    
-    static var copyrightYears: String {
-        if firstSupportedYear == lastSupportedYear {
-            return "© \(lastSupportedYear)"
-        } else {
-            return "© \(firstSupportedYear)-\(lastSupportedYear)"
-        }
     }
 }

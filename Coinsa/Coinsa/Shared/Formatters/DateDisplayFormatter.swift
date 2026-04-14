@@ -8,11 +8,7 @@
 import Foundation
 
 struct DateDisplayFormatter {
-    // MARK: - Stored Properties
-    
-    static let calendar = Calendar.current
-
-    // MARK: - Public Methods
+    // MARK: - Публичные методы
     
     static func formatRelative(_ date: Date, showsTime: Bool = true) -> String {
         if date.isTomorrow {
@@ -27,10 +23,9 @@ struct DateDisplayFormatter {
     }
     
     static func format(_ date: Date, showsTime: Bool = true) -> String {
-        let dateTemplate = isSameYear(.now, date) ? "dMMMM" : "dMMMMy"
+        let dateTemplate = Date().isSameYear(as: date) ? "dMMMM" : "dMMMMy"
         
-        let formatter = Foundation.DateFormatter()
-        formatter.calendar = calendar
+        let formatter = DateFormatter()
         formatter.setLocalizedDateFormatFromTemplate(
             templateWithOptionalTime(dateTemplate: dateTemplate, showsTime: showsTime)
         )
@@ -39,20 +34,15 @@ struct DateDisplayFormatter {
     }
 
     static func formatRange(startDate: Date, endDate: Date, showsTime: Bool = false) -> String {
-        let dateTemplate = isSameYear(startDate, endDate) && isSameYear(.now, startDate) ? "dMMMM" : "dMy"
+        let dateTemplate = startDate.isSameYear(as: endDate) && Date().isSameYear(as: startDate) ? "dMMMM" : "dMy"
         
         let formatter = DateIntervalFormatter()
-        formatter.calendar = calendar
         formatter.dateTemplate = templateWithOptionalTime(dateTemplate: dateTemplate, showsTime: showsTime)
         
         return formatter.string(from: startDate, to: endDate)
     }
 
-    // MARK: - Private Methods
-    
-    private static func isSameYear(_ lhs: Date, _ rhs: Date) -> Bool {
-        calendar.component(.year, from: lhs) == calendar.component(.year, from: rhs)
-    }
+    // MARK: - Внутренние методы
 
     private static func templateWithOptionalTime(dateTemplate: String, showsTime: Bool) -> String {
         showsTime ? "\(dateTemplate)jm" : dateTemplate

@@ -114,7 +114,7 @@ struct TripDetailView: View {
 
     private var emptyLocationListContent: some View {
         EmptyStateView(
-            imageName: Location.primaryIcon,
+            icon: Location.primaryIcon,
             title: .locationEmptyStateTitle,
             description: .locationEmptyStateDescription,
             buttonLabel: .locationAdd,
@@ -126,7 +126,7 @@ struct TripDetailView: View {
     
     private var locationListContent: some View {
         Group {
-            GroupHeaderView(title: .tripLocations, icon: Location.primaryIcon)
+            LabeledHeader(title: .tripLocations, icon: Location.primaryIcon)
                 .listRowBackground(Color.clear)
             
             ForEach(viewModel.groupedLocations, id: \.status) { group in

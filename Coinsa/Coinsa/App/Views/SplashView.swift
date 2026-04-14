@@ -1,5 +1,5 @@
 //
-//  LaunchAnimationView.swift
+//  SplashView.swift
 //  Coinsa
 //
 //  Created by Daniil Gritsenko on 06.04.2026.
@@ -8,16 +8,18 @@
 import SwiftUI
 
 struct SplashView: View {
-    // MARK: - Stored Properties
-
-    let onFinished: () -> Void
+    // MARK: - Свойства
 
     @State private var backgroundOpacity = 1.0
     @State private var iconScale = 0.8
     @State private var iconOpacity = 0.0
     @State private var hasStartedAnimation = false
 
-    // MARK: - Body
+    // MARK: - Зависисмости
+    
+    let onFinished: () -> Void
+    
+    // MARK: - Тело View
 
     var body: some View {
         Color.accent
@@ -35,7 +37,7 @@ struct SplashView: View {
             }
     }
 
-    // MARK: - Private Methods
+    // MARK: - Внутренние методы
 
     @MainActor
     private func runAnimationIfNeeded() async {
@@ -59,7 +61,7 @@ struct SplashView: View {
     }
 }
 
-// MARK: - Previews
+// MARK: - Превью
 
 #Preview("Light") {
     TimelineView(.periodic(from: .now, by: 2.0)) { timeline in

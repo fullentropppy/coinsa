@@ -8,12 +8,12 @@
 import SwiftUI
 
 struct DeletionHandler<Item> {
-    // MARK: - Stored Properties
+    // MARK: - Свойства
 
     var isShowingDeleteConfirmation = false
     var itemsPendingDeletion: [Item] = []
     
-    // MARK: - Public Methods
+    // MARK: - Публичные методы
 
     mutating func request(for items: [Item]) {
         itemsPendingDeletion = items

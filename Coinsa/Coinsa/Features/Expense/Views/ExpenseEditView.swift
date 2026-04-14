@@ -170,12 +170,13 @@ struct ExpenseEditView: View {
         Section {
             LabeledContent(.expenseAmount) {
                 HStack {
-                    NumericInputField(
+                    NumericInputField.standard(
                         amountInputBinding,
                         focusedField: $focusedField,
-                        focusId: .amount
+                        focusId: .amount,
+                        fractionDigits: 2
                     )
-                    CurrencyCodeText(viewModel.currency(for: inputCurrency))
+                    CurrencyCodeText.standard(viewModel.currency(for: inputCurrency))
                     if !viewModel.isHomeLocation {
                         InputCurrencySwitchButton(action: switchInputCurrency)
                     }
@@ -184,7 +185,7 @@ struct ExpenseEditView: View {
             
             if !viewModel.isHomeLocation {
                 LabeledContent(.expenseExchangeRate(localCurrencyCode: viewModel.localCurrency.code)) {
-                    ExchangeRateInputField(
+                    ExchangeRateInputField.standard(
                         rateInputBinding,
                         currency: viewModel.baseCurrency,
                         isLoading: viewModel.isRateLoading,
@@ -198,10 +199,11 @@ struct ExpenseEditView: View {
             if viewModel.showsExchangeAdjustmentInput {
                 LabeledContent(.locationExchangeAdjustmentPercentage) {
                     HStack {
-                        NumericInputField(
+                        NumericInputField.standard(
                             exchangeAdjustmentInputBinding,
                             focusedField: $focusedField,
-                            focusId: .exchangeAdjustmentPercentage
+                            focusId: .exchangeAdjustmentPercentage,
+                            fractionDigits: 2
                         )
                         Image(systemName: "percent")
                             .fontWeight(.semibold)

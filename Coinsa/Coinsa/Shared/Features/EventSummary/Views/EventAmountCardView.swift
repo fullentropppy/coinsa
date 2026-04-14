@@ -37,16 +37,16 @@ struct EventAmountCardView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(title).font(.footnote).foregroundStyle(.secondary)
-
             if let localAmount, let localCurrency {
                 AmountText.standard(localAmount, currency: localCurrency)
+                Spacer()
                 Divider()
                 AmountText.secondarySmall(baseAmount, currency: baseCurrency)
             } else {
                 AmountText.standard(baseAmount, currency: baseCurrency)
             }
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .padding(10)
         .glassEffect(.regular, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
     }

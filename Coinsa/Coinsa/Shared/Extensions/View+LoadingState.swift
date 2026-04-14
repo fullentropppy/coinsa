@@ -1,5 +1,5 @@
 //
-//  View+Loading.swift
+//  View+LoadingState.swift
 //  Coinsa
 //
 //  Created by Daniil Gritsenko on 09.04.2026.

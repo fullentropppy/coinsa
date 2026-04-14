@@ -10,15 +10,53 @@ import SwiftData
 
 @MainActor
 struct PreviewBuilder {
-    // MARK: - Builder
+    // MARK: - Публичные методы
 
+    static func builder() -> Builder {
+        Builder()
+    }
+
+    // MARK: - Внутренние методы
+
+    private static func makeContainer(with trips: [Trip]) -> ModelContainer {
+        let config = ModelConfiguration(isStoredInMemoryOnly: true)
+
+        let container = try! ModelContainer(
+            for: Trip.self, Location.self, Budget.self, Expense.self, AppSettings.self,
+            configurations: config
+        )
+
+        let context = container.mainContext
+        trips.forEach { context.insert($0) }
+        try! context.save()
+
+        return container
+    }
+
+    private static func fetchItem<T: PersistentModel>(
+        from container: ModelContainer,
+        at index: Int = 0,
+        sortBy: [SortDescriptor<T>]
+    ) -> T {
+        let context = container.mainContext
+        var descriptor = FetchDescriptor<T>()
+        descriptor.sortBy = sortBy
+
+        let items = try! context.fetch(descriptor)
+        return items[index]
+    }
+}
+
+// MARK: - Построитель превью-данных
+
+extension PreviewBuilder {
     final class Builder {
-        // MARK: - Stored Properties
+        // MARK: - Свойства
 
         private var scenario: PreviewScenario = .japan
         private var options = PreviewOptions()
 
-        // MARK: - Public Methods. Builder Parameters
+        // MARK: - Установка параметров построителя
 
         func withScenario(_ value: PreviewScenario) -> Builder {
             scenario = value
@@ -50,7 +88,7 @@ struct PreviewBuilder {
             return self
         }
 
-        // MARK: - Public Methods. Container
+        // MARK: - Создание контейнера с данными и получение данных
 
         func buildContainer() -> ModelContainer {
             makeContainer(with: buildData())
@@ -88,7 +126,7 @@ struct PreviewBuilder {
             )
         }
 
-        // MARK: - Public Methods. Sample Data
+        // MARK: - Создание обособленных данныех и получение
 
         func buildData() -> [Trip] {
             PreviewGenerator.makeTrips(for: scenario, options: options)
@@ -119,41 +157,5 @@ struct PreviewBuilder {
         ) -> Expense {
             getLocation(from: data, tripIndex: tripIndex, locationIndex: locationIndex).expenses[expenseIndex]
         }
-    }
-
-    // MARK: - Public Methods
-
-    static func builder() -> Builder {
-        Builder()
-    }
-
-    // MARK: - Private Methods
-
-    private static func makeContainer(with trips: [Trip]) -> ModelContainer {
-        let config = ModelConfiguration(isStoredInMemoryOnly: true)
-
-        let container = try! ModelContainer(
-            for: Trip.self, Location.self, Budget.self, Expense.self, AppSettings.self,
-            configurations: config
-        )
-
-        let context = container.mainContext
-        trips.forEach { context.insert($0) }
-        try! context.save()
-
-        return container
-    }
-
-    private static func fetchItem<T: PersistentModel>(
-        from container: ModelContainer,
-        at index: Int = 0,
-        sortBy: [SortDescriptor<T>]
-    ) -> T {
-        let context = container.mainContext
-        var descriptor = FetchDescriptor<T>()
-        descriptor.sortBy = sortBy
-
-        let items = try! context.fetch(descriptor)
-        return items[index]
     }
 }

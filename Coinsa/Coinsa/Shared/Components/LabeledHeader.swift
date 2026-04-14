@@ -1,5 +1,5 @@
 //
-//  GroupHeaderView.swift
+//  LabeledHeader.swift
 //  Coinsa
 //
 //  Created by Daniil Gritsenko on 10.04.2026.
@@ -7,13 +7,13 @@
 
 import SwiftUI
 
-struct GroupHeaderView: View {
-    // MARK: Stored Properties
+struct LabeledHeader: View {
+    // MARK: Свойства
     
     let title: LocalizedStringResource
     let icon: String
     
-    // MARK: Body
+    // MARK: Тело View
     
     var body: some View {
         HStack {
@@ -26,20 +26,20 @@ struct GroupHeaderView: View {
     }
 }
 
-private extension GroupHeaderView {
+// MARK: - Превью
+
+private extension LabeledHeader {
     static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
-        GroupHeaderView(title: .tripLocations, icon: Location.primaryIcon)
+        LabeledHeader(title: .tripLocations, icon: Location.primaryIcon)
             .environment(\.locale, locale)
             .preferredColorScheme(colorScheme)
     }
 }
 
-// MARK: - Previews
-
 #Preview("Light - RU") {
-    GroupHeaderView.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
+    LabeledHeader.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
 }
 
 #Preview("Dark - EN") {
-    GroupHeaderView.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
+    LabeledHeader.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
 }

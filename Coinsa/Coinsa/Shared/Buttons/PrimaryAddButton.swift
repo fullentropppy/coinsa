@@ -8,12 +8,12 @@
 import SwiftUI
 
 struct PrimaryAddButton: View {
-    // MARK: - Stored Properties
+    // MARK: - Свойства
     
     let isOnLeft: Bool
     let action: () -> Void
     
-    // MARK: - Body
+    // MARK: - Тело View
     
     var body: some View {
         HStack {
@@ -29,7 +29,7 @@ struct PrimaryAddButton: View {
             }
             .padding(16)
             .contentShape(Circle())
-            .glassEffect(.regular.interactive(), in: .circle)
+            .glassEffect(.clear.interactive(), in: .circle)
             
             if isOnLeft {
                 Spacer()
@@ -40,7 +40,7 @@ struct PrimaryAddButton: View {
     }
 }
 
-// MARK: - Previews
+// MARK: - Превью
 
 private extension PrimaryAddButton {
     static func makePreview(colorScheme: ColorScheme) -> some View {

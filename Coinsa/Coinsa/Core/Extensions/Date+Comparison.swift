@@ -8,7 +8,7 @@
 import Foundation
 
 extension Date {
-    // MARK: - Computed Properties
+    // MARK: - Сравнение дат
     
     var isYesterday: Bool {
         self.startOfDay == Date().yesterday.startOfDay
@@ -22,41 +22,53 @@ extension Date {
         self.startOfDay == Date().tomorrow.startOfDay
     }
     
-    // MARK: - Public Methods
-    
     func isSameDay(as other: Date) -> Bool {
         self.startOfDay == other.startOfDay
+    }
+    
+    func isSameWeek(as other: Date) -> Bool {
+        self.startOfWeek == other.startOfWeek
+    }
+    
+    func isSameMonth(as other: Date) -> Bool {
+        self.startOfMonth == other.startOfMonth
+    }
+    
+    func isSameYear(as other: Date) -> Bool {
+        self.startOfYear == other.startOfYear
     }
     
     func isBetween(_ start: Date, and end: Date) -> Bool {
         self.startOfDay >= start && self.endOfDay <= end
     }
     
-    func years(from date: Date) -> Int {
-        return difference(from: date, components: [.year]).year ?? 0
-    }
+    // MARK: - Разница между датами
     
-    func months(from date: Date) -> Int {
-        return difference(from: date, components: [.month]).month ?? 0
-    }
-    
-    func days(from date: Date) -> Int {
-        return difference(from: date, components: [.day]).day ?? 0
-    }
-    
-    func hours(from date: Date) -> Int {
-        return difference(from: date, components: [.hour]).hour ?? 0
+    func seconds(from date: Date) -> Int {
+        return difference(from: date, components: [.second]).second ?? 0
     }
     
     func minutes(from date: Date) -> Int {
         return difference(from: date, components: [.minute]).minute ?? 0
     }
     
-    func seconds(from date: Date) -> Int {
-        return difference(from: date, components: [.second]).second ?? 0
+    func hours(from date: Date) -> Int {
+        return difference(from: date, components: [.hour]).hour ?? 0
     }
     
-    // MARK: - Private Methods
+    func days(from date: Date) -> Int {
+        return difference(from: date, components: [.day]).day ?? 0
+    }
+    
+    func months(from date: Date) -> Int {
+        return difference(from: date, components: [.month]).month ?? 0
+    }
+    
+    func years(from date: Date) -> Int {
+        return difference(from: date, components: [.year]).year ?? 0
+    }
+    
+    // MARK: - Внутренние методы
     
     private func difference(
         from date: Date,
