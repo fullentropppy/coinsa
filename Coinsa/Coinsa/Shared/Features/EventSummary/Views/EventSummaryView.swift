@@ -8,20 +8,15 @@
 import SwiftUI
 
 struct EventSummaryView: View {
-    // MARK: - Stored Properties
+    // MARK: - Хранимые свойства
 
     let data: EventSummaryData
     let showsHeader: Bool
     let showsAmounts: Bool
     let showsDifference: Bool
     
-    // MARK: - Computed Properties
-    
-    private var days: Int {
-        let difference = data.endDate.days(from: data.startDate)
-        return difference == 0 ? 1 : Int(difference)
-    }
-    
+    // MARK: - Вычисляемые свойства
+
     private var baseAmountDifference: Double {
         data.plannedBaseAmount - data.actualBaseAmount
     }
@@ -34,7 +29,7 @@ struct EventSummaryView: View {
         }
     }
     
-    // MARK: - Initialization
+    // MARK: - Инициализация
     
     init(
         data: EventSummaryData,
@@ -48,7 +43,7 @@ struct EventSummaryView: View {
         self.showsDifference = showsDifference
     }
     
-    // MARK: - Body
+    // MARK: - Тело View
 
     var body: some View {
         if !showsHeader && !showsAmounts && !showsDifference {
@@ -68,15 +63,18 @@ struct EventSummaryView: View {
         }
     }
 
-    // MARK: - Components
+    // MARK: - Компоненты
 
     private var headerContent: some View {
         HStack {
-            BadgeView(fillColor: data.badgeColor, icon: data.badgeIcon)
-            data.status.makeBadge()
+            data.badgeProvider.makeBadge()
+            data.statusProvider.status.makeBadge()
             Spacer()
-            DateLabel.secondarySmall(from: data.startDate, to: data.endDate)
-            CountLabel.daysSecondarySmall(days)
+            DateLabel.secondarySmall(
+                from: data.statusProvider.startDate,
+                to: data.statusProvider.endDate
+            )
+            CountLabel.daysSecondarySmall(data.statusProvider.durationInDays)
         }
     }
 
@@ -109,7 +107,7 @@ struct EventSummaryView: View {
     }
 }
 
-// MARK: - Preview
+// MARK: - Превью
 
 private extension EventSummaryData {
     static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {

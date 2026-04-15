@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct AmountText: View {
-    // MARK: - Stored Properties
+    // MARK: - Свойства
     
     private let amount: Double
     private let fractionLength: Int
@@ -18,7 +18,7 @@ struct AmountText: View {
     private let currencyFont: Font?
     private let currencyColor: Color?
     
-    // MARK: - Initialization
+    // MARK: - Инициализация
     
     init(
         _ amount: Double,
@@ -38,7 +38,7 @@ struct AmountText: View {
         self.currencyColor = currency == nil ? nil : (currencyColor ?? color)
     }
     
-    // MARK: - Body
+    // MARK: - Тело View
     
     var body: some View {
         HStack(alignment: .firstTextBaseline, spacing: 2) {
@@ -53,7 +53,7 @@ struct AmountText: View {
     }
 }
 
-// MARK: - Presets
+// MARK: - Предопределенные варианты
 
 extension AmountText {
     static func standard(
@@ -87,12 +87,12 @@ extension AmountText {
     }
 }
 
-// MARK: - Previews
+// MARK: - Превью
 
 private extension AmountText {
     static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
         let amount = 12345.6789
-        let currency = Currency.rub
+        let currency = Currency.defaultCurrency
         
         return VStack(spacing: 40) {
             VStack(spacing: 20) {

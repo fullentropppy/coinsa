@@ -8,14 +8,14 @@
 import SwiftUI
 
 struct EventAmountDifferenceView: View {
-    // MARK: - Stored Properties
+    // MARK: - Сврйсива
     
     private let baseAmountDifference: Double
     private let baseCurrency: Currency
     private let localAmountDifference: Double?
     private let localCurrency: Currency?
     
-    // MARK: - Initialization
+    // MARK: - Инициализация
     
     init(
         baseAmountDifference: Double,
@@ -29,7 +29,7 @@ struct EventAmountDifferenceView: View {
         self.localCurrency = localCurrency
     }
     
-    // MARK: - Preview
+    // MARK: - Тело View
     
     var body: some View {
         HStack(alignment: .lastTextBaseline) {
@@ -39,6 +39,8 @@ struct EventAmountDifferenceView: View {
             differenceIcon
         }
     }
+    
+    // MARK: - Компоненты
     
     private var differenceInfo: some View {
         HStack(alignment: .firstTextBaseline, spacing: 4) {
@@ -66,13 +68,13 @@ struct EventAmountDifferenceView: View {
         }
         
         return Image(systemName: icon)
+            .imageScale(.small)
             .fontWeight(.semibold)
             .foregroundStyle(fillColor)
-            .imageScale(.small)
     }
 }
 
-// MARK: - Preview
+// MARK: - Превью
 
 private extension EventAmountDifferenceView {
     static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {

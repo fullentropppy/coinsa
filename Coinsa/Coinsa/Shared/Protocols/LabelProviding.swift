@@ -10,32 +10,40 @@ import SwiftUI
 // MARK: - Протокол
 
 protocol LabelProviding {
+    // MARK: - Свойства
+    
     var labelTitle: LocalizedStringResource { get }
     var labelBadgeIcon: String? { get }
     var labelBadgeText: String? { get }
     var labelBadgeFrameWidth: Double { get }
+    
+    // MARK: - Методы
+    
+    func makeLabel() -> LabelView
 }
 
 // MARK: - Стандартная реализация
 
 extension LabelProviding {
-    // MARK: - Свойства
+    // MARK: - Свойства со значениями по умолчанию
     
     var labelBadgeIcon: String? { nil }
     var labelBadgeText: String? { nil }
     var labelBadgeFrameWidth: Double { 24 }
     
+    // MARK: - Свойства с безопасным извлечением
+    
+    var safeLabelBadgeIcon: String { labelBadgeIcon ?? "" }
+    var safelabelBadgeText: String { labelBadgeText ?? "" }
+    
     // MARK: - Методы
     
-    func makeLabel() -> some View {
-        Group {
-            if let labelBadgeIcon {
-                LabelView(title: labelTitle, icon: labelBadgeIcon, iconFrameWidth: labelBadgeFrameWidth)
-            } else if let labelBadgeText {
-                LabelView(title: labelTitle, badge: labelBadgeText, badgeFrameWidth: labelBadgeFrameWidth)
-            } else {
-                EmptyView()
-            }
-        }
+    func makeLabel() -> LabelView {
+        LabelView(
+            title: labelTitle,
+            badgeFrameWidth: labelBadgeFrameWidth,
+            badgeIcon: labelBadgeIcon,
+            badgeText: labelBadgeText
+        )
     }
 }

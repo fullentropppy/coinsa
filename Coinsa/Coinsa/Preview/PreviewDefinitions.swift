@@ -5,8 +5,6 @@
 //  Created by Daniil Gritsenko on 03.03.2026.
 //
 
-import Foundation
-
 // MARK: - Наборы превью-данных
 
 enum PreviewTrip: String {

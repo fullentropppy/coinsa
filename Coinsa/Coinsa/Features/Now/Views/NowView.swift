@@ -184,7 +184,7 @@ struct NowView: View {
             selectedQuickCategory = category
         } label: {
             HStack {
-                Image(systemName: category.badgeIcon!)
+                Image(systemName: category.safeBadgeIcon)
                     .frame(width: 20)
                 Text(category.localizedResource)
                     

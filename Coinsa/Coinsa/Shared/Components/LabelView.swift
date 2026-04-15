@@ -17,23 +17,31 @@ struct LabelView: View {
     
     // MARK: - Инициализация
     
-    init(title: LocalizedStringResource, icon: String, iconFrameWidth: Double = 24) {
-        self.title = title
-        self.badgeFrameWidth = iconFrameWidth
-        self.badgeIcon = icon
-        self.badgeText = nil
-    }
-    
-    init(title: LocalizedStringResource, badge: String, badgeFrameWidth: Double = 24) {
+    init(
+        title: LocalizedStringResource,
+        badgeFrameWidth: Double,
+        badgeIcon: String? = nil,
+        badgeText: String? = nil
+    ) {
         self.title = title
         self.badgeFrameWidth = badgeFrameWidth
-        self.badgeIcon = nil
-        self.badgeText = badge
+        self.badgeIcon = badgeIcon
+        self.badgeText = badgeText
     }
     
     // MARK: - Тело View
     
     var body: some View {
+        if badgeIcon == nil && badgeText == nil {
+            EmptyView()
+        } else {
+            labelContent
+        }
+    }
+    
+    // MARK: - Компоненты
+    
+    private var labelContent: some View {
         HStack(alignment: .center, spacing: 4) {
             Group {
                 if let badgeIcon {

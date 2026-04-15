@@ -5,20 +5,19 @@
 //  Created by Daniil Gritsenko on 09.04.2026.
 //
 
-import Foundation
 import Observation
 
 @MainActor
 @Observable
 final class AmountManager {
-    // MARK: - Stored Properties
+    // MARK: - Свойства
     
     private let converter: CurrencyConverter
     
     private(set) var baseAmount: Double
     private(set) var localAmount: Double
     
-    // MARK: - Initialization
+    // MARK: - Инициализация
     
     init(converter: CurrencyConverter, baseAmount: Double = 0, localAmount: Double = 0) {
         self.converter = converter
@@ -26,7 +25,7 @@ final class AmountManager {
         self.localAmount = localAmount
     }
     
-    // MARK: - Public Methods
+    // MARK: - Публичные методы
 
     func amount(for inputCurrency: InputCurrency) -> Double {
         switch inputCurrency {

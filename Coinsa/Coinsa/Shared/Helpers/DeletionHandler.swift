@@ -5,8 +5,6 @@
 //  Created by Daniil Gritsenko on 05.03.2026.
 //
 
-import SwiftUI
-
 struct DeletionHandler<Item> {
     // MARK: - Свойства
 

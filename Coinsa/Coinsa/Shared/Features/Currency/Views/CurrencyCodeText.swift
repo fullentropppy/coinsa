@@ -8,13 +8,13 @@
 import SwiftUI
 
 struct CurrencyCodeText: View {
-    // MARK: - Stored Properties
+    // MARK: - Свойства
     
     private let currency: Currency
     private let font: Font
     private let color: Color
     
-    // MARK: - Initialization
+    // MARK: - Инициализация
     
     init(
         _ currency: Currency,
@@ -26,7 +26,7 @@ struct CurrencyCodeText: View {
         self.color = color
     }
     
-    // MARK: - Body
+    // MARK: - Тело View
     
     var body: some View {
         Text(currency.code)
@@ -35,7 +35,7 @@ struct CurrencyCodeText: View {
     }
 }
 
-// MARK: - Presets
+// MARK: - Предопределенные варианты
 
 extension CurrencyCodeText {
     static func standard(_ currency: Currency) -> some View {
@@ -47,11 +47,11 @@ extension CurrencyCodeText {
     }
 }
 
-// MARK: - Previews
+// MARK: - Превью
 
 private extension CurrencyCodeText {
     static func makePreview(colorScheme: ColorScheme) -> some View {
-        let currency = Currency.rub
+        let currency = Currency.defaultCurrency
         
         return VStack(spacing: 40) {
             VStack(spacing: 20) {

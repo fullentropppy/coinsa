@@ -5,11 +5,9 @@
 //  Created by Daniil Gritsenko on 08.03.2026.
 //
 
-import Foundation
-
 enum Currency: String, CaseIterable, Identifiable {
-    // MARK: - Cases
-
+    // MARK: - Значения
+    
     case aed = "AED"
     case byn = "BYN"
     case cny = "CNY"
@@ -21,24 +19,8 @@ enum Currency: String, CaseIterable, Identifiable {
     case `try` = "TRY"
     case usd = "USD"
 
-    // MARK: - Stored Properties
+    // MARK: - Базовые свойства
     
     var id: String { rawValue }
     var code: String { rawValue }
-    
-    // MARK: - Computed Properties
-    
-    static var defaultCurrency: Currency {
-        Currency.rub
-    }
-    
-    static var defaultCurrencyCode: String {
-        defaultCurrency.code
-    }
-
-    // MARK: - Public Methods
-    
-    static func from(_ code: String) -> Currency {
-        Currency(rawValue: code.uppercased()) ?? .defaultCurrency
-    }
 }

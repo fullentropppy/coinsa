@@ -5,7 +5,7 @@
 //  Created by Daniil Gritsenko on 31.03.2026.
 //
 
-import SwiftUI
+import Foundation
 
 struct AppInfo {
     // MARK: - Правовая информация

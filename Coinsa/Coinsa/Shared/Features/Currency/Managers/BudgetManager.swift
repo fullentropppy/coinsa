@@ -5,30 +5,28 @@
 //  Created by Daniil Gritsenko on 09.04.2026.
 //
 
-import Foundation
+import Observation
 
 @MainActor
 @Observable
 final class BudgetManager {
-    // MARK: - Stored Properties
+    // MARK: - Свойства
     
     private let converter: CurrencyConverter
     private(set) var budgetsBase: [ExpenseCategory: Double]
-    
-    // MARK: - Computed Properties
     
     var totalBaseAmount: Double {
         budgetsBase.values.reduce(0, +)
     }
     
-    // MARK: - Initialization
+    // MARK: - Инициализация
     
     init(converter: CurrencyConverter, initialBudgets: [ExpenseCategory: Double] = [:]) {
         self.converter = converter
         self.budgetsBase = initialBudgets
     }
     
-    // MARK: - Public Methods
+    // MARK: - Публичные методы
     
     func budgetBase(for category: ExpenseCategory) -> Double {
         budgetsBase[category] ?? 0

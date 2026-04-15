@@ -8,13 +8,10 @@
 import SwiftUI
 
 struct EventSummaryData {
-    // MARK: - Stored Properties
+    // MARK: - Свойства
     
-    let badgeIcon: String
-    let badgeColor: Color
-    let status: EventStatus
-    let startDate: Date
-    let endDate: Date
+    let badgeProvider: TypeBadgeProviding.Type
+    let statusProvider: EventStatusProviding
     let plannedBaseAmount: Double
     let actualBaseAmount: Double
     let baseCurrency: Currency
@@ -22,14 +19,11 @@ struct EventSummaryData {
     let actualLocalAmount: Double?
     let localCurrency: Currency?
     
-    // MARK: - Initialization
+    // MARK: - Инициализация
     
     init(
-        badgeIcon: String,
-        badgeColor: Color,
-        status: EventStatus,
-        startDate: Date,
-        endDate: Date,
+        badgeProvider: TypeBadgeProviding.Type,
+        statusProvider: EventStatusProviding,
         plannedBaseAmount: Double,
         actualBaseAmount: Double,
         baseCurrency: Currency,
@@ -37,11 +31,8 @@ struct EventSummaryData {
         actualLocalAmount: Double? = nil,
         localCurrency: Currency? = nil
     ) {
-        self.badgeIcon = badgeIcon
-        self.badgeColor = badgeColor
-        self.status = status
-        self.startDate = startDate
-        self.endDate = endDate
+        self.badgeProvider = badgeProvider
+        self.statusProvider = statusProvider
         self.plannedBaseAmount = plannedBaseAmount
         self.actualBaseAmount = actualBaseAmount
         self.baseCurrency = baseCurrency

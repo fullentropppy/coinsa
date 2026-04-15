@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct EventAmountCardView: View {
-    // MARK: - Stored Properties
+    // MARK: - Свойства
 
     private let title: LocalizedStringResource
     private let baseAmount: Double
@@ -16,7 +16,7 @@ struct EventAmountCardView: View {
     private let localAmount: Double?
     private let localCurrency: Currency?
 
-    // MARK: - Initialization
+    // MARK: - Инициализация
     
     init(
         title: LocalizedStringResource,
@@ -32,7 +32,7 @@ struct EventAmountCardView: View {
         self.localCurrency = localCurrency
     }
     
-    // MARK: - Body
+    // MARK: - Тело View
 
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
@@ -52,7 +52,7 @@ struct EventAmountCardView: View {
     }
 }
 
-// MARK: - Preview
+// MARK: - Превью
 
 private extension EventAmountCardView {
     static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {

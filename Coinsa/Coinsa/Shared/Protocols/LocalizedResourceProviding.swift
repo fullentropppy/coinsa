@@ -17,5 +17,11 @@ protocol LocalizedResourceProviding {
 // MARK: - Стандартная реализация
 
 extension LocalizedResourceProviding {
+    // MARK: - Свойства со значениями по умолчанию
+    
     var localizedResourcePlural: LocalizedStringResource? { nil }
+    
+    // MARK: - Свойства с безопасным извлечением
+    
+    var safeLocalizedResourcePlural: LocalizedStringResource { localizedResourcePlural ?? "" }
 }

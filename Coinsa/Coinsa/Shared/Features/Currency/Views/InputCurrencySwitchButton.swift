@@ -8,20 +8,37 @@
 import SwiftUI
 
 struct InputCurrencySwitchButton: View {
-    // MARK: - Stored Properties
+    // MARK: - Свойства
     
     let action: () -> Void
     
-    // MARK: - Body
+    // MARK: - Тело View
     
     var body: some View {
         Button(action: action) {
             Image(systemName: "arrow.left.arrow.right")
-                .fontWeight(.semibold)
                 .imageScale(.small)
+                .fontWeight(.semibold)
         }
         .frame(width: 16)
         .buttonStyle(.borderless)
         .foregroundStyle(.accent)
     }
+}
+
+// MARK: - Превью
+
+private extension InputCurrencySwitchButton {
+    static func makePreview(colorScheme: ColorScheme) -> some View {
+        InputCurrencySwitchButton(action: {})
+        .preferredColorScheme(colorScheme)
+    }
+}
+
+#Preview("Light") {
+    InputCurrencySwitchButton.makePreview(colorScheme: .light)
+}
+
+#Preview("Dark") {
+    InputCurrencySwitchButton.makePreview(colorScheme: .dark)
 }

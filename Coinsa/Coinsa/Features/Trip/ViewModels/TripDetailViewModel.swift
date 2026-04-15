@@ -28,11 +28,8 @@ struct TripDetailViewModel {
         let actualAmount = trip.calculateActualAmount(asBaseCurrency: true)
         
         return EventSummaryData(
-            badgeIcon: Trip.badgeIcon!,
-            badgeColor: Trip.badgeColor,
-            status: trip.status,
-            startDate: trip.startDate,
-            endDate: trip.endDate,
+            badgeProvider: Trip.self,
+            statusProvider: trip,
             plannedBaseAmount: plannedAmount,
             actualBaseAmount: actualAmount,
             baseCurrency: baseCurrency

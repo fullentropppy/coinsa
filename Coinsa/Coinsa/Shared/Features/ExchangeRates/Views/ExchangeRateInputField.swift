@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct ExchangeRateInputField: View {
-    // MARK: - Properties
+    // MARK: - Свойства
+    
     private let value: Binding<Double>
     private let currency: Currency
     private let isLoading: Bool
@@ -17,7 +18,8 @@ struct ExchangeRateInputField: View {
     private let font: Font
     private let onRefresh: () -> Void
     
-    // MARK: - Initializers
+    // MARK: - Инициализация
+    
     init(
         _ value: Binding<Double>,
         currency: Currency,
@@ -36,7 +38,7 @@ struct ExchangeRateInputField: View {
         self.onRefresh = onRefresh
     }
     
-    // MARK: - Body
+    // MARK: - Тело View
     var body: some View {
         HStack {
             inputField
@@ -45,7 +47,7 @@ struct ExchangeRateInputField: View {
         }
     }
     
-    // MARK: - Components
+    // MARK: - Компоненты
     private var inputField: some View {
         NumericInputField(
             value,
@@ -65,8 +67,8 @@ struct ExchangeRateInputField: View {
                         .controlSize(.small)
                 } else {
                     Image(systemName: "arrow.clockwise")
-                        .fontWeight(.semibold)
                         .imageScale(.small)
+                        .fontWeight(.semibold)
                         .foregroundStyle(.accent)
                 }
             }
@@ -77,7 +79,8 @@ struct ExchangeRateInputField: View {
     }
 }
 
-// MARK: - Presets
+// MARK: - Предопределенные варианты
+
 extension ExchangeRateInputField {
     static func standard(
         _ value: Binding<Double>,
@@ -99,7 +102,8 @@ extension ExchangeRateInputField {
     }
 }
 
-// MARK: - Preview
+// MARK: - Превью
+
 private extension ExchangeRateInputField {
     static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
         List {
@@ -114,7 +118,7 @@ private extension ExchangeRateInputField {
         @State private var rate: Double = 80.1234
         @FocusState private var focusedField: NumericEditField?
         
-        private var currency = Currency.usd
+        private var currency = Currency.defaultCurrency
         private var isLoading: Bool
         
         init(isLoading: Bool) {
@@ -122,7 +126,7 @@ private extension ExchangeRateInputField {
         }
         
         var body: some View {
-            LabeledContent(.expenseExchangeRate(localCurrencyCode: currency.code)) {
+            Section {
                 ExchangeRateInputField(
                     $rate,
                     currency: currency,
@@ -130,6 +134,16 @@ private extension ExchangeRateInputField {
                     focusedField: $focusedField,
                     focusId: .exchangeRate,
                     font: .body,
+                    onRefresh: {}
+                )
+            }
+            Section {
+                ExchangeRateInputField.standard(
+                    $rate,
+                    currency: currency,
+                    isLoading: isLoading,
+                    focusedField: $focusedField,
+                    focusId: .exchangeRate,
                     onRefresh: {}
                 )
             }
