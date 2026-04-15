@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-extension EventStatus {
+extension EventStatus: LocalizedResourceProviding {
     var localizedResource: LocalizedStringResource {
         switch self {
         case .upcoming: .eventStatusUpcoming
@@ -16,7 +16,7 @@ extension EventStatus {
         }
     }
     
-    var localizedResourcePlural: LocalizedStringResource {
+    var localizedResourcePlural: LocalizedStringResource? {
         switch self {
         case .upcoming: .eventStatusUpcomingPlural
         case .ongoing: .eventStatusOngoingPlural

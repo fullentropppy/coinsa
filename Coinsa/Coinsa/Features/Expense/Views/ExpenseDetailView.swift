@@ -80,8 +80,8 @@ struct ExpenseDetailView: View {
     
     private var headerContent: some View {
         HStack {
-            BadgeView(fillColor: Expense.badgeColor, icon: Expense.badgeIcon)
-            BadgeView(fillColor: expense.category.badgeColor, icon: expense.category.badgeIcon)
+            Expense.makeBadge()
+            expense.category.makeBadge()
             Spacer()
             DateLabel.secondarySmall(expense.date)
         }

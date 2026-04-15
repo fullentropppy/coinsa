@@ -23,7 +23,7 @@ struct LocationRowView: View {
     
     private var upperStack: some View {
         HStack(spacing: 4) {
-            EventStatusBadge(location.status)
+            location.status.makeDot()
             Text(location.name).fontWeight(.semibold)
         }
     }

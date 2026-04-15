@@ -27,11 +27,7 @@ struct ExpenseRowView: View {
     
     private var leftStack: some View {
         VStack(alignment: .leading, spacing: 10) {
-            BadgeView(
-                fillColor: expense.category.badgeColor,
-                icon: expense.category.badgeIcon,
-                title: expense.category.localizedResource
-            )
+            expense.category.makeBadge()
             DateLabel.secondarySmall(expense.date)
         }
     }

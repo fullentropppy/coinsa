@@ -62,7 +62,7 @@ struct LabeledPicker<SelectionValue: Hashable, Content: View>: View {
                 selection: $selectedCategory,
                 options: ExpenseCategory.allCases
             ) { category in
-                ExpenseCategoryLabel(category: category)
+                category.makeLabel()
             }
         }
     }
@@ -80,7 +80,7 @@ struct LabeledPicker<SelectionValue: Hashable, Content: View>: View {
                 selection: $selectedCategory,
                 options: ExpenseCategory.allCases
             ) { category in
-                ExpenseCategoryLabel(category: category)
+                category.makeLabel()
             }
         }
     }

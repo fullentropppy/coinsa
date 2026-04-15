@@ -130,7 +130,7 @@ struct TripDetailView: View {
                 .listRowBackground(Color.clear)
             
             ForEach(viewModel.groupedLocations, id: \.status) { group in
-                Section(group.status.localizedResource) {
+                Section(group.status.localizedResourcePlural!) {
                     ForEach(group.locations) { location in
                         NavigationLink {
                             LocationDetailView(location: location)

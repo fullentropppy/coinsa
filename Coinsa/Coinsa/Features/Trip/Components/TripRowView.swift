@@ -25,7 +25,7 @@ struct TripRowView: View {
     
     private var upperStack: some View {
         HStack(spacing: 4) {
-            EventStatusBadge(trip.status)
+            trip.status.makeDot()
             Text(trip.name).fontWeight(.semibold)
         }
     }

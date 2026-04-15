@@ -75,7 +75,7 @@ struct TripListView: View {
     private var tripListContent: some View {
         List {
             ForEach(viewModel.groupedTrips(from: trips), id: \.status) { group in
-                Section(group.status.localizedResourcePlural) {
+                Section(group.status.localizedResourcePlural!) {
                     ForEach(group.trips) { trip in
                         NavigationLink {
                             TripDetailView(trip: trip)

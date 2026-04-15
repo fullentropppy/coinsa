@@ -138,7 +138,7 @@ struct LocationEditView: View {
                 selection: localCurrencyBinding,
                 options: Currency.allCasesSortedByName
             ) { currency in
-                CurrencyLabel(currency)
+                currency.makeLabel()
             }
             
             if !viewModel.isHomeLocation {
@@ -175,7 +175,7 @@ struct LocationEditView: View {
         Section {
             ForEach(ExpenseCategory.allCases, id: \.id) { (category: ExpenseCategory) in
                 HStack {
-                    ExpenseCategoryLabel(category: category)
+                    category.makeLabel()
                     Spacer()
                     NumericInputField.standard(
                         budgetInputBinding(for: category),

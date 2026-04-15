@@ -35,7 +35,7 @@ struct LocationDetailViewModel {
         let localCurrency = isHomeLocation ? nil : localCurrency
 
         return EventSummaryData(
-            badgeIcon: Location.badgeIcon,
+            badgeIcon: Location.badgeIcon!,
             badgeColor: Location.badgeColor,
             status: location.status,
             startDate: location.startDate,

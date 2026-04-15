@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension Currency {
+extension Currency: LocalizedResourceProviding {
     var localizedResource: LocalizedStringResource {
         switch self {
         case .aed: .currencyNameAed

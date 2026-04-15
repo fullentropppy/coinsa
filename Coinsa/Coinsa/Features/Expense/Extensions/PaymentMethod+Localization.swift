@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension PaymentMethod {
+extension PaymentMethod: LocalizedResourceProviding {
     var localizedResource: LocalizedStringResource {
         switch self {
         case .cash: .paymentMethodCash

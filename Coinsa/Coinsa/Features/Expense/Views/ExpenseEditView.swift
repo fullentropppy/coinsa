@@ -153,14 +153,14 @@ struct ExpenseEditView: View {
                 selection: categoryBinding,
                 options: ExpenseCategory.allCases
             ) { category in
-                ExpenseCategoryLabel(category: category)
+                category.makeLabel()
             }
             LabeledPicker(
                 title: .expensePaymentMethod,
                 selection: paymentMethodBinding,
                 options: PaymentMethod.allCases
             ) { method in
-                PaymentMethodLabel(method: method)
+                method.makeLabel()
             }
         }
     }

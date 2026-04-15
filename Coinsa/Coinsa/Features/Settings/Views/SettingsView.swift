@@ -50,7 +50,7 @@ struct SettingsView: View {
     private var baseCurrencySection: some View {
         Section {
             LabeledContent(.settingsBaseCurrency) {
-                CurrencyLabel(settingsStore.baseCurrency)
+                settingsStore.baseCurrency.makeLabel()
             }
         } footer: {
             Text(.settingsBaseCurrencyHint)

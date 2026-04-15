@@ -5,9 +5,9 @@
 //  Created by Daniil Gritsenko on 09.03.2026.
 //
 
-import SwiftUI
+import Foundation
 
-extension ExpenseCategory {
+extension ExpenseCategory: LocalizedResourceProviding {
     var localizedResource: LocalizedStringResource {
         switch self {
         case .food: .expenseCategoryFood

@@ -73,7 +73,7 @@ struct EventSummaryView: View {
     private var headerContent: some View {
         HStack {
             BadgeView(fillColor: data.badgeColor, icon: data.badgeIcon)
-            EventStatusLabel(data.status)
+            data.status.makeBadge()
             Spacer()
             DateLabel.secondarySmall(from: data.startDate, to: data.endDate)
             CountLabel.daysSecondarySmall(days)
