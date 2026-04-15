@@ -12,6 +12,7 @@ import Foundation
 protocol DateRangeProviding {
     var startDate: Date { get }
     var endDate: Date { get }
+    var status: EventStatus { get }
 }
 
 // MARK: - Стандартная реализация
@@ -24,5 +25,20 @@ extension DateRangeProviding {
     
     var range: ClosedRange<Date> {
         startDate...endDate
+    }
+    
+    var status: EventStatus {
+        let today = Date().startOfDay
+        
+        let startDay = startDate.startOfDay
+        let endDay = endDate.endOfDay
+        
+        if today > endDay {
+            return .completed
+        } else if today.isBetween(startDay, and: endDay) {
+            return .ongoing
+        } else {
+            return .upcoming
+        }
     }
 }

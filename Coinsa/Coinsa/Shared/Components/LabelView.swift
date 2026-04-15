@@ -46,8 +46,10 @@ struct LabelView: View {
             Group {
                 if let badgeIcon {
                     Image(systemName: badgeIcon)
+                        .imageScale(.small)
                 } else if let badgeText {
                     Text(badgeText)
+                        .font(.body.monospaced().weight(.semibold))
                 }
             }
             .foregroundStyle(.secondary)
@@ -55,4 +57,33 @@ struct LabelView: View {
             Text(title)
         }
     }
+}
+
+// MARK: - Превью
+
+private extension LabelView {
+    static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
+        VStack(spacing: 40) {
+            VStack(alignment: .leading, spacing: 20) {
+                ForEach(ExpenseCategory.allCases, id: \.self) { category in
+                    category.makeLabel()
+                }
+            }
+            VStack(alignment: .leading, spacing: 20) {
+                ForEach(PaymentMethod.allCases, id: \.self) { method in
+                    method.makeLabel()
+                }
+            }
+        }
+        .environment(\.locale, locale)
+        .preferredColorScheme(colorScheme)
+    }
+}
+
+#Preview("Light - RU") {
+    LabelView.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
+}
+
+#Preview("Dark - EN") {
+    LabelView.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
 }

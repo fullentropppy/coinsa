@@ -24,7 +24,7 @@ struct CountLabel: View {
         self.icon = icon
     }
     
-    // MARK: - Body
+    // MARK: - Тело View
     var body: some View {
         HStack(spacing: 2) {
             Image(systemName: icon)

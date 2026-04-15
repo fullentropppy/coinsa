@@ -145,9 +145,11 @@ extension NumericInputField {
 
 private extension NumericInputField {
     static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
-        NumericInputFieldPreview()
-            .environment(\.locale, locale)
-            .preferredColorScheme(colorScheme)
+        List {
+            NumericInputFieldPreview()
+        }
+        .environment(\.locale, locale)
+        .preferredColorScheme(colorScheme)
     }
     
     private struct NumericInputFieldPreview: View {
@@ -155,16 +157,22 @@ private extension NumericInputField {
         @FocusState private var focusedField: NumericEditField?
 
         var body: some View {
-            Form {
-                LabeledContent(.expenseAmount) {
-                    NumericInputField(
-                        $amount,
-                        focusedField: $focusedField,
-                        focusId: .amount,
-                        fractionDigits: 2,
-                        font: .body
-                    )
-                }
+            Section {
+                NumericInputField(
+                    $amount,
+                    focusedField: $focusedField,
+                    focusId: .amount,
+                    fractionDigits: 2,
+                    font: .body
+                )
+            }
+            Section {
+                NumericInputField.standard(
+                    $amount,
+                    focusedField: $focusedField,
+                    focusId: .amount,
+                    fractionDigits: 2
+                )
             }
         }
     }

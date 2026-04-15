@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 @Model
-class Location: DateRangeProviding, EventStatusProviding {
+class Location: DateRangeProviding {
     // MARK: - Stored Properties
     
     @Attribute(.unique)

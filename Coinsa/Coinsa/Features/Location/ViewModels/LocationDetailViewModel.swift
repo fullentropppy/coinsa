@@ -36,7 +36,7 @@ struct LocationDetailViewModel {
 
         return EventSummaryData(
             badgeProvider: Location.self,
-            statusProvider: location,
+            dateRangeProvider: location,
             plannedBaseAmount: plannedAmountBase,
             actualBaseAmount: actualAmountBase,
             baseCurrency: baseCurrency,

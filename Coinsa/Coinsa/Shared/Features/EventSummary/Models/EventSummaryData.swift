@@ -11,7 +11,7 @@ struct EventSummaryData {
     // MARK: - Свойства
     
     let badgeProvider: TypeBadgeProviding.Type
-    let statusProvider: EventStatusProviding
+    let dateRangeProvider: DateRangeProviding
     let plannedBaseAmount: Double
     let actualBaseAmount: Double
     let baseCurrency: Currency
@@ -23,7 +23,7 @@ struct EventSummaryData {
     
     init(
         badgeProvider: TypeBadgeProviding.Type,
-        statusProvider: EventStatusProviding,
+        dateRangeProvider: DateRangeProviding,
         plannedBaseAmount: Double,
         actualBaseAmount: Double,
         baseCurrency: Currency,
@@ -32,7 +32,7 @@ struct EventSummaryData {
         localCurrency: Currency? = nil
     ) {
         self.badgeProvider = badgeProvider
-        self.statusProvider = statusProvider
+        self.dateRangeProvider = dateRangeProvider
         self.plannedBaseAmount = plannedBaseAmount
         self.actualBaseAmount = actualBaseAmount
         self.baseCurrency = baseCurrency

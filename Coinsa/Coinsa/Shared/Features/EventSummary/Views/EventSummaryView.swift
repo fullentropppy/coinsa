@@ -68,13 +68,13 @@ struct EventSummaryView: View {
     private var headerContent: some View {
         HStack {
             data.badgeProvider.makeBadge()
-            data.statusProvider.status.makeBadge()
+            data.dateRangeProvider.status.makeBadge()
             Spacer()
             DateLabel.secondarySmall(
-                from: data.statusProvider.startDate,
-                to: data.statusProvider.endDate
+                from: data.dateRangeProvider.startDate,
+                to: data.dateRangeProvider.endDate
             )
-            CountLabel.daysSecondarySmall(data.statusProvider.durationInDays)
+            CountLabel.daysSecondarySmall(data.dateRangeProvider.durationInDays)
         }
     }
 

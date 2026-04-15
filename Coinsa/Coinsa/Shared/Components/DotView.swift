@@ -29,25 +29,21 @@ struct DotView: View {
 
 // MARK: - Превью
 
-private struct PreviewContent: View {
-    let colorScheme: ColorScheme
-    
-    var body: some View {
-        PreviewWrapper(colorScheme: colorScheme) {
-            VStack(spacing: 20) {
-                DotView(.red)
-                DotView(.yellow)
-                DotView(.green)
-            }
+private extension DotView {
+    static func makePreview(colorScheme: ColorScheme) -> some View {
+        VStack(spacing: 20) {
+            DotView(.red)
+            DotView(.yellow)
+            DotView(.green)
         }
     }
 }
 
 #Preview("Light") {
-    PreviewContent(colorScheme: .light)
+    DotView.makePreview(colorScheme: .light)
 }
 
 #Preview("Dark") {
-    PreviewContent(colorScheme: .dark)
+    DotView.makePreview(colorScheme: .dark)
 }
 

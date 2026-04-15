@@ -12,7 +12,7 @@ extension PaymentMethod: LabelProviding {
         self.localizedResource
     }
     
-    var labelIcon: String {
+    var labelBadgeIcon: String? {
         switch self {
         case .cash: "banknote"
         case .card: "creditcard"

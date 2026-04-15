@@ -12,7 +12,7 @@ extension ExpenseCategory: LabelProviding {
         self.localizedResource
     }
     
-    var labelIcon: String {
+    var labelBadgeIcon: String? {
         switch self {
         case .food: "fork.knife"
         case .transport: "car"

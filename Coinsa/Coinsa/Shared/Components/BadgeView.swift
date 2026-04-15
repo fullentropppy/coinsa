@@ -59,35 +59,34 @@ struct BadgeView: View {
 
 // MARK: - Превью
 
-private struct PreviewContent: View {
-    let locale: Locale
-    let colorScheme: ColorScheme
-    
-    var body: some View {
-        PreviewWrapper(colorScheme: colorScheme, locale: locale) {
+private extension BadgeView {
+    static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
+        VStack(spacing: 40) {
             VStack(spacing: 20) {
-                BadgeView(
-                    fillColor: Trip.badgeColor,
-                    icon: Trip.badgeIcon
-                )
-                BadgeView(
-                    fillColor: EventStatus.ongoing.badgeColor,
-                    title: EventStatus.ongoing.localizedResource
-                )
-                BadgeView(
-                    fillColor: ExpenseCategory.activity.badgeColor,
-                    icon: ExpenseCategory.activity.badgeIcon,
-                    title: ExpenseCategory.activity.localizedResource
-                )
+                Trip.makeBadge()
+                Location.makeBadge()
+                Expense.makeBadge()
+            }
+            VStack(spacing: 20) {
+                ForEach(EventStatus.allCases, id: \.self) { status in
+                    status.makeBadge()
+                }
+            }
+            VStack(spacing: 20) {
+                ForEach(ExpenseCategory.allCases, id: \.self) { category in
+                    category.makeBadge()
+                }
             }
         }
+        .environment(\.locale, locale)
+        .preferredColorScheme(colorScheme)
     }
 }
 
 #Preview("Light - RU") {
-    PreviewContent(locale: PreviewLocale.ru, colorScheme: .light)
+    BadgeView.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
 }
 
 #Preview("Dark - EN") {
-    PreviewContent(locale: PreviewLocale.en, colorScheme: .dark)
+    BadgeView.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
 }

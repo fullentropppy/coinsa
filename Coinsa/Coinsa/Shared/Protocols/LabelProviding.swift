@@ -13,9 +13,9 @@ protocol LabelProviding {
     // MARK: - Свойства
     
     var labelTitle: LocalizedStringResource { get }
+    var labelBadgeFrameWidth: Double { get }
     var labelBadgeIcon: String? { get }
     var labelBadgeText: String? { get }
-    var labelBadgeFrameWidth: Double { get }
     
     // MARK: - Методы
     
@@ -27,9 +27,9 @@ protocol LabelProviding {
 extension LabelProviding {
     // MARK: - Свойства со значениями по умолчанию
     
+    var labelBadgeFrameWidth: Double { 28 }
     var labelBadgeIcon: String? { nil }
     var labelBadgeText: String? { nil }
-    var labelBadgeFrameWidth: Double { 24 }
     
     // MARK: - Свойства с безопасным извлечением
     

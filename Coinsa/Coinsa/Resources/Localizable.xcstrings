@@ -5,7 +5,7 @@
       "shouldTranslate" : false
     },
     "•" : {
-
+      "shouldTranslate" : false
     },
     "amount.actual" : {
       "extractionState" : "manual",
@@ -1118,13 +1118,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Add your first Expense to get started."
+            "value" : "Add your first Expense\nto get started."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Добавьте первую трату, чтобы начать."
+            "value" : "Добавьте первую трату,\nчтобы начать."
           }
         }
       }
@@ -1356,13 +1356,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Create a Location to track expenses."
+            "value" : "Create a Location\nto track expenses."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Создайте локацию, чтобы отслеживать расходы."
+            "value" : "Создайте локацию,\nчтобы отслеживать расходы."
           }
         }
       }
@@ -1526,13 +1526,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Location will appear automatically on its start date."
+            "value" : "Location will appear automatically\non its start date."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Локация появится автоматически в день своего начала."
+            "value" : "Локация появится автоматически\nв день своего начала."
           }
         }
       }
@@ -2036,13 +2036,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Create a Trip to add locations and expenses."
+            "value" : "Create a Trip\nto add locations\nand expenses."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Создайте поездку, чтобы добавлять локации и расходы."
+            "value" : "Создайте поездку,\nчтобы добавлять локации и расходы."
           }
         }
       }

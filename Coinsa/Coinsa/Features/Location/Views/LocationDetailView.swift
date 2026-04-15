@@ -123,7 +123,7 @@ struct LocationDetailView: View {
     
     private var expenseListContent: some View {
         Group {
-            LabeledHeader(title: .locationExpenses, icon: Expense.primaryIcon)
+            GroupHeaderView(icon: Expense.primaryIcon, title: .locationExpenses)
                 .listRowBackground(Color.clear)
             
             ForEach(viewModel.groupedExpenses, id: \.date) { group in

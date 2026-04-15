@@ -126,7 +126,7 @@ struct TripDetailView: View {
     
     private var locationListContent: some View {
         Group {
-            LabeledHeader(title: .tripLocations, icon: Location.primaryIcon)
+            GroupHeaderView(icon: Location.primaryIcon, title: .tripLocations)
                 .listRowBackground(Color.clear)
             
             ForEach(viewModel.groupedLocations, id: \.status) { group in

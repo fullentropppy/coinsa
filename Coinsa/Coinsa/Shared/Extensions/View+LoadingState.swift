@@ -10,7 +10,7 @@ import SwiftUI
 extension View {
     func loadingState(_ isLoading: Bool) -> some View {
         self
-            .opacity(isLoading ? 0.5 : 1)
+            .opacity(isLoading ? 0.6 : 1)
             .disabled(isLoading)
     }
 }

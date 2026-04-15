@@ -59,7 +59,6 @@ extension DateLabel {
     static func secondarySmall(from date1: Date, to date2: Date) -> some View {
         DateLabel(from: date1, to: date2, font: .footnote, color: .secondary)
     }
-
 }
 
 // MARK: - Превью
@@ -73,14 +72,14 @@ private extension DateLabel {
         return VStack(spacing: 40) {
             VStack(spacing: 20) {
                 DateLabel(now)
-                DateLabel(yearAhead, font: .footnote, color: .accent)
+                DateLabel(now, font: .footnote, color: .accent)
             }
             VStack(spacing: 20) {
                 DateLabel(from: now, to: weekAhead)
                 DateLabel(from: now, to: yearAhead, font: .footnote, color: .accent)
             }
             VStack(spacing: 20) {
-                DateLabel.secondarySmall(yearAhead)
+                DateLabel.secondarySmall(now)
                 DateLabel.secondarySmall(from: now, to: yearAhead)
             }
         }

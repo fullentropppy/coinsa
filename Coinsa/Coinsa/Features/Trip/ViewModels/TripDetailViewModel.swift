@@ -29,7 +29,7 @@ struct TripDetailViewModel {
         
         return EventSummaryData(
             badgeProvider: Trip.self,
-            statusProvider: trip,
+            dateRangeProvider: trip,
             plannedBaseAmount: plannedAmount,
             actualBaseAmount: actualAmount,
             baseCurrency: baseCurrency

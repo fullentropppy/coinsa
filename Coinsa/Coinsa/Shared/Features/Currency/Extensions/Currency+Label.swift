@@ -9,6 +9,6 @@ import Foundation
 
 extension Currency: LabelProviding {
     var labelTitle: LocalizedStringResource { self.localizedResource }
+    var labelBadgeFrameWidth: Double { 38 }
     var labelBadgeText: String? { self.code }
-    var labelBadgeFrameWidth: Double { 32 }
 }
