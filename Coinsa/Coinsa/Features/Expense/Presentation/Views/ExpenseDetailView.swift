@@ -9,7 +9,7 @@ import SwiftUI
 import SwiftData
 
 struct ExpenseDetailView: View {
-    // MARK: - Stored Properties
+    // MARK: - Хранимые свойства
 
     @Environment(AppSettingsStore.self) private var settingsStore
     @Environment(\.dismiss) private var dismiss
@@ -18,13 +18,19 @@ struct ExpenseDetailView: View {
 
     private let expense: Expense
     
-    // MARK: - Initialization
+    // MARK: - Вычисляемые свойства
+
+    private var viewModel: ExpenseDetailViewModel {
+        ExpenseDetailViewModel(expense: expense, baseCurrency: settingsStore.baseCurrency)
+    }
+
+    // MARK: - Инициализация
 
     init(expense: Expense) {
         self.expense = expense
     }
     
-    // MARK: - Body
+    // MARK: - Тело View
 
     var body: some View {
         expenseDetailForm
@@ -47,7 +53,7 @@ struct ExpenseDetailView: View {
             }
     }
 
-    // MARK: - Content
+    // MARK: - Основной контент
     
     private var expenseDetailForm: some View {
         Form {
@@ -56,13 +62,14 @@ struct ExpenseDetailView: View {
         }
     }
     
-    // MARK: - Sections
+    // MARK: - Секции
 
     private var mainSection: some View {
         Section {
             VStack(spacing: 14) {
                 headerContent
                 cardContent
+                additionalInfoContent
             }
         }
     }
@@ -76,7 +83,7 @@ struct ExpenseDetailView: View {
         }
     }
     
-    // MARK: - Components
+    // MARK: - Компоненты
     
     private var headerContent: some View {
         HStack {
@@ -89,15 +96,36 @@ struct ExpenseDetailView: View {
     
     private var cardContent: some View {
         VStack(alignment: .center) {
-            if settingsStore.baseCurrency == expense.localCurrency {
-                amountText(expense.baseAmount, currency: settingsStore.baseCurrency)
-                    .padding(28)
-            } else {
-                amountText(expense.localAmount, currency: expense.localCurrency)
-                    .padding(28)
+            AmountText(
+                viewModel.primaryAmount,
+                font: .title,
+                currency: viewModel.primaryCurrency,
+                currencyFont: .title.monospaced(),
+                currencyColor: .secondary
+            )
+            .padding(.top, 28)
+            .padding(.bottom, 14)
+            
+            HStack(spacing: 6) {
+                Image(systemName: expense.paymentMethod.safeLabelBadgeIcon)
+                    .imageScale(.medium)
+                    .fontWeight(.semibold)
+            }
+            .foregroundStyle(.secondary)
+            .padding(.bottom, 28)
+            
+            if let secondaryAmount = viewModel.secondaryAmount,
+               let secondaryCurrency = viewModel.secondaryCurrency {
                 Divider()
-                amountAdditionalInfo
-                    .padding(14)
+                
+                AmountText(
+                    secondaryAmount,
+                    font: .body.monospacedDigit(),
+                    color: .secondary,
+                    currency: secondaryCurrency,
+                    currencyFont: .body.monospaced()
+                )
+                .padding(14)
             }
         }
         .padding(10)
@@ -105,21 +133,13 @@ struct ExpenseDetailView: View {
         .glassEffect(.regular, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
     }
     
-    private func amountText(_ amount: Double, currency: Currency) -> some View {
-        AmountText(amount, font: .title, currency: currency, currencyColor: .secondary)
-    }
-    
-    private var amountAdditionalInfo: some View {
-        let baseCurrencyCode = settingsStore.baseCurrency.code
-        let parts = [
-            "\(String(format: "%.2f", expense.baseAmount)) \(baseCurrencyCode)",
-            "1 \(baseCurrencyCode) = \(String(format: "%g", expense.rateLocalToBase)) \(expense.localCurrency.code)"
-        ]
-        let info = parts.joined(separator: "  •  ")
-
-        return Text(info)
-            .font(.subheadline)
-            .foregroundStyle(.secondary)
+    @ViewBuilder
+    private var additionalInfoContent: some View {
+        if let exchangeRateDescription = viewModel.exchangeRateDescription {
+            Text(exchangeRateDescription)
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+        }
     }
     
     @ToolbarContentBuilder
@@ -131,16 +151,16 @@ struct ExpenseDetailView: View {
         }
     }
     
-    // MARK: - Actions
+    // MARK: - Действия
     
     private func checkIfDeleted() {
-        if expense.modelContext == nil {
+        if viewModel.shouldDismiss {
             dismiss()
         }
     }
 }
 
-// MARK: - Previews
+// MARK: - Превью
 
 private extension ExpenseDetailView {
     static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {

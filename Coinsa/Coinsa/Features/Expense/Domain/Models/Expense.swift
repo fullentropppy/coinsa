@@ -10,7 +10,7 @@ import SwiftData
 
 @Model
 class Expense {
-    // MARK: - Stored Properties
+    // MARK: - Свойства
     
     @Attribute(.unique)
     var id: UUID
@@ -24,7 +24,7 @@ class Expense {
     var location: Location
     var comment: String?
 
-    // MARK: - Initialization
+    // MARK: - Инициализация
     
     init(
         date: Date = .now,

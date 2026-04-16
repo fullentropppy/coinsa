@@ -22,11 +22,11 @@ extension ExpenseCategory: ValueBadgeProviding {
     var badgeIcon: String? {
         switch self {
         case .food: "fork.knife"
-        case .transport: "car"
+        case .transport: "car.fill"
         case .activity: "sparkles.2"
-        case .shopping: "bag"
-        case .medicine: "pills"
-        case .other: "circle.grid.2x2"
+        case .shopping: "bag.fill"
+        case .medicine: "pills.fill"
+        case .other: "circle.grid.2x2.fill"
         }
     }
     

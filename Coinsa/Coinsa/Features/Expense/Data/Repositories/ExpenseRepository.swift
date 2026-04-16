@@ -10,11 +10,11 @@ import SwiftData
 
 @MainActor
 struct ExpenseRepository {
-    // MARK: - Stored Properties
+    // MARK: - Свойства
 
     let context: ModelContext
 
-    // MARK: - Public Methods
+    // MARK: - Операции с хранилищем
 
     func add(
         date: Date,
@@ -65,7 +65,7 @@ struct ExpenseRepository {
         try? context.save()
     }
     
-    // MARK: - Private Methods
+    // MARK: - Нормализация значений
     
     private func normalizeBaseAmount(_ amount: Double) -> Double {
         amount > 0 ? amount.rounded(to: 2) : 0

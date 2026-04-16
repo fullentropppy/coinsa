@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import SwiftUI
 
 struct TripDetailViewModel {
     // MARK: - Stored Properties

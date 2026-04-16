@@ -11,7 +11,8 @@ import Observation
 @MainActor
 @Observable
 final class ExpenseEditViewModel {
-    // MARK: - Dependencies
+    // MARK: - Зависимости
+    
     private let currencyConverter: CurrencyConverter
     private let amountManager: AmountManager
     
@@ -20,11 +21,13 @@ final class ExpenseEditViewModel {
     let localCurrency: Currency
     let baseCurrency: Currency
     
-    // MARK: - Internal State
+    // MARK: - Внутреннее состояние
+    
     private var initialSnapshot: Snapshot
     private var hasLoadedInitialRate = false
         
-    // MARK: - UI State. Screen Behavior & Appearance
+    // MARK: - Состояние UI. Общее поведение и оформление
+    
     var isEdit: Bool {
         expense != nil
     }
@@ -45,12 +48,14 @@ final class ExpenseEditViewModel {
         baseAmount > 0 && rateLocalToBase > 0
     }
         
-    // MARK: - UI State. Common Data
+    // MARK: - Состояние UI. Общие данные
+    
     var date: Date
     var category: ExpenseCategory
     var comment: String
     
-    // MARK: - UI State. Amount
+    // MARK: - Состояние UI. Сумма
+    
     var baseAmount: Double {
         get { amountManager.baseAmount }
         set { amountManager.updateBaseAmount(newValue) }
@@ -61,7 +66,8 @@ final class ExpenseEditViewModel {
         set { amountManager.updateLocalAmount(newValue) }
     }
     
-    // MARK: - UI State. Exchange Rate
+    // MARK: - Состояние UI. Курс обмена
+    
     var rateLocalToBase: Double {
         get { currencyConverter.rateLocalToBase }
         set { currencyConverter.updateRate(newValue) }
@@ -76,7 +82,8 @@ final class ExpenseEditViewModel {
         set { currencyConverter.rateLoadingError = newValue }
     }
     
-    // MARK: - UI State. Payment
+    // MARK: - Состояние UI. Оплата
+    
     var paymentMethod: PaymentMethod
     var exchangeAdjustmentPercentage: Double
     
@@ -84,8 +91,8 @@ final class ExpenseEditViewModel {
         !isHomeLocation && paymentMethod != .cash
     }
 
+    // MARK: - Инициализация
     
-    // MARK: - Initializers
     convenience init(
         expense: Expense,
         baseCurrency: Currency
@@ -186,7 +193,8 @@ final class ExpenseEditViewModel {
         )
     }
 
-    // MARK: - Currency Operations
+    // MARK: - Операции с валютой
+    
     func currency(for inputCurrency: InputCurrency) -> Currency {
         switch inputCurrency {
         case .base: baseCurrency
@@ -194,7 +202,8 @@ final class ExpenseEditViewModel {
         }
     }
     
-    // MARK: - Amount Operations
+    // MARK: - Операции с суммой
+    
     func amount(for inputCurrency: InputCurrency) -> Double {
         amountManager.amount(for: inputCurrency)
     }
@@ -203,7 +212,8 @@ final class ExpenseEditViewModel {
         amountManager.updateAmount(newValue, for: inputCurrency)
     }
     
-    // MARK: - Exchange Rate Operations
+    // MARK: - Операции с курсом обмена
+    
     func updateRate(_ newRate: Double, currentInput: InputCurrency) {
         currencyConverter.updateRate(newRate)
         amountManager.updateFromRateChange(inputCurrency: currentInput)
@@ -236,7 +246,8 @@ final class ExpenseEditViewModel {
         }
     }
     
-    // MARK: - Payment Operations
+    // MARK: - Операции с оплатой
+
     func updatePaymentMethod(_ method: PaymentMethod, currentInput: InputCurrency) {
         paymentMethod = method
         syncExchangeAdjustmentAndRecalculate(currentInput: currentInput)
@@ -252,7 +263,8 @@ final class ExpenseEditViewModel {
         amountManager.updateFromRateChange(inputCurrency: currentInput)
     }
     
-    // MARK: - Persistance
+    // MARK: - Операции с хранилищем
+    
     func save(using repository: ExpenseRepository) {
         let normalizedComment = comment.trimmed
         let comment = normalizedComment.isEmpty ? nil : normalizedComment
@@ -283,9 +295,12 @@ final class ExpenseEditViewModel {
     }
 }
 
-// MARK: - Internal Types
+// MARK: - Внутренние типы
+
 private extension ExpenseEditViewModel {
     struct Snapshot: Equatable {
+        // MARK: - Свойства
+        
         let date: Date
         let baseAmount: Double
         let rateLocalToBase: Double
@@ -294,7 +309,8 @@ private extension ExpenseEditViewModel {
         let category: ExpenseCategory
         let comment: String
 
-        // MARK: - Initializers
+        // MARK: - Инициализация
+        
         init(viewModel: ExpenseEditViewModel) {
             self.init(
                 date: viewModel.date,

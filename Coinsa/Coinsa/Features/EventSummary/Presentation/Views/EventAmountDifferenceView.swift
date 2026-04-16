@@ -33,7 +33,9 @@ struct EventAmountDifferenceView: View {
     
     var body: some View {
         HStack(alignment: .lastTextBaseline) {
-            Text(.amountDifference).font(.footnote).foregroundStyle(.secondary)
+            Text(.amountDifference)
+                .font(.footnote)
+                .foregroundStyle(.secondary)
             Spacer()
             differenceInfo
             differenceIcon
@@ -43,13 +45,33 @@ struct EventAmountDifferenceView: View {
     // MARK: - Компоненты
     
     private var differenceInfo: some View {
-        HStack(alignment: .firstTextBaseline, spacing: 4) {
+        Group {
             if let localAmountDifference, let localCurrency {
-                AmountText.secondarySmall(localAmountDifference, currency: localCurrency)
-                Text("•").foregroundStyle(.secondary)
+                Text(
+                    .summaryExtendedDifference(
+                        localAmountDifference: localAmountDifference.formatted(
+                            .number.precision(.fractionLength(2))
+                        ),
+                        localCurrencyCode: localCurrency.code,
+                        baseAmountDifference: baseAmountDifference.formatted(
+                            .number.precision(.fractionLength(2))
+                        ),
+                        baseCurrencyCode: baseCurrency.code
+                    )
+                )
+            } else {
+                Text(
+                    .summaryBaseDifference(
+                        baseAmountDifference: baseAmountDifference.formatted(
+                            .number.precision(.fractionLength(2))
+                        ),
+                        baseCurrencyCode: baseCurrency.code
+                    )
+                )
             }
-            AmountText.secondarySmall(baseAmountDifference, currency: baseCurrency)
         }
+        .font(.footnote)
+        .foregroundStyle(.secondary)
     }
     
     private var differenceIcon: some View {

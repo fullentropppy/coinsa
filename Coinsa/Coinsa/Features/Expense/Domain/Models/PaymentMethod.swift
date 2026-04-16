@@ -5,15 +5,13 @@
 //  Created by Daniil Gritsenko on 12.04.2026.
 //
 
-import Foundation
-
 enum PaymentMethod: String, Codable, CaseIterable, Identifiable {
-    // MARK: - Cases
+    // MARK: - Значения
     
     case cash
     case card
     
-    // MARK: - Computed Properties
+    // MARK: - Базовые свойства
     
     var id: String { rawValue }
 }

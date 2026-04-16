@@ -5,31 +5,29 @@
 //  Created by Daniil Gritsenko on 25.03.2026.
 //
 
-import Foundation
-
 extension Expense {
-    // MARK: - Computed Properties
+    // MARK: - Публичные свойства
     
     var localAmount: Double {
         baseAmount * effectiveRateBaseToLocal
-    }
-    
-    var rateBaseToLocal: Double {
-        rateLocalToBase > 0 ? (1 / rateLocalToBase) : 0
     }
     
     var effectiveRateLocalToBase: Double {
         adjustedRateLocalToBase
     }
     
+    var rateBaseToLocal: Double {
+        rateLocalToBase > 0 ? (1 / rateLocalToBase).rounded(to: 4) : 0
+    }
+    
     var effectiveRateBaseToLocal: Double {
         adjustedRateLocalToBase > 0 ? (1 / adjustedRateLocalToBase) : 0
     }
     
-    // MARK: - Private Methods
+    // MARK: - Приватные свойства
     
     private var adjustedRateLocalToBase: Double {
         let adjustmentMultiplier = 1 + (max(0, exchangeAdjustmentPercentage) / 100)
-        return rateLocalToBase * adjustmentMultiplier
+        return (rateLocalToBase * adjustmentMultiplier).rounded(to: 4)
     }
 }

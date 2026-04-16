@@ -5,10 +5,8 @@
 //  Created by Daniil Gritsenko on 27.02.2026.
 //
 
-import Foundation
-
 enum ExpenseCategory: String, Codable, CaseIterable, Identifiable {
-    // MARK: - Cases
+    // MARK: - Значения
     
     case food
     case transport
@@ -17,7 +15,7 @@ enum ExpenseCategory: String, Codable, CaseIterable, Identifiable {
     case medicine
     case other
     
-    // MARK: - Computed Properties
+    // MARK: - Базовые свойства
     
     var id: String { rawValue }
 }

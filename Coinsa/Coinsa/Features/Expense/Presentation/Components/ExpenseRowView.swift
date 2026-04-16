@@ -8,12 +8,19 @@
 import SwiftUI
 
 struct ExpenseRowView: View {
-    // MARK: - Stored Properties
+    // MARK: - Свойства
 
     let expense: Expense
     let baseCurrency: Currency
     
-    // MARK: - Body
+    // MARK: - Инициализация
+    
+    init(_ expense: Expense, baseCurrency: Currency) {
+        self.expense = expense
+        self.baseCurrency = baseCurrency
+    }
+    
+    // MARK: - Тело View
     
     var body: some View {
         HStack {
@@ -23,7 +30,7 @@ struct ExpenseRowView: View {
         }
     }
     
-    // MARK: - Components
+    // MARK: - Компоненты
     
     private var leftStack: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -45,7 +52,7 @@ struct ExpenseRowView: View {
     }
 }
 
-// MARK: - Previews
+// MARK: - Превью
 
 private extension ExpenseRowView {
     static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
@@ -54,12 +61,9 @@ private extension ExpenseRowView {
         let expense = builder.getExpense(from: data)
         
         return List {
-            ExpenseRowView(
-                expense: expense,
-                baseCurrency: Currency.defaultCurrency
-            )
-            .environment(\.locale, locale)
-            .preferredColorScheme(colorScheme)
+            ExpenseRowView(expense, baseCurrency: Currency.defaultCurrency)
+                .environment(\.locale, locale)
+                .preferredColorScheme(colorScheme)
         }
     }
 }

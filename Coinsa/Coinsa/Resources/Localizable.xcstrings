@@ -4,9 +4,6 @@
     "" : {
       "shouldTranslate" : false
     },
-    "•" : {
-      "shouldTranslate" : false
-    },
     "amount.actual" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -823,6 +820,23 @@
         }
       }
     },
+    "expense.adjustedExchangeRate" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 %1$(baseCurrencyCode)@ = %2$(effectiveRateLocalToBase)@ %3$(localCurrencyCode)@ (with adjustment %4$(adjustmentRateLocalToBase)@)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 %1$(baseCurrencyCode)@ = %2$(effectiveRateLocalToBase)@ %3$(localCurrencyCode)@ (с корректировкой %4$(adjustmentRateLocalToBase)@)"
+          }
+        }
+      }
+    },
     "expense.amount" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -870,6 +884,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Локальная"
+          }
+        }
+      }
+    },
+    "expense.baseExchangeRate" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 %1$(baseCurrencyCode)@ = %2$(rateLocalToBase)@ %3$(localCurrencyCode)@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 %1$(baseCurrencyCode)@ = %2$(rateLocalToBase)@ %3$(localCurrencyCode)@"
           }
         }
       }
@@ -1822,6 +1853,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Сторонние API"
+          }
+        }
+      }
+    },
+    "summary.baseDifference" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$(baseAmountDifference)@ %2$(baseCurrencyCode)@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$(baseAmountDifference)@ %2$(baseCurrencyCode)@"
+          }
+        }
+      }
+    },
+    "summary.extendedDifference" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$(localAmountDifference)@ %2$(localCurrencyCode)@ • %3$(baseAmountDifference)@ %4$(baseCurrencyCode)@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$(localAmountDifference)@ %2$(localCurrencyCode)@ • %3$(baseAmountDifference)@ %4$(baseCurrencyCode)@"
           }
         }
       }
