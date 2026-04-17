@@ -103,7 +103,7 @@ struct ExpenseEditView: View {
                 .toolbar {
                     toolbarContent
                 }
-                .interactiveDismissDisabled(viewModel.hasChanges)
+                .interactiveDismissDisabled(true)
                 .scrollDismissesKeyboard(.interactively)
                 .notificationAlert(
                     isPresented: rateErrorBinding,
@@ -255,15 +255,6 @@ struct ExpenseEditView: View {
                 dismiss()
             }
             .disabled(!viewModel.canSave)
-        }
-        
-        ToolbarItemGroup(placement: .keyboard) {
-            if focusedField != nil {
-                Spacer()
-                ToolbarButton.ok {
-                    focusedField = nil
-                }
-            }
         }
     }
 

@@ -1,5 +1,5 @@
 //
-//  NowViewModel.swift
+//  TodayViewModel.swift
 //  Coinsa
 //
 //  Created by Daniil Gritsenko on 11.04.2026.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct NowViewModel {
+struct TodayViewModel {
     // MARK: - Зависимости
     
     let currentLocations: [Location]

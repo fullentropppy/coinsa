@@ -31,11 +31,11 @@ final class UserDefaultsSettingsManager {
     
     var selectedLocationID: UUID? {
         get {
-            guard let idString = defaults.string(forKey: UserDefaultsKey.selectedNowLocationId) else { return nil }
+            guard let idString = defaults.string(forKey: UserDefaultsKey.selectedLocationId) else { return nil }
             return UUID(uuidString: idString)
         }
         set {
-            defaults.set(newValue?.uuidString, forKey: UserDefaultsKey.selectedNowLocationId)
+            defaults.set(newValue?.uuidString, forKey: UserDefaultsKey.selectedLocationId)
         }
     }
     
@@ -53,6 +53,6 @@ final class UserDefaultsSettingsManager {
 private enum UserDefaultsKey {
     static var appAppearance = "appAppearance"
     static var isAddButtonOnLeft = "isAddButtonOnLeft"
-    static var selectedNowLocationId = "selectedCurrentLocation"
+    static var selectedLocationId = "selectedLocationId"
     static var selectedPaymentMethod = "selectedPaymentMethod"
 }

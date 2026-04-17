@@ -10,19 +10,19 @@ import SwiftUI
 struct RootTabView: View {
     // MARK: - Свойства
     
-    @State private var selection: RootTab = .now
+    @State private var selection: RootTab = .today
 
     // MARK: - Тело View
     
     var body: some View {
         TabView(selection: $selection) {
-            Tab(.tabNow, systemImage: Location.primaryIcon, value: .now) {
-                NowView()
+            Tab(RootTab.today.title, systemImage: RootTab.today.icon, value: .today) {
+                TodayView()
             }
-            Tab(.tabTrips, systemImage: Trip.primaryIcon, value: .trips) {
+            Tab(RootTab.trips.title, systemImage: RootTab.trips.icon, value: .trips) {
                 TripListView()
             }
-            Tab(.tabSettings, systemImage: AppSettings.primaryIcon, value: .settings) {
+            Tab(RootTab.settings.title, systemImage: RootTab.settings.icon, value: .settings) {
                 SettingsView()
             }
         }
@@ -32,7 +32,27 @@ struct RootTabView: View {
 // MARK: - Внутренние типы
 
 private enum RootTab: Hashable {
-    case now
+    // MARK: - Значения
+    
+    case today
     case trips
     case settings
+    
+    // MARK: - Свойства
+    
+    var icon: String {
+        switch self {
+        case .today: "calendar"
+        case .trips: Trip.primaryIcon
+        case .settings: AppSettings.primaryIcon
+        }
+    }
+    
+    var title: LocalizedStringResource {
+        switch self {
+        case .today: .tabToday
+        case .trips: .tabTrips
+        case .settings: .tabSettings
+        }
+    }
 }

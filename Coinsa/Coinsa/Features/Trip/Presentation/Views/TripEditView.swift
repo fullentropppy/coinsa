@@ -47,7 +47,7 @@ struct TripEditView: View {
                 .toolbar {
                     toolbarContent
                 }
-                .interactiveDismissDisabled(viewModel.hasChanges)
+                .interactiveDismissDisabled(true)
                 .scrollDismissesKeyboard(.interactively)
                 .discardConfirmationAlert(
                     isPresented: $isShowingDiscardAlert,

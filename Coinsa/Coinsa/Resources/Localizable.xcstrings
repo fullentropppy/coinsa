@@ -1585,108 +1585,6 @@
         }
       }
     },
-    "now.emptyState.description" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Location will appear automatically\non its start date."
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Локация появится автоматически\nв день своего начала."
-          }
-        }
-      }
-    },
-    "now.emptyState.title" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No active Location"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Нет активной локации"
-          }
-        }
-      }
-    },
-    "now.navigationTitle" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Now"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Сейчас"
-          }
-        }
-      }
-    },
-    "now.noTodayExpense" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "There are no Expenses today"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Сегодня трат нет"
-          }
-        }
-      }
-    },
-    "now.quickExpense" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Quick expense"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Быстрая трата"
-          }
-        }
-      }
-    },
-    "now.todayExpenses" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Expenses for today"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Траты за сегодня"
-          }
-        }
-      }
-    },
     "ok" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1863,13 +1761,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The default percentage of currency exchange rate adjustment. It is added to the rate in Expenses and affects the final amount. It can be overridden."
+            "value" : "The default percentage of currency exchange rate adjustment. It is added to the rate in Expenses with payment by card and affects the final amount. It can be overridden."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Процент по умолчанию корректировки курса обмена валюты. Прибавляется к курсу в тратах и влияет на конечную сумму. Может быть переопределен."
+            "value" : "Процент по умолчанию корректировки курса обмена валюты. Прибавляется к курсу в тратах c оплатой по карте и влияет на конечную сумму. Может быть переопределен."
           }
         }
       }
@@ -1959,23 +1857,6 @@
         }
       }
     },
-    "tab.now" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Now"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Сейчас"
-          }
-        }
-      }
-    },
     "tab.settings" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1989,6 +1870,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Настройки"
+          }
+        }
+      }
+    },
+    "tab.today" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Today"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сегодня"
           }
         }
       }
@@ -2074,6 +1972,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Сегодня"
+          }
+        }
+      }
+    },
+    "today.emptyState.description" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Location will appear automatically\non its start date."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Локация появится автоматически\nв день своего начала."
+          }
+        }
+      }
+    },
+    "today.emptyState.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No active Location"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нет активной локации"
+          }
+        }
+      }
+    },
+    "today.expenses" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Expenses for today"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Траты за сегодня"
+          }
+        }
+      }
+    },
+    "today.navigationTitle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Today"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сегодня"
+          }
+        }
+      }
+    },
+    "today.noExpenses" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "There are no Expenses today"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сегодня трат нет"
+          }
+        }
+      }
+    },
+    "today.quickExpense" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quick expense"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Быстрая трата"
           }
         }
       }

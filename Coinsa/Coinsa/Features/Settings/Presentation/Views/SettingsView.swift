@@ -33,9 +33,6 @@ struct SettingsView: View {
             settingsForm
                 .navigationTitle(.settingsNavigationTitle)
                 .navigationBarTitleDisplayMode(.large)
-                .toolbar {
-                    toolbarContent
-                }
                 .scrollDismissesKeyboard(.interactively)
         }
     }
@@ -99,20 +96,6 @@ struct SettingsView: View {
         Section {
             NavigationLink(.settingsAbout) {
                 AboutView()
-            }
-        }
-    }
-    
-    // MARK: - Тулбар
-    
-    @ToolbarContentBuilder
-    private var toolbarContent: some ToolbarContent {
-        ToolbarItemGroup(placement: .keyboard) {
-            if focusedField != nil {
-                Spacer()
-                ToolbarButton.ok {
-                    focusedField = nil
-                }
             }
         }
     }

@@ -1,5 +1,5 @@
 //
-//  NowView.swift
+//  TodayView.swift
 //  Coinsa
 //
 //  Created by Daniil Gritsenko on 08.03.2026.
@@ -8,7 +8,7 @@
 import SwiftUI
 import SwiftData
 
-struct NowView: View {
+struct TodayView: View {
     // MARK: - Окружение
     
     @Environment(\.modelContext) private var context
@@ -29,8 +29,8 @@ struct NowView: View {
         ExpenseRepository(context: context)
     }
     
-    private var viewModel: NowViewModel {
-        NowViewModel(
+    private var viewModel: TodayViewModel {
+        TodayViewModel(
             currentLocations: currentLocations,
             selectedLocationID: selectedLocationID,
             baseCurrency: settingsStore.baseCurrency
@@ -54,8 +54,8 @@ struct NowView: View {
 
     var body: some View {
         NavigationStack {
-            nowForm
-                .navigationTitle(.nowNavigationTitle)
+            todayForm
+                .navigationTitle(.todayNavigationTitle)
                 .navigationSubtitle(viewModel.navigationSubtitle)
                 .navigationBarTitleDisplayMode(.large)
         }
@@ -63,7 +63,7 @@ struct NowView: View {
 
     // MARK: - Основной контент
 
-    private var nowForm: some View {
+    private var todayForm: some View {
         Group {
             if let selectedLocation = viewModel.selectedLocation {
                 locationContent(location: selectedLocation)
@@ -99,9 +99,9 @@ struct NowView: View {
     
     private var emptyCurrentLocationView: some View {
         EmptyStateView(
-            icon: Location.primaryIcon,
-            title: .nowEmptyStateTitle,
-            description: .nowEmptyStateDescription
+            icon: "calendar",
+            title: .todayEmptyStateTitle,
+            description: .todayEmptyStateDescription
         )
     }
     
@@ -126,7 +126,7 @@ struct NowView: View {
     }
     
     private var quickExpenseSection: some View {
-        Section(.nowQuickExpense) {
+        Section(.todayQuickExpense) {
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 140), spacing: 10)], spacing: 10) {
                 ForEach(ExpenseCategory.allCases, id: \.id) { category in
                     quickExpenseButton(category: category)
@@ -140,7 +140,7 @@ struct NowView: View {
     private var todayExpensesSection: some View {
         Group {
             if viewModel.todayExpenses.isEmpty {
-                GroupHeaderView(icon: Location.primaryIcon, title: .nowNoTodayExpense)
+                GroupHeaderView(icon: Location.primaryIcon, title: .todayNoExpenses)
                     .listRowBackground(Color.clear)
             } else {
                 todayExpenseListContent
@@ -204,7 +204,7 @@ struct NowView: View {
     }
     
     private var todayExpenseListContent: some View {
-        Section(.nowTodayExpenses) {
+        Section(.todayExpenses) {
             ForEach(viewModel.todayExpenses) { expense in
                 NavigationLink {
                     ExpenseDetailView(expense)
@@ -260,7 +260,7 @@ struct NowView: View {
 
 // MARK: - Превью
 
-private extension NowView {
+private extension TodayView {
     static func makePreview(
         locale: Locale,
         colorScheme: ColorScheme,
@@ -276,7 +276,7 @@ private extension NowView {
         let container = builder.buildContainer()
         let settingsStore = AppSettingsStore(context: container.mainContext)
 
-        return NowView()
+        return TodayView()
             .modelContainer(container)
             .environment(settingsStore)
             .environment(\.locale, locale)
@@ -285,25 +285,25 @@ private extension NowView {
 }
 
 #Preview("Light - RU") {
-    NowView.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
+    TodayView.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
 }
 
 #Preview("Dark - EN") {
-    NowView.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
+    TodayView.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
 }
 
 #Preview("No Expenses. Light - RU") {
-    NowView.makePreview(locale: PreviewLocale.ru, colorScheme: .light, withExpenses: false)
+    TodayView.makePreview(locale: PreviewLocale.ru, colorScheme: .light, withExpenses: false)
 }
 
 #Preview("No Expenses. Dark - EN") {
-    NowView.makePreview(locale: PreviewLocale.en, colorScheme: .dark, withExpenses: false)
+    TodayView.makePreview(locale: PreviewLocale.en, colorScheme: .dark, withExpenses: false)
 }
 
 #Preview("Empty. Light - RU") {
-    NowView.makePreview(locale: PreviewLocale.ru, colorScheme: .light, withLocation: false, withExpenses: false)
+    TodayView.makePreview(locale: PreviewLocale.ru, colorScheme: .light, withLocation: false, withExpenses: false)
 }
 
 #Preview("Empty. Dark - EN") {
-    NowView.makePreview(locale: PreviewLocale.en, colorScheme: .dark, withLocation: false, withExpenses: false)
+    TodayView.makePreview(locale: PreviewLocale.en, colorScheme: .dark, withLocation: false, withExpenses: false)
 }

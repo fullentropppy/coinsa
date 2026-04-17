@@ -30,16 +30,7 @@ struct NumericInputField: View {
     
     // MARK: - Вычисляемые свойсва
     
-    private var parsingFormatter: NumberFormatter {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.minimumFractionDigits = 0
-        formatter.maximumFractionDigits = fractionDigits
-        formatter.usesGroupingSeparator = true
-        return formatter
-    }
-
-    private var displayFormatter: NumberFormatter {
+    private var formatter: NumberFormatter {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
         formatter.minimumFractionDigits = fractionDigits
@@ -53,7 +44,7 @@ struct NumericInputField: View {
             return "0"
         }
         
-        let separator = displayFormatter.decimalSeparator ?? ","
+        let separator = formatter.decimalSeparator ?? ","
         let zeros = String(repeating: "0", count: fractionDigits)
         
         return "0\(separator)\(zeros)"
@@ -84,7 +75,7 @@ struct NumericInputField: View {
             .keyboardType(.decimalPad)
             .multilineTextAlignment(.trailing)
             .onAppear { syncFromValue() }
-            .onChange(of: value) { _, _ in
+            .onChange(of: value) {
                 if focusedField.wrappedValue != focusId {
                     syncFromValue()
                 }
@@ -102,7 +93,7 @@ struct NumericInputField: View {
     // MARK: - Приватные методы
     
     private func syncFromValue() {
-        text = value == 0 ? "" : displayFormatter.string(from: NSNumber(value: value)) ?? ""
+        text = value == 0 ? "" : formatter.string(from: NSNumber(value: value)) ?? ""
     }
 
     private func commit() {
@@ -114,12 +105,12 @@ struct NumericInputField: View {
             return
         }
 
-        let groupingSeparator = parsingFormatter.groupingSeparator ?? ""
+        let groupingSeparator = formatter.groupingSeparator ?? ""
         let cleaned = trimmed.replacingOccurrences(of: groupingSeparator, with: "")
-        let number = parsingFormatter.number(from: cleaned) ?? 0
+        let number = formatter.number(from: cleaned) ?? 0
         
         value = number.doubleValue
-        text = displayFormatter.string(from: number) ?? cleaned
+        text = formatter.string(from: number) ?? cleaned
     }
 }
 
