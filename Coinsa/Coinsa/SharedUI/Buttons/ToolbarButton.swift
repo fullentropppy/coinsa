@@ -8,22 +8,31 @@
 import SwiftUI
 
 struct ToolbarButton: View {
+    // MARK: - Окружение
+    
+    @Environment(\.haptics) private var haptics
+    
     // MARK: - Свойства
     
     private let icon: String
     private let action: () -> Void
+    private let hapticType: HapticType?
     
     // MARK: - Инициализация
     
-    private init(icon: String, action: @escaping () -> Void) {
+    private init(icon: String, action: @escaping () -> Void, hapticType: HapticType? = nil) {
         self.icon = icon
         self.action = action
+        self.hapticType = hapticType
     }
     
     // MARK: - Тело View
     
     var body: some View {
         Button {
+            if let hapticType {
+                haptics.trigger(hapticType)
+            }
             action()
         } label: {
             Image(systemName: icon)
@@ -35,19 +44,19 @@ struct ToolbarButton: View {
 
 extension ToolbarButton {
     static func ok(action: @escaping () -> Void) -> some View {
-        ToolbarButton(icon: "checkmark", action: action)
+        ToolbarButton(icon: "checkmark", action: action, hapticType: .tap)
     }
     
     static func add(action: @escaping () -> Void) -> some View {
-        ToolbarButton(icon: "plus", action: action)
+        ToolbarButton(icon: "plus", action: action, hapticType: .add)
     }
     
     static func edit(action: @escaping () -> Void) -> some View {
-        ToolbarButton(icon: "pencil", action: action)
+        ToolbarButton(icon: "pencil", action: action, hapticType: .tap)
     }
     
     static func delete(action: @escaping () -> Void) -> some View {
-        ToolbarButton(icon: "trash", action: action)
+        ToolbarButton(icon: "trash", action: action, hapticType: .warning)
     }
     
     static func close(action: @escaping () -> Void) -> some View {

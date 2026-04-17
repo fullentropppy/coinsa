@@ -8,6 +8,10 @@
 import SwiftUI
 
 struct ExchangeRateInputField: View {
+    // MARK: - Окружение
+    
+    @Environment(\.haptics) private var haptics
+    
     // MARK: - Свойства
     
     private let value: Binding<Double>
@@ -16,7 +20,7 @@ struct ExchangeRateInputField: View {
     private let focusedField: FocusState<NumericEditField?>.Binding
     private let focusId: NumericEditField
     private let font: Font
-    private let onRefresh: () -> Void
+    private let action: () -> Void
     
     // MARK: - Инициализация
     
@@ -35,7 +39,7 @@ struct ExchangeRateInputField: View {
         self.focusedField = focusedField
         self.focusId = focusId
         self.font = font
-        self.onRefresh = onRefresh
+        self.action = onRefresh
     }
     
     // MARK: - Тело View
@@ -60,7 +64,10 @@ struct ExchangeRateInputField: View {
     }
     
     private var refreshButton: some View {
-        Button(action: onRefresh) {
+        Button {
+            haptics.trigger(.tap)
+            action()
+        } label: {
             ZStack {
                 if isLoading {
                     ProgressView()

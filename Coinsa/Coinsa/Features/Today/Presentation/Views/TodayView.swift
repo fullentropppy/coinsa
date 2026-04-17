@@ -13,6 +13,7 @@ struct TodayView: View {
     
     @Environment(\.modelContext) private var context
     @Environment(AppSettingsStore.self) private var settingsStore
+    @Environment(\.haptics) private var haptics
 
     // MARK: - Состояние
 
@@ -185,6 +186,7 @@ struct TodayView: View {
     
     private func quickExpenseButton(category: ExpenseCategory) -> some View {
         Button {
+            haptics.trigger(.add)
             selectedQuickCategory = category
         } label: {
             HStack {
@@ -227,6 +229,7 @@ struct TodayView: View {
         Binding(
             get: { viewModel.selectedLocation?.id ?? location.id },
             set: { selectedID in
+                haptics.trigger(.tap)
                 selectedLocationID = selectedID
                 settingsStore.selectedLocationID = selectedID
             }

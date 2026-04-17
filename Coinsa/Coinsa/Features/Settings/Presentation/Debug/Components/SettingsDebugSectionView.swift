@@ -11,6 +11,10 @@ import SwiftUI
 import SwiftData
 
 struct SettingsDebugSectionView: View {
+    // MARK: - Окружение
+    
+    @Environment(\.haptics) private var haptics
+    
     // MARK: - Состояние
 
     @State private var pendingAction: DebugAction?
@@ -37,9 +41,11 @@ struct SettingsDebugSectionView: View {
             } message: { action in
                 Text(action.alertMessage)
             }
-            .alert(resultMessage, isPresented: $isShowingResultAlert) {
-                Button(.ok, role: .cancel) {}
-            }
+            .notificationAlert(
+                isPresented: $isShowingResultAlert,
+                title: "",
+                message: resultMessage
+            )
     }
 
     // MARK: - Основной контент
@@ -77,6 +83,7 @@ struct SettingsDebugSectionView: View {
 
     private func requestLoadDemoData() {
         if demoDataService.hasExistingData() {
+            haptics.trigger(.warning)
             pendingAction = .loadDemoData
         } else {
             perform(.loadDemoData)
@@ -84,6 +91,7 @@ struct SettingsDebugSectionView: View {
     }
 
     private func requestDeleteAllData() {
+        haptics.trigger(.warning)
         pendingAction = .deleteAllData
     }
 

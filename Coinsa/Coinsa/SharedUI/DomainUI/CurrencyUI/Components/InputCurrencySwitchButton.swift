@@ -8,6 +8,10 @@
 import SwiftUI
 
 struct InputCurrencySwitchButton: View {
+    // MARK: - Окружение
+    
+    @Environment(\.haptics) private var haptics
+    
     // MARK: - Свойства
     
     let action: () -> Void
@@ -15,7 +19,10 @@ struct InputCurrencySwitchButton: View {
     // MARK: - Тело View
     
     var body: some View {
-        Button(action: action) {
+        Button {
+            haptics.trigger(.tap)
+            action()
+        } label: {
             Image(systemName: "arrow.left.arrow.right")
                 .imageScale(.small)
                 .fontWeight(.semibold)

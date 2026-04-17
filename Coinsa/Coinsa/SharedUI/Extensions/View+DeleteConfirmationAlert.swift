@@ -15,15 +15,17 @@ extension View {
         onConfirm: @escaping () -> Void,
         onCancel: @escaping () -> Void
     ) -> some View {
-        self.alert(title, isPresented: isPresented) {
-            Button(.delete, role: .destructive) {
-                onConfirm()
-            }
-            Button(.cancel, role: .cancel) {
-                onCancel()
-            }
-        } message: {
-            Text(message)
-        }
+        self.modifier(
+            ConfirmationAlertModifier(
+                isPresented: isPresented,
+                title: title,
+                message: message,
+                destuctiveButtonTitle: .delete,
+                onConfirm: onConfirm,
+                hapticTypeOnConfirm: .success,
+                onCancel: onCancel,
+                hapticTypeOnAppear: .warning
+            )
+        )
     }
 }

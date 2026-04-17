@@ -8,6 +8,10 @@
 import SwiftUI
 
 struct EmptyStateView: View {
+    // MARK: - Окружение
+    
+    @Environment(\.haptics) private var haptics
+    
     // MARK: - Свойства
     
     private let icon: String
@@ -42,6 +46,7 @@ struct EmptyStateView: View {
                 descriptionContent
             } actions: {
                 Button(buttonLabel) {
+                    haptics.trigger(.add)
                     onAddAction()
                 }
                 .buttonStyle(.glassProminent)

@@ -10,10 +10,11 @@ import SwiftData
 
 struct ExpenseEditView: View {
     // MARK: - Окружение
-    
+
     @Environment(\.modelContext) private var context
     @Environment(AppSettingsStore.self) private var settingsStore
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.haptics) private var haptics
 
     // MARK: - Состояние
     

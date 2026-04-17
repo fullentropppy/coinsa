@@ -24,6 +24,7 @@ struct RootContainerView: View {
             if let settingsStore {
                 RootTabView()
                     .environment(settingsStore)
+                    .environment(\.haptics, .live)
                     .preferredColorScheme(settingsStore.appAppearance.colorScheme)
             } else {
                 ProgressView()

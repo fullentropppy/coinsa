@@ -11,12 +11,17 @@ extension View {
     func notificationAlert(
         isPresented: Binding<Bool>,
         title: LocalizedStringResource,
-        message: LocalizedStringResource
+        message: LocalizedStringResource,
+        isError: Bool = false,
+        onAppear: (() -> Void)? = nil
     ) -> some View {
-        self.alert(title, isPresented: isPresented) {
-            Button(.ok, role: .cancel) {}
-        } message: {
-            Text(message)
-        }
+        self.modifier(
+            NotificationAlertModifier(
+                isPresented: isPresented,
+                title: title,
+                message: message,
+                hapticTypeOnChange: isError ? .error : .success
+            )
+        )
     }
 }

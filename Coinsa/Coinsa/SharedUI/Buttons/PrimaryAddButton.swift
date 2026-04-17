@@ -8,6 +8,10 @@
 import SwiftUI
 
 struct PrimaryAddButton: View {
+    // MARK: - Окружение
+    
+    @Environment(\.haptics) private var haptics
+    
     // MARK: - Свойства
     
     let isOnLeft: Bool
@@ -22,6 +26,7 @@ struct PrimaryAddButton: View {
             }
             
             Button {
+                haptics.trigger(.add)
                 action()
             } label: {
                 Image(systemName: "plus")

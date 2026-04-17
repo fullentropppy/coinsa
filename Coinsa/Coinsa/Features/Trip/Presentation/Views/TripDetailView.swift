@@ -52,7 +52,7 @@ struct TripDetailView: View {
                 toolbarContent
             }
             .sheet(isPresented: $isShowingTripEdit) {
-                TripEditView { dismiss() }
+                TripEditView(trip) { dismiss() }
             }
             .sheet(isPresented: $isShowingLocationCreate) {
                 LocationEditView(

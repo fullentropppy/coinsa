@@ -12,13 +12,16 @@ extension View {
         isPresented: Binding<Bool>,
         onConfirm: @escaping () -> Void
     ) -> some View {
-        self.alert(.discardTitle, isPresented: isPresented) {
-            Button(.discardConfirm, role: .destructive) {
-                onConfirm()
-            }
-            Button(.discardKeepEditing, role: .cancel) {}
-        } message: {
-            Text(.discardMessage)
-        }
+        self.modifier(
+            ConfirmationAlertModifier(
+                isPresented: isPresented,
+                title: .discardTitle,
+                message: .discardMessage,
+                destuctiveButtonTitle: .discardConfirm,
+                onConfirm: onConfirm,
+                hapticTypeOnConfirm: .success,
+                hapticTypeOnAppear: .warning
+            )
+        )
     }
 }

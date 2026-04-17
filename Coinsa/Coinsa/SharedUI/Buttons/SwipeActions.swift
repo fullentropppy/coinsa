@@ -8,6 +8,10 @@
 import SwiftUI
 
 struct SwipeActions: View {
+    // MARK: - Окружение
+    
+    @Environment(\.haptics) private var haptics
+    
     // MARK: - Свойства
     
     private let onDelete: (() -> Void)?
@@ -32,6 +36,7 @@ struct SwipeActions: View {
             Group {
                 if let onDelete {
                     Button {
+                        haptics.trigger(.warning)
                         onDelete()
                     } label: {
                         Label(.delete, systemImage: "trash")
@@ -40,6 +45,7 @@ struct SwipeActions: View {
                 }
                 if let onEdit {
                     Button {
+                        haptics.trigger(.tap)
                         onEdit()
                     } label: {
                         Label(.edit, systemImage: "pencil")
