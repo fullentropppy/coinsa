@@ -10,7 +10,7 @@ import SwiftData
 
 @Model
 class Trip: DateRangeProviding {
-    // MARK: - Stored Properties
+    // MARK: - Свойства
     
     @Attribute(.unique)
     var id: UUID
@@ -22,7 +22,7 @@ class Trip: DateRangeProviding {
     @Relationship(deleteRule: .cascade, inverse: \Location.trip)
     var locations: [Location]
     
-    // MARK: - Initialization
+    // MARK: - Инициализация
     
     init(
         name: String,

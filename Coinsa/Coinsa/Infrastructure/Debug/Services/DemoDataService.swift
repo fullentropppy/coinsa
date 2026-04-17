@@ -11,17 +11,17 @@ import SwiftData
 
 @MainActor
 struct DemoDataService {
-    // MARK: - Stored Properties
+    // MARK: - Свойства
 
     private let context: ModelContext
 
-    // MARK: - Initialization
+    // MARK: - Инициализация
 
     init(context: ModelContext) {
         self.context = context
     }
 
-    // MARK: - Public Methods
+    // MARK: - Публичные методы
 
     func hasExistingData() -> Bool {
         let descriptor = FetchDescriptor<Trip>()

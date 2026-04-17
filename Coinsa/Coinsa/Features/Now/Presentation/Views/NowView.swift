@@ -9,18 +9,20 @@ import SwiftUI
 import SwiftData
 
 struct NowView: View {
-    // MARK: - Stored Properties
+    // MARK: - Окружение
     
     @Environment(\.modelContext) private var context
     @Environment(AppSettingsStore.self) private var settingsStore
 
-    @Query private var currentLocations: [Location]
+    // MARK: - Состояние
 
     @State private var deletionHandler = DeletionHandler<Expense>()
     @State private var selectedQuickCategory: ExpenseCategory?
     @State private var expenseToEdit: Expense?
+
+    @Query private var currentLocations: [Location]
     
-    // MARK: - Computed Properties
+    // MARK: - Инфраструктура
 
     private var repository: ExpenseRepository {
         ExpenseRepository(context: context)
@@ -34,7 +36,7 @@ struct NowView: View {
         )
     }
     
-    // MARK: - Initialization
+    // MARK: - Инициализация
     
     init() {
         let today = Date.now
@@ -47,23 +49,23 @@ struct NowView: View {
         )
     }
 
-    // MARK: - Body
+    // MARK: - Тело View
 
     var body: some View {
         NavigationStack {
             nowForm
                 .navigationTitle(.nowNavigationTitle)
-                .navigationSubtitle(DateDisplayFormatter.format(.now, showsTime: false))
+                .navigationSubtitle(viewModel.navigationSubtitle)
                 .navigationBarTitleDisplayMode(.large)
         }
     }
 
-    // MARK: - Content
+    // MARK: - Основной контент
 
     private var nowForm: some View {
         Group {
             if let selectedLocation = viewModel.selectedLocation {
-                nowFormContent(location: selectedLocation)
+                locationContent(location: selectedLocation)
                     .sheet(item: $selectedQuickCategory) { selectedCategory in
                         ExpenseEditView(
                             location: selectedLocation,
@@ -72,7 +74,7 @@ struct NowView: View {
                         )
                     }
                     .sheet(item: $expenseToEdit) { expense in
-                        ExpenseEditView(expense: expense, baseCurrency: settingsStore.baseCurrency)
+                        ExpenseEditView(expense, baseCurrency: settingsStore.baseCurrency)
                     }
                     .deleteConfirmationAlert(
                         isPresented: $deletionHandler.isShowingDeleteConfirmation,
@@ -93,14 +95,6 @@ struct NowView: View {
         }
     }
     
-    private func nowFormContent(location: Location) -> some View {
-        List {
-            locationSection(location: location)
-            quickExpenseSection
-            todayExpensesSection
-        }
-    }
-    
     private var emptyCurrentLocationView: some View {
         EmptyStateView(
             icon: Location.primaryIcon,
@@ -108,8 +102,16 @@ struct NowView: View {
             description: .nowEmptyStateDescription
         )
     }
+    
+    private func locationContent(location: Location) -> some View {
+        List {
+            locationSection(location: location)
+            quickExpenseSection
+            todayExpensesSection
+        }
+    }
 
-    // MARK: - Sections
+    // MARK: - Секции
 
     private func locationSection(location: Location) -> some View {
         Section {
@@ -144,7 +146,7 @@ struct NowView: View {
         }
     }
 
-    // MARK: - Components
+    // MARK: - Компоненты
     
     @ViewBuilder
     private func locationPickerContent(location: Location) -> some View {
@@ -161,7 +163,7 @@ struct NowView: View {
     
     private func locationHeaderContent(location: Location) -> some View {
         NavigationLink {
-            LocationDetailView(location: location)
+            LocationDetailView(location)
         } label: {
             HStack {
                 if !viewModel.hasMultipleLocations {
@@ -203,7 +205,7 @@ struct NowView: View {
         Section(.nowTodayExpenses) {
             ForEach(viewModel.todayExpenses) { expense in
                 NavigationLink {
-                    ExpenseDetailView(expense: expense)
+                    ExpenseDetailView(expense)
                 } label: {
                     ExpenseRowView(expense, baseCurrency: settingsStore.baseCurrency)
                 }
@@ -217,7 +219,7 @@ struct NowView: View {
         }
     }
     
-    // MARK: - Bindings
+    // MARK: - Биндинги
 
     private func selectedLocationBinding(location: Location) -> Binding<UUID> {
         Binding(
@@ -228,7 +230,7 @@ struct NowView: View {
         )
     }
 
-    // MARK: - Actions
+    // MARK: - Действия
 
     private func updateSelectedLocationIfNeeded() {
         settingsStore.selectedCurrentLocation = viewModel.validSelectedLocation(
@@ -251,7 +253,7 @@ struct NowView: View {
     }
 }
 
-// MARK: - Previews
+// MARK: - Превью
 
 private extension NowView {
     static func makePreview(

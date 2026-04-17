@@ -26,7 +26,7 @@ struct ExpenseDetailView: View {
 
     // MARK: - Инициализация
 
-    init(expense: Expense) {
+    init(_ expense: Expense) {
         self.expense = expense
     }
     
@@ -41,10 +41,7 @@ struct ExpenseDetailView: View {
                 toolbarContent
             }
             .sheet(isPresented: $isShowingExpenseEdit) {
-                ExpenseEditView(
-                    expense: expense,
-                    baseCurrency: settingsStore.baseCurrency
-                ) {
+                ExpenseEditView(expense, baseCurrency: settingsStore.baseCurrency) {
                     dismiss()
                 }
             }
@@ -142,6 +139,8 @@ struct ExpenseDetailView: View {
         }
     }
     
+    // MARK: - Тулбар
+    
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
         ToolbarItemGroup(placement: .topBarTrailing) {
@@ -170,7 +169,7 @@ private extension ExpenseDetailView {
         let expense = builder.fetchExpense(from: container)
         
         return NavigationStack {
-            ExpenseDetailView(expense: expense)
+            ExpenseDetailView(expense)
         }
         .modelContainer(container)
         .environment(settingsStore)

@@ -10,11 +10,11 @@ import SwiftData
 
 @MainActor
 struct TripRepository {
-    // MARK: - Stored Properties
+    // MARK: - Свойства
     
     let context: ModelContext
 
-    // MARK: - Public Methods
+    // MARK: - Операции с хранилищем
     
     func add(name: String, startDate: Date, endDate: Date) {
         let trip = Trip(

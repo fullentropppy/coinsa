@@ -10,13 +10,13 @@ import SwiftData
 
 @Model
 class Budget {
-    // MARK: - Stored Properties
+    // MARK: - Свойства
     
     var category: ExpenseCategory
     var baseAmount: Double
     var location: Location
     
-    // MARK: - Initialization
+    // MARK: - Инициализация
     
     init(category: ExpenseCategory, baseAmount: Double, location: Location) {
         self.category = category

@@ -52,7 +52,7 @@ struct ExchangeRateInputField: View {
         NumericInputField(
             value,
             focusedField: focusedField,
-            focusId: .exchangeRate,
+            focusId: focusId,
             fractionDigits: 4,
             font: font
         )

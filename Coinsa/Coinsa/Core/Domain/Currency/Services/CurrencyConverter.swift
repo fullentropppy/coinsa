@@ -20,7 +20,7 @@ final class CurrencyConverter {
     
     // MARK: - Вычисляемые свойства
     
-    private var effectiveRateLocalToBase: Double {
+    var effectiveRateLocalToBase: Double {
         rateLocalToBase * (1 + (exchangeAdjustmentPercentage / 100))
     }
     
@@ -67,15 +67,20 @@ final class CurrencyConverter {
         }
     }
     
-    func updateLocalCurrency(_ newCurrency: Currency) {
+    func updateLocalCurrency(_ newCurrency: Currency, onCompletion: (() -> Void)? = nil) {
         let oldCurrency = localCurrency
         localCurrency = newCurrency
-        
+
         if isHomeLocation {
             exchangeRateManager.cancelRefresh()
             rateLocalToBase = 1
+            onCompletion?()
         } else if localCurrency != oldCurrency {
-            requestRateRefresh()
+            requestRateRefresh { _ in
+                onCompletion?()
+            }
+        } else {
+            onCompletion?()
         }
     }
     

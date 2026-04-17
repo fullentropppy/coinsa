@@ -9,11 +9,13 @@ import SwiftUI
 import SwiftData
 
 struct ExpenseEditView: View {
-    // MARK: - Environment
+    // MARK: - Окружение
+    
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
 
-    // MARK: - State Properties
+    // MARK: - Состояние
+    
     @State private var viewModel: ExpenseEditViewModel
     @State private var deletionHandler = DeletionHandler<Expense>()
     @State private var inputCurrency: InputCurrency
@@ -21,17 +23,20 @@ struct ExpenseEditView: View {
     
     @FocusState private var focusedField: NumericEditField?
     
-    // MARK: - Dependencies
+    // MARK: - Зависимости
+    
     private let onDelete: (() -> Void)?
 
-    // MARK: - Infrastructure
+    // MARK: - Инфраструктура
+    
     private var repository: ExpenseRepository {
         ExpenseRepository(context: context)
     }
     
-    // MARK: - Initializers
+    // MARK: - Инициализация
+    
     init(
-        expense: Expense,
+        _ expense: Expense,
         baseCurrency: Currency,
         onDelete: (() -> Void)? = nil
     ) {
@@ -44,7 +49,6 @@ struct ExpenseEditView: View {
         )
     }
 
-    
     init(
         location: Location,
         baseCurrency: Currency,
@@ -83,7 +87,8 @@ struct ExpenseEditView: View {
         self.onDelete = onDelete
     }
     
-    // MARK: - Body
+    // MARK: - Тело View
+    
     var body: some View {
         NavigationStack {
             expenseEditForm
@@ -123,7 +128,8 @@ struct ExpenseEditView: View {
         }
     }
 
-    // MARK: Form Content
+    // MARK: Основной контент
+    
     private var expenseEditForm: some View {
         Form {
             dateSection
@@ -134,7 +140,8 @@ struct ExpenseEditView: View {
         }
     }
     
-    // MARK: - Section. Date
+    // MARK: - Секции
+    
     private var dateSection: some View {
         Section {
             DatePicker(
@@ -145,7 +152,6 @@ struct ExpenseEditView: View {
         }
     }
     
-    // MARK: - Section. Specification
     private var specificationsSection: some View {
         Section {
             LabeledPicker(
@@ -165,7 +171,6 @@ struct ExpenseEditView: View {
         }
     }
     
-    // MARK: - Section. Amount
     private var amountSection: some View {
         Section {
             LabeledContent(.expenseAmount) {
@@ -209,13 +214,17 @@ struct ExpenseEditView: View {
                             .fontWeight(.semibold)
                             .imageScale(.small)
                             .foregroundStyle(.secondary)
+                            .frame(width: 16)
                     }
                 }
+            }
+        } footer: {
+            if let adjustedExchangeRateDescription = viewModel.adjustedRateDescription {
+                Text(adjustedExchangeRateDescription)
             }
         }
     }
     
-    // MARK: - Section. Additional
     private var commentSection: some View {
         Section {
             TextField(.expenseComment, text: $viewModel.comment)
@@ -233,7 +242,8 @@ struct ExpenseEditView: View {
         }
     }
 
-    // MARK: - Toolbar
+    // MARK: - Тулбар
+    
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
         ToolbarItemGroup(placement: .topBarLeading) {
@@ -260,7 +270,8 @@ struct ExpenseEditView: View {
         }
     }
 
-    // MARK: - Bindings
+    // MARK: - Биндинги
+    
     private var categoryBinding: Binding<ExpenseCategory> {
         Binding(
             get: { viewModel.category },
@@ -315,7 +326,8 @@ struct ExpenseEditView: View {
         )
     }
     
-    // MARK: - Actions
+    // MARK: - Действия
+    
     private func switchInputCurrency() {
         switch inputCurrency {
         case .base: inputCurrency = .local
@@ -347,7 +359,8 @@ struct ExpenseEditView: View {
     }
 }
 
-// MARK: - Preview
+// MARK: - Превью
+
 private extension ExpenseEditView {
     static func makePreview(
         locale: Locale,
@@ -361,7 +374,7 @@ private extension ExpenseEditView {
 
         return Group {
             if let expense {
-                ExpenseEditView(expense: expense, baseCurrency: Currency.rub)
+                ExpenseEditView(expense, baseCurrency: Currency.rub)
             } else {
                 ExpenseEditView(location: location, baseCurrency: Currency.rub)
             }

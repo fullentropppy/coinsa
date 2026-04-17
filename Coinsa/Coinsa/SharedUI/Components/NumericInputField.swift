@@ -88,8 +88,8 @@ struct NumericInputField: View {
                     syncFromValue()
                 }
             }
-            .onChange(of: focusedField.wrappedValue) { _, newId in
-                if newId != focusId {
+            .onChange(of: focusedField.wrappedValue) { oldId, newId in
+                if oldId == focusId && newId != focusId {
                     commit()
                 }
             }

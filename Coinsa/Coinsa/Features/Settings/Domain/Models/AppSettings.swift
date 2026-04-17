@@ -5,16 +5,15 @@
 //  Created by Daniil Gritsenko on 08.03.2026.
 //
 
-import Foundation
 import SwiftData
 
 @Model
 final class AppSettings {
-    // MARK: - Stored Properties
+    // MARK: - Свойства
 
     var baseCurrencyCode: String
 
-    // MARK: - Initialization
+    // MARK: - Инициализация
 
     init(baseCurrencyCode: String) {
         self.baseCurrencyCode = baseCurrencyCode

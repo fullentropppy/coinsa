@@ -6,13 +6,13 @@
 //
 
 enum AppAppearance: String, CaseIterable, Identifiable {
-    // MARK: - Cases
+    // MARK: - Значения
     
     case system
     case light
     case dark
 
-    // MARK: - Computed Properties
+    // MARK: - Основные свойства
     
     var id: String { rawValue }
 }

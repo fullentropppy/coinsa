@@ -10,11 +10,11 @@ import SwiftData
 
 @MainActor
 struct LocationRepository {
-    // MARK: - Stored Properties
+    // MARK: - Свойства
 
     let context: ModelContext
 
-    // MARK: - Public Methods
+    // MARK: - Операции с хранилищем
     
     func add(
         name: String,
@@ -69,7 +69,7 @@ struct LocationRepository {
         try? context.save()
     }
 
-    // MARK: - Private Methods
+    // MARK: - Приватные методы
 
     private func applyBudgets(
         _ budgetsByCategory: [ExpenseCategory: Double],
@@ -97,7 +97,9 @@ struct LocationRepository {
             }
         }
     }
-        
+     
+    // MARK: - Нормализация значений
+    
     private func normalizeBaseAmount(_ amount: Double) -> Double {
         amount > 0 ? amount.rounded(to: 2) : 0
     }

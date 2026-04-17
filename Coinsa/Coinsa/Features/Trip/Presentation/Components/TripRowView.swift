@@ -8,11 +8,17 @@
 import SwiftUI
 
 struct TripRowView: View {
-    // MARK: - Stored Properties
+    // MARK: - Свойства
     
     let trip: Trip
     
-    // MARK: - Body
+    // MARK: - Инициализация
+    
+    init(_ trip: Trip) {
+        self.trip = trip
+    }
+    
+    // MARK: - Тело View
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -21,7 +27,7 @@ struct TripRowView: View {
         }
     }
     
-    // MARK: - Components
+    // MARK: - Компоненты
     
     private var upperStack: some View {
         HStack(spacing: 4) {
@@ -40,7 +46,7 @@ struct TripRowView: View {
     }
 }
 
-// MARK: - Previews
+// MARK: - Превью
 
 private extension TripRowView {
     static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
@@ -49,7 +55,7 @@ private extension TripRowView {
         let trip = builder.getTrip(from: data)
 
         return List {
-            TripRowView(trip: trip)
+            TripRowView(trip)
         }
         .environment(\.locale, locale)
         .preferredColorScheme(colorScheme)

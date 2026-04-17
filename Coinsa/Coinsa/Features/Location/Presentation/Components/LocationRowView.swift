@@ -8,9 +8,17 @@
 import SwiftUI
 
 struct LocationRowView: View {
-    // MARK: - Stored Properties
+    // MARK: - Свойства
     
     let location: Location
+    
+    // MARK: - Инициализация
+    
+    init(_ location: Location) {
+        self.location = location
+    }
+    
+    // MARK: - Тело View
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -19,7 +27,7 @@ struct LocationRowView: View {
         }
     }
     
-    // MARK: - Components
+    // MARK: - Компоненты
     
     private var upperStack: some View {
         HStack(spacing: 4) {
@@ -37,7 +45,7 @@ struct LocationRowView: View {
     }
 }
 
-// MARK: - Previews
+// MARK: - Превью
 
 private extension LocationRowView {
     static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
@@ -46,7 +54,7 @@ private extension LocationRowView {
         let location = builder.getLocation(from: data)
 
         return List {
-            LocationRowView(location: location)
+            LocationRowView(location)
                 .environment(\.locale, locale)
                 .preferredColorScheme(colorScheme)
         }

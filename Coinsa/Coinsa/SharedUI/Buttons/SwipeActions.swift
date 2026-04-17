@@ -60,15 +60,15 @@ private extension SwipeActions {
         let trip = builder.getTrip(from: data)
         
         return List {
-            TripRowView(trip: trip)
+            TripRowView(trip)
                 .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                     SwipeActions(onDelete: {}, onEdit: {})
                 }
-            TripRowView(trip: trip)
+            TripRowView(trip)
                 .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                     SwipeActions(onDelete: {})
                 }
-            TripRowView(trip: trip)
+            TripRowView(trip)
                 .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                     SwipeActions(onEdit: {})
                 }

@@ -8,7 +8,7 @@
 import Foundation
 
 extension Location {
-    // MARK: - Computed Properties
+    // MARK: - Публичные свойства
     
     var rateBaseToLocal: Double {
         rateLocalToBase > 0 ? (1 / rateLocalToBase) : 0
@@ -22,7 +22,14 @@ extension Location {
         adjustedRateLocalToBase > 0 ? (1 / adjustedRateLocalToBase) : 0
     }
     
-    // MARK: - Public Methods
+    // MARK: - Приватные свойства
+    
+    private var adjustedRateLocalToBase: Double {
+        let adjustmentMultiplier = 1 + (max(0, exchangeAdjustmentPercentage) / 100)
+        return rateLocalToBase * adjustmentMultiplier
+    }
+    
+    // MARK: - Публичные методы
     
     func calculatePlannedAmount(asBaseCurrency: Bool = true) -> Double {
         budgets.reduce(0) {
@@ -36,12 +43,5 @@ extension Location {
             let exchangeRate = asBaseCurrency ? 1 : $1.effectiveRateBaseToLocal
             return $0 + $1.baseAmount * exchangeRate
         }
-    }
-    
-    // MARK: - Private Methods
-    
-    private var adjustedRateLocalToBase: Double {
-        let adjustmentMultiplier = 1 + (max(0, exchangeAdjustmentPercentage) / 100)
-        return rateLocalToBase * adjustmentMultiplier
     }
 }

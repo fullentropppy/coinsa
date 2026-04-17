@@ -9,20 +9,24 @@ import SwiftUI
 import SwiftData
 
 struct TripDetailView: View {
-    // MARK: - Stored Properties
+    // MARK: - Окружение
 
     @Environment(\.modelContext) private var context
     @Environment(AppSettingsStore.self) private var settingsStore
     @Environment(\.dismiss) private var dismiss
+    
+    // MARK: - Состояние
     
     @State private var deletionHandler = DeletionHandler<Location>()
     @State private var isShowingTripEdit = false
     @State private var isShowingLocationCreate = false
     @State private var locationToEdit: Location?
 
+    // MARK: - Зависимости
+    
     private let trip: Trip
 
-    // MARK: - Computed Properties
+    // MARK: - Инфраструктура
     
     private var repository: LocationRepository {
         LocationRepository(context: context)
@@ -32,17 +36,13 @@ struct TripDetailView: View {
         TripDetailViewModel(trip: trip, baseCurrency: settingsStore.baseCurrency)
     }
     
-    private var showsFullHeader: Bool {
-        !trip.locations.isEmpty
-    }
-    
-    // MARK: - Initialization
+    // MARK: - Инициализация
 
-    init(trip: Trip) {
+    init(_ trip: Trip) {
         self.trip = trip
     }
 
-    // MARK: - Body
+    // MARK: - Тело View
 
     var body: some View {
         tripDetailForm
@@ -52,13 +52,13 @@ struct TripDetailView: View {
                 toolbarContent
             }
             .sheet(isPresented: $isShowingTripEdit) {
-                TripEditView( trip: trip, onDelete: { dismiss() } )
+                TripEditView { dismiss() }
             }
             .sheet(isPresented: $isShowingLocationCreate) {
                 LocationEditView( trip: trip, baseCurrency: settingsStore.baseCurrency)
             }
             .sheet(item: $locationToEdit) { location in
-                LocationEditView(location: location, baseCurrency: settingsStore.baseCurrency)
+                LocationEditView(location, baseCurrency: settingsStore.baseCurrency)
             }
             .safeAreaInset(edge: .bottom) {
                 if !trip.locations.isEmpty {
@@ -79,7 +79,7 @@ struct TripDetailView: View {
             }
     }
     
-    // MARK: - Content
+    // MARK: - Основной контент
     
     private var tripDetailForm: some View {
         List {
@@ -88,14 +88,14 @@ struct TripDetailView: View {
         }
     }
     
-    // MARK: - Sections
+    // MARK: - Секции
     
     private var headerSection: some View {
         Section {
             EventSummaryView(
                 data: viewModel.eventHeaderData,
-                showsAmounts: showsFullHeader,
-                showsDifference: showsFullHeader
+                showsAmounts: viewModel.showsFullHeader,
+                showsDifference: viewModel.showsFullHeader
             )
         }
     }
@@ -110,7 +110,7 @@ struct TripDetailView: View {
         }
     }
     
-    // MARK: - Components
+    // MARK: - Компоненты
 
     private var emptyLocationListContent: some View {
         EmptyStateView(
@@ -133,9 +133,9 @@ struct TripDetailView: View {
                 Section(group.status.safeLocalizedResourcePlural) {
                     ForEach(group.locations) { location in
                         NavigationLink {
-                            LocationDetailView(location: location)
+                            LocationDetailView(location)
                         } label: {
-                            LocationRowView(location: location)
+                            LocationRowView(location)
                         }
                         .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                             SwipeActions(
@@ -149,6 +149,8 @@ struct TripDetailView: View {
         }
     }
     
+    // MARK: - Тулбар
+    
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
         ToolbarItemGroup(placement: .topBarTrailing) {
@@ -158,7 +160,7 @@ struct TripDetailView: View {
         }
     }
 
-    // MARK: - Actions
+    // MARK: - Действия
     
     private func requestDelete(for locations: [Location]) {
         deletionHandler.request(for: locations)
@@ -181,7 +183,7 @@ struct TripDetailView: View {
     }
 }
 
-// MARK: - Previews
+// MARK: - Превью
 
 private extension TripDetailView {
     static func makePreview(
@@ -195,7 +197,7 @@ private extension TripDetailView {
         let trip = builder.fetchTrip(from: container)
         
         return NavigationStack {
-            TripDetailView(trip: trip)
+            TripDetailView(trip)
         }
         .modelContainer(container)
         .environment(settingsStore)

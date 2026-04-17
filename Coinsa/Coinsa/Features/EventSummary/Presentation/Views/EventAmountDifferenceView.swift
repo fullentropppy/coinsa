@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct EventAmountDifferenceView: View {
-    // MARK: - Сврйсива
+    // MARK: - свойства
     
     private let baseAmountDifference: Double
     private let baseCurrency: Currency

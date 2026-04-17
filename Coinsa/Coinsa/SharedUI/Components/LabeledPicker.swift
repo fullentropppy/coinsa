@@ -46,6 +46,7 @@ struct LabeledPicker<SelectionValue: Hashable, Content: View>: View {
                 .imageScale(.small)
                 .fontWeight(.semibold)
                 .foregroundStyle(.accent)
+                .frame(width: 16)
         }
     }
 }

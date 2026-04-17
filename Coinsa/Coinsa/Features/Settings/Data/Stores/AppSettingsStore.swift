@@ -12,7 +12,7 @@ import Observation
 @MainActor
 @Observable
 final class AppSettingsStore {
-    // MARK: - Stored Properties
+    // MARK: - Хранимые свойства
 
     @ObservationIgnored
     private let context: ModelContext
@@ -23,7 +23,7 @@ final class AppSettingsStore {
     @ObservationIgnored
     private let settings: AppSettings
 
-    // MARK: - Computed Properties
+    // MARK: - Вычисляемые свойства
     
     var baseCurrency: Currency {
         Currency.from(settings.baseCurrencyCode)
@@ -31,24 +31,24 @@ final class AppSettingsStore {
     
     var appAppearance: AppAppearance {
         didSet {
-            defaults.set(appAppearance.rawValue, forKey: UserDefaultsKey.appAppearance.rawValue)
+            defaults.set(appAppearance.rawValue, forKey: UserDefaultsKey.appAppearance)
         }
     }
     
     var isAddButtonOnLeft: Bool {
         didSet {
-            defaults.set(isAddButtonOnLeft, forKey: UserDefaultsKey.isAddButtonOnLeft.rawValue)
+            defaults.set(isAddButtonOnLeft, forKey: UserDefaultsKey.isAddButtonOnLeft)
         }
     }
     
     var selectedCurrentLocation: Location? {
         didSet {
             let idString = selectedCurrentLocation?.id.uuidString
-            defaults.set(idString, forKey: UserDefaultsKey.selectedCurrentLocation.rawValue)
+            defaults.set(idString, forKey: UserDefaultsKey.selectedCurrentLocation)
         }
     }
     
-    // MARK: - Initialization
+    // MARK: - Инициализация
 
     init(context: ModelContext) {
         self.context = context
@@ -61,19 +61,19 @@ final class AppSettingsStore {
             settings = newSettings
         }
 
-        appAppearance = defaults.string(forKey: UserDefaultsKey.appAppearance.rawValue)
+        appAppearance = defaults.string(forKey: UserDefaultsKey.appAppearance)
             .flatMap { AppAppearance(rawValue: $0) } ?? .system
         
-        isAddButtonOnLeft = defaults.bool(forKey: UserDefaultsKey.isAddButtonOnLeft.rawValue)
+        isAddButtonOnLeft = defaults.bool(forKey: UserDefaultsKey.isAddButtonOnLeft)
         
         selectedCurrentLocation = loadLocation(context: context)
     }
         
-    // MARK: - Private Methods
+    // MARK: - Приватные методы
     
     private func loadLocation(context: ModelContext) -> Location? {
         guard
-            let idString = defaults.string(forKey: UserDefaultsKey.selectedCurrentLocation.rawValue),
+            let idString = defaults.string(forKey: UserDefaultsKey.selectedCurrentLocation),
             let uuid = UUID(uuidString: idString)
         else { return nil }
 
@@ -85,10 +85,10 @@ final class AppSettingsStore {
     }
 }
 
-// MARK: - Private Types
+// MARK: - Приватные типы
 
-private enum UserDefaultsKey: String, CaseIterable {
-    case appAppearance
-    case isAddButtonOnLeft
-    case selectedCurrentLocation
+private enum UserDefaultsKey {
+    static var appAppearance = "appAppearance"
+    static var isAddButtonOnLeft = "isAddButtonOnLeft"
+    static var selectedCurrentLocation = "selectedCurrentLocation"
 }

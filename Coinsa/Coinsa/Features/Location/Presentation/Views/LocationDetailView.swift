@@ -9,20 +9,24 @@ import SwiftUI
 import SwiftData
 
 struct LocationDetailView: View {
-    // MARK: - Stored Properties
+    // MARK: - Окружение
 
     @Environment(\.modelContext) private var context
     @Environment(AppSettingsStore.self) private var settingsStore
     @Environment(\.dismiss) private var dismiss
+    
+    // MARK: - Состояние
     
     @State private var deletionHandler = DeletionHandler<Expense>()
     @State private var isShowingLocationEdit = false
     @State private var isShowingExpenseCreate = false
     @State private var expenseToEdit: Expense?
     
+    // MARK: - Зависимости
+    
     private let location: Location
 
-    // MARK: - Computed Properties
+    // MARK: - Инфраструктура
 
     private var repository: ExpenseRepository {
         ExpenseRepository(context: context)
@@ -32,13 +36,13 @@ struct LocationDetailView: View {
         LocationDetailViewModel (location: location, baseCurrency: settingsStore.baseCurrency)
     }
     
-    // MARK: - Initialization
+    // MARK: - Инициализация
 
-    init(location: Location) {
+    init(_ location: Location) {
         self.location = location
     }
 
-    // MARK: - Body
+    // MARK: - Тело View
 
     var body: some View {
         locationDetailForm
@@ -50,7 +54,7 @@ struct LocationDetailView: View {
             }
             .sheet(isPresented: $isShowingLocationEdit) {
                 LocationEditView(
-                    location: location,
+                    location,
                     baseCurrency: settingsStore.baseCurrency,
                     onDelete: { dismiss() }
                 )
@@ -59,7 +63,7 @@ struct LocationDetailView: View {
                 ExpenseEditView(location: location, baseCurrency: settingsStore.baseCurrency)
             }
             .sheet(item: $expenseToEdit) { expense in
-                ExpenseEditView(expense: expense, baseCurrency: settingsStore.baseCurrency)
+                ExpenseEditView(expense, baseCurrency: settingsStore.baseCurrency)
             }
             .safeAreaInset(edge: .bottom) {
                 if !location.expenses.isEmpty {
@@ -80,7 +84,7 @@ struct LocationDetailView: View {
             }
     }
     
-    // MARK: - Content
+    // MARK: - Основной контент
     
     private var locationDetailForm: some View {
         List {
@@ -89,7 +93,7 @@ struct LocationDetailView: View {
         }
     }
     
-    // MARK: - Sections
+    // MARK: - Секции
     
     private var headerSection: some View {
         Section {
@@ -107,7 +111,7 @@ struct LocationDetailView: View {
         }
     }
     
-    // MARK: - Components
+    // MARK: - Компоненты
 
     private var emptyExpenseListContent: some View {
         EmptyStateView(
@@ -130,7 +134,7 @@ struct LocationDetailView: View {
                 Section(DateDisplayFormatter.formatRelative(group.date, showsTime: false)) {
                     ForEach(group.expenses) { expense in
                         NavigationLink {
-                            ExpenseDetailView(expense: expense)
+                            ExpenseDetailView(expense)
                         } label: {
                             ExpenseRowView(expense, baseCurrency: settingsStore.baseCurrency)
                         }
@@ -146,6 +150,8 @@ struct LocationDetailView: View {
         }
     }
 
+    // MARK: - Тулбар
+    
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
         ToolbarItemGroup(placement: .topBarTrailing) {
@@ -155,7 +161,7 @@ struct LocationDetailView: View {
         }
     }
 
-    // MARK: - Actions
+    // MARK: - Действия
 
     private func requestDelete(for expenses: [Expense]) {
         deletionHandler.request(for: expenses)
@@ -178,7 +184,7 @@ struct LocationDetailView: View {
     }
 }
 
-// MARK: - Previews
+// MARK: - Превью
 
 private extension LocationDetailView {
     static func makePreview(
@@ -192,7 +198,7 @@ private extension LocationDetailView {
         let location = builder.fetchLocation(from: container)
 
         return NavigationStack {
-            LocationDetailView(location: location)
+            LocationDetailView(location)
         }
         .modelContainer(container)
         .environment(settingsStore)

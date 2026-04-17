@@ -5,8 +5,6 @@
 //  Created by Daniil Gritsenko on 11.04.2026.
 //
 
-import Foundation
-
 struct TripListViewModel {
     func groupedTrips(from trips: [Trip]) -> [(status: EventStatus, trips: [Trip])] {
         let grouped = Dictionary(grouping: trips) { $0.status }

@@ -81,6 +81,20 @@ final class ExpenseEditViewModel {
         get { currencyConverter.rateLoadingError }
         set { currencyConverter.rateLoadingError = newValue }
     }
+
+    var adjustedRateDescription: LocalizedStringResource? {
+        guard showsExchangeAdjustmentInput && exchangeAdjustmentPercentage > 0 else {
+            return nil
+        }
+
+        return .expenseAdjustedExchangeRateShort(
+            localCurrencyCode: localCurrency.code,
+            effectiveRateLocalToBase: currencyConverter.effectiveRateLocalToBase.formatted(
+                .number.precision(.fractionLength(4))
+            ),
+            baseCurrencyCode: baseCurrency.code
+        )
+    }
     
     // MARK: - Состояние UI. Оплата
     

@@ -8,19 +8,16 @@
 import Foundation
 
 struct TripDetailViewModel {
-    // MARK: - Stored Properties
+    // MARK: - Хранимые свойства
 
     let trip: Trip
     let baseCurrency: Currency
     
-    // MARK: - Initialization
-
-    init(trip: Trip, baseCurrency: Currency) {
-        self.trip = trip
-        self.baseCurrency = baseCurrency
-    }
+    // MARK: - Вычисляемые свойства
     
-    // MARK: - Computed Properties
+    var showsFullHeader: Bool {
+        !trip.locations.isEmpty
+    }
     
     var eventHeaderData: EventSummaryData {
         let plannedAmount = trip.calculatePlannedAmount(asBaseCurrency: true)
@@ -50,5 +47,12 @@ struct TripDetailViewModel {
             
             return (status, locationsForStatus)
         }
+    }
+    
+    // MARK: - Инициализация
+
+    init(trip: Trip, baseCurrency: Currency) {
+        self.trip = trip
+        self.baseCurrency = baseCurrency
     }
 }

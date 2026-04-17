@@ -9,12 +9,12 @@ import SwiftUI
 import SwiftData
 
 struct SettingsView: View {
-    // MARK: - Stored Properties
+    // MARK: - Окружение
 
     @Environment(\.modelContext) private var context
     @Environment(AppSettingsStore.self) private var settingsStore
     
-    // MARK: - Computed Properties
+    // MARK: - Вычисляемые свойства
     
 #if DEBUG
     private var demoDataService: DemoDataService {
@@ -22,7 +22,7 @@ struct SettingsView: View {
     }
 #endif
     
-    // MARK: - Body
+    // MARK: - Тело View
 
     var body: some View {
         NavigationStack {
@@ -32,7 +32,7 @@ struct SettingsView: View {
         }
     }
 
-    // MARK: - Content
+    // MARK: - Основной контент
 
     private var settingsForm: some View {
         Form {
@@ -45,7 +45,7 @@ struct SettingsView: View {
         }
     }
     
-    // MARK: - Sections
+    // MARK: - Секции
     
     private var baseCurrencySection: some View {
         Section {
@@ -81,7 +81,7 @@ struct SettingsView: View {
         }
     }
     
-    // MARK: - Bindings
+    // MARK: - Биндинги
 
     private var selectedAppAppearance: Binding<AppAppearance> {
         Binding(
@@ -98,7 +98,7 @@ struct SettingsView: View {
     }
 }
 
-// MARK: - Previews
+// MARK: - Превью
 
 private extension SettingsView {
     static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {

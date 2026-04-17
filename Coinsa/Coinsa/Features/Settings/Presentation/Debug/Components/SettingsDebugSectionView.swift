@@ -11,15 +11,17 @@ import SwiftUI
 import SwiftData
 
 struct SettingsDebugSectionView: View {
-    // MARK: - Stored Properties
+    // MARK: - Состояние
 
     @State private var pendingAction: DebugAction?
     @State private var resultMessage: LocalizedStringResource = ""
     @State private var isShowingResultAlert = false
 
+    // MARK: - Зависимости
+    
     let demoDataService: DemoDataService
     
-    // MARK: - Body
+    // MARK: - Тело View
 
     var body: some View {
         settingsDebugSection
@@ -40,7 +42,7 @@ struct SettingsDebugSectionView: View {
             }
     }
 
-    // MARK: - Content
+    // MARK: - Основной контент
     
     private var settingsDebugSection: some View {
         Section {
@@ -58,7 +60,7 @@ struct SettingsDebugSectionView: View {
         }
     }
     
-    // MARK: - Bindings
+    // MARK: - Биндинги
 
     private var isShowingConfirmation: Binding<Bool> {
         Binding(
@@ -71,7 +73,7 @@ struct SettingsDebugSectionView: View {
         )
     }
 
-    // MARK: - Actions
+    // MARK: - Действия
 
     private func requestLoadDemoData() {
         if demoDataService.hasExistingData() {
@@ -105,15 +107,15 @@ struct SettingsDebugSectionView: View {
     }
 }
 
-// MARK: - DebugAction
+// MARK: - Приватные типы
 
 private enum DebugAction: String, Identifiable {
-    // MARK: - Cases
+    // MARK: - Значения
     
     case loadDemoData
     case deleteAllData
     
-    // MARK: - Computed Properties
+    // MARK: - Вычисляемые свойства
     
     var id: String {
         rawValue
@@ -141,7 +143,7 @@ private enum DebugAction: String, Identifiable {
     }
 }
 
-// MARK: - Previews
+// MARK: - Превью
 
 private extension SettingsDebugSectionView {
     static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {

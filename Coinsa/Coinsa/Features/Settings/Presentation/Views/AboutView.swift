@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct AboutView: View {
-    // MARK: - Body
+    // MARK: - Тело View
     
     var body: some View {
         NavigationStack {
@@ -24,7 +24,7 @@ struct AboutView: View {
         }
     }
     
-    // MARK: - Sections
+    // MARK: - Секции
     
     private var versionSection: some View {
         Section {
@@ -42,7 +42,7 @@ struct AboutView: View {
         }
     }
     
-    // MARK: - Components
+    // MARK: - Компоненты
     
     private var appInfoFooter: some View {
         VStack(alignment: .center, spacing: 4) {
@@ -60,7 +60,7 @@ struct AboutView: View {
     }
 }
 
-// MARK: - Previews
+// MARK: - Превью
 
 private extension AboutView {
     static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {

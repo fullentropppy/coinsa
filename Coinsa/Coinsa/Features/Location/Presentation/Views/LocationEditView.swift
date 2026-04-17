@@ -9,11 +9,13 @@ import SwiftUI
 import SwiftData
 
 struct LocationEditView: View {
-    // MARK: - Environment
+    // MARK: - Окружение
+    
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
 
-    // MARK: - State Properties
+    // MARK: - Состояние
+    
     @State private var viewModel: LocationEditViewModel
     @State private var deletionHandler = DeletionHandler<Location>()
     @State private var inputCurrency: InputCurrency = .base
@@ -21,14 +23,18 @@ struct LocationEditView: View {
 
     @FocusState private var focusedField: NumericEditField?
     
-    // MARK: - Dependencies
+    // MARK: - Зависимости
+    
     private let onDelete: (() -> Void)?
 
-    // MARK: - Infrastructure
+    // MARK: - Инфраструктура
+    
     private var repository: LocationRepository {
         LocationRepository(context: context)
     }
 
+    // MARK: - Вычисляемые свойства
+    
     private var budgetInputCurrencyValue: Currency {
         switch inputCurrency {
         case .base: viewModel.baseCurrency
@@ -43,8 +49,9 @@ struct LocationEditView: View {
         }
     }
     
-    // MARK: - Initializers
-    init(location: Location, baseCurrency: Currency, onDelete: (() -> Void)? = nil) {
+    // MARK: - Инициализация
+    
+    init(_ location: Location, baseCurrency: Currency, onDelete: (() -> Void)? = nil) {
         _viewModel = State(
             initialValue: LocationEditViewModel(location: location, baseCurrency: baseCurrency)
         )
@@ -58,7 +65,8 @@ struct LocationEditView: View {
         self.onDelete = onDelete
     }
     
-    // MARK: - Body
+    // MARK: - Тело View
+    
     var body: some View {
         NavigationStack {
             locationEditForm
@@ -95,7 +103,8 @@ struct LocationEditView: View {
         }
     }
 
-    // MARK: Form Content
+    // MARK: Основной контекнт
+    
     private var locationEditForm: some View {
         Form {
             mainDataSection
@@ -105,7 +114,8 @@ struct LocationEditView: View {
         }
     }
     
-    // MARK: - Section. Main
+    // MARK: - Секции
+    
     private var mainDataSection: some View {
         Section {
             TextField(.locationName, text: $viewModel.name)
@@ -130,7 +140,6 @@ struct LocationEditView: View {
         }
     }
     
-    // MARK: - Section. Currency & Payment
     private var currencySection: some View {
         Section {
             LabeledPicker(
@@ -144,12 +153,12 @@ struct LocationEditView: View {
             if !viewModel.isHomeLocation {
                 LabeledContent(.locationExchangeRate(localCurrencyCode: viewModel.localCurrency.code)) {
                     ExchangeRateInputField.standard(
-                        $viewModel.rateLocalToBase,
+                        rateInputBinding,
                         currency: viewModel.baseCurrency,
                         isLoading: viewModel.isRateLoading,
                         focusedField: $focusedField,
                         focusId: .exchangeRate,
-                        onRefresh: { viewModel.requestRateRefresh() }
+                        onRefresh: { viewModel.requestRateRefresh(for: inputCurrency) }
                     )
                 }
                 
@@ -165,8 +174,13 @@ struct LocationEditView: View {
                             .fontWeight(.semibold)
                             .imageScale(.small)
                             .foregroundStyle(.secondary)
+                            .frame(width: 16)
                     }
                 }
+            }
+        } footer: {
+            if let adjustedExchangeRateDescription = viewModel.adjustedRateDescription {
+                Text(adjustedExchangeRateDescription)
             }
         }
     }
@@ -187,10 +201,7 @@ struct LocationEditView: View {
             }
             
             HStack {
-                Image(systemName: "sum")
-                    .foregroundStyle(.secondary)
-                    .frame(width: 24)
-                Text(.locationBudgetTotal)
+                LabelView(title: .locationBudgetTotal, badgeFrameWidth: 28, badgeIcon: "sum")
                 Spacer()
                 AmountText.standard(budgetTotalValue)
             }
@@ -207,7 +218,6 @@ struct LocationEditView: View {
         }
     }
 
-    // MARK: - Section. Additional
     @ViewBuilder
     private var actionsSection: some View {
         if viewModel.isEdit {
@@ -219,7 +229,8 @@ struct LocationEditView: View {
         }
     }
     
-    // MARK: - Toolbar
+    // MARK: - Тулбар
+    
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
         ToolbarItemGroup(placement: .topBarLeading) {
@@ -246,11 +257,23 @@ struct LocationEditView: View {
         }
     }
 
-    // MARK: - Bindings
+    // MARK: - Биндинги
+    
     private var localCurrencyBinding: Binding<Currency> {
         Binding(
             get: { viewModel.localCurrency },
-            set: { viewModel.localCurrency = $0 }
+            set: { newCurrency in
+                viewModel.updateLocalCurrency(newCurrency, currentInput: inputCurrency)
+            }
+        )
+    }
+
+    private var rateInputBinding: Binding<Double> {
+        Binding(
+            get: { viewModel.rateLocalToBase },
+            set: { newValue in
+                viewModel.updateRate(newValue, currentInput: inputCurrency)
+            }
         )
     }
 
@@ -269,7 +292,7 @@ struct LocationEditView: View {
         Binding(
             get: { viewModel.exchangeAdjustmentPercentage },
             set: { newValue in
-                viewModel.updateExchangeAdjustmentPercentage(newValue)
+                viewModel.updateExchangeAdjustmentPercentage(newValue, currentInput: inputCurrency)
             }
         )
     }
@@ -288,7 +311,8 @@ struct LocationEditView: View {
         )
     }
     
-    // MARK: - Actions
+    // MARK: - Действия
+    
     private func switchInputCurrency() {
         switch inputCurrency {
         case .base: inputCurrency = .local
@@ -321,7 +345,8 @@ struct LocationEditView: View {
     }
 }
 
-// MARK: - Preview
+// MARK: - Превью
+
 private extension LocationEditView {
     static func makePreview(
         locale: Locale,
@@ -335,7 +360,7 @@ private extension LocationEditView {
         
         return Group {
             if let location {
-                LocationEditView(location: location, baseCurrency: Currency.defaultCurrency)
+                LocationEditView(location, baseCurrency: Currency.defaultCurrency)
             } else {
                 LocationEditView(trip: trip, baseCurrency: Currency.defaultCurrency)
             }

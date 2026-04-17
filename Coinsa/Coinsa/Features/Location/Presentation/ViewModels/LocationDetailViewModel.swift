@@ -8,21 +8,13 @@
 import Foundation
 
 struct LocationDetailViewModel {
-    // MARK: - Stored Properties
+    // MARK: - Хранимые свойства
 
     let location: Location
     let baseCurrency: Currency
     let localCurrency: Currency
-
-    // MARK: - Initialization
-
-    init(location: Location, baseCurrency: Currency) {
-        self.location = location
-        self.baseCurrency = baseCurrency
-        self.localCurrency = Currency.from(location.localCurrencyCode)
-    }
     
-    // MARK: - Computed Properties
+    // MARK: - Вычисляемые свойства
 
     var eventHeaderData: EventSummaryData {
         let isHomeLocation = localCurrency == baseCurrency
@@ -80,5 +72,13 @@ struct LocationDetailViewModel {
         }
         
         return result
+    }
+    
+    // MARK: - Инициализация
+
+    init(location: Location, baseCurrency: Currency) {
+        self.location = location
+        self.baseCurrency = baseCurrency
+        self.localCurrency = Currency.from(location.localCurrencyCode)
     }
 }

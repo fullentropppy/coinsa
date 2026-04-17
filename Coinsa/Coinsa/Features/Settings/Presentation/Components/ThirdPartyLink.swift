@@ -8,13 +8,13 @@
 import SwiftUI
 
 struct ThirdPartyLink: View {
-    // MARK: - Stored Properties
+    // MARK: - Свойства
     
     let name: LocalizedStringResource
     let description: LocalizedStringResource
     let url: URL
     
-    // MARK: - Body
+    // MARK: - Тело View
     
     var body: some View {
         Link(destination: url) {
@@ -34,7 +34,7 @@ struct ThirdPartyLink: View {
     }
 }
 
-// MARK: - Previews
+// MARK: - Превью
 
 private extension ThirdPartyLink {
     static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {

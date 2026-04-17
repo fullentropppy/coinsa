@@ -9,18 +9,20 @@ import SwiftUI
 import SwiftData
 
 struct TripListView: View {
-    // MARK: - Stored Properties
+    // MARK: - Окружение
     
     @Environment(\.modelContext) private var context
     @Environment(AppSettingsStore.self) private var settingsStore
-    
-    @Query private var trips: [Trip]
 
+    // MARK: - Состояние
+    
     @State private var deletionHandler = DeletionHandler<Trip>()
     @State private var isShowingTripCreate = false
     @State private var tripToEdit: Trip?
+
+    @Query private var trips: [Trip]
     
-    // MARK: - Computed Properties
+    // MARK: - Инфраструктура
     
     private var repository: TripRepository {
         TripRepository(context: context)
@@ -30,7 +32,7 @@ struct TripListView: View {
         TripListViewModel()
     }
     
-    // MARK: - Body
+    // MARK: - Тело View
     
     var body: some View {
         NavigationStack {
@@ -38,10 +40,10 @@ struct TripListView: View {
                 .navigationTitle(.tripNavigationTitleList)
                 .navigationBarTitleDisplayMode(.large)
                 .sheet(isPresented: $isShowingTripCreate) {
-                    TripEditView(trip: nil)
+                    TripEditView()
                 }
                 .sheet(item: $tripToEdit) { trip in
-                    TripEditView(trip: trip)
+                    TripEditView(trip)
                 }
                 .safeAreaInset(edge: .bottom) {
                     if !trips.isEmpty {
@@ -60,7 +62,7 @@ struct TripListView: View {
         }
     }
     
-    // MARK: - Content
+    // MARK: - Основной контент
     
     private var tripListForm: some View {
         Group {
@@ -72,15 +74,28 @@ struct TripListView: View {
         }
     }
     
+    // MARK: - Компоненты
+    
+    private var emptyTripListContent: some View {
+        EmptyStateView(
+            icon: Trip.primaryIcon,
+            title: .tripEmptyStateTitle,
+            description: .tripEmptyStateDescription,
+            buttonLabel: .tripAdd,
+        ) {
+            isShowingTripCreate = true
+        }
+    }
+    
     private var tripListContent: some View {
         List {
             ForEach(viewModel.groupedTrips(from: trips), id: \.status) { group in
                 Section(group.status.safeLocalizedResourcePlural) {
                     ForEach(group.trips) { trip in
                         NavigationLink {
-                            TripDetailView(trip: trip)
+                            TripDetailView(trip)
                         } label: {
-                            TripRowView(trip: trip)
+                            TripRowView(trip)
                         }
                         .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                             SwipeActions(
@@ -94,18 +109,7 @@ struct TripListView: View {
         }
     }
     
-    private var emptyTripListContent: some View {
-        EmptyStateView(
-            icon: Trip.primaryIcon,
-            title: .tripEmptyStateTitle,
-            description: .tripEmptyStateDescription,
-            buttonLabel: .tripAdd,
-        ) {
-            isShowingTripCreate = true
-        }
-    }
-    
-    // MARK: - Actions
+    // MARK: - Действия
 
     private func requestDelete(for trips: [Trip]) {
         deletionHandler.request(for: trips)
@@ -122,7 +126,7 @@ struct TripListView: View {
     }
 }
 
-// MARK: - Previews
+// MARK: - Превью
 
 private extension TripListView {
     static func makePreview(

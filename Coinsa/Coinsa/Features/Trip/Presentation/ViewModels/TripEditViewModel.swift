@@ -11,24 +11,15 @@ import Observation
 @MainActor
 @Observable
 final class TripEditViewModel {
-    // MARK: - Stored Properties
+    // MARK: - Внутреннее состояние
 
     private let initialSnapshot: Snapshot
     
+    // MARK: - Зависимости
+    
     let trip: Trip?
     
-    var name: String
-    var startDate: Date {
-        didSet {
-            if endDate < startDate {
-                endDate = startDate
-            }
-        }
-    }
-    var endDate: Date
-    var locations: [Location]
-
-    // MARK: - Computed Properties
+    // MARK: - Состояние UI. Общее поведение и оформление
 
     var isEditing: Bool {
         trip != nil
@@ -46,7 +37,20 @@ final class TripEditViewModel {
         !name.isBlank && startDate <= endDate
     }
 
-    // MARK: - Initialization
+    // MARK: - Состояние UI. Общие данные
+    
+    var name: String
+    var startDate: Date {
+        didSet {
+            if endDate < startDate {
+                endDate = startDate
+            }
+        }
+    }
+    var endDate: Date
+    var locations: [Location]
+    
+    // MARK: - Инициализация
 
     init(trip: Trip?) {
         self.trip = trip
@@ -80,7 +84,7 @@ final class TripEditViewModel {
         )
     }
 
-    // MARK: - Public Methods
+    // MARK: - Операции с хранилищем
 
     func save(using repository: TripRepository) {
         if let trip {
@@ -100,23 +104,17 @@ final class TripEditViewModel {
     }
 }
 
-// MARK: - Snapshot
+// MARK: - Внутренние типы
 
 private extension TripEditViewModel {
     struct Snapshot: Equatable {
-        // MARK: - Stored Properties
+        // MARK: - Свойства
 
         let name: String
         let startDate: Date
         let endDate: Date
 
-        // MARK: - Initialization
-
-        init(name: String, startDate: Date, endDate: Date) {
-            self.name = name.trimmed
-            self.startDate = startDate
-            self.endDate = endDate
-        }
+        // MARK: - Инициализация
 
         init(viewModel: TripEditViewModel) {
             self.init(
@@ -124,6 +122,12 @@ private extension TripEditViewModel {
                 startDate: viewModel.startDate,
                 endDate: viewModel.endDate
             )
+        }
+        
+        init(name: String, startDate: Date, endDate: Date) {
+            self.name = name.trimmed
+            self.startDate = startDate
+            self.endDate = endDate
         }
     }
 }

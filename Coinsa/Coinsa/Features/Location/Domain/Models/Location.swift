@@ -10,7 +10,7 @@ import SwiftData
 
 @Model
 class Location: DateRangeProviding {
-    // MARK: - Stored Properties
+    // MARK: - Свойства
     
     @Attribute(.unique)
     var id: UUID
@@ -29,7 +29,7 @@ class Location: DateRangeProviding {
     @Relationship(deleteRule: .cascade, inverse: \Expense.location)
     var expenses: [Expense]
 
-    // MARK: - Initialization
+    // MARK: - Инициализация
     
     init(
         name: String,

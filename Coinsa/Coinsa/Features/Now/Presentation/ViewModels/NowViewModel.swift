@@ -8,13 +8,13 @@
 import Foundation
 
 struct NowViewModel {
-    // MARK: - Stored Properties
+    // MARK: - Зависимости
     
     let currentLocations: [Location]
     let selectedLocationID: UUID?
     let baseCurrency: Currency
     
-    // MARK: - Computed Properties
+    // MARK: - Состояние UI. Общее поведение и оформление
     
     var selectedLocation: Location? {
         if let selectedLocationID,
@@ -29,18 +29,11 @@ struct NowViewModel {
         currentLocations.count > 1
     }
     
-    var todayExpenses: [Expense] {
-        guard let selectedLocation else { return [] }
-        
-        let today = Date()
-        return selectedLocation.expenses
-            .filter { $0.date >= today.startOfDay && $0.date < today.endOfDay }
-            .sorted { $0.date > $1.date }
+    var navigationSubtitle: String {
+        DateDisplayFormatter.format(.now, showsTime: false)
     }
     
-    var hasTodayExpenses: Bool {
-        !todayExpenses.isEmpty
-    }
+    // MARK: - Состояние UI. Данные локации
     
     var locationHeaderData: (name: String, duration: Int, startDate: Date, endDate: Date)? {
         guard let selectedLocation else { return nil }
@@ -51,6 +44,23 @@ struct NowViewModel {
             endDate: selectedLocation.endDate
         )
     }
+    
+    // MARK: - Состояние UI. Расходы за сегодня
+    
+    var hasTodayExpenses: Bool {
+        !todayExpenses.isEmpty
+    }
+    
+    var todayExpenses: [Expense] {
+        guard let selectedLocation else { return [] }
+        
+        let today = Date()
+        return selectedLocation.expenses
+            .filter { $0.date >= today.startOfDay && $0.date < today.endOfDay }
+            .sorted { $0.date > $1.date }
+    }
+    
+    // MARK: - Вспомогательные методы
     
     func validSelectedLocation(from selectedLocation: Location?) -> Location? {
         guard !currentLocations.isEmpty else { return nil }
@@ -64,10 +74,23 @@ struct NowViewModel {
     }
     
     func eventSummaryData(for location: Location) -> EventSummaryData {
-        let viewModel = LocationDetailViewModel(
-            location: location,
-            baseCurrency: baseCurrency
+        let isHomeLocation = location.localCurrency == baseCurrency
+        
+        let plannedAmountBase = location.calculatePlannedAmount(asBaseCurrency: true)
+        let plannedAmountLocal = isHomeLocation ? nil : location.calculatePlannedAmount(asBaseCurrency: false)
+        let actualAmountBase = location.calculateActualAmount(asBaseCurrency: true)
+        let actualAmountLocal = isHomeLocation ? nil : location.calculateActualAmount(asBaseCurrency: false)
+        let localCurrency = isHomeLocation ? nil : location.localCurrency
+
+        return EventSummaryData(
+            badgeProvider: Location.self,
+            dateRangeProvider: location,
+            plannedBaseAmount: plannedAmountBase,
+            actualBaseAmount: actualAmountBase,
+            baseCurrency: baseCurrency,
+            plannedLocalAmount: plannedAmountLocal,
+            actualLocalAmount: actualAmountLocal,
+            localCurrency: localCurrency
         )
-        return viewModel.eventHeaderData
     }
 }

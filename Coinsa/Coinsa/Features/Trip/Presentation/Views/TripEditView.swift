@@ -9,31 +9,35 @@ import SwiftUI
 import SwiftData
 
 struct TripEditView: View {
-    // MARK: - Stored properties
+    // MARK: - Окружение
     
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
 
+    // MARK: - Состояние
+    
     @State private var viewModel: TripEditViewModel
     @State private var deletionHandler = DeletionHandler<Trip>()
     @State private var isShowingDiscardAlert = false
     
+    // MARK: - Зависимости
+    
     private let onDelete: (() -> Void)?
         
-    // MARK: - Computed Properties
+    // MARK: - Инфраструктура
     
     private var repository: TripRepository {
         TripRepository(context: context)
     }
 
-    // MARK: - Initialization
+    // MARK: - Инициализация
     
-    init(trip: Trip? = nil, onDelete: (() -> Void)? = nil) {
+    init(_ trip: Trip? = nil, onDelete: (() -> Void)? = nil) {
         _viewModel = State(initialValue: TripEditViewModel(trip: trip))
         self.onDelete = onDelete
     }
     
-    // MARK: - Body
+    // MARK: - Тело View
     
     var body: some View {
         NavigationStack {
@@ -43,7 +47,7 @@ struct TripEditView: View {
                 .toolbar {
                     toolbarContent
                 }
-                .interactiveDismissDisabled(true)
+                .interactiveDismissDisabled(viewModel.hasChanges)
                 .scrollDismissesKeyboard(.interactively)
                 .discardConfirmationAlert(
                     isPresented: $isShowingDiscardAlert,
@@ -60,7 +64,7 @@ struct TripEditView: View {
         }
     }
 
-    // MARK: - Content
+    // MARK: - Основной контент
     
     private var tripEditForm: some View {
         Form {
@@ -69,7 +73,7 @@ struct TripEditView: View {
         }
     }
     
-    // MARK: - Sections
+    // MARK: - Секции
     
     private var mainDataSection: some View {
         Section {
@@ -105,7 +109,7 @@ struct TripEditView: View {
         }
     }
     
-    // MARK: - Components
+    // MARK: - Тулбар
     
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
@@ -124,7 +128,7 @@ struct TripEditView: View {
         }
     }
     
-    // MARK: - Actions
+    // MARK: - Действия
 
     private func handleClose() {
         if viewModel.hasChanges {
@@ -152,7 +156,7 @@ struct TripEditView: View {
     }
 }
 
-// MARK: - Previews
+// MARK: - Превью
 
 private extension TripEditView {
     static func makePreview(
@@ -168,7 +172,7 @@ private extension TripEditView {
             trip = builder.getTrip(from: data)
         }
 
-        return TripEditView(trip: trip)
+        return TripEditView(trip)
             .environment(\.locale, locale)
             .preferredColorScheme(colorScheme)
     }

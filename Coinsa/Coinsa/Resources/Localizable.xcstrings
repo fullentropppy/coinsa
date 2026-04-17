@@ -820,7 +820,7 @@
         }
       }
     },
-    "expense.adjustedExchangeRate" : {
+    "expense.adjustedExchangeRate.long" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -833,6 +833,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "1 %1$(baseCurrencyCode)@ = %2$(effectiveRateLocalToBase)@ %3$(localCurrencyCode)@ (с корректировкой %4$(adjustmentRateLocalToBase)@)"
+          }
+        }
+      }
+    },
+    "expense.adjustedExchangeRate.short" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adjusted exchange rate of %1$(localCurrencyCode)@: %2$(effectiveRateLocalToBase)@ %3$(baseCurrencyCode)@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Скорректированный курс %1$(localCurrencyCode)@: %2$(effectiveRateLocalToBase)@ %3$(baseCurrencyCode)@"
           }
         }
       }
@@ -1183,13 +1200,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Fee"
+            "value" : "Adjustment"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Комиссия"
+            "value" : "Корректировка"
           }
         }
       }
@@ -1275,6 +1292,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Создать локацию"
+          }
+        }
+      }
+    },
+    "location.adjustedExchangeRate" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adjusted exchange rate of %1$(localCurrencyCode)@: %2$(effectiveRateLocalToBase)@ %3$(baseCurrencyCode)@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Скорректированный курс %1$(localCurrencyCode)@: %2$(effectiveRateLocalToBase)@ %3$(baseCurrencyCode)@"
           }
         }
       }
@@ -1438,13 +1472,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Fee"
+            "value" : "Adjustment"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Комиссия по карте"
+            "value" : "Корректировка"
           }
         }
       }
