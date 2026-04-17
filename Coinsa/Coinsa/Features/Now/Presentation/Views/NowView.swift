@@ -19,6 +19,7 @@ struct NowView: View {
     @State private var deletionHandler = DeletionHandler<Expense>()
     @State private var selectedQuickCategory: ExpenseCategory?
     @State private var expenseToEdit: Expense?
+    @State private var selectedLocationID: UUID?
 
     @Query private var currentLocations: [Location]
     
@@ -31,7 +32,7 @@ struct NowView: View {
     private var viewModel: NowViewModel {
         NowViewModel(
             currentLocations: currentLocations,
-            selectedLocationID: settingsStore.selectedCurrentLocation?.id,
+            selectedLocationID: selectedLocationID,
             baseCurrency: settingsStore.baseCurrency
         )
     }
@@ -70,7 +71,8 @@ struct NowView: View {
                         ExpenseEditView(
                             location: selectedLocation,
                             baseCurrency: settingsStore.baseCurrency,
-                            preselectedCategory: selectedCategory
+                            preselectedCategory: selectedCategory,
+                            preselectedPaymentMethod: settingsStore.selectedPaymentMethod
                         )
                     }
                     .sheet(item: $expenseToEdit) { expense in
@@ -225,7 +227,8 @@ struct NowView: View {
         Binding(
             get: { viewModel.selectedLocation?.id ?? location.id },
             set: { selectedID in
-                settingsStore.selectedCurrentLocation = viewModel.currentLocations.first(where: { $0.id == selectedID })
+                selectedLocationID = selectedID
+                settingsStore.selectedLocationID = selectedID
             }
         )
     }
@@ -233,9 +236,11 @@ struct NowView: View {
     // MARK: - Действия
 
     private func updateSelectedLocationIfNeeded() {
-        settingsStore.selectedCurrentLocation = viewModel.validSelectedLocation(
-            from: settingsStore.selectedCurrentLocation
+        let validID = viewModel.validSelectedLocationID(
+            from: selectedLocationID ?? settingsStore.selectedLocationID
         )
+        selectedLocationID = validID
+        settingsStore.selectedLocationID = validID
     }
     
     private func requestDelete(for expenses: [Expense]) {

@@ -58,11 +58,19 @@ struct LocationEditView: View {
         self.onDelete = onDelete
     }
     
-    init(trip: Trip, baseCurrency: Currency, onDelete: (() -> Void)? = nil) {
+    init(
+        trip: Trip,
+        baseCurrency: Currency,
+        preselectedExchangeAdjustment: Double? = nil
+    ) {
         _viewModel = State(
-            initialValue: LocationEditViewModel(trip: trip, baseCurrency: baseCurrency)
+            initialValue: LocationEditViewModel(
+                trip: trip,
+                baseCurrency: baseCurrency,
+                preselectedExchangeAdjustment: preselectedExchangeAdjustment
+            )
         )
-        self.onDelete = onDelete
+        self.onDelete = nil
     }
     
     // MARK: - Тело View
@@ -162,20 +170,12 @@ struct LocationEditView: View {
                     )
                 }
                 
-                LabeledContent(.locationExchangeAdjustmentPercentage) {
-                    HStack {
-                        NumericInputField.standard(
-                            exchangeAdjustmentInputBinding,
-                            focusedField: $focusedField,
-                            focusId: .exchangeAdjustmentPercentage,
-                            fractionDigits: 2
-                        )
-                        Image(systemName: "percent")
-                            .fontWeight(.semibold)
-                            .imageScale(.small)
-                            .foregroundStyle(.secondary)
-                            .frame(width: 16)
-                    }
+                LabeledContent(.locationExchangeAdjustment) {
+                    PercentInputField.standard(
+                        exchangeAdjustmentInputBinding,
+                        focusedField: $focusedField,
+                        focusId: .exchangeAdjustment
+                    )
                 }
             }
         } footer: {
@@ -290,9 +290,9 @@ struct LocationEditView: View {
     
     private var exchangeAdjustmentInputBinding: Binding<Double> {
         Binding(
-            get: { viewModel.exchangeAdjustmentPercentage },
+            get: { viewModel.exchangeAdjustment },
             set: { newValue in
-                viewModel.updateExchangeAdjustmentPercentage(newValue, currentInput: inputCurrency)
+                viewModel.updateExchangeAdjustment(newValue, currentInput: inputCurrency)
             }
         )
     }

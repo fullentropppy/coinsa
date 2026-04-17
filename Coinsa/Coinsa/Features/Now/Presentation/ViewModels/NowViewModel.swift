@@ -62,15 +62,15 @@ struct NowViewModel {
     
     // MARK: - Вспомогательные методы
     
-    func validSelectedLocation(from selectedLocation: Location?) -> Location? {
+    func validSelectedLocationID(from selectedLocationID: UUID?) -> UUID? {
         guard !currentLocations.isEmpty else { return nil }
         
-        if let selectedLocation,
-           currentLocations.contains(where: { $0.id == selectedLocation.id }) {
-            return selectedLocation
+        if let selectedLocationID,
+           currentLocations.contains(where: { $0.id == selectedLocationID }) {
+            return selectedLocationID
         }
         
-        return currentLocations.first
+        return currentLocations.first?.id
     }
     
     func eventSummaryData(for location: Location) -> EventSummaryData {

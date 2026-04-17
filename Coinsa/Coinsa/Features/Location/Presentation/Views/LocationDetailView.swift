@@ -60,7 +60,11 @@ struct LocationDetailView: View {
                 )
             }
             .sheet(isPresented: $isShowingExpenseCreate) {
-                ExpenseEditView(location: location, baseCurrency: settingsStore.baseCurrency)
+                ExpenseEditView(
+                    location: location,
+                    baseCurrency: settingsStore.baseCurrency,
+                    preselectedPaymentMethod: settingsStore.selectedPaymentMethod
+                )
             }
             .sheet(item: $expenseToEdit) { expense in
                 ExpenseEditView(expense, baseCurrency: settingsStore.baseCurrency)

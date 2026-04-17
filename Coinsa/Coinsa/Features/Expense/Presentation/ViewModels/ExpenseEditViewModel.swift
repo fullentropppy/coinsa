@@ -83,7 +83,7 @@ final class ExpenseEditViewModel {
     }
 
     var adjustedRateDescription: LocalizedStringResource? {
-        guard showsExchangeAdjustmentInput && exchangeAdjustmentPercentage > 0 else {
+        guard showsExchangeAdjustmentInput && exchangeAdjustment > 0 else {
             return nil
         }
 
@@ -99,7 +99,7 @@ final class ExpenseEditViewModel {
     // MARK: - Состояние UI. Оплата
     
     var paymentMethod: PaymentMethod
-    var exchangeAdjustmentPercentage: Double
+    var exchangeAdjustment: Double
     
     var showsExchangeAdjustmentInput: Bool {
         !isHomeLocation && paymentMethod != .cash
@@ -123,7 +123,8 @@ final class ExpenseEditViewModel {
     convenience init(
         location: Location,
         baseCurrency: Currency,
-        preselectedCategory: ExpenseCategory? = nil
+        preselectedCategory: ExpenseCategory? = nil,
+        preselectedPaymentMethod: PaymentMethod? = nil
     ) {
         let exchangeRateProvider = ExchangeRateProvider(service: HexarateService())
         self.init(
@@ -131,7 +132,8 @@ final class ExpenseEditViewModel {
             location: location,
             baseCurrency: baseCurrency,
             exchangeRateProvider: exchangeRateProvider,
-            preselectedCategory: preselectedCategory
+            preselectedCategory: preselectedCategory,
+            preselectedPaymentMethod: preselectedPaymentMethod
         )
     }
 
@@ -141,6 +143,7 @@ final class ExpenseEditViewModel {
         baseCurrency: Currency,
         exchangeRateProvider: ExchangeRateProvider,
         preselectedCategory: ExpenseCategory? = nil,
+        preselectedPaymentMethod: PaymentMethod? = nil
     ) {
         self.location = expense?.location ?? location
         self.expense = expense
@@ -152,7 +155,7 @@ final class ExpenseEditViewModel {
         let resolvedRateLocalToBase: Double
         let resolvedAmountLocal: Double
         let resolvedPaymentMethod: PaymentMethod
-        let resolvedExchangeAdjustmentPercentage: Double
+        let resolvedExchangeAdjustment: Double
         let resolvedCategory: ExpenseCategory
         let resolvedComment: String
 
@@ -162,7 +165,7 @@ final class ExpenseEditViewModel {
             resolvedRateLocalToBase = expense.rateLocalToBase
             resolvedAmountLocal = expense.localAmount
             resolvedPaymentMethod = expense.paymentMethod
-            resolvedExchangeAdjustmentPercentage = expense.exchangeAdjustmentPercentage
+            resolvedExchangeAdjustment = expense.exchangeAdjustment
             resolvedCategory = expense.category
             resolvedComment = expense.comment ?? ""
         } else {
@@ -170,15 +173,15 @@ final class ExpenseEditViewModel {
             resolvedAmountBase = 0
             resolvedRateLocalToBase = self.location.rateLocalToBase
             resolvedAmountLocal = 0
-            resolvedPaymentMethod = .cash
-            resolvedExchangeAdjustmentPercentage = location.exchangeAdjustmentPercentage
+            resolvedPaymentMethod = preselectedPaymentMethod ?? .cash
+            resolvedExchangeAdjustment = location.exchangeAdjustment
             resolvedCategory = preselectedCategory ?? .food
             resolvedComment = ""
         }
 
         self.date = resolvedDate
         self.paymentMethod = resolvedPaymentMethod
-        self.exchangeAdjustmentPercentage = resolvedExchangeAdjustmentPercentage
+        self.exchangeAdjustment = resolvedExchangeAdjustment
         self.category = resolvedCategory
         self.comment = resolvedComment
 
@@ -187,7 +190,7 @@ final class ExpenseEditViewModel {
             baseCurrency: baseCurrency,
             localCurrency: self.localCurrency,
             rateLocalToBase: resolvedRateLocalToBase,
-            exchangeAdjustmentPercentage: resolvedExchangeAdjustmentPercentage
+            exchangeAdjustment: resolvedExchangeAdjustment
         )
         
         self.amountManager = AmountManager(
@@ -201,7 +204,7 @@ final class ExpenseEditViewModel {
             baseAmount: resolvedAmountBase,
             rateLocalToBase: resolvedRateLocalToBase,
             paymentMethod: resolvedPaymentMethod,
-            exchangeAdjustmentPercentage: resolvedExchangeAdjustmentPercentage,
+            exchangeAdjustment: resolvedExchangeAdjustment,
             category: resolvedCategory,
             comment: resolvedComment
         )
@@ -247,7 +250,7 @@ final class ExpenseEditViewModel {
                 baseAmount: initialSnapshot.baseAmount,
                 rateLocalToBase: rateLocalToBase,
                 paymentMethod: initialSnapshot.paymentMethod,
-                exchangeAdjustmentPercentage: initialSnapshot.exchangeAdjustmentPercentage,
+                exchangeAdjustment: initialSnapshot.exchangeAdjustment,
                 category: initialSnapshot.category,
                 comment: initialSnapshot.comment
             )
@@ -267,13 +270,13 @@ final class ExpenseEditViewModel {
         syncExchangeAdjustmentAndRecalculate(currentInput: currentInput)
     }
     
-    func updateExchangeAdjustmentPercentage(_ newPercentage: Double, currentInput: InputCurrency) {
-        exchangeAdjustmentPercentage = max(0, newPercentage)
+    func updateExchangeAdjustment(_ newPercentage: Double, currentInput: InputCurrency) {
+        exchangeAdjustment = max(0, newPercentage)
         syncExchangeAdjustmentAndRecalculate(currentInput: currentInput)
     }
     
     private func syncExchangeAdjustmentAndRecalculate(currentInput: InputCurrency) {
-        currencyConverter.updateExchangeAdjustmentPercentage(exchangeAdjustmentPercentage)
+        currencyConverter.updateExchangeAdjustment(exchangeAdjustment)
         amountManager.updateFromRateChange(inputCurrency: currentInput)
     }
     
@@ -290,7 +293,7 @@ final class ExpenseEditViewModel {
                 baseAmount: baseAmount,
                 rateLocalToBase: rateLocalToBase,
                 paymentMethod: paymentMethod,
-                exchangeAdjustmentPercentage: exchangeAdjustmentPercentage,
+                exchangeAdjustment: exchangeAdjustment,
                 category: category,
                 comment: comment
             )
@@ -300,7 +303,7 @@ final class ExpenseEditViewModel {
                 baseAmount: baseAmount,
                 rateLocalToBase: rateLocalToBase,
                 paymentMethod: paymentMethod,
-                exchangeAdjustmentPercentage: exchangeAdjustmentPercentage,
+                exchangeAdjustment: exchangeAdjustment,
                 category: category,
                 location: location,
                 comment: comment
@@ -319,7 +322,7 @@ private extension ExpenseEditViewModel {
         let baseAmount: Double
         let rateLocalToBase: Double
         let paymentMethod: PaymentMethod
-        let exchangeAdjustmentPercentage: Double
+        let exchangeAdjustment: Double
         let category: ExpenseCategory
         let comment: String
 
@@ -331,7 +334,7 @@ private extension ExpenseEditViewModel {
                 baseAmount: viewModel.baseAmount,
                 rateLocalToBase: viewModel.rateLocalToBase,
                 paymentMethod: viewModel.paymentMethod,
-                exchangeAdjustmentPercentage: viewModel.exchangeAdjustmentPercentage,
+                exchangeAdjustment: viewModel.exchangeAdjustment,
                 category: viewModel.category,
                 comment: viewModel.comment
             )
@@ -342,7 +345,7 @@ private extension ExpenseEditViewModel {
             baseAmount: Double,
             rateLocalToBase: Double,
             paymentMethod: PaymentMethod,
-            exchangeAdjustmentPercentage: Double,
+            exchangeAdjustment: Double,
             category: ExpenseCategory,
             comment: String
         ) {
@@ -350,7 +353,7 @@ private extension ExpenseEditViewModel {
             self.baseAmount = baseAmount
             self.rateLocalToBase = rateLocalToBase
             self.paymentMethod = paymentMethod
-            self.exchangeAdjustmentPercentage = exchangeAdjustmentPercentage
+            self.exchangeAdjustment = exchangeAdjustment
             self.category = category
             self.comment = comment
         }

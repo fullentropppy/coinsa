@@ -16,12 +16,12 @@ final class CurrencyConverter {
     private(set) var baseCurrency: Currency
     private(set) var localCurrency: Currency
     private(set) var rateLocalToBase: Double
-    private(set) var exchangeAdjustmentPercentage: Double
+    private(set) var exchangeAdjustment: Double
     
     // MARK: - Вычисляемые свойства
     
     var effectiveRateLocalToBase: Double {
-        rateLocalToBase * (1 + (exchangeAdjustmentPercentage / 100))
+        rateLocalToBase * (1 + (exchangeAdjustment / 100))
     }
     
     var isHomeLocation: Bool {
@@ -44,13 +44,13 @@ final class CurrencyConverter {
         baseCurrency: Currency,
         localCurrency: Currency,
         rateLocalToBase: Double = 1,
-        exchangeAdjustmentPercentage: Double = 0
+        exchangeAdjustment: Double = 0
     ) {
         self.exchangeRateManager = ExchangeRateManager(provider: exchangeRateProvider)
         self.baseCurrency = baseCurrency
         self.localCurrency = localCurrency
         self.rateLocalToBase = rateLocalToBase
-        self.exchangeAdjustmentPercentage = max(0, exchangeAdjustmentPercentage)
+        self.exchangeAdjustment = max(0, exchangeAdjustment)
     }
     
     // MARK: - Получение и обновление курса валюты
@@ -122,7 +122,7 @@ final class CurrencyConverter {
     
     // MARK: - Процент корректировки
     
-    func updateExchangeAdjustmentPercentage(_ newPercentage: Double) {
-        exchangeAdjustmentPercentage = max(0, newPercentage)
+    func updateExchangeAdjustment(_ newPercentage: Double) {
+        exchangeAdjustment = max(0, newPercentage)
     }
 }

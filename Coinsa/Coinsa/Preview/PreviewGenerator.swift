@@ -103,7 +103,7 @@ private extension PreviewGenerator {
             endDate: endDate,
             localCurrencyCode: tokyoData.currencyCode,
             rateLocalToBase: tokyoData.exchangeRate,
-            exchangeAdjustmentPercentage: tokyoData.exchangeAdjustmentPercentage,
+            exchangeAdjustment: tokyoData.exchangeAdjustment,
             trip: trip
         )
         
@@ -131,7 +131,7 @@ private extension PreviewGenerator {
             endDate: endDate,
             localCurrencyCode: kyotoData.currencyCode,
             rateLocalToBase: kyotoData.exchangeRate,
-            exchangeAdjustmentPercentage: kyotoData.exchangeAdjustmentPercentage,
+            exchangeAdjustment: kyotoData.exchangeAdjustment,
             trip: trip
         )
         
@@ -159,7 +159,7 @@ private extension PreviewGenerator {
             endDate: endDate,
             localCurrencyCode: osakaData.currencyCode,
             rateLocalToBase: osakaData.exchangeRate,
-            exchangeAdjustmentPercentage: osakaData.exchangeAdjustmentPercentage,
+            exchangeAdjustment: osakaData.exchangeAdjustment,
             trip: trip
         )
         
@@ -214,7 +214,7 @@ private extension PreviewGenerator {
                 baseAmount: 2300,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .cash,
-                exchangeAdjustmentPercentage: 0,
+                exchangeAdjustment: 0,
                 category: .food,
                 location: location,
                 comment: PreviewExpenseComment.breakfast.rawValue
@@ -224,7 +224,7 @@ private extension PreviewGenerator {
                 baseAmount: 2116.4,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .other,
                 location: location
             ),
@@ -233,7 +233,7 @@ private extension PreviewGenerator {
                 baseAmount: 120,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .cash,
-                exchangeAdjustmentPercentage: 0,
+                exchangeAdjustment: 0,
                 category: .transport,
                 location: location
             ),
@@ -242,7 +242,7 @@ private extension PreviewGenerator {
                 baseAmount: 6219,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .activity,
                 location: location
             ),
@@ -251,7 +251,7 @@ private extension PreviewGenerator {
                 baseAmount: 1992,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .food,
                 location: location
             ),
@@ -260,7 +260,7 @@ private extension PreviewGenerator {
                 baseAmount: 140,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .cash,
-                exchangeAdjustmentPercentage: 0,
+                exchangeAdjustment: 0,
                 category: .transport,
                 location: location,
                 comment: PreviewExpenseComment.subway.rawValue
@@ -270,7 +270,7 @@ private extension PreviewGenerator {
                 baseAmount: 2120,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: 3.8,
+                exchangeAdjustment: 3.8,
                 category: .food,
                 location: location
             ),
@@ -279,7 +279,7 @@ private extension PreviewGenerator {
                 baseAmount: 8902,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: 3.8,
+                exchangeAdjustment: 3.8,
                 category: .activity,
                 location: location
             ),
@@ -288,7 +288,7 @@ private extension PreviewGenerator {
                 baseAmount: 8902,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .shopping,
                 location: location,
                 comment: PreviewExpenseComment.clothes.rawValue
@@ -298,7 +298,7 @@ private extension PreviewGenerator {
                 baseAmount: 1220,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .medicine,
                 location: location,
                 comment: PreviewExpenseComment.pharmacy.rawValue
@@ -308,7 +308,7 @@ private extension PreviewGenerator {
                 baseAmount: 240,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .transport,
                 location: location
             ),
@@ -317,7 +317,7 @@ private extension PreviewGenerator {
                 baseAmount: 3098.4,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .food,
                 location: location,
                 comment: PreviewExpenseComment.breakfast.rawValue
@@ -327,7 +327,7 @@ private extension PreviewGenerator {
                 baseAmount: 3409.72,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .activity,
                 location: location,
                 comment: PreviewExpenseComment.museum.rawValue
@@ -337,7 +337,7 @@ private extension PreviewGenerator {
                 baseAmount: 312,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .cash,
-                exchangeAdjustmentPercentage: 0,
+                exchangeAdjustment: 0,
                 category: .transport,
                 location: location
             ),
@@ -346,7 +346,7 @@ private extension PreviewGenerator {
                 baseAmount: 12091.07,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .shopping,
                 location: location,
                 comment: PreviewExpenseComment.clothes.rawValue
@@ -356,7 +356,7 @@ private extension PreviewGenerator {
                 baseAmount: 887.01,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: 1,
+                exchangeAdjustment: 1,
                 category: .medicine,
                 location: location
             ),
@@ -365,7 +365,7 @@ private extension PreviewGenerator {
                 baseAmount: 2590,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .food,
                 location: location
             ),
@@ -374,7 +374,7 @@ private extension PreviewGenerator {
                 baseAmount: 1450,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .other,
                 location: location,
                 comment: PreviewExpenseComment.miscellaneous.rawValue
@@ -384,7 +384,7 @@ private extension PreviewGenerator {
                 baseAmount: 90,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .cash,
-                exchangeAdjustmentPercentage: 0,
+                exchangeAdjustment: 0,
                 category: .transport,
                 location: location
             ),
@@ -393,7 +393,7 @@ private extension PreviewGenerator {
                 baseAmount: 2500,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .shopping,
                 location: location
             ),
@@ -402,7 +402,7 @@ private extension PreviewGenerator {
                 baseAmount: 1841.98,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .food,
                 location: location,
                 comment: PreviewExpenseComment.streetFood.rawValue
@@ -412,7 +412,7 @@ private extension PreviewGenerator {
                 baseAmount: 1882,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .food,
                 location: location
             ),
@@ -421,7 +421,7 @@ private extension PreviewGenerator {
                 baseAmount: 500,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .cash,
-                exchangeAdjustmentPercentage: 0,
+                exchangeAdjustment: 0,
                 category: .transport,
                 location: location
             ),
@@ -430,7 +430,7 @@ private extension PreviewGenerator {
                 baseAmount: 1003.6,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .other,
                 location: location
             ),
@@ -439,7 +439,7 @@ private extension PreviewGenerator {
                 baseAmount: 5902,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: 4.5,
+                exchangeAdjustment: 4.5,
                 category: .activity,
                 location: location
             ),
@@ -448,7 +448,7 @@ private extension PreviewGenerator {
                 baseAmount: 2600,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .other,
                 location: location,
                 comment: PreviewExpenseComment.miscellaneous.rawValue
@@ -458,7 +458,7 @@ private extension PreviewGenerator {
                 baseAmount: 202,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .transport,
                 location: location,
                 comment: PreviewExpenseComment.subway.rawValue
@@ -468,7 +468,7 @@ private extension PreviewGenerator {
                 baseAmount: 3850,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .cash,
-                exchangeAdjustmentPercentage: 0,
+                exchangeAdjustment: 0,
                 category: .food,
                 location: location
             ),
@@ -484,7 +484,7 @@ private extension PreviewGenerator {
                 baseAmount: 6250,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .transport,
                 location: location,
                 comment: PreviewExpenseComment.train.rawValue
@@ -494,7 +494,7 @@ private extension PreviewGenerator {
                 baseAmount: 1200,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .cash,
-                exchangeAdjustmentPercentage: 0,
+                exchangeAdjustment: 0,
                 category: .food,
                 location: location,
                 comment: PreviewExpenseComment.snacks.rawValue
@@ -504,7 +504,7 @@ private extension PreviewGenerator {
                 baseAmount: 3509.9,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .transport,
                 location: location,
                 comment: PreviewExpenseComment.taxi.rawValue
@@ -514,7 +514,7 @@ private extension PreviewGenerator {
                 baseAmount: 2500.05,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .food,
                 location: location
             ),
@@ -523,7 +523,7 @@ private extension PreviewGenerator {
                 baseAmount: 5209.6,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .activity,
                 location: location
             ),
@@ -532,7 +532,7 @@ private extension PreviewGenerator {
                 baseAmount: 120,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .medicine,
                 location: location
             ),
@@ -541,7 +541,7 @@ private extension PreviewGenerator {
                 baseAmount: 2691,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .food,
                 location: location,
                 comment: PreviewExpenseComment.lunch.rawValue
@@ -551,7 +551,7 @@ private extension PreviewGenerator {
                 baseAmount: 890,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .activity,
                 location: location,
                 comment: PreviewExpenseComment.temple.rawValue
@@ -561,7 +561,7 @@ private extension PreviewGenerator {
                 baseAmount: 212,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .transport,
                 location: location,
                 comment: PreviewExpenseComment.subway.rawValue
@@ -571,7 +571,7 @@ private extension PreviewGenerator {
                 baseAmount: 1620.18,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .other,
                 location: location,
                 comment: PreviewExpenseComment.souvenirs.rawValue
@@ -581,7 +581,7 @@ private extension PreviewGenerator {
                 baseAmount: 2906.7,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .food,
                 location: location,
                 comment: PreviewExpenseComment.breakfast.rawValue
@@ -591,7 +591,7 @@ private extension PreviewGenerator {
                 baseAmount: 1105,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .transport,
                 location: location,
                 comment: PreviewExpenseComment.bus.rawValue
@@ -601,7 +601,7 @@ private extension PreviewGenerator {
                 baseAmount: 2000.05,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .activity,
                 location: location,
             ),
@@ -610,7 +610,7 @@ private extension PreviewGenerator {
                 baseAmount: 2012,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .other,
                 location: location,
             ),
@@ -619,7 +619,7 @@ private extension PreviewGenerator {
                 baseAmount: 29020,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .shopping,
                 location: location
             ),
@@ -628,7 +628,7 @@ private extension PreviewGenerator {
                 baseAmount: 3040.84,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .food,
                 location: location
             ),
@@ -637,7 +637,7 @@ private extension PreviewGenerator {
                 baseAmount: 706,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .food,
                 location: location,
                 comment: PreviewExpenseComment.breakfast.rawValue
@@ -647,7 +647,7 @@ private extension PreviewGenerator {
                 baseAmount: 706,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .transport,
                 location: location,
                 comment: PreviewExpenseComment.train.rawValue
@@ -664,7 +664,7 @@ private extension PreviewGenerator {
                 baseAmount: 2099,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .activity,
                 location: location
             ),
@@ -673,7 +673,7 @@ private extension PreviewGenerator {
                 baseAmount: 201,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .transport,
                 location: location
             ),
@@ -682,7 +682,7 @@ private extension PreviewGenerator {
                 baseAmount: 2720,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .cash,
-                exchangeAdjustmentPercentage: 0,
+                exchangeAdjustment: 0,
                 category: .food,
                 location: location
             ),
@@ -691,7 +691,7 @@ private extension PreviewGenerator {
                 baseAmount: 290,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .other,
                 location: location,
                 comment: PreviewExpenseComment.miscellaneous.rawValue
@@ -701,7 +701,7 @@ private extension PreviewGenerator {
                 baseAmount: 290,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .cash,
-                exchangeAdjustmentPercentage: 0,
+                exchangeAdjustment: 0,
                 category: .food,
                 location: location
             ),
@@ -710,7 +710,7 @@ private extension PreviewGenerator {
                 baseAmount: 1556,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .food,
                 location: location,
                 comment: PreviewExpenseComment.breakfast.rawValue
@@ -720,7 +720,7 @@ private extension PreviewGenerator {
                 baseAmount: 6991.44,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .shopping,
                 location: location
             ),
@@ -729,7 +729,7 @@ private extension PreviewGenerator {
                 baseAmount: 4010,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .other,
                 location: location
             ),
@@ -738,7 +738,7 @@ private extension PreviewGenerator {
                 baseAmount: 1900.04,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .activity,
                 location: location
             ),
@@ -747,7 +747,7 @@ private extension PreviewGenerator {
                 baseAmount: 1500,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .cash,
-                exchangeAdjustmentPercentage: 0,
+                exchangeAdjustment: 0,
                 category: .food,
                 location: location,
                 comment: PreviewExpenseComment.streetFood.rawValue
@@ -757,7 +757,7 @@ private extension PreviewGenerator {
                 baseAmount: 2068,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .food,
                 location: location,
             ),
@@ -766,7 +766,7 @@ private extension PreviewGenerator {
                 baseAmount: 2400,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: 2,
+                exchangeAdjustment: 2,
                 category: .activity,
                 location: location,
                 comment: PreviewExpenseComment.museum.rawValue
@@ -776,7 +776,7 @@ private extension PreviewGenerator {
                 baseAmount: 309.06,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .transport,
                 location: location,
             ),
@@ -785,7 +785,7 @@ private extension PreviewGenerator {
                 baseAmount: 5200,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: 2,
+                exchangeAdjustment: 2,
                 category: .shopping,
                 location: location,
                 comment: PreviewExpenseComment.clothes.rawValue
@@ -795,7 +795,7 @@ private extension PreviewGenerator {
                 baseAmount: 2095,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .food,
                 location: location
             ),
@@ -804,7 +804,7 @@ private extension PreviewGenerator {
                 baseAmount: 5252.9,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .transport,
                 location: location,
                 comment: PreviewExpenseComment.taxi.rawValue
@@ -814,7 +814,7 @@ private extension PreviewGenerator {
                 baseAmount: 4520,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .food,
                 location: location
             ),
@@ -823,7 +823,7 @@ private extension PreviewGenerator {
                 baseAmount: 6270,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: 5.5,
+                exchangeAdjustment: 5.5,
                 category: .other,
                 location: location
             )
@@ -873,7 +873,7 @@ private extension PreviewGenerator {
             endDate: endDate,
             localCurrencyCode: saintpData.currencyCode,
             rateLocalToBase: saintpData.exchangeRate,
-            exchangeAdjustmentPercentage: saintpData.exchangeAdjustmentPercentage,
+            exchangeAdjustment: saintpData.exchangeAdjustment,
             trip: trip
         )
         
@@ -909,7 +909,7 @@ private extension PreviewGenerator {
                 baseAmount: 2990,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .food,
                 location: location,
             ),
@@ -918,7 +918,7 @@ private extension PreviewGenerator {
                 baseAmount: 950,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .transport,
                 location: location,
                 comment: PreviewExpenseComment.taxi.rawValue
@@ -928,7 +928,7 @@ private extension PreviewGenerator {
                 baseAmount: 2400,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .activity,
                 location: location,
                 comment: PreviewExpenseComment.museum.rawValue
@@ -938,7 +938,7 @@ private extension PreviewGenerator {
                 baseAmount: 1800,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .food,
                 location: location,
             )
@@ -990,7 +990,7 @@ private extension PreviewGenerator {
             endDate: endDate,
             localCurrencyCode: seoulData.currencyCode,
             rateLocalToBase: seoulData.exchangeRate,
-            exchangeAdjustmentPercentage: seoulData.exchangeAdjustmentPercentage,
+            exchangeAdjustment: seoulData.exchangeAdjustment,
             trip: trip
         )
         
@@ -1018,7 +1018,7 @@ private extension PreviewGenerator {
             endDate: endDate,
             localCurrencyCode: busanData.currencyCode,
             rateLocalToBase: busanData.exchangeRate,
-            exchangeAdjustmentPercentage: busanData.exchangeAdjustmentPercentage,
+            exchangeAdjustment: busanData.exchangeAdjustment,
             trip: trip
         )
         
@@ -1059,7 +1059,7 @@ private extension PreviewGenerator {
                 baseAmount: 3205.92,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .food,
                 location: location,
                 comment: PreviewExpenseComment.breakfast.rawValue
@@ -1069,7 +1069,7 @@ private extension PreviewGenerator {
                 baseAmount: 312,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .transport,
                 location: location,
                 comment: PreviewExpenseComment.subway.rawValue
@@ -1079,7 +1079,7 @@ private extension PreviewGenerator {
                 baseAmount: 2300,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .cash,
-                exchangeAdjustmentPercentage: 0,
+                exchangeAdjustment: 0,
                 category: .food,
                 location: location,
                 comment: PreviewExpenseComment.lunch.rawValue
@@ -1089,7 +1089,7 @@ private extension PreviewGenerator {
                 baseAmount: 150,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .other,
                 location: location
             ),
@@ -1098,7 +1098,7 @@ private extension PreviewGenerator {
                 baseAmount: 924.13,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: 1,
+                exchangeAdjustment: 1,
                 category: .medicine,
                 location: location
             ),
@@ -1107,7 +1107,7 @@ private extension PreviewGenerator {
                 baseAmount: 9200.2,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .shopping,
                 location: location
             ),
@@ -1116,7 +1116,7 @@ private extension PreviewGenerator {
                 baseAmount: 2910,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .cash,
-                exchangeAdjustmentPercentage: 0,
+                exchangeAdjustment: 0,
                 category: .food,
                 location: location
             ),
@@ -1125,7 +1125,7 @@ private extension PreviewGenerator {
                 baseAmount: 2450,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .food,
                 location: location
             ),
@@ -1134,7 +1134,7 @@ private extension PreviewGenerator {
                 baseAmount: 292.4,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .transport,
                 location: location,
                 comment: PreviewExpenseComment.subway.rawValue
@@ -1144,7 +1144,7 @@ private extension PreviewGenerator {
                 baseAmount: 1043,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .activity,
                 location: location,
                 comment: PreviewExpenseComment.museum.rawValue
@@ -1154,7 +1154,7 @@ private extension PreviewGenerator {
                 baseAmount: 1687,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .food,
                 location: location,
                 comment: PreviewExpenseComment.lunch.rawValue
@@ -1164,7 +1164,7 @@ private extension PreviewGenerator {
                 baseAmount: 300,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .transport,
                 location: location
             ),
@@ -1173,7 +1173,7 @@ private extension PreviewGenerator {
                 baseAmount: 2540.14,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .food,
                 location: location
             ),
@@ -1182,7 +1182,7 @@ private extension PreviewGenerator {
                 baseAmount: 2051.51,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .food,
                 location: location,
                 comment: PreviewExpenseComment.streetFood.rawValue
@@ -1192,7 +1192,7 @@ private extension PreviewGenerator {
                 baseAmount: 199.3,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .transport,
                 location: location
             ),
@@ -1201,7 +1201,7 @@ private extension PreviewGenerator {
                 baseAmount: 14200,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .activity,
                 location: location
             ),
@@ -1210,7 +1210,7 @@ private extension PreviewGenerator {
                 baseAmount: 1250,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: 6,
+                exchangeAdjustment: 6,
                 category: .other,
                 location: location
             ),
@@ -1219,7 +1219,7 @@ private extension PreviewGenerator {
                 baseAmount: 1940.2,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .food,
                 location: location
             ),
@@ -1228,7 +1228,7 @@ private extension PreviewGenerator {
                 baseAmount: 1001,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: 1,
+                exchangeAdjustment: 1,
                 category: .medicine,
                 location: location
             ),
@@ -1237,7 +1237,7 @@ private extension PreviewGenerator {
                 baseAmount: 2046,
                 rateLocalToBase: exchangeRate,
                 paymentMethod: .card,
-                exchangeAdjustmentPercentage: location.exchangeAdjustmentPercentage,
+                exchangeAdjustment: location.exchangeAdjustment,
                 category: .food,
                 location: location
             )
@@ -1281,7 +1281,7 @@ private extension PreviewGenerator {
             endDate: trip.endDate,
             localCurrencyCode: istanbulData.currencyCode,
             rateLocalToBase: istanbulData.exchangeRate,
-            exchangeAdjustmentPercentage: istanbulData.exchangeAdjustmentPercentage,
+            exchangeAdjustment: istanbulData.exchangeAdjustment,
             trip: trip
         )
 

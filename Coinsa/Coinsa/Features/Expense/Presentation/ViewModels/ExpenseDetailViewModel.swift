@@ -57,14 +57,14 @@ struct ExpenseDetailViewModel {
             return nil
         }
 
-        if expense.paymentMethod == .card && expense.exchangeAdjustmentPercentage > 0 {
+        if expense.paymentMethod == .card && expense.exchangeAdjustment > 0 {
             return .expenseAdjustedExchangeRateLong(
                 baseCurrencyCode: baseCurrency.code,
                 effectiveRateLocalToBase: expense.effectiveRateLocalToBase.formatted(
                     .number.precision(.fractionLength(4))
                 ),
                 localCurrencyCode: expense.localCurrency.code,
-                adjustmentRateLocalToBase: (expense.exchangeAdjustmentPercentage / 100).formatted(
+                adjustmentRateLocalToBase: (expense.exchangeAdjustment / 100).formatted(
                     .percent.precision(.fractionLength(0...2))
                 )
             )

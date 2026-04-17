@@ -12,6 +12,7 @@ struct ExpenseEditView: View {
     // MARK: - Окружение
     
     @Environment(\.modelContext) private var context
+    @Environment(AppSettingsStore.self) private var settingsStore
     @Environment(\.dismiss) private var dismiss
 
     // MARK: - Состояние
@@ -52,13 +53,15 @@ struct ExpenseEditView: View {
     init(
         location: Location,
         baseCurrency: Currency,
-        preselectedCategory: ExpenseCategory? = nil
+        preselectedCategory: ExpenseCategory? = nil,
+        preselectedPaymentMethod: PaymentMethod? = nil
     ) {
         self.init(
             expense: nil,
             location: location,
             baseCurrency: baseCurrency,
             preselectedCategory: preselectedCategory,
+            preselectedPaymentMethod: preselectedPaymentMethod,
             onDelete: nil
         )
     }
@@ -68,6 +71,7 @@ struct ExpenseEditView: View {
         location: Location,
         baseCurrency: Currency,
         preselectedCategory: ExpenseCategory? = nil,
+        preselectedPaymentMethod: PaymentMethod? = nil,
         onDelete: (() -> Void)? = nil
     ) {
         let viewModel: ExpenseEditViewModel
@@ -77,7 +81,8 @@ struct ExpenseEditView: View {
             viewModel = ExpenseEditViewModel(
                 location: location,
                 baseCurrency: baseCurrency,
-                preselectedCategory: preselectedCategory
+                preselectedCategory: preselectedCategory,
+                preselectedPaymentMethod: preselectedPaymentMethod
             )
         }
         _viewModel = State(initialValue: viewModel)
@@ -202,20 +207,12 @@ struct ExpenseEditView: View {
             }
             
             if viewModel.showsExchangeAdjustmentInput {
-                LabeledContent(.locationExchangeAdjustmentPercentage) {
-                    HStack {
-                        NumericInputField.standard(
-                            exchangeAdjustmentInputBinding,
-                            focusedField: $focusedField,
-                            focusId: .exchangeAdjustmentPercentage,
-                            fractionDigits: 2
-                        )
-                        Image(systemName: "percent")
-                            .fontWeight(.semibold)
-                            .imageScale(.small)
-                            .foregroundStyle(.secondary)
-                            .frame(width: 16)
-                    }
+                LabeledContent(.locationExchangeAdjustment) {
+                    PercentInputField.standard(
+                        exchangeAdjustmentInputBinding,
+                        focusedField: $focusedField,
+                        focusId: .exchangeAdjustment
+                    )
                 }
             }
         } footer: {
@@ -284,6 +281,7 @@ struct ExpenseEditView: View {
             get: { viewModel.paymentMethod },
             set: { newMethod in
                 viewModel.updatePaymentMethod(newMethod, currentInput: inputCurrency)
+                settingsStore.selectedPaymentMethod = newMethod
             }
         )
     }
@@ -319,9 +317,9 @@ struct ExpenseEditView: View {
     
     private var exchangeAdjustmentInputBinding: Binding<Double> {
         Binding(
-            get: { viewModel.exchangeAdjustmentPercentage },
+            get: { viewModel.exchangeAdjustment },
             set: { newValue in
-                viewModel.updateExchangeAdjustmentPercentage(newValue, currentInput: inputCurrency)
+                viewModel.updateExchangeAdjustment(newValue, currentInput: inputCurrency)
             }
         )
     }
@@ -369,6 +367,7 @@ private extension ExpenseEditView {
     ) -> some View {
         let builder = PreviewBuilder.builder().withBudgets(false)
         let container = builder.buildContainer()
+        let settingsStore = AppSettingsStore(context: container.mainContext)
         let location = builder.fetchLocation(from: container)
         let expense = withNewExpense ? nil : builder.fetchExpense(from: container)
 
@@ -380,6 +379,7 @@ private extension ExpenseEditView {
             }
         }
         .modelContainer(container)
+        .environment(settingsStore)
         .environment(\.locale, locale)
         .preferredColorScheme(colorScheme)
     }

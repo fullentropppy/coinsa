@@ -55,7 +55,11 @@ struct TripDetailView: View {
                 TripEditView { dismiss() }
             }
             .sheet(isPresented: $isShowingLocationCreate) {
-                LocationEditView( trip: trip, baseCurrency: settingsStore.baseCurrency)
+                LocationEditView(
+                    trip: trip,
+                    baseCurrency: settingsStore.baseCurrency,
+                    preselectedExchangeAdjustment: settingsStore.exchangeAdjustment
+                )
             }
             .sheet(item: $locationToEdit) { location in
                 LocationEditView(location, baseCurrency: settingsStore.baseCurrency)

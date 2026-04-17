@@ -78,7 +78,7 @@ final class LocationEditViewModel {
     }
     
     var adjustedRateDescription: LocalizedStringResource? {
-        guard !isHomeLocation && exchangeAdjustmentPercentage > 0 else {
+        guard !isHomeLocation && exchangeAdjustment > 0 else {
             return nil
         }
 
@@ -93,7 +93,7 @@ final class LocationEditViewModel {
     
     // MARK: - Состояние UI. Оплата
     
-    var exchangeAdjustmentPercentage: Double
+    var exchangeAdjustment: Double
     
     // MARK: - Состояние UI. Бюджет
     
@@ -121,13 +121,18 @@ final class LocationEditViewModel {
         )
     }
     
-    convenience init(trip: Trip, baseCurrency: Currency) {
+    convenience init(
+        trip: Trip,
+        baseCurrency: Currency,
+        preselectedExchangeAdjustment: Double? = nil
+    ) {
         let exchangeRateProvider = ExchangeRateProvider(service: HexarateService())
         self.init(
             trip: trip,
             location: nil,
             baseCurrency: baseCurrency,
-            exchangeRateProvider: exchangeRateProvider
+            exchangeRateProvider: exchangeRateProvider,
+            preselectedExchangeAdjustment: preselectedExchangeAdjustment
         )
     }
     
@@ -135,7 +140,8 @@ final class LocationEditViewModel {
         trip: Trip,
         location: Location?,
         baseCurrency: Currency,
-        exchangeRateProvider: ExchangeRateProvider
+        exchangeRateProvider: ExchangeRateProvider,
+        preselectedExchangeAdjustment: Double? = nil
     ) {
         self.location = location
         self.trip = location?.trip ?? trip
@@ -146,7 +152,7 @@ final class LocationEditViewModel {
         let resolvedEndDate: Date
         let resolvedLocalCurrency: Currency
         let resolvedRateLocalToBase: Double
-        let resolvedExchangeAdjustmentPercentage: Double
+        let resolvedExchangeAdjustment: Double
         
         if let location {
             resolvedName = location.name
@@ -154,14 +160,14 @@ final class LocationEditViewModel {
             resolvedEndDate = location.endDate
             resolvedLocalCurrency = Currency.from(location.localCurrencyCode)
             resolvedRateLocalToBase = location.rateLocalToBase
-            resolvedExchangeAdjustmentPercentage = location.exchangeAdjustmentPercentage
+            resolvedExchangeAdjustment = location.exchangeAdjustment
         } else {
             resolvedName = ""
             resolvedStartDate = trip.startDate
             resolvedEndDate = trip.endDate
             resolvedLocalCurrency = baseCurrency
             resolvedRateLocalToBase = 1
-            resolvedExchangeAdjustmentPercentage = 0
+            resolvedExchangeAdjustment = preselectedExchangeAdjustment ?? 0
         }
         
         var resolvedBudgetAmounts = Dictionary(
@@ -177,14 +183,14 @@ final class LocationEditViewModel {
         self.name = resolvedName
         self.startDate = resolvedStartDate
         self.endDate = resolvedEndDate
-        self.exchangeAdjustmentPercentage = resolvedExchangeAdjustmentPercentage
+        self.exchangeAdjustment = resolvedExchangeAdjustment
         
         self.currencyConverter = CurrencyConverter(
             exchangeRateProvider: exchangeRateProvider,
             baseCurrency: baseCurrency,
             localCurrency: resolvedLocalCurrency,
             rateLocalToBase: resolvedRateLocalToBase,
-            exchangeAdjustmentPercentage: resolvedExchangeAdjustmentPercentage
+            exchangeAdjustment: resolvedExchangeAdjustment
         )
         
         var initialBudgets: [ExpenseCategory: Double] = [:]
@@ -205,7 +211,7 @@ final class LocationEditViewModel {
             endDate: resolvedEndDate,
             localCurrency: resolvedLocalCurrency,
             rateLocalToBase: resolvedRateLocalToBase,
-            exchangeAdjustmentPercentage: resolvedExchangeAdjustmentPercentage,
+            exchangeAdjustment: resolvedExchangeAdjustment,
             budgetAmounts: resolvedBudgetAmounts
         )
     }
@@ -248,7 +254,7 @@ final class LocationEditViewModel {
                 endDate: initialSnapshot.endDate,
                 localCurrency: initialSnapshot.localCurrency,
                 rateLocalToBase: rateLocalToBase,
-                exchangeAdjustmentPercentage: exchangeAdjustmentPercentage,
+                exchangeAdjustment: exchangeAdjustment,
                 budgetAmounts: initialSnapshot.budgetAmounts
             )
         }
@@ -256,10 +262,10 @@ final class LocationEditViewModel {
 
     // MARK: - Операции с оплатой
     
-    func updateExchangeAdjustmentPercentage(_ newPercentage: Double, currentInput: InputCurrency) {
-        exchangeAdjustmentPercentage = max(0, newPercentage)
+    func updateExchangeAdjustment(_ newPercentage: Double, currentInput: InputCurrency) {
+        exchangeAdjustment = max(0, newPercentage)
         budgetManager.updateFromRateChange(inputCurrency: currentInput)
-        currencyConverter.updateExchangeAdjustmentPercentage(exchangeAdjustmentPercentage)
+        currencyConverter.updateExchangeAdjustment(exchangeAdjustment)
     }
     
     // MARK: - Операции с бюджетом
@@ -287,7 +293,7 @@ final class LocationEditViewModel {
                 endDate: endDate,
                 localCurrency: localCurrency,
                 rateLocalToBase: rateLocalToBase,
-                exchangeAdjustmentPercentage: exchangeAdjustmentPercentage,
+                exchangeAdjustment: exchangeAdjustment,
                 budgetsByCategory: budgetAmounts
             )
         } else {
@@ -297,7 +303,7 @@ final class LocationEditViewModel {
                 endDate: endDate,
                 localCurrency: localCurrency,
                 rateLocalToBase: rateLocalToBase,
-                exchangeAdjustmentPercentage: exchangeAdjustmentPercentage,
+                exchangeAdjustment: exchangeAdjustment,
                 trip: trip,
                 budgetsByCategory: budgetAmounts
             )
@@ -316,7 +322,7 @@ private extension LocationEditViewModel {
         let endDate: Date
         let localCurrency: Currency
         let rateLocalToBase: Double
-        let exchangeAdjustmentPercentage: Double
+        let exchangeAdjustment: Double
         let budgetAmounts: [ExpenseCategory: Double]
 
         // MARK: - Инициализация
@@ -328,7 +334,7 @@ private extension LocationEditViewModel {
                 endDate: viewModel.endDate,
                 localCurrency: viewModel.localCurrency,
                 rateLocalToBase: viewModel.rateLocalToBase,
-                exchangeAdjustmentPercentage: viewModel.exchangeAdjustmentPercentage,
+                exchangeAdjustment: viewModel.exchangeAdjustment,
                 budgetAmounts: viewModel.budgetAmounts
             )
         }
@@ -339,7 +345,7 @@ private extension LocationEditViewModel {
             endDate: Date,
             localCurrency: Currency,
             rateLocalToBase: Double,
-            exchangeAdjustmentPercentage: Double,
+            exchangeAdjustment: Double,
             budgetAmounts: [ExpenseCategory: Double]
         ) {
             self.name = name.trimmed
@@ -347,7 +353,7 @@ private extension LocationEditViewModel {
             self.endDate = endDate
             self.localCurrency = localCurrency
             self.rateLocalToBase = rateLocalToBase
-            self.exchangeAdjustmentPercentage = exchangeAdjustmentPercentage
+            self.exchangeAdjustment = exchangeAdjustment
             self.budgetAmounts = Dictionary(
                 uniqueKeysWithValues: ExpenseCategory.allCases.map { category in
                     (category, (budgetAmounts[category] ?? 0).rounded())

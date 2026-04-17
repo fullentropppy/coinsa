@@ -14,6 +14,10 @@ struct SettingsView: View {
     @Environment(\.modelContext) private var context
     @Environment(AppSettingsStore.self) private var settingsStore
     
+    // MARK: - Состояние
+    
+    @FocusState private var focusedField: NumericEditField?
+    
     // MARK: - Вычисляемые свойства
     
 #if DEBUG
@@ -29,6 +33,10 @@ struct SettingsView: View {
             settingsForm
                 .navigationTitle(.settingsNavigationTitle)
                 .navigationBarTitleDisplayMode(.large)
+                .toolbar {
+                    toolbarContent
+                }
+                .scrollDismissesKeyboard(.interactively)
         }
     }
 
@@ -37,6 +45,7 @@ struct SettingsView: View {
     private var settingsForm: some View {
         Form {
             baseCurrencySection
+            exchangeAdjustmentSection
             appearanceSection
             aboutSection
 #if DEBUG
@@ -54,10 +63,23 @@ struct SettingsView: View {
             }
         } footer: {
             Text(.settingsBaseCurrencyHint)
-                .multilineTextAlignment(.leading)
         }
     }
 
+    private var exchangeAdjustmentSection: some View {
+        Section {
+            LabeledContent(.settingsExchangeAdjustment) {
+                PercentInputField.standard(
+                    exchangeAdjustmentInputBinding,
+                    focusedField: $focusedField,
+                    focusId: .exchangeAdjustment
+                )
+            }
+        } footer: {
+            Text(.settingsExchangeAdjustmentHint)
+        }
+    }
+    
     private var appearanceSection: some View {
         Section {
             Picker(.settingsAppAppearance, selection: selectedAppAppearance) {
@@ -81,8 +103,29 @@ struct SettingsView: View {
         }
     }
     
+    // MARK: - Тулбар
+    
+    @ToolbarContentBuilder
+    private var toolbarContent: some ToolbarContent {
+        ToolbarItemGroup(placement: .keyboard) {
+            if focusedField != nil {
+                Spacer()
+                ToolbarButton.ok {
+                    focusedField = nil
+                }
+            }
+        }
+    }
+    
     // MARK: - Биндинги
 
+    private var exchangeAdjustmentInputBinding: Binding<Double> {
+        Binding(
+            get: { settingsStore.exchangeAdjustment },
+            set: { settingsStore.exchangeAdjustment = $0 }
+        )
+    }
+    
     private var selectedAppAppearance: Binding<AppAppearance> {
         Binding(
             get: { settingsStore.appAppearance },

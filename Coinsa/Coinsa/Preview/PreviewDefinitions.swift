@@ -36,7 +36,7 @@ enum PreviewLocation: String {
         PreviewCurrency.exchangeRate(forCode: currencyCode)
     }
     
-    var exchangeAdjustmentPercentage: Double {
+    var exchangeAdjustment: Double {
         switch self {
         case .tokyo, .kyoto, .osaka: 5
         case .saintp: 0

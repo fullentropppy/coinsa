@@ -12,10 +12,15 @@ final class AppSettings {
     // MARK: - Свойства
 
     var baseCurrencyCode: String
-
+    var exchangeAdjustment: Double
+    
     // MARK: - Инициализация
 
-    init(baseCurrencyCode: String) {
+    init(
+        baseCurrencyCode: String,
+        exchangeAdjustment: Double
+    ) {
         self.baseCurrencyCode = baseCurrencyCode
+        self .exchangeAdjustment = exchangeAdjustment
     }
 }

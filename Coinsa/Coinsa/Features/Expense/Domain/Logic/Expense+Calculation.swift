@@ -27,7 +27,7 @@ extension Expense {
     // MARK: - Приватные свойства
     
     private var adjustedRateLocalToBase: Double {
-        let adjustmentMultiplier = 1 + (max(0, exchangeAdjustmentPercentage) / 100)
+        let adjustmentMultiplier = 1 + (max(0, exchangeAdjustment) / 100)
         return (rateLocalToBase * adjustmentMultiplier).rounded(to: 4)
     }
 }

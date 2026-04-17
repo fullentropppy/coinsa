@@ -1194,7 +1194,7 @@
         }
       }
     },
-    "expense.exchangeAdjustmentPercentage" : {
+    "expense.exchangeAdjustment" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -1466,7 +1466,7 @@
         }
       }
     },
-    "location.exchangeAdjustmentPercentage" : {
+    "location.exchangeAdjustment" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -1818,7 +1818,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Основная валюта ведения учета трат и отображения сумм в поездках, локациях, бюджетах  и тратах. Не может быть изменена."
+            "value" : "Основная валюта ведения учета трат и отображения сумм в поездках, локациях, бюджетах и тратах. Не может быть изменена."
           }
         }
       }
@@ -1836,6 +1836,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Отладка"
+          }
+        }
+      }
+    },
+    "settings.exchangeAdjustment" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exchange rate adj."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Корр. курса обмена"
+          }
+        }
+      }
+    },
+    "settings.exchangeAdjustment.hint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The default percentage of currency exchange rate adjustment. It is added to the rate in Expenses and affects the final amount. It can be overridden."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Процент по умолчанию корректировки курса обмена валюты. Прибавляется к курсу в тратах и влияет на конечную сумму. Может быть переопределен."
           }
         }
       }

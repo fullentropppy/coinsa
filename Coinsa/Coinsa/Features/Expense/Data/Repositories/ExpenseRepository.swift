@@ -21,7 +21,7 @@ struct ExpenseRepository {
         baseAmount: Double,
         rateLocalToBase: Double,
         paymentMethod: PaymentMethod,
-        exchangeAdjustmentPercentage: Double,
+        exchangeAdjustment: Double,
         category: ExpenseCategory,
         location: Location,
         comment: String?
@@ -31,7 +31,7 @@ struct ExpenseRepository {
             baseAmount: normalizeBaseAmount(baseAmount),
             rateLocalToBase: normalizeRateLocalToBase(rateLocalToBase),
             paymentMethod: paymentMethod,
-            exchangeAdjustmentPercentage: normalizeExchangeAdjustmentPercentage(exchangeAdjustmentPercentage),
+            exchangeAdjustment: normalizeExchangeAdjustment(exchangeAdjustment),
             category: category,
             location: location,
             comment: normalizeComment(comment)
@@ -46,7 +46,7 @@ struct ExpenseRepository {
         baseAmount: Double,
         rateLocalToBase: Double,
         paymentMethod: PaymentMethod,
-        exchangeAdjustmentPercentage: Double,
+        exchangeAdjustment: Double,
         category: ExpenseCategory,
         comment: String?
     ) {
@@ -54,7 +54,7 @@ struct ExpenseRepository {
         expense.baseAmount = normalizeBaseAmount(baseAmount)
         expense.rateLocalToBase = normalizeRateLocalToBase(rateLocalToBase)
         expense.paymentMethod = paymentMethod
-        expense.exchangeAdjustmentPercentage = normalizeExchangeAdjustmentPercentage(exchangeAdjustmentPercentage)
+        expense.exchangeAdjustment = normalizeExchangeAdjustment(exchangeAdjustment)
         expense.category = category
         expense.comment = normalizeComment(comment)
         try? context.save()
@@ -75,7 +75,7 @@ struct ExpenseRepository {
         rate > 0 ? rate.rounded(to: 4) : 0
     }
     
-    private func normalizeExchangeAdjustmentPercentage(_ percentage: Double) -> Double {
+    private func normalizeExchangeAdjustment(_ percentage: Double) -> Double {
         max(0, percentage)
     }
     
