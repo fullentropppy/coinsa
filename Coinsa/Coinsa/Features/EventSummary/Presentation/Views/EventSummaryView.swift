@@ -13,15 +13,15 @@ struct EventSummaryView: View {
     let data: EventSummaryData
     let showsHeader: Bool
     let showsAmounts: Bool
-    let showsDifference: Bool
+    let showsAmountBalance: Bool
     
     // MARK: - Вычисляемые свойства
 
-    private var baseAmountDifference: Double {
+    private var baseAmountBalance: Double {
         data.plannedBaseAmount - data.actualBaseAmount
     }
     
-    private var localAmountDifference: Double {
+    private var localAmountBalance: Double {
         if let planned = data.plannedLocalAmount, let actual = data.actualLocalAmount {
             planned - actual
         } else {
@@ -40,13 +40,13 @@ struct EventSummaryView: View {
         self.data = data
         self.showsHeader = showsHeader
         self.showsAmounts = showsAmounts
-        self.showsDifference = showsDifference
+        self.showsAmountBalance = showsDifference
     }
     
     // MARK: - Тело View
 
     var body: some View {
-        if !showsHeader && !showsAmounts && !showsDifference {
+        if !showsHeader && !showsAmounts && !showsAmountBalance {
             EmptyView()
         } else {
             VStack(spacing: 14) {
@@ -56,8 +56,9 @@ struct EventSummaryView: View {
                 if showsAmounts {
                     amountsContent
                 }
-                if showsDifference {
-                    differenceContent
+                
+                if showsAmountBalance && data.plannedBaseAmount > 0 {
+                    expenseAnalisysContent
                 }
             }
         }
@@ -74,7 +75,7 @@ struct EventSummaryView: View {
                 from: data.dateRangeProvider.startDate,
                 to: data.dateRangeProvider.endDate
             )
-            CountLabel.daysSecondarySmall(data.dateRangeProvider.durationInDays)
+            CountLabel.daysSecondarySmall(data.dateRangeProvider.totalDays)
         }
     }
 
@@ -97,13 +98,16 @@ struct EventSummaryView: View {
         }
     }
     
-    private var differenceContent: some View {
-        EventAmountDifferenceView(
-            baseAmountDifference: baseAmountDifference,
-            baseCurrency: data.baseCurrency,
-            localAmountDifference: localAmountDifference,
-            localCurrency: data.localCurrency
-        )
+    private var expenseAnalisysContent: some View {
+        VStack {
+            EventAmountBalanceView(
+                plannedBaseAmount: data.plannedBaseAmount,
+                baseAmountBalance: baseAmountBalance,
+                baseCurrency: data.baseCurrency,
+                localAmountBalance: localAmountBalance,
+                localCurrency: data.localCurrency
+            )
+        }
     }
 }
 

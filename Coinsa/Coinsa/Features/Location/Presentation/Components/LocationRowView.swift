@@ -40,7 +40,7 @@ struct LocationRowView: View {
         HStack(spacing: 10) {
             DateLabel.secondarySmall(from: location.startDate, to: location.endDate)
             Spacer()
-            CountLabel.daysSecondarySmall(location.durationInDays)
+            CountLabel.daysSecondarySmall(location.totalDays)
         }
     }
 }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-// MARK: - Публичные типы для генератора превью-данных
+// MARK: - Публичные типы
 
 enum PreviewScenario: CaseIterable {
     case japan

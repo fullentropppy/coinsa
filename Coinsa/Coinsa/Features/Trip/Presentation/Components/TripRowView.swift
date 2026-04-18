@@ -41,7 +41,7 @@ struct TripRowView: View {
             DateLabel.secondarySmall(from: trip.startDate, to: trip.endDate)
             Spacer()
             CountLabel.secondarySmall(trip.locations.count, icon: Location.primaryIcon)
-            CountLabel.daysSecondarySmall(trip.durationInDays)
+            CountLabel.daysSecondarySmall(trip.totalDays)
         }
     }
 }

@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-// MARK: - Публичные типы для поля ввода
+// MARK: - Публичные типы
 
 enum NumericEditField: Hashable {
     case amount

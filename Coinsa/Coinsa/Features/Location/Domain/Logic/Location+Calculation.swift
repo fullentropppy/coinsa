@@ -31,17 +31,33 @@ extension Location {
     
     // MARK: - Публичные методы
     
-    func calculatePlannedAmount(asBaseCurrency: Bool = true) -> Double {
-        budgets.reduce(0) {
+    func calculatePlannedAmountForToday(asBaseCurrency: Bool = true) -> Double {
+        let plannedAmount = calculatePlannedAmount(asBaseCurrency: asBaseCurrency, asDailyAverage: false)
+        let actualAmount = calculateActualAmount(asBaseCurrency: asBaseCurrency)
+        let remainingPlannedAmount = plannedAmount - actualAmount
+        
+        return remainingDays == 0 ? 0 : remainingPlannedAmount / Double(remainingDays)
+    }
+    
+    func calculatePlannedAmount(asBaseCurrency: Bool = true, asDailyAverage: Bool = false) -> Double {
+        let plannedAmount = budgets.reduce(0) {
             let exchangeRate = asBaseCurrency ? 1 : effectiveRateBaseToLocal
             return $0 + $1.baseAmount * exchangeRate
         }
+        return asDailyAverage ? plannedAmount / Double(totalDays).rounded() : plannedAmount
     }
 
-    func calculateActualAmount(asBaseCurrency: Bool = true) -> Double {
-        expenses.reduce(0) {
-            let exchangeRate = asBaseCurrency ? 1 : $1.effectiveRateBaseToLocal
-            return $0 + $1.baseAmount * exchangeRate
+    func calculateActualAmount(
+        asBaseCurrency: Bool = true,
+        withinDateRange: ClosedRange<Date>? = nil
+    ) -> Double {
+        expenses.reduce(0) { result, expense in
+            if let withinDateRange, !withinDateRange.contains(expense.date) {
+                return result
+            }
+            
+            let exchangeRate = asBaseCurrency ? 1 : expense.effectiveRateBaseToLocal
+            return result + expense.baseAmount * exchangeRate
         }
     }
 }

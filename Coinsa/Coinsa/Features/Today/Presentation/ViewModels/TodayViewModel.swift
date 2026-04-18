@@ -16,6 +16,9 @@ struct TodayViewModel {
     
     // MARK: - Состояние UI. Общее поведение и оформление
     
+    var today: Date = .now
+    var todayRange: ClosedRange<Date> = Date().startOfDay...Date().endOfDay
+    
     var selectedLocation: Location? {
         if let selectedLocationID,
            let location = currentLocations.first(where: { $0.id == selectedLocationID }) {
@@ -29,6 +32,14 @@ struct TodayViewModel {
         currentLocations.count > 1
     }
     
+    var navigtaionTitle: String {
+        if let selectedLocation, !hasMultipleLocations {
+            selectedLocation.name
+        } else {
+            String(localized: .today)
+        }
+    }
+    
     var navigationSubtitle: String {
         DateDisplayFormatter.format(.now, showsTime: false)
     }
@@ -39,7 +50,7 @@ struct TodayViewModel {
         guard let selectedLocation else { return nil }
         return (
             name: selectedLocation.name,
-            duration: selectedLocation.durationInDays,
+            duration: selectedLocation.totalDays,
             startDate: selectedLocation.startDate,
             endDate: selectedLocation.endDate
         )
@@ -53,8 +64,7 @@ struct TodayViewModel {
     
     var todayExpenses: [Expense] {
         guard let selectedLocation else { return [] }
-        
-        let today = Date()
+
         return selectedLocation.expenses
             .filter { $0.date >= today.startOfDay && $0.date < today.endOfDay }
             .sorted { $0.date > $1.date }
@@ -75,11 +85,11 @@ struct TodayViewModel {
     
     func eventSummaryData(for location: Location) -> EventSummaryData {
         let isHomeLocation = location.localCurrency == baseCurrency
-        
-        let plannedAmountBase = location.calculatePlannedAmount(asBaseCurrency: true)
-        let plannedAmountLocal = isHomeLocation ? nil : location.calculatePlannedAmount(asBaseCurrency: false)
-        let actualAmountBase = location.calculateActualAmount(asBaseCurrency: true)
-        let actualAmountLocal = isHomeLocation ? nil : location.calculateActualAmount(asBaseCurrency: false)
+
+        let plannedAmountBase = location.calculatePlannedAmountForToday()
+        let plannedAmountLocal = isHomeLocation ? nil : location.calculatePlannedAmountForToday(asBaseCurrency: false)
+        let actualAmountBase = location.calculateActualAmount(asBaseCurrency: true, withinDateRange: todayRange)
+        let actualAmountLocal = isHomeLocation ? nil : location.calculateActualAmount(asBaseCurrency: false, withinDateRange: todayRange)
         let localCurrency = isHomeLocation ? nil : location.localCurrency
 
         return EventSummaryData(

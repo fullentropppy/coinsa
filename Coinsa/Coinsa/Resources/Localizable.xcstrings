@@ -4,6 +4,16 @@
     "" : {
       "shouldTranslate" : false
     },
+    "%@ • %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ • %2$@"
+          }
+        }
+      }
+    },
     "amount.actual" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -21,19 +31,19 @@
         }
       }
     },
-    "amount.difference" : {
+    "amount.balance" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Difference"
+            "value" : "Balance: %1$(balancePercent)@"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Разница"
+            "value" : "Остаток: %(balancePercent)@"
           }
         }
       }
@@ -1823,36 +1833,36 @@
         }
       }
     },
-    "summary.baseDifference" : {
+    "summary.duoBalance" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$(baseAmountDifference)@ %2$(baseCurrencyCode)@"
+            "value" : "%1$(localAmountBalance)@ %2$(localCurrencyCode)@ • %3$(baseAmountBalance)@ %4$(baseCurrencyCode)@"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$(baseAmountDifference)@ %2$(baseCurrencyCode)@"
+            "value" : "%1$(localAmountBalance)@ %2$(localCurrencyCode)@ • %3$(baseAmountBalance)@ %4$(baseCurrencyCode)@"
           }
         }
       }
     },
-    "summary.extendedDifference" : {
+    "summary.monoBalance" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$(localAmountDifference)@ %2$(localCurrencyCode)@ • %3$(baseAmountDifference)@ %4$(baseCurrencyCode)@"
+            "value" : "%1$(baseAmountBalance)@ %2$(baseCurrencyCode)@"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$(localAmountDifference)@ %2$(localCurrencyCode)@ • %3$(baseAmountDifference)@ %4$(baseCurrencyCode)@"
+            "value" : "%1$(baseAmountBalance)@ %2$(baseCurrencyCode)@"
           }
         }
       }

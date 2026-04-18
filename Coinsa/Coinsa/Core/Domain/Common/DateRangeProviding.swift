@@ -18,9 +18,14 @@ protocol DateRangeProviding {
 // MARK: - Стандартная реализация
 
 extension DateRangeProviding {
-    var durationInDays: Int {
-        let duration = endDate.days(from: startDate)
-        return duration == 0 ? 1 : Int(duration)
+    var totalDays: Int {
+        let days = endDate.days(from: startDate)
+        return days == 0 ? 1 : Int(days)
+    }
+    
+    var remainingDays: Int {
+        let now = Date()
+        return now > endDate.endOfDay ? 0 : Int(endDate.days(from: Date())) + 1
     }
     
     var range: ClosedRange<Date> {

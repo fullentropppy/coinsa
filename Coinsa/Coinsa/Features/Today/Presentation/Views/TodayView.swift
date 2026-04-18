@@ -56,7 +56,7 @@ struct TodayView: View {
     var body: some View {
         NavigationStack {
             todayForm
-                .navigationTitle(.todayNavigationTitle)
+                .navigationTitle(viewModel.navigtaionTitle)
                 .navigationSubtitle(viewModel.navigationSubtitle)
                 .navigationBarTitleDisplayMode(.large)
         }
@@ -109,6 +109,7 @@ struct TodayView: View {
     private func locationContent(location: Location) -> some View {
         List {
             locationSection(location: location)
+            locationNavigationLinkSection(location: location)
             quickExpenseSection
             todayExpensesSection
         }
@@ -120,8 +121,26 @@ struct TodayView: View {
         Section {
             VStack(spacing: 14) {
                 locationPickerContent(location: location)
-                locationHeaderContent(location: location)
                 locationSummaryContent(location: location)
+            }
+        }
+    }
+    
+    private func locationNavigationLinkSection(location: Location) -> some View {
+        Section {
+            HStack {
+                NavigationLink {
+                    LocationDetailView(location)
+                } label: {
+                    HStack {
+                        Image(systemName: Location.primaryIcon)
+                            .imageScale(.small)
+                        Text("\(location.name) • \(location.trip.name)")
+                    }
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(.secondary)
+                    .frame(maxWidth: .infinity, alignment: .center)
+                }
             }
         }
     }
@@ -141,7 +160,7 @@ struct TodayView: View {
     private var todayExpensesSection: some View {
         Group {
             if viewModel.todayExpenses.isEmpty {
-                GroupHeaderView(icon: Location.primaryIcon, title: .todayNoExpenses)
+                GroupHeaderView(icon: Expense.primaryIcon, title: .todayNoExpenses)
                     .listRowBackground(Color.clear)
             } else {
                 todayExpenseListContent
@@ -161,22 +180,6 @@ struct TodayView: View {
                 }
             }
             .pickerStyle(.segmented)
-        }
-    }
-    
-    private func locationHeaderContent(location: Location) -> some View {
-        NavigationLink {
-            LocationDetailView(location)
-        } label: {
-            HStack {
-                if !viewModel.hasMultipleLocations {
-                    Text(location.name)
-                        .fontWeight(.semibold)
-                    Spacer()
-                }
-                DateLabel.secondarySmall(from: location.startDate, to: location.endDate)
-                CountLabel.daysSecondarySmall(location.durationInDays)
-            }
         }
     }
     
