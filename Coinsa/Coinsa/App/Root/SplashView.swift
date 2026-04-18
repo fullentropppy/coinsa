@@ -8,6 +8,10 @@
 import SwiftUI
 
 struct SplashView: View {
+    // MARK: - Окружение
+    
+    @Environment(\.haptics) private var haptics
+
     // MARK: - Свойства
 
     @State private var backgroundOpacity = 1.0
@@ -43,18 +47,24 @@ struct SplashView: View {
     private func runAnimationIfNeeded() async {
         guard !hasStartedAnimation else { return }
         hasStartedAnimation = true
-
+        
         withAnimation(.spring(response: 0.42, dampingFraction: 0.68)) {
             iconOpacity = 1
             iconScale = 1
         }
-        try? await Task.sleep(for: .milliseconds(400))
-
+        
+        try? await Task.sleep(for: .milliseconds(200))
+        haptics.trigger(.add)
+        
+        try? await Task.sleep(for: .milliseconds(200))
+        haptics.trigger(.tap)
+        
         withAnimation(.spring(response: 0.46, dampingFraction: 0.82)) {
             iconOpacity = 0
             iconScale = 0
             backgroundOpacity = 0
         }
+
         try? await Task.sleep(for: .milliseconds(2000))
         
         onFinished()

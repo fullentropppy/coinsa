@@ -111,13 +111,13 @@ final class CurrencyConverter {
     func convertToBase(fromLocal amount: Double) -> Double {
         let effectiveRate = effectiveRateLocalToBase
         guard effectiveRate > 0 else { return 0 }
-        return (amount * effectiveRate).rounded(to: 2)
+        return (amount * effectiveRate)
     }
     
     func convertToLocal(fromBase amount: Double) -> Double {
         let effectiveRate = effectiveRateLocalToBase
         guard effectiveRate > 0 else { return 0 }
-        return (amount / effectiveRate).rounded(to: 2)
+        return (amount / effectiveRate)
     }
     
     // MARK: - Процент корректировки

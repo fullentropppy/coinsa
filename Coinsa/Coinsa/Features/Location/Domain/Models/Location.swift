@@ -14,6 +14,8 @@ class Location: DateRangeProviding {
     
     @Attribute(.unique)
     var id: UUID
+    var createdAt: Date
+    var updatedAt: Date
     
     var name: String
     var startDate: Date
@@ -42,7 +44,12 @@ class Location: DateRangeProviding {
         budgets: [Budget] = [],
         expenses: [Expense] = []
     ) {
+        let now = Date()
+        
         self.id = UUID()
+        self.createdAt = now
+        self.updatedAt = now
+        
         self.name = name
         self.startDate = startDate
         self.endDate = endDate

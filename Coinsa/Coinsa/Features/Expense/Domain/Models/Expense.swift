@@ -14,6 +14,8 @@ class Expense {
     
     @Attribute(.unique)
     var id: UUID
+    var createdAt: Date
+    var updatedAt: Date
     
     var date: Date
     var baseAmount: Double
@@ -34,9 +36,14 @@ class Expense {
         exchangeAdjustment: Double,
         category: ExpenseCategory,
         location: Location,
-        comment: String? = nil
+        comment: String? = nil,
     ) {
+        let now = Date()
+        
         self.id = UUID()
+        self.createdAt = now
+        self.updatedAt = now
+        
         self.date = date
         self.baseAmount = baseAmount
         self.rateLocalToBase = rateLocalToBase

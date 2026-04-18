@@ -14,6 +14,8 @@ class Trip: DateRangeProviding {
     
     @Attribute(.unique)
     var id: UUID
+    var createdAt: Date
+    var updatedAt: Date
     
     var name: String
     var startDate: Date
@@ -30,7 +32,12 @@ class Trip: DateRangeProviding {
         endDate: Date,
         locations: [Location] = []
     ) {
+        let now = Date()
+        
         self.id = UUID()
+        self.createdAt = now
+        self.updatedAt = now
+        
         self.name = name
         self.startDate = startDate
         self.endDate = endDate

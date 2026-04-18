@@ -112,7 +112,8 @@ struct ExpenseEditView: View {
                     message: .exchangeRateLoadingErrorMessage(
                         errorDescription: viewModel.rateLoadingError?.errorDescription
                         ?? String(localized: .errorUnknown)
-                    )
+                    ),
+                    isError: true
                 )
                 .discardConfirmationAlert(
                     isPresented: $isShowingDiscardAlert,

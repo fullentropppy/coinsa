@@ -28,10 +28,10 @@ struct ExpenseRepository {
     ) {
         let expense = Expense(
             date: date,
-            baseAmount: normalizeBaseAmount(baseAmount),
-            rateLocalToBase: normalizeRateLocalToBase(rateLocalToBase),
+            baseAmount: baseAmount.nonNegative,
+            rateLocalToBase: rateLocalToBase.nonNegative,
             paymentMethod: paymentMethod,
-            exchangeAdjustment: normalizeExchangeAdjustment(exchangeAdjustment),
+            exchangeAdjustment: exchangeAdjustment.nonNegative,
             category: category,
             location: location,
             comment: normalizeComment(comment)
@@ -51,12 +51,13 @@ struct ExpenseRepository {
         comment: String?
     ) {
         expense.date = date
-        expense.baseAmount = normalizeBaseAmount(baseAmount)
-        expense.rateLocalToBase = normalizeRateLocalToBase(rateLocalToBase)
+        expense.baseAmount = baseAmount.nonNegative
+        expense.rateLocalToBase = rateLocalToBase.nonNegative
         expense.paymentMethod = paymentMethod
-        expense.exchangeAdjustment = normalizeExchangeAdjustment(exchangeAdjustment)
+        expense.exchangeAdjustment = exchangeAdjustment.nonNegative
         expense.category = category
         expense.comment = normalizeComment(comment)
+        expense.updatedAt = Date()
         try? context.save()
     }
 
@@ -66,19 +67,7 @@ struct ExpenseRepository {
     }
     
     // MARK: - Нормализация значений
-    
-    private func normalizeBaseAmount(_ amount: Double) -> Double {
-        amount > 0 ? amount.rounded(to: 2) : 0
-    }
-    
-    private func normalizeRateLocalToBase(_ rate: Double) -> Double {
-        rate > 0 ? rate.rounded(to: 4) : 0
-    }
-    
-    private func normalizeExchangeAdjustment(_ percentage: Double) -> Double {
-        max(0, percentage)
-    }
-    
+
     private func normalizeComment(_ comment: String?) -> String? {
         comment == nil ? nil : comment?.trimmed
     }

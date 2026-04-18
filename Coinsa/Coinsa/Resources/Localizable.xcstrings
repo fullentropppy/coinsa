@@ -815,7 +815,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Создать трату"
+            "value" : "Добавить трату"
           }
         }
       }
@@ -1291,7 +1291,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Создать локацию"
+            "value" : "Добавить локацию"
           }
         }
       }
@@ -2107,7 +2107,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Создать поездку"
+            "value" : "Добавить поездку"
           }
         }
       }

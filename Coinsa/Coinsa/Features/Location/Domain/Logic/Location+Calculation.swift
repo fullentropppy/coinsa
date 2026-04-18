@@ -25,7 +25,7 @@ extension Location {
     // MARK: - Приватные свойства
     
     private var adjustedRateLocalToBase: Double {
-        let adjustmentMultiplier = 1 + (max(0, exchangeAdjustment) / 100)
+        let adjustmentMultiplier = 1 + (exchangeAdjustment / 100)
         return rateLocalToBase * adjustmentMultiplier
     }
     

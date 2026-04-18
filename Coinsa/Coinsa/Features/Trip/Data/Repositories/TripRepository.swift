@@ -20,8 +20,7 @@ struct TripRepository {
         let trip = Trip(
             name: name,
             startDate: startDate,
-            endDate: endDate,
-            locations: []
+            endDate: endDate
         )
         
         context.insert(trip)
@@ -29,9 +28,10 @@ struct TripRepository {
     }
 
     func update(_ trip: Trip, name: String, startDate: Date, endDate: Date) {
-        trip.name = name
+        trip.name = name.trimmed
         trip.startDate = startDate
         trip.endDate = endDate
+        trip.updatedAt = Date()
         try? context.save()
     }
 

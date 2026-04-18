@@ -5,6 +5,7 @@
 //  Created by Daniil Gritsenko on 17.04.2026.
 //
 
+import Foundation
 import SwiftData
 
 @MainActor
@@ -24,7 +25,7 @@ final class SwiftDataSettingsManager {
         get { settings.exchangeAdjustment }
         set {
             settings.exchangeAdjustment = max(0, newValue)
-            try? context.save()
+            saveSettings()
         }
     }
     
@@ -49,5 +50,10 @@ final class SwiftDataSettingsManager {
         context.insert(new)
         
         return new
+    }
+    
+    private func saveSettings() -> Void {
+        settings.updatedAt = Date()
+        try? context.save()
     }
 }

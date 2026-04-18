@@ -22,7 +22,7 @@ final class ExchangeRateProvider {
     
     func getRate(from: Currency, to: Currency) async throws -> Double {
         try await AsyncTimeout.run(seconds: 5) {
-            try await self.service.fetchRate(from: from, to: to).rounded(to: 4)
+            try await self.service.fetchRate(from: from, to: to)
         }
     }
 }

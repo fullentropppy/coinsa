@@ -17,7 +17,7 @@ extension Expense {
     }
     
     var rateBaseToLocal: Double {
-        rateLocalToBase > 0 ? (1 / rateLocalToBase).rounded(to: 4) : 0
+        rateLocalToBase > 0 ? (1 / rateLocalToBase) : 0
     }
     
     var effectiveRateBaseToLocal: Double {
@@ -27,7 +27,7 @@ extension Expense {
     // MARK: - Приватные свойства
     
     private var adjustedRateLocalToBase: Double {
-        let adjustmentMultiplier = 1 + (max(0, exchangeAdjustment) / 100)
-        return (rateLocalToBase * adjustmentMultiplier).rounded(to: 4)
+        let adjustmentMultiplier = 1 + (exchangeAdjustment / 100)
+        return (rateLocalToBase * adjustmentMultiplier)
     }
 }
