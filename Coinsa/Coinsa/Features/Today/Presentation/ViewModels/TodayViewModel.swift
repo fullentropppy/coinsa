@@ -16,8 +16,13 @@ struct TodayViewModel {
     
     // MARK: - Состояние UI. Общее поведение и оформление
     
-    var today: Date = .now
-    var todayRange: ClosedRange<Date> = Date().startOfDay...Date().endOfDay
+    var today: Date {
+        .now
+    }
+    
+    var todayRange: ClosedRange<Date> {
+        today.startOfDay...today.endOfDay
+    }
     
     var selectedLocation: Location? {
         if let selectedLocationID,
@@ -66,7 +71,7 @@ struct TodayViewModel {
         guard let selectedLocation else { return [] }
 
         return selectedLocation.expenses
-            .filter { $0.date >= today.startOfDay && $0.date < today.endOfDay }
+            .filter { $0.date.isToday }
             .sorted { $0.date > $1.date }
     }
     

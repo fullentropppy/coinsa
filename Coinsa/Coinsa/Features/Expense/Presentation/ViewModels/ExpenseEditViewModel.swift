@@ -169,7 +169,7 @@ final class ExpenseEditViewModel {
             resolvedCategory = expense.category
             resolvedComment = expense.comment ?? ""
         } else {
-            resolvedDate = .now
+            resolvedDate = min(location.endDate, .now)
             resolvedAmountBase = 0
             resolvedRateLocalToBase = self.location.rateLocalToBase
             resolvedAmountLocal = 0

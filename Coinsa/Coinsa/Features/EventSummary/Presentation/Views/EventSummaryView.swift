@@ -17,6 +17,10 @@ struct EventSummaryView: View {
     
     // MARK: - Вычисляемые свойства
 
+    private var hasPlannedAmount: Bool {
+        data.plannedBaseAmount > 0
+    }
+    
     private var baseAmountBalance: Double {
         data.plannedBaseAmount - data.actualBaseAmount
     }
@@ -57,8 +61,8 @@ struct EventSummaryView: View {
                     amountsContent
                 }
                 
-                if showsAmountBalance && data.plannedBaseAmount > 0 {
-                    expenseAnalisysContent
+                if showsAmountBalance {
+                    amountBalanceContent
                 }
             }
         }
@@ -81,13 +85,15 @@ struct EventSummaryView: View {
 
     private var amountsContent: some View {
         HStack {
-            EventAmountCardView(
-                title: .amountPlanned,
-                baseAmount: data.plannedBaseAmount,
-                baseCurrency: data.baseCurrency,
-                localAmount: data.plannedLocalAmount,
-                localCurrency: data.localCurrency
-            )
+            if hasPlannedAmount {
+                EventAmountCardView(
+                    title: .amountPlanned,
+                    baseAmount: data.plannedBaseAmount,
+                    baseCurrency: data.baseCurrency,
+                    localAmount: data.plannedLocalAmount,
+                    localCurrency: data.localCurrency
+                )
+            }
             EventAmountCardView(
                 title: .amountActual,
                 baseAmount: data.actualBaseAmount,
@@ -98,15 +104,18 @@ struct EventSummaryView: View {
         }
     }
     
-    private var expenseAnalisysContent: some View {
-        VStack {
-            EventAmountBalanceView(
-                plannedBaseAmount: data.plannedBaseAmount,
-                baseAmountBalance: baseAmountBalance,
-                baseCurrency: data.baseCurrency,
-                localAmountBalance: localAmountBalance,
-                localCurrency: data.localCurrency
-            )
+    @ViewBuilder
+    private var amountBalanceContent: some View {
+        if hasPlannedAmount {
+            VStack {
+                EventAmountBalanceView(
+                    plannedBaseAmount: data.plannedBaseAmount,
+                    baseAmountBalance: baseAmountBalance,
+                    baseCurrency: data.baseCurrency,
+                    localAmountBalance: localAmountBalance,
+                    localCurrency: data.localCurrency
+                )
+            }
         }
     }
 }

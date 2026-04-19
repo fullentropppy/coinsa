@@ -19,8 +19,8 @@ protocol DateRangeProviding {
 
 extension DateRangeProviding {
     var totalDays: Int {
-        let days = endDate.days(from: startDate)
-        return days == 0 ? 1 : Int(days)
+        let days = endDate.startOfDay.days(from: startDate.startOfDay)
+        return days == 0 ? 1 : days + 1
     }
     
     var remainingDays: Int {
@@ -29,7 +29,7 @@ extension DateRangeProviding {
     }
     
     var range: ClosedRange<Date> {
-        startDate...endDate
+        startDate.startOfDay...endDate.endOfDay
     }
     
     var status: EventStatus {

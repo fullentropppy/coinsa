@@ -39,15 +39,15 @@ struct ProgressBar: View {
             return .green
         } else if style == .positive {
             switch progress {
-            case ..<0.2: return .red
-            case ..<0.4: return .orange
-            case ..<0.6: return .yellow
+            case ..<0.1: return .red
+            case ..<0.25: return .orange
+            case ..<0.4: return .yellow
             default: return .green
             }
         } else {
             switch progress {
-            case ..<0.7: return .green
-            case ..<0.8: return .yellow
+            case ..<0.6: return .green
+            case ..<0.75: return .yellow
             case ..<0.9: return .orange
             default: return .red
             }
@@ -86,23 +86,25 @@ struct ProgressBar: View {
 
 private extension ProgressBar {
     static func makePreview(colorScheme: ColorScheme) -> some View {
-        let maxValue: Double = 205
+        let maxValue: Double = 100
         
         return Form {
             Section {
-                ForEach(Array(stride(from: 5, through: maxValue, by: 100)), id: \.self) { value in
-                    ProgressBar(currentValue: value, maxValue: maxValue)
-                }
+                ProgressBar(currentValue: 50, maxValue: maxValue)
             }
             Section {
-                ForEach(Array(stride(from: 5, through: maxValue, by: 50)), id: \.self) { value in
-                    ProgressBar(currentValue: value, maxValue: maxValue, style: .positive)
-                }
+                ProgressBar(currentValue: 5, maxValue: maxValue, style: .positive)
+                ProgressBar(currentValue: 15, maxValue: maxValue, style: .positive)
+                ProgressBar(currentValue: 35, maxValue: maxValue, style: .positive)
+                ProgressBar(currentValue: 65, maxValue: maxValue, style: .positive)
+                ProgressBar(currentValue: 100, maxValue: maxValue, style: .positive)
             }
             Section {
-                ForEach(Array(stride(from: 5, through: maxValue, by: 50)), id: \.self) { value in
-                    ProgressBar(currentValue: value, maxValue: maxValue, style: .negative)
-                }
+                ProgressBar(currentValue: 5, maxValue: maxValue, style: .negative)
+                ProgressBar(currentValue: 40, maxValue: maxValue, style: .negative)
+                ProgressBar(currentValue: 60, maxValue: maxValue, style: .negative)
+                ProgressBar(currentValue: 80, maxValue: maxValue, style: .negative)
+                ProgressBar(currentValue: 100, maxValue: maxValue, style: .negative)
             }
         }
         .preferredColorScheme(colorScheme)

@@ -33,10 +33,21 @@ extension Location {
     
     func calculatePlannedAmountForToday(asBaseCurrency: Bool = true) -> Double {
         let plannedAmount = calculatePlannedAmount(asBaseCurrency: asBaseCurrency, asDailyAverage: false)
-        let actualAmount = calculateActualAmount(asBaseCurrency: asBaseCurrency)
-        let remainingPlannedAmount = plannedAmount - actualAmount
         
-        return remainingDays == 0 ? 0 : remainingPlannedAmount / Double(remainingDays)
+        if totalDays == 1 {
+            return plannedAmount
+        }
+        
+        let endOfYesterday = Date().yesterday.endOfDay
+        let startRange = min(startDate.startOfDay, endOfYesterday)
+        let endRange = max(startRange, endOfYesterday)
+        
+        let actualAmount = calculateActualAmount(
+            asBaseCurrency: asBaseCurrency,
+            withinDateRange: startRange...endRange
+        )
+        
+        return remainingDays == 0 ? 0 : (plannedAmount - actualAmount) / Double(remainingDays)
     }
     
     func calculatePlannedAmount(asBaseCurrency: Bool = true, asDailyAverage: Bool = false) -> Double {

@@ -39,7 +39,7 @@ extension Date {
     }
     
     func isBetween(_ start: Date, and end: Date) -> Bool {
-        self.startOfDay >= start && self.endOfDay <= end
+        self >= start && self <= end
     }
     
     // MARK: - Разница между датами

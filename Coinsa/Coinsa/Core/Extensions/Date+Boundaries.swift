@@ -69,7 +69,7 @@ extension Date {
     
     private func endOf(_ component: Calendar.Component) -> Date {
         if let endOfInterval = dateInterval(of: component)?.end {
-            endOfInterval - 1
+            endOfInterval.addingTimeInterval(-1)
         } else {
             self
         }
