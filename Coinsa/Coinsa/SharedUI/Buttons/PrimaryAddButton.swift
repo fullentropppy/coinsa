@@ -34,7 +34,7 @@ struct PrimaryAddButton: View {
             }
             .padding(16)
             .contentShape(Circle())
-            .glassEffect(.clear.interactive(), in: .circle)
+            .glassEffect(.regular.interactive(), in: .circle)
             
             if isOnLeft {
                 Spacer()

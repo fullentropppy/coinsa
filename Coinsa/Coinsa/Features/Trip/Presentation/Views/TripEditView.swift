@@ -82,7 +82,7 @@ struct TripEditView: View {
                 .tripStartDate,
                 selection: Binding(
                     get: { viewModel.startDate },
-                    set: { viewModel.startDate = $0.startOfDay }
+                    set: { viewModel.startDate = $0 }
                 ),
                 displayedComponents: .date
             )
@@ -90,7 +90,7 @@ struct TripEditView: View {
                 .tripEndDate,
                 selection: Binding(
                     get: { viewModel.endDate },
-                    set: { viewModel.endDate = $0.endOfDay }
+                    set: { viewModel.endDate = $0 }
                 ),
                 in: viewModel.startDate...,
                 displayedComponents: .date

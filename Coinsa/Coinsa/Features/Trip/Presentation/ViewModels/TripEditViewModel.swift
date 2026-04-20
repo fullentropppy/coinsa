@@ -67,8 +67,8 @@ final class TripEditViewModel {
             resolvedLocations = trip.locations
         } else {
             resolvedName = ""
-            resolvedStartDate = .now.startOfDay
-            resolvedEndDate = .now.endOfDay
+            resolvedStartDate = .now
+            resolvedEndDate = .now
             resolvedLocations = []
         }
 

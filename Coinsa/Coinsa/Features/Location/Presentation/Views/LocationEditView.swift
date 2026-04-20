@@ -127,22 +127,18 @@ struct LocationEditView: View {
     private var mainDataSection: some View {
         Section {
             TextField(.locationName, text: $viewModel.name)
-            // ++ Отключено до реализации поддержки часовых поясов
-            if false {
-                LabeledPicker(
-                    title: .locationTimeZone,
-                    selection: majorTimeZoneBinding,
-                    options: MajorTimeZone.allCasesSortedByGMT
-                ) { timeZone in
-                    timeZone.makeLabel()
-                }
+            LabeledPicker(
+                title: .locationTimeZone,
+                selection: majorTimeZoneBinding,
+                options: MajorTimeZone.allCasesSortedByGMT
+            ) { timeZone in
+                timeZone.makeLabel()
             }
-            // --
             DatePicker(
                 .locationStartDate,
                 selection: Binding(
                     get: { viewModel.startDate },
-                    set: { viewModel.startDate = $0.startOfDay }
+                    set: { viewModel.startDate = $0 }
                 ),
                 in: viewModel.trip.range,
                 displayedComponents: .date
@@ -151,17 +147,13 @@ struct LocationEditView: View {
                 .locationEndDate,
                 selection: Binding(
                     get: { viewModel.endDate },
-                    set: { viewModel.endDate = $0.endOfDay }
+                    set: { viewModel.endDate = $0 }
                 ),
                 in: viewModel.startDate...viewModel.trip.endDate,
                 displayedComponents: .date
             )
         } footer: {
-            // ++ Отключено до реализации поддержки часовых поясов
-            if false {
-                Text(.locationTimeZoneHint)
-            }
-            // --
+            Text(.locationTimeZoneHint)
         }
     }
     
