@@ -95,21 +95,21 @@ private extension EventAmountBalanceView {
                 EventAmountBalanceView(
                     plannedBaseAmount: 42000,
                     baseAmountBalance: -24600,
-                    baseCurrency: .defaultCurrency,
+                    baseCurrency: .defaultValue,
                     localAmountBalance: -41000,
                     localCurrency: .jpy
                 )
                 EventAmountBalanceView(
                     plannedBaseAmount: 42000,
                     baseAmountBalance: 0,
-                    baseCurrency: .defaultCurrency,
+                    baseCurrency: .defaultValue,
                     localAmountBalance: 0,
                     localCurrency: .jpy
                 )
                 EventAmountBalanceView(
                     plannedBaseAmount: 42000,
                     baseAmountBalance: 24600,
-                    baseCurrency: .defaultCurrency,
+                    baseCurrency: .defaultValue,
                     localAmountBalance: 41000,
                     localCurrency: .jpy
                 )
@@ -118,17 +118,17 @@ private extension EventAmountBalanceView {
                 EventAmountBalanceView(
                     plannedBaseAmount: 42000,
                     baseAmountBalance: -24600,
-                    baseCurrency: .defaultCurrency
+                    baseCurrency: .defaultValue
                 )
                 EventAmountBalanceView(
                     plannedBaseAmount: 42000,
                     baseAmountBalance: 0,
-                    baseCurrency: .defaultCurrency
+                    baseCurrency: .defaultValue
                 )
                 EventAmountBalanceView(
                     plannedBaseAmount: 42000,
                     baseAmountBalance: 24600,
-                    baseCurrency: .defaultCurrency
+                    baseCurrency: .defaultValue
                 )
             }
         }

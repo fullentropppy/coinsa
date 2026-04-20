@@ -7,6 +7,6 @@
 
 extension Currency {
     static func from(_ code: String) -> Currency {
-        Currency(rawValue: code.uppercased()) ?? .defaultCurrency
+        Currency(rawValue: code.uppercased()) ?? .defaultValue
     }
 }

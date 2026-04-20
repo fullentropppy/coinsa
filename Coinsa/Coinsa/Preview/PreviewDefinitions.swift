@@ -23,6 +23,13 @@ enum PreviewLocation: String {
     case busan = "Пусан"
     case istanbul = "Стамбул"
 
+    var timeZoneIdentifier: String {
+        switch self {
+        case .tokyo, .kyoto, .osaka, .seoul, .busan: MajorTimeZone.tokyo.identifier
+        case .saintp, .istanbul: MajorTimeZone.moscow.identifier
+        }
+    }
+    
     var currencyCode: String {
         switch self {
         case .tokyo, .kyoto, .osaka: Currency.jpy.code

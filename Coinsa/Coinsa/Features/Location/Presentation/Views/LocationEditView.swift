@@ -20,7 +20,6 @@ struct LocationEditView: View {
     @State private var deletionHandler = DeletionHandler<Location>()
     @State private var inputCurrency: InputCurrency = .base
     @State private var isShowingDiscardAlert = false
-
     @FocusState private var focusedField: NumericEditField?
     
     // MARK: - Зависимости
@@ -146,6 +145,13 @@ struct LocationEditView: View {
                 in: viewModel.startDate...viewModel.trip.endDate,
                 displayedComponents: .date
             )
+            LabeledPicker(
+                title: .locationTimeZone,
+                selection: majorTimeZoneBinding,
+                options: MajorTimeZone.allCasesSortedByGMT
+            ) { timeZone in
+                timeZone.makeLabel()
+            }
         }
     }
     
@@ -202,7 +208,7 @@ struct LocationEditView: View {
             }
             
             HStack {
-                LabelView(title: .locationBudgetTotal, badgeFrameWidth: 28, badgeIcon: "sum")
+                LabelView(style: .withIcon(title: .locationBudgetTotal, icon: "sum", iconWidth: 28))
                 Spacer()
                 AmountText.standard(budgetTotalValue)
             }
@@ -251,6 +257,13 @@ struct LocationEditView: View {
 
     // MARK: - Биндинги
     
+    private var majorTimeZoneBinding: Binding<MajorTimeZone> {
+        Binding(
+            get: { viewModel.majorTimeZone },
+            set: { viewModel.majorTimeZone = $0 }
+        )
+    }
+    
     private var localCurrencyBinding: Binding<Currency> {
         Binding(
             get: { viewModel.localCurrency },
@@ -259,7 +272,7 @@ struct LocationEditView: View {
             }
         )
     }
-
+    
     private var rateInputBinding: Binding<Double> {
         Binding(
             get: { viewModel.rateLocalToBase },
@@ -352,9 +365,9 @@ private extension LocationEditView {
         
         return Group {
             if let location {
-                LocationEditView(location, baseCurrency: Currency.defaultCurrency)
+                LocationEditView(location, baseCurrency: Currency.defaultValue)
             } else {
-                LocationEditView(trip: trip, baseCurrency: Currency.defaultCurrency)
+                LocationEditView(trip: trip, baseCurrency: Currency.defaultValue)
             }
         }
         .modelContainer(container)

@@ -44,7 +44,7 @@ final class SwiftDataSettingsManager {
         }
         
         let new = AppSettings(
-            baseCurrencyCode: Currency.defaultCurrencyCode,
+            baseCurrencyCode: Currency.defaultCode,
             exchangeAdjustment: 0
         )
         context.insert(new)

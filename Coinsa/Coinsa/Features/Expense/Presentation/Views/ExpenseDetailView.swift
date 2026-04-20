@@ -104,7 +104,7 @@ struct ExpenseDetailView: View {
             .padding(.bottom, 14)
             
             HStack(spacing: 6) {
-                Image(systemName: expense.paymentMethod.safeLabelBadgeIcon)
+                Image(systemName: expense.paymentMethod.secondaryIcon)
                     .imageScale(.medium)
                     .fontWeight(.semibold)
             }

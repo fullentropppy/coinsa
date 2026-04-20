@@ -125,7 +125,7 @@ private extension ExchangeRateInputField {
         @State private var rate: Double = 80.1234
         @FocusState private var focusedField: NumericEditField?
         
-        private var currency = Currency.defaultCurrency
+        private var currency = Currency.defaultValue
         private var isLoading: Bool
         
         init(isLoading: Bool) {

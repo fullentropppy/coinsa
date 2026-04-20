@@ -196,7 +196,7 @@ struct TodayView: View {
             selectedQuickCategory = category
         } label: {
             HStack {
-                Image(systemName: category.safeBadgeIcon)
+                Image(systemName: category.secondaryIcon)
                     .frame(width: 20)
                 Text(category.localizedResource)
                     
@@ -208,7 +208,7 @@ struct TodayView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
         }
         .buttonStyle(.glassProminent)
-        .tint(category.badgeColor)
+        .tint(category.accentColor)
     }
     
     private var todayExpenseListContent: some View {

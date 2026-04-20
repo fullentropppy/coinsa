@@ -51,7 +51,7 @@ extension CurrencyCodeText {
 
 private extension CurrencyCodeText {
     static func makePreview(colorScheme: ColorScheme) -> some View {
-        let currency = Currency.defaultCurrency
+        let currency = Currency.defaultValue
         
         return VStack(spacing: 40) {
             VStack(spacing: 20) {

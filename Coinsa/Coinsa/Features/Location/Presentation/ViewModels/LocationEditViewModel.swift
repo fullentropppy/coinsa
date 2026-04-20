@@ -58,6 +58,7 @@ final class LocationEditViewModel {
         }
     }
     var endDate: Date
+    var majorTimeZone: MajorTimeZone
     
     // MARK: - Состояние UI. Курс обмена
     
@@ -153,6 +154,7 @@ final class LocationEditViewModel {
         let resolvedLocalCurrency: Currency
         let resolvedRateLocalToBase: Double
         let resolvedExchangeAdjustment: Double
+        let resolvedMajorTimeZone: MajorTimeZone
         
         if let location {
             resolvedName = location.name
@@ -161,6 +163,7 @@ final class LocationEditViewModel {
             resolvedLocalCurrency = Currency.from(location.localCurrencyCode)
             resolvedRateLocalToBase = location.rateLocalToBase
             resolvedExchangeAdjustment = location.exchangeAdjustment
+            resolvedMajorTimeZone = location.majorTimeZone
         } else {
             resolvedName = ""
             resolvedStartDate = trip.startDate
@@ -168,6 +171,7 @@ final class LocationEditViewModel {
             resolvedLocalCurrency = baseCurrency
             resolvedRateLocalToBase = 1
             resolvedExchangeAdjustment = preselectedExchangeAdjustment ?? 0
+            resolvedMajorTimeZone = MajorTimeZone.defaultValue
         }
         
         var resolvedBudgetAmounts = Dictionary(
@@ -183,6 +187,7 @@ final class LocationEditViewModel {
         self.name = resolvedName
         self.startDate = resolvedStartDate
         self.endDate = resolvedEndDate
+        self.majorTimeZone = resolvedMajorTimeZone
         self.exchangeAdjustment = resolvedExchangeAdjustment
         
         self.currencyConverter = CurrencyConverter(
@@ -209,6 +214,7 @@ final class LocationEditViewModel {
             name: resolvedName,
             startDate: resolvedStartDate,
             endDate: resolvedEndDate,
+            majorTimeZone: resolvedMajorTimeZone,
             localCurrency: resolvedLocalCurrency,
             rateLocalToBase: resolvedRateLocalToBase,
             exchangeAdjustment: resolvedExchangeAdjustment,
@@ -252,6 +258,7 @@ final class LocationEditViewModel {
                 name: initialSnapshot.name,
                 startDate: initialSnapshot.startDate,
                 endDate: initialSnapshot.endDate,
+                majorTimeZone: initialSnapshot.majorTimeZone,
                 localCurrency: initialSnapshot.localCurrency,
                 rateLocalToBase: rateLocalToBase,
                 exchangeAdjustment: exchangeAdjustment,
@@ -291,6 +298,7 @@ final class LocationEditViewModel {
                 name: name,
                 startDate: startDate,
                 endDate: endDate,
+                majorTimeZone: majorTimeZone,
                 localCurrency: localCurrency,
                 rateLocalToBase: rateLocalToBase,
                 exchangeAdjustment: exchangeAdjustment,
@@ -301,6 +309,7 @@ final class LocationEditViewModel {
                 name: name,
                 startDate: startDate,
                 endDate: endDate,
+                majorTimeZone: majorTimeZone,
                 localCurrency: localCurrency,
                 rateLocalToBase: rateLocalToBase,
                 exchangeAdjustment: exchangeAdjustment,
@@ -320,6 +329,7 @@ private extension LocationEditViewModel {
         let name: String
         let startDate: Date
         let endDate: Date
+        let majorTimeZone: MajorTimeZone
         let localCurrency: Currency
         let rateLocalToBase: Double
         let exchangeAdjustment: Double
@@ -332,6 +342,7 @@ private extension LocationEditViewModel {
                 name: viewModel.name,
                 startDate: viewModel.startDate,
                 endDate: viewModel.endDate,
+                majorTimeZone: viewModel.majorTimeZone,
                 localCurrency: viewModel.localCurrency,
                 rateLocalToBase: viewModel.rateLocalToBase,
                 exchangeAdjustment: viewModel.exchangeAdjustment,
@@ -343,6 +354,7 @@ private extension LocationEditViewModel {
             name: String,
             startDate: Date,
             endDate: Date,
+            majorTimeZone: MajorTimeZone,
             localCurrency: Currency,
             rateLocalToBase: Double,
             exchangeAdjustment: Double,
@@ -351,6 +363,7 @@ private extension LocationEditViewModel {
             self.name = name.trimmed
             self.startDate = startDate
             self.endDate = endDate
+            self.majorTimeZone = majorTimeZone
             self.localCurrency = localCurrency
             self.rateLocalToBase = rateLocalToBase
             self.exchangeAdjustment = exchangeAdjustment

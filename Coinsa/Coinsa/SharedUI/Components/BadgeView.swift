@@ -8,22 +8,37 @@
 import SwiftUI
 
 struct BadgeView: View {
+    // MARK: - Вложенные типы
+    
+    enum Style {
+        case icon(icon: String, fill: Color)
+        case title(title: LocalizedStringResource, fill: Color)
+        case combined(icon: String, badge: LocalizedStringResource, fill: Color)
+    }
+    
     // MARK: - Свойства
     
-    private let fillColor: Color
+    private let fill: Color
     private let icon: String?
     private let title: LocalizedStringResource?
     
     // MARK: - Инициализация
     
-    init(
-        fillColor: Color,
-        icon: String? = nil,
-        title: LocalizedStringResource? = nil
-    ) {
-        self.fillColor = fillColor
-        self.icon = icon
-        self.title = title
+    init(style: Style) {
+        switch style {
+        case .icon(let icon, let fill):
+            self.fill = fill
+            self.icon = icon
+            self.title = nil
+        case .title(let text, let fill):
+            self.fill = fill
+            self.icon = nil
+            self.title = text
+        case .combined(let icon, let text, let fill):
+            self.fill = fill
+            self.icon = icon
+            self.title = text
+        }
     }
     
     // MARK: - Тело View
@@ -53,7 +68,15 @@ struct BadgeView: View {
         .padding(.vertical, 4)
         .frame(minWidth: 36)
         .frame(height: 22)
-        .background(fillColor.gradient, in: .capsule)
+        .background(fill.gradient, in: .capsule)
+    }
+    
+    private func iconComponent(icon: String) -> some View {
+        Image(systemName: icon)
+    }
+    
+    private func badgeComponent(badge: LocalizedStringResource) -> some View {
+        Text(badge)
     }
 }
 

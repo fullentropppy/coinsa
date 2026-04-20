@@ -61,7 +61,7 @@ private extension ExpenseRowView {
         let expense = builder.getExpense(from: data)
         
         return List {
-            ExpenseRowView(expense, baseCurrency: Currency.defaultCurrency)
+            ExpenseRowView(expense, baseCurrency: Currency.defaultValue)
                 .environment(\.locale, locale)
                 .preferredColorScheme(colorScheme)
         }

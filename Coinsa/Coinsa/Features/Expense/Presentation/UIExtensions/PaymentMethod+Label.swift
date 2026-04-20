@@ -8,14 +8,7 @@
 import Foundation
 
 extension PaymentMethod: LabelProviding {
-    var labelTitle: LocalizedStringResource {
-        self.localizedResource
-    }
-    
-    var labelBadgeIcon: String? {
-        switch self {
-        case .cash: "banknote"
-        case .card: "creditcard"
-        }
+    var labelSyle: LabelView.Style {
+        .withIcon(title: localizedResource, icon: primaryIcon, iconWidth: 28)
     }
 }

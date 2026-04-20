@@ -10,9 +10,9 @@ import Foundation
 extension Currency {
     static var allCasesSortedByName: [Currency] {
         allCases.sorted {
-            let firstName = String(localized: $0.localizedResource)
-            let secondName = String(localized: $1.localizedResource)
-            return firstName.localizedCaseInsensitiveCompare(secondName) == .orderedAscending
+            let name1 = String(localized: $0.localizedResource)
+            let name2 = String(localized: $1.localizedResource)
+            return name1.localizedCaseInsensitiveCompare(name2) == .orderedAscending
         }
     }
 }

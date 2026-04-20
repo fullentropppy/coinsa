@@ -92,7 +92,7 @@ extension AmountText {
 private extension AmountText {
     static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
         let amount = 12345.6789
-        let currency = Currency.defaultCurrency
+        let currency = Currency.defaultValue
         
         return VStack(spacing: 40) {
             VStack(spacing: 20) {

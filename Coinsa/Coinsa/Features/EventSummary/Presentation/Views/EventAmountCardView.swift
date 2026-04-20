@@ -61,14 +61,14 @@ private extension EventAmountCardView {
                 EventAmountCardView(
                     title: .amountActual,
                     baseAmount: 24600,
-                    baseCurrency: .defaultCurrency,
+                    baseCurrency: .defaultValue,
                     localAmount: 41000,
                     localCurrency: .jpy
                 )
                 EventAmountCardView(
                     title: .amountActual,
                     baseAmount: 24600,
-                    baseCurrency: .defaultCurrency
+                    baseCurrency: .defaultValue
                 )
             }
         }

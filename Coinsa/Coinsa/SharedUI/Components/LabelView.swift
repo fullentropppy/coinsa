@@ -8,55 +8,49 @@
 import SwiftUI
 
 struct LabelView: View {
+    // MARK: - Вложенные типы
+
+    enum Style {
+        case withIcon(title: LocalizedStringResource, icon: String, iconWidth: CGFloat)
+        case withText(title: LocalizedStringResource, text: String)
+    }
+    
     // MARK: - Свойства
     
-    let title: LocalizedStringResource
-    let badgeFrameWidth: Double
-    let badgeIcon: String?
-    let badgeText: String?
-    
-    // MARK: - Инициализация
-    
-    init(
-        title: LocalizedStringResource,
-        badgeFrameWidth: Double,
-        badgeIcon: String? = nil,
-        badgeText: String? = nil
-    ) {
-        self.title = title
-        self.badgeFrameWidth = badgeFrameWidth
-        self.badgeIcon = badgeIcon
-        self.badgeText = badgeText
-    }
+    let style: Style
     
     // MARK: - Тело View
     
     var body: some View {
-        if badgeIcon == nil && badgeText == nil {
-            EmptyView()
-        } else {
-            labelContent
+        switch style {
+        case .withIcon(let title, let icon, let iconWidth):
+            withIconComponent(title: title, icon: icon, iconWidth: iconWidth)
+        case .withText(let title, let badge):
+            withBadgeComponent(title: title, badge: badge)
         }
     }
     
     // MARK: - Компоненты
     
-    private var labelContent: some View {
+    private func withIconComponent(
+        title: LocalizedStringResource,
+        icon: String,
+        iconWidth: CGFloat
+    ) -> some View {
         HStack(alignment: .center, spacing: 4) {
-            Group {
-                if let badgeIcon {
-                    Image(systemName: badgeIcon)
-                        .imageScale(.small)
-                } else if let badgeText {
-                    Text(badgeText)
-                        .font(.body.monospaced().weight(.semibold))
-                }
-            }
-            .foregroundStyle(.secondary)
-            .frame(width: badgeFrameWidth)
+            Image(systemName: icon)
+                .imageScale(.small)
+                .fontWeight(.semibold)
+                .foregroundStyle(.secondary)
+                .frame(width: iconWidth, alignment: .center)
             Text(title)
         }
     }
+    
+    private func withBadgeComponent(title: LocalizedStringResource, badge: String) -> some View {
+        Text("\(badge) • \(title)")
+    }
+    
 }
 
 // MARK: - Превью

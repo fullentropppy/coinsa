@@ -130,13 +130,13 @@ private extension EventSummaryData {
         let trip = builder.getTrip(from: data)
         let tripViewModel = TripDetailViewModel(
             trip: trip,
-            baseCurrency: Currency.defaultCurrency
+            baseCurrency: Currency.defaultValue
         )
         
         let location = builder.getLocation(from: data)
         let locationViewModel = LocationDetailViewModel(
             location: location,
-            baseCurrency: Currency.defaultCurrency
+            baseCurrency: Currency.defaultValue
         )
         
         return Form {

@@ -8,18 +8,7 @@
 import Foundation
 
 extension ExpenseCategory: LabelProviding {
-    var labelTitle: LocalizedStringResource {
-        self.localizedResource
-    }
-    
-    var labelBadgeIcon: String? {
-        switch self {
-        case .food: "fork.knife"
-        case .transport: "car"
-        case .activity: "sparkles.2"
-        case .shopping: "bag"
-        case .medicine: "pills"
-        case .other: "circle.grid.2x2"
-        }
+    var labelSyle: LabelView.Style {
+        .withIcon(title: localizedResource, icon: primaryIcon, iconWidth: 28)
     }
 }

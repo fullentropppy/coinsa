@@ -12,10 +12,7 @@ import SwiftUI
 protocol LabelProviding {
     // MARK: - Свойства
     
-    var labelTitle: LocalizedStringResource { get }
-    var labelBadgeFrameWidth: Double { get }
-    var labelBadgeIcon: String? { get }
-    var labelBadgeText: String? { get }
+    var labelSyle: LabelView.Style { get }
     
     // MARK: - Методы
     
@@ -25,25 +22,7 @@ protocol LabelProviding {
 // MARK: - Стандартная реализация
 
 extension LabelProviding {
-    // MARK: - Свойства со значениями по умолчанию
-    
-    var labelBadgeFrameWidth: Double { 28 }
-    var labelBadgeIcon: String? { nil }
-    var labelBadgeText: String? { nil }
-    
-    // MARK: - Свойства с безопасным извлечением
-    
-    var safeLabelBadgeIcon: String { labelBadgeIcon ?? "" }
-    var safelabelBadgeText: String { labelBadgeText ?? "" }
-    
-    // MARK: - Методы
-    
     func makeLabel() -> LabelView {
-        LabelView(
-            title: labelTitle,
-            badgeFrameWidth: labelBadgeFrameWidth,
-            badgeIcon: labelBadgeIcon,
-            badgeText: labelBadgeText
-        )
+        LabelView(style: labelSyle)
     }
 }

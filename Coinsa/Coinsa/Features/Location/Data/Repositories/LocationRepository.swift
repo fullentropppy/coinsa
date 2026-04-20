@@ -20,6 +20,7 @@ struct LocationRepository {
         name: String,
         startDate: Date,
         endDate: Date,
+        majorTimeZone: MajorTimeZone,
         localCurrency: Currency,
         rateLocalToBase: Double,
         exchangeAdjustment: Double,
@@ -30,10 +31,11 @@ struct LocationRepository {
             name: name.trimmed,
             startDate: startDate,
             endDate: endDate,
+            timeZoneIdentifier: majorTimeZone.identifier,
             localCurrencyCode: localCurrency.code,
             rateLocalToBase: rateLocalToBase.nonNegative,
             exchangeAdjustment: exchangeAdjustment.nonNegative,
-            trip: trip
+            trip: trip,
         )
 
         applyBudgets(budgetsByCategory, to: location)
@@ -46,6 +48,7 @@ struct LocationRepository {
         name: String,
         startDate: Date,
         endDate: Date,
+        majorTimeZone: MajorTimeZone,
         localCurrency: Currency,
         rateLocalToBase: Double,
         exchangeAdjustment: Double,
@@ -54,6 +57,7 @@ struct LocationRepository {
         location.name = name.trimmed
         location.startDate = startDate
         location.endDate = endDate
+        location.timeZoneIdentifier = majorTimeZone.identifier
         location.localCurrencyCode = localCurrency.code
         location.rateLocalToBase = rateLocalToBase.nonNegative
         location.exchangeAdjustment = exchangeAdjustment.nonNegative

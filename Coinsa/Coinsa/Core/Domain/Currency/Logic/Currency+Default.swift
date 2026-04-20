@@ -6,6 +6,6 @@
 //
 
 extension Currency {
-    static var defaultCurrency: Currency { Currency.rub }
-    static var defaultCurrencyCode: String { defaultCurrency.code }
+    static var defaultValue: Currency { Currency.rub }
+    static var defaultCode: String { defaultValue.code }
 }

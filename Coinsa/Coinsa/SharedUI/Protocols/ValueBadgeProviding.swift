@@ -9,12 +9,10 @@ import SwiftUI
 
 // MARK: - Протокол
 
-protocol ValueBadgeProviding {
+protocol ValueBadgeProviding: ValueVisualRepresentable {
     // MARK: - Свойства
     
-    var badgeColor: Color { get }
-    var badgeIcon: String? { get }
-    var badgeTitle: LocalizedStringResource? { get }
+    var badgeStyle: BadgeView.Style { get }
     
     // MARK: - Методы
     
@@ -25,27 +23,11 @@ protocol ValueBadgeProviding {
 // MARK: - Стандартная реализация
 
 extension ValueBadgeProviding {
-    // MARK: - Свойства со значениями по умолчанию
-    
-    var badgeIcon: String? { nil }
-    var badgeTitle: LocalizedStringResource? { nil }
-    
-    // MARK: - Свойства с безопасным извлечением
-    
-    var safeBadgeIcon: String { badgeIcon ?? "" }
-    var safeBadgeTitle: LocalizedStringResource { badgeTitle ?? "" }
-    
-    // MARK: - Методы
-    
     func makeBadge() -> BadgeView {
-        BadgeView(
-            fillColor: badgeColor,
-            icon: badgeIcon,
-            title: badgeTitle
-        )
+        BadgeView(style: badgeStyle)
     }
     
     func makeDot() -> DotView {
-        DotView(badgeColor)
+        DotView(accentColor)
     }
 }

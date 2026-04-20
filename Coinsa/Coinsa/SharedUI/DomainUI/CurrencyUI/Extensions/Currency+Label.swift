@@ -8,7 +8,7 @@
 import Foundation
 
 extension Currency: LabelProviding {
-    var labelTitle: LocalizedStringResource { self.localizedResource }
-    var labelBadgeFrameWidth: Double { 38 }
-    var labelBadgeText: String? { self.code }
+    var labelSyle: LabelView.Style {
+        .withText(title: localizedResource, text: code)
+    }
 }
