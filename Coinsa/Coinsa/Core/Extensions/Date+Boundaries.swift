@@ -8,74 +8,125 @@
 import Foundation
 
 extension Date {
-    // MARK: - Начало периода
+    // MARK: - Свойства. Начало периода по текущему календарю
     
     var startOfMinute: Date {
-        startOf([.year, .month, .day, .hour, .minute])
+        startOfMinute()
     }
     
     var startOfHour: Date {
-        startOf([.year, .month, .day, .hour])
+        startOfHour()
     }
     
     var startOfDay: Date {
-        startOf([.year, .month, .day])
+        startOfDay()
     }
     
     var startOfWeek: Date {
-        dateInterval(of: .weekOfYear)?.start ?? self
+        startOfWeek()
     }
     
     var startOfMonth: Date {
-        startOf([.year, .month])
+        startOfMonth()
     }
     
     var startOfYear: Date {
-        startOf([.year])
+        startOfYear()
     }
     
-    // MARK: - Конец периода
+    // MARK: - Свойства. Конец периода по текущему календарю
     
     var endOfMinute: Date {
-        endOf(.minute)
+        endOfMinute()
     }
     
     var endOfHour: Date {
-        endOf(.hour)
+        endOfHour()
     }
     
     var endOfDay: Date {
-        endOf(.day)
+        endOfDay()
     }
     
     var endOfWeek: Date {
-        endOf(.weekOfYear)
+        endOfWeek()
     }
     
     var endOfMonth: Date {
-        endOf(.month)
+        endOfMonth()
     }
     
     var endOfYear: Date {
-        endOf(.year)
+        endOfYear()
+    }
+    
+    // MARK: - Методы. Начало периода с поддержкой календаря
+    
+    func startOfMinute(using calendar: Calendar = .current) -> Date {
+        startOf([.year, .month, .day, .hour, .minute], using: calendar)
+    }
+    
+    func startOfHour(using calendar: Calendar = .current) -> Date {
+        startOf([.year, .month, .day, .hour], using: calendar)
+    }
+    
+    func startOfDay(using calendar: Calendar = .current) -> Date {
+        startOf([.year, .month, .day], using: calendar)
+    }
+    
+    func startOfWeek(using calendar: Calendar = .current) -> Date {
+        dateInterval(of: .weekOfYear, using: calendar)?.start ?? self
+    }
+    
+    func startOfMonth(using calendar: Calendar = .current) -> Date {
+        startOf([.year, .month], using: calendar)
+    }
+    
+    func startOfYear(using calendar: Calendar = .current) -> Date {
+        startOf([.year], using: calendar)
+    }
+    
+    // MARK: - Методы. Конец периода с поддержкой календаря
+    
+    func endOfMinute(using calendar: Calendar = .current) -> Date {
+        endOf(.minute, using: calendar)
+    }
+    
+    func endOfHour(using calendar: Calendar = .current) -> Date {
+        endOf(.hour, using: calendar)
+    }
+    
+    func endOfDay(using calendar: Calendar = .current) -> Date {
+        endOf(.day, using: calendar)
+    }
+    
+    func endOfWeek(using calendar: Calendar = .current) -> Date {
+        endOf(.weekOfYear, using: calendar)
+    }
+    
+    func endOfMonth(using calendar: Calendar = .current) -> Date {
+        endOf(.month, using: calendar)
+    }
+    
+    func endOfYear(using calendar: Calendar = .current) -> Date {
+        endOf(.year, using: calendar)
     }
     
     // MARK: - Внутренние методы
     
-    private func startOf(_ components: Set<Calendar.Component>) -> Date {
-        let calendar = Calendar.current
+    private func startOf(_ components: Set<Calendar.Component>, using calendar: Calendar) -> Date {
         return calendar.date(from: calendar.dateComponents(components, from: self)) ?? self
     }
     
-    private func endOf(_ component: Calendar.Component) -> Date {
-        if let endOfInterval = dateInterval(of: component)?.end {
+    private func endOf(_ component: Calendar.Component, using calendar: Calendar) -> Date {
+        if let endOfInterval = dateInterval(of: component, using: calendar)?.end {
             endOfInterval.addingTimeInterval(-1)
         } else {
             self
         }
     }
     
-    private func dateInterval(of component: Calendar.Component) -> DateInterval? {
-        Calendar.current.dateInterval(of: component, for: self)
+    private func dateInterval(of component: Calendar.Component, using calendar: Calendar) -> DateInterval? {
+        calendar.dateInterval(of: component, for: self)
     }
 }

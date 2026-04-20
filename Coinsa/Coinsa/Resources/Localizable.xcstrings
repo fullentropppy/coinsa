@@ -1618,6 +1618,23 @@
         }
       }
     },
+    "location.timeZone.hint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The dates of the Location and the dates of all Expenses of the current Location are entered in the selected time zone."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Даты локации и даты всех трат текущей локации вводятся в выбранном часовом поясе."
+          }
+        }
+      }
+    },
     "majorTimeZone.name.adelaide" : {
       "extractionState" : "manual",
       "localizations" : {

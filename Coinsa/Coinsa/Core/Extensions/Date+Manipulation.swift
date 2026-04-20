@@ -8,43 +8,53 @@
 import Foundation
 
 extension Date {
-    // MARK: - Смежные дни
+    // MARK: - Свойства. Смежные дни по текущему календарю
     
     var yesterday: Date {
-        adding(days: -1)
+        yesterday()
     }
     
     var tomorrow: Date {
+        tomorrow()
+    }
+    
+    // MARK: - Методы. Смежные дни с поддержкой календаря
+    
+    func yesterday(using calendar: Calendar = .current) -> Date {
+        adding(days: -1)
+    }
+    
+    func tomorrow(using calendar: Calendar = .current) -> Date {
         adding(days: 1)
     }
     
-    // MARK: - Добавление компонентов
+    // MARK: - Методы. Добавление компонентов с поддержкой календаря
     
-    func adding(seconds: Int) -> Date {
-        adding(seconds, .second)
+    func adding(seconds: Int, using calendar: Calendar = .current) -> Date {
+        adding(seconds, .second, using: calendar)
     }
     
-    func adding(minutes: Int) -> Date {
-        adding(minutes, .minute)
+    func adding(minutes: Int, using calendar: Calendar = .current) -> Date {
+        adding(minutes, .minute, using: calendar)
     }
     
-    func adding(hours: Int) -> Date {
-        adding(hours, .hour)
+    func adding(hours: Int, using calendar: Calendar = .current) -> Date {
+        adding(hours, .hour, using: calendar)
     }
-    func adding(days: Int) -> Date {
-        adding(days, .day)
-    }
-    
-    func adding(weeks: Int) -> Date {
-        adding(weeks, .weekOfYear)
+    func adding(days: Int, using calendar: Calendar = .current) -> Date {
+        adding(days, .day, using: calendar)
     }
     
-    func adding(months: Int) -> Date {
-        adding(months, .month)
+    func adding(weeks: Int, using calendar: Calendar = .current) -> Date {
+        adding(weeks, .weekOfYear, using: calendar)
     }
     
-    func adding(years: Int) -> Date {
-        adding(years, .year)
+    func adding(months: Int, using calendar: Calendar = .current) -> Date {
+        adding(months, .month, using: calendar)
+    }
+    
+    func adding(years: Int, using calendar: Calendar = .current) -> Date {
+        adding(years, .year, using: calendar)
     }
 
     func adding(
@@ -54,7 +64,8 @@ extension Date {
         days: Int = 0,
         hours: Int = 0,
         minutes: Int = 0,
-        seconds: Int = 0
+        seconds: Int = 0,
+        using calendar: Calendar = .current
     ) -> Date {
         var dateComponents = DateComponents()
         
@@ -66,12 +77,16 @@ extension Date {
         dateComponents.minute = minutes
         dateComponents.second = seconds
         
-        return Calendar.current.date(byAdding: dateComponents, to: self) ?? self
+        return calendar.date(byAdding: dateComponents, to: self) ?? self
     }
     
     // MARK: - Внутренние методы
     
-    private func adding(_ value: Int, _ component: Calendar.Component) -> Date {
-        Calendar.current.date(byAdding: component, value: value, to: self) ?? self
+    private func adding(
+        _ value: Int,
+        _ component: Calendar.Component,
+        using calendar: Calendar
+    ) -> Date {
+        calendar.date(byAdding: component, value: value, to: self) ?? self
     }
 }
