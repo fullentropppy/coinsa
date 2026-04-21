@@ -28,6 +28,8 @@ struct ThirdPartyLink: View {
                 .tint(.primary)
                 Spacer()
                 Image(systemName: "arrow.up.right")
+                    .imageScale(.small)
+                    .fontWeight(.semibold)
                     .foregroundStyle(.link)
             }
         }

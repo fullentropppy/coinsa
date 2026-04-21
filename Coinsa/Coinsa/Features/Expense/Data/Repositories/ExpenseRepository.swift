@@ -26,15 +26,20 @@ struct ExpenseRepository {
         location: Location,
         comment: String?
     ) {
+        let now = Date()
+        
         let expense = Expense(
+            id: UUID(),
             date: date,
-            baseAmount: baseAmount.nonNegative,
-            rateLocalToBase: rateLocalToBase.nonNegative,
+            baseAmount: normalizedAmount(baseAmount),
+            rateLocalToBase: normalizedRateLocalToBase(rateLocalToBase),
             paymentMethod: paymentMethod,
-            exchangeAdjustment: exchangeAdjustment.nonNegative,
+            exchangeAdjustment: normalizedExchangeAdjustment(exchangeAdjustment),
             category: category,
             location: location,
-            comment: normalizeComment(comment)
+            comment: normalizeComment(comment),
+            createdAt: now,
+            updatedAt: now
         )
         context.insert(expense)
         try? context.save()
@@ -51,10 +56,10 @@ struct ExpenseRepository {
         comment: String?
     ) {
         expense.date = date
-        expense.baseAmount = baseAmount.nonNegative
-        expense.rateLocalToBase = rateLocalToBase.nonNegative
+        expense.baseAmount = normalizedAmount(baseAmount)
+        expense.rateLocalToBase = normalizedRateLocalToBase(rateLocalToBase)
         expense.paymentMethod = paymentMethod
-        expense.exchangeAdjustment = exchangeAdjustment.nonNegative
+        expense.exchangeAdjustment = normalizedExchangeAdjustment(exchangeAdjustment)
         expense.category = category
         expense.comment = normalizeComment(comment)
         expense.updatedAt = Date()
@@ -68,6 +73,18 @@ struct ExpenseRepository {
     
     // MARK: - Нормализация значений
 
+    private func normalizedAmount(_ amount: Double) -> Double {
+        amount.nonNegative
+    }
+    
+    private func normalizedRateLocalToBase(_ rate: Double) -> Double {
+        rate.nonNegative
+    }
+    
+    private func normalizedExchangeAdjustment(_ adjustment: Double) -> Double {
+        adjustment.nonNegative
+    }
+    
     private func normalizeComment(_ comment: String?) -> String? {
         comment == nil ? nil : comment?.trimmed
     }

@@ -38,7 +38,7 @@ enum MajorTimeZone: String, CaseIterable, Identifiable {
     case adelaide = "Australia/Adelaide"
     case sydney = "Australia/Sydney"
     case auckland = "Pacific/Auckland"
-    case tonga = "Pacific/Tongatapu"
+    case tongatapu = "Pacific/Tongatapu"
     
     // MARK: - Базовые свойства
     

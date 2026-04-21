@@ -27,16 +27,17 @@ class Trip: DateRangeProviding {
     // MARK: - Инициализация
     
     init(
+        id: UUID,
         name: String,
         startDate: Date,
         endDate: Date,
-        locations: [Location] = []
+        locations: [Location],
+        createdAt: Date,
+        updatedAt: Date,
     ) {
-        let now = Date()
-        
-        self.id = UUID()
-        self.createdAt = now
-        self.updatedAt = now
+        self.id = id
+        self.createdAt = createdAt
+        self.updatedAt = updatedAt
         
         self.name = name
         self.startDate = startDate

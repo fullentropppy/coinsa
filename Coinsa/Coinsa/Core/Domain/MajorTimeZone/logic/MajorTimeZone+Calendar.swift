@@ -9,8 +9,6 @@ import Foundation
 
 extension MajorTimeZone {
     var calendar: Calendar {
-        var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = timeZone
-        return calendar
+        timeZone.calendar
     }
 }

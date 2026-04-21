@@ -40,7 +40,7 @@ extension MajorTimeZone: LocalizedResourceProviding {
         case .adelaide: .majorTimeZoneNameAdelaide
         case .sydney: .majorTimeZoneNameSydney
         case .auckland: .majorTimeZoneNameAuckland
-        case .tonga: .majorTimeZoneNameTongatapu
+        case .tongatapu: .majorTimeZoneNameTongatapu
         }
     }
 }

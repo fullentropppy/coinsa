@@ -126,14 +126,18 @@ struct LocationEditView: View {
     
     private var mainDataSection: some View {
         Section {
-            TextField(.locationName, text: $viewModel.name)
-            LabeledPicker(
-                title: .locationTimeZone,
-                selection: majorTimeZoneBinding,
-                options: MajorTimeZone.allCasesSortedByGMT
-            ) { timeZone in
-                timeZone.makeLabel()
+            // ++ Отключено до реализации поддержки работы с часовыми поясами
+            if false {
+                TextField(.locationName, text: $viewModel.name)
+                LabeledPicker(
+                    title: .locationTimeZone,
+                    selection: majorTimeZoneBinding,
+                    options: MajorTimeZone.allCasesSortedByGMT
+                ) { timeZone in
+                    timeZone.makeLabel()
+                }
             }
+            // --
             DatePicker(
                 .locationStartDate,
                 selection: Binding(
@@ -153,7 +157,11 @@ struct LocationEditView: View {
                 displayedComponents: .date
             )
         } footer: {
-            Text(.locationTimeZoneHint)
+            // ++ Отключено до реализации поддержки работы с часовыми поясами
+            if false {
+                Text(.locationTimeZoneHint)
+            }
+            // --
         }
     }
     

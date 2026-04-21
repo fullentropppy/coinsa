@@ -8,6 +8,16 @@
 import Foundation
 
 extension Date {
+    // MARK: - Свойства. Основные границы по текущему календарю
+    
+    var inclusive: Date {
+        inclusive()
+    }
+    
+    var exclusive: Date {
+        exclusive()
+    }
+    
     // MARK: - Свойства. Начало периода по текущему календарю
     
     var startOfMinute: Date {
@@ -58,6 +68,16 @@ extension Date {
     
     var endOfYear: Date {
         endOfYear()
+    }
+    
+    // MARK: - Методы. Основные границы с поддержкой календаря
+    
+    func inclusive(using calendar: Calendar = .current) -> Date {
+        startOfDay(using: calendar).adding(days: -1, using: calendar)
+    }
+    
+    func exclusive(using calendar: Calendar = .current) -> Date {
+        endOfDay(using: calendar)
     }
     
     // MARK: - Методы. Начало периода с поддержкой календаря
@@ -115,7 +135,7 @@ extension Date {
     // MARK: - Внутренние методы
     
     private func startOf(_ components: Set<Calendar.Component>, using calendar: Calendar) -> Date {
-        return calendar.date(from: calendar.dateComponents(components, from: self)) ?? self
+        calendar.date(from: calendar.dateComponents(components, from: self)) ?? self
     }
     
     private func endOf(_ component: Calendar.Component, using calendar: Calendar) -> Date {

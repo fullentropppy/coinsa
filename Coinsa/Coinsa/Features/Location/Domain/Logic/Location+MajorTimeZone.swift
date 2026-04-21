@@ -9,6 +9,6 @@ import Foundation
 
 extension Location {
     var majorTimeZone: MajorTimeZone {
-        MajorTimeZone.from(timeZoneIdentifier)
+        MajorTimeZone.from(selectedTimeZoneIdentifier)
     }
 }

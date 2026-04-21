@@ -20,7 +20,7 @@ final class TripEditViewModel {
     let trip: Trip?
     
     // MARK: - Состояние UI. Общее поведение и оформление
-
+    
     var isEditing: Bool {
         trip != nil
     }
@@ -71,7 +71,7 @@ final class TripEditViewModel {
             resolvedEndDate = .now
             resolvedLocations = []
         }
-
+        
         name = resolvedName
         startDate = resolvedStartDate
         endDate = resolvedEndDate

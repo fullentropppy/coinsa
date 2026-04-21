@@ -13,30 +13,50 @@ struct TripRepository {
     // MARK: - Свойства
     
     let context: ModelContext
-
+    
     // MARK: - Операции с хранилищем
     
     func add(name: String, startDate: Date, endDate: Date) {
+        let now = Date()
+        
         let trip = Trip(
-            name: name,
-            startDate: startDate,
-            endDate: endDate
+            id: UUID(),
+            name: normlizedName(name),
+            startDate: normalizedStartDate(startDate),
+            endDate: normalizedEndDate(endDate),
+            locations: [],
+            createdAt: now,
+            updatedAt: now
         )
         
         context.insert(trip)
         try? context.save()
     }
-
+    
     func update(_ trip: Trip, name: String, startDate: Date, endDate: Date) {
-        trip.name = name.trimmed
-        trip.startDate = startDate
-        trip.endDate = endDate
+        trip.name = normlizedName(name)
+        trip.startDate = normalizedStartDate(startDate)
+        trip.endDate = normalizedEndDate(endDate)
         trip.updatedAt = Date()
         try? context.save()
     }
-
+    
     func delete(_ trip: Trip) {
         context.delete(trip)
         try? context.save()
+    }
+    
+    // MARK: - Номализация
+    
+    private func normlizedName(_ name: String) -> String {
+        name.trimmed
+    }
+    
+    private func normalizedStartDate(_ startDate: Date) -> Date {
+        startDate.startOfDay
+    }
+    
+    private func normalizedEndDate(_ endDate: Date) -> Date {
+        endDate.endOfDay
     }
 }

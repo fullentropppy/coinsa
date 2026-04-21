@@ -20,7 +20,7 @@ class Location: DateRangeProviding {
     var name: String
     var startDate: Date
     var endDate: Date
-    var timeZoneIdentifier: String
+    var selectedTimeZoneIdentifier: String
     var localCurrencyCode: String
     var rateLocalToBase: Double
     var exchangeAdjustment: Double
@@ -35,27 +35,28 @@ class Location: DateRangeProviding {
     // MARK: - Инициализация
     
     init(
+        id: UUID,
         name: String,
         startDate: Date,
         endDate: Date,
-        timeZoneIdentifier: String,
+        selectedTimeZoneIdentifier: String,
         localCurrencyCode: String,
         rateLocalToBase: Double,
         exchangeAdjustment: Double,
         trip: Trip,
         budgets: [Budget] = [],
-        expenses: [Expense] = []
+        expenses: [Expense] = [],
+        createdAt: Date,
+        updatedAt: Date,
     ) {
-        let now = Date()
-        
-        self.id = UUID()
-        self.createdAt = now
-        self.updatedAt = now
+        self.id = id
+        self.createdAt = createdAt
+        self.updatedAt = updatedAt
         
         self.name = name
         self.startDate = startDate
         self.endDate = endDate
-        self.timeZoneIdentifier = timeZoneIdentifier
+        self.selectedTimeZoneIdentifier = selectedTimeZoneIdentifier
         self.localCurrencyCode = localCurrencyCode
         self.rateLocalToBase = rateLocalToBase
         self.exchangeAdjustment = exchangeAdjustment

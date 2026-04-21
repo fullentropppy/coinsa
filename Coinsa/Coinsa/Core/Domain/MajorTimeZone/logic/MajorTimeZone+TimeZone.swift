@@ -8,6 +8,10 @@
 import Foundation
 
 extension MajorTimeZone {
+    static var systemTimeZone: TimeZone {
+        .current
+    }
+    
     var timeZone: TimeZone {
         TimeZone(identifier: self.identifier) ?? .current
     }

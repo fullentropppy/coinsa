@@ -27,15 +27,20 @@ struct LocationRepository {
         trip: Trip,
         budgetsByCategory: [ExpenseCategory: Double]
     ) {
+        let now = Date()
+        
         let location = Location(
+            id: UUID(),
             name: name.trimmed,
             startDate: startDate,
             endDate: endDate,
-            timeZoneIdentifier: majorTimeZone.identifier,
+            selectedTimeZoneIdentifier: majorTimeZone.identifier,
             localCurrencyCode: localCurrency.code,
-            rateLocalToBase: rateLocalToBase.nonNegative,
-            exchangeAdjustment: exchangeAdjustment.nonNegative,
+            rateLocalToBase: normalizedRateLocalToBase(rateLocalToBase),
+            exchangeAdjustment: normalizedRateLocalToBase(exchangeAdjustment),
             trip: trip,
+            createdAt: now,
+            updatedAt: now
         )
 
         applyBudgets(budgetsByCategory, to: location)
@@ -57,10 +62,10 @@ struct LocationRepository {
         location.name = name.trimmed
         location.startDate = startDate
         location.endDate = endDate
-        location.timeZoneIdentifier = majorTimeZone.identifier
+        location.selectedTimeZoneIdentifier = majorTimeZone.identifier
         location.localCurrencyCode = localCurrency.code
-        location.rateLocalToBase = rateLocalToBase.nonNegative
-        location.exchangeAdjustment = exchangeAdjustment.nonNegative
+        location.rateLocalToBase = normalizedRateLocalToBase(rateLocalToBase)
+        location.exchangeAdjustment = normalizedRateLocalToBase(exchangeAdjustment)
         location.updatedAt = Date()
         
         applyBudgets(budgetsByCategory, to: location)
@@ -85,12 +90,12 @@ struct LocationRepository {
         for (category, amount) in budgetsByCategory {
             if amount > 0 {
                 if let budget = existingBudgets[category] {
-                    budget.baseAmount = amount.nonNegative
+                    budget.baseAmount = normalizedAmount(amount)
                     budget.updatedAt = Date()
                 } else {
                     let budget = Budget(
                         category: category,
-                        baseAmount: amount.nonNegative,
+                        baseAmount: normalizedAmount(amount),
                         location: location
                     )
                     location.budgets.append(budget)
@@ -100,5 +105,31 @@ struct LocationRepository {
                 context.delete(budget)
             }
         }
+    }
+    
+    // MARK: - Номализация
+    
+    private func normlizedName(_ name: String) -> String {
+        name.trimmed
+    }
+    
+    private func normalizedStartDate(_ startDate: Date) -> Date {
+        startDate.startOfDay
+    }
+    
+    private func normalizedEndDate(_ endDate: Date) -> Date {
+        endDate.exclusive
+    }
+    
+    private func normalizedAmount(_ amount: Double) -> Double {
+        amount.nonNegative
+    }
+    
+    private func normalizedRateLocalToBase(_ rate: Double) -> Double {
+        rate.nonNegative
+    }
+    
+    private func normalizedExchangeAdjustment(_ adjustment: Double) -> Double {
+        adjustment.nonNegative
     }
 }

@@ -5,13 +5,46 @@
 //  Created by Daniil Gritsenko on 03.03.2026.
 //
 
-// MARK: - Наборы превью-данных
+import Foundation
+
+// MARK: - Наборы данных
 
 enum PreviewTrip: String {
     case japan = "Япония"
     case russia = "Россия"
     case southKorea = "Южная Корея"
     case turkey = "Турция"
+    
+    var name: String {
+        rawValue
+    }
+    
+    var startDate: Date {
+        switch self {
+        case .japan: Date().adding(months: -14)
+        case .russia: Date().adding(months: -2)
+        case .southKorea: Date().adding(days: -3)
+        case .turkey: Date().adding(months: 3)
+        }
+    }
+    
+    var endDate: Date {
+        switch self {
+        case .japan: startDate.adding(days: 14)
+        case .russia: startDate
+        case .southKorea: startDate.adding(days: 10)
+        case .turkey: startDate.adding(days: 7)
+        }
+    }
+    
+    var locationsData: [PreviewLocation] {
+        switch self {
+        case .japan: [.tokyo, .kyoto, .osaka]
+        case .russia: [.saintp]
+        case .southKorea: [.seoul, .busan]
+        case .turkey: [.istanbul]
+        }
+    }
 }
 
 enum PreviewLocation: String {
@@ -23,7 +56,44 @@ enum PreviewLocation: String {
     case busan = "Пусан"
     case istanbul = "Стамбул"
 
-    var timeZoneIdentifier: String {
+    var name: String {
+        rawValue
+    }
+    
+    var tripData: PreviewTrip {
+        switch self {
+        case .tokyo, .kyoto, .osaka: .japan
+        case .saintp: .russia
+        case .seoul, .busan: .southKorea
+        case .istanbul: .turkey
+        }
+    }
+    
+    var startDate: Date {
+        switch self {
+        case .tokyo: tripData.startDate
+        case .kyoto: PreviewLocation.tokyo.endDate
+        case .osaka: PreviewLocation.kyoto.endDate
+        case .saintp: tripData.startDate
+        case .seoul: tripData.startDate
+        case .busan: PreviewLocation.seoul.endDate
+        case .istanbul: tripData.startDate
+        }
+    }
+    
+    var endDate: Date {
+        switch self {
+        case .tokyo: startDate.adding(days: 6)
+        case .kyoto: PreviewLocation.tokyo.endDate.adding(days: 4)
+        case .osaka: tripData.endDate
+        case .saintp: tripData.endDate
+        case .seoul: tripData.startDate.adding(days: 6)
+        case .busan: tripData.endDate
+        case .istanbul: tripData.endDate
+        }
+    }
+
+    var selectedTimeZoneIdentifier: String {
         switch self {
         case .tokyo, .kyoto, .osaka, .seoul, .busan: MajorTimeZone.tokyo.identifier
         case .saintp, .istanbul: MajorTimeZone.moscow.identifier
@@ -39,7 +109,7 @@ enum PreviewLocation: String {
         }
     }
 
-    var exchangeRate: Double {
+    var rateLocalToBase: Double {
         PreviewCurrency.exchangeRate(forCode: currencyCode)
     }
     

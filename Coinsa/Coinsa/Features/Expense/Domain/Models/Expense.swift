@@ -29,6 +29,7 @@ class Expense {
     // MARK: - Инициализация
     
     init(
+        id: UUID,
         date: Date = .now,
         baseAmount: Double,
         rateLocalToBase: Double,
@@ -37,12 +38,12 @@ class Expense {
         category: ExpenseCategory,
         location: Location,
         comment: String? = nil,
+        createdAt: Date,
+        updatedAt: Date
     ) {
-        let now = Date()
-        
-        self.id = UUID()
-        self.createdAt = now
-        self.updatedAt = now
+        self.id = id
+        self.createdAt = createdAt
+        self.updatedAt = updatedAt
         
         self.date = date
         self.baseAmount = baseAmount

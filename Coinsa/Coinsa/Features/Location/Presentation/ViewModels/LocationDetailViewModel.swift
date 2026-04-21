@@ -53,6 +53,16 @@ struct LocationDetailViewModel {
         
         var result: [(date: Date, expenses: [Expense])] = []
         
+        let futureDates = grouped.keys
+            .filter { $0 > today }
+            .sorted(by: >)
+        
+        for date in futureDates {
+            if let expensesForDate = grouped[date] {
+                result.append((date: date, expenses: expensesForDate))
+            }
+        }
+        
         if let todayExpenses = grouped[today] {
             result.append((date: today, expenses: todayExpenses))
         }
@@ -61,11 +71,11 @@ struct LocationDetailViewModel {
             result.append((date: yesterday, expenses: yesterdayExpenses))
         }
         
-        let otherDates = grouped.keys
-            .filter { $0 != today && $0 != yesterday }
+        let pastDates = grouped.keys
+            .filter { $0 < yesterday }
             .sorted(by: >)
         
-        for date in otherDates {
+        for date in pastDates {
             if let expensesForDate = grouped[date] {
                 result.append((date: date, expenses: expensesForDate))
             }
