@@ -12,30 +12,38 @@ struct DateLabel: View {
     
     private let date1: Date
     private let date2: Date?
+    private let calendar: Calendar
     private let font: Font
     private let color: Color
     
     private var labelText: String {
         if let date2 {
-            DateDisplayFormatter.formatRange(startDate: date1, endDate: date2)
+            DateDisplayFormatter.formatRange(startDate: date1, endDate: date2, using: calendar)
         } else {
-            DateDisplayFormatter.format(date1)
+            DateDisplayFormatter.format(date1, using: calendar)
         }
     }
     
     // MARK: - Инициализация
     
-    init(_ date: Date, font: Font = .body, color: Color = .primary) {
-        self.init(date1: date, font: font, color: color)
+    init(_ date: Date, using calendar: Calendar = .current, font: Font = .body, color: Color = .primary) {
+        self.date1 = date
+        self.date2 = nil
+        self.calendar = calendar
+        self.font = font
+        self.color = color
     }
     
-    init(from date1: Date, to date2: Date, font: Font = .body, color: Color = .primary) {
-        self.init(date1: date1, date2: date2, font: font, color: color)
-    }
-    
-    private init(date1: Date, date2: Date? = nil, font: Font = .body, color: Color = .primary) {
-        self.date1 = date1
-        self.date2 = date2
+    init(
+        from startDate: Date,
+        to endDate: Date,
+        using calendar: Calendar = .current,
+        font: Font = .body,
+        color: Color = .primary
+    ) {
+        self.date1 = startDate
+        self.date2 = endDate
+        self.calendar = calendar
         self.font = font
         self.color = color
     }
@@ -52,12 +60,16 @@ struct DateLabel: View {
 // MARK: - Предопределенные варианты
 
 extension DateLabel {
-    static func secondarySmall(_ date: Date) -> some View {
-        DateLabel(date, font: .footnote, color: .secondary)
+    static func secondarySmall(_ date: Date, using calendar: Calendar = .current) -> some View {
+        DateLabel(date, using: calendar, font: .footnote, color: .secondary)
     }
     
-    static func secondarySmall(from date1: Date, to date2: Date) -> some View {
-        DateLabel(from: date1, to: date2, font: .footnote, color: .secondary)
+    static func secondarySmall(
+        from startDate: Date,
+        to endDate: Date,
+        using calendar: Calendar = .current
+    ) -> some View {
+        DateLabel(from: startDate, to: endDate, using: calendar, font: .footnote, color: .secondary)
     }
 }
 

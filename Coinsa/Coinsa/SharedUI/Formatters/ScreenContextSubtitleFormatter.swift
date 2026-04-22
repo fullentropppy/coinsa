@@ -8,10 +8,16 @@
 import Foundation
 
 struct ScreenContextSubtitleFormatter {
-    static func format(parentTitle: String, startDate: Date, endDate: Date) -> String {
+    static func format(
+        parentTitle: String,
+        startDate: Date,
+        endDate: Date,
+        using calendar: Calendar = .current
+    ) -> String {
         let dateRange = DateDisplayFormatter.formatRange(
             startDate: startDate,
-            endDate: endDate
+            endDate: endDate,
+            using: calendar
         )
 
         guard !parentTitle.isEmpty else {

@@ -60,6 +60,10 @@ final class LocationEditViewModel {
     var endDate: Date
     var majorTimeZone: MajorTimeZone
     
+    var availableRange: ClosedRange<Date> {
+        min(trip.startDate, startDate)...max(endDate, trip.endDate)
+    }
+    
     // MARK: - Состояние UI. Курс обмена
     
     var rateLocalToBase: Double {

@@ -39,7 +39,7 @@ extension Location {
         }
         
         let endOfYesterday = Date().yesterday.endOfDay
-        let startRange = min(startDate.startOfDay, endOfYesterday)
+        let startRange = min(startDate, endOfYesterday)
         let endRange = max(startRange, endOfYesterday)
         
         let actualAmount = calculateActualAmount(

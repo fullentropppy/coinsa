@@ -7,20 +7,21 @@
 
 import SwiftUI
 
-// MARK: - Публичные типы
-
-enum progressBarStyle {
-    case plain
-    case positive
-    case negative
-}
-
 struct ProgressBar: View {
+    // MARK: - Вложенные типы
+    
+    enum Style {
+        case plain
+        case positive
+        case negative
+    }
+
+    
     // MARK: - Свойства
     
     let currentValue: Double
     let maxValue: Double
-    let style: progressBarStyle
+    let style: Style
     
     private var progress: Double {
         maxValue > 0 ? max(min(currentValue / maxValue, 1), 0) : 0
@@ -56,7 +57,7 @@ struct ProgressBar: View {
     
     // MARK: - Инициализация
     
-    init(currentValue: Double, maxValue: Double, style: progressBarStyle = .plain) {
+    init(currentValue: Double, maxValue: Double, style: Style = .plain) {
         self.currentValue = currentValue
         self.maxValue = maxValue
         self.style = style

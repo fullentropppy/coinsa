@@ -13,12 +13,20 @@ protocol DateRangeProviding {
     var startDate: Date { get }
     var endDate: Date { get }
     var status: EventStatus { get }
+    var totalDays: Int { get }
+    var elapsedDays: Int { get }
+    var remainingDays: Int { get }
+    var range: ClosedRange<Date> { get }
 }
 
 // MARK: - Стандартная реализация
 
 extension DateRangeProviding {
     // MARK: - Свойства. Расчет по текущему календарю
+    
+    var status: EventStatus {
+        status()
+    }
     
     var totalDays: Int {
         totalDays()
@@ -33,14 +41,22 @@ extension DateRangeProviding {
     }
     
     var range: ClosedRange<Date> {
-        range()
-    }
-    
-    var status: EventStatus {
-        status()
+        startDate...endDate
     }
     
     // MARK: - Методы. Расчет с поддержкой календаря
+    
+    func status(using calendar: Calendar = .current) -> EventStatus {
+        let today = Date().startOfDay(using: calendar)
+        
+        if today > endDate {
+            return .completed
+        } else if today.isBetween(startDate, and: endDate, using: calendar) {
+            return .ongoing
+        } else {
+            return .upcoming
+        }
+    }
     
     func totalDays(using calendar: Calendar = .current) -> Int {
         endDate.days(from: startDate, using: calendar) + 1
@@ -52,24 +68,5 @@ extension DateRangeProviding {
     
     func remainingDays(on date: Date = .now, using calendar: Calendar = .current) -> Int {
         min(totalDays(using: calendar), max(0, endDate.days(from: date, using: calendar)))
-    }
-    
-    func range(using calendar: Calendar = .current) -> ClosedRange<Date> {
-        startDate.startOfDay(using: calendar)...endDate.endOfDay(using: calendar)
-    }
-    
-    func status(using calendar: Calendar = .current) -> EventStatus {
-        let today = Date().startOfDay(using: calendar)
-        
-        let startDay = startDate.startOfDay(using: calendar)
-        let endDay = endDate.inclusive(using: calendar)
-        
-        if today > endDay {
-            return .completed
-        } else if today.isBetween(startDay, and: endDay, using: calendar) {
-            return .ongoing
-        } else {
-            return .upcoming
-        }
     }
 }
