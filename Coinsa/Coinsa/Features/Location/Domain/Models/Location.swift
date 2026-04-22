@@ -25,8 +25,6 @@ class Location: DateRangeProviding {
     var rateLocalToBase: Double
     var exchangeAdjustment: Double
     var trip: Trip
-    
-    @Relationship(deleteRule: .cascade, inverse: \Budget.location)
     var budgets: [Budget]
     
     @Relationship(deleteRule: .cascade, inverse: \Expense.location)

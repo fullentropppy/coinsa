@@ -22,7 +22,7 @@ struct PreviewBuilder {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
 
         let container = try! ModelContainer(
-            for: Trip.self, Location.self, Budget.self, Expense.self, AppSettings.self,
+            for: Trip.self, Location.self, Expense.self, AppSettings.self,
             configurations: config
         )
 
@@ -110,14 +110,6 @@ extension PreviewBuilder {
             )
         }
 
-        func fetchBudget(from container: ModelContainer, at index: Int = 0) -> Budget {
-            fetchItem(
-                from: container,
-                at: index,
-                sortBy: [SortDescriptor(\Budget.location.trip.startDate, order: .forward)]
-            )
-        }
-
         func fetchExpense(from container: ModelContainer, at index: Int = 0) -> Expense {
             fetchItem(
                 from: container,
@@ -138,15 +130,6 @@ extension PreviewBuilder {
 
         func getLocation(from data: [Trip], tripIndex: Int = 0, locationIndex: Int = 0) -> Location {
             getTrip(from: data, at: tripIndex).locations[locationIndex]
-        }
-
-        func getBudget(
-            from data: [Trip],
-            tripIndex: Int = 0,
-            locationIndex: Int = 0,
-            budgetIndex: Int = 0
-        ) -> Budget {
-            getLocation(from: data, tripIndex: tripIndex, locationIndex: locationIndex).budgets[budgetIndex]
         }
 
         func getExpense(

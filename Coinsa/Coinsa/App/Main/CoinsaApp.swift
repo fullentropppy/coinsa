@@ -16,7 +16,6 @@ struct CoinsaApp: App {
     [
         Trip.self,
         Location.self,
-        Budget.self,
         Expense.self,
         AppSettings.self
     ]

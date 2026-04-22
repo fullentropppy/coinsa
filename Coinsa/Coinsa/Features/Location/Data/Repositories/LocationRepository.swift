@@ -79,32 +79,11 @@ struct LocationRepository {
 
     // MARK: - Приватные методы
 
-    private func applyBudgets(
-        _ budgetsByCategory: [ExpenseCategory: Double],
-        to location: Location
-    ) {
-        let existingBudgets = Dictionary(
-            uniqueKeysWithValues: location.budgets.map { ($0.category, $0) }
+    private func applyBudgets(_ budgetsByCategory: [ExpenseCategory: Double], to location: Location) {
+        let normalizedBudgets = Dictionary(
+            uniqueKeysWithValues: budgetsByCategory.map { ($0.key, normalizedAmount($0.value)) }
         )
-
-        for (category, amount) in budgetsByCategory {
-            if amount > 0 {
-                if let budget = existingBudgets[category] {
-                    budget.baseAmount = normalizedAmount(amount)
-                    budget.updatedAt = Date()
-                } else {
-                    let budget = Budget(
-                        category: category,
-                        baseAmount: normalizedAmount(amount),
-                        location: location
-                    )
-                    location.budgets.append(budget)
-                }
-            } else if let budget = existingBudgets[category] {
-                location.budgets.removeAll { $0 === budget }
-                context.delete(budget)
-            }
-        }
+        location.applyBudgets(normalizedBudgets)
     }
     
     // MARK: - Номализация

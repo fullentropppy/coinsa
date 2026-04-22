@@ -183,8 +183,8 @@ final class LocationEditViewModel {
         )
         
         if let location {
-            for budget in location.budgets {
-                resolvedBudgetAmounts[budget.category] = budget.baseAmount
+            for (category, amount) in location.budgetsByCategory() {
+                resolvedBudgetAmounts[category] = amount
             }
         }
         
@@ -204,9 +204,7 @@ final class LocationEditViewModel {
         
         var initialBudgets: [ExpenseCategory: Double] = [:]
         if let location {
-            for budget in location.budgets {
-                initialBudgets[budget.category] = budget.baseAmount
-            }
+            initialBudgets = location.budgetsByCategory()
         }
         
         self.budgetManager = BudgetManager(

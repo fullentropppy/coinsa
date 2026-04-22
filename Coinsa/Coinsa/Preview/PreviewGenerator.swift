@@ -136,62 +136,62 @@ private extension PreviewGenerator {
 
 private extension PreviewGenerator {
     private static func includeBudgets(of previewLocation: PreviewLocation, to location: Location) {
-        var budgets: [Budget] = []
+        var budgetsByCategory: [ExpenseCategory: Double] = [:]
         
         switch previewLocation {
         case .tokyo:
-            budgets = [
-                Budget(category: .food, baseAmount: 22000, location: location),
-                Budget(category: .transport, baseAmount: 7200, location: location),
-                Budget(category: .activity, baseAmount: 12550, location: location),
-                Budget(category: .shopping, baseAmount: 29500, location: location),
-                Budget(category: .medicine, baseAmount: 2000, location: location),
-                Budget(category: .other, baseAmount: 9490, location: location)
+            budgetsByCategory = [
+                .food: 22000,
+                .transport: 7200,
+                .activity: 12550,
+                .shopping: 29500,
+                .medicine: 2000,
+                .other: 9490
             ]
         case .kyoto:
-            budgets = [
-                Budget(category: .food, baseAmount: 18000, location: location),
-                Budget(category: .activity, baseAmount: 5000, location: location),
-                Budget(category: .shopping, baseAmount: 19000, location: location),
-                Budget(category: .other, baseAmount: 20500, location: location)
+            budgetsByCategory = [
+                .food: 18000,
+                .activity: 5000,
+                .shopping: 19000,
+                .other: 20500
             ]
         case .osaka:
-            budgets = [
-                Budget(category: .food, baseAmount: 14000, location: location),
-                Budget(category: .transport, baseAmount: 6500, location: location),
-                Budget(category: .other, baseAmount: 30000, location: location)
+            budgetsByCategory = [
+                .food: 14000,
+                .transport: 6500,
+                .other: 30000
             ]
         case .saintp:
-            budgets = [
-                Budget(category: .food, baseAmount: 7000, location: location),
-                Budget(category: .transport, baseAmount: 1500, location: location),
-                Budget(category: .activity, baseAmount: 4500, location: location),
-                Budget(category: .other, baseAmount: 2000, location: location)
+            budgetsByCategory = [
+                .food: 7000,
+                .transport: 1500,
+                .activity: 4500,
+                .other: 2000
             ]
         case .seoul:
-            budgets = [
-                Budget(category: .food, baseAmount: 24000, location: location),
-                Budget(category: .transport, baseAmount: 5200, location: location),
-                Budget(category: .activity, baseAmount: 11000, location: location),
-                Budget(category: .shopping, baseAmount: 20000, location: location)
+            budgetsByCategory = [
+                .food: 24000,
+                .transport: 5200,
+                .activity: 11000,
+                .shopping: 20000
             ]
         case .busan:
-            budgets = [
-                Budget(category: .food, baseAmount: 12000, location: location),
-                Budget(category: .transport, baseAmount: 2800, location: location),
-                Budget(category: .other, baseAmount: 15000, location: location)
+            budgetsByCategory = [
+                .food: 12000,
+                .transport: 2800,
+                .other: 15000
             ]
         case .istanbul:
-            budgets = [
-                Budget(category: .food, baseAmount: 21000, location: location),
-                Budget(category: .transport, baseAmount: 3600, location: location),
-                Budget(category: .activity, baseAmount: 8200, location: location),
-                Budget(category: .shopping, baseAmount: 6800, location: location),
-                Budget(category: .other, baseAmount: 4200, location: location)
+            budgetsByCategory = [
+                .food: 21000,
+                .transport: 3600,
+                .activity: 8200,
+                .shopping: 6800,
+                .other: 4200
             ]
         }
         
-        location.budgets = budgets
+        location.applyBudgets(budgetsByCategory)
     }
     
     private static func includeExpenses(of previewLocation: PreviewLocation, to location: Location) {
