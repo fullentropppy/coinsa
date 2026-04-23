@@ -7,12 +7,17 @@
 
 import Foundation
 
-struct TodayViewModel {
+@MainActor
+@Observable
+final class TodayViewModel {
     // MARK: - Зависимости
     
-    let currentLocations: [Location]
-    let selectedLocationID: UUID?
-    let baseCurrency: Currency
+    private let exchangeRateManager: ExchangeRateManager
+    
+    private var selectedLocationID: UUID?
+    private var baseCurrency: Currency
+    
+    var currentLocations: [Location]
     
     // MARK: - Состояние UI. Общее поведение и оформление
     
@@ -49,16 +54,30 @@ struct TodayViewModel {
         DateDisplayFormatter.format(.now, showsTime: false)
     }
     
-    // MARK: - Состояние UI. Данные локации
+    // MARK: - Состояние UI. Курс обмена
     
-    var locationHeaderData: (name: String, duration: Int, startDate: Date, endDate: Date)? {
-        guard let selectedLocation else { return nil }
-        return (
-            name: selectedLocation.name,
-            duration: selectedLocation.totalDays,
-            startDate: selectedLocation.startDate,
-            endDate: selectedLocation.endDate
-        )
+    private var loadedRateLocalToBase: Double?
+    
+    var rateLocalToBase: Double {
+        if let loadedRateLocalToBase {
+            return loadedRateLocalToBase
+        } else if let selectedLocation {
+            return selectedLocation.rateLocalToBase
+        } else {
+            return 1
+        }
+    }
+    
+    var rateBaseToLocal: Double {
+        rateLocalToBase > 0 ? (1 / rateLocalToBase) : 0
+    }
+    
+    var rateRefreshKey: Date {
+        if let selectedLocation {
+            selectedLocation.updatedAt
+        } else {
+            Date()
+        }
     }
     
     // MARK: - Состояние UI. Расходы за сегодня
@@ -73,6 +92,46 @@ struct TodayViewModel {
         return selectedLocation.expenses
             .filter { $0.date.isToday }
             .sorted { $0.date > $1.date }
+    }
+    
+    // MARK: - Инициализация
+    
+    init(currentLocations: [Location], selectedLocationID: UUID?, baseCurrency: Currency) {
+        let exchangeRateService = ExchangeRateProvider(service: HexarateService())
+        let exchangeRateManager = ExchangeRateManager(provider: exchangeRateService)
+        
+        self.exchangeRateManager = exchangeRateManager
+        self.currentLocations = currentLocations
+        self.selectedLocationID = selectedLocationID
+        self.baseCurrency = baseCurrency
+        self.loadedRateLocalToBase = nil
+    }
+    
+    func updateContext(
+        currentLocations: [Location],
+        selectedLocationID: UUID?,
+        baseCurrency: Currency
+    ) {
+        self.currentLocations = currentLocations
+        self.selectedLocationID = selectedLocationID
+        self.baseCurrency = baseCurrency
+    }
+    
+    // MARK: - Курс обмена
+    
+    func loadInitialRateIfNeeded() {
+        guard let selectedLocation else { return }
+        
+        loadedRateLocalToBase = nil
+
+        guard selectedLocation.localCurrency != baseCurrency else { return }
+        
+        exchangeRateManager.requestRefresh(
+            from: selectedLocation.localCurrency,
+            to: baseCurrency
+        ) { [weak self] rate in
+            self?.loadedRateLocalToBase = rate
+        }
     }
     
     // MARK: - Вспомогательные методы

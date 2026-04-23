@@ -64,8 +64,8 @@ private extension PreviewGenerator {
         let trip = Trip(
             id: UUID(),
             name: data.name,
-            startDate: data.startDate,
-            endDate: data.endDate,
+            startDate: data.startDate.startOfDay,
+            endDate: data.endDate.endOfDay,
             locations: [],
             createdAt: now,
             updatedAt: now
@@ -83,8 +83,8 @@ private extension PreviewGenerator {
         let location =  Location(
             id: UUID(),
             name: data.name,
-            startDate: data.startDate,
-            endDate: data.endDate,
+            startDate: data.startDate.startOfDay,
+            endDate: data.endDate.endOfDay,
             selectedTimeZoneIdentifier: data.selectedTimeZoneIdentifier,
             localCurrencyCode: data.currencyCode,
             rateLocalToBase: data.rateLocalToBase,

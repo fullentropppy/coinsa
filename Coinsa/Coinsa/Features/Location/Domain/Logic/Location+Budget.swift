@@ -8,6 +8,14 @@
 import Foundation
 
 extension Location {
+    // MARK: - Свойства
+    
+    var hasBudget: Bool {
+        budgets.count > 0
+    }
+    
+    // MARK: - Методы
+    
     func budgetAmount(for category: ExpenseCategory) -> Double {
         budgets.first(where: { $0.category == category })?.baseAmount ?? 0
     }

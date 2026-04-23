@@ -47,7 +47,8 @@ extension Location {
             withinDateRange: startRange...endRange
         )
         
-        return remainingDays == 0 ? 0 : (plannedAmount - actualAmount) / Double(remainingDays)
+        let difference = plannedAmount - actualAmount
+        return remainingDays == 0 ? difference : max(0, difference / Double(remainingDays))
     }
     
     func calculatePlannedAmount(asBaseCurrency: Bool = true, asDailyAverage: Bool = false) -> Double {

@@ -10,15 +10,16 @@ import SwiftUI
 struct EventSummaryView: View {
     // MARK: - Хранимые свойства
 
-    let data: EventSummaryData
-    let showsHeader: Bool
-    let showsAmounts: Bool
-    let showsAmountBalance: Bool
+    private let data: EventSummaryData
+    private let showsHeader: Bool
+    private let showsAmounts: Bool
+    private let showsAmountBalance: Bool
+    private let showsPlannedIfZero: Bool
     
     // MARK: - Вычисляемые свойства
 
-    private var hasPlannedAmount: Bool {
-        data.plannedBaseAmount > 0
+    private var showsPlannedAmount: Bool {
+        data.plannedBaseAmount > 0 || showsPlannedIfZero
     }
     
     private var baseAmountBalance: Double {
@@ -39,12 +40,14 @@ struct EventSummaryView: View {
         data: EventSummaryData,
         showsHeader: Bool = true,
         showsAmounts: Bool = true,
-        showsDifference: Bool = true
+        showsDifference: Bool = true,
+        showsPlannedIfZero: Bool = false,
     ) {
         self.data = data
         self.showsHeader = showsHeader
         self.showsAmounts = showsAmounts
         self.showsAmountBalance = showsDifference
+        self.showsPlannedIfZero = showsPlannedIfZero
     }
     
     // MARK: - Тело View
@@ -85,7 +88,7 @@ struct EventSummaryView: View {
 
     private var amountsContent: some View {
         HStack {
-            if hasPlannedAmount {
+            if showsPlannedAmount {
                 EventAmountCardView(
                     title: .amountPlanned,
                     baseAmount: data.plannedBaseAmount,
@@ -106,7 +109,7 @@ struct EventSummaryView: View {
     
     @ViewBuilder
     private var amountBalanceContent: some View {
-        if hasPlannedAmount {
+        if showsPlannedAmount {
             VStack {
                 EventAmountBalanceView(
                     plannedBaseAmount: data.plannedBaseAmount,

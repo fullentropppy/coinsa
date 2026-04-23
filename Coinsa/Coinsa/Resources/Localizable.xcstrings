@@ -842,13 +842,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "1 %1$(baseCurrencyCode)@ = %2$(effectiveRateLocalToBase)@ %3$(localCurrencyCode)@ (with adjustment %4$(adjustmentRateLocalToBase)@)"
+            "value" : "1 %1$(localCurrencyCode)@ = %2$(effectiveRateLocalToBase)@ %3$(baseCurrencyCode)@ (with adjustment %4$(adjustmentRateLocalToBase)@)"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "1 %1$(baseCurrencyCode)@ = %2$(effectiveRateLocalToBase)@ %3$(localCurrencyCode)@ (с корректировкой %4$(adjustmentRateLocalToBase)@)"
+            "value" : "1 %1$(localCurrencyCode)@ = %2$(effectiveRateLocalToBase)@ %3$(baseCurrencyCode)@ (с корректировкой %4$(adjustmentRateLocalToBase)@)"
           }
         }
       }
@@ -927,13 +927,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "1 %1$(baseCurrencyCode)@ = %2$(rateLocalToBase)@ %3$(localCurrencyCode)@"
+            "value" : "1 %1$(localCurrencyCode)@ = %2$(rateLocalToBase)@ %3$(baseCurrencyCode)@"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "1 %1$(baseCurrencyCode)@ = %2$(rateLocalToBase)@ %3$(localCurrencyCode)@"
+            "value" : "1 %1$(localCurrencyCode)@ = %2$(rateLocalToBase)@ %3$(baseCurrencyCode)@"
           }
         }
       }
@@ -2532,6 +2532,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Нет активной локации"
+          }
+        }
+      }
+    },
+    "today.exchangeRate" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 %1$(currencyCode1)@ = %2$(rate1to2)@ %3$(currencyCode2)@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 %1$(currencyCode1)@ = %2$(rate1to2)@ %3$(currencyCode2)@"
           }
         }
       }

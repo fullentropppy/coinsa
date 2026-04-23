@@ -17,6 +17,7 @@ struct TodayView: View {
 
     // MARK: - Состояние
 
+    @State private var viewModel: TodayViewModel
     @State private var deletionHandler = DeletionHandler<Expense>()
     @State private var selectedQuickCategory: ExpenseCategory?
     @State private var expenseToEdit: Expense?
@@ -30,17 +31,16 @@ struct TodayView: View {
         ExpenseRepository(context: context)
     }
     
-    private var viewModel: TodayViewModel {
-        TodayViewModel(
-            currentLocations: currentLocations,
-            selectedLocationID: selectedLocationID,
-            baseCurrency: settingsStore.baseCurrency
-        )
-    }
-    
     // MARK: - Инициализация
     
     init() {
+        let viewModel = TodayViewModel(
+            currentLocations: [],
+            selectedLocationID: nil,
+            baseCurrency: .defaultValue
+        )
+        _viewModel = State(initialValue: viewModel)
+        
         let today = Date.now
         let startOfDay = today.startOfDay
         let endOfDay = today.endOfDay
@@ -89,15 +89,19 @@ struct TodayView: View {
                         onConfirm: { confirmDelete() },
                         onCancel: { cancelDelete() }
                     )
-                    .onAppear {
-                        updateSelectedLocationIfNeeded()
-                    }
-                    .onChange(of: currentLocations) { _, _ in
-                        updateSelectedLocationIfNeeded()
-                    }
             } else {
                 emptyCurrentLocationView
             }
+        }
+        .onAppear {
+            syncViewModelContext()
+            updateSelectedLocationIfNeeded()
+        }
+        .onChange(of: selectedLocationID) { _, _ in
+            updateSelectedLocationIfNeeded()
+        }
+        .task(id: viewModel.rateRefreshKey) {
+            viewModel.loadInitialRateIfNeeded()
         }
     }
     
@@ -112,7 +116,7 @@ struct TodayView: View {
     private func locationContent(location: Location) -> some View {
         List {
             locationSection(location: location)
-            locationNavigationLinkSection(location: location)
+            contextAdditionalSection(location: location)
             quickExpenseSection
             todayExpensesSection
         }
@@ -129,18 +133,39 @@ struct TodayView: View {
         }
     }
     
-    private func locationNavigationLinkSection(location: Location) -> some View {
+    private func contextAdditionalSection(location: Location) -> some View {
         Section {
             HStack {
                 NavigationLink {
                     LocationDetailView(location)
                 } label: {
-                    HStack {
+                    HStack(alignment: .center) {
+                        VStack(alignment: .leading) {
+                            Text(
+                                .todayExchangeRate(
+                                    currencyCode1: location.localCurrencyCode,
+                                    rate1To2: viewModel.rateLocalToBase.formatted(
+                                        .number.precision(.fractionLength(4))
+                                    ),
+                                    currencyCode2: settingsStore.baseCurrency.code)
+                            )
+                            Text(
+                                .todayExchangeRate(
+                                    currencyCode1: settingsStore.baseCurrency.code,
+                                    rate1To2: viewModel.rateBaseToLocal.formatted(
+                                        .number.precision(.fractionLength(4))
+                                    ),
+                                    currencyCode2: location.localCurrencyCode)
+                            )
+                        }
+                        .font(.caption)
+                        
+                        Spacer()
+                        
                         Image(systemName: Location.primaryIcon)
                             .imageScale(.small)
-                        Text("\(location.name) • \(location.trip.name)")
+                            .font(.subheadline.weight(.semibold))
                     }
-                    .font(.subheadline.weight(.semibold))
                     .foregroundStyle(.secondary)
                     .frame(maxWidth: .infinity, alignment: .center)
                 }
@@ -187,7 +212,11 @@ struct TodayView: View {
     }
     
     private func locationSummaryContent(location: Location) -> some View {
-        EventSummaryView(data: viewModel.eventSummaryData(for: location), showsHeader: false)
+        EventSummaryView(
+            data: viewModel.eventSummaryData(for: location),
+            showsHeader: false,
+            showsPlannedIfZero: location.hasBudget
+        )
     }
     
     private func quickExpenseButton(category: ExpenseCategory) -> some View {
@@ -244,12 +273,21 @@ struct TodayView: View {
 
     // MARK: - Действия
 
+    private func syncViewModelContext(selectedLocationID: UUID? = nil) {
+        viewModel.updateContext(
+            currentLocations: currentLocations,
+            selectedLocationID: selectedLocationID ?? self.selectedLocationID,
+            baseCurrency: settingsStore.baseCurrency
+        )
+    }
+
     private func updateSelectedLocationIfNeeded() {
         let validID = viewModel.validSelectedLocationID(
             from: selectedLocationID ?? settingsStore.selectedLocationID
         )
         selectedLocationID = validID
         settingsStore.selectedLocationID = validID
+        syncViewModelContext(selectedLocationID: validID)
     }
     
     private func requestDelete(for expenses: [Expense]) {

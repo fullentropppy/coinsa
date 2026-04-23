@@ -59,22 +59,22 @@ struct ExpenseDetailViewModel {
 
         if expense.paymentMethod == .card && expense.exchangeAdjustment > 0 {
             return .expenseAdjustedExchangeRateLong(
-                baseCurrencyCode: baseCurrency.code,
+                localCurrencyCode: expense.localCurrency.code,
                 effectiveRateLocalToBase: expense.effectiveRateLocalToBase.formatted(
                     .number.precision(.fractionLength(4))
                 ),
-                localCurrencyCode: expense.localCurrency.code,
+                baseCurrencyCode: baseCurrency.code,
                 adjustmentRateLocalToBase: (expense.exchangeAdjustment / 100).formatted(
                     .percent.precision(.fractionLength(0...2))
                 )
             )
         } else {
             return .expenseBaseExchangeRate(
-                baseCurrencyCode: baseCurrency.code,
+                localCurrencyCode: expense.localCurrency.code,
                 rateLocalToBase: expense.rateLocalToBase.formatted(
                     .number.precision(.fractionLength(4))
                 ),
-                localCurrencyCode: expense.localCurrency.code
+                baseCurrencyCode: baseCurrency.code
             )
         }
     }

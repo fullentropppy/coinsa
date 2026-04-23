@@ -21,7 +21,7 @@ struct TripRepository {
         
         let trip = Trip(
             id: UUID(),
-            name: normlizedName(name),
+            name: normalizedName(name),
             startDate: normalizedStartDate(startDate),
             endDate: normalizedEndDate(endDate),
             locations: [],
@@ -34,7 +34,7 @@ struct TripRepository {
     }
     
     func update(_ trip: Trip, name: String, startDate: Date, endDate: Date) {
-        trip.name = normlizedName(name)
+        trip.name = normalizedName(name)
         trip.startDate = normalizedStartDate(startDate)
         trip.endDate = normalizedEndDate(endDate)
         trip.updatedAt = Date()
@@ -48,7 +48,7 @@ struct TripRepository {
     
     // MARK: - Номализация
     
-    private func normlizedName(_ name: String) -> String {
+    private func normalizedName(_ name: String) -> String {
         name.trimmed
     }
     

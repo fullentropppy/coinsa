@@ -32,8 +32,8 @@ struct LocationRepository {
         let location = Location(
             id: UUID(),
             name: name.trimmed,
-            startDate: startDate,
-            endDate: endDate,
+            startDate: normalizedStartDate(startDate),
+            endDate: normalizedEndDate(endDate),
             selectedTimeZoneIdentifier: majorTimeZone.identifier,
             localCurrencyCode: localCurrency.code,
             rateLocalToBase: normalizedRateLocalToBase(rateLocalToBase),
@@ -60,8 +60,8 @@ struct LocationRepository {
         budgetsByCategory: [ExpenseCategory: Double]
     ) {
         location.name = name.trimmed
-        location.startDate = startDate
-        location.endDate = endDate
+        location.startDate = normalizedStartDate(startDate)
+        location.endDate = normalizedEndDate(endDate)
         location.selectedTimeZoneIdentifier = majorTimeZone.identifier
         location.localCurrencyCode = localCurrency.code
         location.rateLocalToBase = normalizedRateLocalToBase(rateLocalToBase)
@@ -88,7 +88,7 @@ struct LocationRepository {
     
     // MARK: - Номализация
     
-    private func normlizedName(_ name: String) -> String {
+    private func normalizedName(_ name: String) -> String {
         name.trimmed
     }
     
@@ -97,7 +97,7 @@ struct LocationRepository {
     }
     
     private func normalizedEndDate(_ endDate: Date) -> Date {
-        endDate.exclusive
+        endDate.endOfDay
     }
     
     private func normalizedAmount(_ amount: Double) -> Double {

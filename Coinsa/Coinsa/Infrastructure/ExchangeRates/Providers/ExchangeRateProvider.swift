@@ -21,7 +21,7 @@ final class ExchangeRateProvider {
     // MARK: - Публичные методы
     
     func getRate(from: Currency, to: Currency) async throws -> Double {
-        try await AsyncTimeout.run(seconds: 5) {
+        try await AsyncTimeout.run(seconds: 10) {
             try await self.service.fetchRate(from: from, to: to)
         }
     }
