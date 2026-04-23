@@ -34,7 +34,7 @@ struct ExpenseRepository {
             baseAmount: normalizedAmount(baseAmount),
             rateLocalToBase: normalizedRateLocalToBase(rateLocalToBase),
             paymentMethod: paymentMethod,
-            exchangeAdjustment: normalizedExchangeAdjustment(exchangeAdjustment),
+            exchangeAdjustment: normalizedExchangeAdjustment(exchangeAdjustment, paymentMethod: paymentMethod),
             category: category,
             location: location,
             comment: normalizeComment(comment),
@@ -59,7 +59,7 @@ struct ExpenseRepository {
         expense.baseAmount = normalizedAmount(baseAmount)
         expense.rateLocalToBase = normalizedRateLocalToBase(rateLocalToBase)
         expense.paymentMethod = paymentMethod
-        expense.exchangeAdjustment = normalizedExchangeAdjustment(exchangeAdjustment)
+        expense.exchangeAdjustment = normalizedExchangeAdjustment(exchangeAdjustment, paymentMethod: paymentMethod)
         expense.category = category
         expense.comment = normalizeComment(comment)
         expense.updatedAt = Date()
@@ -81,8 +81,8 @@ struct ExpenseRepository {
         rate.nonNegative
     }
     
-    private func normalizedExchangeAdjustment(_ adjustment: Double) -> Double {
-        adjustment.nonNegative
+    private func normalizedExchangeAdjustment(_ adjustment: Double, paymentMethod: PaymentMethod) -> Double {
+        paymentMethod == .card ? adjustment.nonNegative : 0
     }
     
     private func normalizeComment(_ comment: String?) -> String? {

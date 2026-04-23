@@ -208,7 +208,7 @@ struct ExpenseEditView: View {
                 }
             }
             
-            if viewModel.showsExchangeAdjustmentInput {
+            if viewModel.useExchangeAdjustment {
                 LabeledContent(.locationExchangeAdjustment) {
                     PercentInputField.standard(
                         exchangeAdjustmentInputBinding,

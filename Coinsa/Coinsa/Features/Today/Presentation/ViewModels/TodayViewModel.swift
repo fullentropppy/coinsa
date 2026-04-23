@@ -29,6 +29,10 @@ final class TodayViewModel {
         today.startOfDay...today.endOfDay
     }
     
+    var hasMultipleLocations: Bool {
+        currentLocations.count > 1
+    }
+    
     var selectedLocation: Location? {
         if let selectedLocationID,
            let location = currentLocations.first(where: { $0.id == selectedLocationID }) {
@@ -38,8 +42,12 @@ final class TodayViewModel {
         }
     }
     
-    var hasMultipleLocations: Bool {
-        currentLocations.count > 1
+    var isHomeLocation: Bool {
+        if let selectedLocation {
+            selectedLocation.localCurrency == baseCurrency
+        } else {
+            false
+        }
     }
     
     var navigtaionTitle: String {

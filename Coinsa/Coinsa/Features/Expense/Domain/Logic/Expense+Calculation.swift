@@ -27,7 +27,6 @@ extension Expense {
     // MARK: - Приватные свойства
     
     private var adjustedRateLocalToBase: Double {
-        let adjustmentMultiplier = 1 + (exchangeAdjustment / 100)
-        return (rateLocalToBase * adjustmentMultiplier)
+        paymentMethod == .card ? (rateLocalToBase * (1 + (exchangeAdjustment / 100))) : rateLocalToBase
     }
 }

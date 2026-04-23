@@ -140,31 +140,17 @@ struct TodayView: View {
                     LocationDetailView(location)
                 } label: {
                     HStack(alignment: .center) {
-                        VStack(alignment: .leading) {
-                            Text(
-                                .todayExchangeRate(
-                                    currencyCode1: location.localCurrencyCode,
-                                    rate1To2: viewModel.rateLocalToBase.formatted(
-                                        .number.precision(.fractionLength(4))
-                                    ),
-                                    currencyCode2: settingsStore.baseCurrency.code)
-                            )
-                            Text(
-                                .todayExchangeRate(
-                                    currencyCode1: settingsStore.baseCurrency.code,
-                                    rate1To2: viewModel.rateBaseToLocal.formatted(
-                                        .number.precision(.fractionLength(4))
-                                    ),
-                                    currencyCode2: location.localCurrencyCode)
-                            )
+                        if viewModel.isHomeLocation {
+                            Text("\(location.name) • \(location.trip.name)")
+                                .font(.subheadline)
+                        } else {
+                            exchangeRatesContent(location: location)
                         }
-                        .font(.caption)
-                        
                         Spacer()
-                        
                         Image(systemName: Location.primaryIcon)
                             .imageScale(.small)
                             .font(.subheadline.weight(.semibold))
+                        
                     }
                     .foregroundStyle(.secondary)
                     .frame(maxWidth: .infinity, alignment: .center)
@@ -217,6 +203,34 @@ struct TodayView: View {
             showsHeader: false,
             showsPlannedIfZero: location.hasBudget
         )
+    }
+    
+    private func exchangeRatesContent(location: Location) -> some View {
+        HStack {
+            Image(systemName: "arrow.left.arrow.right")
+                .imageScale(.small)
+                .font(.subheadline.weight(.semibold))
+            
+            VStack(alignment: .leading) {
+                Text(
+                    .todayExchangeRate(
+                        currencyCode1: location.localCurrencyCode,
+                        rate1To2: viewModel.rateLocalToBase.formatted(
+                            .number.precision(.fractionLength(4))
+                        ),
+                        currencyCode2: settingsStore.baseCurrency.code)
+                )
+                Text(
+                    .todayExchangeRate(
+                        currencyCode1: settingsStore.baseCurrency.code,
+                        rate1To2: viewModel.rateBaseToLocal.formatted(
+                            .number.precision(.fractionLength(4))
+                        ),
+                        currencyCode2: location.localCurrencyCode)
+                )
+            }
+            .font(.caption)
+        }
     }
     
     private func quickExpenseButton(category: ExpenseCategory) -> some View {

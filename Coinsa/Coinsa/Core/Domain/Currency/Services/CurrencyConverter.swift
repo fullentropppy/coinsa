@@ -50,7 +50,7 @@ final class CurrencyConverter {
         self.baseCurrency = baseCurrency
         self.localCurrency = localCurrency
         self.rateLocalToBase = rateLocalToBase
-        self.exchangeAdjustment = max(0, exchangeAdjustment)
+        self.exchangeAdjustment = exchangeAdjustment
     }
     
     // MARK: - Получение и обновление курса валюты
@@ -109,20 +109,16 @@ final class CurrencyConverter {
     }
     
     func convertToBase(fromLocal amount: Double) -> Double {
-        let effectiveRate = effectiveRateLocalToBase
-        guard effectiveRate > 0 else { return 0 }
-        return (amount * effectiveRate)
+        effectiveRateLocalToBase > 0 ? amount * effectiveRateLocalToBase : 0
     }
     
     func convertToLocal(fromBase amount: Double) -> Double {
-        let effectiveRate = effectiveRateLocalToBase
-        guard effectiveRate > 0 else { return 0 }
-        return (amount / effectiveRate)
+        effectiveRateLocalToBase > 0 ? amount / effectiveRateLocalToBase : 0
     }
     
     // MARK: - Процент корректировки
     
-    func updateExchangeAdjustment(_ newPercentage: Double) {
-        exchangeAdjustment = max(0, newPercentage)
+    func updateExchangeAdjustment(_ newAdjustment: Double) {
+        exchangeAdjustment = newAdjustment.nonNegative
     }
 }

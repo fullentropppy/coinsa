@@ -47,6 +47,14 @@ final class LocationEditViewModel {
         !name.isBlank && startDate <= endDate && rateLocalToBase > 0
     }
     
+    var hasExpenses: Bool {
+        if let location {
+            location.expenses.count > 0
+        } else {
+            false
+        }
+    }
+    
     // MARK: - Состояние UI. Общие данные
     
     var name: String

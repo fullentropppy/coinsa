@@ -83,9 +83,7 @@ final class ExpenseEditViewModel {
     }
 
     var adjustedRateDescription: LocalizedStringResource? {
-        guard showsExchangeAdjustmentInput && exchangeAdjustment > 0 else {
-            return nil
-        }
+        guard useExchangeAdjustment && exchangeAdjustment > 0 else { return nil }
 
         return .expenseAdjustedExchangeRateShort(
             localCurrencyCode: localCurrency.code,
@@ -100,11 +98,12 @@ final class ExpenseEditViewModel {
     
     var paymentMethod: PaymentMethod
     var exchangeAdjustment: Double
+    var storedExchangeAdjustment: Double
     
-    var showsExchangeAdjustmentInput: Bool {
-        !isHomeLocation && paymentMethod != .cash
+    var useExchangeAdjustment: Bool {
+        paymentMethod == .card
     }
-
+    
     // MARK: - Инициализация
     
     convenience init(
@@ -178,10 +177,11 @@ final class ExpenseEditViewModel {
             resolvedCategory = preselectedCategory ?? .food
             resolvedComment = ""
         }
-
+        
         self.date = resolvedDate
         self.paymentMethod = resolvedPaymentMethod
         self.exchangeAdjustment = resolvedExchangeAdjustment
+        self.storedExchangeAdjustment = resolvedExchangeAdjustment
         self.category = resolvedCategory
         self.comment = resolvedComment
 
@@ -267,11 +267,19 @@ final class ExpenseEditViewModel {
 
     func updatePaymentMethod(_ method: PaymentMethod, currentInput: InputCurrency) {
         paymentMethod = method
+        
+        if useExchangeAdjustment {
+            exchangeAdjustment = storedExchangeAdjustment
+        } else {
+            exchangeAdjustment = 0
+        }
+        
         syncExchangeAdjustmentAndRecalculate(currentInput: currentInput)
     }
     
-    func updateExchangeAdjustment(_ newPercentage: Double, currentInput: InputCurrency) {
-        exchangeAdjustment = max(0, newPercentage)
+    func updateExchangeAdjustment(_ newAdjustment: Double, currentInput: InputCurrency) {
+        exchangeAdjustment = newAdjustment
+        storedExchangeAdjustment = newAdjustment
         syncExchangeAdjustmentAndRecalculate(currentInput: currentInput)
     }
     
@@ -283,9 +291,6 @@ final class ExpenseEditViewModel {
     // MARK: - Операции с хранилищем
     
     func save(using repository: ExpenseRepository) {
-        let normalizedComment = comment.trimmed
-        let comment = normalizedComment.isEmpty ? nil : normalizedComment
-
         if let expense {
             repository.update(
                 expense,
