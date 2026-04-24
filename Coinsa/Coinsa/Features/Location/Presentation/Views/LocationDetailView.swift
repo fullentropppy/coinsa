@@ -102,6 +102,12 @@ struct LocationDetailView: View {
     private var headerSection: some View {
         Section {
             EventSummaryView(data: viewModel.eventHeaderData)
+            AnalyticsNavigationLink {
+                EventAnalyticsView(
+                    screenContextSubtitle: location.screenContextSubtitle,
+                    data: viewModel.eventAnalyticsData
+                )
+            }
         }
     }
     

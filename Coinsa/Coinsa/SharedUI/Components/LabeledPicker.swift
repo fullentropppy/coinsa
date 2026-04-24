@@ -35,6 +35,22 @@ struct LabeledPicker<SelectionValue: Hashable, Content: View>: View {
     // MARK: - Тело View
     
     var body: some View {
+        if disabled {
+            disabledContent
+        } else {
+            enabledContent
+        }
+    }
+    
+    // MARK: - Компоненты
+    
+    private var disabledContent: some View {
+        LabeledContent(title) {
+            content(selection.wrappedValue)
+        }
+    }
+    
+    private var enabledContent: some View {
         HStack {
             Picker(title, selection: selection) {
                 ForEach(options, id: \.self) { option in
@@ -49,7 +65,7 @@ struct LabeledPicker<SelectionValue: Hashable, Content: View>: View {
             Image(systemName: "chevron.right")
                 .imageScale(.small)
                 .fontWeight(.semibold)
-                .foregroundStyle(disabled ? Color.secondary.opacity(0.85) : Color.accent)
+                .foregroundStyle(.accent)
                 .frame(width: 16)
         }
     }
@@ -69,6 +85,14 @@ struct LabeledPicker<SelectionValue: Hashable, Content: View>: View {
             ) { category in
                 category.makeLabel()
             }
+            LabeledPicker(
+                title: .expenseCategory,
+                selection: $selectedCategory,
+                options: ExpenseCategory.allCases,
+                disabled: true
+            ) { category in
+                category.makeLabel()
+            }
         }
     }
     .environment(\.locale, PreviewLocale.ru)
@@ -84,6 +108,14 @@ struct LabeledPicker<SelectionValue: Hashable, Content: View>: View {
                 title: .expenseCategory,
                 selection: $selectedCategory,
                 options: ExpenseCategory.allCases
+            ) { category in
+                category.makeLabel()
+            }
+            LabeledPicker(
+                title: .expenseCategory,
+                selection: $selectedCategory,
+                options: ExpenseCategory.allCases,
+                disabled: true
             ) { category in
                 category.makeLabel()
             }

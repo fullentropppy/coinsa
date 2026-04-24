@@ -98,9 +98,16 @@ struct TripDetailView: View {
         Section {
             EventSummaryView(
                 data: viewModel.eventHeaderData,
-                showsAmounts: viewModel.showsFullHeader,
-                showsDifference: viewModel.showsFullHeader
+                showsAmounts: viewModel.showsFullHeader
             )
+            if viewModel.showsFullHeader {
+                AnalyticsNavigationLink {
+                    EventAnalyticsView(
+                        screenContextSubtitle: trip.screenContextSubtitle,
+                        data: viewModel.eventAnalyticsData
+                    )
+                }
+            }
         }
     }
     
@@ -113,7 +120,7 @@ struct TripDetailView: View {
             }
         }
     }
-    
+
     // MARK: - Компоненты
 
     private var emptyLocationListContent: some View {

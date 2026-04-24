@@ -16,48 +16,35 @@ struct EmptyStateView: View {
     
     private let icon: String
     private let title: LocalizedStringResource
-    private let description: LocalizedStringResource
+    private let description: LocalizedStringResource?
     private let buttonLabel: LocalizedStringResource?
-    private let onAddAction: (() -> Void)?
+    private let action: (() -> Void)?
     
     // MARK: - Инициализация
     
     init(
         icon: String,
         title: LocalizedStringResource,
-        description: LocalizedStringResource,
+        description: LocalizedStringResource? = nil,
         buttonLabel: LocalizedStringResource? = nil,
-        onAddAction: (() -> Void)? = nil
+        action: (() -> Void)? = nil
     ) {
         self.icon = icon
         self.title = title
         self.description = description
         self.buttonLabel = buttonLabel
-        self.onAddAction = onAddAction
+        self.action = action
     }
     
     // MARK: - Тело View
     
     var body: some View {
-        if let buttonLabel, let onAddAction {
-            ContentUnavailableView {
-                titleContent
-            } description: {
-                descriptionContent
-            } actions: {
-                Button(buttonLabel) {
-                    haptics.trigger(.add)
-                    onAddAction()
-                }
-                .buttonStyle(.glassProminent)
-                .controlSize(.large)
-            }
-        } else {
-            ContentUnavailableView {
-                titleContent
-            } description: {
-                descriptionContent
-            }
+        ContentUnavailableView {
+            titleContent
+        } description: {
+            descriptionContent
+        } actions: {
+            buttonContent
         }
     }
     
@@ -67,9 +54,24 @@ struct EmptyStateView: View {
         Label(title, systemImage: icon)
     }
     
+    @ViewBuilder
     private var descriptionContent: some View {
-        Text(description)
-            .padding()
+        if let description {
+            Text(description)
+                .padding()
+        }
+    }
+    
+    @ViewBuilder
+    private var buttonContent: some View {
+        if let buttonLabel, let action {
+            Button(buttonLabel) {
+                haptics.trigger(.add)
+                action()
+            }
+            .buttonStyle(.glassProminent)
+            .controlSize(.large)
+        }
     }
 }
 
@@ -82,7 +84,7 @@ private extension EmptyStateView {
             title: .tripEmptyStateTitle,
             description: .tripEmptyStateDescription,
             buttonLabel: .tripAdd,
-            onAddAction: {}
+            action: {}
         )
         .environment(\.locale, locale)
         .preferredColorScheme(colorScheme)

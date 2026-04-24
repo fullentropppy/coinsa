@@ -40,13 +40,13 @@ struct EventSummaryView: View {
         data: EventSummaryData,
         showsHeader: Bool = true,
         showsAmounts: Bool = true,
-        showsDifference: Bool = true,
+        showsAmountBalance: Bool = true,
         showsPlannedIfZero: Bool = false,
     ) {
         self.data = data
         self.showsHeader = showsHeader
         self.showsAmounts = showsAmounts
-        self.showsAmountBalance = showsDifference
+        self.showsAmountBalance = showsAmountBalance
         self.showsPlannedIfZero = showsPlannedIfZero
     }
     
@@ -144,7 +144,7 @@ private extension EventSummaryData {
         
         return Form {
             Section {
-                EventSummaryView(data: tripViewModel.eventHeaderData, showsAmounts: false, showsDifference: false)
+                EventSummaryView(data: tripViewModel.eventHeaderData, showsAmounts: false, showsAmountBalance: false)
             }
             Section {
                 EventSummaryView(data: tripViewModel.eventHeaderData)

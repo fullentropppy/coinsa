@@ -36,6 +36,27 @@ struct LocationDetailViewModel {
             localCurrency: localCurrency
         )
     }
+
+    var eventAnalyticsData: EventCategoryAnalyticsData {
+        let isHomeLocation = localCurrency == baseCurrency
+        let budgetByCategoryBase = location.calculateBudgetByCategory(asBaseCurrency: true, withinDateRange: location.range)
+        let expenseByCategoryBase = location.calculateExpenseByCategory(asBaseCurrency: true, withinDateRange: location.range)
+
+        let budgetByCategoryLocal = isHomeLocation
+            ? nil
+            : location.calculateBudgetByCategory(asBaseCurrency: false, withinDateRange: location.range)
+        let expenseByCategoryLocal = isHomeLocation
+            ? nil
+            : location.calculateExpenseByCategory(asBaseCurrency: false, withinDateRange: location.range)
+
+        return EventCategoryAnalyticsData(
+            dateRange: location.range,
+            baseCurrency: baseCurrency,
+            localCurrency: isHomeLocation ? nil : localCurrency,
+            budgetByCategory: slices(from: budgetByCategoryBase, localValues: budgetByCategoryLocal),
+            expenseByCategory: slices(from: expenseByCategoryBase, localValues: expenseByCategoryLocal)
+        )
+    }
     
     var groupedExpenses: [(date: Date, expenses: [Expense])] {
         let today = Date().startOfDay
@@ -90,5 +111,20 @@ struct LocationDetailViewModel {
         self.location = location
         self.baseCurrency = baseCurrency
         self.localCurrency = Currency.from(location.localCurrencyCode)
+    }
+
+    // MARK: - Приватные методы
+
+    private func slices(
+        from baseValues: [ExpenseCategory: Double],
+        localValues: [ExpenseCategory: Double]?
+    ) -> [CategoryAnalyticsSlice] {
+        ExpenseCategory.allCases.map { category in
+            CategoryAnalyticsSlice(
+                category: category,
+                baseAmount: baseValues[category] ?? 0,
+                localAmount: localValues?[category]
+            )
+        }
     }
 }

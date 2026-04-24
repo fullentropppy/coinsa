@@ -31,6 +31,19 @@ struct TripDetailViewModel {
             baseCurrency: baseCurrency
         )
     }
+
+    var eventAnalyticsData: EventCategoryAnalyticsData {
+        let budgetByCategory = trip.calculateBudgetByCategory(asBaseCurrency: true)
+        let expenseByCategory = trip.calculateExpenseByCategory(asBaseCurrency: true)
+
+        return EventCategoryAnalyticsData(
+            dateRange: trip.range,
+            baseCurrency: baseCurrency,
+            localCurrency: nil,
+            budgetByCategory: slices(from: budgetByCategory, localValues: nil),
+            expenseByCategory: slices(from: expenseByCategory, localValues: nil)
+        )
+    }
     
     var groupedLocations: [(status: EventStatus, locations: [Location])] {
         let grouped = Dictionary(grouping: trip.locations) { $0.status }
@@ -54,5 +67,20 @@ struct TripDetailViewModel {
     init(trip: Trip, baseCurrency: Currency) {
         self.trip = trip
         self.baseCurrency = baseCurrency
+    }
+
+    // MARK: - Приватные методы
+
+    private func slices(
+        from baseValues: [ExpenseCategory: Double],
+        localValues: [ExpenseCategory: Double]?
+    ) -> [CategoryAnalyticsSlice] {
+        ExpenseCategory.allCases.map { category in
+            CategoryAnalyticsSlice(
+                category: category,
+                baseAmount: baseValues[category] ?? 0,
+                localAmount: localValues?[category]
+            )
+        }
     }
 }

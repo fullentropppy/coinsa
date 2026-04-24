@@ -72,4 +72,49 @@ extension Location {
             return result + expense.baseAmount * exchangeRate
         }
     }
+
+    func calculateBudgetByCategory(
+        asBaseCurrency: Bool = true,
+        withinDateRange: ClosedRange<Date>? = nil
+    ) -> [ExpenseCategory: Double] {
+        let exchangeRate = asBaseCurrency ? 1 : effectiveRateBaseToLocal
+        let periodRatio = budgetPeriodRatio(withinDateRange: withinDateRange)
+
+        return ExpenseCategory.allCases.reduce(into: [:]) { result, category in
+            let baseAmount = budgetAmount(for: category)
+            result[category] = baseAmount * exchangeRate * periodRatio
+        }
+    }
+
+    func calculateExpenseByCategory(
+        asBaseCurrency: Bool = true,
+        withinDateRange: ClosedRange<Date>? = nil
+    ) -> [ExpenseCategory: Double] {
+        expenses.reduce(into: [:]) { result, expense in
+            if let withinDateRange, !withinDateRange.contains(expense.date) {
+                return
+            }
+
+            let exchangeRate = asBaseCurrency ? 1 : expense.effectiveRateBaseToLocal
+            result[expense.category, default: 0] += expense.baseAmount * exchangeRate
+        }
+    }
+
+    // MARK: - Приватные методы
+
+    private func budgetPeriodRatio(withinDateRange: ClosedRange<Date>?) -> Double {
+        guard let withinDateRange else { return 1 }
+
+        let eventRange = startDate.startOfDay...endDate.endOfDay
+        let targetRange = withinDateRange.lowerBound.startOfDay...withinDateRange.upperBound.endOfDay
+        let overlapStart = max(eventRange.lowerBound, targetRange.lowerBound)
+        let overlapEnd = min(eventRange.upperBound, targetRange.upperBound)
+
+        guard overlapStart <= overlapEnd else { return 0 }
+
+        let overlapDays = overlapEnd.startOfDay.days(from: overlapStart.startOfDay) + 1
+        guard totalDays > 0 else { return 0 }
+
+        return min(1, max(0, Double(overlapDays) / Double(totalDays)))
+    }
 }

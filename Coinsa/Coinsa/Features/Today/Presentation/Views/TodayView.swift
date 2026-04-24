@@ -90,7 +90,7 @@ struct TodayView: View {
                         onCancel: { cancelDelete() }
                     )
             } else {
-                emptyCurrentLocationView
+                emptyCurrentLocationContent
             }
         }
         .onAppear {
@@ -105,7 +105,7 @@ struct TodayView: View {
         }
     }
     
-    private var emptyCurrentLocationView: some View {
+    private var emptyCurrentLocationContent: some View {
         EmptyStateView(
             icon: "calendar",
             title: .todayEmptyStateTitle,
@@ -116,7 +116,6 @@ struct TodayView: View {
     private func locationContent(location: Location) -> some View {
         List {
             locationSection(location: location)
-            contextAdditionalSection(location: location)
             quickExpenseSection
             todayExpensesSection
         }
@@ -130,32 +129,7 @@ struct TodayView: View {
                 locationPickerContent(location: location)
                 locationSummaryContent(location: location)
             }
-        }
-    }
-    
-    private func contextAdditionalSection(location: Location) -> some View {
-        Section {
-            HStack {
-                NavigationLink {
-                    LocationDetailView(location)
-                } label: {
-                    HStack(alignment: .center) {
-                        if viewModel.isHomeLocation {
-                            Text("\(location.name) • \(location.trip.name)")
-                                .font(.subheadline)
-                        } else {
-                            exchangeRatesContent(location: location)
-                        }
-                        Spacer()
-                        Image(systemName: Location.primaryIcon)
-                            .imageScale(.small)
-                            .font(.subheadline.weight(.semibold))
-                        
-                    }
-                    .foregroundStyle(.secondary)
-                    .frame(maxWidth: .infinity, alignment: .center)
-                }
-            }
+            contextContent(location: location)
         }
     }
     
@@ -203,6 +177,29 @@ struct TodayView: View {
             showsHeader: false,
             showsPlannedIfZero: location.hasBudget
         )
+    }
+    
+    private func contextContent(location: Location) -> some View {
+        HStack {
+            NavigationLink {
+                LocationDetailView(location)
+            } label: {
+                HStack(alignment: .center) {
+                    if viewModel.isHomeLocation {
+                        Text("\(location.name) • \(location.trip.name)")
+                            .font(.subheadline)
+                    } else {
+                        exchangeRatesContent(location: location)
+                    }
+                    Spacer()
+                    Image(systemName: Location.primaryIcon)
+                        .imageScale(.small)
+                        .font(.subheadline.weight(.semibold))
+                    
+                }
+                .foregroundStyle(.secondary)
+            }
+        }
     }
     
     private func exchangeRatesContent(location: Location) -> some View {

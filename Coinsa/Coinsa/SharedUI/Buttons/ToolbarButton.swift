@@ -88,6 +88,6 @@ private extension ToolbarButton {
     ToolbarButton.makePreview(colorScheme: .light)
 }
 
-#Preview("dark") {
+#Preview("Dark") {
     ToolbarButton.makePreview(colorScheme: .dark)
 }
