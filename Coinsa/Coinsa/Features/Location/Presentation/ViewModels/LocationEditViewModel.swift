@@ -16,9 +16,8 @@ final class LocationEditViewModel {
     private let currencyConverter: CurrencyConverter
     private let budgetManager: BudgetManager
     
-    let location: Location?
     let trip: Trip
-    let baseCurrency: Currency
+    let location: Location?
     
     // MARK: - Внутреннее состояние
     
@@ -53,6 +52,10 @@ final class LocationEditViewModel {
         } else {
             false
         }
+    }
+    
+    var baseCurrency: Currency {
+        trip.baseCurrency
     }
     
     // MARK: - Состояние UI. Общие данные
@@ -107,6 +110,7 @@ final class LocationEditViewModel {
     // MARK: - Состояние UI. Оплата
     
     var exchangeAdjustment: Double
+    var storedExchangeAdjustment: Double
     
     // MARK: - Состояние UI. Бюджет
     
@@ -124,111 +128,81 @@ final class LocationEditViewModel {
     
     // MARK: - Инициализация
     
-    convenience init(location: Location, baseCurrency: Currency) {
-        let exchangeRateProvider = ExchangeRateProvider(service: HexarateService())
-        self.init(
-            trip: location.trip,
-            location: location,
-            baseCurrency: baseCurrency,
-            exchangeRateProvider: exchangeRateProvider
-        )
-    }
-    
-    convenience init(
-        trip: Trip,
-        baseCurrency: Currency,
-        preselectedExchangeAdjustment: Double? = nil
-    ) {
-        let exchangeRateProvider = ExchangeRateProvider(service: HexarateService())
+    convenience init(forCreateWith trip: Trip, preselectedExchangeAdjustment: Double? = nil) {
         self.init(
             trip: trip,
             location: nil,
-            baseCurrency: baseCurrency,
-            exchangeRateProvider: exchangeRateProvider,
-            preselectedExchangeAdjustment: preselectedExchangeAdjustment
+            name: "",
+            startDate: trip.startDate,
+            endDate: trip.endDate,
+            majorTimeZone: .defaultValue,
+            localCurrency: trip.baseCurrency,
+            rateLocalToBase: 1,
+            exchangeAdjustment: preselectedExchangeAdjustment ?? 0,
+            budgetAmounts: [:]
         )
     }
     
-    init(
+    convenience init(forEdit location: Location) {
+        self.init(
+            trip: location.trip,
+            location: location,
+            name: location.name,
+            startDate: location.startDate,
+            endDate: location.endDate,
+            majorTimeZone: location.majorTimeZone,
+            localCurrency: location.localCurrency,
+            rateLocalToBase: location.rateLocalToBase,
+            exchangeAdjustment: location.exchangeAdjustment,
+            budgetAmounts: location.budgetsByCategory()
+        )
+    }
+    
+    private init(
         trip: Trip,
         location: Location?,
-        baseCurrency: Currency,
-        exchangeRateProvider: ExchangeRateProvider,
-        preselectedExchangeAdjustment: Double? = nil
+        name: String,
+        startDate: Date,
+        endDate: Date,
+        majorTimeZone: MajorTimeZone,
+        localCurrency: Currency,
+        rateLocalToBase: Double,
+        exchangeAdjustment: Double,
+        budgetAmounts: [ExpenseCategory: Double]
     ) {
+        self.trip = trip
         self.location = location
-        self.trip = location?.trip ?? trip
-        self.baseCurrency = baseCurrency
+        self.name = name
+        self.startDate = startDate
+        self.endDate = endDate
+        self.majorTimeZone = majorTimeZone
+        self.exchangeAdjustment = exchangeAdjustment
+        self.storedExchangeAdjustment = exchangeAdjustment
         
-        let resolvedName: String
-        let resolvedStartDate: Date
-        let resolvedEndDate: Date
-        let resolvedLocalCurrency: Currency
-        let resolvedRateLocalToBase: Double
-        let resolvedExchangeAdjustment: Double
-        let resolvedMajorTimeZone: MajorTimeZone
-        
-        if let location {
-            resolvedName = location.name
-            resolvedStartDate = location.startDate
-            resolvedEndDate = location.endDate
-            resolvedLocalCurrency = Currency.from(location.localCurrencyCode)
-            resolvedRateLocalToBase = location.rateLocalToBase
-            resolvedExchangeAdjustment = location.exchangeAdjustment
-            resolvedMajorTimeZone = location.majorTimeZone
-        } else {
-            resolvedName = ""
-            resolvedStartDate = trip.startDate
-            resolvedEndDate = trip.endDate
-            resolvedLocalCurrency = baseCurrency
-            resolvedRateLocalToBase = 1
-            resolvedExchangeAdjustment = preselectedExchangeAdjustment ?? 0
-            resolvedMajorTimeZone = MajorTimeZone.defaultValue
-        }
-        
-        var resolvedBudgetAmounts = Dictionary(
-            uniqueKeysWithValues: ExpenseCategory.allCases.map { ($0, 0.0) }
-        )
-        
-        if let location {
-            for (category, amount) in location.budgetsByCategory() {
-                resolvedBudgetAmounts[category] = amount
-            }
-        }
-        
-        self.name = resolvedName
-        self.startDate = resolvedStartDate
-        self.endDate = resolvedEndDate
-        self.majorTimeZone = resolvedMajorTimeZone
-        self.exchangeAdjustment = resolvedExchangeAdjustment
+        let exchangeRateProvider = ExchangeRateProvider(service: HexarateService())
         
         self.currencyConverter = CurrencyConverter(
             exchangeRateProvider: exchangeRateProvider,
-            baseCurrency: baseCurrency,
-            localCurrency: resolvedLocalCurrency,
-            rateLocalToBase: resolvedRateLocalToBase,
-            exchangeAdjustment: resolvedExchangeAdjustment
+            baseCurrency: trip.baseCurrency,
+            localCurrency: localCurrency,
+            rateLocalToBase: rateLocalToBase,
+            exchangeAdjustment: exchangeAdjustment
         )
-        
-        var initialBudgets: [ExpenseCategory: Double] = [:]
-        if let location {
-            initialBudgets = location.budgetsByCategory()
-        }
         
         self.budgetManager = BudgetManager(
             converter: currencyConverter,
-            initialBudgets: initialBudgets
+            initialBudgets: budgetAmounts
         )
         
         initialSnapshot = Snapshot(
-            name: resolvedName,
-            startDate: resolvedStartDate,
-            endDate: resolvedEndDate,
-            majorTimeZone: resolvedMajorTimeZone,
-            localCurrency: resolvedLocalCurrency,
-            rateLocalToBase: resolvedRateLocalToBase,
-            exchangeAdjustment: resolvedExchangeAdjustment,
-            budgetAmounts: resolvedBudgetAmounts
+            name: name,
+            startDate: startDate,
+            endDate: endDate,
+            majorTimeZone: majorTimeZone,
+            localCurrency: localCurrency,
+            rateLocalToBase: rateLocalToBase,
+            exchangeAdjustment: exchangeAdjustment,
+            budgetAmounts: budgetAmounts
         )
     }
 
@@ -279,8 +253,8 @@ final class LocationEditViewModel {
 
     // MARK: - Операции с оплатой
     
-    func updateExchangeAdjustment(_ newPercentage: Double, currentInput: InputCurrency) {
-        exchangeAdjustment = max(0, newPercentage)
+    func updateExchangeAdjustment(_ newAdjustment: Double, currentInput: InputCurrency) {
+        exchangeAdjustment = newAdjustment
         budgetManager.updateFromRateChange(inputCurrency: currentInput)
         currencyConverter.updateExchangeAdjustment(exchangeAdjustment)
     }

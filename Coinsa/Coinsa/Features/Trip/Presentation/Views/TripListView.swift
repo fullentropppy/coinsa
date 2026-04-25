@@ -40,10 +40,10 @@ struct TripListView: View {
                 .navigationTitle(.tripNavigationTitleList)
                 .navigationBarTitleDisplayMode(.large)
                 .sheet(isPresented: $isShowingTripCreate) {
-                    TripEditView()
+                    TripEditView(forCreateWith: settingsStore.baseCurrency)
                 }
                 .sheet(item: $tripToEdit) { trip in
-                    TripEditView(trip)
+                    TripEditView(forEdit: trip)
                 }
                 .safeAreaInset(edge: .bottom) {
                     if !trips.isEmpty {

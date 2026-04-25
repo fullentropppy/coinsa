@@ -8,6 +8,18 @@
 import Foundation
 
 extension Expense {
+    var baseCurrencyCode: String {
+        location.baseCurrencyCode
+    }
+    
+    var baseCurrency: Currency {
+        location.baseCurrency
+    }
+    
+    var localCurrencyCode: String {
+        location.localCurrencyCode
+    }
+    
     var localCurrency: Currency {
         location.localCurrency
     }

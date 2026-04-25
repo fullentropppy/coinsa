@@ -11,14 +11,22 @@ struct LocationDetailViewModel {
     // MARK: - Хранимые свойства
 
     let location: Location
-    let baseCurrency: Currency
-    let localCurrency: Currency
     
     // MARK: - Вычисляемые свойства
 
+    var baseCurrency: Currency {
+        location.baseCurrency
+    }
+    
+    var localCurrency: Currency {
+        location.localCurrency
+    }
+    
+    var isHomeLocation: Bool {
+        baseCurrency == localCurrency
+    }
+    
     var eventHeaderData: EventSummaryData {
-        let isHomeLocation = localCurrency == baseCurrency
-        
         let plannedAmountBase = location.calculatePlannedAmount(asBaseCurrency: true)
         let plannedAmountLocal = isHomeLocation ? nil : location.calculatePlannedAmount(asBaseCurrency: false)
         let actualAmountBase = location.calculateActualAmount(asBaseCurrency: true)
@@ -103,14 +111,6 @@ struct LocationDetailViewModel {
         }
         
         return result
-    }
-    
-    // MARK: - Инициализация
-
-    init(location: Location, baseCurrency: Currency) {
-        self.location = location
-        self.baseCurrency = baseCurrency
-        self.localCurrency = Currency.from(location.localCurrencyCode)
     }
 
     // MARK: - Приватные методы

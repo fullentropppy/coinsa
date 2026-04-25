@@ -33,7 +33,7 @@ struct TripDetailView: View {
     }
     
     private var viewModel: TripDetailViewModel {
-        TripDetailViewModel(trip: trip, baseCurrency: settingsStore.baseCurrency)
+        TripDetailViewModel(trip: trip)
     }
     
     // MARK: - Инициализация
@@ -52,17 +52,16 @@ struct TripDetailView: View {
                 toolbarContent
             }
             .sheet(isPresented: $isShowingTripEdit) {
-                TripEditView(trip) { dismiss() }
+                TripEditView(forEdit: trip) { dismiss() }
             }
             .sheet(isPresented: $isShowingLocationCreate) {
                 LocationEditView(
-                    trip: trip,
-                    baseCurrency: settingsStore.baseCurrency,
+                    forCreateWith: trip,
                     preselectedExchangeAdjustment: settingsStore.exchangeAdjustment
                 )
             }
             .sheet(item: $locationToEdit) { location in
-                LocationEditView(location, baseCurrency: settingsStore.baseCurrency)
+                LocationEditView(forEdit: location)
             }
             .safeAreaInset(edge: .bottom) {
                 if !trip.locations.isEmpty {

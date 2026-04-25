@@ -18,8 +18,6 @@ final class ExpenseEditViewModel {
     
     let expense: Expense?
     let location: Location
-    let localCurrency: Currency
-    let baseCurrency: Currency
     
     // MARK: - Внутреннее состояние
     
@@ -47,7 +45,15 @@ final class ExpenseEditViewModel {
     var canSave: Bool {
         baseAmount > 0 && rateLocalToBase > 0
     }
-        
+     
+    var baseCurrency: Currency {
+        location.baseCurrency
+    }
+    
+    var localCurrency: Currency {
+        location.localCurrency
+    }
+    
     // MARK: - Состояние UI. Общие данные
     
     var date: Date
@@ -101,115 +107,94 @@ final class ExpenseEditViewModel {
     var storedExchangeAdjustment: Double
     
     var useExchangeAdjustment: Bool {
-        paymentMethod == .card
+        !isHomeLocation && paymentMethod == .card
     }
     
     // MARK: - Инициализация
     
     convenience init(
-        expense: Expense,
-        baseCurrency: Currency
+        forCreateWith location: Location,
+        preselectedCategory: ExpenseCategory? = nil,
+        preselectedPaymentMethod: PaymentMethod? = nil
     ) {
-        let exchangeRateProvider = ExchangeRateProvider(service: HexarateService())
         self.init(
-            expense: expense,
-            location: expense.location,
-            baseCurrency: baseCurrency,
-            exchangeRateProvider: exchangeRateProvider
+            location: location,
+            expense: nil,
+            date: .now,
+            baseAmount: 0,
+            localAmount: 0,
+            rateLocalToBase: location.rateLocalToBase,
+            paymentMethod: preselectedPaymentMethod ?? .card,
+            exchangeAdjustment: location.exchangeAdjustment,
+            category: preselectedCategory ?? .other,
+            comment: ""
         )
     }
     
-    convenience init(
-        location: Location,
-        baseCurrency: Currency,
-        preselectedCategory: ExpenseCategory? = nil,
-        preselectedPaymentMethod: PaymentMethod? = nil
-    ) {
-        let exchangeRateProvider = ExchangeRateProvider(service: HexarateService())
+    convenience init(forEdit expense: Expense) {
         self.init(
-            expense: nil,
-            location: location,
-            baseCurrency: baseCurrency,
-            exchangeRateProvider: exchangeRateProvider,
-            preselectedCategory: preselectedCategory,
-            preselectedPaymentMethod: preselectedPaymentMethod
+            location: expense.location,
+            expense: expense,
+            date: expense.date,
+            baseAmount: expense.baseAmount,
+            localAmount: expense.localAmount,
+            rateLocalToBase: expense.rateLocalToBase,
+            paymentMethod: expense.paymentMethod,
+            exchangeAdjustment: expense.exchangeAdjustment,
+            category: expense.category,
+            comment: expense.comment ?? ""
         )
     }
-
+    
     private init(
-        expense: Expense?,
         location: Location,
-        baseCurrency: Currency,
-        exchangeRateProvider: ExchangeRateProvider,
-        preselectedCategory: ExpenseCategory? = nil,
-        preselectedPaymentMethod: PaymentMethod? = nil
+        expense: Expense?,
+        date: Date,
+        baseAmount: Double,
+        localAmount: Double,
+        rateLocalToBase: Double,
+        paymentMethod: PaymentMethod,
+        exchangeAdjustment: Double,
+        category: ExpenseCategory,
+        comment: String
     ) {
-        self.location = expense?.location ?? location
+        self.location = location
         self.expense = expense
-        self.localCurrency = Currency.from(self.location.localCurrencyCode)
-        self.baseCurrency = baseCurrency
-
-        let resolvedDate: Date
-        let resolvedAmountBase: Double
-        let resolvedRateLocalToBase: Double
-        let resolvedAmountLocal: Double
-        let resolvedPaymentMethod: PaymentMethod
-        let resolvedExchangeAdjustment: Double
-        let resolvedCategory: ExpenseCategory
-        let resolvedComment: String
-
-        if let expense {
-            resolvedDate = expense.date
-            resolvedAmountBase = expense.baseAmount
-            resolvedRateLocalToBase = expense.rateLocalToBase
-            resolvedAmountLocal = expense.localAmount
-            resolvedPaymentMethod = expense.paymentMethod
-            resolvedExchangeAdjustment = expense.exchangeAdjustment
-            resolvedCategory = expense.category
-            resolvedComment = expense.comment ?? ""
-        } else {
-            resolvedDate = min(location.endDate, .now)
-            resolvedAmountBase = 0
-            resolvedRateLocalToBase = self.location.rateLocalToBase
-            resolvedAmountLocal = 0
-            resolvedPaymentMethod = preselectedPaymentMethod ?? .cash
-            resolvedExchangeAdjustment = location.exchangeAdjustment
-            resolvedCategory = preselectedCategory ?? .food
-            resolvedComment = ""
-        }
+        self.date = date
+        self.paymentMethod = paymentMethod
+        self.exchangeAdjustment = exchangeAdjustment
+        self.storedExchangeAdjustment = exchangeAdjustment
+        self.category = category
+        self.comment = comment
         
-        self.date = resolvedDate
-        self.paymentMethod = resolvedPaymentMethod
-        self.exchangeAdjustment = resolvedExchangeAdjustment
-        self.storedExchangeAdjustment = resolvedExchangeAdjustment
-        self.category = resolvedCategory
-        self.comment = resolvedComment
-
+        let exchangeRateProvider = ExchangeRateProvider(service: HexarateService())
+        
         self.currencyConverter = CurrencyConverter(
             exchangeRateProvider: exchangeRateProvider,
-            baseCurrency: baseCurrency,
-            localCurrency: self.localCurrency,
-            rateLocalToBase: resolvedRateLocalToBase,
-            exchangeAdjustment: resolvedExchangeAdjustment
+            baseCurrency: location.baseCurrency,
+            localCurrency: location.localCurrency,
+            rateLocalToBase: rateLocalToBase,
+            exchangeAdjustment: exchangeAdjustment
         )
         
         self.amountManager = AmountManager(
             converter: currencyConverter,
-            baseAmount: resolvedAmountBase,
-            localAmount: resolvedAmountLocal
+            baseAmount: baseAmount,
+            localAmount: localAmount
         )
         
         initialSnapshot = Snapshot(
-            date: resolvedDate,
-            baseAmount: resolvedAmountBase,
-            rateLocalToBase: resolvedRateLocalToBase,
-            paymentMethod: resolvedPaymentMethod,
-            exchangeAdjustment: resolvedExchangeAdjustment,
-            category: resolvedCategory,
-            comment: resolvedComment
+            date: date,
+            baseAmount: baseAmount,
+            rateLocalToBase: rateLocalToBase,
+            paymentMethod: paymentMethod,
+            exchangeAdjustment: exchangeAdjustment,
+            category: category,
+            comment: comment
         )
+        
     }
-
+    
     // MARK: - Операции с валютой
     
     func currency(for inputCurrency: InputCurrency) -> Currency {
@@ -329,7 +314,7 @@ private extension ExpenseEditViewModel {
         let paymentMethod: PaymentMethod
         let exchangeAdjustment: Double
         let category: ExpenseCategory
-        let comment: String
+        let comment: String?
 
         // MARK: - Инициализация
         
@@ -352,7 +337,7 @@ private extension ExpenseEditViewModel {
             paymentMethod: PaymentMethod,
             exchangeAdjustment: Double,
             category: ExpenseCategory,
-            comment: String
+            comment: String?
         ) {
             self.date = date
             self.baseAmount = baseAmount

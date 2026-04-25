@@ -13,19 +13,11 @@ struct ExpenseDetailViewModel {
     // MARK: - Зависимости
 
     let expense: Expense
-    let baseCurrency: Currency
-
-    // MARK: - Инициализация
-
-    init(expense: Expense, baseCurrency: Currency) {
-        self.expense = expense
-        self.baseCurrency = baseCurrency
-    }
 
     // MARK: - Состояние UI. Общее поведение и оформление
 
     var isHomeLocation: Bool {
-        baseCurrency == expense.localCurrency
+        baseCurrency == localCurrency
     }
 
     var shouldDismiss: Bool {
@@ -34,12 +26,20 @@ struct ExpenseDetailViewModel {
     
     // MARK: - Состояние UI. Сумма и валюта
     
+    var baseCurrency: Currency {
+        expense.baseCurrency
+    }
+    
+    var localCurrency: Currency {
+        expense.localCurrency
+    }
+    
     var primaryAmount: Double {
         isHomeLocation ? expense.baseAmount : expense.localAmount
     }
 
     var primaryCurrency: Currency {
-        isHomeLocation ? baseCurrency : expense.localCurrency
+        isHomeLocation ? baseCurrency : localCurrency
     }
 
     var secondaryAmount: Double? {
@@ -63,7 +63,7 @@ struct ExpenseDetailViewModel {
                 effectiveRateLocalToBase: expense.effectiveRateLocalToBase.formatted(
                     .number.precision(.fractionLength(4))
                 ),
-                baseCurrencyCode: baseCurrency.code,
+                baseCurrencyCode: expense.baseCurrency.code,
                 adjustmentRateLocalToBase: (expense.exchangeAdjustment / 100).formatted(
                     .percent.precision(.fractionLength(0...2))
                 )
@@ -74,7 +74,7 @@ struct ExpenseDetailViewModel {
                 rateLocalToBase: expense.rateLocalToBase.formatted(
                     .number.precision(.fractionLength(4))
                 ),
-                baseCurrencyCode: baseCurrency.code
+                baseCurrencyCode: expense.baseCurrency.code
             )
         }
     }

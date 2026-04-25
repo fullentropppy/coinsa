@@ -38,57 +38,27 @@ struct ExpenseEditView: View {
     // MARK: - Инициализация
     
     init(
-        _ expense: Expense,
-        baseCurrency: Currency,
-        onDelete: (() -> Void)? = nil
-    ) {
-        self.init(
-            expense: expense,
-            location: expense.location,
-            baseCurrency: baseCurrency,
-            preselectedCategory: nil,
-            onDelete: onDelete
-        )
-    }
-
-    init(
-        location: Location,
-        baseCurrency: Currency,
+        forCreateWith location: Location,
         preselectedCategory: ExpenseCategory? = nil,
         preselectedPaymentMethod: PaymentMethod? = nil
     ) {
-        self.init(
-            expense: nil,
-            location: location,
-            baseCurrency: baseCurrency,
+        let viewModel = ExpenseEditViewModel(
+            forCreateWith: location,
             preselectedCategory: preselectedCategory,
-            preselectedPaymentMethod: preselectedPaymentMethod,
-            onDelete: nil
+            preselectedPaymentMethod: preselectedPaymentMethod
         )
+        self.init(initialViewModel: viewModel)
     }
-
-    private init(
-        expense: Expense?,
-        location: Location,
-        baseCurrency: Currency,
-        preselectedCategory: ExpenseCategory? = nil,
-        preselectedPaymentMethod: PaymentMethod? = nil,
-        onDelete: (() -> Void)? = nil
-    ) {
-        let viewModel: ExpenseEditViewModel
-        if let expense {
-            viewModel = ExpenseEditViewModel(expense: expense, baseCurrency: baseCurrency)
-        } else {
-            viewModel = ExpenseEditViewModel(
-                location: location,
-                baseCurrency: baseCurrency,
-                preselectedCategory: preselectedCategory,
-                preselectedPaymentMethod: preselectedPaymentMethod
-            )
-        }
-        _viewModel = State(initialValue: viewModel)
+    
+    init(forEdit expense: Expense, onDelete: (() -> Void)? = nil) {
+        let viewModel = ExpenseEditViewModel(forEdit: expense)
+        self.init(initialViewModel: viewModel, onDelete: onDelete)
+    }
+    
+    private init(initialViewModel: ExpenseEditViewModel, onDelete: (() -> Void)? = nil) {
+        _viewModel = State(initialValue: initialViewModel)
         _inputCurrency = State(
-            initialValue: viewModel.baseCurrency == viewModel.localCurrency ? .base : .local
+            initialValue: initialViewModel.baseCurrency == initialViewModel.localCurrency ? .base : .local
         )
         self.onDelete = onDelete
     }
@@ -206,15 +176,15 @@ struct ExpenseEditView: View {
                         onRefresh: { viewModel.requestRateRefresh(for: inputCurrency) }
                     )
                 }
-            }
-            
-            if viewModel.useExchangeAdjustment {
-                LabeledContent(.locationExchangeAdjustment) {
-                    PercentInputField.standard(
-                        exchangeAdjustmentInputBinding,
-                        focusedField: $focusedField,
-                        focusId: .exchangeAdjustment
-                    )
+                
+                if viewModel.useExchangeAdjustment {
+                    LabeledContent(.locationExchangeAdjustment) {
+                        PercentInputField.standard(
+                            exchangeAdjustmentInputBinding,
+                            focusedField: $focusedField,
+                            focusId: .exchangeAdjustment
+                        )
+                    }
                 }
             }
         } footer: {
@@ -357,18 +327,18 @@ private extension ExpenseEditView {
         locale: Locale,
         colorScheme: ColorScheme,
         withNewExpense: Bool = false
-    ) -> some View {
+    ) -> some View { 
         let builder = PreviewBuilder.builder().withBudgets(false)
         let container = builder.buildContainer()
         let settingsStore = AppSettingsStore(context: container.mainContext)
         let location = builder.fetchLocation(from: container)
-        let expense = withNewExpense ? nil : builder.fetchExpense(from: container)
-
+       
         return Group {
-            if let expense {
-                ExpenseEditView(expense, baseCurrency: Currency.rub)
+            if withNewExpense {
+                return ExpenseEditView(forCreateWith: location)
             } else {
-                ExpenseEditView(location: location, baseCurrency: Currency.rub)
+                let expense = builder.fetchExpense(from: container)
+                return ExpenseEditView(forEdit: expense)
             }
         }
         .modelContainer(container)

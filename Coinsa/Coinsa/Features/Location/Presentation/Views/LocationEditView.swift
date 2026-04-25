@@ -50,26 +50,19 @@ struct LocationEditView: View {
     
     // MARK: - Инициализация
     
-    init(_ location: Location, baseCurrency: Currency, onDelete: (() -> Void)? = nil) {
-        _viewModel = State(
-            initialValue: LocationEditViewModel(location: location, baseCurrency: baseCurrency)
-        )
-        self.onDelete = onDelete
-    }
-    
-    init(
-        trip: Trip,
-        baseCurrency: Currency,
-        preselectedExchangeAdjustment: Double? = nil
-    ) {
+    init(forCreateWith trip: Trip, preselectedExchangeAdjustment: Double? = nil) {
         _viewModel = State(
             initialValue: LocationEditViewModel(
-                trip: trip,
-                baseCurrency: baseCurrency,
+                forCreateWith: trip,
                 preselectedExchangeAdjustment: preselectedExchangeAdjustment
             )
         )
         self.onDelete = nil
+    }
+    
+    init(forEdit location: Location, onDelete: (() -> Void)? = nil) {
+        _viewModel = State(initialValue: LocationEditViewModel(forEdit: location))
+        self.onDelete = onDelete
     }
     
     // MARK: - Тело View
@@ -370,18 +363,17 @@ private extension LocationEditView {
         withNewLocation: Bool = false
     ) -> some View {
         let builder = PreviewBuilder.builder()
-        let container = builder.buildContainer()
-        let trip = builder.fetchTrip(from: container)
-        let location = withNewLocation ? nil : builder.fetchLocation(from: container)
-        
+        let data = builder.buildData()
+        let trip = builder.getTrip(from: data)
+       
         return Group {
-            if let location {
-                LocationEditView(location, baseCurrency: Currency.defaultValue)
+            if withNewLocation {
+                return LocationEditView(forCreateWith: trip)
             } else {
-                LocationEditView(trip: trip, baseCurrency: Currency.defaultValue)
+                let location = builder.getLocation(from: data)
+                return LocationEditView(forEdit: location)
             }
         }
-        .modelContainer(container)
         .environment(\.locale, locale)
         .preferredColorScheme(colorScheme)
     }

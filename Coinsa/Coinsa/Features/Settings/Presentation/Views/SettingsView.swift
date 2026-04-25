@@ -55,8 +55,12 @@ struct SettingsView: View {
     
     private var baseCurrencySection: some View {
         Section {
-            LabeledContent(.settingsBaseCurrency) {
-                settingsStore.baseCurrency.makeLabel()
+            LabeledPicker(
+                title: .settingsBaseCurrency,
+                selection: baseCurrencyBinding,
+                options: Currency.allCasesSortedByName
+            ) { currency in
+                currency.makeLabel()
             }
         } footer: {
             Text(.settingsBaseCurrencyHint)
@@ -102,6 +106,13 @@ struct SettingsView: View {
     
     // MARK: - Биндинги
 
+    private var baseCurrencyBinding: Binding<Currency> {
+        Binding(
+            get: { settingsStore.baseCurrency },
+            set: { settingsStore.baseCurrency = $0 }
+        )
+    }
+    
     private var exchangeAdjustmentInputBinding: Binding<Double> {
         Binding(
             get: { settingsStore.exchangeAdjustment },

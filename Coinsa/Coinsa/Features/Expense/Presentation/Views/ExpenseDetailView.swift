@@ -21,7 +21,7 @@ struct ExpenseDetailView: View {
     // MARK: - Вычисляемые свойства
 
     private var viewModel: ExpenseDetailViewModel {
-        ExpenseDetailViewModel(expense: expense, baseCurrency: settingsStore.baseCurrency)
+        ExpenseDetailViewModel(expense: expense)
     }
 
     // MARK: - Инициализация
@@ -41,7 +41,7 @@ struct ExpenseDetailView: View {
                 toolbarContent
             }
             .sheet(isPresented: $isShowingExpenseEdit) {
-                ExpenseEditView(expense, baseCurrency: settingsStore.baseCurrency) {
+                ExpenseEditView(forEdit: expense) {
                     dismiss()
                 }
             }

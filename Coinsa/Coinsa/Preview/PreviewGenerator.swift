@@ -66,6 +66,7 @@ private extension PreviewGenerator {
             name: data.name,
             startDate: data.startDate.startOfDay,
             endDate: data.endDate.endOfDay,
+            baseCurrencyCode: Currency.defaultCode,
             locations: [],
             createdAt: now,
             updatedAt: now

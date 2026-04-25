@@ -18,13 +18,17 @@ final class SwiftDataSettingsManager {
     // MARK: - Параметры учета
     
     var baseCurrencyCode: String {
-        settings.baseCurrencyCode
+        get { settings.baseCurrencyCode }
+        set {
+            settings.baseCurrencyCode = newValue
+            saveSettings()
+        }
     }
     
     var exchangeAdjustment: Double {
         get { settings.exchangeAdjustment }
         set {
-            settings.exchangeAdjustment = max(0, newValue)
+            settings.exchangeAdjustment = newValue.nonNegative
             saveSettings()
         }
     }

@@ -6,8 +6,8 @@
 //
 
 struct Budget: Codable, Identifiable, Equatable {
-        var category: ExpenseCategory
-        var baseAmount: Double
-
-        var id: String { category.rawValue }
-    }
+    var category: ExpenseCategory
+    var baseAmount: Double
+    
+    var id: String { category.rawValue }
+}

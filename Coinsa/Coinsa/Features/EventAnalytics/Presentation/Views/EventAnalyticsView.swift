@@ -190,12 +190,12 @@ private extension EventAnalyticsView {
         
         if forTrip {
             let trip = builder.getTrip(from: data)
-            let viewModel = TripDetailViewModel(trip: trip, baseCurrency: .defaultValue)
+            let viewModel = TripDetailViewModel(trip: trip)
             screenContextSubtitle = trip.screenContextSubtitle
             analyticsData = viewModel.eventAnalyticsData
         } else {
             let location = builder.getLocation(from: data)
-            let viewModel = LocationDetailViewModel(location: location, baseCurrency: .defaultValue)
+            let viewModel = LocationDetailViewModel(location: location)
             screenContextSubtitle = location.screenContextSubtitle
             analyticsData = viewModel.eventAnalyticsData
         }

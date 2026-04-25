@@ -32,8 +32,13 @@ struct TripEditView: View {
 
     // MARK: - Инициализация
     
-    init(_ trip: Trip? = nil, onDelete: (() -> Void)? = nil) {
-        _viewModel = State(initialValue: TripEditViewModel(trip: trip))
+    init(forCreateWith baseCurrency: Currency) {
+        _viewModel = State(initialValue: TripEditViewModel(forCreateWith: baseCurrency))
+        self.onDelete = nil
+    }
+    
+    init(forEdit trip: Trip, onDelete: (() -> Void)? = nil) {
+        _viewModel = State(initialValue: TripEditViewModel(forEdit: trip))
         self.onDelete = onDelete
     }
     
@@ -69,6 +74,7 @@ struct TripEditView: View {
     private var tripEditForm: some View {
         Form {
             mainDataSection
+            currencySection
             actionsSection
         }
     }
@@ -95,6 +101,21 @@ struct TripEditView: View {
                 in: viewModel.startDate...,
                 displayedComponents: .date
             )
+        }
+    }
+    
+    private var currencySection: some View {
+        Section {
+            LabeledPicker(
+                title: .tripBaseCurrency,
+                selection: baseCurrencyBinding,
+                options: Currency.allCasesSortedByName,
+                disabled: viewModel.hasLocations
+            ) { currency in
+                currency.makeLabel()
+            }
+        } footer: {
+            Text(.tripBaseCurrencyHint)
         }
     }
     
@@ -128,6 +149,15 @@ struct TripEditView: View {
         }
     }
     
+    // MARK: - Биндинги
+
+    private var baseCurrencyBinding: Binding<Currency> {
+        Binding(
+            get: { viewModel.baseCurrency },
+            set: { viewModel.baseCurrency = $0 }
+        )
+    }
+
     // MARK: - Действия
 
     private func handleClose() {
@@ -164,17 +194,18 @@ private extension TripEditView {
         colorScheme: ColorScheme,
         withNewTrip: Bool = false
     ) -> some View {
-        var trip: Trip? = nil
-        
-        if !withNewTrip {
-            let builder = PreviewBuilder.builder().withLocations(false)
-            let data = builder.buildData()
-            trip = builder.getTrip(from: data)
+        Group {
+            if withNewTrip {
+                return TripEditView(forCreateWith: .defaultValue)
+            } else {
+                let builder = PreviewBuilder.builder().withLocations(false)
+                let data = builder.buildData()
+                let trip = builder.getTrip(from: data)
+                return TripEditView(forEdit: trip)
+            }
         }
-
-        return TripEditView(trip)
-            .environment(\.locale, locale)
-            .preferredColorScheme(colorScheme)
+        .environment(\.locale, locale)
+        .preferredColorScheme(colorScheme)
     }
 }
 

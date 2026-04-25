@@ -2270,13 +2270,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The base currency for keeping records of expenses and displaying amounts in Trips, Locations, Budgets and Expenses. It cannot be changed."
+            "value" : "The base currency for displaying and storing budgets and amounts of Expenses in Locations. It is set for new Trip."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Основная валюта ведения учета трат и отображения сумм в поездках, локациях, бюджетах и тратах. Не может быть изменена."
+            "value" : "Основная валюта для отображения и хранения бюджетов и сумм трат на локациях. Устанавливается в новых поездках."
           }
         }
       }
@@ -2321,13 +2321,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The default percentage of currency exchange rate adjustment. It is added to the rate in Expenses with payment by card and affects the final amount. It can be overridden."
+            "value" : "The percentage of currency exchange rate adjustments. It is added to the exchange rate in Expenses with payment by card and affects the final amount. It is set for new Locations."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Процент по умолчанию корректировки курса обмена валюты. Прибавляется к курсу в тратах c оплатой по карте и влияет на конечную сумму. Может быть переопределен."
+            "value" : "Процент корректировки курса обмена валюты. Прибавляется к курсу обмена в тратах c оплатой по карте и влияет на конечную сумму. Устанавливается в новых локациях."
           }
         }
       }
@@ -2685,6 +2685,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Добавить поездку"
+          }
+        }
+      }
+    },
+    "trip.baseCurrency" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Base currency"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Осн. валюта"
+          }
+        }
+      }
+    },
+    "trip.baseCurrency.hint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The base currency for displaying and storing budgets and amounts of Expenses in Locations. It can only be changed if there are no Locations in the Trip."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Основная валюта для отображения и хранения бюджетов и сумм трат на локациях. Может быть изменена только при отсутствии локаций в поездке."
           }
         }
       }

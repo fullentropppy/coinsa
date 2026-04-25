@@ -18,7 +18,9 @@ final class AppSettingsStore {
     
     // MARK: - Параметры учета
     
-    var baseCurrency: Currency
+    var baseCurrency: Currency {
+        didSet { swiftDataManager.baseCurrencyCode = baseCurrency.code }
+    }
     
     var exchangeAdjustment: Double {
         didSet { swiftDataManager.exchangeAdjustment = exchangeAdjustment }

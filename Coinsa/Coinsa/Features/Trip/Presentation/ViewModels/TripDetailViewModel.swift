@@ -11,7 +11,6 @@ struct TripDetailViewModel {
     // MARK: - Хранимые свойства
 
     let trip: Trip
-    let baseCurrency: Currency
     
     // MARK: - Вычисляемые свойства
     
@@ -28,7 +27,7 @@ struct TripDetailViewModel {
             dateRangeProvider: trip,
             plannedBaseAmount: plannedAmount,
             actualBaseAmount: actualAmount,
-            baseCurrency: baseCurrency
+            baseCurrency: trip.baseCurrency
         )
     }
 
@@ -38,7 +37,7 @@ struct TripDetailViewModel {
 
         return EventCategoryAnalyticsData(
             dateRange: trip.range,
-            baseCurrency: baseCurrency,
+            baseCurrency: trip.baseCurrency,
             localCurrency: nil,
             budgetByCategory: slices(from: budgetByCategory, localValues: nil),
             expenseByCategory: slices(from: expenseByCategory, localValues: nil)
@@ -64,9 +63,8 @@ struct TripDetailViewModel {
     
     // MARK: - Инициализация
 
-    init(trip: Trip, baseCurrency: Currency) {
+    init(trip: Trip) {
         self.trip = trip
-        self.baseCurrency = baseCurrency
     }
 
     // MARK: - Приватные методы

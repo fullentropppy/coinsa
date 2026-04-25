@@ -37,6 +37,14 @@ final class TripEditViewModel {
         !name.isBlank && startDate <= endDate
     }
 
+    var hasLocations: Bool {
+        if let trip {
+            !trip.locations.isEmpty
+        } else {
+            false
+        }
+    }
+    
     // MARK: - Состояние UI. Общие данные
     
     var name: String
@@ -48,42 +56,51 @@ final class TripEditViewModel {
         }
     }
     var endDate: Date
-    var locations: [Location]
+    var baseCurrency: Currency
     
     // MARK: - Инициализация
 
-    init(trip: Trip?) {
-        self.trip = trip
-
-        let resolvedName: String
-        let resolvedStartDate: Date
-        let resolvedEndDate: Date
-        let resolvedLocations: [Location]
-
-        if let trip {
-            resolvedName = trip.name
-            resolvedStartDate = trip.startDate
-            resolvedEndDate = trip.endDate
-            resolvedLocations = trip.locations
-        } else {
-            resolvedName = ""
-            resolvedStartDate = .now
-            resolvedEndDate = .now
-            resolvedLocations = []
-        }
-        
-        name = resolvedName
-        startDate = resolvedStartDate
-        endDate = resolvedEndDate
-        locations = resolvedLocations
-
-        initialSnapshot = Snapshot(
-            name: resolvedName,
-            startDate: resolvedStartDate,
-            endDate: resolvedEndDate
+    convenience init(forCreateWith baseCurrency: Currency) {
+        self.init(
+            trip: nil,
+            name: "",
+            startDate: .now.startOfDay,
+            endDate: .now.endOfDay,
+            baseCurrency: baseCurrency
+        )
+    }
+    
+    convenience init(forEdit trip: Trip) {
+        self.init(
+            trip: trip,
+            name: trip.name,
+            startDate: trip.startDate,
+            endDate: trip.endDate,
+            baseCurrency: trip.baseCurrency
         )
     }
 
+    private init(
+        trip: Trip?,
+        name: String,
+        startDate: Date,
+        endDate: Date,
+        baseCurrency: Currency
+    ) {
+        self.trip = trip
+        self.name = name
+        self.startDate = startDate
+        self.endDate = endDate
+        self.baseCurrency = baseCurrency
+        
+        self.initialSnapshot = Snapshot(
+            name: name,
+            startDate: startDate,
+            endDate: endDate,
+            baseCurrency: baseCurrency
+        )
+    }
+    
     // MARK: - Операции с хранилищем
 
     func save(using repository: TripRepository) {
@@ -92,13 +109,15 @@ final class TripEditViewModel {
                 trip,
                 name: name,
                 startDate: startDate,
-                endDate: endDate
+                endDate: endDate,
+                baseCurrency: baseCurrency
             )
         } else {
             repository.add(
                 name: name,
                 startDate: startDate,
-                endDate: endDate
+                endDate: endDate,
+                baseCurrency: baseCurrency
             )
         }
     }
@@ -113,6 +132,7 @@ private extension TripEditViewModel {
         let name: String
         let startDate: Date
         let endDate: Date
+        let baseCurrency: Currency
 
         // MARK: - Инициализация
 
@@ -120,14 +140,16 @@ private extension TripEditViewModel {
             self.init(
                 name: viewModel.name,
                 startDate: viewModel.startDate,
-                endDate: viewModel.endDate
+                endDate: viewModel.endDate,
+                baseCurrency: viewModel.baseCurrency
             )
         }
         
-        init(name: String, startDate: Date, endDate: Date) {
+        init(name: String, startDate: Date, endDate: Date, baseCurrency: Currency) {
             self.name = name.trimmed
             self.startDate = startDate
             self.endDate = endDate
+            self.baseCurrency = baseCurrency
         }
     }
 }

@@ -73,14 +73,13 @@ struct TodayView: View {
                 locationContent(location: selectedLocation)
                     .sheet(item: $selectedQuickCategory) { selectedCategory in
                         ExpenseEditView(
-                            location: selectedLocation,
-                            baseCurrency: settingsStore.baseCurrency,
+                            forCreateWith: selectedLocation,
                             preselectedCategory: selectedCategory,
                             preselectedPaymentMethod: settingsStore.selectedPaymentMethod
                         )
                     }
                     .sheet(item: $expenseToEdit) { expense in
-                        ExpenseEditView(expense, baseCurrency: settingsStore.baseCurrency)
+                        ExpenseEditView(forEdit: expense)
                     }
                     .deleteConfirmationAlert(
                         isPresented: $deletionHandler.isShowingDeleteConfirmation,

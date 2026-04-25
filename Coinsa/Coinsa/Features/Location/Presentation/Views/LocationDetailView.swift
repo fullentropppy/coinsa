@@ -33,7 +33,7 @@ struct LocationDetailView: View {
     }
 
     private var viewModel: LocationDetailViewModel {
-        LocationDetailViewModel (location: location, baseCurrency: settingsStore.baseCurrency)
+        LocationDetailViewModel (location: location)
     }
     
     // MARK: - Инициализация
@@ -53,21 +53,16 @@ struct LocationDetailView: View {
                 toolbarContent
             }
             .sheet(isPresented: $isShowingLocationEdit) {
-                LocationEditView(
-                    location,
-                    baseCurrency: settingsStore.baseCurrency,
-                    onDelete: { dismiss() }
-                )
+                LocationEditView(forEdit: location) { dismiss() }
             }
             .sheet(isPresented: $isShowingExpenseCreate) {
                 ExpenseEditView(
-                    location: location,
-                    baseCurrency: settingsStore.baseCurrency,
+                    forCreateWith: location,
                     preselectedPaymentMethod: settingsStore.selectedPaymentMethod
                 )
             }
             .sheet(item: $expenseToEdit) { expense in
-                ExpenseEditView(expense, baseCurrency: settingsStore.baseCurrency)
+                ExpenseEditView(forEdit: expense)
             }
             .safeAreaInset(edge: .bottom) {
                 if !location.expenses.isEmpty {

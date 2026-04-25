@@ -16,7 +16,12 @@ struct TripRepository {
     
     // MARK: - Операции с хранилищем
     
-    func add(name: String, startDate: Date, endDate: Date) {
+    func add(
+        name: String,
+        startDate: Date,
+        endDate: Date,
+        baseCurrency: Currency
+    ) {
         let now = Date()
         
         let trip = Trip(
@@ -24,6 +29,7 @@ struct TripRepository {
             name: normalizedName(name),
             startDate: normalizedStartDate(startDate),
             endDate: normalizedEndDate(endDate),
+            baseCurrencyCode: baseCurrency.code,
             locations: [],
             createdAt: now,
             updatedAt: now
@@ -33,11 +39,19 @@ struct TripRepository {
         try? context.save()
     }
     
-    func update(_ trip: Trip, name: String, startDate: Date, endDate: Date) {
+    func update(
+        _ trip: Trip,
+        name: String,
+        startDate: Date,
+        endDate: Date,
+        baseCurrency: Currency
+    ) {
         trip.name = normalizedName(name)
         trip.startDate = normalizedStartDate(startDate)
         trip.endDate = normalizedEndDate(endDate)
+        trip.baseCurrencyCode = baseCurrency.code
         trip.updatedAt = Date()
+        
         try? context.save()
     }
     
