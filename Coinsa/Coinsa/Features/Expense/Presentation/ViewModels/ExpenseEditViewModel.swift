@@ -116,10 +116,13 @@ final class ExpenseEditViewModel {
         preselectedCategory: ExpenseCategory? = nil,
         preselectedPaymentMethod: PaymentMethod? = nil
     ) {
+        let now = Date()
+        let date = min(max(now, location.startDate), location.endDate)
+        
         self.init(
             location: location,
             expense: nil,
-            date: .now,
+            date: date,
             baseAmount: 0,
             localAmount: 0,
             rateLocalToBase: location.rateLocalToBase,

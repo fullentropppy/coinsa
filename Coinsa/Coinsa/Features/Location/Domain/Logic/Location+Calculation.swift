@@ -105,7 +105,6 @@ extension Location {
     // MARK: - Приватные методы
 
     private func plannedAmountRatio(withinDateRange targetRange: ClosedRange<Date>?) -> Double {
-        print("1")
         guard let targetRange else { return 1 }
 
         let normalizedTargetRange = targetRange.lowerBound.startOfDay...targetRange.upperBound.endOfDay

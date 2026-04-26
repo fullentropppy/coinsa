@@ -27,8 +27,8 @@ struct LocationDetailViewModel {
     }
     
     var eventHeaderData: EventSummaryData {
-        let plannedAmountBase = location.calculatePlannedAmount(asBaseCurrency: true)
-        let plannedAmountLocal = isHomeLocation ? nil : location.calculatePlannedAmount(asBaseCurrency: false)
+        let plannedBaseAmount = location.calculatePlannedAmount(asBaseCurrency: true)
+        let plannedLocalAmount = isHomeLocation ? nil : location.calculatePlannedAmount(asBaseCurrency: false)
         let actualAmountBase = location.calculateActualAmount(asBaseCurrency: true)
         let actualAmountLocal = isHomeLocation ? nil : location.calculateActualAmount(asBaseCurrency: false)
         let localCurrency = isHomeLocation ? nil : localCurrency
@@ -36,10 +36,10 @@ struct LocationDetailViewModel {
         return EventSummaryData(
             badgeProvider: Location.self,
             dateRangeProvider: location,
-            plannedBaseAmount: plannedAmountBase,
+            plannedBaseAmount: plannedBaseAmount,
             actualBaseAmount: actualAmountBase,
             baseCurrency: baseCurrency,
-            plannedLocalAmount: plannedAmountLocal,
+            plannedLocalAmount: plannedLocalAmount,
             actualLocalAmount: actualAmountLocal,
             localCurrency: localCurrency
         )
@@ -47,13 +47,13 @@ struct LocationDetailViewModel {
 
     var eventAnalyticsData: EventCategoryAnalyticsData {
         let isHomeLocation = localCurrency == baseCurrency
-        let budgetByCategoryBase = location.calculatePlannedAmountByCategory(asBaseCurrency: true, withinDateRange: location.range)
-        let expenseByCategoryBase = location.calculateActualAmountByCategory(asBaseCurrency: true, withinDateRange: location.range)
+        let plannedAmountByCategoryBase = location.calculatePlannedAmountByCategory(asBaseCurrency: true, withinDateRange: location.range)
+        let actualAmountByCategoryBase = location.calculateActualAmountByCategory(asBaseCurrency: true, withinDateRange: location.range)
 
-        let budgetByCategoryLocal = isHomeLocation
+        let plannedLocalAmountByCategory = isHomeLocation
             ? nil
             : location.calculatePlannedAmountByCategory(asBaseCurrency: false, withinDateRange: location.range)
-        let expenseByCategoryLocal = isHomeLocation
+        let actualLocalAmountByCategory = isHomeLocation
             ? nil
             : location.calculateActualAmountByCategory(asBaseCurrency: false, withinDateRange: location.range)
 
@@ -61,8 +61,8 @@ struct LocationDetailViewModel {
             dateRange: location.range,
             baseCurrency: baseCurrency,
             localCurrency: isHomeLocation ? nil : localCurrency,
-            budgetByCategory: slices(from: budgetByCategoryBase, localValues: budgetByCategoryLocal),
-            expenseByCategory: slices(from: expenseByCategoryBase, localValues: expenseByCategoryLocal)
+            plannedAmountByCategory: slices(from: plannedAmountByCategoryBase, localValues: plannedLocalAmountByCategory),
+            actualAmountByCategory: slices(from: actualAmountByCategoryBase, localValues: actualLocalAmountByCategory)
         )
     }
     
@@ -116,7 +116,7 @@ struct LocationDetailViewModel {
     // MARK: - Приватные методы
 
     private func slices(
-        from baseValues: [ExpenseCategory: Double],
+    from baseValues: [ExpenseCategory: Double],
         localValues: [ExpenseCategory: Double]?
     ) -> [CategoryAnalyticsSlice] {
         ExpenseCategory.allCases.map { category in

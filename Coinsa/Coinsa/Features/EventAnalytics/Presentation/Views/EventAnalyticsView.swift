@@ -12,19 +12,23 @@ struct EventAnalyticsView: View {
     // MARK: - Внутренние типы
 
     private enum Metric: String, CaseIterable, Identifiable {
-        case budget
-        case expense
+        case planned
+        case actual
 
         var id: String { rawValue }
 
         var localizedTitle: LocalizedStringResource {
             switch self {
-            case .budget: .amountPlanned
-            case .expense: .amountActual
+            case .planned: .amountPlanned
+            case .actual: .amountActual
             }
         }
     }
 
+    // MARK: - Окружение
+    
+    @Environment(\.haptics) private var haptics
+    
     // MARK: - Хранимые свойства
 
     private let screenContextSubtitle: String
@@ -32,27 +36,37 @@ struct EventAnalyticsView: View {
 
     // MARK: - Состояние
 
-    @State private var selectedMetric: Metric = .budget
+    @State private var selectedMetric: Metric = .planned
 
     // MARK: - Вычисляемые свойства
 
     private var currentSlices: [CategoryAnalyticsSlice] {
+        var slices: [CategoryAnalyticsSlice]
+        
         switch selectedMetric {
-        case .budget: data.budgetByCategory
-        case .expense: data.expenseByCategory
+        case .planned: slices = data.plannedAmountByCategory
+        case .actual: slices = data.actualAmountByCategory
         }
+        
+        return slices.contains { $0.baseAmount > 0 } ? slices : []
     }
 
-    private var displayedSlices: [CategoryAnalyticsSlice] {
-        currentSlices
-            .filter { amountValue(for: $0) > 0 }
-            .sorted { amountValue(for: $0) > amountValue(for: $1) }
+    private var displayedSlicesSortedByID: [CategoryAnalyticsSlice] {
+        currentSlices.sorted { $0.category.id > $1.category.id }
     }
 
-    private var totalAmount: Double {
-        displayedSlices.reduce(0) { $0 + amountValue(for: $1) }
+    private var displayedSlicesSortedByAmout: [CategoryAnalyticsSlice] {
+        currentSlices.sorted { $0.baseAmount > $1.baseAmount }
     }
-
+    
+    private var totalBaseAmount: Double {
+        displayedSlicesSortedByID.reduce(0) { $0 + $1.baseAmount }
+    }
+    
+    private var totalLocalAmount: Double {
+        displayedSlicesSortedByID.reduce(0) { $0 + ($1.localAmount ?? 0) }
+    }
+    
     // MARK: - Инициализация
 
     init(screenContextSubtitle: String, data: EventCategoryAnalyticsData) {
@@ -74,7 +88,7 @@ struct EventAnalyticsView: View {
     private var eventAnalyticsForm: some View {
         List {
             metricPickerSection
-            if displayedSlices.isEmpty {
+            if displayedSlicesSortedByID.isEmpty {
                 emptyAnalyticsContent
             } else {
                 sectorMarkSection
@@ -101,50 +115,71 @@ struct EventAnalyticsView: View {
                 }
             }
             .pickerStyle(.segmented)
+            .onChange(of: selectedMetric) {
+                haptics.trigger(.tap)
+            }
         }
     }
     
     private var sectorMarkSection: some View {
         Section {
-            Chart(displayedSlices) { slice in
+            HStack {
+                Image(systemName: "sum")
+                    .fontWeight(.semibold)
+                    .foregroundStyle(.secondary)
+                VStack(alignment: .center, spacing: 2) {
+                    if let localCurrency = data.localCurrency {
+                        AmountText.standard(totalLocalAmount, currency: localCurrency)
+                        AmountText.secondarySmall(totalBaseAmount, currency: data.baseCurrency)
+                    } else {
+                        AmountText.standard(totalBaseAmount, currency: data.baseCurrency)
+                    }
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .center)
+            .listRowSeparator(.hidden)
+            
+            Chart(displayedSlicesSortedByID, id: \.category.id) { slice in
                 SectorMark(
-                    angle: .value("", amountValue(for: slice)),
-                    innerRadius: 60,
+                    angle: .value("", slice.baseAmount),
+                    innerRadius: 68,
                     angularInset: 1,
-                    
                 )
-                .cornerRadius(4)
+                .cornerRadius(6)
                 .foregroundStyle(slice.category.accentColor.gradient)
             }
-            .frame(height: 200)
+            .frame(height: 220)
+            .animation(.spring(response: 0.2, dampingFraction: 0.6), value: selectedMetric)
         }
         .listRowBackground(Color.clear)
     }
     
     @ViewBuilder
     private var sectorMarkLegendSection: some View {
-            Section {
-                ForEach(displayedSlices) { slice in
-                    legendRow(for: slice)
-                }
+        Section {
+            ForEach(displayedSlicesSortedByAmout) { slice in
+                legendRow(for: slice)
             }
+        }
     }
     
     // MARK: - Компоненты
     
     private func legendRow(for slice: CategoryAnalyticsSlice) -> some View {
         HStack {
-            Text(shareValue(for: slice), format: .percent.precision(.fractionLength(0)))
-                .font(.footnote.monospacedDigit())
-                .foregroundStyle(.secondary)
-                .frame(width: 38, alignment: .leading)
+            VStack(alignment: .leading, spacing: 10) {
+                Text(slice.category.localizedResource)
+                HStack {
+                    slice.category.makeDot()
+                    Text(shareValue(for: slice), format: .percent.precision(.fractionLength(2)))
+                        .font(.footnote.monospacedDigit())
+                        .foregroundStyle(.secondary)
+                }
+            }
             
-            slice.category.makeDot()
-            Text(slice.category.localizedResource)
-
             Spacer()
 
-            VStack(alignment: .trailing, spacing: 2) {
+            VStack(alignment: .trailing, spacing: 10) {
                 if let localCurrency = data.localCurrency, let localAmount = slice.localAmount {
                     AmountText.standard(localAmount, currency: localCurrency)
                     AmountText.secondarySmall(slice.baseAmount, currency: data.baseCurrency)
@@ -161,13 +196,11 @@ struct EventAnalyticsView: View {
         if let localAmount = slice.localAmount, data.localCurrency != nil {
             return localAmount
         }
-
         return slice.baseAmount
     }
 
     private func shareValue(for slice: CategoryAnalyticsSlice) -> Double {
-        guard totalAmount > 0 else { return 0 }
-        return amountValue(for: slice) / totalAmount
+        totalBaseAmount > 0 ? slice.baseAmount / totalBaseAmount : 0
     }
 }
 

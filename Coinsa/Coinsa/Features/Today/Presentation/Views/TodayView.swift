@@ -167,6 +167,9 @@ struct TodayView: View {
                 }
             }
             .pickerStyle(.segmented)
+            .onChange(of: selectedLocationBinding(location: location).wrappedValue) {
+                haptics.trigger(.tap)
+            }
         }
     }
     
@@ -274,7 +277,6 @@ struct TodayView: View {
         Binding(
             get: { viewModel.selectedLocation?.id ?? location.id },
             set: { selectedID in
-                haptics.trigger(.tap)
                 selectedLocationID = selectedID
                 settingsStore.selectedLocationID = selectedID
             }

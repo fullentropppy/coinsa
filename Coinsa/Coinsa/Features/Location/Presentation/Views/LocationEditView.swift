@@ -174,9 +174,10 @@ struct LocationEditView: View {
         }
     }
     
+    @ViewBuilder
     private var exchangeRateSection: some View {
-        Section {
-            if !viewModel.isHomeLocation {
+        if !viewModel.isHomeLocation {
+            Section {
                 LabeledContent(.locationExchangeRate(localCurrencyCode: viewModel.localCurrency.code)) {
                     ExchangeRateInputField.standard(
                         rateInputBinding,
@@ -195,13 +196,13 @@ struct LocationEditView: View {
                         focusId: .exchangeAdjustment
                     )
                 }
-            }
-        } footer: {
-            VStack(alignment: .leading, spacing: 10) {
-                if let adjustedExchangeRateDescription = viewModel.adjustedRateDescription {
-                    Text(adjustedExchangeRateDescription)
-                }
-                if !viewModel.isHomeLocation {
+                
+            } footer: {
+                VStack(alignment: .leading, spacing: 10) {
+                    if let adjustedExchangeRateDescription = viewModel.adjustedRateDescription {
+                        Text(adjustedExchangeRateDescription)
+                    }
+                    
                     Text(.locationExchangeAdjustmentHint)
                 }
             }
