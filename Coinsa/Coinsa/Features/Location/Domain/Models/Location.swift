@@ -25,7 +25,7 @@ class Location: DateRangeProviding {
     var rateLocalToBase: Double
     var exchangeAdjustment: Double
     var trip: Trip
-    var budgets: [Budget]
+    var budgets: [ExpenseCategory: Double]
     
     @Relationship(deleteRule: .cascade, inverse: \Expense.location)
     var expenses: [Expense]
@@ -42,7 +42,7 @@ class Location: DateRangeProviding {
         rateLocalToBase: Double,
         exchangeAdjustment: Double,
         trip: Trip,
-        budgets: [Budget] = [],
+        budgets: [ExpenseCategory: Double] = [:],
         expenses: [Expense] = [],
         createdAt: Date,
         updatedAt: Date,

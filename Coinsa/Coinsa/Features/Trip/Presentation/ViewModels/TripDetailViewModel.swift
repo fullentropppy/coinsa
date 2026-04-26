@@ -32,8 +32,8 @@ struct TripDetailViewModel {
     }
 
     var eventAnalyticsData: EventCategoryAnalyticsData {
-        let budgetByCategory = trip.calculateBudgetByCategory(asBaseCurrency: true)
-        let expenseByCategory = trip.calculateExpenseByCategory(asBaseCurrency: true)
+        let budgetByCategory = trip.calculatePlannedAmountByCategory(asBaseCurrency: true)
+        let expenseByCategory = trip.calculateActualAmountByCategory(asBaseCurrency: true)
 
         return EventCategoryAnalyticsData(
             dateRange: trip.range,
@@ -59,12 +59,6 @@ struct TripDetailViewModel {
             
             return (status, locationsForStatus)
         }
-    }
-    
-    // MARK: - Инициализация
-
-    init(trip: Trip) {
-        self.trip = trip
     }
 
     // MARK: - Приватные методы

@@ -1414,6 +1414,23 @@
         }
       }
     },
+    "location.currency.hint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Location currency for entering and showing budgets and Expenses. Can be changed only if the Location has no Expenses."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Валюта локации для ввода и отображения бюджета и трат. Может быть изменена только если в локации нет трат."
+          }
+        }
+      }
+    },
     "location.delete" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1529,6 +1546,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Корректировка"
+          }
+        }
+      }
+    },
+    "location.exchangeAdjustment.hint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exchange rate adjustment for card payments. Applied when base currency differs from Location currency."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Корректировка курса обмена для трат с оплатой по карте. Применяется если основная валюта отличается от валюты локации."
           }
         }
       }
@@ -2270,13 +2304,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The base currency for displaying and storing budgets and amounts of Expenses in Locations. It is set for new Trip."
+            "value" : "Default currency for new Trips. Can be changed inside a Trip."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Основная валюта для отображения и хранения бюджетов и сумм трат на локациях. Устанавливается в новых поездках."
+            "value" : "Основная валюта для автоматической подстановки в новых поездках. Может быть изменена внутри поездки."
           }
         }
       }
@@ -2321,13 +2355,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The percentage of currency exchange rate adjustments. It is added to the exchange rate in Expenses with payment by card and affects the final amount. It is set for new Locations."
+            "value" : "Exchange rate adjustment for new Locations. Can be changed inside a Location."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Процент корректировки курса обмена валюты. Прибавляется к курсу обмена в тратах c оплатой по карте и влияет на конечную сумму. Устанавливается в новых локациях."
+            "value" : "Корректировка курса обмена для автоматической подстановки в новых локациях. Может быть изменена внутри локации."
           }
         }
       }
@@ -2689,7 +2723,7 @@
         }
       }
     },
-    "trip.baseCurrency" : {
+    "trip.currency" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -2706,19 +2740,19 @@
         }
       }
     },
-    "trip.baseCurrency.hint" : {
+    "trip.currency.hint" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The base currency for displaying and storing budgets and amounts of Expenses in Locations. It can only be changed if there are no Locations in the Trip."
+            "value" : "Base currency for entering, storing, and showing Budgets and Expenses. Can be changed only if the Trip has no Locations."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Основная валюта для отображения и хранения бюджетов и сумм трат на локациях. Может быть изменена только при отсутствии локаций в поездке."
+            "value" : "Основная валюта для ввода, хранения, отображения бюджета и трат. Может быть изменена только если в поездке нет локаций."
           }
         }
       }

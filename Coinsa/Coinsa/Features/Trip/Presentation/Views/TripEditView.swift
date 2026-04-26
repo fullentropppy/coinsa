@@ -107,7 +107,7 @@ struct TripEditView: View {
     private var currencySection: some View {
         Section {
             LabeledPicker(
-                title: .tripBaseCurrency,
+                title: .tripCurrency,
                 selection: baseCurrencyBinding,
                 options: Currency.allCasesSortedByName,
                 disabled: viewModel.hasLocations
@@ -115,7 +115,7 @@ struct TripEditView: View {
                 currency.makeLabel()
             }
         } footer: {
-            Text(.tripBaseCurrencyHint)
+            Text(.tripCurrencyHint)
         }
     }
     

@@ -104,7 +104,6 @@ final class ExpenseEditViewModel {
     
     var paymentMethod: PaymentMethod
     var exchangeAdjustment: Double
-    var storedExchangeAdjustment: Double
     
     var useExchangeAdjustment: Bool {
         !isHomeLocation && paymentMethod == .card
@@ -163,7 +162,6 @@ final class ExpenseEditViewModel {
         self.date = date
         self.paymentMethod = paymentMethod
         self.exchangeAdjustment = exchangeAdjustment
-        self.storedExchangeAdjustment = exchangeAdjustment
         self.category = category
         self.comment = comment
         
@@ -252,19 +250,11 @@ final class ExpenseEditViewModel {
 
     func updatePaymentMethod(_ method: PaymentMethod, currentInput: InputCurrency) {
         paymentMethod = method
-        
-        if useExchangeAdjustment {
-            exchangeAdjustment = storedExchangeAdjustment
-        } else {
-            exchangeAdjustment = 0
-        }
-        
         syncExchangeAdjustmentAndRecalculate(currentInput: currentInput)
     }
     
     func updateExchangeAdjustment(_ newAdjustment: Double, currentInput: InputCurrency) {
         exchangeAdjustment = newAdjustment
-        storedExchangeAdjustment = newAdjustment
         syncExchangeAdjustmentAndRecalculate(currentInput: currentInput)
     }
     

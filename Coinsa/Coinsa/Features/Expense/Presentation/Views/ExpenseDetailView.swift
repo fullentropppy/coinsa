@@ -153,7 +153,7 @@ struct ExpenseDetailView: View {
     // MARK: - Действия
     
     private func checkIfDeleted() {
-        if viewModel.shouldDismiss {
+        if expense.modelContext == nil {
             dismiss()
         }
     }

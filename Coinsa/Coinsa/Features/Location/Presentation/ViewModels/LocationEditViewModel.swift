@@ -110,7 +110,6 @@ final class LocationEditViewModel {
     // MARK: - Состояние UI. Оплата
     
     var exchangeAdjustment: Double
-    var storedExchangeAdjustment: Double
     
     // MARK: - Состояние UI. Бюджет
     
@@ -154,7 +153,7 @@ final class LocationEditViewModel {
             localCurrency: location.localCurrency,
             rateLocalToBase: location.rateLocalToBase,
             exchangeAdjustment: location.exchangeAdjustment,
-            budgetAmounts: location.budgetsByCategory()
+            budgetAmounts: location.budgets
         )
     }
     
@@ -177,7 +176,6 @@ final class LocationEditViewModel {
         self.endDate = endDate
         self.majorTimeZone = majorTimeZone
         self.exchangeAdjustment = exchangeAdjustment
-        self.storedExchangeAdjustment = exchangeAdjustment
         
         let exchangeRateProvider = ExchangeRateProvider(service: HexarateService())
         

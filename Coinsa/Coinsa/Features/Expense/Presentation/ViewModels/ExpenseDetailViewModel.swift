@@ -6,25 +6,19 @@
 //
 
 import Foundation
-import SwiftData
-import SwiftUI
 
 struct ExpenseDetailViewModel {
-    // MARK: - Зависимости
+    // MARK: - Хранимые свойства
 
     let expense: Expense
 
-    // MARK: - Состояние UI. Общее поведение и оформление
+    // MARK: - Вычисляемые свойства. Общее
 
     var isHomeLocation: Bool {
         baseCurrency == localCurrency
     }
-
-    var shouldDismiss: Bool {
-        expense.modelContext == nil
-    }
     
-    // MARK: - Состояние UI. Сумма и валюта
+    // MARK: - Вычисляемые свойства. Валюта и сумма
     
     var baseCurrency: Currency {
         expense.baseCurrency
@@ -50,7 +44,7 @@ struct ExpenseDetailViewModel {
         isHomeLocation ? nil : baseCurrency
     }
 
-    // MARK: - Состояние UI. Курс обмена
+    // MARK: - Вычисляемые свойства. Курс обмена
     
     var exchangeRateDescription: LocalizedStringResource? {
         guard !isHomeLocation else {

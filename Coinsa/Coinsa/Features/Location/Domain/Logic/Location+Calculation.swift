@@ -25,15 +25,14 @@ extension Location {
     // MARK: - Приватные свойства
     
     private var adjustedRateLocalToBase: Double {
-        let adjustmentMultiplier = 1 + (exchangeAdjustment / 100)
-        return rateLocalToBase * adjustmentMultiplier
+        rateLocalToBase * (1 + (exchangeAdjustment / 100))
     }
     
-    // MARK: - Публичные методы
+    // MARK: - Публичные методы. Плановая сумма
     
     func calculatePlannedAmountForToday(asBaseCurrency: Bool = true) -> Double {
         let plannedAmount = calculatePlannedAmount(asBaseCurrency: asBaseCurrency, asDailyAverage: false)
-        
+
         if totalDays == 1 {
             return plannedAmount
         }
@@ -48,23 +47,39 @@ extension Location {
         )
         
         let difference = plannedAmount - actualAmount
-        return remainingDays == 0 ? difference : max(0, difference / Double(remainingDays))
-    }
-    
-    func calculatePlannedAmount(asBaseCurrency: Bool = true, asDailyAverage: Bool = false) -> Double {
-        let plannedAmount = budgets.reduce(0) {
-            let exchangeRate = asBaseCurrency ? 1 : effectiveRateBaseToLocal
-            return $0 + $1.baseAmount * exchangeRate
-        }
-        return asDailyAverage ? plannedAmount / Double(totalDays).rounded() : plannedAmount
+        return remainingDays == 0 ? difference : max(0, difference / Double(remainingDays + 1))
     }
 
+    func calculatePlannedAmount(
+        asBaseCurrency: Bool = true,
+        asDailyAverage: Bool = false
+    ) -> Double {
+        let exchangeRate = asBaseCurrency ? 1 : effectiveRateBaseToLocal
+        let plannedAmount = budgets.values.reduce(0, +) * exchangeRate
+        return asDailyAverage ? plannedAmount / Double(totalDays).rounded() : plannedAmount
+    }
+ 
+    func calculatePlannedAmountByCategory(
+        asBaseCurrency: Bool = true,
+        withinDateRange targetRange: ClosedRange<Date>? = nil
+    ) -> [ExpenseCategory: Double] {
+        let exchangeRate = asBaseCurrency ? 1 : effectiveRateBaseToLocal
+        let periodRatio = plannedAmountRatio(withinDateRange: targetRange)
+
+        return ExpenseCategory.allCases.reduce(into: [:]) { result, category in
+            let baseAmount = budgetAmount(for: category)
+            result[category] = baseAmount * exchangeRate * periodRatio
+        }
+    }
+    
+    // MARK: - Публичные методы. Фактическая сумма
+    
     func calculateActualAmount(
         asBaseCurrency: Bool = true,
-        withinDateRange: ClosedRange<Date>? = nil
+        withinDateRange targetRange: ClosedRange<Date>? = nil
     ) -> Double {
         expenses.reduce(0) { result, expense in
-            if let withinDateRange, !withinDateRange.contains(expense.date) {
+            if let targetRange, !targetRange.contains(expense.date) {
                 return result
             }
             
@@ -73,25 +88,12 @@ extension Location {
         }
     }
 
-    func calculateBudgetByCategory(
+    func calculateActualAmountByCategory(
         asBaseCurrency: Bool = true,
-        withinDateRange: ClosedRange<Date>? = nil
-    ) -> [ExpenseCategory: Double] {
-        let exchangeRate = asBaseCurrency ? 1 : effectiveRateBaseToLocal
-        let periodRatio = budgetPeriodRatio(withinDateRange: withinDateRange)
-
-        return ExpenseCategory.allCases.reduce(into: [:]) { result, category in
-            let baseAmount = budgetAmount(for: category)
-            result[category] = baseAmount * exchangeRate * periodRatio
-        }
-    }
-
-    func calculateExpenseByCategory(
-        asBaseCurrency: Bool = true,
-        withinDateRange: ClosedRange<Date>? = nil
+        withinDateRange targetRange: ClosedRange<Date>? = nil
     ) -> [ExpenseCategory: Double] {
         expenses.reduce(into: [:]) { result, expense in
-            if let withinDateRange, !withinDateRange.contains(expense.date) {
+            if let targetRange, !targetRange.contains(expense.date) {
                 return
             }
 
@@ -102,13 +104,13 @@ extension Location {
 
     // MARK: - Приватные методы
 
-    private func budgetPeriodRatio(withinDateRange: ClosedRange<Date>?) -> Double {
-        guard let withinDateRange else { return 1 }
+    private func plannedAmountRatio(withinDateRange targetRange: ClosedRange<Date>?) -> Double {
+        print("1")
+        guard let targetRange else { return 1 }
 
-        let eventRange = startDate.startOfDay...endDate.endOfDay
-        let targetRange = withinDateRange.lowerBound.startOfDay...withinDateRange.upperBound.endOfDay
-        let overlapStart = max(eventRange.lowerBound, targetRange.lowerBound)
-        let overlapEnd = min(eventRange.upperBound, targetRange.upperBound)
+        let normalizedTargetRange = targetRange.lowerBound.startOfDay...targetRange.upperBound.endOfDay
+        let overlapStart = max(range.lowerBound, normalizedTargetRange.lowerBound)
+        let overlapEnd = min(range.upperBound, normalizedTargetRange.upperBound)
 
         guard overlapStart <= overlapEnd else { return 0 }
 

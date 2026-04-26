@@ -8,8 +8,6 @@
 import Foundation
 
 struct EventCategoryAnalyticsData {
-    // MARK: - Свойства
-
     let dateRange: ClosedRange<Date>
     let baseCurrency: Currency
     let localCurrency: Currency?
@@ -18,8 +16,6 @@ struct EventCategoryAnalyticsData {
 }
 
 struct CategoryAnalyticsSlice: Identifiable {
-    // MARK: - Свойства
-
     let category: ExpenseCategory
     let baseAmount: Double
     let localAmount: Double?

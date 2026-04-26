@@ -11,28 +11,24 @@ extension Location {
     // MARK: - Свойства
     
     var hasBudget: Bool {
-        budgets.count > 0
+        budgets.values.contains { $0 > 0 }
     }
     
     // MARK: - Методы
     
     func budgetAmount(for category: ExpenseCategory) -> Double {
-        budgets.first(where: { $0.category == category })?.baseAmount ?? 0
-    }
-
-    func budgetsByCategory() -> [ExpenseCategory: Double] {
-        Dictionary(uniqueKeysWithValues: budgets.map { ($0.category, $0.baseAmount) })
+        budgets[category] ?? 0
     }
 
     func applyBudgets(_ budgetsByCategory: [ExpenseCategory: Double]) {
-        let normalizedBudgets = ExpenseCategory.allCases.compactMap { category -> Budget? in
-            let amount = (budgetsByCategory[category] ?? 0).nonNegative
-            guard amount > 0 else {
-                return nil
+        budgets = Dictionary(
+            uniqueKeysWithValues: ExpenseCategory.allCases.compactMap { category in
+                let amount = (budgetsByCategory[category] ?? 0).nonNegative
+                guard amount > 0 else {
+                    return nil
+                }
+                return (category, amount)
             }
-            return Budget(category: category, baseAmount: amount)
-        }
-
-        budgets = normalizedBudgets
+        )
     }
 }

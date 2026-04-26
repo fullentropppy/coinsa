@@ -110,6 +110,7 @@ struct LocationEditView: View {
         Form {
             mainDataSection
             currencySection
+            exchangeRateSection
             budgetsSection
             actionsSection
         }
@@ -168,7 +169,13 @@ struct LocationEditView: View {
             ) { currency in
                 currency.makeLabel()
             }
-            
+        } footer: {
+            Text(.locationCurrencyHint)
+        }
+    }
+    
+    private var exchangeRateSection: some View {
+        Section {
             if !viewModel.isHomeLocation {
                 LabeledContent(.locationExchangeRate(localCurrencyCode: viewModel.localCurrency.code)) {
                     ExchangeRateInputField.standard(
@@ -190,8 +197,13 @@ struct LocationEditView: View {
                 }
             }
         } footer: {
-            if let adjustedExchangeRateDescription = viewModel.adjustedRateDescription {
-                Text(adjustedExchangeRateDescription)
+            VStack(alignment: .leading, spacing: 10) {
+                if let adjustedExchangeRateDescription = viewModel.adjustedRateDescription {
+                    Text(adjustedExchangeRateDescription)
+                }
+                if !viewModel.isHomeLocation {
+                    Text(.locationExchangeAdjustmentHint)
+                }
             }
         }
     }

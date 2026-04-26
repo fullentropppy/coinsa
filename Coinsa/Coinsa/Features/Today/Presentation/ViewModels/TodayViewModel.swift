@@ -115,16 +115,6 @@ final class TodayViewModel {
         self.loadedRateLocalToBase = nil
     }
     
-    func updateContext(
-        currentLocations: [Location],
-        selectedLocationID: UUID?,
-        baseCurrency: Currency
-    ) {
-        self.currentLocations = currentLocations
-        self.selectedLocationID = selectedLocationID
-        self.baseCurrency = baseCurrency
-    }
-    
     // MARK: - Курс обмена
     
     func loadInitialRateIfNeeded() {
@@ -143,6 +133,16 @@ final class TodayViewModel {
     }
     
     // MARK: - Вспомогательные методы
+    
+    func updateContext(
+        currentLocations: [Location],
+        selectedLocationID: UUID?,
+        baseCurrency: Currency
+    ) {
+        self.currentLocations = currentLocations
+        self.selectedLocationID = selectedLocationID
+        self.baseCurrency = baseCurrency
+    }
     
     func validSelectedLocationID(from selectedLocationID: UUID?) -> UUID? {
         guard !currentLocations.isEmpty else { return nil }
