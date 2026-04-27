@@ -42,7 +42,7 @@ struct AmountText: View {
     
     var body: some View {
         HStack(alignment: .firstTextBaseline, spacing: 4) {
-            Text(amount, format: .number.precision(.fractionLength(fractionLength)))
+            Text(amount.numberFormat(fractionLength: fractionLength))
                 .font(font)
                 .foregroundStyle(color)
             

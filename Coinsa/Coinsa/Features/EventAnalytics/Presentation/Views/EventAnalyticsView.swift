@@ -12,15 +12,17 @@ struct EventAnalyticsView: View {
     // MARK: - Внутренние типы
 
     private enum Metric: String, CaseIterable, Identifiable {
-        case planned
+        case summary
+        case plan
         case actual
 
         var id: String { rawValue }
 
         var localizedTitle: LocalizedStringResource {
             switch self {
-            case .planned: .amountPlanned
-            case .actual: .amountActual
+            case .summary: .analyticsSummary
+            case .plan: .analyticsPlan
+            case .actual: .analyticsActual
             }
         }
     }
@@ -36,7 +38,7 @@ struct EventAnalyticsView: View {
 
     // MARK: - Состояние
 
-    @State private var selectedMetric: Metric = .planned
+    @State private var selectedMetric: Metric = .summary
 
     // MARK: - Вычисляемые свойства
 
@@ -44,7 +46,8 @@ struct EventAnalyticsView: View {
         var slices: [CategoryAnalyticsSlice]
         
         switch selectedMetric {
-        case .planned: slices = data.plannedAmountByCategory
+        case .summary: slices = data.plannedAmountByCategory
+        case .plan: slices = data.plannedAmountByCategory
         case .actual: slices = data.actualAmountByCategory
         }
         
@@ -171,7 +174,7 @@ struct EventAnalyticsView: View {
                 Text(slice.category.localizedResource)
                 HStack {
                     slice.category.makeDot()
-                    Text(shareValue(for: slice), format: .percent.precision(.fractionLength(2)))
+                    Text(shareValue(for: slice).percentFormat())
                         .font(.footnote.monospacedDigit())
                         .foregroundStyle(.secondary)
                 }

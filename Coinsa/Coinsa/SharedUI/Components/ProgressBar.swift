@@ -29,9 +29,11 @@ struct ProgressBar: View {
 
     private var backgroundFill: Color {
         if style == .positive && progress == 0 {
-            return .red
+            .red
+        } else if style == .negative && progress == 0 {
+            .green
         } else {
-            return .secondary
+            .secondary
         }
     }
     

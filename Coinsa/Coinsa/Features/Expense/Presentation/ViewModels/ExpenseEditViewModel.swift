@@ -93,9 +93,7 @@ final class ExpenseEditViewModel {
 
         return .expenseAdjustedExchangeRateShort(
             localCurrencyCode: localCurrency.code,
-            effectiveRateLocalToBase: currencyConverter.effectiveRateLocalToBase.formatted(
-                .number.precision(.fractionLength(4))
-            ),
+            effectiveRateLocalToBase: currencyConverter.effectiveRateLocalToBase.numberFormat(fractionLength: 4),
             baseCurrencyCode: baseCurrency.code
         )
     }

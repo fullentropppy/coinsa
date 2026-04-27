@@ -44,7 +44,7 @@ struct EventAmountBalanceView: View {
         VStack(alignment: .leading) {
             ProgressBar(currentValue: baseAmountBalance, maxValue: plannedBaseAmount, style: .positive)
             HStack {
-                Text(.amountBalance(balancePercent: progress.formatted(.percent.precision(.fractionLength(2)))))
+                Text(.amountBalancePersentage(balancePercent: progress.percentFormat()))
                     .font(.footnote)
                     .foregroundStyle(.secondary)
                 Spacer()
@@ -59,23 +59,17 @@ struct EventAmountBalanceView: View {
         Group {
             if let localAmountBalance, let localCurrency {
                 Text(
-                    .summaryDuoBalance(
-                        localAmountBalance: localAmountBalance.formatted(
-                            .number.precision(.fractionLength(2))
-                        ),
+                    .amountDuo(
+                        localAmountBalance: localAmountBalance.numberFormat(),
                         localCurrencyCode: localCurrency.code,
-                        baseAmountBalance: baseAmountBalance.formatted(
-                            .number.precision(.fractionLength(2))
-                        ),
+                        baseAmountBalance: baseAmountBalance.numberFormat(),
                         baseCurrencyCode: baseCurrency.code
                     )
                 )
             } else {
                 Text(
-                    .summaryMonoBalance(
-                        baseAmountBalance: baseAmountBalance.formatted(
-                            .number.precision(.fractionLength(2))
-                        ),
+                    .amountMono(
+                        baseAmountBalance: baseAmountBalance.numberFormat(),
                         baseCurrencyCode: baseCurrency.code
                     )
                 )

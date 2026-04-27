@@ -214,17 +214,13 @@ struct TodayView: View {
                 Text(
                     .todayExchangeRate(
                         currencyCode1: location.localCurrencyCode,
-                        rate1To2: viewModel.rateLocalToBase.formatted(
-                            .number.precision(.fractionLength(4))
-                        ),
+                        rate1To2: viewModel.rateLocalToBase.numberFormat(fractionLength: 4),
                         currencyCode2: settingsStore.baseCurrency.code)
                 )
                 Text(
                     .todayExchangeRate(
                         currencyCode1: settingsStore.baseCurrency.code,
-                        rate1To2: viewModel.rateBaseToLocal.formatted(
-                            .number.precision(.fractionLength(4))
-                        ),
+                        rate1To2: viewModel.rateBaseToLocal.numberFormat(fractionLength: 4),
                         currencyCode2: location.localCurrencyCode)
                 )
             }

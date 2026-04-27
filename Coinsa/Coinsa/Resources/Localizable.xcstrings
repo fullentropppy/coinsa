@@ -43,6 +43,23 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
+            "value" : "Balance"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Остаток"
+          }
+        }
+      }
+    },
+    "amount.balancePersentage" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "Balance: %1$(balancePercent)@"
           }
         },
@@ -54,13 +71,47 @@
         }
       }
     },
-    "amount.planned" : {
+    "amount.duo" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Planned"
+            "value" : "%1$(localAmountBalance)@ %2$(localCurrencyCode)@ • %3$(baseAmountBalance)@ %4$(baseCurrencyCode)@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$(localAmountBalance)@ %2$(localCurrencyCode)@ • %3$(baseAmountBalance)@ %4$(baseCurrencyCode)@"
+          }
+        }
+      }
+    },
+    "amount.mono" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$(baseAmountBalance)@ %2$(baseCurrencyCode)@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$(baseAmountBalance)@ %2$(baseCurrencyCode)@"
+          }
+        }
+      }
+    },
+    "amount.plan" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plan"
           }
         },
         "ru" : {
@@ -88,6 +139,23 @@
         }
       }
     },
+    "analytics.actual" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actual"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Факт"
+          }
+        }
+      }
+    },
     "analytics.emptyState" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -101,6 +169,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Нет данных"
+          }
+        }
+      }
+    },
+    "analytics.plan" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plan"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "План"
+          }
+        }
+      }
+    },
+    "analytics.summary" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Summary"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сводно"
           }
         }
       }
@@ -2991,40 +3093,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Сторонние API"
-          }
-        }
-      }
-    },
-    "summary.duoBalance" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$(localAmountBalance)@ %2$(localCurrencyCode)@ • %3$(baseAmountBalance)@ %4$(baseCurrencyCode)@"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$(localAmountBalance)@ %2$(localCurrencyCode)@ • %3$(baseAmountBalance)@ %4$(baseCurrencyCode)@"
-          }
-        }
-      }
-    },
-    "summary.monoBalance" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$(baseAmountBalance)@ %2$(baseCurrencyCode)@"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$(baseAmountBalance)@ %2$(baseCurrencyCode)@"
           }
         }
       }

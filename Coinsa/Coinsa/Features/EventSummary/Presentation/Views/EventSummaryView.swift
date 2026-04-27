@@ -90,7 +90,7 @@ struct EventSummaryView: View {
         HStack {
             if showsPlannedAmount {
                 EventAmountCardView(
-                    title: .amountPlanned,
+                    title: .amountPlan,
                     baseAmount: data.plannedBaseAmount,
                     baseCurrency: data.baseCurrency,
                     localAmount: data.plannedLocalAmount,
