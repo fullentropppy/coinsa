@@ -9,72 +9,39 @@ import SwiftUI
 import Charts
 
 struct EventAnalyticsView: View {
-    // MARK: - Внутренние типы
-
-    private enum Metric: String, CaseIterable, Identifiable {
-        case summary
-        case plan
-        case actual
-
-        var id: String { rawValue }
-
-        var localizedTitle: LocalizedStringResource {
-            switch self {
-            case .summary: .analyticsSummary
-            case .plan: .analyticsPlan
-            case .actual: .analyticsActual
-            }
-        }
-    }
-
     // MARK: - Окружение
     
     @Environment(\.haptics) private var haptics
     
-    // MARK: - Хранимые свойства
-
-    private let screenContextSubtitle: String
-    private let data: EventCategoryAnalyticsData
-
     // MARK: - Состояние
 
-    @State private var selectedMetric: Metric = .summary
+    @State private var selectedMetric: EventAnalyticsMetric = .summary
+    @State private var selectedSummaryMode: EventAnalyticsSummaryMode = .perCategory
+    
+    // MARK: - Хранимые свойства
 
+    private let viewModel: EventAnalyticsViewModel
+    private let screenContextSubtitle: String
+    
     // MARK: - Вычисляемые свойства
 
-    private var currentSlices: [CategoryAnalyticsSlice] {
-        var slices: [CategoryAnalyticsSlice]
-        
-        switch selectedMetric {
-        case .summary: slices = data.plannedAmountByCategory
-        case .plan: slices = data.plannedAmountByCategory
-        case .actual: slices = data.actualAmountByCategory
-        }
-        
-        return slices.contains { $0.baseAmount > 0 } ? slices : []
-    }
-
     private var displayedSlicesSortedByID: [CategoryAnalyticsSlice] {
-        currentSlices.sorted { $0.category.id > $1.category.id }
+        viewModel.displayedSlicesSortedByID(for: selectedMetric)
     }
 
     private var displayedSlicesSortedByAmout: [CategoryAnalyticsSlice] {
-        currentSlices.sorted { $0.baseAmount > $1.baseAmount }
+        viewModel.displayedSlicesSortedByAmount(for: selectedMetric)
     }
-    
-    private var totalBaseAmount: Double {
-        displayedSlicesSortedByID.reduce(0) { $0 + $1.baseAmount }
-    }
-    
-    private var totalLocalAmount: Double {
-        displayedSlicesSortedByID.reduce(0) { $0 + ($1.localAmount ?? 0) }
+
+    private var categoryProgressItems: [EventAnalyticsCategoryProgressItem] {
+        viewModel.categoryProgressItems(for: selectedSummaryMode)
     }
     
     // MARK: - Инициализация
 
-    init(screenContextSubtitle: String, data: EventCategoryAnalyticsData) {
+    init(data: EventCategoryAnalyticsData, screenContextSubtitle: String) {
+        self.viewModel = EventAnalyticsViewModel(data: data)
         self.screenContextSubtitle = screenContextSubtitle
-        self.data = data
     }
 
     // MARK: - Тело View
@@ -90,12 +57,14 @@ struct EventAnalyticsView: View {
     
     private var eventAnalyticsForm: some View {
         List {
-            metricPickerSection
-            if displayedSlicesSortedByID.isEmpty {
+            sharedHeaderSection
+            if viewModel.showsEmptyState(for: selectedMetric) {
                 emptyAnalyticsContent
             } else {
-                sectorMarkSection
-                sectorMarkLegendSection
+                switch selectedMetric {
+                case .summary: summaryMainContent
+                case .plan, .actual: planActualMainContent
+                }
             }
         }
     }
@@ -108,12 +77,25 @@ struct EventAnalyticsView: View {
         .listRowBackground(Color.clear)
     }
     
+    private var summaryMainContent: some View {
+        Group {
+            summaryCategoriesSection
+        }
+    }
+    
+    private var planActualMainContent: some View {
+        Group {
+            sectorMarkSection
+            sectorMarkLegendSection
+        }
+    }
+    
     // MARK: - Секции
     
-    private var metricPickerSection: some View {
+    private var sharedHeaderSection: some View {
         Section {
             Picker("", selection: $selectedMetric) {
-                ForEach(Metric.allCases) { metric in
+                ForEach(EventAnalyticsMetric.allCases) { metric in
                     Text(metric.localizedTitle).tag(metric)
                 }
             }
@@ -121,27 +103,49 @@ struct EventAnalyticsView: View {
             .onChange(of: selectedMetric) {
                 haptics.trigger(.tap)
             }
+            .listRowSeparator(.hidden)
+            
+            switch selectedMetric {
+            case .summary: summaryHeaderContent
+            case .plan: planHeaderContent
+            case .actual: actualHeaderContent
+            }
+        }
+    }
+    
+    private var summaryCategoriesSection: some View {
+        Section {
+            Picker("", selection: $selectedSummaryMode) {
+                ForEach(EventAnalyticsSummaryMode.allCases) { mode in
+                    Text(mode.localizedTitle).tag(mode)
+                }
+            }
+            .pickerStyle(.segmented)
+            .onChange(of: selectedSummaryMode) {
+                haptics.trigger(.tap)
+            }
+            .listRowSeparator(.hidden)
+            
+            ForEach(categoryProgressItems) { item in
+                EventAmountProgressView(
+                    plannedBaseAmount: item.plannedBaseAmount,
+                    baseActualAmount: item.actualBaseAmount,
+                    baseCurrency: viewModel.baseCurrency,
+                    localPlannedAmount: item.plannedLocalAmount,
+                    localActualAmount: item.actualLocalAmount,
+                    localCurrency: viewModel.localCurrency
+                ) {
+                    HStack(spacing: 8) {
+                        item.category.makeDot()
+                        Text(item.category.localizedResource)
+                    }
+                }
+            }
         }
     }
     
     private var sectorMarkSection: some View {
         Section {
-            HStack {
-                Image(systemName: "sum")
-                    .fontWeight(.semibold)
-                    .foregroundStyle(.secondary)
-                VStack(alignment: .center, spacing: 2) {
-                    if let localCurrency = data.localCurrency {
-                        AmountText.standard(totalLocalAmount, currency: localCurrency)
-                        AmountText.secondarySmall(totalBaseAmount, currency: data.baseCurrency)
-                    } else {
-                        AmountText.standard(totalBaseAmount, currency: data.baseCurrency)
-                    }
-                }
-            }
-            .frame(maxWidth: .infinity, alignment: .center)
-            .listRowSeparator(.hidden)
-            
             Chart(displayedSlicesSortedByID, id: \.category.id) { slice in
                 SectorMark(
                     angle: .value("", slice.baseAmount),
@@ -167,6 +171,49 @@ struct EventAnalyticsView: View {
     }
     
     // MARK: - Компоненты
+
+    private var summaryHeaderContent: some View {
+        EventSummaryView(data: viewModel.eventSummaryData)
+    }
+    
+    private var planHeaderContent: some View {
+        HStack {
+            EventAmountCardView(
+                title: .amountPlan,
+                baseAmount: viewModel.plannedTotalBaseAmount,
+                baseCurrency: viewModel.baseCurrency,
+                localAmount: viewModel.plannedTotalLocalAmount,
+                localCurrency: viewModel.localCurrency
+            )
+            EventAmountCardView(
+                title: .amountPlanDaily,
+                baseAmount: viewModel.dailyBasePlannedAmount,
+                baseCurrency: viewModel.baseCurrency,
+                localAmount: viewModel.dailyLocalPlannedAmount,
+                localCurrency: viewModel.localCurrency
+            )
+        }
+    }
+    
+    private var actualHeaderContent: some View {
+        HStack {
+            EventAmountCardView(
+                title: .amountActual,
+                baseAmount: viewModel.actualTotalBaseAmount,
+                baseCurrency: viewModel.baseCurrency,
+                localAmount: viewModel.actualTotalLocalAmount,
+                localCurrency: viewModel.localCurrency
+            )
+            EventAmountCardView(
+                title: .amountActualDaily,
+                baseAmount: viewModel.dailyBaseActualAmount,
+                baseCurrency: viewModel.baseCurrency,
+                localAmount: viewModel.dailyLocalActualAmount,
+                localCurrency: viewModel.localCurrency
+            )
+        }
+        
+    }
     
     private func legendRow(for slice: CategoryAnalyticsSlice) -> some View {
         HStack {
@@ -179,15 +226,13 @@ struct EventAnalyticsView: View {
                         .foregroundStyle(.secondary)
                 }
             }
-            
             Spacer()
-
             VStack(alignment: .trailing, spacing: 10) {
-                if let localCurrency = data.localCurrency, let localAmount = slice.localAmount {
+                if let localCurrency = viewModel.localCurrency, let localAmount = slice.localAmount {
                     AmountText.standard(localAmount, currency: localCurrency)
-                    AmountText.secondarySmall(slice.baseAmount, currency: data.baseCurrency)
+                    AmountText.secondarySmall(slice.baseAmount, currency: viewModel.baseCurrency)
                 } else {
-                    AmountText.standard(slice.baseAmount, currency: data.baseCurrency)
+                    AmountText.standard(slice.baseAmount, currency: viewModel.baseCurrency)
                 }
             }
         }
@@ -195,15 +240,8 @@ struct EventAnalyticsView: View {
 
     // MARK: - Вспомогательные методы
 
-    private func amountValue(for slice: CategoryAnalyticsSlice) -> Double {
-        if let localAmount = slice.localAmount, data.localCurrency != nil {
-            return localAmount
-        }
-        return slice.baseAmount
-    }
-
     private func shareValue(for slice: CategoryAnalyticsSlice) -> Double {
-        totalBaseAmount > 0 ? slice.baseAmount / totalBaseAmount : 0
+        viewModel.shareValue(for: slice, metric: selectedMetric)
     }
 }
 
@@ -237,7 +275,7 @@ private extension EventAnalyticsView {
         }
         
         return NavigationStack {
-            EventAnalyticsView(screenContextSubtitle: screenContextSubtitle, data: analyticsData)
+            EventAnalyticsView(data: analyticsData, screenContextSubtitle: screenContextSubtitle)
         }
         .environment(\.locale, locale)
         .preferredColorScheme(colorScheme)

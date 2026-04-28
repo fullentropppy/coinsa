@@ -37,6 +37,23 @@
         }
       }
     },
+    "amount.actual.daily" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Daily actual"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Дневной факт"
+          }
+        }
+      }
+    },
     "amount.balance" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -122,6 +139,23 @@
         }
       }
     },
+    "amount.plan.daily" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Daily plan"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Дневной план"
+          }
+        }
+      }
+    },
     "analytics" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -203,6 +237,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Сводно"
+          }
+        }
+      }
+    },
+    "analytics.summary.fromTotal" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "From total"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "От общего"
+          }
+        }
+      }
+    },
+    "analytics.summary.perCategory" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Per category"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "По категории"
           }
         }
       }

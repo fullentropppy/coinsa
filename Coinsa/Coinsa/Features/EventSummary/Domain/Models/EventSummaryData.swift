@@ -10,8 +10,8 @@ import SwiftUI
 struct EventSummaryData {
     // MARK: - Свойства
     
-    let badgeProvider: TypeBadgeProviding.Type
-    let dateRangeProvider: DateRangeProviding
+    let badgeProvider: TypeBadgeProviding.Type?
+    let dateRangeProvider: DateRangeProviding?
     let plannedBaseAmount: Double
     let actualBaseAmount: Double
     let baseCurrency: Currency
@@ -22,8 +22,8 @@ struct EventSummaryData {
     // MARK: - Инициализация
     
     init(
-        badgeProvider: TypeBadgeProviding.Type,
-        dateRangeProvider: DateRangeProviding,
+        badgeProvider: TypeBadgeProviding.Type? = nil,
+        dateRangeProvider: DateRangeProviding? = nil,
         plannedBaseAmount: Double,
         actualBaseAmount: Double,
         baseCurrency: Currency,

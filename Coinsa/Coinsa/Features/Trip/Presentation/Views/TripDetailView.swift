@@ -102,8 +102,8 @@ struct TripDetailView: View {
             if viewModel.showsFullHeader {
                 AnalyticsNavigationLink {
                     EventAnalyticsView(
-                        screenContextSubtitle: trip.screenContextSubtitle,
-                        data: viewModel.eventAnalyticsData
+                        data: viewModel.eventAnalyticsData,
+                        screenContextSubtitle: trip.screenContextSubtitle
                     )
                 }
             }

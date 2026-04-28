@@ -73,16 +73,19 @@ struct EventSummaryView: View {
 
     // MARK: - Компоненты
 
+    @ViewBuilder
     private var headerContent: some View {
-        HStack {
-            data.badgeProvider.makeBadge()
-            data.dateRangeProvider.status.makeBadge()
-            Spacer()
-            DateLabel.secondarySmall(
-                from: data.dateRangeProvider.startDate,
-                to: data.dateRangeProvider.endDate
-            )
-            CountLabel.daysSecondarySmall(data.dateRangeProvider.totalDays)
+        if let badgeProvider = data.badgeProvider, let dateRangeProvider = data.dateRangeProvider {
+            HStack {
+                badgeProvider.makeBadge()
+                dateRangeProvider.status.makeBadge()
+                Spacer()
+                DateLabel.secondarySmall(
+                    from: dateRangeProvider.startDate,
+                    to: dateRangeProvider.endDate
+                )
+                CountLabel.daysSecondarySmall(dateRangeProvider.totalDays)
+            }
         }
     }
 
