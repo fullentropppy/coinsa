@@ -17,10 +17,10 @@ final class SwiftDataSettingsManager {
     
     // MARK: - Параметры учета
     
-    var baseCurrencyCode: String {
-        get { settings.baseCurrencyCode }
+    var baseCurrency: Currency {
+        get { settings.baseCurrency }
         set {
-            settings.baseCurrencyCode = newValue
+            settings.baseCurrency = newValue
             saveSettings()
         }
     }
@@ -48,7 +48,7 @@ final class SwiftDataSettingsManager {
         }
         
         let new = AppSettings(
-            baseCurrencyCode: Currency.defaultCode,
+            baseCurrency: Currency.defaultValue,
             exchangeAdjustment: 0
         )
         context.insert(new)

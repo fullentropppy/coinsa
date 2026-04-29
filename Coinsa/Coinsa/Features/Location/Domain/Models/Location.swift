@@ -20,12 +20,14 @@ class Location: DateRangeProviding {
     var name: String
     var startDate: Date
     var endDate: Date
-    var selectedTimeZoneIdentifier: String
-    var localCurrencyCode: String
+    var majorTimeZone: MajorTimeZone
+    var localCurrency: Currency
     var rateLocalToBase: Double
     var exchangeAdjustment: Double
     var trip: Trip
-    var budgets: [ExpenseCategory: Double]
+
+    @Relationship(deleteRule: .cascade, inverse: \Budget.location)
+    var budgets: [Budget]
     
     @Relationship(deleteRule: .cascade, inverse: \Expense.location)
     var expenses: [Expense]
@@ -37,12 +39,12 @@ class Location: DateRangeProviding {
         name: String,
         startDate: Date,
         endDate: Date,
-        selectedTimeZoneIdentifier: String,
-        localCurrencyCode: String,
+        majorTimeZone: MajorTimeZone,
+        localCurrency: Currency,
         rateLocalToBase: Double,
         exchangeAdjustment: Double,
         trip: Trip,
-        budgets: [ExpenseCategory: Double] = [:],
+        budgets: [Budget] = [],
         expenses: [Expense] = [],
         createdAt: Date,
         updatedAt: Date,
@@ -54,8 +56,8 @@ class Location: DateRangeProviding {
         self.name = name
         self.startDate = startDate
         self.endDate = endDate
-        self.selectedTimeZoneIdentifier = selectedTimeZoneIdentifier
-        self.localCurrencyCode = localCurrencyCode
+        self.majorTimeZone = majorTimeZone
+        self.localCurrency = localCurrency
         self.rateLocalToBase = rateLocalToBase
         self.exchangeAdjustment = exchangeAdjustment
         self.trip = trip

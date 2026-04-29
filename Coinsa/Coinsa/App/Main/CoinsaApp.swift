@@ -14,10 +14,11 @@ struct CoinsaApp: App {
     
     private let modelTypes: [any PersistentModel.Type] =
     [
+        AppSettings.self,
         Trip.self,
         Location.self,
-        Expense.self,
-        AppSettings.self
+        Budget.self,
+        Expense.self
     ]
     
     // MARK: - Тело View

@@ -20,7 +20,7 @@ class Trip: DateRangeProviding {
     var name: String
     var startDate: Date
     var endDate: Date
-    var baseCurrencyCode: String
+    var baseCurrency: Currency
 
     @Relationship(deleteRule: .cascade, inverse: \Location.trip)
     var locations: [Location]
@@ -32,7 +32,7 @@ class Trip: DateRangeProviding {
         name: String,
         startDate: Date,
         endDate: Date,
-        baseCurrencyCode: String,
+        baseCurrency: Currency,
         locations: [Location],
         createdAt: Date,
         updatedAt: Date,
@@ -44,7 +44,7 @@ class Trip: DateRangeProviding {
         self.name = name
         self.startDate = startDate
         self.endDate = endDate
-        self.baseCurrencyCode = baseCurrencyCode
+        self.baseCurrency = baseCurrency
         self.locations = locations
     }
 }

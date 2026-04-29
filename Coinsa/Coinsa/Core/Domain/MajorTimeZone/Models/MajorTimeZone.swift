@@ -5,7 +5,7 @@
 //  Created by Daniil Gritsenko on 19.04.2026.
 //
 
-enum MajorTimeZone: String, CaseIterable, Identifiable {
+enum MajorTimeZone: String, Codable, CaseIterable, Identifiable {
     // MARK: - Значения
     
     case honolulu = "Pacific/Honolulu"

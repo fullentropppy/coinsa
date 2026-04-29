@@ -34,16 +34,16 @@ struct LocationRepository {
             name: name.trimmed,
             startDate: normalizedStartDate(startDate),
             endDate: normalizedEndDate(endDate),
-            selectedTimeZoneIdentifier: majorTimeZone.identifier,
-            localCurrencyCode: localCurrency.code,
+            majorTimeZone: majorTimeZone,
+            localCurrency: localCurrency,
             rateLocalToBase: normalizedRateLocalToBase(rateLocalToBase),
             exchangeAdjustment: normalizedRateLocalToBase(exchangeAdjustment),
             trip: trip,
             createdAt: now,
             updatedAt: now
         )
-
-        applyBudgets(budgetsByCategory, to: location)
+        location.applyBudgets(budgetsByCategory)
+        
         context.insert(location)
         try? context.save()
     }
@@ -62,28 +62,19 @@ struct LocationRepository {
         location.name = name.trimmed
         location.startDate = normalizedStartDate(startDate)
         location.endDate = normalizedEndDate(endDate)
-        location.selectedTimeZoneIdentifier = majorTimeZone.identifier
-        location.localCurrencyCode = localCurrency.code
+        location.majorTimeZone = majorTimeZone
+        location.localCurrency = localCurrency
         location.rateLocalToBase = normalizedRateLocalToBase(rateLocalToBase)
         location.exchangeAdjustment = normalizedRateLocalToBase(exchangeAdjustment)
         location.updatedAt = Date()
+        location.applyBudgets(budgetsByCategory)
         
-        applyBudgets(budgetsByCategory, to: location)
         try? context.save()
     }
 
     func delete(_ location: Location) {
         context.delete(location)
         try? context.save()
-    }
-
-    // MARK: - Приватные методы
-
-    private func applyBudgets(_ budgetsByCategory: [ExpenseCategory: Double], to location: Location) {
-        let normalizedBudgets = Dictionary(
-            uniqueKeysWithValues: budgetsByCategory.map { ($0.key, normalizedAmount($0.value)) }
-        )
-        location.applyBudgets(normalizedBudgets)
     }
     
     // MARK: - Номализация

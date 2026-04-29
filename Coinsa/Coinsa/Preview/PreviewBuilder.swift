@@ -22,7 +22,7 @@ struct PreviewBuilder {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
 
         let container = try! ModelContainer(
-            for: Trip.self, Location.self, Expense.self, AppSettings.self,
+            for: Trip.self, Location.self, Budget.self, Expense.self, AppSettings.self,
             configurations: config
         )
 

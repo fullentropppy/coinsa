@@ -151,7 +151,7 @@ final class LocationEditViewModel {
             localCurrency: location.localCurrency,
             rateLocalToBase: location.rateLocalToBase,
             exchangeAdjustment: location.exchangeAdjustment,
-            budgetAmounts: location.budgets
+            budgetAmounts: location.budgetsByCategory
         )
     }
     

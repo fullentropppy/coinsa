@@ -93,24 +93,24 @@ enum PreviewLocation: String {
         }
     }
 
-    var selectedTimeZoneIdentifier: String {
+    var majorTimeZone: MajorTimeZone {
         switch self {
-        case .tokyo, .kyoto, .osaka, .seoul, .busan: MajorTimeZone.tokyo.identifier
-        case .saintp, .istanbul: MajorTimeZone.moscow.identifier
+        case .tokyo, .kyoto, .osaka, .seoul, .busan: MajorTimeZone.tokyo
+        case .saintp, .istanbul: MajorTimeZone.moscow
         }
     }
     
-    var currencyCode: String {
+    var currency: Currency {
         switch self {
-        case .tokyo, .kyoto, .osaka: Currency.jpy.code
-        case .saintp: Currency.rub.code
-        case .seoul, .busan: Currency.krw.code
-        case .istanbul: Currency.try.code
+        case .tokyo, .kyoto, .osaka: Currency.jpy
+        case .saintp: Currency.rub
+        case .seoul, .busan: Currency.krw
+        case .istanbul: Currency.try
         }
     }
 
     var rateLocalToBase: Double {
-        PreviewCurrency.exchangeRate(forCode: currencyCode)
+        PreviewCurrency.exchangeRate(for: currency)
     }
     
     var exchangeAdjustment: Double {
@@ -143,15 +143,15 @@ enum PreviewExpenseComment: String {
 // MARK: - Приватные типы
 
 private enum PreviewCurrency {
-    private static let exchangeRates: [String: Double] = [
-        Currency.jpy.code: 0.48,
-        Currency.rub.code: 1.0,
-        Currency.krw.code: 0.05,
-        Currency.try.code: 1.73
+    private static let exchangeRates: [Currency: Double] = [
+        Currency.jpy: 0.48,
+        Currency.rub: 1.0,
+        Currency.krw: 0.05,
+        Currency.try: 1.73
     ]
 
-    static func exchangeRate(forCode: String) -> Double {
-        if let rate = exchangeRates[forCode] {
+    static func exchangeRate(for currency: Currency) -> Double {
+        if let rate = exchangeRates[currency] {
             rate
         } else {
             1.0

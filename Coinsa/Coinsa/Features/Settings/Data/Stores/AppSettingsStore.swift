@@ -19,7 +19,7 @@ final class AppSettingsStore {
     // MARK: - Параметры учета
     
     var baseCurrency: Currency {
-        didSet { swiftDataManager.baseCurrencyCode = baseCurrency.code }
+        didSet { swiftDataManager.baseCurrency = baseCurrency }
     }
     
     var exchangeAdjustment: Double {
@@ -52,7 +52,7 @@ final class AppSettingsStore {
         self.swiftDataManager = SwiftDataSettingsManager(context: context)
         self.userDefaultsManager = UserDefaultsSettingsManager()
         
-        self.baseCurrency = Currency.from(swiftDataManager.baseCurrencyCode)
+        self.baseCurrency = swiftDataManager.baseCurrency
         self.exchangeAdjustment = swiftDataManager.exchangeAdjustment
         self.appAppearance = userDefaultsManager.appAppearance
         self.isAddButtonOnLeft = userDefaultsManager.isAddButtonOnLeft

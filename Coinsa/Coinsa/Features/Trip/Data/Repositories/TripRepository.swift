@@ -29,7 +29,7 @@ struct TripRepository {
             name: normalizedName(name),
             startDate: normalizedStartDate(startDate),
             endDate: normalizedEndDate(endDate),
-            baseCurrencyCode: baseCurrency.code,
+            baseCurrency: baseCurrency,
             locations: [],
             createdAt: now,
             updatedAt: now
@@ -49,7 +49,7 @@ struct TripRepository {
         trip.name = normalizedName(name)
         trip.startDate = normalizedStartDate(startDate)
         trip.endDate = normalizedEndDate(endDate)
-        trip.baseCurrencyCode = baseCurrency.code
+        trip.baseCurrency = baseCurrency
         trip.updatedAt = Date()
         
         try? context.save()

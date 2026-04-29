@@ -5,7 +5,7 @@
 //  Created by Daniil Gritsenko on 08.03.2026.
 //
 
-enum Currency: String, CaseIterable, Identifiable {
+enum Currency: String, Codable, CaseIterable, Identifiable {
     // MARK: - Значения
     
     case aed = "AED"

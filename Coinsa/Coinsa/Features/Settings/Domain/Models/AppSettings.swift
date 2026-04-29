@@ -17,13 +17,13 @@ final class AppSettings {
     var createdAt: Date
     var updatedAt: Date
     
-    var baseCurrencyCode: String
+    var baseCurrency: Currency
     var exchangeAdjustment: Double
     
     // MARK: - Инициализация
 
     init(
-        baseCurrencyCode: String,
+        baseCurrency: Currency,
         exchangeAdjustment: Double
     ) {
         let now = Date()
@@ -32,7 +32,7 @@ final class AppSettings {
         self.createdAt = now
         self.updatedAt = now
         
-        self.baseCurrencyCode = baseCurrencyCode
-        self .exchangeAdjustment = exchangeAdjustment
+        self.baseCurrency = baseCurrency
+        self.exchangeAdjustment = exchangeAdjustment
     }
 }

@@ -8,15 +8,7 @@
 import Foundation
 
 extension Location {
-    var baseCurrencyCode: String {
-        trip.baseCurrencyCode
-    }
-    
     var baseCurrency: Currency {
         trip.baseCurrency
-    }
-    
-    var localCurrency: Currency {
-        Currency.from(localCurrencyCode)
     }
 }

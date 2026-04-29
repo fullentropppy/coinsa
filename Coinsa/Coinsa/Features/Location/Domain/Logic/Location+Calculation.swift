@@ -55,7 +55,7 @@ extension Location {
         asDailyAverage: Bool = false
     ) -> Double {
         let exchangeRate = asBaseCurrency ? 1 : effectiveRateBaseToLocal
-        let plannedAmount = budgets.values.reduce(0, +) * exchangeRate
+        let plannedAmount = budgets.reduce(0) { $0 + $1.baseAmount } * exchangeRate
         return asDailyAverage ? plannedAmount / Double(totalDays).rounded() : plannedAmount
     }
  
