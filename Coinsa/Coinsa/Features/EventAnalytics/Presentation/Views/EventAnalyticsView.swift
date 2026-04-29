@@ -58,13 +58,13 @@ struct EventAnalyticsView: View {
     private var eventAnalyticsForm: some View {
         List {
             sharedHeaderSection
-            if viewModel.showsEmptyState(for: selectedMetric) {
-                emptyAnalyticsContent
-            } else {
+            if viewModel.hasAnalytics(for: selectedMetric) {
                 switch selectedMetric {
                 case .summary: summaryMainContent
                 case .plan, .actual: planActualMainContent
                 }
+            } else {
+                emptyAnalyticsContent
             }
         }
     }
@@ -96,7 +96,7 @@ struct EventAnalyticsView: View {
         Section {
             Picker("", selection: $selectedMetric) {
                 ForEach(EventAnalyticsMetric.allCases) { metric in
-                    Text(metric.localizedTitle).tag(metric)
+                    Text(metric.localizedResource).tag(metric)
                 }
             }
             .pickerStyle(.segmented)
@@ -105,10 +105,12 @@ struct EventAnalyticsView: View {
             }
             .listRowSeparator(.hidden)
             
-            switch selectedMetric {
-            case .summary: summaryHeaderContent
-            case .plan: planHeaderContent
-            case .actual: actualHeaderContent
+            if viewModel.hasAnalytics(for: selectedMetric) {
+                switch selectedMetric {
+                case .summary: summaryHeaderContent
+                case .plan: planHeaderContent
+                case .actual: actualHeaderContent
+                }
             }
         }
     }
@@ -117,7 +119,7 @@ struct EventAnalyticsView: View {
         Section {
             Picker("", selection: $selectedSummaryMode) {
                 ForEach(EventAnalyticsSummaryMode.allCases) { mode in
-                    Text(mode.localizedTitle).tag(mode)
+                    Text(mode.localizedResource).tag(mode)
                 }
             }
             .pickerStyle(.segmented)

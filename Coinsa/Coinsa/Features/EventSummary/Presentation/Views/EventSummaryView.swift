@@ -26,11 +26,11 @@ struct EventSummaryView: View {
         data.plannedBaseAmount - data.actualBaseAmount
     }
     
-    private var localAmountBalance: Double {
+    private var localAmountBalance: Double? {
         if let planned = data.plannedLocalAmount, let actual = data.actualLocalAmount {
             planned - actual
         } else {
-            0
+            nil
         }
     }
     

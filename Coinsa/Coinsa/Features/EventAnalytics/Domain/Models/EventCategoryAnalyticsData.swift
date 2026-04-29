@@ -14,11 +14,3 @@ struct EventCategoryAnalyticsData {
     let plannedAmountByCategory: [CategoryAnalyticsSlice]
     let actualAmountByCategory: [CategoryAnalyticsSlice]
 }
-
-struct CategoryAnalyticsSlice: Identifiable {
-    let category: ExpenseCategory
-    let baseAmount: Double
-    let localAmount: Double?
-
-    var id: String { category.id }
-}
