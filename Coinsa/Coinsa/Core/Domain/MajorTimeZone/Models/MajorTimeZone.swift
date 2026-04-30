@@ -43,5 +43,4 @@ enum MajorTimeZone: String, Codable, CaseIterable, Identifiable {
     // MARK: - Базовые свойства
     
     var id: String { rawValue }
-    var identifier: String { rawValue }
 }

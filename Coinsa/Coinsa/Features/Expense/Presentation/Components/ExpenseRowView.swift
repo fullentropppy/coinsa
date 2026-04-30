@@ -10,14 +10,12 @@ import SwiftUI
 struct ExpenseRowView: View {
     // MARK: - Свойства
 
-    let expense: Expense
-    let baseCurrency: Currency
+    private let expense: Expense
     
     // MARK: - Инициализация
     
-    init(_ expense: Expense, baseCurrency: Currency) {
+    init(_ expense: Expense) {
         self.expense = expense
-        self.baseCurrency = baseCurrency
     }
     
     // MARK: - Тело View
@@ -41,11 +39,11 @@ struct ExpenseRowView: View {
     
     private var rightStack: some View {
         VStack(alignment: .trailing, spacing: 10) {
-            if baseCurrency == expense.localCurrency {
-                AmountText.standard(expense.baseAmount, currency: baseCurrency)
+            if expense.baseCurrency == expense.localCurrency {
+                AmountText.standard(expense.baseAmount, currency: expense.baseCurrency)
             } else {
                 AmountText.standard(expense.localAmount, currency: expense.localCurrency)
-                AmountText.secondarySmall(expense.baseAmount,currency: baseCurrency)
+                AmountText.secondarySmall(expense.baseAmount,currency: expense.baseCurrency)
             }
         }
     }
@@ -60,7 +58,7 @@ private extension ExpenseRowView {
         let expense = builder.getExpense(from: data)
         
         return List {
-            ExpenseRowView(expense, baseCurrency: Currency.defaultValue)
+            ExpenseRowView(expense)
                 .environment(\.locale, locale)
                 .preferredColorScheme(colorScheme)
         }

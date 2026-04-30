@@ -20,9 +20,9 @@ class Expense {
     var date: Date
     var baseAmount: Double
     var rateLocalToBase: Double
-    var paymentMethod: PaymentMethod
+    var paymentMethodRaw: String
     var exchangeAdjustment: Double
-    var category: ExpenseCategory
+    var categoryRaw: String
     var location: Location
     var comment: String?
 
@@ -33,9 +33,9 @@ class Expense {
         date: Date = .now,
         baseAmount: Double,
         rateLocalToBase: Double,
-        paymentMethod: PaymentMethod,
+        paymentMethodRaw: String,
         exchangeAdjustment: Double,
-        category: ExpenseCategory,
+        categoryRaw: String,
         location: Location,
         comment: String? = nil,
         createdAt: Date,
@@ -48,9 +48,9 @@ class Expense {
         self.date = date
         self.baseAmount = baseAmount
         self.rateLocalToBase = rateLocalToBase
-        self.paymentMethod = paymentMethod
+        self.paymentMethodRaw = paymentMethodRaw
         self.exchangeAdjustment = exchangeAdjustment
-        self.category = category
+        self.categoryRaw = categoryRaw
         self.location = location
         self.comment = comment
     }

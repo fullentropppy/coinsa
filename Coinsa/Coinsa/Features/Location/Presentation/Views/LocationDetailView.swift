@@ -141,7 +141,7 @@ struct LocationDetailView: View {
                         NavigationLink {
                             ExpenseDetailView(expense)
                         } label: {
-                            ExpenseRowView(expense, baseCurrency: settingsStore.baseCurrency)
+                            ExpenseRowView(expense)
                         }
                         .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                             SwipeActions(

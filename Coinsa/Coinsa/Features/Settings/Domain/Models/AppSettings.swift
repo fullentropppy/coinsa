@@ -17,22 +17,23 @@ final class AppSettings {
     var createdAt: Date
     var updatedAt: Date
     
-    var baseCurrency: Currency
+    var baseCurrencyCode: String
     var exchangeAdjustment: Double
     
     // MARK: - Инициализация
 
     init(
-        baseCurrency: Currency,
-        exchangeAdjustment: Double
+        id: UUID,
+        baseCurrencyCode: String,
+        exchangeAdjustment: Double,
+        createdAt: Date,
+        updatedAt: Date
     ) {
-        let now = Date()
+        self.id = id
+        self.createdAt = createdAt
+        self.updatedAt = updatedAt
         
-        self.id = UUID()
-        self.createdAt = now
-        self.updatedAt = now
-        
-        self.baseCurrency = baseCurrency
+        self.baseCurrencyCode = baseCurrencyCode
         self.exchangeAdjustment = exchangeAdjustment
     }
 }

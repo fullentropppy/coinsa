@@ -13,9 +13,7 @@ final class TodayViewModel {
     // MARK: - Зависимости
     
     private let exchangeRateManager: ExchangeRateManager
-    
     private var selectedLocationID: UUID?
-    private var baseCurrency: Currency
     
     var currentLocations: [Location]
     
@@ -44,7 +42,7 @@ final class TodayViewModel {
     
     var isHomeLocation: Bool {
         if let selectedLocation {
-            selectedLocation.localCurrency == baseCurrency
+            selectedLocation.baseCurrency == selectedLocation.localCurrency
         } else {
             false
         }
@@ -104,14 +102,13 @@ final class TodayViewModel {
     
     // MARK: - Инициализация
     
-    init(currentLocations: [Location], selectedLocationID: UUID?, baseCurrency: Currency) {
+    init(currentLocations: [Location], selectedLocationID: UUID?) {
         let exchangeRateService = ExchangeRateProvider(service: HexarateService())
         let exchangeRateManager = ExchangeRateManager(provider: exchangeRateService)
         
         self.exchangeRateManager = exchangeRateManager
         self.currentLocations = currentLocations
         self.selectedLocationID = selectedLocationID
-        self.baseCurrency = baseCurrency
         self.loadedRateLocalToBase = nil
     }
     
@@ -122,11 +119,11 @@ final class TodayViewModel {
         
         loadedRateLocalToBase = nil
 
-        guard selectedLocation.localCurrency != baseCurrency else { return }
+        guard !isHomeLocation else { return }
         
         exchangeRateManager.requestRefresh(
             from: selectedLocation.localCurrency,
-            to: baseCurrency
+            to: selectedLocation.baseCurrency
         ) { [weak self] rate in
             self?.loadedRateLocalToBase = rate
         }
@@ -134,14 +131,9 @@ final class TodayViewModel {
     
     // MARK: - Вспомогательные методы
     
-    func updateContext(
-        currentLocations: [Location],
-        selectedLocationID: UUID?,
-        baseCurrency: Currency
-    ) {
+    func updateContext(currentLocations: [Location], selectedLocationID: UUID?) {
         self.currentLocations = currentLocations
         self.selectedLocationID = selectedLocationID
-        self.baseCurrency = baseCurrency
     }
     
     func validSelectedLocationID(from selectedLocationID: UUID?) -> UUID? {
@@ -156,8 +148,6 @@ final class TodayViewModel {
     }
     
     func eventSummaryData(for location: Location) -> EventSummaryData {
-        let isHomeLocation = location.localCurrency == baseCurrency
-
         let plannedBaseAmount = location.calculatePlannedAmountForToday()
         let plannedLocalAmount = isHomeLocation ? nil : location.calculatePlannedAmountForToday(asBaseCurrency: false)
         let actualAmountBase = location.calculateActualAmount(asBaseCurrency: true, withinDateRange: todayRange)
@@ -169,7 +159,7 @@ final class TodayViewModel {
             dateRangeProvider: location,
             plannedBaseAmount: plannedBaseAmount,
             actualBaseAmount: actualAmountBase,
-            baseCurrency: baseCurrency,
+            baseCurrency: location.baseCurrency,
             plannedLocalAmount: plannedLocalAmount,
             actualLocalAmount: actualAmountLocal,
             localCurrency: localCurrency

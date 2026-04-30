@@ -13,7 +13,7 @@ extension MajorTimeZone {
     }
     
     var timeZone: TimeZone {
-        TimeZone(identifier: self.identifier) ?? .current
+        TimeZone(identifier: id) ?? .current
     }
     
     var gmtOffsetSeconds: Int {

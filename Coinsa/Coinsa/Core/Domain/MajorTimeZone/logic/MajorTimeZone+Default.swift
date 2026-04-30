@@ -7,5 +7,5 @@
 
 extension MajorTimeZone {
     static var defaultValue: MajorTimeZone { MajorTimeZone.moscow }
-    static var defaultIdentifier: String { defaultValue.identifier }
+    static var defaultIdentifier: String { defaultValue.id }
 }

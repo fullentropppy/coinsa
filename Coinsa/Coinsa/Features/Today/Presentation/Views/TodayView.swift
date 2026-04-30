@@ -36,8 +36,7 @@ struct TodayView: View {
     init() {
         let viewModel = TodayViewModel(
             currentLocations: [],
-            selectedLocationID: nil,
-            baseCurrency: .defaultValue
+            selectedLocationID: nil
         )
         _viewModel = State(initialValue: viewModel)
         
@@ -213,15 +212,15 @@ struct TodayView: View {
             VStack(alignment: .leading) {
                 Text(
                     .todayExchangeRate(
-                        currencyCode1: location.localCurrency.code,
+                        currencyCode1: location.localCurrencyCode,
                         rate1To2: viewModel.rateLocalToBase.numberFormat(fractionLength: 4),
-                        currencyCode2: settingsStore.baseCurrency.code)
+                        currencyCode2: location.trip.baseCurrencyCode)
                 )
                 Text(
                     .todayExchangeRate(
-                        currencyCode1: settingsStore.baseCurrency.code,
+                        currencyCode1: location.trip.baseCurrencyCode,
                         rate1To2: viewModel.rateBaseToLocal.numberFormat(fractionLength: 4),
-                        currencyCode2: location.localCurrency.code)
+                        currencyCode2: location.localCurrencyCode)
                 )
             }
             .font(.caption)
@@ -255,7 +254,7 @@ struct TodayView: View {
                 NavigationLink {
                     ExpenseDetailView(expense)
                 } label: {
-                    ExpenseRowView(expense, baseCurrency: settingsStore.baseCurrency)
+                    ExpenseRowView(expense)
                 }
                 .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                     SwipeActions(
@@ -284,8 +283,7 @@ struct TodayView: View {
     private func syncViewModelContext(selectedLocationID: UUID? = nil) {
         viewModel.updateContext(
             currentLocations: currentLocations,
-            selectedLocationID: selectedLocationID ?? self.selectedLocationID,
-            baseCurrency: settingsStore.baseCurrency
+            selectedLocationID: selectedLocationID ?? self.selectedLocationID
         )
     }
 

@@ -126,7 +126,7 @@ final class ExpenseEditViewModel {
             rateLocalToBase: location.rateLocalToBase,
             paymentMethod: preselectedPaymentMethod ?? .card,
             exchangeAdjustment: location.exchangeAdjustment,
-            category: preselectedCategory ?? .other,
+            category: preselectedCategory ?? .defaultValue,
             comment: ""
         )
     }

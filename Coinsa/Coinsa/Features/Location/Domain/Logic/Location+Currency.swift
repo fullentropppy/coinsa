@@ -11,4 +11,8 @@ extension Location {
     var baseCurrency: Currency {
         trip.baseCurrency
     }
+    
+    var localCurrency: Currency {
+        Currency.from(localCurrencyCode)
+    }
 }

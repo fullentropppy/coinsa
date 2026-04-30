@@ -18,9 +18,9 @@ final class SwiftDataSettingsManager {
     // MARK: - Параметры учета
     
     var baseCurrency: Currency {
-        get { settings.baseCurrency }
+        get { Currency.from(settings.baseCurrencyCode) }
         set {
-            settings.baseCurrency = newValue
+            settings.baseCurrencyCode = newValue.code
             saveSettings()
         }
     }
@@ -43,16 +43,24 @@ final class SwiftDataSettingsManager {
     // MARK: - Приватные методы
     
     private static func loadSettings(from context: ModelContext) -> AppSettings {
-        if let existing = try? context.fetch(FetchDescriptor<AppSettings>()).first {
+        let defaultId = UUID(uuidString: "00000000-0000-0000-0000-000000000001")!
+        
+        let fetchDescriptor = FetchDescriptor<AppSettings>(
+            predicate: #Predicate { $0.id == defaultId }
+        )
+        
+        if let existing = try? context.fetch(fetchDescriptor).first {
             return existing
         }
         
         let new = AppSettings(
-            baseCurrency: Currency.defaultValue,
-            exchangeAdjustment: 0
+            id: defaultId,
+            baseCurrencyCode: Currency.defaultCode,
+            exchangeAdjustment: 0,
+            createdAt: .now,
+            updatedAt: .now
         )
         context.insert(new)
-        
         return new
     }
     

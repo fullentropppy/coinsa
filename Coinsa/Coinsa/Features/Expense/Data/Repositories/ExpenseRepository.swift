@@ -33,9 +33,9 @@ struct ExpenseRepository {
             date: date,
             baseAmount: normalizedAmount(baseAmount),
             rateLocalToBase: normalizedRateLocalToBase(rateLocalToBase),
-            paymentMethod: paymentMethod,
+            paymentMethodRaw: paymentMethod.rawValue,
             exchangeAdjustment: normalizedExchangeAdjustment(exchangeAdjustment),
-            category: category,
+            categoryRaw: category.rawValue,
             location: location,
             comment: normalizeComment(comment),
             createdAt: now,
@@ -58,9 +58,9 @@ struct ExpenseRepository {
         expense.date = date
         expense.baseAmount = normalizedAmount(baseAmount)
         expense.rateLocalToBase = normalizedRateLocalToBase(rateLocalToBase)
-        expense.paymentMethod = paymentMethod
+        expense.paymentMethodRaw = paymentMethod.rawValue
         expense.exchangeAdjustment = normalizedExchangeAdjustment(exchangeAdjustment)
-        expense.category = category
+        expense.categoryRaw = category.rawValue
         expense.comment = normalizeComment(comment)
         expense.updatedAt = Date()
         try? context.save()

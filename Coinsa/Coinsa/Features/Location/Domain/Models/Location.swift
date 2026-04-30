@@ -20,8 +20,8 @@ class Location: DateRangeProviding {
     var name: String
     var startDate: Date
     var endDate: Date
-    var majorTimeZone: MajorTimeZone
-    var localCurrency: Currency
+    var timeZoneID: String
+    var localCurrencyCode: String
     var rateLocalToBase: Double
     var exchangeAdjustment: Double
     var trip: Trip
@@ -39,8 +39,8 @@ class Location: DateRangeProviding {
         name: String,
         startDate: Date,
         endDate: Date,
-        majorTimeZone: MajorTimeZone,
-        localCurrency: Currency,
+        timeZoneID: String,
+        localCurrencyCode: String,
         rateLocalToBase: Double,
         exchangeAdjustment: Double,
         trip: Trip,
@@ -56,8 +56,8 @@ class Location: DateRangeProviding {
         self.name = name
         self.startDate = startDate
         self.endDate = endDate
-        self.majorTimeZone = majorTimeZone
-        self.localCurrency = localCurrency
+        self.timeZoneID = timeZoneID
+        self.localCurrencyCode = localCurrencyCode
         self.rateLocalToBase = rateLocalToBase
         self.exchangeAdjustment = exchangeAdjustment
         self.trip = trip

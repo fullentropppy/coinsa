@@ -27,7 +27,7 @@ extension Expense {
     // MARK: - Приватные свойства
     
     private var adjustedRateLocalToBase: Double {
-        if baseCurrency != localCurrency && paymentMethod == .card {
+        if baseCurrency != localCurrency && paymentMethod == .defaultValue {
             rateLocalToBase * (1 + (exchangeAdjustment / 100))
         } else {
             rateLocalToBase

@@ -34,8 +34,8 @@ struct LocationRepository {
             name: name.trimmed,
             startDate: normalizedStartDate(startDate),
             endDate: normalizedEndDate(endDate),
-            majorTimeZone: majorTimeZone,
-            localCurrency: localCurrency,
+            timeZoneID: majorTimeZone.id,
+            localCurrencyCode: localCurrency.code,
             rateLocalToBase: normalizedRateLocalToBase(rateLocalToBase),
             exchangeAdjustment: normalizedRateLocalToBase(exchangeAdjustment),
             trip: trip,
@@ -62,8 +62,8 @@ struct LocationRepository {
         location.name = name.trimmed
         location.startDate = normalizedStartDate(startDate)
         location.endDate = normalizedEndDate(endDate)
-        location.majorTimeZone = majorTimeZone
-        location.localCurrency = localCurrency
+        location.timeZoneID = majorTimeZone.id
+        location.localCurrencyCode = localCurrency.code
         location.rateLocalToBase = normalizedRateLocalToBase(rateLocalToBase)
         location.exchangeAdjustment = normalizedRateLocalToBase(exchangeAdjustment)
         location.updatedAt = Date()
