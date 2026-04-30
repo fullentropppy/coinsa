@@ -47,7 +47,7 @@ final class AppSettingsStore {
     
     // MARK: - Инициализация
     
-    init(context: ModelContext) {
+    init() {
         self.userDefaultsManager = UserDefaultsSettingsManager()
         
         self.baseCurrency = userDefaultsManager.baseCurrency

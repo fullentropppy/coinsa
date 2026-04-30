@@ -165,7 +165,7 @@ private extension ExpenseDetailView {
     static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
         let builder = PreviewBuilder.builder().withBudgets(false)
         let container = builder.buildContainer()
-        let settingsStore = AppSettingsStore(context: container.mainContext)
+        let settingsStore = AppSettingsStore()
         let expense = builder.fetchExpense(from: container)
         
         return NavigationStack {

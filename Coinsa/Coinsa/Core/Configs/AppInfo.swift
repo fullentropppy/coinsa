@@ -34,4 +34,14 @@ struct AppInfo {
     static var build: String {
         Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "None"
     }
+
+    // MARK: - Параметры сборки
+    
+    static var iCloudContainerIdentifier: String {
+#if DEBUG
+        "iCloud.ru.dgritsenko.Coinsa.debug"
+#else
+        "iCloud.ru.dgritsenko.Coinsa"
+#endif
+    }
 }

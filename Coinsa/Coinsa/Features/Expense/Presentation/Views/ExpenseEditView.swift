@@ -330,7 +330,7 @@ private extension ExpenseEditView {
     ) -> some View { 
         let builder = PreviewBuilder.builder().withBudgets(false)
         let container = builder.buildContainer()
-        let settingsStore = AppSettingsStore(context: container.mainContext)
+        let settingsStore = AppSettingsStore()
         let location = builder.fetchLocation(from: container)
        
         return Group {

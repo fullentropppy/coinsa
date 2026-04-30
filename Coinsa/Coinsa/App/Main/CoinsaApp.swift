@@ -20,13 +20,10 @@ struct CoinsaApp: App {
             Expense.self
         ])
         
-#if DEBUG
-        let privateDBName = "iCloud.ru.dgritsenko.Coinsa.debug"
-#else
-        let privateDBName = "iCloud.ru.dgritsenko.Coinsa"
-#endif
-
-        let config = ModelConfiguration(schema: schema, cloudKitDatabase: .private(privateDBName))
+        let config = ModelConfiguration(
+            schema: schema,
+            cloudKitDatabase: .private(AppInfo.iCloudContainerIdentifier)
+        )
 
         do {
             return try ModelContainer(for: schema, configurations: [config])

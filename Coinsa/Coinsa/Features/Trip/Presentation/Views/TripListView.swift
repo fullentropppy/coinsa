@@ -141,7 +141,7 @@ private extension TripListView {
             .withBudgets(false)
             .buildContainer()
         
-        let settingsStore = AppSettingsStore(context: container.mainContext)
+        let settingsStore = AppSettingsStore()
         
         return TripListView()
             .modelContainer(container)

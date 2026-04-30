@@ -11,7 +11,10 @@ import SwiftData
 struct SettingsView: View {
     // MARK: - Окружение
 
+#if DEBUG
     @Environment(\.modelContext) private var context
+#endif
+    
     @Environment(AppSettingsStore.self) private var settingsStore
     
     // MARK: - Состояние
@@ -140,7 +143,7 @@ struct SettingsView: View {
 private extension SettingsView {
     static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
         let container = PreviewBuilder.builder().withTrips(false).buildContainer()
-        let store = AppSettingsStore(context: container.mainContext)
+        let store = AppSettingsStore()
         
         return SettingsView()
             .modelContainer(container)

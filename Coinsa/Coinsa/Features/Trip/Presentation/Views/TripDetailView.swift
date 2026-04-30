@@ -203,7 +203,7 @@ private extension TripDetailView {
     ) -> some View {
         let builder = PreviewBuilder.builder().withLocations(withLocations)
         let container = builder.buildContainer()
-        let settingsStore = AppSettingsStore(context: container.mainContext)
+        let settingsStore = AppSettingsStore()
         let trip = builder.fetchTrip(from: container)
         
         return NavigationStack {

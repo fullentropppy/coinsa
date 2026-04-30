@@ -28,31 +28,3 @@ struct RootTabView: View {
         }
     }
 }
-
-// MARK: - Внутренние типы
-
-private enum RootTab: Hashable {
-    // MARK: - Значения
-    
-    case today
-    case trips
-    case settings
-    
-    // MARK: - Свойства
-    
-    var icon: String {
-        switch self {
-        case .today: "calendar"
-        case .trips: Trip.primaryIcon
-        case .settings: "gearshape.fill"
-        }
-    }
-    
-    var title: LocalizedStringResource {
-        switch self {
-        case .today: .tabToday
-        case .trips: .tabTrips
-        case .settings: .tabSettings
-        }
-    }
-}

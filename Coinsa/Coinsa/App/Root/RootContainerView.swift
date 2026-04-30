@@ -30,7 +30,7 @@ struct RootContainerView: View {
                 ProgressView()
                     .task {
                         if !hasLoadedSettings {
-                            settingsStore = AppSettingsStore(context: context)
+                            settingsStore = AppSettingsStore()
                             hasLoadedSettings = true
                         }
                     }

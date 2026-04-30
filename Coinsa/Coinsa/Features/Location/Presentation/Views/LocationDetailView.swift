@@ -199,7 +199,7 @@ private extension LocationDetailView {
     ) -> some View {
         let builder = PreviewBuilder.builder().withExpenses(withExpenses)
         let container = builder.buildContainer()
-        let settingsStore = AppSettingsStore(context: container.mainContext)
+        let settingsStore = AppSettingsStore()
         let location = builder.fetchLocation(from: container)
 
         return NavigationStack {

@@ -327,7 +327,7 @@ private extension TodayView {
             builder = builder.withTrips(false)
         }
         let container = builder.buildContainer()
-        let settingsStore = AppSettingsStore(context: container.mainContext)
+        let settingsStore = AppSettingsStore()
 
         return TodayView()
             .modelContainer(container)
