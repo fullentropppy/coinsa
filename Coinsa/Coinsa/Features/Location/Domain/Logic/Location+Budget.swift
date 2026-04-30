@@ -11,22 +11,24 @@ extension Location {
     // MARK: - Свойства
 
     var hasBudget: Bool {
-        budgets.contains { $0.baseAmount > 0 }
+        budgets?.contains { $0.baseAmount > 0 } ?? false
     }
 
     var budgetsByCategory: [ExpenseCategory: Double] {
-        budgets.reduce(into: [:]) { result, budget in
+        budgets?.reduce(into: [:]) { result, budget in
             result[budget.category] = budget.baseAmount
-        }
+        } ?? [:]
     }
 
     // MARK: - Методы
 
     func budgetAmount(for category: ExpenseCategory) -> Double {
-        budgets.first(where: { $0.category == category })?.baseAmount ?? 0
+        budgets?.first(where: { $0.category == category })?.baseAmount ?? 0
     }
 
     func applyBudgets(_ budgetsByCategory: [ExpenseCategory: Double]) {
+        guard var budgets else { return }
+        
         var normalizedBudgets: [ExpenseCategory: Double] = [:]
 
         for category in ExpenseCategory.allCases {
@@ -49,7 +51,7 @@ extension Location {
             } else {
                 let budget = Budget(
                     id: UUID(),
-                    category: category,
+                    categoryRaw: category.rawValue,
                     baseAmount: amount,
                     location: self,
                     createdAt: now,

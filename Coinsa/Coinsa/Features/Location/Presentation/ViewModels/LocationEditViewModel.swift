@@ -47,11 +47,7 @@ final class LocationEditViewModel {
     }
     
     var hasExpenses: Bool {
-        if let location {
-            location.expenses.count > 0
-        } else {
-            false
-        }
+        location?.hasExpenses ?? false
     }
     
     var baseCurrency: Currency {
@@ -142,7 +138,7 @@ final class LocationEditViewModel {
     
     convenience init(forEdit location: Location) {
         self.init(
-            trip: location.trip,
+            trip: location.trip!,
             location: location,
             name: location.name,
             startDate: location.startDate,

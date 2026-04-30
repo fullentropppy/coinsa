@@ -7,6 +7,10 @@
 
 extension Expense {
     var majorTimeZone: MajorTimeZone {
-        location.majorTimeZone
+        if let location {
+            location.majorTimeZone
+        } else {
+            .defaultValue
+        }
     }
 }

@@ -39,6 +39,8 @@ struct LocationRepository {
             rateLocalToBase: normalizedRateLocalToBase(rateLocalToBase),
             exchangeAdjustment: normalizedRateLocalToBase(exchangeAdjustment),
             trip: trip,
+            budgets: [],
+            expenses: [],
             createdAt: now,
             updatedAt: now
         )

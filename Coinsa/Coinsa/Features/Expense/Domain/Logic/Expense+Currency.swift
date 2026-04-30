@@ -9,10 +9,18 @@ import Foundation
 
 extension Expense {
     var baseCurrency: Currency {
-        location.baseCurrency
+        if let location {
+            location.baseCurrency
+        } else {
+            .defaultValue
+        }
     }
     
     var localCurrency: Currency {
-        location.localCurrency
+        if let location {
+            location.localCurrency
+        } else {
+            .defaultValue
+        }
     }
 }

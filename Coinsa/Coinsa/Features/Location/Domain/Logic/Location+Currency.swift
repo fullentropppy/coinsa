@@ -9,7 +9,11 @@ import Foundation
 
 extension Location {
     var baseCurrency: Currency {
-        trip.baseCurrency
+        if let trip {
+            trip.baseCurrency
+        } else {
+            .defaultValue
+        }
     }
     
     var localCurrency: Currency {

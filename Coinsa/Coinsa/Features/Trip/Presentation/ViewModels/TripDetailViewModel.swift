@@ -15,7 +15,7 @@ struct TripDetailViewModel {
     // MARK: - Вычисляемые свойства
     
     var showsFullHeader: Bool {
-        !trip.locations.isEmpty
+        trip.hasLocations
     }
     
     var eventHeaderData: EventSummaryData {
@@ -45,7 +45,9 @@ struct TripDetailViewModel {
     }
     
     var groupedLocations: [(status: EventStatus, locations: [Location])] {
-        let grouped = Dictionary(grouping: trip.locations) { $0.status }
+        guard let locations = trip.locations else { return [] }
+        
+        let grouped = Dictionary(grouping: locations) { $0.status }
         let statusOrder: [EventStatus] = [.ongoing, .upcoming, .completed]
         
         return statusOrder.compactMap { status in

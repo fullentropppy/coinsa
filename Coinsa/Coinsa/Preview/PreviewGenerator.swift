@@ -73,7 +73,12 @@ private extension PreviewGenerator {
         )
         
         if options.includeLocations {
-            trip.locations += data.locationsData.map { makeLocation(from: $0, to: trip, with: options) }
+            var locations: [Location] = []
+            for locationData in data.locationsData {
+                let location = makeLocation(from: locationData, to: trip, with: options)
+                locations.append(location)
+            }
+            trip.locations = locations
         }
         
         return trip
@@ -91,6 +96,8 @@ private extension PreviewGenerator {
             rateLocalToBase: data.rateLocalToBase,
             exchangeAdjustment: data.exchangeAdjustment,
             trip: trip,
+            budgets: [],
+            expenses: [],
             createdAt: now,
             updatedAt: now
         )

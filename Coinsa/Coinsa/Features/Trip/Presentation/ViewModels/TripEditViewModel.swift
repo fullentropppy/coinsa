@@ -38,11 +38,7 @@ final class TripEditViewModel {
     }
 
     var hasLocations: Bool {
-        if let trip {
-            !trip.locations.isEmpty
-        } else {
-            false
-        }
+        trip?.hasLocations ?? false
     }
     
     // MARK: - Состояние UI. Общие данные

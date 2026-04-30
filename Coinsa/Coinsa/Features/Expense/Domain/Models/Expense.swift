@@ -12,32 +12,31 @@ import SwiftData
 class Expense {
     // MARK: - Свойства
     
-    @Attribute(.unique)
-    var id: UUID
-    var createdAt: Date
-    var updatedAt: Date
+    var id: UUID = UUID()
+    var createdAt: Date = Date()
+    var updatedAt: Date = Date()
     
-    var date: Date
-    var baseAmount: Double
-    var rateLocalToBase: Double
-    var paymentMethodRaw: String
-    var exchangeAdjustment: Double
-    var categoryRaw: String
-    var location: Location
+    var date: Date = Date()
+    var baseAmount: Double = 0
+    var rateLocalToBase: Double = 0
+    var paymentMethodRaw: String = ""
+    var exchangeAdjustment: Double = 0
+    var categoryRaw: String = ""
+    var location: Location?
     var comment: String?
 
     // MARK: - Инициализация
     
     init(
         id: UUID,
-        date: Date = .now,
+        date: Date,
         baseAmount: Double,
         rateLocalToBase: Double,
         paymentMethodRaw: String,
         exchangeAdjustment: Double,
-        categoryRaw: String,
+        categoryRaw: String ,
         location: Location,
-        comment: String? = nil,
+        comment: String?,
         createdAt: Date,
         updatedAt: Date
     ) {

@@ -40,7 +40,7 @@ struct TripRowView: View {
         HStack(spacing: 10) {
             DateLabel.secondarySmall(from: trip.startDate, to: trip.endDate)
             Spacer()
-            CountLabel.secondarySmall(trip.locations.count, icon: Location.primaryIcon)
+            CountLabel.secondarySmall(trip.locationsCount, icon: Location.primaryIcon)
             CountLabel.daysSecondarySmall(trip.totalDays)
         }
     }

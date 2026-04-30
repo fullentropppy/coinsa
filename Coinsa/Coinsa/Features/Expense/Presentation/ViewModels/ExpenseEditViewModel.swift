@@ -133,7 +133,7 @@ final class ExpenseEditViewModel {
     
     convenience init(forEdit expense: Expense) {
         self.init(
-            location: expense.location,
+            location: expense.location!,
             expense: expense,
             date: expense.date,
             baseAmount: expense.baseAmount,

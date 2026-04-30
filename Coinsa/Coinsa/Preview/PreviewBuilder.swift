@@ -106,7 +106,7 @@ extension PreviewBuilder {
             fetchItem(
                 from: container,
                 at: index,
-                sortBy: [SortDescriptor(\Location.trip.startDate, order: .forward)]
+                sortBy: [SortDescriptor(\Location.trip?.startDate, order: .forward)]
             )
         }
 
@@ -114,11 +114,11 @@ extension PreviewBuilder {
             fetchItem(
                 from: container,
                 at: index,
-                sortBy: [SortDescriptor(\Expense.location.trip.startDate, order: .forward)]
+                sortBy: [SortDescriptor(\Expense.location?.trip?.startDate, order: .forward)]
             )
         }
 
-        // MARK: - Создание обособленных данныех и получение
+        // MARK: - Создание обособленных данных и получение
 
         func buildData() -> [Trip] {
             PreviewGenerator.makeTrips(for: scenario, options: options)
@@ -129,7 +129,7 @@ extension PreviewBuilder {
         }
 
         func getLocation(from data: [Trip], tripIndex: Int = 0, locationIndex: Int = 0) -> Location {
-            getTrip(from: data, at: tripIndex).locations[locationIndex]
+            getTrip(from: data, at: tripIndex).locations![locationIndex]
         }
 
         func getExpense(
@@ -138,7 +138,7 @@ extension PreviewBuilder {
             locationIndex: Int = 0,
             expenseIndex: Int = 0
         ) -> Expense {
-            getLocation(from: data, tripIndex: tripIndex, locationIndex: locationIndex).expenses[expenseIndex]
+            getLocation(from: data, tripIndex: tripIndex, locationIndex: locationIndex).expenses![expenseIndex]
         }
     }
 }

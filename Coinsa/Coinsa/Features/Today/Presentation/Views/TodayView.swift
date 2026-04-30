@@ -187,7 +187,7 @@ struct TodayView: View {
             } label: {
                 HStack(alignment: .center) {
                     if viewModel.isHomeLocation {
-                        Text("\(location.name) • \(location.trip.name)")
+                        Text("\(location.name) • \(location.trip?.name ?? "")")
                             .font(.subheadline)
                     } else {
                         exchangeRatesContent(location: location)
@@ -214,11 +214,11 @@ struct TodayView: View {
                     .todayExchangeRate(
                         currencyCode1: location.localCurrencyCode,
                         rate1To2: viewModel.rateLocalToBase.numberFormat(fractionLength: 4),
-                        currencyCode2: location.trip.baseCurrencyCode)
+                        currencyCode2: location.trip?.baseCurrencyCode ?? "")
                 )
                 Text(
                     .todayExchangeRate(
-                        currencyCode1: location.trip.baseCurrencyCode,
+                        currencyCode1: location.trip?.baseCurrencyCode ?? "",
                         rate1To2: viewModel.rateBaseToLocal.numberFormat(fractionLength: 4),
                         currencyCode2: location.localCurrencyCode)
                 )

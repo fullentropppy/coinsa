@@ -12,13 +12,12 @@ import SwiftData
 final class AppSettings {
     // MARK: - Свойства
 
-    @Attribute(.unique)
-    var id: UUID
-    var createdAt: Date
-    var updatedAt: Date
+    var id: UUID = UUID()
+    var createdAt: Date = Date()
+    var updatedAt: Date = Date()
     
-    var baseCurrencyCode: String
-    var exchangeAdjustment: Double
+    var baseCurrencyCode: String = ""
+    var exchangeAdjustment: Double = 0
     
     // MARK: - Инициализация
 

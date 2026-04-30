@@ -106,7 +106,7 @@ struct EventAnalyticsViewModel {
         }
     }
     
-    // MARK: - Хранимые свойства. Данные
+    // MARK: - Хранимые свойства. Общие данные
     
     var eventSummaryData: EventSummaryData {
         EventSummaryData(

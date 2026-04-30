@@ -18,6 +18,14 @@ struct ExpenseDetailViewModel {
         baseCurrency == localCurrency
     }
     
+    var navigationTitle: LocalizedStringResource {
+        expense.category.localizedResource
+    }
+    
+    var navigationSubtitle: String {
+        expense.location?.screenContextSubtitle ?? ""
+    }
+    
     // MARK: - Вычисляемые свойства. Валюта и сумма
     
     var baseCurrency: Currency {

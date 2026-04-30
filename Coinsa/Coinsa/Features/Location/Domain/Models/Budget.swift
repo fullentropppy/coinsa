@@ -12,20 +12,19 @@ import SwiftData
 class Budget {
     // MARK: - Свойства
 
-    @Attribute(.unique)
-    var id: UUID
-    var createdAt: Date
-    var updatedAt: Date
+    var id: UUID = UUID()
+    var createdAt: Date = Date()
+    var updatedAt: Date = Date()
 
-    var category: ExpenseCategory
-    var baseAmount: Double
-    var location: Location
+    var categoryRaw: String = ""
+    var baseAmount: Double = 0
+    var location: Location? = nil
 
     // MARK: - Инициализация
 
     init(
         id: UUID,
-        category: ExpenseCategory,
+        categoryRaw: String,
         baseAmount: Double,
         location: Location,
         createdAt: Date,
@@ -35,7 +34,7 @@ class Budget {
         self.createdAt = createdAt
         self.updatedAt = updatedAt
 
-        self.category = category
+        self.categoryRaw = categoryRaw
         self.baseAmount = baseAmount
         self.location = location
     }

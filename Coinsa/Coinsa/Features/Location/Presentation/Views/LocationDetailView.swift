@@ -46,8 +46,8 @@ struct LocationDetailView: View {
 
     var body: some View {
         locationDetailForm
-            .navigationTitle(viewModel.location.name)
-            .navigationSubtitle(viewModel.location.trip.screenContextSubtitle)
+            .navigationTitle(viewModel.navigationTitle)
+            .navigationSubtitle(viewModel.navigationSubtitle)
             .toolbarTitleDisplayMode(.inline)
             .toolbar {
                 toolbarContent
@@ -65,7 +65,7 @@ struct LocationDetailView: View {
                 ExpenseEditView(forEdit: expense)
             }
             .safeAreaInset(edge: .bottom) {
-                if !location.expenses.isEmpty {
+                if location.hasExpenses {
                     PrimaryAddButton(isOnLeft: settingsStore.isAddButtonOnLeft) {
                         isShowingExpenseCreate = true
                     }
@@ -108,10 +108,10 @@ struct LocationDetailView: View {
     
     private var locationsSection: some View {
         Group {
-            if location.expenses.isEmpty {
-                emptyExpenseListContent
-            } else {
+            if location.hasExpenses {
                 expenseListContent
+            } else {
+                emptyExpenseListContent
             }
         }
     }

@@ -12,25 +12,24 @@ import SwiftData
 class Location: DateRangeProviding {
     // MARK: - Свойства
     
-    @Attribute(.unique)
-    var id: UUID
-    var createdAt: Date
-    var updatedAt: Date
+    var id: UUID = UUID()
+    var createdAt: Date = Date()
+    var updatedAt: Date = Date()
     
-    var name: String
-    var startDate: Date
-    var endDate: Date
-    var timeZoneID: String
-    var localCurrencyCode: String
-    var rateLocalToBase: Double
-    var exchangeAdjustment: Double
-    var trip: Trip
+    var name: String = ""
+    var startDate: Date = Date()
+    var endDate: Date = Date()
+    var timeZoneID: String = ""
+    var localCurrencyCode: String = ""
+    var rateLocalToBase: Double = 0
+    var exchangeAdjustment: Double = 0
+    var trip: Trip? = nil
 
     @Relationship(deleteRule: .cascade, inverse: \Budget.location)
-    var budgets: [Budget]
+    var budgets: [Budget]?
     
     @Relationship(deleteRule: .cascade, inverse: \Expense.location)
-    var expenses: [Expense]
+    var expenses: [Expense]?
 
     // MARK: - Инициализация
     
@@ -44,8 +43,8 @@ class Location: DateRangeProviding {
         rateLocalToBase: Double,
         exchangeAdjustment: Double,
         trip: Trip,
-        budgets: [Budget] = [],
-        expenses: [Expense] = [],
+        budgets: [Budget],
+        expenses: [Expense],
         createdAt: Date,
         updatedAt: Date,
     ) {

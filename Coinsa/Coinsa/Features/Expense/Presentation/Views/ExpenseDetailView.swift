@@ -34,8 +34,8 @@ struct ExpenseDetailView: View {
 
     var body: some View {
         expenseDetailForm
-            .navigationTitle(expense.category.localizedResource)
-            .navigationSubtitle(expense.location.screenContextSubtitle)
+            .navigationTitle(viewModel.navigationTitle)
+            .navigationSubtitle(viewModel.navigationSubtitle)
             .toolbarTitleDisplayMode(.inline)
             .toolbar {
                 toolbarContent

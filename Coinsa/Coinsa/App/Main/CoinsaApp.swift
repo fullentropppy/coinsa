@@ -12,14 +12,29 @@ import SwiftData
 struct CoinsaApp: App {
     // MARK: - Свойства
     
-    private let modelTypes: [any PersistentModel.Type] =
-    [
-        AppSettings.self,
-        Trip.self,
-        Location.self,
-        Budget.self,
-        Expense.self
-    ]
+    private let container: ModelContainer = {
+        let schema = Schema([
+            AppSettings.self,
+            Trip.self,
+            Location.self,
+            Budget.self,
+            Expense.self
+        ])
+        
+#if DEBUG
+        let privateDBName = "iCloud.ru.dgritsenko.Coinsa.debug"
+#else
+        let privateDBName = "iCloud.ru.dgritsenko.Coinsa"
+#endif
+
+        let config = ModelConfiguration(schema: schema, cloudKitDatabase: .private(privateDBName))
+
+        do {
+            return try ModelContainer(for: schema, configurations: [config])
+        } catch {
+            fatalError("Failed to create container: \(error)")
+        }
+    }()
     
     // MARK: - Тело View
     
@@ -27,6 +42,6 @@ struct CoinsaApp: App {
         WindowGroup {
             RootContainerView()
         }
-        .modelContainer(for: modelTypes)
+        .modelContainer(container)
     }
 }

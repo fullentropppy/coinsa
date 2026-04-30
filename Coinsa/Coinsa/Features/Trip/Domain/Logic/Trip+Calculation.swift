@@ -11,16 +11,16 @@ extension Trip {
     // MARK: - Плановая сумма
     
     func calculatePlannedAmount(asBaseCurrency: Bool = true, asDailyAverage: Bool = false) -> Double {
-        locations.reduce(0) {
+        locations?.reduce(0) {
             $0 + $1.calculatePlannedAmount(asBaseCurrency: asBaseCurrency, asDailyAverage: asDailyAverage)
-        }
+        } ?? 0
     }
     
     func calculatePlannedAmountByCategory(
         asBaseCurrency: Bool = true,
         withinDateRange: ClosedRange<Date>? = nil
     ) -> [ExpenseCategory: Double] {
-        locations.reduce(into: [:]) { result, location in
+        locations?.reduce(into: [:]) { result, location in
             let locationValues = location.calculatePlannedAmountByCategory(
                 asBaseCurrency: asBaseCurrency,
                 withinDateRange: withinDateRange
@@ -29,7 +29,7 @@ extension Trip {
             for (category, amount) in locationValues {
                 result[category, default: 0] += amount
             }
-        }
+        } ?? [:]
     }
     
     // MARK: - Фактическая сумма
@@ -38,16 +38,16 @@ extension Trip {
         asBaseCurrency: Bool = true,
         withinDateRange: ClosedRange<Date>? = nil
     ) -> Double {
-        locations.reduce(0) {
+        locations?.reduce(0) {
             $0 + $1.calculateActualAmount(asBaseCurrency: asBaseCurrency, withinDateRange: withinDateRange)
-        }
+        } ?? 0
     }
 
     func calculateActualAmountByCategory(
         asBaseCurrency: Bool = true,
         withinDateRange: ClosedRange<Date>? = nil
     ) -> [ExpenseCategory: Double] {
-        locations.reduce(into: [:]) { result, location in
+        locations?.reduce(into: [:]) { result, location in
             let locationValues = location.calculateActualAmountByCategory(
                 asBaseCurrency: asBaseCurrency,
                 withinDateRange: withinDateRange
@@ -56,6 +56,6 @@ extension Trip {
             for (category, amount) in locationValues {
                 result[category, default: 0] += amount
             }
-        }
+        } ?? [:]
     }
 }

@@ -95,9 +95,10 @@ final class TodayViewModel {
     var todayExpenses: [Expense] {
         guard let selectedLocation else { return [] }
 
-        return selectedLocation.expenses
+        return selectedLocation.expenses?
             .filter { $0.date.isToday }
             .sorted { $0.date > $1.date }
+        ?? []
     }
     
     // MARK: - Инициализация

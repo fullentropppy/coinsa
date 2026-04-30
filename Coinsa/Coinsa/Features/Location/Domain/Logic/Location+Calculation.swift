@@ -55,7 +55,7 @@ extension Location {
         asDailyAverage: Bool = false
     ) -> Double {
         let exchangeRate = asBaseCurrency ? 1 : effectiveRateBaseToLocal
-        let plannedAmount = budgets.reduce(0) { $0 + $1.baseAmount } * exchangeRate
+        let plannedAmount = budgets?.reduce(0) { $0 + $1.baseAmount } ?? 0 * exchangeRate
         return asDailyAverage ? plannedAmount / Double(totalDays).rounded() : plannedAmount
     }
  
@@ -78,28 +78,28 @@ extension Location {
         asBaseCurrency: Bool = true,
         withinDateRange targetRange: ClosedRange<Date>? = nil
     ) -> Double {
-        expenses.reduce(0) { result, expense in
+        expenses?.reduce(0) { result, expense in
             if let targetRange, !targetRange.contains(expense.date) {
                 return result
             }
             
             let exchangeRate = asBaseCurrency ? 1 : expense.effectiveRateBaseToLocal
             return result + expense.baseAmount * exchangeRate
-        }
+        } ?? 0
     }
 
     func calculateActualAmountByCategory(
         asBaseCurrency: Bool = true,
         withinDateRange targetRange: ClosedRange<Date>? = nil
     ) -> [ExpenseCategory: Double] {
-        expenses.reduce(into: [:]) { result, expense in
+        expenses?.reduce(into: [:]) { result, expense in
             if let targetRange, !targetRange.contains(expense.date) {
                 return
             }
 
             let exchangeRate = asBaseCurrency ? 1 : expense.effectiveRateBaseToLocal
             result[expense.category, default: 0] += expense.baseAmount * exchangeRate
-        }
+        } ?? [:]
     }
 
     // MARK: - Приватные методы

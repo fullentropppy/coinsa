@@ -64,7 +64,7 @@ struct TripDetailView: View {
                 LocationEditView(forEdit: location)
             }
             .safeAreaInset(edge: .bottom) {
-                if !trip.locations.isEmpty {
+                if trip.hasLocations {
                     PrimaryAddButton(isOnLeft: settingsStore.isAddButtonOnLeft) {
                         isShowingLocationCreate = true
                     }
@@ -112,10 +112,10 @@ struct TripDetailView: View {
     
     private var locationsSection: some View {
         Group {
-            if trip.locations.isEmpty {
-                emptyLocationListContent
-            } else {
+            if trip.hasLocations {
                 locationListContent
+            } else {
+                emptyLocationListContent
             }
         }
     }

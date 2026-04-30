@@ -12,18 +12,17 @@ import SwiftData
 class Trip: DateRangeProviding {
     // MARK: - Свойства
     
-    @Attribute(.unique)
-    var id: UUID
-    var createdAt: Date
-    var updatedAt: Date
+    var id: UUID = UUID()
+    var createdAt: Date = Date()
+    var updatedAt: Date = Date()
     
-    var name: String
-    var startDate: Date
-    var endDate: Date
-    var baseCurrencyCode: String
+    var name: String = ""
+    var startDate: Date = Date()
+    var endDate: Date = Date()
+    var baseCurrencyCode: String = ""
 
     @Relationship(deleteRule: .cascade, inverse: \Location.trip)
-    var locations: [Location]
+    var locations: [Location]?
     
     // MARK: - Инициализация
     

@@ -12,8 +12,18 @@ struct LocationDetailViewModel {
 
     let location: Location
     
-    // MARK: - Вычисляемые свойства
+    // MARK: - Вычисляемые свойства. Общее
 
+    var navigationTitle: String {
+        location.name
+    }
+    
+    var navigationSubtitle: String {
+        location.trip?.screenContextSubtitle ?? ""
+    }
+    
+    // MARK: - Вычисляемые свойства. Валюта и сумма
+    
     var baseCurrency: Currency {
         location.baseCurrency
     }
@@ -25,6 +35,8 @@ struct LocationDetailViewModel {
     var isHomeLocation: Bool {
         baseCurrency == localCurrency
     }
+    
+    // MARK: - Вычисляемые свойства. Общие данные
     
     var eventHeaderData: EventSummaryData {
         let plannedBaseAmount = location.calculatePlannedAmount(asBaseCurrency: true)
@@ -67,12 +79,13 @@ struct LocationDetailViewModel {
     }
     
     var groupedExpenses: [(date: Date, expenses: [Expense])] {
+        guard let expenses = location.expenses else { return [] }
         let today = Date().startOfDay
         let yesterday = today.adding(days: -1)
         
         var grouped: [Date: [Expense]] = [:]
         
-        for expense in location.expenses {
+        for expense in expenses {
             grouped[expense.date.startOfDay, default: []].append(expense)
         }
         

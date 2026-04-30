@@ -43,24 +43,19 @@ final class SwiftDataSettingsManager {
     // MARK: - Приватные методы
     
     private static func loadSettings(from context: ModelContext) -> AppSettings {
-        let defaultId = UUID(uuidString: "00000000-0000-0000-0000-000000000001")!
-        
-        let fetchDescriptor = FetchDescriptor<AppSettings>(
-            predicate: #Predicate { $0.id == defaultId }
-        )
-        
-        if let existing = try? context.fetch(fetchDescriptor).first {
+        if let existing = try? context.fetch(FetchDescriptor<AppSettings>()).first {
             return existing
         }
         
         let new = AppSettings(
-            id: defaultId,
+            id: UUID(),
             baseCurrencyCode: Currency.defaultCode,
             exchangeAdjustment: 0,
             createdAt: .now,
             updatedAt: .now
         )
         context.insert(new)
+        
         return new
     }
     
