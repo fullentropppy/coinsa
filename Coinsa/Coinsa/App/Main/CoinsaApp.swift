@@ -14,7 +14,6 @@ struct CoinsaApp: App {
     
     private let container: ModelContainer = {
         let schema = Schema([
-            AppSettings.self,
             Trip.self,
             Location.self,
             Budget.self,

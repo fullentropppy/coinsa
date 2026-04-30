@@ -12,6 +12,21 @@ final class UserDefaultsSettingsManager {
     
     private let defaults = UserDefaults.standard
     
+    // MARK: - Параметры учета
+    
+    var baseCurrency: Currency {
+        get {
+            defaults.string(forKey: UserDefaultsKey.baseCurrency)
+                .flatMap { Currency(rawValue: $0) } ?? .defaultValue
+        }
+        set { defaults.set(newValue.rawValue, forKey: UserDefaultsKey.baseCurrency) }
+    }
+    
+    var exchangeAdjustment: Double {
+        get { defaults.double(forKey: UserDefaultsKey.exchangeAdjustment) }
+        set { defaults.set(newValue, forKey: UserDefaultsKey.exchangeAdjustment) }
+    }
+    
     // MARK: - Оформление
     
     var appAppearance: AppAppearance {
@@ -51,6 +66,8 @@ final class UserDefaultsSettingsManager {
 // MARK: - Приватные типы
 
 private enum UserDefaultsKey {
+    static var baseCurrency = "baseCurrency"
+    static var exchangeAdjustment = "exchangeAdjustment"
     static var appAppearance = "appAppearance"
     static var isAddButtonOnLeft = "isAddButtonOnLeft"
     static var selectedLocationId = "selectedLocationId"

@@ -44,7 +44,7 @@ private enum RootTab: Hashable {
         switch self {
         case .today: "calendar"
         case .trips: Trip.primaryIcon
-        case .settings: AppSettings.primaryIcon
+        case .settings: "gearshape.fill"
         }
     }
     

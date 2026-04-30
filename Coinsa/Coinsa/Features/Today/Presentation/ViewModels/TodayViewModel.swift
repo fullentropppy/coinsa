@@ -79,11 +79,7 @@ final class TodayViewModel {
     }
     
     var rateRefreshKey: Date {
-        if let selectedLocation {
-            selectedLocation.updatedAt
-        } else {
-            Date()
-        }
+        selectedLocation?.updatedAt ?? .now
     }
     
     // MARK: - Состояние UI. Расходы за сегодня

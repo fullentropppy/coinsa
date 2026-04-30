@@ -13,17 +13,16 @@ import SwiftData
 final class AppSettingsStore {
     // MARK: - Зависимости
     
-    private let swiftDataManager: SwiftDataSettingsManager
     private let userDefaultsManager: UserDefaultsSettingsManager
     
     // MARK: - Параметры учета
     
     var baseCurrency: Currency {
-        didSet { swiftDataManager.baseCurrency = baseCurrency }
+        didSet { userDefaultsManager.baseCurrency = baseCurrency }
     }
     
     var exchangeAdjustment: Double {
-        didSet { swiftDataManager.exchangeAdjustment = exchangeAdjustment }
+        didSet { userDefaultsManager.exchangeAdjustment = exchangeAdjustment }
     }
     
     // MARK: - Оформление
@@ -49,11 +48,10 @@ final class AppSettingsStore {
     // MARK: - Инициализация
     
     init(context: ModelContext) {
-        self.swiftDataManager = SwiftDataSettingsManager(context: context)
         self.userDefaultsManager = UserDefaultsSettingsManager()
         
-        self.baseCurrency = swiftDataManager.baseCurrency
-        self.exchangeAdjustment = swiftDataManager.exchangeAdjustment
+        self.baseCurrency = userDefaultsManager.baseCurrency
+        self.exchangeAdjustment = userDefaultsManager.exchangeAdjustment
         self.appAppearance = userDefaultsManager.appAppearance
         self.isAddButtonOnLeft = userDefaultsManager.isAddButtonOnLeft
         self.selectedLocationID = userDefaultsManager.selectedLocationID
