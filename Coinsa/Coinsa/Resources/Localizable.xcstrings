@@ -2304,13 +2304,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Exchange rate adjustment for card payments. Applied when base currency differs from Location currency."
+            "value" : "Exchange rate adjustment for card payments."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Корректировка курса обмена для трат с оплатой по карте. Применяется если основная валюта отличается от валюты локации."
+            "value" : "Корректировка курса обмена для трат с оплатой по карте."
           }
         }
       }

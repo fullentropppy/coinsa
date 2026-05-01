@@ -8,6 +8,14 @@
 import SwiftUI
 
 extension View {
+    /// Добавляет алерт подтверждения удаления с предустановленным стилем и тактильными откликами.
+    /// - Parameters:
+    ///   - isPresented: Флаг отображения алерта.
+    ///   - title: Заголовок.
+    ///   - message: Сообщение.
+    ///   - onConfirm: Действие при подтверждении удаления.
+    ///   - onCancel: Действие при отмене удаления.
+    /// - Returns: Модифицированное представление.
     func deleteConfirmationAlert(
         isPresented: Binding<Bool>,
         title: LocalizedStringResource,

@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// Модификатор для отображения информационного алерта (только с кнопкой "OK") с поддержкой тактильного отклика.
 struct NotificationAlertModifier: ViewModifier {
     // MARK: - Окружение
     
@@ -21,6 +22,12 @@ struct NotificationAlertModifier: ViewModifier {
     
     // MARK: - Инициализация
     
+    /// Создаёт модификатор информационного алерта.
+    /// - Parameters:
+    ///   - isPresented: Флаг отображения алерта.
+    ///   - title: Заголовок.
+    ///   - message: Сообщение.
+    ///   - hapticTypeOnAppear: Тактильный отклик при появлении алерта.
     init(
         isPresented: Binding<Bool>,
         title: LocalizedStringResource,

@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// Модификатор для отображения алерта подтверждения с поддержкой тактильных откликов.
 struct ConfirmationAlertModifier: ViewModifier {
     // MARK: - Окружение
     
@@ -26,6 +27,17 @@ struct ConfirmationAlertModifier: ViewModifier {
     
     // MARK: - Инициализация
     
+    /// Создаёт модификатор алерта подтверждения.
+    /// - Parameters:
+    ///   - isPresented: Флаг отображения алерта.
+    ///   - title: Заголовок.
+    ///   - message: Сообщение.
+    ///   - destuctiveButtonTitle: Текст деструктивной кнопки.
+    ///   - onConfirm: Действие при подтверждении.
+    ///   - hapticTypeOnConfirm: Тактильный отклик при подтверждении.
+    ///   - onCancel: Действие при отмене.
+    ///   - hapticTypeOnCancel: Тактильный отклик при отмене.
+    ///   - hapticTypeOnAppear: Тактильный отклик при появлении алерта.
     init(
         isPresented: Binding<Bool>,
         title: LocalizedStringResource,

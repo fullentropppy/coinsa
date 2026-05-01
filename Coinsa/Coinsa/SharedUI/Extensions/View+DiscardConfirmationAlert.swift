@@ -8,6 +8,11 @@
 import SwiftUI
 
 extension View {
+    /// Добавляет алерт подтверждения отмены изменений с предустановленными текстами и тактильными откликами.
+    /// - Parameters:
+    ///   - isPresented: Флаг отображения алерта.
+    ///   - onConfirm: Действие при подтверждении отмены изменений.
+    /// - Returns: Модифицированное представление.
     func discardConfirmationAlert(
         isPresented: Binding<Bool>,
         onConfirm: @escaping () -> Void

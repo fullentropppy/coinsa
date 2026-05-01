@@ -5,6 +5,7 @@
 //  Created by Daniil Gritsenko on 19.04.2026.
 //
 
+/// Идентификаторы IANA основных (универсальных) часовых поясов.
 enum MajorTimeZone: String, Codable, CaseIterable, Identifiable {
     // MARK: - Значения
     

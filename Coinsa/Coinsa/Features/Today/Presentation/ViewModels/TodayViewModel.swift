@@ -57,7 +57,7 @@ final class TodayViewModel {
     }
     
     var navigationSubtitle: String {
-        DateDisplayFormatter.format(.now, showsTime: false)
+        DateDisplayFormatter.format(.now, showsTime: false, showsWeekday: true).capitalized
     }
     
     // MARK: - Состояние UI. Курс обмена

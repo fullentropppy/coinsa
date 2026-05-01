@@ -5,6 +5,7 @@
 //  Created by Daniil Gritsenko on 27.02.2026.
 //
 
+/// Категории трат.
 enum ExpenseCategory: String, Codable, CaseIterable, Identifiable {
     // MARK: - Значения
     

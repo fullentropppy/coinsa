@@ -7,7 +7,14 @@
 
 import Foundation
 
+/// Утилита для выполнения асинхронных операций с ограничением по времени.
 struct AsyncTimeout {
+    /// Выполняет асинхронную операцию с таймаутом.
+    /// - Parameters:
+    ///   - seconds: Максимальное время выполнения операции в секундах.
+    ///   - operation: Асинхронное замыкание для выполнения.
+    /// - Returns: Результат операции типа `T`.
+    /// - Throws: `TimeoutError`, если операция не завершилась за отведённое время.
     static func run<T>(
         seconds: TimeInterval,
         operation: @escaping () async throws -> T
@@ -30,6 +37,7 @@ struct AsyncTimeout {
 
 // MARK: - Ошибки
 
+/// Ошибка, возникающая при превышении времени ожидания операции.
 struct TimeoutError: LocalizedError {
     var errorDescription: String? {
         String(localized: .timeoutException)

@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// Главный таб-бар с вкладками.
 struct RootTabView: View {
     // MARK: - Свойства
     

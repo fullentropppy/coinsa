@@ -8,10 +8,12 @@
 import SwiftUI
 import SwiftData
 
+/// Главная точка входа в приложение.
 @main
 struct CoinsaApp: App {
     // MARK: - Свойства
     
+    /// Контейнер модели SwiftData с поддержкой CloudKit.
     private let container: ModelContainer = {
         let schema = Schema([
             Trip.self,
@@ -19,7 +21,7 @@ struct CoinsaApp: App {
             Budget.self,
             Expense.self
         ])
-        
+
         let config = ModelConfiguration(
             schema: schema,
             cloudKitDatabase: .private(AppInfo.iCloudContainerIdentifier)

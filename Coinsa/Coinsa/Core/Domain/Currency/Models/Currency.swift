@@ -5,6 +5,7 @@
 //  Created by Daniil Gritsenko on 08.03.2026.
 //
 
+/// Трехбуквенные коды ISO 4217 валют.
 enum Currency: String, Codable, CaseIterable, Identifiable {
     // MARK: - Значения
     

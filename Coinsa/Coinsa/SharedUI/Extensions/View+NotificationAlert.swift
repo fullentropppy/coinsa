@@ -8,12 +8,18 @@
 import SwiftUI
 
 extension View {
+    /// Добавляет информационный алерт (только с кнопкой "OK") с тактильным откликом в зависимости от типа уведомления.
+    /// - Parameters:
+    ///   - isPresented: Флаг отображения алерта.
+    ///   - title: Заголовок.
+    ///   - message: Сообщение.
+    ///   - isError: Флаг ошибки. При `true` используется тактильный отклик `.error`, иначе — `.success`.
+    /// - Returns: Модифицированное представление.
     func notificationAlert(
         isPresented: Binding<Bool>,
         title: LocalizedStringResource,
         message: LocalizedStringResource,
-        isError: Bool = false,
-        onAppear: (() -> Void)? = nil
+        isError: Bool = false
     ) -> some View {
         self.modifier(
             NotificationAlertModifier(

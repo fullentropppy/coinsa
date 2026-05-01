@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// Протокол для значений, определяющих визуальное представление.
 protocol ValueVisualRepresentable {
     var primaryIcon: String { get }
     var secondaryIcon: String { get }

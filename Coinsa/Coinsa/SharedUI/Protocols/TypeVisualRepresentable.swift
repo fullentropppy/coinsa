@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// Протокол для типов, определяющих визуальное представление.
 protocol TypeVisualRepresentable {
     static var primaryIcon: String { get }
     static var secondaryIcon: String { get }

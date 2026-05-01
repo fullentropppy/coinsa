@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// Клиент для генерации тактильных откликов разных типов.
 struct HapticClient {
     var trigger: (HapticType) -> Void
 }

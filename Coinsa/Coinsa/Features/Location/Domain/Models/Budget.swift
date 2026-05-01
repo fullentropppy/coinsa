@@ -8,20 +8,39 @@
 import Foundation
 import SwiftData
 
+/// Модель бюджета для определённой категории расходов в рамках локации.
 @Model
 class Budget {
     // MARK: - Свойства
 
+    /// Уникальный идентификатор бюджета.
     var id: UUID = UUID()
-    var createdAt: Date = Date()
-    var updatedAt: Date = Date()
 
+    /// Сырое значение категории трат.
     var categoryRaw: String = ""
+    
+    /// Сумма бюджета в основной валюте поездки.
     var baseAmount: Double = 0
+    
+    /// Локация, к которой относится бюджет.
     var location: Location? = nil
 
+    /// Дата создания записи.
+    var createdAt: Date = Date()
+    
+    /// Дата последнего обновления записи.
+    var updatedAt: Date = Date()
+    
     // MARK: - Инициализация
 
+    /// Создаёт новый бюджет для категории в указанной локации.
+    /// - Parameters:
+    ///   - id: Уникальный идентификатор.
+    ///   - categoryRaw: Сырое значение категории трат.
+    ///   - baseAmount: Сумма бюджета в основной валюте.
+    ///   - location: Локация, к которой относится бюджет.
+    ///   - createdAt: Дата создания.
+    ///   - updatedAt: Дата обновления.
     init(
         id: UUID,
         categoryRaw: String,

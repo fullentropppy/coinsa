@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// Вкладки главного таб-бара приложения.
 enum RootTab: Hashable {
     // MARK: - Значения
     

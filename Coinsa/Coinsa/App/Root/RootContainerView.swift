@@ -8,6 +8,7 @@
 import SwiftUI
 import SwiftData
 
+/// Корневой контейнер, управляющий загрузкой настроек и отображением сплеш-экрана.
 struct RootContainerView: View {
     // MARK: - Свойства
     

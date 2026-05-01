@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// Экран-заставка при запуске приложения.
 struct SplashView: View {
     // MARK: - Окружение
     

@@ -9,24 +9,31 @@ import SwiftUI
 
 // MARK: - Протокол
 
+/// Протокол для типов, предоставляющих бейдж и точку с визуальным стилем.
 protocol TypeBadgeProviding: TypeVisualRepresentable {
     // MARK: - Свойства
     
+    /// Стиль бейджа для отображения.
     static var badgeStyle: BadgeView.Style { get }
     
     // MARK: - Методы
     
+    /// Создаёт представление бейджа.
     static func makeBadge() -> BadgeView
+    
+    /// Создаёт представление точки.
     static func makeDot() -> DotView
 }
 
 // MARK: - Стандартная реализация
 
 extension TypeBadgeProviding {
+    /// Создаёт бейдж на основе свойства `badgeStyle`.
     static func makeBadge() -> BadgeView {
         BadgeView(style: badgeStyle)
     }
     
+    /// Создаёт точку с акцентным цветом типа.
     static func makeDot() -> DotView {
         DotView(accentColor)
     }

@@ -7,7 +7,9 @@
 
 import Foundation
 
+/// Манипуляции со строками.
 extension String {
+    /// Cтрока с удалёнными пробелами и символами новой строки в начале и конце.
     var trimmed: String {
         self.trimmingCharacters(in: .whitespacesAndNewlines)
     }
