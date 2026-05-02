@@ -76,28 +76,28 @@ extension Date {
     // MARK: - Методы. Начало периода с поддержкой календаря
     
     /// Возвращает первую микросекунду минуты.
-    /// - Parameter calendar: Календарь для вычислений. По умолчанию - `.current`.
+    /// - Parameter calendar: Календарь для вычислений. По умолчанию `.current`.
     /// - Returns: Начало минуты в указанном календаре (:00).
     func startOfMinute(using calendar: Calendar = .current) -> Date {
         startOf([.year, .month, .day, .hour, .minute], using: calendar)
     }
     
     /// Возвращает первую микросекунду часа.
-    /// - Parameter calendar: Календарь для вычислений. По умолчанию - `.current`.
+    /// - Parameter calendar: Календарь для вычислений. По умолчанию `.current`.
     /// - Returns: Начало часа в указанном календаре (00:00).
     func startOfHour(using calendar: Calendar = .current) -> Date {
         startOf([.year, .month, .day, .hour], using: calendar)
     }
     
     /// Возвращает первую микросекунду дня.
-    /// - Parameter calendar: Календарь для вычислений. По умолчанию - `.current`.
+    /// - Parameter calendar: Календарь для вычислений. По умолчанию `.current`.
     /// - Returns: Начало дня в указанном календаре  (00:00:00).
     func startOfDay(using calendar: Calendar = .current) -> Date {
         startOf([.year, .month, .day], using: calendar)
     }
     
     /// Возвращает первую микросекунду недели.
-    /// - Parameter calendar: Календарь для вычислений. По умолчанию - `.current`.
+    /// - Parameter calendar: Календарь для вычислений. По умолчанию `.current`.
     /// - Returns: Начало недели в указанном календаре (первый день недели, 00:00:00).
     ///            Если интервал не может быть определён, возвращается исходная дата.
     func startOfWeek(using calendar: Calendar = .current) -> Date {
@@ -105,14 +105,14 @@ extension Date {
     }
     
     /// Возвращает первую микросекунду месяца.
-    /// - Parameter calendar: Календарь для вычислений. По умолчанию - `.current`.
+    /// - Parameter calendar: Календарь для вычислений. По умолчанию `.current`.
     /// - Returns: Начало месяца в указанном календаре (первое число, 00:00:00).
     func startOfMonth(using calendar: Calendar = .current) -> Date {
         startOf([.year, .month], using: calendar)
     }
     
     /// Возвращает первую микросекунду года.
-    /// - Parameter calendar: Календарь для вычислений. По умолчанию - `.current`.
+    /// - Parameter calendar: Календарь для вычислений. По умолчанию `.current`.
     /// - Returns: Начало года в указанном календаре (1 января, 00:00:00).
     func startOfYear(using calendar: Calendar = .current) -> Date {
         startOf([.year], using: calendar)
@@ -121,42 +121,42 @@ extension Date {
     // MARK: - Методы. Конец периода с поддержкой календаря
     
     /// Возвращает последнюю микросекунду минуты.
-    /// - Parameter calendar: Календарь для вычислений. По умолчанию - `.current`.
+    /// - Parameter calendar: Календарь для вычислений. По умолчанию `.current`.
     /// - Returns: Конец минуты в указанном календаре (:59).
     func endOfMinute(using calendar: Calendar = .current) -> Date {
         endOf(.minute, using: calendar)
     }
     
     /// Возвращает последнюю микросекунду часа.
-    /// - Parameter calendar: Календарь для вычислений. По умолчанию - `.current`.
+    /// - Parameter calendar: Календарь для вычислений. По умолчанию `.current`.
     /// - Returns: Конец часа в указанном календаре (:59:59).
     func endOfHour(using calendar: Calendar = .current) -> Date {
         endOf(.hour, using: calendar)
     }
     
     /// Возвращает последнюю микросекунду дня.
-    /// - Parameter calendar: Календарь для вычислений. По умолчанию - `.current`.
+    /// - Parameter calendar: Календарь для вычислений. По умолчанию `.current`.
     /// - Returns: Конец дня в указанном календаре (23:59:59).
     func endOfDay(using calendar: Calendar = .current) -> Date {
         endOf(.day, using: calendar)
     }
     
     /// Возвращает последнюю микросекунду недели.
-    /// - Parameter calendar: Календарь для вычислений. По умолчанию - `.current`.
+    /// - Parameter calendar: Календарь для вычислений. По умолчанию `.current`.
     /// - Returns: Конец недели в указанном календаре (последний день недели, 23:59:59).
     func endOfWeek(using calendar: Calendar = .current) -> Date {
         endOf(.weekOfYear, using: calendar)
     }
     
     /// Возвращает последнюю микросекунду месяца.
-    /// - Parameter calendar: Календарь для вычислений. По умолчанию - `.current`.
+    /// - Parameter calendar: Календарь для вычислений. По умолчанию `.current`.
     /// - Returns: Конец месяца в указанном календаре (последнее число, 23:59:59).
     func endOfMonth(using calendar: Calendar = .current) -> Date {
         endOf(.month, using: calendar)
     }
     
     /// Возвращает последнюю микросекунду года.
-    /// - Parameter calendar: Календарь для вычислений. По умолчанию - `.current`.
+    /// - Parameter calendar: Календарь для вычислений. По умолчанию `.current`.
     /// - Returns: Конец года в указанном календаре (31 декабря, 23:59:59).
     func endOfYear(using calendar: Calendar = .current) -> Date {
         endOf(.year, using: calendar)

@@ -66,7 +66,7 @@ extension DateRangeProviding {
     // MARK: - Методы. Расчет с поддержкой календаря
     
     /// Определяет статус события относительно текущей даты.
-    /// - Parameter calendar: Календарь для вычислений. По умолчанию - `.current`.
+    /// - Parameter calendar: Календарь для вычислений. По умолчанию `.current`.
     /// - Returns: Статус события.
     func status(using calendar: Calendar = .current) -> EventStatus {
         let today = Date().startOfDay(using: calendar)
@@ -81,7 +81,7 @@ extension DateRangeProviding {
     }
     
     /// Возвращает общее количество дней в диапазоне (включительно).
-    /// - Parameter calendar: Календарь для вычислений. По умолчанию - `.current`.
+    /// - Parameter calendar: Календарь для вычислений. По умолчанию `.current`.
     /// - Returns: Количество дней.
     func totalDays(using calendar: Calendar = .current) -> Int {
         endDate.days(from: startDate, using: calendar) + 1
@@ -89,8 +89,8 @@ extension DateRangeProviding {
     
     /// Возвращает количество прошедших дней от начала диапазона до указанной даты.
     /// - Parameters:
-    ///   - date: Дата, для которой вычисляется количество прошедших дней. По умолчанию - `.now`.
-    ///   - calendar: Календарь для вычислений. По умолчанию - `.current`.
+    ///   - date: Дата, для которой вычисляется количество прошедших дней. По умолчанию `.now`.
+    ///   - calendar: Календарь для вычислений. По умолчанию `.current`.
     /// - Returns: Количество прошедших дней (ограничено общим количеством дней).
     func elapsedDays(on date: Date = .now, using calendar: Calendar = .current) -> Int {
         max(0, min(totalDays(using: calendar), date.days(from: startDate, using: calendar) + 1))
@@ -98,8 +98,8 @@ extension DateRangeProviding {
     
     /// Возвращает количество оставшихся дней от указанной даты до конца диапазона.
     /// - Parameters:
-    ///   - date: Дата, для которой вычисляется количество оставшихся дней. По умолчанию - `.now`.
-    ///   - calendar: Календарь для вычислений. По умолчанию - `.current`.
+    ///   - date: Дата, для которой вычисляется количество оставшихся дней. По умолчанию `.now`.
+    ///   - calendar: Календарь для вычислений. По умолчанию `.current`.
     /// - Returns: Количество оставшихся дней (неотрицательное, ограниченное общим количеством дней).
     func remainingDays(on date: Date = .now, using calendar: Calendar = .current) -> Int {
         min(totalDays(using: calendar), max(0, endDate.days(from: date, using: calendar)))

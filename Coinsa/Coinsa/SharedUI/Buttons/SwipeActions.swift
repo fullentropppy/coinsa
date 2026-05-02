@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// Набор кнопок для свайп-действий в списках.
 struct SwipeActions: View {
     // MARK: - Окружение
     
@@ -19,6 +20,10 @@ struct SwipeActions: View {
     
     // MARK: - Инициализация
     
+    /// Создаёт набор свайп-действий.
+    /// - Parameters:
+    ///   - onDelete: Действие при удалении (опционально).
+    ///   - onEdit: Действие при редактировании (опционально).
     init(
         onDelete: (() -> Void)? = nil,
         onEdit: (() -> Void)? = nil

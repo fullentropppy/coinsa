@@ -7,12 +7,29 @@
 
 import SwiftUI
 
+/// Представление бейджа с иконкой, текстом или комбинированным содержимым.
 struct BadgeView: View {
     // MARK: - Вложенные типы
     
+    /// Стили бейджа, определяющие его содержимое и цвет.
     enum Style {
+        /// Только иконка.
+        /// - Parameters:
+        ///   - icon: Название системной иконки.
+        ///   - fill: Цвет заливки бейджа.
         case icon(icon: String, fill: Color)
+        
+        /// Только текст.
+        /// - Parameters:
+        ///   - title: Локализованный текст.
+        ///   - fill: Цвет заливки бейджа.
         case title(title: LocalizedStringResource, fill: Color)
+        
+        /// Иконка и текст.
+        /// - Parameters:
+        ///   - icon: Название системной иконки.
+        ///   - badge: Локализованный текст.
+        ///   - fill: Цвет заливки бейджа.
         case combined(icon: String, badge: LocalizedStringResource, fill: Color)
     }
     
@@ -24,6 +41,8 @@ struct BadgeView: View {
     
     // MARK: - Инициализация
     
+    /// Создаёт бейдж с указанным стилем.
+    /// - Parameter style: Стиль бейджа.
     init(style: Style) {
         switch style {
         case .icon(let icon, let fill):

@@ -16,8 +16,8 @@ extension Double {
     
     /// Округляет число до указанного количества знаков после запятой.
     /// - Parameters:
-    ///   - fractionLength: Количество знаков после запятой для сохранения. По умолчанию - `2`.
-    ///   - rule: Правило округления. По умолчанию - `.toNearestOrEven`.
+    ///   - fractionLength: Количество знаков после запятой для сохранения. По умолчанию `2`.
+    ///   - rule: Правило округления. По умолчанию `.toNearestOrEven`.
     /// - Returns: Округлённое число с заданной точностью.
     func rounded(to fractionLength: Int = 2, rule: FloatingPointRoundingRule = .toNearestOrEven) -> Double {
         let multiplier = pow(10.0, Double(fractionLength))

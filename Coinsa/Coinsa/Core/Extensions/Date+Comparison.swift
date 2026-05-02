@@ -29,21 +29,21 @@ extension Date {
     // MARK: - Методы. Сравнение дат с поддержкой календаря
     
     /// Определяет, является ли дата вчерашним днем.
-    /// - Parameter calendar: Календарь для вычислений. По умолчанию - `.current`.
+    /// - Parameter calendar: Календарь для вычислений. По умолчанию `.current`.
     /// - Returns: `true`, если дата - вчера.
     func isYesterday(using calendar: Calendar = .current) -> Bool {
         self.startOfDay(using: calendar) == Date().yesterday(using: calendar).startOfDay(using: calendar)
     }
     
     /// Определяет, является ли дата сегодняшним днем.
-    /// - Parameter calendar: Календарь для вычислений. По умолчанию - `.current`.
+    /// - Parameter calendar: Календарь для вычислений. По умолчанию `.current`.
     /// - Returns: `true`, если дата - сегодня.
     func isToday(using calendar: Calendar = .current) -> Bool {
         self.startOfDay(using: calendar) == Date().startOfDay(using: calendar)
     }
     
     /// Определяет, является ли дата завтрашним днем.
-    /// - Parameter calendar: Календарь для вычислений. По умолчанию - `.current`.
+    /// - Parameter calendar: Календарь для вычислений. По умолчанию `.current`.
     /// - Returns: `true`, если дата - завтра.
     func isTomorrow(using calendar: Calendar = .current) -> Bool {
         self.startOfDay(using: calendar) == Date().tomorrow(using: calendar).startOfDay(using: calendar)
@@ -52,7 +52,7 @@ extension Date {
     /// Определяет, находится ли дата в том же дне, что и другая дата.
     /// - Parameters:
     ///   - other: Другая дата для сравнения.
-    ///   - calendar: Календарь для вычислений. По умолчанию - `.current`.
+    ///   - calendar: Календарь для вычислений. По умолчанию `.current`.
     /// - Returns: `true`, если обе даты относятся к одному дню.
     func isSameDay(as other: Date, using calendar: Calendar = .current) -> Bool {
         self.startOfDay(using: calendar) == other.startOfDay(using: calendar)
@@ -61,7 +61,7 @@ extension Date {
     /// Определяет, находится ли дата в той же неделе, что и другая дата.
     /// - Parameters:
     ///   - other: Другая дата для сравнения.
-    ///   - calendar: Календарь для вычислений. По умолчанию - `.current`.
+    ///   - calendar: Календарь для вычислений. По умолчанию `.current`.
     /// - Returns: `true`, если обе даты относятся к одной неделе.
     func isSameWeek(as other: Date, using calendar: Calendar = .current) -> Bool {
         self.startOfWeek(using: calendar) == other.startOfWeek(using: calendar)
@@ -70,7 +70,7 @@ extension Date {
     /// Определяет, находится ли дата в том же месяце, что и другая дата.
     /// - Parameters:
     ///   - other: Другая дата для сравнения.
-    ///   - calendar: Календарь для вычислений. По умолчанию - `.current`.
+    ///   - calendar: Календарь для вычислений. По умолчанию `.current`.
     /// - Returns: `true`, если обе даты относятся к одному месяцу.
     func isSameMonth(as other: Date, using calendar: Calendar = .current) -> Bool {
         self.startOfMonth(using: calendar) == other.startOfMonth(using: calendar)
@@ -79,7 +79,7 @@ extension Date {
     /// Определяет, находится ли дата в том же году, что и другая дата.
     /// - Parameters:
     ///   - other: Другая дата для сравнения.
-    ///   - calendar: Календарь для вычислений. По умолчанию - `.current`.
+    ///   - calendar: Календарь для вычислений. По умолчанию `.current`.
     /// - Returns: `true`, если обе даты относятся к одному году.
     func isSameYear(as other: Date, using calendar: Calendar = .current) -> Bool {
         self.startOfYear(using: calendar) == other.startOfYear(using: calendar)
@@ -89,7 +89,7 @@ extension Date {
     /// - Parameters:
     ///   - start: Начальная граница интервала.
     ///   - end: Конечная граница интервала.
-    ///   - calendar: Календарь для вычислений. По умолчанию - `.current`.
+    ///   - calendar: Календарь для вычислений. По умолчанию `.current`.
     /// - Returns: `true`, если дата лежит в интервале `[start, end]`, иначе `false`.
     func isBetween(_ start: Date, and end: Date, using calendar: Calendar = .current) -> Bool {
         self >= start && self <= end
@@ -100,7 +100,7 @@ extension Date {
     /// Возвращает количество секунд от указанной даты.
     /// - Parameters:
     ///   - date: Дата, относительно которой вычисляется разница.
-    ///   - calendar: Календарь для вычислений. По умолчанию - `.current`.
+    ///   - calendar: Календарь для вычислений. По умолчанию `.current`.
     /// - Returns: Количество полных секунд.
     func seconds(from date: Date, using calendar: Calendar = .current) -> Int {
         return difference(from: date, components: [.second], using: calendar).second ?? 0
@@ -109,7 +109,7 @@ extension Date {
     /// Возвращает количество минут от указанной даты.
     /// - Parameters:
     ///   - date: Дата, относительно которой вычисляется разница.
-    ///   - calendar: Календарь для вычислений. По умолчанию - `.current`.
+    ///   - calendar: Календарь для вычислений. По умолчанию `.current`.
     /// - Returns: Количество полных минут.
     func minutes(from date: Date, using calendar: Calendar = .current) -> Int {
         return difference(from: date, components: [.minute], using: calendar).minute ?? 0
@@ -118,7 +118,7 @@ extension Date {
     /// Возвращает количество часов от указанной даты.
     /// - Parameters:
     ///   - date: Дата, относительно которой вычисляется разница.
-    ///   - calendar: Календарь для вычислений. По умолчанию - `.current`.
+    ///   - calendar: Календарь для вычислений. По умолчанию `.current`.
     /// - Returns: Количество полных часов.
     func hours(from date: Date, using calendar: Calendar = .current) -> Int {
         return difference(from: date, components: [.hour], using: calendar).hour ?? 0
@@ -127,7 +127,7 @@ extension Date {
     /// Возвращает количество дней от указанной даты.
     /// - Parameters:
     ///   - date: Дата, относительно которой вычисляется разница.
-    ///   - calendar: Календарь для вычислений. По умолчанию - `.current`.
+    ///   - calendar: Календарь для вычислений. По умолчанию `.current`.
     /// - Returns: Количество полных дней.
     func days(from date: Date, using calendar: Calendar = .current) -> Int {
         return difference(from: date, components: [.day], using: calendar).day ?? 0
@@ -136,7 +136,7 @@ extension Date {
     /// Возвращает количество месяцев от указанной даты.
     /// - Parameters:
     ///   - date: Дата, относительно которой вычисляется разница.
-    ///   - calendar: Календарь для вычислений. По умолчанию - `.current`.
+    ///   - calendar: Календарь для вычислений. По умолчанию `.current`.
     /// - Returns: Количество полных месяцев.
     func months(from date: Date, using calendar: Calendar = .current) -> Int {
         return difference(from: date, components: [.month], using: calendar).month ?? 0
@@ -145,7 +145,7 @@ extension Date {
     /// Возвращает количество лет от указанной даты.
     /// - Parameters:
     ///   - date: Дата, относительно которой вычисляется разница.
-    ///   - calendar: Календарь для вычислений. По умолчанию - `.current`.
+    ///   - calendar: Календарь для вычислений. По умолчанию `.current`.
     /// - Returns: Количество полных лет.
     func years(from date: Date, using calendar: Calendar = .current) -> Int {
         return difference(from: date, components: [.year], using: calendar).year ?? 0

@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// Представление пустого состояния.
 struct EmptyStateView: View {
     // MARK: - Окружение
     
@@ -22,6 +23,13 @@ struct EmptyStateView: View {
     
     // MARK: - Инициализация
     
+    /// Создаёт представление пустого состояния.
+    /// - Parameters:
+    ///   - icon: Название системной иконки.
+    ///   - title: Заголовок.
+    ///   - description: Описание (опционально).
+    ///   - buttonLabel: Текст кнопки действия (опционально).
+    ///   - action: Действие при нажатии на кнопку (опционально).
     init(
         icon: String,
         title: LocalizedStringResource,

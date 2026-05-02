@@ -7,7 +7,8 @@
 
 import SwiftUI
 
-extension EventStatus: ValueBadgeProviding {    
+extension EventStatus: ValueBadgeProviding {
+    /// Стиль бейджа для статуса события (текстовый бейдж с акцентным цветом).
     var badgeStyle: BadgeView.Style {
         .title(title: localizedResource, fill: accentColor)
     }

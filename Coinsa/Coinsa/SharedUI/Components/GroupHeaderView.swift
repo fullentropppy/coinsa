@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// Заголовок для секции группы, отображающий иконку и текст.
 struct GroupHeaderView: View {
     // MARK: Свойства
     

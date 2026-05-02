@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// Кнопка для переключения между валютами ввода.
 struct InputCurrencySwitchButton: View {
     // MARK: - Окружение
     

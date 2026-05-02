@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// Текстовое представление денежной суммы.
 struct AmountText: View {
     // MARK: - Свойства
     
@@ -20,6 +21,15 @@ struct AmountText: View {
     
     // MARK: - Инициализация
     
+    /// Создаёт текстовое представление суммы.
+    /// - Parameters:
+    ///   - amount: Числовое значение суммы.
+    ///   - fractionLength: Количество знаков после запятой. По умолчанию `2`.
+    ///   - font: Шрифт для числа. По умолчанию `.body`.
+    ///   - color: Цвет числа. По умолчанию `.primary`.
+    ///   - currency: Валюта (опционально).
+    ///   - currencyFont: Шрифт для кода валюты (если не указан, используется `font`).
+    ///   - currencyColor: Цвет кода валюты (если не указан, используется `color`).
     init(
         _ amount: Double,
         fractionLength: Int = 2,
@@ -56,6 +66,12 @@ struct AmountText: View {
 // MARK: - Предопределенные варианты
 
 extension AmountText {
+    /// Стандартное представление суммы с моноширинными цифрами.
+    /// - Parameters:
+    ///   - amount: Сумма.
+    ///   - fractionLength: Количество знаков после запятой.
+    ///   - currency: Валюта (опционально).
+    /// - Returns: Настроенное представление.
     static func standard(
         _ amount: Double,
         fractionLength: Int = 2,
@@ -70,7 +86,13 @@ extension AmountText {
             currencyColor: .secondary
         )
     }
-
+    
+    /// Компактное вторичное представление суммы (мелкий шрифт).
+    /// - Parameters:
+    ///   - amount: Сумма.
+    ///   - fractionLength: Количество знаков после запятой.
+    ///   - currency: Валюта (опционально).
+    /// - Returns: Настроенное представление.
     static func secondarySmall(
         _ amount: Double,
         fractionLength: Int = 2,

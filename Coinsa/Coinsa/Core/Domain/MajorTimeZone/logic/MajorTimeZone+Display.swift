@@ -8,6 +8,7 @@
 import Foundation
 
 extension MajorTimeZone {
+    /// Строковое представление смещения.
     var offsetDisplay: String {
         let totalSeconds = gmtOffsetSeconds
         let hours = totalSeconds / 3600
@@ -20,6 +21,7 @@ extension MajorTimeZone {
         }
     }
     
+    /// Полное строковое представление смещения.
     var gmtOffsetDisplay: String {
         "GMT\(offsetDisplay)"
     }

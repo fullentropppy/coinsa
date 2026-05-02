@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// Главная кнопка добавления.
 struct PrimaryAddButton: View {
     // MARK: - Окружение
     

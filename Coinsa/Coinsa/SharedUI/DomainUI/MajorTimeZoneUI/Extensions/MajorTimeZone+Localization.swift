@@ -8,6 +8,7 @@
 import Foundation
 
 extension MajorTimeZone: LocalizedResourceProviding {
+    /// Локализованное универсальное название часового пояса.
     var localizedResource: LocalizedStringResource {
         switch self {
         case .honolulu: .majorTimeZoneNameHonolulu

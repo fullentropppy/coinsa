@@ -9,6 +9,7 @@ import Foundation
 
 // MARK: - Публичные типы
 
+/// Сценарии генерации данных для превью.
 enum PreviewScenario: CaseIterable {
     case japan
     case russia
@@ -17,6 +18,7 @@ enum PreviewScenario: CaseIterable {
     case all
 }
 
+/// Настройки включения связанных данных при генерации.
 struct PreviewOptions {
     var includeTrips = true
     var includeLocations = true
@@ -26,6 +28,7 @@ struct PreviewOptions {
 
 // MARK: - Генерартор превью-данных
 
+/// Генератор тестовых данных для использования в превью SwiftUI.
 enum PreviewGenerator {
     // MARK: - Свойства
     
@@ -33,6 +36,11 @@ enum PreviewGenerator {
     
     // MARK: - Публичные методы
     
+    /// Создаёт массив поездок согласно сценарию и настройкам.
+    /// - Parameters:
+    ///   - scenario: Сценарий генерации.
+    ///   - options: Настройки включения подчинённых объектов.
+    /// - Returns: Массив сгенерированных поездок.
     static func makeTrips(for scenario: PreviewScenario, options: PreviewOptions) -> [Trip] {
         var trips: [Trip] = []
         
@@ -59,6 +67,11 @@ enum PreviewGenerator {
 // MARK: - Конструкторы данных
 
 private extension PreviewGenerator {
+    /// Создаёт поездку на основе предопределённых данных.
+    /// - Parameters:
+    ///   - data: Предопределённые данные поездки.
+    ///   - options: Настройки включения подчинённых объектов.
+    /// - Returns: Сгенерированная поездка.
     private static func makeTrip(from data: PreviewTrip, with options: PreviewOptions) -> Trip {
         let now = Date()
         let trip = Trip(
@@ -84,6 +97,12 @@ private extension PreviewGenerator {
         return trip
     }
     
+    /// Создаёт локацию на основе предопределённых данных.
+    /// - Parameters:
+    ///   - data: Предопределённые данные локации.
+    ///   - trip: Родительская поездка.
+    ///   - options: Настройки включения подчинённых объектов.
+    /// - Returns: Сгенерированная локация.
     private static func makeLocation(from data: PreviewLocation, to trip: Trip, with options: PreviewOptions) -> Location {
         let now = Date()
         let location =  Location(
@@ -113,6 +132,17 @@ private extension PreviewGenerator {
         return location
     }
     
+    /// Создаёт трату с заданными параметрами.
+    /// - Parameters:
+    ///   - location: Локация расхода.
+    ///   - date: Дата расхода.
+    ///   - baseAmount: Сумма в основной валюте.
+    ///   - rateLocalToBase: Курс местной валюты (опционально).
+    ///   - paymentMethod: Способ оплаты. По умолчанию `.cash`.
+    ///   - exchangeAdjustment: Поправка курса (опционально).
+    ///   - category: Категория расхода.
+    ///   - comment: Комментарий (опционально).
+    /// - Returns: Сгенерированный расход.
     private static func makeExpense(
         to location: Location,
         date: Date,
@@ -143,6 +173,10 @@ private extension PreviewGenerator {
 // MARK: - Генерация подчиненных объектов наборов данных
 
 private extension PreviewGenerator {
+    /// Добавляет бюджеты в локацию на основе предопределённых данных.
+    /// - Parameters:
+    ///   - previewLocation: Предопределённые данные локации.
+    ///   - location: Локация для добавления бюджетов.
     private static func includeBudgets(of previewLocation: PreviewLocation, to location: Location) {
         var budgetsByCategory: [ExpenseCategory: Double] = [:]
         
@@ -202,6 +236,10 @@ private extension PreviewGenerator {
         location.applyBudgets(budgetsByCategory)
     }
     
+    /// Добавляет расходы в локацию на основе предопределённых данных.
+    /// - Parameters:
+    ///   - previewLocation: Предопределённые данные локации.
+    ///   - location: Локация для добавления расходов.
     private static func includeExpenses(of previewLocation: PreviewLocation, to location: Location) {
         var expenses: [Expense] = []
         

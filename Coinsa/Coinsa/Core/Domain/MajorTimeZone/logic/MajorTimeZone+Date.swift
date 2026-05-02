@@ -8,6 +8,15 @@
 import Foundation
 
 extension MajorTimeZone {
+    /// Создаёт дату с учётом часового пояса.
+    /// - Parameters:
+    ///   - year: Год.
+    ///   - month: Месяц (1...12).
+    ///   - day: День (1...31).
+    ///   - hour: Час (0...23).
+    ///   - minute: Минута (0...59).
+    ///   - second: Секунда (0...59).
+    /// - Returns: Дата в указанном часовом поясе или `nil`, если компоненты невалидны.
     func createDate(
         year: Int,
         month: Int,

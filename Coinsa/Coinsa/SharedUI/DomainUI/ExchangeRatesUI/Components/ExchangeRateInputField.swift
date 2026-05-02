@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// Поле для ввода курса обмена валюты с отображением кода валюты и кнопкой обновления.
 struct ExchangeRateInputField: View {
     // MARK: - Окружение
     
@@ -24,6 +25,15 @@ struct ExchangeRateInputField: View {
     
     // MARK: - Инициализация
     
+    /// Создаёт поле для ввода курса обмена.
+    /// - Parameters:
+    ///   - value: Привязка к значению курса.
+    ///   - currency: Валюта.
+    ///   - isLoading: Флаг загрузки.
+    ///   - focusedField: Привязка к фокусированному полю.
+    ///   - focusId: Уникальный идентификатор поля.
+    ///   - font: Шрифт текста.
+    ///   - onRefresh: Действие при нажатии кнопки обновления.
     init(
         _ value: Binding<Double>,
         currency: Currency,
@@ -89,6 +99,15 @@ struct ExchangeRateInputField: View {
 // MARK: - Предопределенные варианты
 
 extension ExchangeRateInputField {
+    /// Стандартное поле для ввода курса с моноширинными цифрами.
+    /// - Parameters:
+    ///   - value: Привязка к значению курса.
+    ///   - currency: Валюта.
+    ///   - isLoading: Флаг загрузки.
+    ///   - focusedField: Привязка к фокусированному полю.
+    ///   - focusId: Уникальный идентификатор поля.
+    ///   - onRefresh: Действие при нажатии кнопки обновления.
+    /// - Returns: Настроенное поле ввода.
     static func standard(
         _ value: Binding<Double>,
         currency: Currency,

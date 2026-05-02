@@ -7,21 +7,28 @@
 
 import SwiftUI
 
+/// Индикатор прогресса в виде капсулы.
 struct ProgressBar: View {
     // MARK: - Вложенные типы
     
+    /// Стиль отображения прогресс-бара.
     enum Style {
+        /// Обычный стиль (зелёная полоса).
         case plain
+        
+        /// Положительный прогресс (зеленеет при достижении цели).
         case positive
+        
+        /// Отрицательный прогресс (краснеет при превышении).
         case negative
     }
 
     
     // MARK: - Свойства
     
-    let currentValue: Double
-    let maxValue: Double
-    let style: Style
+    private let currentValue: Double
+    private let maxValue: Double
+    private let style: Style
     
     private var progress: Double {
         maxValue > 0 ? max(min(currentValue / maxValue, 1), 0) : 0
@@ -37,6 +44,11 @@ struct ProgressBar: View {
         }
     }
     
+    /// Создаёт индикатор прогресса.
+    /// - Parameters:
+    ///   - currentValue: Текущее значение.
+    ///   - maxValue: Максимальное значение (цель).
+    ///   - style: Стиль отображения. По умолчанию `.plain`.
     private var barFill: Color {
         if style == .plain {
             return .green

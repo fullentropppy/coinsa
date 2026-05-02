@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// Кнопка для использования в панелях инструментов.
 struct ToolbarButton: View {
     // MARK: - Окружение
     
@@ -43,26 +44,32 @@ struct ToolbarButton: View {
 // MARK: - Предопределенные варианты
 
 extension ToolbarButton {
+    /// Кнопка "ОК" (галочка) с тактильным откликом `.tap`.
     static func ok(action: @escaping () -> Void) -> some View {
         ToolbarButton(icon: "checkmark", action: action, hapticType: .tap)
     }
     
+    /// Кнопка добавления (плюс) с тактильным откликом `.add`.
     static func add(action: @escaping () -> Void) -> some View {
         ToolbarButton(icon: "plus", action: action, hapticType: .add)
     }
     
+    /// Кнопка редактирования (карандаш) с тактильным откликом `.tap`.
     static func edit(action: @escaping () -> Void) -> some View {
         ToolbarButton(icon: "pencil", action: action, hapticType: .tap)
     }
     
+    /// Кнопка удаления (корзина) с тактильным откликом `.warning`.
     static func delete(action: @escaping () -> Void) -> some View {
         ToolbarButton(icon: "trash", action: action, hapticType: .warning)
     }
     
+    /// Кнопка закрытия (крестик) без тактильного отклика.
     static func close(action: @escaping () -> Void) -> some View {
         ToolbarButton(icon: "xmark", action: action)
     }
         
+    /// Кнопка настроек (шестерёнка) без тактильного отклика.
     static func settings(action: @escaping () -> Void) -> some View {
         ToolbarButton(icon: "gear", action: action)
     }

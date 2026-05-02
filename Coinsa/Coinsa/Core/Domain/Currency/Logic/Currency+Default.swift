@@ -6,6 +6,9 @@
 //
 
 extension Currency {
+    /// Валюта по умолчанию (Российский рубль).
     static var defaultValue: Currency { Currency.rub }
+    
+    /// Код валюты по умолчанию ("RUB").
     static var defaultCode: String { defaultValue.code }
 }

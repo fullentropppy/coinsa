@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// Поле для ввода процентных значений с иконкой процента.
 struct PercentInputField: View {
     // MARK: - Свойства
     
@@ -17,6 +18,12 @@ struct PercentInputField: View {
     
     // MARK: - Инициализация
     
+    /// Создаёт поле для ввода процентов.
+    /// - Parameters:
+    ///   - value: Привязка к числовому значению.
+    ///   - focusedField: Привязка к фокусированному полю.
+    ///   - focusId: Уникальный идентификатор поля.
+    ///   - font: Шрифт текста.
     init(
         _ value: Binding<Double>,
         focusedField: FocusState<NumericEditField?>.Binding,
@@ -52,6 +59,12 @@ struct PercentInputField: View {
 // MARK: - Предопределенные варианты
 
 extension PercentInputField {
+    /// Стандартное поле для ввода процентов с моноширинными цифрами.
+    /// - Parameters:
+    ///   - value: Привязка к числовому значению.
+    ///   - focusedField: Привязка к фокусированному полю.
+    ///   - focusId: Уникальный идентификатор поля.
+    /// - Returns: Настроенное поле ввода.
     static func standard(
         _ value: Binding<Double>,
         focusedField: FocusState<NumericEditField?>.Binding,

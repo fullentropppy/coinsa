@@ -6,6 +6,9 @@
 //
 
 extension MajorTimeZone {
+    /// Создаёт часовой пояс по идентификатору.
+    /// - Parameter indentifier: Идентификатор часового пояса IANA.
+    /// - Returns: Часовой пояс или значение по умолчанию, если идентификатор не найден.
     static func from(_ indentifier: String) -> MajorTimeZone {
         MajorTimeZone(rawValue: indentifier) ?? .defaultValue
     }

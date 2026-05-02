@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// Провайдер курсов обмена.
 final class ExchangeRateProvider {
     // MARK: - Свойства
     
@@ -14,12 +15,20 @@ final class ExchangeRateProvider {
     
     // MARK: - Инициализация
     
+    /// Создаёт провайдер с указанным сервисом.
+    /// - Parameter service: Сервис для получения курсов.
     init(service: ExchangeRateService) {
         self.service = service
     }
     
     // MARK: - Публичные методы
     
+    /// Получает курс обмена с таймаутом 10 секунд.
+    /// - Parameters:
+    ///   - from: Исходная валюта.
+    ///   - to: Целевая валюта.
+    /// - Returns: Курс обмена (сколько единиц `to` за 1 единицу `from`).
+    /// - Throws: Ошибки сети, декодирования или невалидного URL.
     func getRate(from: Currency, to: Currency) async throws -> Double {
         try await AsyncTimeout.run(seconds: 10) {
             try await self.service.fetchRate(from: from, to: to)
@@ -29,6 +38,7 @@ final class ExchangeRateProvider {
 
 // MARK: - Ошибки
 
+/// Ошибка загрузки курса обмена.
 struct ExchangeRateLoadingError: LocalizedError {
     // MARK: - Свойства
     

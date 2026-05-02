@@ -7,11 +7,23 @@
 
 import SwiftUI
 
+/// Кастомизированное представление метки.
 struct LabelView: View {
     // MARK: - Вложенные типы
-
+    
+    /// Стили отображения метки.
     enum Style {
+        /// Метка с иконкой.
+        /// - Parameters:
+        ///   - title: Локализованный текст метки.
+        ///   - icon: Название системной иконки.
+        ///   - iconWidth: Фиксированная ширина для иконки (обеспечивает выравнивание).
         case withIcon(title: LocalizedStringResource, icon: String, iconWidth: CGFloat)
+        
+        /// Метка с текстовым бейджем в формате "бейдж • заголовок".
+        /// - Parameters:
+        ///   - title: Локализованный текст метки.
+        ///   - text: Текст бейджа.
         case withText(title: LocalizedStringResource, text: String)
     }
     

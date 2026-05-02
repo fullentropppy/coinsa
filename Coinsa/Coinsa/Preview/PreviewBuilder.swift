@@ -8,16 +8,21 @@
 import Foundation
 import SwiftData
 
+/// Построитель данных для превью.
 @MainActor
 struct PreviewBuilder {
     // MARK: - Публичные методы
 
+    /// Создаёт новый экземпляр построителя.
     static func builder() -> Builder {
         Builder()
     }
 
     // MARK: - Внутренние методы
 
+    /// Создаёт контейнер SwiftData с указанными поездками.
+    /// - Parameter trips: Массив поездок для вставки.
+    /// - Returns: Настроенный контейнер с данными в памяти.
     private static func makeContainer(with trips: [Trip]) -> ModelContainer {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
 
@@ -33,6 +38,12 @@ struct PreviewBuilder {
         return container
     }
 
+    /// Извлекает элемент из контейнера по индексу и сортировке.
+    /// - Parameters:
+    ///   - container: Контейнер SwiftData.
+    ///   - index: Индекс элемента в массиве.
+    ///   - sortBy: Дескрипторы сортировки.
+    /// - Returns: Запрошенный элемент.
     private static func fetchItem<T: PersistentModel>(
         from container: ModelContainer,
         at index: Int = 0,
@@ -50,6 +61,7 @@ struct PreviewBuilder {
 // MARK: - Построитель превью-данных
 
 extension PreviewBuilder {
+    /// Построитель с настраиваемыми параметрами для генерации превью-данных.
     final class Builder {
         // MARK: - Свойства
 
@@ -58,31 +70,37 @@ extension PreviewBuilder {
 
         // MARK: - Установка параметров построителя
 
+        /// Устанавливает сценарий генерации.
         func withScenario(_ value: PreviewScenario) -> Builder {
             scenario = value
             return self
         }
 
+        /// Включает/выключает генерацию поездок.
         func withTrips(_ value: Bool) -> Builder {
             options.includeTrips = value
             return self
         }
 
+        /// Включает/выключает генерацию локаций.
         func withLocations(_ value: Bool) -> Builder {
             options.includeLocations = value
             return self
         }
 
+        /// Включает/выключает генерацию бюджетов.
         func withBudgets(_ value: Bool) -> Builder {
             options.includeBudgets = value
             return self
         }
 
+        /// Включает/выключает генерацию расходов.
         func withExpenses(_ value: Bool) -> Builder {
             options.includeExpenses = value
             return self
         }
 
+        /// Устанавливает полные настройки генерации.
         func withOptions(_ value: PreviewOptions) -> Builder {
             options = value
             return self
@@ -90,10 +108,12 @@ extension PreviewBuilder {
 
         // MARK: - Создание контейнера с данными и получение данных
 
+        /// Создаёт контейнер SwiftData с сгенерированными данными.
         func buildContainer() -> ModelContainer {
             makeContainer(with: buildData())
         }
 
+        /// Извлекает поездку из контейнера.
         func fetchTrip(from container: ModelContainer, at index: Int = 0) -> Trip {
             fetchItem(
                 from: container,
@@ -102,6 +122,7 @@ extension PreviewBuilder {
             )
         }
 
+        /// Извлекает локацию из контейнера.
         func fetchLocation(from container: ModelContainer, at index: Int = 0) -> Location {
             fetchItem(
                 from: container,
@@ -110,6 +131,7 @@ extension PreviewBuilder {
             )
         }
 
+        /// Извлекает трату из контейнера.
         func fetchExpense(from container: ModelContainer, at index: Int = 0) -> Expense {
             fetchItem(
                 from: container,
@@ -120,18 +142,22 @@ extension PreviewBuilder {
 
         // MARK: - Создание обособленных данных и получение
 
+        /// Генерирует массив поездок согласно настройкам.
         func buildData() -> [Trip] {
             PreviewGenerator.makeTrips(for: scenario, options: options)
         }
 
+        /// Извлекает поездку из сгенерированных данных.
         func getTrip(from data: [Trip], at index: Int = 0) -> Trip {
             data[index]
         }
 
+        /// Извлекает локацию из сгенерированных данных.
         func getLocation(from data: [Trip], tripIndex: Int = 0, locationIndex: Int = 0) -> Location {
             getTrip(from: data, at: tripIndex).locations![locationIndex]
         }
 
+        /// Извлекает трату из сгенерированных данных.
         func getExpense(
             from data: [Trip],
             tripIndex: Int = 0,

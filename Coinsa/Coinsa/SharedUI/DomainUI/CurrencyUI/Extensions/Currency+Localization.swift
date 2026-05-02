@@ -8,6 +8,7 @@
 import Foundation
 
 extension Currency: LocalizedResourceProviding {
+    /// Локализованное название валюты.
     var localizedResource: LocalizedStringResource {
         switch self {
         case .aed: .currencyNameAed

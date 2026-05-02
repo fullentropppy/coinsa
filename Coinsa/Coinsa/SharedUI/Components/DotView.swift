@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// Круглая точка-индикатор.
 struct DotView: View {
     // MARK: - Свойства
 
@@ -14,6 +15,8 @@ struct DotView: View {
 
     // MARK: - Инициализация
     
+    /// Создаёт точку-индикатор с указанным цветом.
+    /// - Parameter fillColor: Цвет заливки точки.
     init(_ fillColor: Color) {
         self.fillColor = fillColor
     }

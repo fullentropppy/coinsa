@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// Текстовое представление кода валюты.
 struct CurrencyCodeText: View {
     // MARK: - Свойства
     
@@ -16,6 +17,11 @@ struct CurrencyCodeText: View {
     
     // MARK: - Инициализация
     
+    /// Создаёт текстовое представление кода валюты.
+    /// - Parameters:
+    ///   - currency: Валюта.
+    ///   - font: Шрифт текста. По умолчанию `.body`.
+    ///   - color: Цвет текста. По умолчанию `.secondary`.
     init(
         _ currency: Currency,
         font: Font = .body,
@@ -38,10 +44,12 @@ struct CurrencyCodeText: View {
 // MARK: - Предопределенные варианты
 
 extension CurrencyCodeText {
+    /// Стандартный код валюты (полужирный моноширинный шрифт).
     static func standard(_ currency: Currency) -> some View {
         CurrencyCodeText(currency, font: .body.monospaced().weight(.medium), color: .secondary)
     }
     
+    /// Компактный код валюты (мелкий полужирный моноширинный шрифт).
     static func secondarySmall(_ currency: Currency) -> some View {
         CurrencyCodeText(currency, font: .footnote.monospaced().weight(.medium), color: .secondary)
     }

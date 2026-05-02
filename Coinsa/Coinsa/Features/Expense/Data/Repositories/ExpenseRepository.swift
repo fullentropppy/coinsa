@@ -37,7 +37,7 @@ struct ExpenseRepository {
             exchangeAdjustment: normalizedExchangeAdjustment(exchangeAdjustment),
             categoryRaw: category.rawValue,
             location: location,
-            comment: normalizeComment(comment),
+            comment: normalizedComment(comment),
             createdAt: now,
             updatedAt: now
         )
@@ -61,7 +61,7 @@ struct ExpenseRepository {
         expense.paymentMethodRaw = paymentMethod.rawValue
         expense.exchangeAdjustment = normalizedExchangeAdjustment(exchangeAdjustment)
         expense.categoryRaw = category.rawValue
-        expense.comment = normalizeComment(comment)
+        expense.comment = normalizedComment(comment)
         expense.updatedAt = Date()
         try? context.save()
     }
@@ -85,7 +85,11 @@ struct ExpenseRepository {
         adjustment.nonNegative
     }
     
-    private func normalizeComment(_ comment: String?) -> String? {
-        comment == nil ? nil : comment?.trimmed
+    private func normalizedComment(_ comment: String?) -> String? {
+        if let comment, !comment.isBlank {
+            comment.trimmed
+        } else {
+            nil
+        }
     }
 }

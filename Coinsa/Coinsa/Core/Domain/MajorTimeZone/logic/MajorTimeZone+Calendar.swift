@@ -8,6 +8,7 @@
 import Foundation
 
 extension MajorTimeZone {
+    /// Календарь, настроенный на текущий часовой пояс.
     var calendar: Calendar {
         timeZone.calendar
     }

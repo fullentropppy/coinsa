@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// Кастомизированный пикер с заголовком, работающий как навигационная ссылка в списке.
 struct LabeledPicker<SelectionValue: Hashable, Content: View>: View {
     // MARK: - Свойства
     
@@ -18,6 +19,13 @@ struct LabeledPicker<SelectionValue: Hashable, Content: View>: View {
     
     // MARK: - Инициализация
     
+    /// Создаёт пикер с заголовком.
+    /// - Parameters:
+    ///   - title: Заголовок пикера.
+    ///   - selection: Привязка к выбранному значению.
+    ///   - options: Массив доступных опций.
+    ///   - disabled: Флаг блокировки (по умолчанию `false`).
+    ///   - content: Замыкание для построения представления каждой опции.
     init(
         title: LocalizedStringResource,
         selection: Binding<SelectionValue>,

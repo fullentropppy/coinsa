@@ -64,7 +64,7 @@ struct ExpenseDetailViewModel {
                 localCurrencyCode: expense.localCurrency.code,
                 effectiveRateLocalToBase: expense.effectiveRateLocalToBase.numberFormat(fractionLength: 4),
                 baseCurrencyCode: expense.baseCurrency.code,
-                adjustmentRateLocalToBase: (expense.exchangeAdjustment / 100).numberFormat()
+                adjustmentRateLocalToBase: (expense.exchangeAdjustment / 100).percentFormat()
             )
         } else {
             return .expenseBaseExchangeRate(

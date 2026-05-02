@@ -15,7 +15,7 @@ struct DateDisplayFormatter {
     /// - Parameters:
     ///   - date: Форматируемая дата.
     ///   - showsTime: Флаг отображения времени. По умолчанию `true`.
-    ///   - calendar: Календарь для вычислений. По умолчанию - `.current`.
+    ///   - calendar: Календарь для вычислений. По умолчанию `.current`.
     /// - Returns: Локализованная строка.
     static func formatRelative(
         _ date: Date,
@@ -38,7 +38,7 @@ struct DateDisplayFormatter {
     ///   - date: Форматируемая дата.
     ///   - showsTime: Флаг отображения времени. По умолчанию `true`.
     ///   - showsWeekday: Показывать день недели. По умолчанию `false`.
-    ///   - calendar: Календарь для вычислений. По умолчанию - `.current`.
+    ///   - calendar: Календарь для вычислений. По умолчанию `.current`.
     /// - Returns: Локализованная строка.
     static func format(
         _ date: Date,
@@ -48,9 +48,9 @@ struct DateDisplayFormatter {
     ) -> String {
         let dateTemplate: String
         if showsWeekday {
-            dateTemplate = date.isSameYear(as: date) ? "EEEEdMMMM" : "EEEEdMMMMy"
+            dateTemplate = Date().isSameYear(as: date) ? "EEEEdMMMM" : "EEEEdMMMMy"
         } else {
-            dateTemplate = date.isSameYear(as: date) ? "dMMMM" : "dMMMMy"
+            dateTemplate = Date().isSameYear(as: date) ? "dMMMM" : "dMMMMy"
         }
         
         let formatter = DateFormatter()
@@ -67,7 +67,7 @@ struct DateDisplayFormatter {
     ///   - startDate: Начальная дата диапазона.
     ///   - endDate: Конечная дата диапазона.
     ///   - showsTime: Флаг отображения времени. По умолчанию `false`.
-    ///   - calendar: Календарь для вычислений. По умолчанию - `.current`.
+    ///   - calendar: Календарь для вычислений. По умолчанию `.current`.
     /// - Returns: Локализованная строка с диапазоном дат.
     static func formatRange(
         startDate: Date,

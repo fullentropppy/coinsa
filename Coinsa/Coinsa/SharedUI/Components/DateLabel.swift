@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// Метка для отображения даты или диапазона дат.
 struct DateLabel: View {
     // MARK: - Свойства
     
@@ -26,7 +27,18 @@ struct DateLabel: View {
     
     // MARK: - Инициализация
     
-    init(_ date: Date, using calendar: Calendar = .current, font: Font = .body, color: Color = .primary) {
+    /// Создаёт метку для одной даты.
+    /// - Parameters:
+    ///   - date: Отображаемая дата.
+    ///   - calendar: Календарь для форматирования. По умолчанию `.current`.
+    ///   - font: Шрифт текста. По умолчанию `.body`.
+    ///   - color: Цвет текста. По умолчанию `.primary`.
+    init(
+        _ date: Date,
+        using calendar: Calendar = .current,
+        font: Font = .body,
+        color: Color = .primary
+    ) {
         self.date1 = date
         self.date2 = nil
         self.calendar = calendar
@@ -34,6 +46,13 @@ struct DateLabel: View {
         self.color = color
     }
     
+    /// Создаёт метку для диапазона дат.
+    /// - Parameters:
+    ///   - startDate: Начальная дата диапазона.
+    ///   - endDate: Конечная дата диапазона.
+    ///   - calendar: Календарь для форматирования. По умолчанию `.current`.
+    ///   - font: Шрифт текста. По умолчанию `.body`.
+    ///   - color: Цвет текста. По умолчанию `.primary`.
     init(
         from startDate: Date,
         to endDate: Date,
@@ -60,10 +79,21 @@ struct DateLabel: View {
 // MARK: - Предопределенные варианты
 
 extension DateLabel {
+    /// Вторичная компактная метка для одной даты.
+    /// - Parameters:
+    ///   - date: Отображаемая дата.
+    ///   - calendar: Календарь для форматирования. По умолчанию `.current`.
+    /// - Returns: Метка с мелким шрифтом и вторичным цветом.
     static func secondarySmall(_ date: Date, using calendar: Calendar = .current) -> some View {
         DateLabel(date, using: calendar, font: .footnote, color: .secondary)
     }
     
+    /// Вторичная компактная метка для диапазона дат.
+    /// - Parameters:
+    ///   - startDate: Начальная дата диапазона.
+    ///   - endDate: Конечная дата диапазона.
+    ///   - calendar: Календарь для форматирования. По умолчанию `.current`.
+    /// - Returns: Метка с мелким шрифтом и вторичным цветом.
     static func secondarySmall(
         from startDate: Date,
         to endDate: Date,

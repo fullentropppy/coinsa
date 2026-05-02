@@ -8,6 +8,7 @@
 import Foundation
 
 extension MajorTimeZone {
+    /// Все часовые пояса, отсортированные по смещению от GMT.
     static var allCasesSortedByGMT: [MajorTimeZone] {
         allCases.sorted {
             let offset1 = $0.gmtOffsetSeconds

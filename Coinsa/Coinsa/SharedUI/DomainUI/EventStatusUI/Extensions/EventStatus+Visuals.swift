@@ -8,6 +8,7 @@
 import SwiftUI
 
 extension EventStatus: ValueVisualRepresentable {
+    /// Основная иконка для статуса события (контурная версия).
     var primaryIcon: String {
         switch self {
         case .upcoming: "clock"
@@ -16,6 +17,7 @@ extension EventStatus: ValueVisualRepresentable {
         }
     }
     
+    /// Вторичная иконка для статуса события (заливная версия).
     var secondaryIcon: String {
         switch self {
         case .upcoming: "clock.fill"
@@ -24,6 +26,7 @@ extension EventStatus: ValueVisualRepresentable {
         }
     }
     
+    /// Акцентный цвет для статуса события.
     var accentColor: Color {
         switch self {
         case .upcoming: .teal

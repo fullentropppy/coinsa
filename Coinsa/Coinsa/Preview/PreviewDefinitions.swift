@@ -9,6 +9,7 @@ import Foundation
 
 // MARK: - Наборы данных
 
+/// Предопределённые поездки для превью.
 enum PreviewTrip: String {
     case japan = "Япония"
     case russia = "Россия"
@@ -47,6 +48,7 @@ enum PreviewTrip: String {
     }
 }
 
+/// Предопределённые локации для превью.
 enum PreviewLocation: String {
     case tokyo = "Токио"
     case kyoto = "Киото"
@@ -123,6 +125,7 @@ enum PreviewLocation: String {
     }
 }
 
+/// Предопределённые комментарии к тратам для превью.
 enum PreviewExpenseComment: String {
     case breakfast = "Завтрак"
     case lunch = "Обед"
@@ -142,7 +145,9 @@ enum PreviewExpenseComment: String {
 
 // MARK: - Приватные типы
 
+/// Внутренний помощник для получения курсов валют для превью.
 private enum PreviewCurrency {
+    /// Фиксированные курсы валют к RUB.
     private static let exchangeRates: [Currency: Double] = [
         Currency.jpy: 0.48,
         Currency.rub: 1.0,
@@ -150,6 +155,9 @@ private enum PreviewCurrency {
         Currency.try: 1.73
     ]
 
+    /// Возвращает курс обмена для указанной валюты.
+    /// - Parameter currency: Валюта.
+    /// - Returns: Курс к RUB.
     static func exchangeRate(for currency: Currency) -> Double {
         if let rate = exchangeRates[currency] {
             rate

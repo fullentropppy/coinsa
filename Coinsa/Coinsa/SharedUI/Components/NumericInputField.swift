@@ -9,14 +9,15 @@ import SwiftUI
 
 // MARK: - Публичные типы
 
+/// Идентификаторы полей для управления фокусом в числовых вводах.
 enum NumericEditField: Hashable {
     case amount
     case exchangeRate
     case exchangeAdjustment
-    case test(String)
     case budget(String)
 }
 
+/// Кастомное поле для ввода числовых значений с форматированием и поддержкой фокуса.
 struct NumericInputField: View {
     // MARK: - Свойства
     
@@ -52,6 +53,13 @@ struct NumericInputField: View {
     
     // MARK: - Инициализация
     
+    /// Создаёт поле для ввода чисел.
+    /// - Parameters:
+    ///   - value: Привязка к числовому значению.
+    ///   - focusedField: Привязка к фокусированному полю.
+    ///   - focusId: Уникальный идентификатор этого поля.
+    ///   - fractionDigits: Количество знаков после запятой.
+    ///   - font: Шрифт текста.
     init(
         _ value: Binding<Double>,
         focusedField: FocusState<NumericEditField?>.Binding,
@@ -117,6 +125,13 @@ struct NumericInputField: View {
 // MARK: - Предопределенные варианты
 
 extension NumericInputField {
+    /// Стандартное числовое поле с моноширинными цифрами.
+    /// - Parameters:
+    ///   - value: Привязка к числовому значению.
+    ///   - focusedField: Привязка к фокусированному полю.
+    ///   - focusId: Уникальный идентификатор поля.
+    ///   - fractionDigits: Количество знаков после запятой.
+    /// - Returns: Настроенное поле ввода.
     static func standard(
         _ value: Binding<Double>,
         focusedField: FocusState<NumericEditField?>.Binding,
