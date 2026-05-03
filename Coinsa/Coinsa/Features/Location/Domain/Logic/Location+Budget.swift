@@ -34,7 +34,9 @@ extension Location {
     /// Применяет бюджеты к локации (создает, обновляет или удаляет).
     /// - Parameter budgetsByCategory: Новые бюджеты по категориям.
     func applyBudgets(_ budgetsByCategory: [ExpenseCategory: Double]) {
-        guard var budgets else { return }
+        if budgets == nil {
+            budgets = []
+        }
         
         var normalizedBudgets: [ExpenseCategory: Double] = [:]
         
@@ -45,14 +47,14 @@ extension Location {
             }
         }
         
-        budgets.removeAll { budget in
+        budgets?.removeAll { budget in
             normalizedBudgets[budget.category] == nil
         }
         
         let now = Date()
         
         for (category, amount) in normalizedBudgets {
-            if let existingBudget = budgets.first(where: { $0.category == category }) {
+            if let existingBudget = budgets?.first(where: { $0.category == category }) {
                 existingBudget.baseAmount = amount
                 existingBudget.updatedAt = now
             } else {
@@ -64,7 +66,7 @@ extension Location {
                     createdAt: now,
                     updatedAt: now
                 )
-                budgets.append(budget)
+                budgets?.append(budget)
             }
         }
     }

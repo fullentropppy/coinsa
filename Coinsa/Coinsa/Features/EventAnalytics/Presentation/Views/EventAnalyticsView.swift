@@ -140,7 +140,8 @@ struct EventAnalyticsView: View {
                     baseCurrency: viewModel.baseCurrency,
                     localPlannedAmount: item.plannedLocalAmount,
                     localActualAmount: item.actualLocalAmount,
-                    localCurrency: viewModel.localCurrency
+                    localCurrency: viewModel.localCurrency,
+                    showsPlannedIfZero: selectedSummaryMode == .fromTotal
                 ) {
                     HStack(spacing: 8) {
                         item.category.makeDot()

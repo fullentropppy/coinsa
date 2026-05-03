@@ -17,12 +17,13 @@ struct EventAmountProgressView<Header: View>: View {
     private let plannedLocalAmount: Double?
     private let actualLocalAmount: Double?
     private let localCurrency: Currency?
+    private let showsPlannedIfZero: Bool
     private let header: () -> Header
     
     // MARK: - Вычисляемые свойства
     
-    private var hasPlan: Bool {
-        plannedBaseAmount > 0
+    private var showsPlan: Bool {
+        plannedBaseAmount > 0 || showsPlannedIfZero
     }
     
     private var baseAmountBalance: Double {
@@ -51,6 +52,7 @@ struct EventAmountProgressView<Header: View>: View {
     ///   - localPlannedAmount: Плановая сумма в локальной валюте (опционально).
     ///   - localActualAmount: Фактическая сумма в локальной валюте (опционально).
     ///   - localCurrency: Локальная валюта (опционально).
+    ///   - showsPlannedIfZero: Отображать плановую сумму если отсутствует. По умолчанию `false`.
     ///   - header: Замыкание для создания кастомного заголовка.
     init(
         plannedBaseAmount: Double,
@@ -59,6 +61,7 @@ struct EventAmountProgressView<Header: View>: View {
         localPlannedAmount: Double? = nil,
         localActualAmount: Double? = nil,
         localCurrency: Currency? = nil,
+        showsPlannedIfZero: Bool = false,
         @ViewBuilder header: @escaping () -> Header
     ) {
         self.plannedBaseAmount = plannedBaseAmount
@@ -67,6 +70,7 @@ struct EventAmountProgressView<Header: View>: View {
         self.plannedLocalAmount = localPlannedAmount
         self.actualLocalAmount = localActualAmount
         self.localCurrency = localCurrency
+        self.showsPlannedIfZero = showsPlannedIfZero
         self.header = header
     }
     
@@ -85,7 +89,7 @@ struct EventAmountProgressView<Header: View>: View {
     private var titleContent: some View {
         HStack {
             header()
-            if hasPlan {
+            if showsPlan {
                 Spacer()
                 Text(.amountBalancePersentage(balancePercent: progress.percentFormat()))
                     .font(.footnote)
@@ -95,7 +99,7 @@ struct EventAmountProgressView<Header: View>: View {
     }
     
     private var progressBarContent: some View {
-        if hasPlan {
+        if showsPlan {
             ProgressBar(currentValue: baseAmountBalance, maxValue: plannedBaseAmount, style: .positive)
         } else {
             ProgressBar(currentValue: 0, maxValue: 0, style: .negative)
@@ -104,7 +108,7 @@ struct EventAmountProgressView<Header: View>: View {
     
     private var summaryContent: some View {
         VStack {
-            if hasPlan {
+            if showsPlan {
                 amountTextRow(
                     title: .amountPlan,
                     baseAmount: plannedBaseAmount,
@@ -118,7 +122,7 @@ struct EventAmountProgressView<Header: View>: View {
                 localAmount: actualLocalAmount
             )
             
-            if hasPlan {
+            if showsPlan {
                 amountTextRow(
                     title: .amountBalance,
                     baseAmount: baseAmountBalance,
