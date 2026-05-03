@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// Строка для отображения поездки в списке.
 struct TripRowView: View {
     // MARK: - Свойства
     
@@ -14,6 +15,8 @@ struct TripRowView: View {
     
     // MARK: - Инициализация
     
+    /// Создает строку для отображения поездки.
+    /// - Parameter trip: Поездка для отображения.
     init(_ trip: Trip) {
         self.trip = trip
     }

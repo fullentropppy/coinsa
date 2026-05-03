@@ -40,7 +40,7 @@ final class CurrencyConverter {
     
     // MARK: - Инициализация
     
-    /// Создаёт конвертер валют.
+    /// Создает конвертер валют.
     /// - Parameters:
     ///   - exchangeRateProvider: Провайдер курсов обмена.
     ///   - baseCurrency: Основная валюта.

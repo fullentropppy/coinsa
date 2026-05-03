@@ -8,6 +8,7 @@
 import SwiftUI
 import SwiftData
 
+/// Детальный экран поездки с информацией о локациях и аналитикой.
 struct TripDetailView: View {
     // MARK: - Окружение
 

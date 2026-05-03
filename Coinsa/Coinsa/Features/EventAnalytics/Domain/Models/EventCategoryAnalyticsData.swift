@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// Структура для хранения данные события для аналитики.
 struct EventCategoryAnalyticsData {
     let dateRange: ClosedRange<Date>
     let baseCurrency: Currency

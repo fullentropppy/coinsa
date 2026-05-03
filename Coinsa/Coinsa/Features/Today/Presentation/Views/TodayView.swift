@@ -8,6 +8,7 @@
 import SwiftUI
 import SwiftData
 
+/// Экран "Сегодня" для отображения данных по текущему дню.
 struct TodayView: View {
     // MARK: - Окружение
     

@@ -12,7 +12,7 @@ enum PaymentMethod: String, Codable, CaseIterable, Identifiable {
     case cash
     case card
     
-    // MARK: - Базовые свойства
+    // MARK: - Основные свойства
     
     var id: String { rawValue }
 }

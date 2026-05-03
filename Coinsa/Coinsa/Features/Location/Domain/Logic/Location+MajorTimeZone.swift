@@ -6,6 +6,7 @@
 //
 
 extension Location {
+    /// Часовой пояс локации (из идентификатора).
     var majorTimeZone: MajorTimeZone {
         MajorTimeZone.from(timeZoneID)
     }

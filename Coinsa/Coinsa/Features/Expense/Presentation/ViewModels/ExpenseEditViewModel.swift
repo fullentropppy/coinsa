@@ -8,6 +8,7 @@
 import Foundation
 import Observation
 
+/// ViewModel для экрана создания/редактирования траты.
 @MainActor
 @Observable
 final class ExpenseEditViewModel {
@@ -109,6 +110,11 @@ final class ExpenseEditViewModel {
     
     // MARK: - Инициализация
     
+    /// Создает ViewModel для новой траты.
+        /// - Parameters:
+        ///   - location: Локация траты.
+        ///   - preselectedCategory: Предустановленная категория.
+        ///   - preselectedPaymentMethod: Предустановленный способ оплаты.
     convenience init(
         forCreateWith location: Location,
         preselectedCategory: ExpenseCategory? = nil,
@@ -131,6 +137,8 @@ final class ExpenseEditViewModel {
         )
     }
     
+    /// Создает ViewModel для редактирования существующей траты.
+        /// - Parameter expense: Редактируемая трата.
     convenience init(forEdit expense: Expense) {
         self.init(
             location: expense.location!,

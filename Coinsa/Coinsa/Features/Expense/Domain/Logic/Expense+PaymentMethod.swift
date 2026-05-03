@@ -6,6 +6,7 @@
 //
 
 extension Expense {
+    /// Способ оплаты траты (из строкового значения).
     var paymentMethod: PaymentMethod {
         PaymentMethod.from(paymentMethodRaw)
     }

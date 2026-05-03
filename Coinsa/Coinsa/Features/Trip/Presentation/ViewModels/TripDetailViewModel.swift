@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// ViewModel для детального экрана поездки.
 struct TripDetailViewModel {
     // MARK: - Хранимые свойства
 

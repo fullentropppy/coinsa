@@ -6,6 +6,9 @@
 //
 
 extension PaymentMethod {
+    /// Способ оплаты по умолчанию (карта).
     static var defaultValue: PaymentMethod { PaymentMethod.card }
+    
+    /// Сырое значение способа оплаты по умолчанию.
     static var defaultCode: String { defaultValue.rawValue }
 }

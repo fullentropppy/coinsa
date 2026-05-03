@@ -7,6 +7,7 @@
 
 import Observation
 
+/// Менеджер для управления бюджетами по категориям расходов в основной и локальной валютах.
 @MainActor
 @Observable
 final class BudgetManager {
@@ -26,6 +27,10 @@ final class BudgetManager {
     
     // MARK: - Инициализация
     
+    /// Создает менеджер бюджетов.
+    /// - Parameters:
+    ///   - converter: Конвертер валют.
+    ///   - initialBudgets: Начальные бюджеты в основной валюте. По умолчанию пустой словарь.
     init(converter: CurrencyConverter, initialBudgets: [ExpenseCategory: Double] = [:]) {
         let normalizedBudgetsBase = Dictionary(
             uniqueKeysWithValues: ExpenseCategory.allCases.map { category in
@@ -38,7 +43,7 @@ final class BudgetManager {
                 return (category, converter.convertToLocal(fromBase: baseAmount))
             }
         )
-
+        
         self.converter = converter
         self.budgetsBase = normalizedBudgetsBase
         self.budgetsLocal = normalizedBudgetsLocal
@@ -46,14 +51,25 @@ final class BudgetManager {
     
     // MARK: - Публичные методы
     
+    /// Возвращает бюджет для категории в основной валюте.
+    /// - Parameter category: Категория расхода.
+    /// - Returns: Сумма бюджета в основной валюте.
     func budgetBase(for category: ExpenseCategory) -> Double {
         budgetsBase[category] ?? 0
     }
     
+    /// Возвращает бюджет для категории в локальной валюте.
+    /// - Parameter category: Категория расхода.
+    /// - Returns: Сумма бюджета в локальной валюте.
     func budgetLocal(for category: ExpenseCategory) -> Double {
         budgetsLocal[category] ?? 0
     }
     
+    /// Обновляет бюджет для категории в указанной валюте.
+    /// - Parameters:
+    ///   - amount: Новое значение бюджета.
+    ///   - category: Категория расхода.
+    ///   - inputCurrency: Валюта, в которой задается новое значение.
     func updateBudget(_ amount: Double, for category: ExpenseCategory, in inputCurrency: InputCurrency) {
         switch inputCurrency {
         case .base:
@@ -65,6 +81,8 @@ final class BudgetManager {
         }
     }
     
+    /// Обновляет все бюджеты после изменения курса обмена.
+    /// - Parameter inputCurrency: Валюта, значения которой остаются неизменными при пересчете.
     func updateFromRateChange(inputCurrency: InputCurrency) {
         for category in ExpenseCategory.allCases {
             let currentAmount = amount(for: category, in: inputCurrency)
@@ -72,6 +90,13 @@ final class BudgetManager {
         }
     }
     
+    // MARK: - Приватные методы
+    
+    /// Возвращает бюджет для категории в указанной валюте).
+    /// - Parameters:
+    ///   - category: Категория расхода.
+    ///   - inputCurrency: Валюта.
+    /// - Returns: Сумма бюджета.
     private func amount(for category: ExpenseCategory, in inputCurrency: InputCurrency) -> Double {
         switch inputCurrency {
         case .base: budgetBase(for: category)

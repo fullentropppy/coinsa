@@ -15,7 +15,7 @@ struct DotView: View {
 
     // MARK: - Инициализация
     
-    /// Создаёт точку-индикатор с указанным цветом.
+    /// Создает точку-индикатор с указанным цветом.
     /// - Parameter fillColor: Цвет заливки точки.
     init(_ fillColor: Color) {
         self.fillColor = fillColor

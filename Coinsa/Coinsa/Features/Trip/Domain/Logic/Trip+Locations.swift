@@ -6,10 +6,12 @@
 //
 
 extension Trip {
+    /// Признак наличия локаций в поездке.
     var hasLocations: Bool {
         locations?.isEmpty == false
     }
     
+    /// Количество локаций в поездке.
     var locationsCount: Int {
         locations?.count ?? 0
     }

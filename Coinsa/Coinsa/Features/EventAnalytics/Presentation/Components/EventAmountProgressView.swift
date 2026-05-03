@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// Представление прогресса выполнения плана по суммам (план vs факт) для события.
 struct EventAmountProgressView<Header: View>: View {
     // MARK: - Хранимые свойства
     
@@ -42,6 +43,15 @@ struct EventAmountProgressView<Header: View>: View {
     
     // MARK: - Инициализация
     
+    /// Создает представление прогресса выполнения плана.
+    /// - Parameters:
+    ///   - plannedBaseAmount: Плановая сумма в основной валюте.
+    ///   - baseActualAmount: Фактическая сумма в основной валюте.
+    ///   - baseCurrency: Основная валюта.
+    ///   - localPlannedAmount: Плановая сумма в локальной валюте (опционально).
+    ///   - localActualAmount: Фактическая сумма в локальной валюте (опционально).
+    ///   - localCurrency: Локальная валюта (опционально).
+    ///   - header: Замыкание для создания кастомного заголовка.
     init(
         plannedBaseAmount: Double,
         baseActualAmount: Double,

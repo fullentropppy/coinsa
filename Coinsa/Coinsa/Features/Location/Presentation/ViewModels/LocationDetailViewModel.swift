@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// ViewModel для детального экрана локации.
 struct LocationDetailViewModel {
     // MARK: - Хранимые свойства
 

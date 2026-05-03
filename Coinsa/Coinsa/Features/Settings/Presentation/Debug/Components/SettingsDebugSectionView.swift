@@ -10,6 +10,7 @@
 import SwiftUI
 import SwiftData
 
+/// Отладочная секция в настройках (доступна только в DEBUG-сборках).
 struct SettingsDebugSectionView: View {
     // MARK: - Окружение
     

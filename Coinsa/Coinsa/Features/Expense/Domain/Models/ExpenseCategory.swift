@@ -16,7 +16,7 @@ enum ExpenseCategory: String, Codable, CaseIterable, Identifiable {
     case medicine
     case other
     
-    // MARK: - Базовые свойства
+    // MARK: - Основные свойства
     
     var id: String { rawValue }
 }

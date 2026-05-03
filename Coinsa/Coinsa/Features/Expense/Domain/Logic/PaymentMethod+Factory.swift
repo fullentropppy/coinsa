@@ -6,6 +6,9 @@
 //
 
 extension PaymentMethod {
+    /// Создает способ оплаты по строковому имени.
+    /// - Parameter name: Строковое представление способа оплаты.
+    /// - Returns: Способ оплаты или значение по умолчанию.
     static func from(_ name: String) -> PaymentMethod {
         PaymentMethod(rawValue: name.lowercased()) ?? .defaultValue
     }

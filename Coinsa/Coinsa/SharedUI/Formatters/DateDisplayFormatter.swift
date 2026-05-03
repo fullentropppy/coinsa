@@ -85,7 +85,7 @@ struct DateDisplayFormatter {
         return formatter.string(from: startDate, to: endDate)
     }
 
-    // MARK: - Внутренние методы
+    // MARK: - Приватные методы
 
     /// Добавляет компонент времени к шаблону даты при необходимости.
     /// - Parameters:

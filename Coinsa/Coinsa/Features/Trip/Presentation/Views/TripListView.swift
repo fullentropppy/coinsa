@@ -8,6 +8,7 @@
 import SwiftUI
 import SwiftData
 
+/// Экран со списком всех поездок.
 struct TripListView: View {
     // MARK: - Окружение
     

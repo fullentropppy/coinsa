@@ -8,6 +8,7 @@
 import Foundation
 
 extension ExpenseCategory: LocalizedResourceProviding {
+    /// Локализованное название категории траты.
     var localizedResource: LocalizedStringResource {
         switch self {
         case .food: .expenseCategoryFood

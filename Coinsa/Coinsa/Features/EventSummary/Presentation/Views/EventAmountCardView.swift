@@ -7,17 +7,25 @@
 
 import SwiftUI
 
+/// Карточка с суммой в одной или двух валютах.
 struct EventAmountCardView: View {
     // MARK: - Свойства
-
+    
     private let title: LocalizedStringResource
     private let baseAmount: Double
     private let baseCurrency: Currency
     private let localAmount: Double?
     private let localCurrency: Currency?
-
+    
     // MARK: - Инициализация
     
+    /// Создает карточку с суммой.
+    /// - Parameters:
+    ///   - title: Заголовок.
+    ///   - baseAmount: Сумма в основной валюте.
+    ///   - baseCurrency: Основная валюта.
+    ///   - localAmount: Сумма в локальной валюте (опционально).
+    ///   - localCurrency: Локальная валюта (опционально).
     init(
         title: LocalizedStringResource,
         baseAmount: Double,
@@ -33,7 +41,7 @@ struct EventAmountCardView: View {
     }
     
     // MARK: - Тело View
-
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(title).font(.footnote).foregroundStyle(.secondary)

@@ -18,7 +18,7 @@ protocol LabelProviding {
     
     // MARK: - Методы
     
-    /// Создаёт представление метки.
+    /// Создает представление метки.
     /// - Returns: Настроенное представление `LabelView`.
     func makeLabel() -> LabelView
 }
@@ -26,7 +26,7 @@ protocol LabelProviding {
 // MARK: - Стандартная реализация
 
 extension LabelProviding {
-    /// Создаёт метку на основе свойства `labelSyle`.
+    /// Создает метку на основе свойства `labelSyle`.
     func makeLabel() -> LabelView {
         LabelView(style: labelSyle)
     }

@@ -8,6 +8,7 @@
 import SwiftUI
 import SwiftData
 
+/// Экран настроек приложения.
 struct SettingsView: View {
     // MARK: - Окружение
 

@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// Структура для хранения сводных данных события.
 struct EventSummaryData {
     // MARK: - Свойства
     
@@ -21,6 +22,16 @@ struct EventSummaryData {
     
     // MARK: - Инициализация
     
+    /// Создает сводные данные события.
+    /// - Parameters:
+    ///   - badgeProvider: Провайдер бейджа (опционально).
+    ///   - dateRangeProvider: Провайдер диапазона дат (опционально).
+    ///   - plannedBaseAmount: Плановая сумма в основной валюте.
+    ///   - actualBaseAmount: Фактическая сумма в основной валюте.
+    ///   - baseCurrency: Основная валюта.
+    ///   - plannedLocalAmount: Плановая сумма в локальной валюте (опционально).
+    ///   - actualLocalAmount: Фактическая сумма в локальной валюте (опционально).
+    ///   - localCurrency: Локальная валюта (опционально).
     init(
         badgeProvider: TypeBadgeProviding.Type? = nil,
         dateRangeProvider: DateRangeProviding? = nil,

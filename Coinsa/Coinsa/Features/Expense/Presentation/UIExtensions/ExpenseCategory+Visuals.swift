@@ -8,6 +8,7 @@
 import SwiftUI
 
 extension ExpenseCategory: ValueVisualRepresentable {
+    /// Основная иконка категории (контурная версия).
     var primaryIcon: String {
         switch self {
         case .food: "fork.knife"
@@ -19,6 +20,7 @@ extension ExpenseCategory: ValueVisualRepresentable {
         }
     }
     
+    /// Вторичная иконка категории (заливная версия).
     var secondaryIcon: String {
         switch self {
         case .food: "fork.knife"
@@ -30,6 +32,7 @@ extension ExpenseCategory: ValueVisualRepresentable {
         }
     }
     
+    /// Акцентный цвет категории.
     var accentColor: Color {
         switch self {
         case .food: .mint

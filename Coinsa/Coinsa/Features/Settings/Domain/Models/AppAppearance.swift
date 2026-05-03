@@ -5,6 +5,7 @@
 //  Created by Daniil Gritsenko on 08.03.2026.
 //
 
+/// Режим внешнего вида приложения (цветовая схема).
 enum AppAppearance: String, CaseIterable, Identifiable {
     // MARK: - Значения
     

@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// ViewModel для экрана "Сегодня".
 @MainActor
 @Observable
 final class TodayViewModel {
@@ -90,7 +91,7 @@ final class TodayViewModel {
     
     var todayExpenses: [Expense] {
         guard let selectedLocation else { return [] }
-
+        
         return selectedLocation.expenses?
             .filter { $0.date.isToday }
             .sorted { $0.date > $1.date }
@@ -99,6 +100,10 @@ final class TodayViewModel {
     
     // MARK: - Инициализация
     
+    /// Создает ViewModel для экрана "Сегодня".
+    /// - Parameters:
+    ///   - currentLocations: Доступные на сегодня локации.
+    ///   - selectedLocationID: Идентификатор выбранной локации (из настроек).
     init(currentLocations: [Location], selectedLocationID: UUID?) {
         let exchangeRateService = ExchangeRateProvider(service: HexarateService())
         let exchangeRateManager = ExchangeRateManager(provider: exchangeRateService)
@@ -115,7 +120,7 @@ final class TodayViewModel {
         guard let selectedLocation else { return }
         
         loadedRateLocalToBase = nil
-
+        
         guard !isHomeLocation else { return }
         
         exchangeRateManager.requestRefresh(
@@ -150,7 +155,7 @@ final class TodayViewModel {
         let actualAmountBase = location.calculateActualAmount(asBaseCurrency: true, withinDateRange: todayRange)
         let actualAmountLocal = isHomeLocation ? nil : location.calculateActualAmount(asBaseCurrency: false, withinDateRange: todayRange)
         let localCurrency = isHomeLocation ? nil : location.localCurrency
-
+        
         return EventSummaryData(
             badgeProvider: Location.self,
             dateRangeProvider: location,

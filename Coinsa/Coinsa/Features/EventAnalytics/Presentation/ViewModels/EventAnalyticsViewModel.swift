@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// ViewModel для отображения аналитики события.ц
 struct EventAnalyticsViewModel {
     // MARK: - Зависимости
 
@@ -137,50 +138,6 @@ struct EventAnalyticsViewModel {
         }
     }
 
-    // MARK: - Публичные методы
-
-    func displayedSlicesSortedByID(for metric: EventAnalyticsMetric) -> [CategoryAnalyticsSlice] {
-        slices(for: metric).sorted { $0.category.id > $1.category.id }
-    }
-
-    func displayedSlicesSortedByAmount(for metric: EventAnalyticsMetric) -> [CategoryAnalyticsSlice] {
-        slices(for: metric).sorted { $0.baseAmount > $1.baseAmount }
-    }
-
-    func categoryProgressItems(for mode: EventAnalyticsSummaryMode) -> [EventAnalyticsCategoryProgressItem] {
-        switch mode {
-        case .perCategory: rawCategoryProgressItems
-        case .fromTotal: effectiveCategoryProgressItems
-        }
-    }
-    
-    func hasAnalytics(for metric: EventAnalyticsMetric) -> Bool {
-        switch metric {
-        case .summary: true
-        case .plan, .actual: !displayedSlicesSortedByID(for: metric).isEmpty
-        }
-    }
-
-    func shareValue(for slice: CategoryAnalyticsSlice, metric: EventAnalyticsMetric) -> Double {
-        let totalBaseAmount = displayedSlicesSortedByID(for: metric).reduce(0) { $0 + $1.baseAmount }
-        return totalBaseAmount > 0 ? slice.baseAmount / totalBaseAmount : 0
-    }
-
-    // MARK: - Приватные методы
-
-    private func slices(for metric: EventAnalyticsMetric) -> [CategoryAnalyticsSlice] {
-        let slices: [CategoryAnalyticsSlice]
-
-        switch metric {
-        case .summary, .plan:
-            slices = data.plannedAmountByCategory
-        case .actual:
-            slices = data.actualAmountByCategory
-        }
-
-        return slices.contains { $0.baseAmount > 0 } ? slices : []
-    }
-
     private var effectiveCategoryProgressItems: [EventAnalyticsCategoryProgressItem] {
         let rawItems = rawCategoryProgressItems
         let globalBaseRemaining = max(0, plannedTotalBaseAmount - actualTotalBaseAmount)
@@ -229,5 +186,49 @@ struct EventAnalyticsViewModel {
                 actualLocalAmount: item.actualLocalAmount
             )
         }
+    }
+    
+    // MARK: - Публичные методы
+
+    func displayedSlicesSortedByID(for metric: EventAnalyticsMetric) -> [CategoryAnalyticsSlice] {
+        slices(for: metric).sorted { $0.category.id > $1.category.id }
+    }
+
+    func displayedSlicesSortedByAmount(for metric: EventAnalyticsMetric) -> [CategoryAnalyticsSlice] {
+        slices(for: metric).sorted { $0.baseAmount > $1.baseAmount }
+    }
+
+    func categoryProgressItems(for mode: EventAnalyticsSummaryMode) -> [EventAnalyticsCategoryProgressItem] {
+        switch mode {
+        case .perCategory: rawCategoryProgressItems
+        case .fromTotal: effectiveCategoryProgressItems
+        }
+    }
+    
+    func hasAnalytics(for metric: EventAnalyticsMetric) -> Bool {
+        switch metric {
+        case .summary: true
+        case .plan, .actual: !displayedSlicesSortedByID(for: metric).isEmpty
+        }
+    }
+
+    func shareValue(for slice: CategoryAnalyticsSlice, metric: EventAnalyticsMetric) -> Double {
+        let totalBaseAmount = displayedSlicesSortedByID(for: metric).reduce(0) { $0 + $1.baseAmount }
+        return totalBaseAmount > 0 ? slice.baseAmount / totalBaseAmount : 0
+    }
+
+    // MARK: - Приватные методы
+
+    private func slices(for metric: EventAnalyticsMetric) -> [CategoryAnalyticsSlice] {
+        let slices: [CategoryAnalyticsSlice]
+
+        switch metric {
+        case .summary, .plan:
+            slices = data.plannedAmountByCategory
+        case .actual:
+            slices = data.actualAmountByCategory
+        }
+
+        return slices.contains { $0.baseAmount > 0 } ? slices : []
     }
 }

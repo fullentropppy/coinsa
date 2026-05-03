@@ -10,12 +10,22 @@ import Foundation
 extension Trip {
     // MARK: - Плановая сумма
     
+    /// Рассчитывает общую плановую сумму по всем локациям поездки.
+    /// - Parameters:
+    ///   - asBaseCurrency: Если `true`, сумма возвращается в основной валюте, иначе в локальной.
+    ///   - asDailyAverage: Если `true`, возвращает среднюю сумму в день.
+    /// - Returns: Плановая сумма.
     func calculatePlannedAmount(asBaseCurrency: Bool = true, asDailyAverage: Bool = false) -> Double {
         locations?.reduce(0) {
             $0 + $1.calculatePlannedAmount(asBaseCurrency: asBaseCurrency, asDailyAverage: asDailyAverage)
         } ?? 0
     }
     
+    /// Рассчитывает плановые суммы по категориям для всех локаций поездки.
+    /// - Parameters:
+    ///   - asBaseCurrency: Если `true`, суммы возвращаются в основной валюте, иначе в локальной.
+    ///   - withinDateRange: Опциональный диапазон дат для фильтрации.
+    /// - Returns: Словарь из категорий и сумм.
     func calculatePlannedAmountByCategory(
         asBaseCurrency: Bool = true,
         withinDateRange: ClosedRange<Date>? = nil
@@ -25,7 +35,7 @@ extension Trip {
                 asBaseCurrency: asBaseCurrency,
                 withinDateRange: withinDateRange
             )
-
+            
             for (category, amount) in locationValues {
                 result[category, default: 0] += amount
             }
@@ -34,6 +44,11 @@ extension Trip {
     
     // MARK: - Фактическая сумма
     
+    /// Рассчитывает общую фактическую сумму по всем локациям поездки.
+    /// - Parameters:
+    ///   - asBaseCurrency: Если `true`, сумма возвращается в основной валюте, иначе в локальной.
+    ///   - withinDateRange: Опциональный диапазон дат для фильтрации.
+    /// - Returns: Фактическая сумма.
     func calculateActualAmount(
         asBaseCurrency: Bool = true,
         withinDateRange: ClosedRange<Date>? = nil
@@ -42,7 +57,12 @@ extension Trip {
             $0 + $1.calculateActualAmount(asBaseCurrency: asBaseCurrency, withinDateRange: withinDateRange)
         } ?? 0
     }
-
+    
+    /// Рассчитывает фактические суммы по категориям для всех локаций поездки.
+    /// - Parameters:
+    ///   - asBaseCurrency: Если `true`, суммы возвращаются в основной валюте, иначе в локальной.
+    ///   - withinDateRange: Опциональный диапазон дат для фильтрации.
+    /// - Returns: Словарь из категорий и сумм.
     func calculateActualAmountByCategory(
         asBaseCurrency: Bool = true,
         withinDateRange: ClosedRange<Date>? = nil
@@ -52,7 +72,7 @@ extension Trip {
                 asBaseCurrency: asBaseCurrency,
                 withinDateRange: withinDateRange
             )
-
+            
             for (category, amount) in locationValues {
                 result[category, default: 0] += amount
             }

@@ -6,6 +6,7 @@
 //
 
 extension Expense {
+    /// Категория траты (из строкового значения).
     var category: ExpenseCategory {
         ExpenseCategory.from(categoryRaw)
     }

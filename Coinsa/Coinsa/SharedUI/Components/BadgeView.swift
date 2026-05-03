@@ -41,7 +41,7 @@ struct BadgeView: View {
     
     // MARK: - Инициализация
     
-    /// Создаёт бейдж с указанным стилем.
+    /// Создает бейдж с указанным стилем.
     /// - Parameter style: Стиль бейджа.
     init(style: Style) {
         switch style {

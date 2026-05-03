@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// Представление баланса с прогресс-баром.
 struct EventAmountBalanceView: View {
     // MARK: - Хранимые свойства
     
@@ -24,6 +25,13 @@ struct EventAmountBalanceView: View {
     
     // MARK: - Инициализация
     
+    /// Создает представление баланса.
+    /// - Parameters:
+    ///   - plannedBaseAmount: Плановая сумма.
+    ///   - baseAmountBalance: Остаток в основной валюте.
+    ///   - baseCurrency: Основная валюта.
+    ///   - localAmountBalance: Остаток в локальной валюте (опционально).
+    ///   - localCurrency: Локальная валюта (опционально).
     init(
         plannedBaseAmount: Double,
         baseAmountBalance: Double,

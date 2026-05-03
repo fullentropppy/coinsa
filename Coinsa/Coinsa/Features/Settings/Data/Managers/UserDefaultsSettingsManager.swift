@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// Менеджер для хранения и извлечения настроек приложения в UserDefaults.
 final class UserDefaultsSettingsManager {
     // MARK: - Зависимости
     
@@ -65,6 +66,7 @@ final class UserDefaultsSettingsManager {
 
 // MARK: - Приватные типы
 
+/// Ключи для хранения значений в UserDefaults.
 private enum UserDefaultsKey {
     static var baseCurrency = "baseCurrency"
     static var exchangeAdjustment = "exchangeAdjustment"

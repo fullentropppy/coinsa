@@ -8,6 +8,7 @@
 import SwiftUI
 import Charts
 
+/// Экран аналитики события с сводными данными и графиками.
 struct EventAnalyticsView: View {
     // MARK: - Окружение
     
@@ -39,6 +40,10 @@ struct EventAnalyticsView: View {
     
     // MARK: - Инициализация
 
+    /// Создает экран аналитики.
+    /// - Parameters:
+    ///   - data: Аналитические данные события.
+    ///   - screenContextSubtitle: Подзаголовок экрана.
     init(data: EventCategoryAnalyticsData, screenContextSubtitle: String) {
         self.viewModel = EventAnalyticsViewModel(data: data)
         self.screenContextSubtitle = screenContextSubtitle
@@ -187,13 +192,14 @@ struct EventAnalyticsView: View {
                 localAmount: viewModel.plannedTotalLocalAmount,
                 localCurrency: viewModel.localCurrency
             )
-            EventAmountCardView(
-                title: .amountPlanDaily,
-                baseAmount: viewModel.dailyBasePlannedAmount,
-                baseCurrency: viewModel.baseCurrency,
-                localAmount: viewModel.dailyLocalPlannedAmount,
-                localCurrency: viewModel.localCurrency
-            )
+            if viewModel.totalDays > 1 {
+                EventAmountCardView(
+                    title: .amountPlanDaily,
+                    baseAmount: viewModel.dailyBasePlannedAmount,
+                    baseCurrency: viewModel.baseCurrency,
+                    localAmount: viewModel.dailyLocalPlannedAmount,
+                    localCurrency: viewModel.localCurrency
+                )}
         }
     }
     
@@ -206,13 +212,15 @@ struct EventAnalyticsView: View {
                 localAmount: viewModel.actualTotalLocalAmount,
                 localCurrency: viewModel.localCurrency
             )
-            EventAmountCardView(
-                title: .amountActualDaily,
-                baseAmount: viewModel.dailyBaseActualAmount,
-                baseCurrency: viewModel.baseCurrency,
-                localAmount: viewModel.dailyLocalActualAmount,
-                localCurrency: viewModel.localCurrency
-            )
+            if viewModel.totalDays > 1 {
+                EventAmountCardView(
+                    title: .amountActualDaily,
+                    baseAmount: viewModel.dailyBaseActualAmount,
+                    baseCurrency: viewModel.baseCurrency,
+                    localAmount: viewModel.dailyLocalActualAmount,
+                    localCurrency: viewModel.localCurrency
+                )
+            }
         }
         
     }

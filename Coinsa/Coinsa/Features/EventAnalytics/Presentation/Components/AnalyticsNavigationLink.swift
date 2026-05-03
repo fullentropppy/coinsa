@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// Навигационная ссылка на экран аналитики.
 struct AnalyticsNavigationLink<Destination: View>: View {
     // MARK: - Свойства
     
@@ -14,6 +15,8 @@ struct AnalyticsNavigationLink<Destination: View>: View {
     
     // MARK: - Инициализаци
     
+    /// Создает ссылку на экран аналитики.
+    /// - Parameter destination: Замыкание, создающее целевое представление.
     init(@ViewBuilder destination: () -> Destination) {
         self.destination = destination()
     }

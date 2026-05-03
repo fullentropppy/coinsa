@@ -8,6 +8,7 @@
 import SwiftUI
 
 extension AppAppearance {
+    /// Преобразует режим внешнего вида в ColorScheme.
     var colorScheme: ColorScheme? {
         switch self {
         case .system: nil

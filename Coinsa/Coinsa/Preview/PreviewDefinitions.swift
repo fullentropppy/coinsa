@@ -9,7 +9,7 @@ import Foundation
 
 // MARK: - Наборы данных
 
-/// Предопределённые поездки для превью.
+/// Предопределенные поездки для превью.
 enum PreviewTrip: String {
     case japan = "Япония"
     case russia = "Россия"
@@ -48,7 +48,7 @@ enum PreviewTrip: String {
     }
 }
 
-/// Предопределённые локации для превью.
+/// Предопределенные локации для превью.
 enum PreviewLocation: String {
     case tokyo = "Токио"
     case kyoto = "Киото"
@@ -125,7 +125,7 @@ enum PreviewLocation: String {
     }
 }
 
-/// Предопределённые комментарии к тратам для превью.
+/// Предопределенные комментарии к тратам для превью.
 enum PreviewExpenseComment: String {
     case breakfast = "Завтрак"
     case lunch = "Обед"

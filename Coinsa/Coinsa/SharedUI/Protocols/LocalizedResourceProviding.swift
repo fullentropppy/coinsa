@@ -23,7 +23,7 @@ protocol LocalizedResourceProviding {
 extension LocalizedResourceProviding {
     // MARK: - Свойства со значениями по умолчанию
     
-    /// Ресурс во множественном числе. По умолчанию — `nil`.
+    /// Ресурс во множественном числе. По умолчанию - `nil`.
     var localizedResourcePlural: LocalizedStringResource? { nil }
     
     // MARK: - Свойства с безопасным извлечением

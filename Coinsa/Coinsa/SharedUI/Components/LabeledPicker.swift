@@ -19,7 +19,7 @@ struct LabeledPicker<SelectionValue: Hashable, Content: View>: View {
     
     // MARK: - Инициализация
     
-    /// Создаёт пикер с заголовком.
+    /// Создает пикер с заголовком.
     /// - Parameters:
     ///   - title: Заголовок пикера.
     ///   - selection: Привязка к выбранному значению.

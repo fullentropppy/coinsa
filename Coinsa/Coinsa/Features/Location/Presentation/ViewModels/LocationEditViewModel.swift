@@ -2,12 +2,13 @@
 //  LocationEditViewModel.swift
 //  Coinsa
 //
-//  Created by Daniil Gritsenko on 08.03.2026. 
+//  Created by Daniil Gritsenko on 08.03.2026.
 //
 
 import Foundation
 import Observation
 
+/// ViewModel для экрана создания/редактирования локации.
 @MainActor
 @Observable
 final class LocationEditViewModel {
@@ -93,7 +94,7 @@ final class LocationEditViewModel {
         guard !isHomeLocation && exchangeAdjustment > 0 else {
             return nil
         }
-
+        
         return .locationAdjustedExchangeRate(
             localCurrencyCode: localCurrency.code,
             effectiveRateLocalToBase: currencyConverter.effectiveRateLocalToBase.numberFormat(fractionLength: 4),
@@ -121,6 +122,10 @@ final class LocationEditViewModel {
     
     // MARK: - Инициализация
     
+    /// Создает ViewModel для новой локации.
+    /// - Parameters:
+    ///   - trip: Родительская поездка.
+    ///   - preselectedExchangeAdjustment: Предустановленная корректировка курса.
     convenience init(forCreateWith trip: Trip, preselectedExchangeAdjustment: Double? = nil) {
         self.init(
             trip: trip,
@@ -136,6 +141,8 @@ final class LocationEditViewModel {
         )
     }
     
+    /// Создает ViewModel для редактирования существующей локации.
+    /// - Parameter location: Редактируемая локация.
     convenience init(forEdit location: Location) {
         self.init(
             trip: location.trip!,
@@ -197,12 +204,12 @@ final class LocationEditViewModel {
             budgetAmounts: budgetAmounts
         )
     }
-
+    
     // MARK: - Операции с валютой
     
     func updateLocalCurrency(_ newCurrency: Currency, currentInput: InputCurrency) {
         guard newCurrency != localCurrency else { return }
-
+        
         currencyConverter.updateLocalCurrency(newCurrency) { [weak self] in
             self?.budgetManager.updateFromRateChange(inputCurrency: currentInput)
         }
@@ -214,7 +221,7 @@ final class LocationEditViewModel {
         currencyConverter.updateRate(newRate)
         budgetManager.updateFromRateChange(inputCurrency: currentInput)
     }
-
+    
     func requestRateRefresh(for inputCurrency: InputCurrency = .base) {
         currencyConverter.requestRateRefresh { [weak self] _ in
             self?.budgetManager.updateFromRateChange(inputCurrency: inputCurrency)
@@ -223,9 +230,9 @@ final class LocationEditViewModel {
     
     func loadInitialRateIfNeeded() {
         guard !hasLoadedInitialRate && !isEdit && !isHomeLocation else { return }
-            
+        
         hasLoadedInitialRate = true
-    
+        
         currencyConverter.requestRateRefresh { [weak self] rate in
             guard let self else { return }
             
@@ -242,7 +249,7 @@ final class LocationEditViewModel {
             )
         }
     }
-
+    
     // MARK: - Операции с оплатой
     
     func updateExchangeAdjustment(_ newAdjustment: Double, currentInput: InputCurrency) {
@@ -299,6 +306,7 @@ final class LocationEditViewModel {
 // MARK: - Внутренние типы
 
 private extension LocationEditViewModel {
+    /// Снимок состояния для отслеживания изменений.
     struct Snapshot: Equatable {
         // MARK: - Свойства
         
@@ -310,7 +318,7 @@ private extension LocationEditViewModel {
         let rateLocalToBase: Double
         let exchangeAdjustment: Double
         let budgetAmounts: [ExpenseCategory: Double]
-
+        
         // MARK: - Инициализация
         
         init(viewModel: LocationEditViewModel) {

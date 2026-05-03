@@ -8,6 +8,7 @@
 import SwiftUI
 
 extension AppAppearance: LocalizedResourceProviding {
+    /// Локализованное название режима внешнего вида.
     var localizedResource: LocalizedStringResource {
         switch self {
         case .system: .appAppearanceSystem

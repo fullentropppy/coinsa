@@ -8,6 +8,7 @@
 import Foundation
 import Observation
 
+/// ViewModel для экрана создания/редактирования поездки.
 @MainActor
 @Observable
 final class TripEditViewModel {
@@ -56,6 +57,8 @@ final class TripEditViewModel {
     
     // MARK: - Инициализация
 
+    /// Создает ViewModel для новой поездки.
+    /// - Parameter baseCurrency: Основная валюта по умолчанию.
     convenience init(forCreateWith baseCurrency: Currency) {
         self.init(
             trip: nil,
@@ -66,6 +69,8 @@ final class TripEditViewModel {
         )
     }
     
+    /// Создает ViewModel для редактирования существующей поездки.
+    /// - Parameter trip: Редактируемая поездка.
     convenience init(forEdit trip: Trip) {
         self.init(
             trip: trip,
@@ -122,6 +127,7 @@ final class TripEditViewModel {
 // MARK: - Внутренние типы
 
 private extension TripEditViewModel {
+    /// Снимок состояния для отслеживания изменений.
     struct Snapshot: Equatable {
         // MARK: - Свойства
 

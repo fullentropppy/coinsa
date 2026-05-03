@@ -18,7 +18,7 @@ struct DemoDataService {
 
     // MARK: - Инициализация
 
-    /// Создаёт сервис для работы с демо-данными.
+    /// Создает сервис для работы с демо-данными.
     /// - Parameter context: Контекст модели SwiftData.
     init(context: ModelContext) {
         self.context = context

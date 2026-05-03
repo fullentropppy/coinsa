@@ -8,6 +8,7 @@
 import SwiftUI
 import SwiftData
 
+/// Экран создания/редактирования локации.
 struct LocationEditView: View {
     // MARK: - Окружение
     
@@ -50,6 +51,10 @@ struct LocationEditView: View {
     
     // MARK: - Инициализация
     
+    /// Создает экран для новой локации.
+    /// - Parameters:
+    ///   - trip: Родительская поездка.
+    ///   - preselectedExchangeAdjustment: Предустановленная корректировка курса.
     init(forCreateWith trip: Trip, preselectedExchangeAdjustment: Double? = nil) {
         _viewModel = State(
             initialValue: LocationEditViewModel(
@@ -60,6 +65,10 @@ struct LocationEditView: View {
         self.onDelete = nil
     }
     
+    /// Создает экран для редактирования существующей локации.
+    /// - Parameters:
+    ///   - location: Редактируемая локация.
+    ///   - onDelete: Действие после удаления.
     init(forEdit location: Location, onDelete: (() -> Void)? = nil) {
         _viewModel = State(initialValue: LocationEditViewModel(forEdit: location))
         self.onDelete = onDelete

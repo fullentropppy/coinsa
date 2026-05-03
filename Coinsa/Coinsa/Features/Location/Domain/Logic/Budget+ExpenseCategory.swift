@@ -6,6 +6,7 @@
 //
 
 extension Budget {
+    /// Категория расхода для бюджета (из строкового значения).
     var category: ExpenseCategory {
         ExpenseCategory.from(categoryRaw)
     }

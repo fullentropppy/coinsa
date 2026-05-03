@@ -7,7 +7,7 @@
 
 import Foundation
 
-/// Предопределённые локали для использования в превью SwiftUI.
+/// Предопределенные локали для использования в превью SwiftUI.
 enum PreviewLocale {
     static var en: Locale {
         Locale(identifier: "en")

@@ -8,6 +8,7 @@
 import SwiftUI
 
 extension Location: TypeBadgeProviding {
+    /// Стиль бейджа для локации (иконка с акцентным цветом).
     static var badgeStyle: BadgeView.Style {
         .icon(icon: secondaryIcon, fill: accentColor)
     }

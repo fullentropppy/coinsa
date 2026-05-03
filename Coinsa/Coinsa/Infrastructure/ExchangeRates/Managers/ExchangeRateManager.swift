@@ -22,7 +22,7 @@ final class ExchangeRateManager {
     
     // MARK: - Инициализация
     
-    /// Создаёт менеджер с указанным провайдером.
+    /// Создает менеджер с указанным провайдером.
     /// - Parameter provider: Провайдер курсов обмена.
     init(provider: ExchangeRateProvider) {
         self.provider = provider

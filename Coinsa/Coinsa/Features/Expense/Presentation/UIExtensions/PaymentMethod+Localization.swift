@@ -8,6 +8,7 @@
 import Foundation
 
 extension PaymentMethod: LocalizedResourceProviding {
+    /// Локализованное название способа оплаты.
     var localizedResource: LocalizedStringResource {
         switch self {
         case .cash: .paymentMethodCash

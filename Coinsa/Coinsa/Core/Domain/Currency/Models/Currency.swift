@@ -54,7 +54,7 @@ enum Currency: String, Codable, CaseIterable, Identifiable {
     case vnd = "VND"
     case zar = "ZAR"
 
-    // MARK: - Базовые свойства
+    // MARK: - Основные свойства
     
     var id: String { rawValue }
     var code: String { rawValue }

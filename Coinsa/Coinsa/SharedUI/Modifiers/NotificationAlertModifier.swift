@@ -22,7 +22,7 @@ struct NotificationAlertModifier: ViewModifier {
     
     // MARK: - Инициализация
     
-    /// Создаёт модификатор информационного алерта.
+    /// Создает модификатор информационного алерта.
     /// - Parameters:
     ///   - isPresented: Флаг отображения алерта.
     ///   - title: Заголовок.

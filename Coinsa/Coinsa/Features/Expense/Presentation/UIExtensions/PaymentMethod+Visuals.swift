@@ -8,6 +8,7 @@
 import SwiftUI
 
 extension PaymentMethod: ValueVisualRepresentable {
+    /// Основная иконка способа оплаты (контурная версия).
     var primaryIcon: String {
         switch self {
         case .cash: "banknote"
@@ -15,6 +16,7 @@ extension PaymentMethod: ValueVisualRepresentable {
         }
     }
     
+    /// Вторичная иконка способа оплаты (заливная версия).
     var secondaryIcon: String {
         switch self {
         case .cash: "banknote.fill"
@@ -22,6 +24,7 @@ extension PaymentMethod: ValueVisualRepresentable {
         }
     }
     
+    /// Акцентный цвет способа оплаты.
     var accentColor: Color {
         switch self {
         case .cash: .green

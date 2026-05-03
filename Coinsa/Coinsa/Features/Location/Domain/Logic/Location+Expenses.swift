@@ -6,10 +6,12 @@
 //
 
 extension Location {
+    /// Признак наличия трат в локации.
     var hasExpenses: Bool {
         expenses?.isEmpty == false
     }
     
+    /// Количество трат в локации.
     var expensesCount: Int {
         expenses?.count ?? 0
     }

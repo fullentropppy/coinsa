@@ -15,7 +15,7 @@ final class ExchangeRateProvider {
     
     // MARK: - Инициализация
     
-    /// Создаёт провайдер с указанным сервисом.
+    /// Создает провайдер с указанным сервисом.
     /// - Parameter service: Сервис для получения курсов.
     init(service: ExchangeRateService) {
         self.service = service

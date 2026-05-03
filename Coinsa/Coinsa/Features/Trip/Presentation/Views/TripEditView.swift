@@ -8,12 +8,13 @@
 import SwiftUI
 import SwiftData
 
+/// Экран создания/редактирования поездки.
 struct TripEditView: View {
     // MARK: - Окружение
     
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
-
+    
     // MARK: - Состояние
     
     @State private var viewModel: TripEditViewModel
@@ -23,20 +24,26 @@ struct TripEditView: View {
     // MARK: - Зависимости
     
     private let onDelete: (() -> Void)?
-        
+    
     // MARK: - Инфраструктура
     
     private var repository: TripRepository {
         TripRepository(context: context)
     }
-
+    
     // MARK: - Инициализация
     
+    /// Создает экран для новой поездки.
+    /// - Parameter baseCurrency: Основная валюта по умолчанию.
     init(forCreateWith baseCurrency: Currency) {
         _viewModel = State(initialValue: TripEditViewModel(forCreateWith: baseCurrency))
         self.onDelete = nil
     }
     
+    /// Создает экран для редактирования поездки.
+    /// - Parameters:
+    ///   - trip: Редактируемая поездка.
+    ///   - onDelete: Действие после удаления.
     init(forEdit trip: Trip, onDelete: (() -> Void)? = nil) {
         _viewModel = State(initialValue: TripEditViewModel(forEdit: trip))
         self.onDelete = onDelete
@@ -68,7 +75,7 @@ struct TripEditView: View {
                 )
         }
     }
-
+    
     // MARK: - Основной контент
     
     private var tripEditForm: some View {
@@ -139,7 +146,7 @@ struct TripEditView: View {
                 handleClose()
             }
         }
-
+        
         ToolbarItemGroup(placement: .topBarTrailing) {
             ToolbarButton.ok {
                 viewModel.save(using: repository)
@@ -150,16 +157,16 @@ struct TripEditView: View {
     }
     
     // MARK: - Биндинги
-
+    
     private var baseCurrencyBinding: Binding<Currency> {
         Binding(
             get: { viewModel.baseCurrency },
             set: { viewModel.baseCurrency = $0 }
         )
     }
-
+    
     // MARK: - Действия
-
+    
     private func handleClose() {
         if viewModel.hasChanges {
             isShowingDiscardAlert = true
@@ -174,13 +181,13 @@ struct TripEditView: View {
         }
         
     }
-
+    
     private func confirmDelete() {
         deletionHandler.confirm { repository.delete($0) }
         dismiss()
         onDelete?()
     }
-
+    
     private func cancelDelete() {
         deletionHandler.cancel()
     }

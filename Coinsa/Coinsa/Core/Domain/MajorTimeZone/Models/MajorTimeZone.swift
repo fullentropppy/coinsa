@@ -41,7 +41,7 @@ enum MajorTimeZone: String, Codable, CaseIterable, Identifiable {
     case auckland = "Pacific/Auckland"
     case tongatapu = "Pacific/Tongatapu"
     
-    // MARK: - Базовые свойства
+    // MARK: - Основные свойства
     
     var id: String { rawValue }
 }

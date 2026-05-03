@@ -7,9 +7,10 @@
 
 import SwiftUI
 
+/// Комплексное представление сводки события.
 struct EventSummaryView: View {
     // MARK: - Хранимые свойства
-
+    
     private let data: EventSummaryData
     private let showsHeader: Bool
     private let showsAmounts: Bool
@@ -17,7 +18,7 @@ struct EventSummaryView: View {
     private let showsPlannedIfZero: Bool
     
     // MARK: - Вычисляемые свойства
-
+    
     private var showsPlannedAmount: Bool {
         data.plannedBaseAmount > 0 || showsPlannedIfZero
     }
@@ -36,6 +37,13 @@ struct EventSummaryView: View {
     
     // MARK: - Инициализация
     
+    /// Создает представление сводки события.
+    /// - Parameters:
+    ///   - data: Данные для отображения.
+    ///   - showsHeader: Показывать заголовок. По умолчанию `true`.
+    ///   - showsAmounts: Показывать карточки сумм. По умолчанию `true`.
+    ///   - showsAmountBalance: Показывать баланс. По умолчанию `true`.
+    ///   - showsPlannedIfZero: Показывать плановые суммы при нуле. По умолчанию `false`.
     init(
         data: EventSummaryData,
         showsHeader: Bool = true,
@@ -51,7 +59,7 @@ struct EventSummaryView: View {
     }
     
     // MARK: - Тело View
-
+    
     var body: some View {
         if !showsHeader && !showsAmounts && !showsAmountBalance {
             EmptyView()
@@ -70,9 +78,9 @@ struct EventSummaryView: View {
             }
         }
     }
-
+    
     // MARK: - Компоненты
-
+    
     @ViewBuilder
     private var headerContent: some View {
         if let badgeProvider = data.badgeProvider, let dateRangeProvider = data.dateRangeProvider {
@@ -88,7 +96,7 @@ struct EventSummaryView: View {
             }
         }
     }
-
+    
     private var amountsContent: some View {
         HStack {
             if showsPlannedAmount {

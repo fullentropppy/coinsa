@@ -36,10 +36,10 @@ enum PreviewGenerator {
     
     // MARK: - Публичные методы
     
-    /// Создаёт массив поездок согласно сценарию и настройкам.
+    /// Создает массив поездок согласно сценарию и настройкам.
     /// - Parameters:
     ///   - scenario: Сценарий генерации.
-    ///   - options: Настройки включения подчинённых объектов.
+    ///   - options: Настройки включения подчиненных объектов.
     /// - Returns: Массив сгенерированных поездок.
     static func makeTrips(for scenario: PreviewScenario, options: PreviewOptions) -> [Trip] {
         var trips: [Trip] = []
@@ -67,10 +67,10 @@ enum PreviewGenerator {
 // MARK: - Конструкторы данных
 
 private extension PreviewGenerator {
-    /// Создаёт поездку на основе предопределённых данных.
+    /// Создает поездку на основе предопределенных данных.
     /// - Parameters:
-    ///   - data: Предопределённые данные поездки.
-    ///   - options: Настройки включения подчинённых объектов.
+    ///   - data: Предопределенные данные поездки.
+    ///   - options: Настройки включения подчиненных объектов.
     /// - Returns: Сгенерированная поездка.
     private static func makeTrip(from data: PreviewTrip, with options: PreviewOptions) -> Trip {
         let now = Date()
@@ -97,11 +97,11 @@ private extension PreviewGenerator {
         return trip
     }
     
-    /// Создаёт локацию на основе предопределённых данных.
+    /// Создает локацию на основе предопределенных данных.
     /// - Parameters:
-    ///   - data: Предопределённые данные локации.
+    ///   - data: Предопределенные данные локации.
     ///   - trip: Родительская поездка.
-    ///   - options: Настройки включения подчинённых объектов.
+    ///   - options: Настройки включения подчиненных объектов.
     /// - Returns: Сгенерированная локация.
     private static func makeLocation(from data: PreviewLocation, to trip: Trip, with options: PreviewOptions) -> Location {
         let now = Date()
@@ -132,7 +132,7 @@ private extension PreviewGenerator {
         return location
     }
     
-    /// Создаёт трату с заданными параметрами.
+    /// Создает трату с заданными параметрами.
     /// - Parameters:
     ///   - location: Локация расхода.
     ///   - date: Дата расхода.
@@ -173,9 +173,9 @@ private extension PreviewGenerator {
 // MARK: - Генерация подчиненных объектов наборов данных
 
 private extension PreviewGenerator {
-    /// Добавляет бюджеты в локацию на основе предопределённых данных.
+    /// Добавляет бюджеты в локацию на основе предопределенных данных.
     /// - Parameters:
-    ///   - previewLocation: Предопределённые данные локации.
+    ///   - previewLocation: Предопределенные данные локации.
     ///   - location: Локация для добавления бюджетов.
     private static func includeBudgets(of previewLocation: PreviewLocation, to location: Location) {
         var budgetsByCategory: [ExpenseCategory: Double] = [:]
@@ -236,9 +236,9 @@ private extension PreviewGenerator {
         location.applyBudgets(budgetsByCategory)
     }
     
-    /// Добавляет расходы в локацию на основе предопределённых данных.
+    /// Добавляет расходы в локацию на основе предопределенных данных.
     /// - Parameters:
-    ///   - previewLocation: Предопределённые данные локации.
+    ///   - previewLocation: Предопределенные данные локации.
     ///   - location: Локация для добавления расходов.
     private static func includeExpenses(of previewLocation: PreviewLocation, to location: Location) {
         var expenses: [Expense] = []

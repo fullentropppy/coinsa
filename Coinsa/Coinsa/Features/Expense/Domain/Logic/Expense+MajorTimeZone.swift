@@ -6,11 +6,8 @@
 //
 
 extension Expense {
+    /// Часовой пояс, в котором была совершена трата (из локации).
     var majorTimeZone: MajorTimeZone {
-        if let location {
-            location.majorTimeZone
-        } else {
-            .defaultValue
-        }
+        location?.majorTimeZone ?? .defaultValue
     }
 }

@@ -8,6 +8,7 @@
 import SwiftUI
 import SwiftData
 
+/// Детальный экран траты.
 struct ExpenseDetailView: View {
     // MARK: - Хранимые свойства
 

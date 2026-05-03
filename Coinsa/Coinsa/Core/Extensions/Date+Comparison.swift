@@ -151,7 +151,7 @@ extension Date {
         return difference(from: date, components: [.year], using: calendar).year ?? 0
     }
     
-    // MARK: - Внутренние методы
+    // MARK: - Приватные методы
     
     /// Вычисляет разницу от указанной даты в указанных компонентах.
     /// - Parameters:

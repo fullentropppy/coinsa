@@ -8,6 +8,7 @@
 import Foundation
 import SwiftData
 
+/// Хранилище настроек приложения.
 @MainActor
 @Observable
 final class AppSettingsStore {
@@ -47,6 +48,7 @@ final class AppSettingsStore {
     
     // MARK: - Инициализация
     
+    /// Создает хранилище настроек, загружая значения из UserDefaults.
     init() {
         self.userDefaultsManager = UserDefaultsSettingsManager()
         

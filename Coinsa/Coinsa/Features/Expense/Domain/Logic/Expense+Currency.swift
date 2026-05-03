@@ -8,19 +8,13 @@
 import Foundation
 
 extension Expense {
+    /// Основная валюта траты (из родительской поездки).
     var baseCurrency: Currency {
-        if let location {
-            location.baseCurrency
-        } else {
-            .defaultValue
-        }
+        location?.baseCurrency ?? .defaultValue
     }
     
+    /// Локальная валюта траты (из локации).
     var localCurrency: Currency {
-        if let location {
-            location.localCurrency
-        } else {
-            .defaultValue
-        }
+        location?.localCurrency ?? .defaultValue
     }
 }

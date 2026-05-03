@@ -6,8 +6,8 @@
 //
 
 extension Currency {
-    /// Создаёт валюту по коду.
-    /// - Parameter code: Трёхбуквенный код валюты ISO 4217.
+    /// Создает валюту по коду.
+    /// - Parameter code: Трехбуквенный код валюты ISO 4217.
     /// - Returns: Валюта или значение по умолчанию, если код не распознан.
     static func from(_ code: String) -> Currency {
         Currency(rawValue: code.uppercased()) ?? .defaultValue

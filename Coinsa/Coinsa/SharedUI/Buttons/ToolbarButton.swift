@@ -69,7 +69,7 @@ extension ToolbarButton {
         ToolbarButton(icon: "xmark", action: action)
     }
         
-    /// Кнопка настроек (шестерёнка) без тактильного отклика.
+    /// Кнопка настроек (шестеренка) без тактильного отклика.
     static func settings(action: @escaping () -> Void) -> some View {
         ToolbarButton(icon: "gear", action: action)
     }

@@ -27,7 +27,7 @@ struct ConfirmationAlertModifier: ViewModifier {
     
     // MARK: - Инициализация
     
-    /// Создаёт модификатор алерта подтверждения.
+    /// Создает модификатор алерта подтверждения.
     /// - Parameters:
     ///   - isPresented: Флаг отображения алерта.
     ///   - title: Заголовок.

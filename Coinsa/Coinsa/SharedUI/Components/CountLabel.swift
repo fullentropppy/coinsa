@@ -18,11 +18,11 @@ struct CountLabel: View {
     
     // MARK: - Инициализация
     
-    /// Создаёт метку с числом и иконкой.
+    /// Создает метку с числом и иконкой.
     /// - Parameters:
     ///   - count: Отображаемое число.
-    ///   - font: Шрифт текста. По умолчанию — `.body`.
-    ///   - color: Цвет текста и иконки. По умолчанию — `.primary`.
+    ///   - font: Шрифт текста. По умолчанию - `.body`.
+    ///   - color: Цвет текста и иконки. По умолчанию - `.primary`.
     ///   - icon: Название системной иконки. По умолчанию `"number"`.
     init(_ count: Int, font: Font = .body, color: Color = .primary, icon: String = "number") {
         self.count = count
@@ -55,14 +55,14 @@ extension CountLabel {
         CountLabel(count, font: .footnote, color: .secondary, icon: icon)
     }
     
-    /// Метка для отображения количества дней (иконка часов).
+    /// Метка для отображения количества дней.
     /// - Parameters:
     ///   - days: Количество дней.
     ///   - font: Шрифт текста. По умолчанию `.body`.
     ///   - color: Цвет текста и иконки. По умолчанию `.primary`.
     /// - Returns: Настроенная метка.
     static func days(_ days: Int, font: Font = .body, color: Color = .primary) -> some View {
-        CountLabel(days, font: font, color: color, icon: "clock")
+        CountLabel(days, font: font, color: color, icon: "calendar")
     }
     
     /// Вторичная компактная метка для дней (мелкий шрифт, вторичный цвет).

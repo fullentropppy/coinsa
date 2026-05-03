@@ -13,14 +13,14 @@ import SwiftData
 struct PreviewBuilder {
     // MARK: - Публичные методы
 
-    /// Создаёт новый экземпляр построителя.
+    /// Создает новый экземпляр построителя.
     static func builder() -> Builder {
         Builder()
     }
 
-    // MARK: - Внутренние методы
+    // MARK: - Приватные методы
 
-    /// Создаёт контейнер SwiftData с указанными поездками.
+    /// Создает контейнер SwiftData с указанными поездками.
     /// - Parameter trips: Массив поездок для вставки.
     /// - Returns: Настроенный контейнер с данными в памяти.
     private static func makeContainer(with trips: [Trip]) -> ModelContainer {
@@ -108,7 +108,7 @@ extension PreviewBuilder {
 
         // MARK: - Создание контейнера с данными и получение данных
 
-        /// Создаёт контейнер SwiftData с сгенерированными данными.
+        /// Создает контейнер SwiftData с сгенерированными данными.
         func buildContainer() -> ModelContainer {
             makeContainer(with: buildData())
         }

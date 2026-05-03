@@ -8,6 +8,7 @@
 import Foundation
 
 extension Location {
+    /// Основная валюта (из родительской поездки или значение по умолчанию).
     var baseCurrency: Currency {
         if let trip {
             trip.baseCurrency
@@ -16,6 +17,7 @@ extension Location {
         }
     }
     
+    /// Локальная валюта локации (из кода валюты).
     var localCurrency: Currency {
         Currency.from(localCurrencyCode)
     }

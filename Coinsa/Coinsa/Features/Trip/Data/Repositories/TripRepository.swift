@@ -8,6 +8,7 @@
 import Foundation
 import SwiftData
 
+/// Репозиторий для выполнения операций CRUD над поездками.
 @MainActor
 struct TripRepository {
     // MARK: - Свойства
@@ -16,6 +17,12 @@ struct TripRepository {
     
     // MARK: - Операции с хранилищем
     
+    /// Создает новую поездку.
+    /// - Parameters:
+    ///   - name: Название поездки.
+    ///   - startDate: Дата начала.
+    ///   - endDate: Дата окончания.
+    ///   - baseCurrency: Основная валюта.
     func add(
         name: String,
         startDate: Date,
@@ -39,6 +46,14 @@ struct TripRepository {
         try? context.save()
     }
     
+    /// Обновляет существующую поездку.
+    /// - Parameters:
+    ///   - trip: Поездка для обновления.
+    ///   - name: Новое название.
+    ///   - startDate: Новая дата начала.
+    ///   - endDate: Новая дата окончания.
+    ///   - baseCurrency: Новая основная валюта.
+    
     func update(
         _ trip: Trip,
         name: String,
@@ -55,6 +70,8 @@ struct TripRepository {
         try? context.save()
     }
     
+    /// Удаляет поездку.
+    /// - Parameter trip: Поездка для удаления.
     func delete(_ trip: Trip) {
         context.delete(trip)
         try? context.save()
@@ -62,14 +79,17 @@ struct TripRepository {
     
     // MARK: - Номализация
     
+    /// Очищает название от лишних пробелов.
     private func normalizedName(_ name: String) -> String {
         name.trimmed
     }
     
+    /// Нормализует дату начала к началу дня.
     private func normalizedStartDate(_ startDate: Date) -> Date {
         startDate.startOfDay
     }
     
+    /// Нормализует дату окончания к концу дня.
     private func normalizedEndDate(_ endDate: Date) -> Date {
         endDate.endOfDay
     }

@@ -8,7 +8,12 @@
 import SwiftUI
 
 extension Trip: TypeVisualRepresentable {
+    /// Основная иконка поездки (контурная).
     static var primaryIcon: String { "suitcase" }
+    
+    /// Вторичная иконка поездки (заливная).
     static var secondaryIcon: String { "suitcase.fill" }
+    
+    /// Акцентный цвет для поездки.
     static var accentColor: Color { .indigo }
 }

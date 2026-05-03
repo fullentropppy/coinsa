@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// Экран "О приложении" с информацией о версии, сторонних API и копирайте.
 struct AboutView: View {
     // MARK: - Тело View
     

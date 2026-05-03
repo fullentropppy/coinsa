@@ -8,6 +8,7 @@
 import SwiftUI
 import SwiftData
 
+/// Детальный экран локации.
 struct LocationDetailView: View {
     // MARK: - Окружение
 

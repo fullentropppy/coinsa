@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// Строка для отображения локации в списке.
 struct LocationRowView: View {
     // MARK: - Свойства
     
@@ -14,6 +15,8 @@ struct LocationRowView: View {
     
     // MARK: - Инициализация
     
+    /// Создает строку для отображения локации.
+    /// - Parameter location: Локация для отображения.
     init(_ location: Location) {
         self.location = location
     }

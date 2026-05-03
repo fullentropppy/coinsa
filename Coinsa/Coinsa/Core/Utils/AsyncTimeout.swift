@@ -14,7 +14,7 @@ struct AsyncTimeout {
     ///   - seconds: Максимальное время выполнения операции в секундах.
     ///   - operation: Асинхронное замыкание для выполнения.
     /// - Returns: Результат операции типа `T`.
-    /// - Throws: `TimeoutError`, если операция не завершилась за отведённое время.
+    /// - Throws: `TimeoutError`, если операция не завершилась за отведенное время.
     static func run<T>(
         seconds: TimeInterval,
         operation: @escaping () async throws -> T

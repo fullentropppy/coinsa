@@ -13,7 +13,7 @@ extension View {
     ///   - isPresented: Флаг отображения алерта.
     ///   - title: Заголовок.
     ///   - message: Сообщение.
-    ///   - isError: Флаг ошибки. При `true` используется тактильный отклик `.error`, иначе — `.success`.
+    ///   - isError: Флаг ошибки. При `true` используется тактильный отклик `.error`, иначе - `.success`.
     /// - Returns: Модифицированное представление.
     func notificationAlert(
         isPresented: Binding<Bool>,

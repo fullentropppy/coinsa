@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// Ссылка на сторонний сервис с названием и описанием.
 struct ThirdPartyLink: View {
     // MARK: - Свойства
     

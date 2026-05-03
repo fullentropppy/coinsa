@@ -136,7 +136,7 @@ extension Date {
         return calendar.date(byAdding: dateComponents, to: self) ?? self
     }
     
-    // MARK: - Внутренние методы
+    // MARK: - Приватные методы
     
     /// Добавляет указанное значение к заданному компоненту даты.
     /// - Parameters:

@@ -8,7 +8,7 @@
 import Foundation
 
 extension MajorTimeZone {
-    /// Создаёт дату с учётом часового пояса.
+    /// Создает дату с учетом часового пояса.
     /// - Parameters:
     ///   - year: Год.
     ///   - month: Месяц (1...12).

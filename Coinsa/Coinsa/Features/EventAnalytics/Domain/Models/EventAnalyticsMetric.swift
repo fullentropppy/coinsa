@@ -5,10 +5,15 @@
 //  Created by Daniil Gritsenko on 29.04.2026.
 //
 
+/// Метрика аналитики.
 enum EventAnalyticsMetric: String, CaseIterable, Identifiable {
+    // MARK: - Значения
+    
     case summary
     case plan
     case actual
 
+    // MARK: - Основные свойства
+    
     var id: String { rawValue }
 }

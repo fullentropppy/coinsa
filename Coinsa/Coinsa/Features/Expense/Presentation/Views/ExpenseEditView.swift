@@ -8,6 +8,7 @@
 import SwiftUI
 import SwiftData
 
+/// Экран создания/редактирования траты.
 struct ExpenseEditView: View {
     // MARK: - Окружение
 
@@ -37,6 +38,11 @@ struct ExpenseEditView: View {
     
     // MARK: - Инициализация
     
+    /// Создает экран для новой траты.
+    /// - Parameters:
+    ///   - location: Локация траты.
+    ///   - preselectedCategory: Предустановленная категория.
+    ///   - preselectedPaymentMethod: Предустановленный способ оплаты.
     init(
         forCreateWith location: Location,
         preselectedCategory: ExpenseCategory? = nil,
@@ -50,6 +56,10 @@ struct ExpenseEditView: View {
         self.init(initialViewModel: viewModel)
     }
     
+    /// Создает экран для редактирования существующей траты.
+    /// - Parameters:
+    ///   - expense: Редактируемая трата.
+    ///   - onDelete: Действие после удаления.
     init(forEdit expense: Expense, onDelete: (() -> Void)? = nil) {
         let viewModel = ExpenseEditViewModel(forEdit: expense)
         self.init(initialViewModel: viewModel, onDelete: onDelete)

@@ -18,22 +18,22 @@ protocol ValueBadgeProviding: ValueVisualRepresentable {
     
     // MARK: - Методы
     
-    /// Создаёт представление бейджа.
+    /// Создает представление бейджа.
     func makeBadge() -> BadgeView
     
-    /// Создаёт представление точки.
+    /// Создает представление точки.
     func makeDot() -> DotView
 }
 
 // MARK: - Стандартная реализация
 
 extension ValueBadgeProviding {
-    /// Создаёт бейдж на основе свойства `badgeStyle`.
+    /// Создает бейдж на основе свойства `badgeStyle`.
     func makeBadge() -> BadgeView {
         BadgeView(style: badgeStyle)
     }
     
-    /// Создаёт точку с акцентным цветом типа.
+    /// Создает точку с акцентным цветом типа.
     func makeDot() -> DotView {
         DotView(accentColor)
     }

@@ -6,6 +6,7 @@
 //
 
 extension Trip {
+    /// Основная валюта поездки (из кода валюты).
     var baseCurrency: Currency {
         Currency.from(baseCurrencyCode)
     }

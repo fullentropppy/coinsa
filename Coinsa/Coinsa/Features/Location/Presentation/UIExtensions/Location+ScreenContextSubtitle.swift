@@ -9,6 +9,7 @@ import Foundation
 
 extension Location {
     var screenContextSubtitle: String {
+        /// Контекстный подзаголовок для экрана локации.
         ScreenContextSubtitleFormatter.format(
             parentTitle: name,
             startDate: startDate,

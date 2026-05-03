@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// ViewModel для детального экрана траты.
 struct ExpenseDetailViewModel {
     // MARK: - Хранимые свойства
 

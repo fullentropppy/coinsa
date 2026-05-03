@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// Строка для отображения траты в списке.
 struct ExpenseRowView: View {
     // MARK: - Свойства
 
@@ -14,6 +15,8 @@ struct ExpenseRowView: View {
     
     // MARK: - Инициализация
     
+    /// Создает строку для отображения траты.
+    /// - Parameter expense: Трата для отображения.
     init(_ expense: Expense) {
         self.expense = expense
     }

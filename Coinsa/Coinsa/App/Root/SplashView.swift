@@ -42,7 +42,7 @@ struct SplashView: View {
             }
     }
 
-    // MARK: - Внутренние методы
+    // MARK: - Приватные методы
 
     @MainActor
     private func runAnimationIfNeeded() async {

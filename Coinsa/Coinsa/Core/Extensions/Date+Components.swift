@@ -133,7 +133,7 @@ extension Date {
         component(.year, using: calendar)
     }
     
-    // MARK: - Внутренние методы
+    // MARK: - Приватные методы
     
     /// Извлекает числовое значение указанного компонента из даты.
     /// - Parameters:
