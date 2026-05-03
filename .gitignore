@@ -16,6 +16,7 @@ xcuserdata/
 *.dSYM
 
 ## Playgrounds
+Playground/
 timeline.xctimeline
 playground.xcworkspace
 

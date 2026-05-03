@@ -1,0 +1,73 @@
+//
+//  LocationRowView.swift
+//  Coinsa
+//
+//  Created by Daniil Gritsenko on 03.03.2026.
+//
+
+import SwiftUI
+
+/// Строка для отображения локации в списке.
+struct LocationRowView: View {
+    // MARK: - Свойства
+    
+    let location: Location
+    
+    // MARK: - Инициализация
+    
+    /// Создает строку для отображения локации.
+    /// - Parameter location: Локация для отображения.
+    init(_ location: Location) {
+        self.location = location
+    }
+    
+    // MARK: - Тело View
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            upperStack
+            lowerStack
+        }
+    }
+    
+    // MARK: - Компоненты
+    
+    private var upperStack: some View {
+        HStack(spacing: 4) {
+            location.status.makeDot()
+            Text(location.name).fontWeight(.semibold)
+        }
+    }
+    
+    private var lowerStack: some View {
+        HStack(spacing: 10) {
+            DateLabel.secondarySmall(from: location.startDate, to: location.endDate)
+            Spacer()
+            CountLabel.daysSecondarySmall(location.totalDays)
+        }
+    }
+}
+
+// MARK: - Превью
+
+private extension LocationRowView {
+    static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
+        let builder = PreviewBuilder.builder().withBudgets(false).withExpenses(false)
+        let data = builder.buildData()
+        let location = builder.getLocation(from: data)
+
+        return List {
+            LocationRowView(location)
+                .environment(\.locale, locale)
+                .preferredColorScheme(colorScheme)
+        }
+    }
+}
+
+#Preview("Light - RU") {
+    LocationRowView.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
+}
+
+#Preview("Dark - EN") {
+    LocationRowView.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
+}
