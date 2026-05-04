@@ -30,12 +30,17 @@ struct AboutView: View {
     private var versionSection: some View {
         Section {
             LabeledContent(.appVersion, value: "\(AppInfo.version) (\(AppInfo.build))")
+            LinkView(
+                name: .settingsProjectLinkTitle,
+                description: .settingsProjectLinkDescription,
+                url: URL(string: "https://github.com/fullentropppy/coinsa")!
+            )
         }
     }
     
     private var thirdPartyAPISection: some View {
         Section(.settingsThirdPartyAPIs) {
-            ThirdPartyLink(
+            LinkView(
                 name: .thirdPartyHexarate,
                 description: .thirdPartyHexarateDescription,
                 url: URL(string: "https://hexarate.paikama.co")!

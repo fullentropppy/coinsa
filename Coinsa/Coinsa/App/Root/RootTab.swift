@@ -17,13 +17,9 @@ enum RootTab: Hashable {
     
     // MARK: - Свойства
     
-    private var todayIcon: String {
-        "\(Date().day).calendar"
-    }
-    
     var icon: String {
         switch self {
-        case .today: todayIcon
+        case .today: "\(Date().day).calendar"
         case .trips: Trip.primaryIcon
         case .settings: "gearshape.fill"
         }

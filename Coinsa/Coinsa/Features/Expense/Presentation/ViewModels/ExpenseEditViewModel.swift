@@ -24,13 +24,13 @@ final class ExpenseEditViewModel {
     
     private var initialSnapshot: Snapshot
     private var hasLoadedInitialRate = false
-        
+    
     // MARK: - Состояние UI. Общее поведение и оформление
     
     var isEdit: Bool {
         expense != nil
     }
-
+    
     var isHomeLocation: Bool {
         baseCurrency == localCurrency
     }
@@ -38,7 +38,7 @@ final class ExpenseEditViewModel {
     var navigationTitle: LocalizedStringResource {
         isEdit ? .expenseNavigationTitleEdit : .expenseNavigationTitleCreate
     }
-
+    
     var hasChanges: Bool {
         Snapshot(viewModel: self) != initialSnapshot
     }
@@ -46,7 +46,7 @@ final class ExpenseEditViewModel {
     var canSave: Bool {
         baseAmount > 0 && rateLocalToBase > 0
     }
-     
+    
     var baseCurrency: Currency {
         location.baseCurrency
     }
@@ -88,10 +88,10 @@ final class ExpenseEditViewModel {
         get { currencyConverter.rateLoadingError }
         set { currencyConverter.rateLoadingError = newValue }
     }
-
+    
     var adjustedRateDescription: LocalizedStringResource? {
         guard useExchangeAdjustment && exchangeAdjustment > 0 else { return nil }
-
+        
         return .expenseAdjustedExchangeRateShort(
             localCurrencyCode: localCurrency.code,
             effectiveRateLocalToBase: currencyConverter.effectiveRateLocalToBase.numberFormat(fractionLength: 4),
@@ -111,10 +111,10 @@ final class ExpenseEditViewModel {
     // MARK: - Инициализация
     
     /// Создает ViewModel для новой траты.
-        /// - Parameters:
-        ///   - location: Локация траты.
-        ///   - preselectedCategory: Предустановленная категория.
-        ///   - preselectedPaymentMethod: Предустановленный способ оплаты.
+    /// - Parameters:
+    ///   - location: Локация траты.
+    ///   - preselectedCategory: Предустановленная категория.
+    ///   - preselectedPaymentMethod: Предустановленный способ оплаты.
     convenience init(
         forCreateWith location: Location,
         preselectedCategory: ExpenseCategory? = nil,
@@ -138,7 +138,7 @@ final class ExpenseEditViewModel {
     }
     
     /// Создает ViewModel для редактирования существующей траты.
-        /// - Parameter expense: Редактируемая трата.
+    /// - Parameter expense: Редактируемая трата.
     convenience init(forEdit expense: Expense) {
         self.init(
             location: expense.location!,
@@ -230,9 +230,9 @@ final class ExpenseEditViewModel {
     
     func loadInitialRateIfNeeded() {
         guard !hasLoadedInitialRate && !isEdit && !isHomeLocation else { return }
-            
+        
         hasLoadedInitialRate = true
-    
+        
         currencyConverter.requestRateRefresh { [weak self] rate in
             guard let self else { return }
             
@@ -256,7 +256,7 @@ final class ExpenseEditViewModel {
     }
     
     // MARK: - Операции с оплатой
-
+    
     func updatePaymentMethod(_ method: PaymentMethod, currentInput: InputCurrency) {
         paymentMethod = method
         syncExchangeAdjustmentAndRecalculate(currentInput: currentInput)
@@ -314,7 +314,7 @@ private extension ExpenseEditViewModel {
         let exchangeAdjustment: Double
         let category: ExpenseCategory
         let comment: String?
-
+        
         // MARK: - Инициализация
         
         init(viewModel: ExpenseEditViewModel) {

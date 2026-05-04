@@ -1,4 +1,4 @@
-# Coinsa - учет расходов в путешествии
+# Coinsa - трекер расходов в путешествиях
 
 ![iOS](https://img.shields.io/badge/iOS-26-178DF6)
 ![SwiftUI](https://img.shields.io/badge/SwiftUI-000000?logo=swift&logoColor=white)
@@ -6,7 +6,7 @@
 ![CloudKit](https://img.shields.io/badge/CloudKit-3C61AB?logo=icloud&logoColor=white)
 [![Last Commit](https://img.shields.io/github/last-commit/fullentropppy/coinsa.svg)](https://github.com/fullentropppy/coinsa/commits)
 
-**Coinsa** - iOS-приложение для управления бюджетом в путешествиях. Помогает планировать расходы, учитывать траты на локациях и получать понятную аналитику по бюджету.
+**Coinsa** - iOS-приложение для отслеживания расходов в путешествиях. Помогает планировать расходы, учитывать траты на локациях и получать понятную аналитику по бюджету.
 
 ## Основные возможности
 

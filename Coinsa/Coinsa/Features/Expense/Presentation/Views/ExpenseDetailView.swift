@@ -12,7 +12,6 @@ import SwiftData
 struct ExpenseDetailView: View {
     // MARK: - Хранимые свойства
 
-    @Environment(AppSettingsStore.self) private var settingsStore
     @Environment(\.dismiss) private var dismiss
     
     @State private var isShowingExpenseEdit = false
@@ -165,15 +164,12 @@ struct ExpenseDetailView: View {
 private extension ExpenseDetailView {
     static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
         let builder = PreviewBuilder.builder().withBudgets(false)
-        let container = builder.buildContainer()
-        let settingsStore = AppSettingsStore()
-        let expense = builder.fetchExpense(from: container)
+        let data = builder.buildData()
+        let expense = builder.getExpense(from: data)
         
         return NavigationStack {
             ExpenseDetailView(expense)
         }
-        .modelContainer(container)
-        .environment(settingsStore)
         .environment(\.locale, locale)
         .preferredColorScheme(colorScheme)
     }

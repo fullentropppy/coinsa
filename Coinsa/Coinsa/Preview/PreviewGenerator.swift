@@ -10,7 +10,7 @@ import Foundation
 // MARK: - Публичные типы
 
 /// Сценарии генерации данных для превью.
-enum PreviewScenario: CaseIterable {
+enum PreviewScenario: String, CaseIterable {
     case japan
     case russia
     case southKorea

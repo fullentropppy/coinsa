@@ -3148,6 +3148,40 @@
         }
       }
     },
+    "settings.projectLink.description" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Project repository"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Репозиторий проекта"
+          }
+        }
+      }
+    },
+    "settings.projectLink.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GitHub"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GitHub"
+          }
+        }
+      }
+    },
     "settings.thirdPartyAPIs" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -3416,6 +3450,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Завтра"
+          }
+        }
+      }
+    },
+    "totalNumber" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Total: %1$(number)@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Всего: %(number)@"
           }
         }
       }

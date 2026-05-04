@@ -60,8 +60,15 @@ struct LocationDetailViewModel {
 
     var eventAnalyticsData: EventCategoryAnalyticsData {
         let isHomeLocation = localCurrency == baseCurrency
-        let plannedAmountByCategoryBase = location.calculatePlannedAmountByCategory(asBaseCurrency: true, withinDateRange: location.range)
-        let actualAmountByCategoryBase = location.calculateActualAmountByCategory(asBaseCurrency: true, withinDateRange: location.range)
+        
+        let plannedAmountByCategoryBase = location.calculatePlannedAmountByCategory(
+            asBaseCurrency: true,
+            withinDateRange: location.range
+        )
+        let actualAmountByCategoryBase = location.calculateActualAmountByCategory(
+            asBaseCurrency: true,
+            withinDateRange: location.range
+        )
 
         let plannedLocalAmountByCategory = isHomeLocation
             ? nil
@@ -80,7 +87,8 @@ struct LocationDetailViewModel {
     }
     
     var groupedExpenses: [(date: Date, expenses: [Expense])] {
-        guard let expenses = location.expenses else { return [] }
+        guard let expenses = location.expenses, !expenses.isEmpty else { return [] }
+        
         let today = Date().startOfDay
         let yesterday = today.adding(days: -1)
         
