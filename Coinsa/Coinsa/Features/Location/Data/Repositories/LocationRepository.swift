@@ -111,14 +111,14 @@ struct LocationRepository {
         name.trimmed
     }
     
-    /// Нормализует дату начала к началу дня.
+    /// Нормализует дату начала к полудню UTC.
     private func normalizedStartDate(_ startDate: Date) -> Date {
-        startDate.startOfDay
+        startDate.utcNoon
     }
     
-    /// Нормализует дату окончания к концу дня.
+    /// Нормализует дату окончания к полудню UTC.
     private func normalizedEndDate(_ endDate: Date) -> Date {
-        endDate.endOfDay
+        endDate.utcNoon
     }
     
     /// Приводит сумму к неотрицательному значению.

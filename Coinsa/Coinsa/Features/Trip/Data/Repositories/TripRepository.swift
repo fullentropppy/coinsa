@@ -66,7 +66,7 @@ struct TripRepository {
         trip.endDate = normalizedEndDate(endDate)
         trip.baseCurrencyCode = baseCurrency.code
         trip.updatedAt = Date()
-        
+
         try? context.save()
     }
     
@@ -84,13 +84,13 @@ struct TripRepository {
         name.trimmed
     }
     
-    /// Нормализует дату начала к началу дня.
+    /// Нормализует дату начала к полудню UTC.
     private func normalizedStartDate(_ startDate: Date) -> Date {
-        startDate.startOfDay
+        startDate.utcNoon
     }
     
-    /// Нормализует дату окончания к концу дня.
+    /// Нормализует дату окончания к полудню UTC.
     private func normalizedEndDate(_ endDate: Date) -> Date {
-        endDate.endOfDay
+        endDate.utcNoon
     }
 }

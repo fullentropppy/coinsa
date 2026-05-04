@@ -29,7 +29,7 @@ protocol DateRangeProviding {
     /// Количество оставшихся дней до конца диапазона.
     var remainingDays: Int { get }
     
-    /// Закрытый интервал дат от `startDate` до `endDate`.
+    /// Закрытый интервал дат от начала дня `startDate` до конца дня `endDate`.
     var range: ClosedRange<Date> { get }
 }
 
@@ -58,9 +58,9 @@ extension DateRangeProviding {
         remainingDays()
     }
     
-    /// Закрытый интервал дат от `startDate` до `endDate`.
+    /// Закрытый интервал дат от начала дня `startDate` до конца дня `endDate`.
     var range: ClosedRange<Date> {
-        startDate...endDate
+        startDate.startOfDay...endDate.endOfDay
     }
     
     // MARK: - Методы. Расчет с поддержкой календаря
@@ -71,9 +71,12 @@ extension DateRangeProviding {
     func status(using calendar: Calendar = .current) -> EventStatus {
         let today = Date().startOfDay(using: calendar)
         
-        if today > endDate {
+        let startDateStartOfDay = startDate.startOfDay(using: calendar)
+        let endDateEndOfDay = endDate.endOfDay(using: calendar)
+        
+        if today > endDateEndOfDay {
             return .completed
-        } else if today.isBetween(startDate, and: endDate, using: calendar) {
+        } else if today.isBetween(startDateStartOfDay, and: endDateEndOfDay, using: calendar) {
             return .ongoing
         } else {
             return .upcoming
@@ -102,6 +105,16 @@ extension DateRangeProviding {
     ///   - calendar: Календарь для вычислений. По умолчанию `.current`.
     /// - Returns: Количество оставшихся дней (неотрицательное, ограниченное общим количеством дней).
     func remainingDays(on date: Date = .now, using calendar: Calendar = .current) -> Int {
-        min(totalDays(using: calendar), max(0, endDate.days(from: date, using: calendar)))
+        min(
+            totalDays(using: calendar),
+            max(0, endDate.endOfDay(using: calendar).days(from: date, using: calendar))
+        )
+    }
+    
+    /// Возвращает закрытый интервал дат от начала дня `startDate` до конца дня `endDate`.
+    /// - Parameter calendar: Календарь для вычислений. По умолчанию `.current`.
+    /// - Returns: Закрытый интервал дат.
+    func range(using calendar: Calendar = .current) -> ClosedRange<Date> {
+        startDate.startOfDay(using: calendar)...endDate.endOfDay(using: calendar)
     }
 }

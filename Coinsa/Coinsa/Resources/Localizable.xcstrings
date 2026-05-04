@@ -3511,13 +3511,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Base currency for entering, storing, and showing Budgets and Expenses. Can be changed only if the Trip has no Locations."
+            "value" : "Base (home) currency for entering, storing, and showing Budgets and Expenses. Can be changed only if the Trip has no Locations."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Основная валюта для ввода, хранения, отображения бюджета и трат. Может быть изменена только если в поездке нет локаций."
+            "value" : "Основная (домашняя) валюта для ввода, хранения, отображения бюджета и трат. Может быть изменена только если в поездке нет локаций."
           }
         }
       }

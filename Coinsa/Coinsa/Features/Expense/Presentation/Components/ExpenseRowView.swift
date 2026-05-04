@@ -44,6 +44,7 @@ struct ExpenseRowView: View {
         VStack(alignment: .trailing, spacing: 10) {
             if expense.baseCurrency == expense.localCurrency {
                 AmountText.standard(expense.baseAmount, currency: expense.baseCurrency)
+                Spacer()
             } else {
                 AmountText.standard(expense.localAmount, currency: expense.localCurrency)
                 AmountText.secondarySmall(expense.baseAmount,currency: expense.baseCurrency)

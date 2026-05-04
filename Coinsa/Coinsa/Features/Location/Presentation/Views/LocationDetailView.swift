@@ -202,7 +202,6 @@ private extension LocationDetailView {
         colorScheme: ColorScheme,
         withExpenses: Bool = true
     ) -> some View {
-        print(Date())
         let builder = PreviewBuilder.builder().withExpenses(withExpenses)
         let container = builder.buildContainer()
         let settingsStore = AppSettingsStore()
