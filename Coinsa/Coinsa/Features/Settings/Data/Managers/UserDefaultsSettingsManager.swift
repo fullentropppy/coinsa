@@ -58,7 +58,7 @@ final class UserDefaultsSettingsManager {
     var selectedPaymentMethod: PaymentMethod {
         get {
             defaults.string(forKey: UserDefaultsKey.selectedPaymentMethod)
-                .flatMap { PaymentMethod(rawValue: $0) } ?? .cash
+                .flatMap { PaymentMethod(rawValue: $0) } ?? .defaultValue
         }
         set { defaults.set(newValue.rawValue, forKey: UserDefaultsKey.selectedPaymentMethod) }
     }

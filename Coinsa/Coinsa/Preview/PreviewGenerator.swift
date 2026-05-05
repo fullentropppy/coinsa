@@ -10,7 +10,7 @@ import Foundation
 // MARK: - Публичные типы
 
 /// Сценарии генерации данных для превью.
-enum PreviewScenario: CaseIterable {
+enum PreviewScenario: String, CaseIterable {
     case japan
     case russia
     case southKorea
@@ -77,8 +77,8 @@ private extension PreviewGenerator {
         let trip = Trip(
             id: UUID(),
             name: data.name,
-            startDate: data.startDate.startOfDay,
-            endDate: data.endDate.endOfDay,
+            startDate: data.startDate.startOfDay.utcNoon,
+            endDate: data.endDate.endOfDay.utcNoon,
             baseCurrencyCode: Currency.defaultValue.code,
             locations: [],
             createdAt: now,
@@ -108,8 +108,8 @@ private extension PreviewGenerator {
         let location =  Location(
             id: UUID(),
             name: data.name,
-            startDate: data.startDate.startOfDay,
-            endDate: data.endDate.endOfDay,
+            startDate: data.startDate.startOfDay.utcNoon,
+            endDate: data.endDate.endOfDay.utcNoon,
             timeZoneID: data.majorTimeZone.id,
             localCurrencyCode: data.currency.code,
             rateLocalToBase: data.rateLocalToBase,
@@ -205,23 +205,23 @@ private extension PreviewGenerator {
             ]
         case .saintp:
             budgetsByCategory = [
-                .food: 7000,
+                .food: 6000,
                 .transport: 1500,
-                .activity: 4500,
+                .activity: 4000,
                 .other: 2000
             ]
         case .seoul:
             budgetsByCategory = [
-                .food: 24000,
-                .transport: 5200,
-                .activity: 11000,
-                .shopping: 20000
+                .food: 26000,
+                .transport: 6200,
+                .activity: 18000,
+                .shopping: 24000
             ]
         case .busan:
             budgetsByCategory = [
-                .food: 12000,
-                .transport: 2800,
-                .other: 15000
+                .food: 14000,
+                .transport: 3200,
+                .other: 16000
             ]
         case .istanbul:
             budgetsByCategory = [
@@ -778,7 +778,6 @@ private extension PreviewGenerator {
     
     private static func makeSeoulExpenses(_ location: Location) -> [Expense] {
         let startDate = location.startDate.startOfDay
-        let now = Date().startOfMinute
         
         return [
             makeExpense(
@@ -917,13 +916,19 @@ private extension PreviewGenerator {
             ),
             makeExpense(
                 to: location,
-                date: now,
+                date: startDate.adding(days: 3, hours: 10, minutes: 14),
                 baseAmount: 2046,
                 category: .food
             ),
             makeExpense(
                 to: location,
-                date: now.endOfDay,
+                date: startDate.adding(days: 3, hours: 11, minutes: 35),
+                baseAmount: 199,
+                category: .transport
+            ),
+            makeExpense(
+                to: location,
+                date: startDate.adding(days: 3, hours: 15, minutes: 42),
                 baseAmount: 765,
                 paymentMethod: .card,
                 category: .other,

@@ -24,13 +24,13 @@ final class ExpenseEditViewModel {
     
     private var initialSnapshot: Snapshot
     private var hasLoadedInitialRate = false
-        
+    
     // MARK: - Состояние UI. Общее поведение и оформление
     
     var isEdit: Bool {
         expense != nil
     }
-
+    
     var isHomeLocation: Bool {
         baseCurrency == localCurrency
     }
@@ -38,7 +38,7 @@ final class ExpenseEditViewModel {
     var navigationTitle: LocalizedStringResource {
         isEdit ? .expenseNavigationTitleEdit : .expenseNavigationTitleCreate
     }
-
+    
     var hasChanges: Bool {
         Snapshot(viewModel: self) != initialSnapshot
     }
@@ -46,7 +46,7 @@ final class ExpenseEditViewModel {
     var canSave: Bool {
         baseAmount > 0 && rateLocalToBase > 0
     }
-     
+    
     var baseCurrency: Currency {
         location.baseCurrency
     }
@@ -65,12 +65,12 @@ final class ExpenseEditViewModel {
     
     var baseAmount: Double {
         get { amountManager.baseAmount }
-        set { amountManager.updateBaseAmount(newValue) }
+        set { amountManager.updateBaseAmount(newValue, useExchangeAdjustment: useExchangeAdjustment) }
     }
     
     var localAmount: Double {
         get { amountManager.localAmount }
-        set { amountManager.updateLocalAmount(newValue) }
+        set { amountManager.updateLocalAmount(newValue, useExchangeAdjustment: useExchangeAdjustment) }
     }
     
     // MARK: - Состояние UI. Курс обмена
@@ -88,10 +88,10 @@ final class ExpenseEditViewModel {
         get { currencyConverter.rateLoadingError }
         set { currencyConverter.rateLoadingError = newValue }
     }
-
+    
     var adjustedRateDescription: LocalizedStringResource? {
         guard useExchangeAdjustment && exchangeAdjustment > 0 else { return nil }
-
+        
         return .expenseAdjustedExchangeRateShort(
             localCurrencyCode: localCurrency.code,
             effectiveRateLocalToBase: currencyConverter.effectiveRateLocalToBase.numberFormat(fractionLength: 4),
@@ -111,17 +111,17 @@ final class ExpenseEditViewModel {
     // MARK: - Инициализация
     
     /// Создает ViewModel для новой траты.
-        /// - Parameters:
-        ///   - location: Локация траты.
-        ///   - preselectedCategory: Предустановленная категория.
-        ///   - preselectedPaymentMethod: Предустановленный способ оплаты.
+    /// - Parameters:
+    ///   - location: Локация траты.
+    ///   - preselectedCategory: Предустановленная категория.
+    ///   - preselectedPaymentMethod: Предустановленный способ оплаты.
     convenience init(
         forCreateWith location: Location,
         preselectedCategory: ExpenseCategory? = nil,
         preselectedPaymentMethod: PaymentMethod? = nil
     ) {
         let now = Date()
-        let date = min(max(now, location.startDate), location.endDate)
+        let date = min(max(now, location.startDate.startOfDay), location.endDate.endOfDay)
         
         self.init(
             location: location,
@@ -138,7 +138,7 @@ final class ExpenseEditViewModel {
     }
     
     /// Создает ViewModel для редактирования существующей траты.
-        /// - Parameter expense: Редактируемая трата.
+    /// - Parameter expense: Редактируемая трата.
     convenience init(forEdit expense: Expense) {
         self.init(
             location: expense.location!,
@@ -218,21 +218,28 @@ final class ExpenseEditViewModel {
     }
     
     func updateAmount(_ newValue: Double, for inputCurrency: InputCurrency) {
-        amountManager.updateAmount(newValue, for: inputCurrency)
+        amountManager.updateAmount(
+            newValue,
+            for: inputCurrency,
+            useExchangeAdjustment: useExchangeAdjustment
+        )
     }
     
     // MARK: - Операции с курсом обмена
     
     func updateRate(_ newRate: Double, currentInput: InputCurrency) {
         currencyConverter.updateRate(newRate)
-        amountManager.updateFromRateChange(inputCurrency: currentInput)
+        amountManager.updateFromRateChange(
+            inputCurrency: currentInput,
+            useExchangeAdjustment: useExchangeAdjustment
+        )
     }
     
     func loadInitialRateIfNeeded() {
         guard !hasLoadedInitialRate && !isEdit && !isHomeLocation else { return }
-            
+        
         hasLoadedInitialRate = true
-    
+        
         currencyConverter.requestRateRefresh { [weak self] rate in
             guard let self else { return }
             
@@ -251,12 +258,16 @@ final class ExpenseEditViewModel {
     
     func requestRateRefresh(for inputCurrency: InputCurrency = .base) {
         currencyConverter.requestRateRefresh { [weak self] _ in
-            self?.amountManager.updateFromRateChange(inputCurrency: inputCurrency)
+            guard let self else { return }
+            amountManager.updateFromRateChange(
+                inputCurrency: inputCurrency,
+                useExchangeAdjustment: useExchangeAdjustment
+            )
         }
     }
     
     // MARK: - Операции с оплатой
-
+    
     func updatePaymentMethod(_ method: PaymentMethod, currentInput: InputCurrency) {
         paymentMethod = method
         syncExchangeAdjustmentAndRecalculate(currentInput: currentInput)
@@ -269,7 +280,7 @@ final class ExpenseEditViewModel {
     
     private func syncExchangeAdjustmentAndRecalculate(currentInput: InputCurrency) {
         currencyConverter.updateExchangeAdjustment(exchangeAdjustment)
-        amountManager.updateFromRateChange(inputCurrency: currentInput)
+        amountManager.updateFromRateChange(inputCurrency: currentInput, useExchangeAdjustment: useExchangeAdjustment)
     }
     
     // MARK: - Операции с хранилищем
@@ -314,7 +325,7 @@ private extension ExpenseEditViewModel {
         let exchangeAdjustment: Double
         let category: ExpenseCategory
         let comment: String?
-
+        
         // MARK: - Инициализация
         
         init(viewModel: ExpenseEditViewModel) {

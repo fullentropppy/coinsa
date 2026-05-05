@@ -35,17 +35,26 @@ extension Location {
     // MARK: - Публичные методы. Плановая сумма
     
     /// Рассчитывает плановую сумму на сегодня (с учетом уже потраченного).
-    /// - Parameter asBaseCurrency: Если `true`, возвращает в основной валюте, иначе в локальной.
+    /// - Parameters:
+    ///   - asBaseCurrency: Если `true`, возвращает в основной валюте, иначе в локальной.
+    ///   - calendar: Календарь для вычислений. По умолчанию `.current`.
     /// - Returns: Рекомендуемая сумма на сегодня.
-    func calculatePlannedAmountForToday(asBaseCurrency: Bool = true) -> Double {
-        let plannedAmount = calculatePlannedAmount(asBaseCurrency: asBaseCurrency, asDailyAverage: false)
+    func calculatePlannedAmountForToday(
+        asBaseCurrency: Bool = true,
+        using calendar: Calendar = .current
+    ) -> Double {
+        let plannedAmount = calculatePlannedAmount(
+            asBaseCurrency: asBaseCurrency,
+            asDailyAverage: false,
+            using: calendar
+        )
         
-        if totalDays == 1 {
+        if totalDays(using: calendar) == 1 {
             return plannedAmount
         }
         
-        let endOfYesterday = Date().yesterday.endOfDay
-        let startRange = min(startDate, endOfYesterday)
+        let endOfYesterday = Date().yesterday(using: calendar).endOfDay(using: calendar)
+        let startRange = min(startDate.startOfDay(using: calendar), endOfYesterday)
         let endRange = max(startRange, endOfYesterday)
         
         let actualAmount = calculateActualAmount(
@@ -53,7 +62,9 @@ extension Location {
             withinDateRange: startRange...endRange
         )
         
+        let remainingDays = remainingDays(on: .now, using: calendar)
         let difference = plannedAmount - actualAmount
+        
         return remainingDays == 0 ? difference : max(0, difference / Double(remainingDays + 1))
     }
     
@@ -61,13 +72,17 @@ extension Location {
     /// - Parameters:
     ///   - asBaseCurrency: Если `true`, возвращает в основной валюте, иначе в локальной.
     ///   - asDailyAverage: Если `true`, возвращает среднюю сумму в день.
+    ///   - calendar: Календарь для вычислений. По умолчанию `.current`.
     /// - Returns: Плановая сумма.
     func calculatePlannedAmount(
         asBaseCurrency: Bool = true,
-        asDailyAverage: Bool = false
+        asDailyAverage: Bool = false,
+        using calendar: Calendar = .current
     ) -> Double {
         let exchangeRate = asBaseCurrency ? 1 : effectiveRateBaseToLocal
         let plannedAmount = (budgets?.reduce(0) { $0 + $1.baseAmount } ?? 0) * exchangeRate
+        let totalDays = totalDays(using: calendar)
+        
         return asDailyAverage ? plannedAmount / Double(totalDays).rounded() : plannedAmount
     }
     
@@ -75,13 +90,15 @@ extension Location {
     /// - Parameters:
     ///   - asBaseCurrency: Если `true`, возвращает в основной валюте, иначе в локальной.
     ///   - targetRange: Опциональный диапазон дат для фильтрации.
+    ///   - calendar: Календарь для вычислений. По умолчанию `.current`.
     /// - Returns: Словарь из категорий и сумм.
     func calculatePlannedAmountByCategory(
         asBaseCurrency: Bool = true,
-        withinDateRange targetRange: ClosedRange<Date>? = nil
+        withinDateRange targetRange: ClosedRange<Date>? = nil,
+        using calendar: Calendar = .current
     ) -> [ExpenseCategory: Double] {
         let exchangeRate = asBaseCurrency ? 1 : effectiveRateBaseToLocal
-        let periodRatio = plannedAmountRatio(withinDateRange: targetRange)
+        let periodRatio = plannedAmountRatio(withinDateRange: targetRange, using: calendar)
         
         return ExpenseCategory.allCases.reduce(into: [:]) { result, category in
             let baseAmount = budgetAmount(for: category)
@@ -132,19 +149,31 @@ extension Location {
     // MARK: - Приватные методы
     
     /// Вычисляет долю периода в общей длительности локации.
-    /// - Parameter targetRange: Целевой диапазон дат.
+    /// - Parameters:
+    ///   - targetRange: Целевой диапазон дат.
+    ///   - calendar: Календарь для вычислений. По умолчанию `.current`.
     /// - Returns: Коэффициент пропорции (0...1).
-    private func plannedAmountRatio(withinDateRange targetRange: ClosedRange<Date>?) -> Double {
+    private func plannedAmountRatio(
+        withinDateRange targetRange: ClosedRange<Date>?,
+        using calendar: Calendar = .current
+    ) -> Double {
         guard let targetRange else { return 1 }
         
-        let normalizedTargetRange = targetRange.lowerBound.startOfDay...targetRange.upperBound.endOfDay
-        let overlapStart = max(range.lowerBound, normalizedTargetRange.lowerBound)
-        let overlapEnd = min(range.upperBound, normalizedTargetRange.upperBound)
+        let normalizedTargetLowerBound = targetRange.lowerBound.startOfDay(using: calendar)
+        let normalizedTargetUppedBound = targetRange.upperBound.endOfDay(using: calendar)
+        let range = range(using: calendar)
+        let overlapStart = max(range.lowerBound, normalizedTargetLowerBound)
+        let overlapEnd = min(range.upperBound, normalizedTargetUppedBound)
         
         guard overlapStart <= overlapEnd else { return 0 }
         
-        let overlapDays = overlapEnd.startOfDay.days(from: overlapStart.startOfDay) + 1
+        let totalDays = totalDays(using: calendar)
+        
         guard totalDays > 0 else { return 0 }
+        
+        let overlapDays = overlapEnd
+            .startOfDay(using: calendar)
+            .days(from: overlapStart.startOfDay, using: calendar) + 1
         
         return min(1, max(0, Double(overlapDays) / Double(totalDays)))
     }

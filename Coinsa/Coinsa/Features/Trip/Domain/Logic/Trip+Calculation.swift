@@ -14,10 +14,19 @@ extension Trip {
     /// - Parameters:
     ///   - asBaseCurrency: Если `true`, сумма возвращается в основной валюте, иначе в локальной.
     ///   - asDailyAverage: Если `true`, возвращает среднюю сумму в день.
+    ///   - calendar: Календарь для вычислений. По умолчанию `.current`.
     /// - Returns: Плановая сумма.
-    func calculatePlannedAmount(asBaseCurrency: Bool = true, asDailyAverage: Bool = false) -> Double {
+    func calculatePlannedAmount(
+        asBaseCurrency: Bool = true,
+        asDailyAverage: Bool = false,
+        using calendar: Calendar = .current
+    ) -> Double {
         locations?.reduce(0) {
-            $0 + $1.calculatePlannedAmount(asBaseCurrency: asBaseCurrency, asDailyAverage: asDailyAverage)
+            $0 + $1.calculatePlannedAmount(
+                asBaseCurrency: asBaseCurrency,
+                asDailyAverage: asDailyAverage,
+                using: calendar
+            )
         } ?? 0
     }
     
@@ -25,15 +34,18 @@ extension Trip {
     /// - Parameters:
     ///   - asBaseCurrency: Если `true`, суммы возвращаются в основной валюте, иначе в локальной.
     ///   - withinDateRange: Опциональный диапазон дат для фильтрации.
+    ///   - calendar: Календарь для вычислений. По умолчанию `.current`.
     /// - Returns: Словарь из категорий и сумм.
     func calculatePlannedAmountByCategory(
         asBaseCurrency: Bool = true,
-        withinDateRange: ClosedRange<Date>? = nil
+        withinDateRange: ClosedRange<Date>? = nil,
+        using calendar: Calendar = .current
     ) -> [ExpenseCategory: Double] {
         locations?.reduce(into: [:]) { result, location in
             let locationValues = location.calculatePlannedAmountByCategory(
                 asBaseCurrency: asBaseCurrency,
-                withinDateRange: withinDateRange
+                withinDateRange: withinDateRange,
+                using: calendar
             )
             
             for (category, amount) in locationValues {

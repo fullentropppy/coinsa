@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-/// Ссылка на сторонний сервис с названием и описанием.
-struct ThirdPartyLink: View {
+/// Элемент текстом и описанием web-ссылки.
+struct LinkView: View {
     // MARK: - Свойства
     
     let name: LocalizedStringResource
@@ -39,10 +39,10 @@ struct ThirdPartyLink: View {
 
 // MARK: - Превью
 
-private extension ThirdPartyLink {
+private extension LinkView {
     static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
         return List {
-            ThirdPartyLink(
+            LinkView(
                 name: .thirdPartyHexarate,
                 description: .thirdPartyHexarateDescription,
                 url: URL(string: "example.com")!
@@ -54,9 +54,9 @@ private extension ThirdPartyLink {
 }
 
 #Preview("Light - RU") {
-    ThirdPartyLink.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
+    LinkView.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
 }
 
 #Preview("Dark - EN") {
-    ThirdPartyLink.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
+    LinkView.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
 }

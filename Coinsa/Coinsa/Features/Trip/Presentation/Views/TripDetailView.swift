@@ -137,8 +137,12 @@ struct TripDetailView: View {
     
     private var locationListContent: some View {
         Group {
-            GroupHeaderView(icon: Location.primaryIcon, title: .tripLocations)
-                .listRowBackground(Color.clear)
+            GroupHeaderView(
+                icon: Location.primaryIcon,
+                title: .tripLocations,
+                subtitle: .totalNumber(number: String(trip.locationsCount))
+            )
+            .listRowBackground(Color.clear)
             
             ForEach(viewModel.groupedLocations, id: \.status) { group in
                 Section(group.status.safeLocalizedResourcePlural) {

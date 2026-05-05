@@ -236,7 +236,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Сводно"
+            "value" : "Сводка"
           }
         }
       }
@@ -2174,7 +2174,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Валюта локации для ввода и отображения бюджета и трат. Может быть изменена только если в локации нет трат."
+            "value" : "Валюта локации для ввода и отображения бюджета и трат. Может быть изменена только, если в локации нет трат."
           }
         }
       }
@@ -2922,7 +2922,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Южный Тихий океана"
+            "value" : "Южный Тихий океан"
           }
         }
       }
@@ -3052,13 +3052,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Default currency for new Trips. Can be changed inside a Trip."
+            "value" : "Default (home) currency for new Trips. Can be changed inside a Trip."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Основная валюта для автоматической подстановки в новых поездках. Может быть изменена внутри поездки."
+            "value" : "Основная (домашняя) валюта для автоматической подстановки в новых поездках. Может быть изменена внутри поездки."
           }
         }
       }
@@ -3144,6 +3144,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Настройки"
+          }
+        }
+      }
+    },
+    "settings.projectLink.description" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Project repository"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Репозиторий проекта"
+          }
+        }
+      }
+    },
+    "settings.projectLink.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GitHub"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GitHub"
           }
         }
       }
@@ -3420,6 +3454,23 @@
         }
       }
     },
+    "totalNumber" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Total: %1$(number)@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Всего: %(number)@"
+          }
+        }
+      }
+    },
     "trip.add" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -3460,13 +3511,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Base currency for entering, storing, and showing Budgets and Expenses. Can be changed only if the Trip has no Locations."
+            "value" : "Base (home) currency for entering, storing, and showing Budgets and Expenses. Can be changed only if the Trip has no Locations."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Основная валюта для ввода, хранения, отображения бюджета и трат. Может быть изменена только если в поездке нет локаций."
+            "value" : "Основная (домашняя) валюта для ввода, хранения и отображения бюджета и трат. Может быть изменена только если в поездке нет локаций."
           }
         }
       }

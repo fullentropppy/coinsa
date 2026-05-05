@@ -147,7 +147,7 @@ struct LocationEditView: View {
                     get: { viewModel.startDate },
                     set: { viewModel.startDate = $0 }
                 ),
-                in: viewModel.availableRange,
+                in: viewModel.availableRangeForStartDate,
                 displayedComponents: .date
             )
             DatePicker(
@@ -156,7 +156,7 @@ struct LocationEditView: View {
                     get: { viewModel.endDate },
                     set: { viewModel.endDate = $0 }
                 ),
-                in: viewModel.availableRange,
+                in: viewModel.availableRangeForEndDate,
                 displayedComponents: .date
             )
         } footer: {

@@ -133,8 +133,12 @@ struct LocationDetailView: View {
     
     private var expenseListContent: some View {
         Group {
-            GroupHeaderView(icon: Expense.primaryIcon, title: .locationExpenses)
-                .listRowBackground(Color.clear)
+            GroupHeaderView(
+                icon: Expense.primaryIcon,
+                title: .locationExpenses,
+                subtitle: .totalNumber(number: String(location.expensesCount))
+            )
+            .listRowBackground(Color.clear)
             
             ForEach(viewModel.groupedExpenses, id: \.date) { group in
                 Section(DateDisplayFormatter.formatRelative(group.date, showsTime: false)) {
@@ -202,7 +206,7 @@ private extension LocationDetailView {
         let container = builder.buildContainer()
         let settingsStore = AppSettingsStore()
         let location = builder.fetchLocation(from: container)
-
+        
         return NavigationStack {
             LocationDetailView(location)
         }

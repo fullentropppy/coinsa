@@ -7,22 +7,45 @@
 
 import SwiftUI
 
-/// Заголовок для секции группы, отображающий иконку и текст.
+/// Заголовок для секции группы, отображающий иконку, основной текст и опционально подтекст.
 struct GroupHeaderView: View {
-    // MARK: Свойства
+    // MARK: - Свойства
     
     let icon: String
     let title: LocalizedStringResource
+    let subtitle: LocalizedStringResource?
     
-    // MARK: Тело View
+    // MARK: - Тело View
+    
+    /// Создает заголовок секции группы.
+    /// - Parameters:
+    ///   - icon: Название системной иконки.
+    ///   - title: Заголовок.
+    ///   - subtitle: Подазголовок (опционально).
+    init(icon: String, title: LocalizedStringResource, subtitle: LocalizedStringResource? = nil) {
+        self.icon = icon
+        self.title = title
+        self.subtitle = subtitle
+    }
+    
+    // MARK: - Тело View
     
     var body: some View {
-        HStack {
-            Image(systemName: icon)
-                .imageScale(.small)
-            Text(title)
+        VStack(alignment: .center) {
+            HStack(alignment: .firstTextBaseline, spacing: 4) {
+                Image(systemName: icon)
+                    .imageScale(.small)
+                Text(title)
+                    .fontWeight(.semibold)
+            }
+            if let subtitle {
+                Divider()
+                    .frame(width: 80)
+                Text(subtitle)
+                    .font(.caption)
+                    .padding(1)
+            }
         }
-        .fontWeight(.semibold)
         .foregroundStyle(.secondary)
         .frame(maxWidth: .infinity, alignment: .center)
     }
@@ -32,7 +55,11 @@ struct GroupHeaderView: View {
 
 private extension GroupHeaderView {
     static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
-        GroupHeaderView(icon: Location.primaryIcon, title: .tripLocations)
+        GroupHeaderView(
+            icon: Location.primaryIcon,
+            title: .tripLocations,
+            subtitle: .totalNumber(number: 4.numberFormat(fractionLength: 0))
+        )
             .environment(\.locale, locale)
             .preferredColorScheme(colorScheme)
     }

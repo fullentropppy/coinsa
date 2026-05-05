@@ -22,7 +22,7 @@ final class CurrencyConverter {
     // MARK: - Вычисляемые свойства
     
     var effectiveRateLocalToBase: Double {
-        rateLocalToBase * (1 + (exchangeAdjustment / 100))
+        effectiveRateLocalToBase(useExchangeAdjustment: true)
     }
     
     var isHomeLocation: Bool {
@@ -123,11 +123,19 @@ final class CurrencyConverter {
     ///   - amount: Конвертируемая сумма.
     ///   - source: Исходная валюта.
     ///   - target: Целевая валюта.
+    ///   - useExchangeAdjustment: Флаг использования корректировки курса обмена.
     /// - Returns: Сконвертированная сумма.
-    func convertAmount(_ amount: Double, from source: InputCurrency, to target: InputCurrency) -> Double {
+    func convertAmount(
+        _ amount: Double,
+        from source: InputCurrency,
+        to target: InputCurrency,
+        useExchangeAdjustment: Bool = true
+    ) -> Double {
         switch (source, target) {
-        case (.base, .local): convertToLocal(fromBase: amount)
-        case (.local, .base): convertToBase(fromLocal: amount)
+        case (.base, .local):
+            convertToLocal(fromBase: amount, useExchangeAdjustment: useExchangeAdjustment)
+        case (.local, .base):
+            convertToBase(fromLocal: amount, useExchangeAdjustment: useExchangeAdjustment)
         default: amount
         }
     }
@@ -135,15 +143,17 @@ final class CurrencyConverter {
     /// Конвертирует сумму из основной валюты в локальную.
     /// - Parameter amount: Сумма в основной валюте.
     /// - Returns: Сумма в локальной валюте.
-    func convertToBase(fromLocal amount: Double) -> Double {
-        effectiveRateLocalToBase > 0 ? amount * effectiveRateLocalToBase : 0
+    func convertToBase(fromLocal amount: Double, useExchangeAdjustment: Bool = true) -> Double {
+        let effectiveRate = effectiveRateLocalToBase(useExchangeAdjustment: useExchangeAdjustment)
+        return effectiveRate > 0 ? amount * effectiveRate : 0
     }
     
     /// Конвертирует сумму из локальной валюты в основную.
     /// - Parameter amount: Сумма в локальной валюте.
     /// - Returns: Сумма в основной валюте.
-    func convertToLocal(fromBase amount: Double) -> Double {
-        effectiveRateLocalToBase > 0 ? amount / effectiveRateLocalToBase : 0
+    func convertToLocal(fromBase amount: Double, useExchangeAdjustment: Bool = true) -> Double {
+        let effectiveRate = effectiveRateLocalToBase(useExchangeAdjustment: useExchangeAdjustment)
+        return effectiveRate > 0 ? amount / effectiveRate : 0
     }
     
     // MARK: - Процент корректировки
@@ -152,5 +162,12 @@ final class CurrencyConverter {
     /// - Parameter newAdjustment: Новое значение.
     func updateExchangeAdjustment(_ newAdjustment: Double) {
         exchangeAdjustment = newAdjustment.nonNegative
+    }
+    
+    // MARK: - Приватные методы
+    
+    private func effectiveRateLocalToBase(useExchangeAdjustment: Bool) -> Double {
+        guard useExchangeAdjustment else { return rateLocalToBase }
+        return rateLocalToBase * (1 + (exchangeAdjustment / 100))
     }
 }

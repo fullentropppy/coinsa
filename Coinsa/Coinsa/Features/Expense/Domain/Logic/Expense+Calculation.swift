@@ -30,10 +30,10 @@ extension Expense {
     
     // MARK: - Приватные свойства
     
-    /// Скорректированный курс локальной валюты к основной (с учетом поправки).
-    /// Корректировка применяется только если валюты разные и способ оплаты - по умолчанию.
+    /// Скорректированный курс локальной валюты к основной (с учетом корректировки).
+    /// Корректировка применяется только если валюты разные и способ оплаты - карта.
     private var adjustedRateLocalToBase: Double {
-        if baseCurrency != localCurrency && paymentMethod == .defaultValue {
+        if baseCurrency != localCurrency && paymentMethod == .card {
             rateLocalToBase * (1 + (exchangeAdjustment / 100))
         } else {
             rateLocalToBase

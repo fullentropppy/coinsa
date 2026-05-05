@@ -47,11 +47,14 @@ struct PreviewBuilder {
     private static func fetchItem<T: PersistentModel>(
         from container: ModelContainer,
         at index: Int = 0,
-        sortBy: [SortDescriptor<T>]
+        sortBy: [SortDescriptor<T>]?
     ) -> T {
         let context = container.mainContext
         var descriptor = FetchDescriptor<T>()
-        descriptor.sortBy = sortBy
+        
+        if let sortBy {
+            descriptor.sortBy = sortBy
+        }
 
         let items = try! context.fetch(descriptor)
         return items[index]
@@ -127,7 +130,7 @@ extension PreviewBuilder {
             fetchItem(
                 from: container,
                 at: index,
-                sortBy: [SortDescriptor(\Location.trip?.startDate, order: .forward)]
+                sortBy: [SortDescriptor(\Location.startDate, order: .forward)]
             )
         }
 
@@ -136,7 +139,7 @@ extension PreviewBuilder {
             fetchItem(
                 from: container,
                 at: index,
-                sortBy: [SortDescriptor(\Expense.location?.trip?.startDate, order: .forward)]
+                sortBy: [SortDescriptor(\Expense.date, order: .forward)]
             )
         }
 
@@ -144,7 +147,7 @@ extension PreviewBuilder {
 
         /// Генерирует массив поездок согласно настройкам.
         func buildData() -> [Trip] {
-            PreviewGenerator.makeTrips(for: scenario, options: options)
+            return PreviewGenerator.makeTrips(for: scenario, options: options)
         }
 
         /// Извлекает поездку из сгенерированных данных.

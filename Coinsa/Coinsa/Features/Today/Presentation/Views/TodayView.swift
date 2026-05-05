@@ -106,7 +106,7 @@ struct TodayView: View {
     
     private var emptyCurrentLocationContent: some View {
         EmptyStateView(
-            icon: "calendar",
+            icon: Location.primaryIcon,
             title: .todayEmptyStateTitle,
             description: .todayEmptyStateDescription
         )

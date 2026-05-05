@@ -21,7 +21,7 @@ struct DateDisplayFormatter {
         _ date: Date,
         showsTime: Bool = true,
         using calendar: Calendar = .current
-    ) -> String {
+    ) -> String {        
         if date.isTomorrow(using: calendar) {
             String(localized: .tomorrow)
         } else if date.isToday(using: calendar) {
@@ -29,7 +29,7 @@ struct DateDisplayFormatter {
         } else if date.isYesterday(using: calendar) {
             String(localized: .yesterday)
         } else {
-            format(date, showsTime: showsTime)
+            format(date, showsTime: showsTime, using: calendar)
         }
     }
     
@@ -55,6 +55,7 @@ struct DateDisplayFormatter {
         
         let formatter = DateFormatter()
         formatter.calendar = calendar
+        formatter.timeZone = calendar.timeZone
         formatter.setLocalizedDateFormatFromTemplate(
             templateWithOptionalTime(dateTemplate: dateTemplate, showsTime: showsTime)
         )
@@ -80,6 +81,7 @@ struct DateDisplayFormatter {
         
         let formatter = DateIntervalFormatter()
         formatter.calendar = calendar
+        formatter.timeZone = calendar.timeZone
         formatter.dateTemplate = templateWithOptionalTime(dateTemplate: dateTemplate, showsTime: showsTime)
         
         return formatter.string(from: startDate, to: endDate)
