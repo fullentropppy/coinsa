@@ -47,36 +47,42 @@ final class AmountManager {
     /// - Parameters:
     ///   - newValue: Новое значение суммы.
     ///   - inputCurrency: Валюта, в которой задается новое значение.
-    func updateAmount(_ newValue: Double, for inputCurrency: InputCurrency) {
+    func updateAmount(_ newValue: Double, for inputCurrency: InputCurrency, useExchangeAdjustment: Bool = true) {
         switch inputCurrency {
         case .base:
             baseAmount = newValue
-            localAmount = converter.convertToLocal(fromBase: newValue)
+            localAmount = converter.convertToLocal(
+                fromBase: newValue,
+                useExchangeAdjustment: useExchangeAdjustment
+            )
         case .local:
             localAmount = newValue
-            baseAmount = converter.convertToBase(fromLocal: newValue)
+            baseAmount = converter.convertToBase(
+                fromLocal: newValue,
+                useExchangeAdjustment: useExchangeAdjustment
+            )
         }
     }
     
     /// Обновляет только сумму в основной валюте (пересчитывает локальную).
     /// - Parameter newValue: Новое значение в основной валюте.
-    func updateBaseAmount(_ newValue: Double) {
+    func updateBaseAmount(_ newValue: Double, useExchangeAdjustment: Bool = true) {
         baseAmount = newValue
-        localAmount = converter.convertToLocal(fromBase: newValue)
+        localAmount = converter.convertToLocal(fromBase: newValue, useExchangeAdjustment: useExchangeAdjustment)
     }
     
     /// Обновляет только сумму в локальной валюте (пересчитывает основную).
     /// - Parameter newValue: Новое значение в локальной валюте.
-    func updateLocalAmount(_ newValue: Double) {
+    func updateLocalAmount(_ newValue: Double, useExchangeAdjustment: Bool = true) {
         localAmount = newValue
-        baseAmount = converter.convertToBase(fromLocal: newValue)
+        baseAmount = converter.convertToBase(fromLocal: newValue, useExchangeAdjustment: useExchangeAdjustment)
     }
     
     /// Обновляет суммы после изменения курса обмена.
     /// - Parameter inputCurrency: Валюта, значение которой остается неизменным при пересчете.
-    func updateFromRateChange(inputCurrency: InputCurrency) {
+    func updateFromRateChange(inputCurrency: InputCurrency, useExchangeAdjustment: Bool = true) {
         let currentAmount = amount(for: inputCurrency)
-        updateAmount(currentAmount, for: inputCurrency)
+        updateAmount(currentAmount, for: inputCurrency, useExchangeAdjustment: useExchangeAdjustment)
     }
     
     /// Сбрасывает обе суммы в ноль.

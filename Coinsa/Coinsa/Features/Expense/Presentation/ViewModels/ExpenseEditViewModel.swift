@@ -65,12 +65,12 @@ final class ExpenseEditViewModel {
     
     var baseAmount: Double {
         get { amountManager.baseAmount }
-        set { amountManager.updateBaseAmount(newValue) }
+        set { amountManager.updateBaseAmount(newValue, useExchangeAdjustment: useExchangeAdjustment) }
     }
     
     var localAmount: Double {
         get { amountManager.localAmount }
-        set { amountManager.updateLocalAmount(newValue) }
+        set { amountManager.updateLocalAmount(newValue, useExchangeAdjustment: useExchangeAdjustment) }
     }
     
     // MARK: - Состояние UI. Курс обмена
@@ -218,14 +218,21 @@ final class ExpenseEditViewModel {
     }
     
     func updateAmount(_ newValue: Double, for inputCurrency: InputCurrency) {
-        amountManager.updateAmount(newValue, for: inputCurrency)
+        amountManager.updateAmount(
+            newValue,
+            for: inputCurrency,
+            useExchangeAdjustment: useExchangeAdjustment
+        )
     }
     
     // MARK: - Операции с курсом обмена
     
     func updateRate(_ newRate: Double, currentInput: InputCurrency) {
         currencyConverter.updateRate(newRate)
-        amountManager.updateFromRateChange(inputCurrency: currentInput)
+        amountManager.updateFromRateChange(
+            inputCurrency: currentInput,
+            useExchangeAdjustment: useExchangeAdjustment
+        )
     }
     
     func loadInitialRateIfNeeded() {
@@ -251,7 +258,11 @@ final class ExpenseEditViewModel {
     
     func requestRateRefresh(for inputCurrency: InputCurrency = .base) {
         currencyConverter.requestRateRefresh { [weak self] _ in
-            self?.amountManager.updateFromRateChange(inputCurrency: inputCurrency)
+            guard let self else { return }
+            amountManager.updateFromRateChange(
+                inputCurrency: inputCurrency,
+                useExchangeAdjustment: useExchangeAdjustment
+            )
         }
     }
     
@@ -269,7 +280,7 @@ final class ExpenseEditViewModel {
     
     private func syncExchangeAdjustmentAndRecalculate(currentInput: InputCurrency) {
         currencyConverter.updateExchangeAdjustment(exchangeAdjustment)
-        amountManager.updateFromRateChange(inputCurrency: currentInput)
+        amountManager.updateFromRateChange(inputCurrency: currentInput, useExchangeAdjustment: useExchangeAdjustment)
     }
     
     // MARK: - Операции с хранилищем
