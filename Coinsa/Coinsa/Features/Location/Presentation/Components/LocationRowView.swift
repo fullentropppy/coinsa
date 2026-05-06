@@ -53,7 +53,7 @@ struct LocationRowView: View {
 
 private extension LocationRowView {
     static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
-        let builder = PreviewBuilder.builder().withBudgets(false).withExpenses(false)
+        let builder = PreviewBuilder.builder().withBudgets(false)
         let data = builder.buildData()
         let location = builder.getLocation(from: data)
 

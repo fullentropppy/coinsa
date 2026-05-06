@@ -18,9 +18,38 @@ struct TripListViewModel {
             guard var tripsForStatus = grouped[status] else { return nil }
             
             switch status {
-            case .ongoing: tripsForStatus.sort { $0.startDate > $1.startDate }
-            case .upcoming: tripsForStatus.sort { $0.startDate < $1.startDate }
-            case .completed: tripsForStatus.sort { $0.endDate > $1.endDate }
+            case .ongoing:
+                tripsForStatus.sort {
+                    if $0.startDate != $1.startDate {
+                        return $0.startDate > $1.startDate
+                    }
+                    if $0.totalDays != $1.totalDays {
+                        return $0.totalDays < $1.totalDays
+                    }
+                    return $0.endDate < $1.endDate
+                }
+                
+            case .upcoming:
+                tripsForStatus.sort {
+                    if $0.startDate != $1.startDate {
+                        return $0.startDate < $1.startDate
+                    }
+                    if $0.totalDays != $1.totalDays {
+                        return $0.totalDays < $1.totalDays
+                    }
+                    return $0.endDate < $1.endDate
+                }
+                
+            case .completed:
+                tripsForStatus.sort {
+                    if $0.startDate != $1.startDate {
+                        return $0.startDate > $1.startDate
+                    }
+                    if $0.totalDays != $1.totalDays {
+                        return $0.totalDays < $1.totalDays
+                    }
+                    return $0.endDate < $1.endDate
+                }
             }
             
             return (status, tripsForStatus)

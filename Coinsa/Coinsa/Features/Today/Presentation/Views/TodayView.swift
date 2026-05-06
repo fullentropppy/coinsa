@@ -31,7 +31,7 @@ struct TodayView: View {
     private var repository: ExpenseRepository {
         ExpenseRepository(context: context)
     }
-    
+
     // MARK: - Инициализация
     
     init() {
@@ -139,8 +139,8 @@ struct TodayView: View {
                     quickExpenseButton(category: category)
                 }
             }
-            .padding(.vertical, 2)
         }
+        .listRowBackground(Color.clear)
     }
     
     @ViewBuilder
@@ -233,20 +233,19 @@ struct TodayView: View {
             haptics.trigger(.add)
             selectedQuickCategory = category
         } label: {
-            HStack {
-                Image(systemName: category.secondaryIcon)
-                    .frame(width: 20)
+            HStack(alignment: .center) {
+                Image(systemName: category.primaryIcon)
+                    .frame(width: 20, height: 20)
+                    .foregroundStyle(category.accentColor)
+                    .shadow(color: category.accentColor.opacity(0.2), radius: 2)
                 Text(category.localizedResource)
-                    
             }
-            .foregroundStyle(.windowBackground)
-            .font(.subheadline.weight(.semibold))
+            .font(.subheadline.weight(.medium))
             .padding(.horizontal, 8)
             .padding(.vertical, 4)
             .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .buttonStyle(.glassProminent)
-        .tint(category.accentColor)
+        .buttonStyle(.glass)
     }
     
     private var todayExpenseListContent: some View {

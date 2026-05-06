@@ -81,7 +81,7 @@ struct BadgeView: View {
                 Text(title)
             }
         }
-        .font(.caption.weight(.semibold))
+        .font(.caption.weight(.medium))
         .foregroundStyle(.windowBackground)
         .padding(.horizontal, 8)
         .padding(.vertical, 4)

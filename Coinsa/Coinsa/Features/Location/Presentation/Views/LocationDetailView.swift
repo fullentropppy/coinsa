@@ -136,7 +136,7 @@ struct LocationDetailView: View {
             GroupHeaderView(
                 icon: Expense.primaryIcon,
                 title: .locationExpenses,
-                subtitle: .totalNumber(number: String(location.expensesCount))
+                itemCount: location.expensesCount
             )
             .listRowBackground(Color.clear)
             
