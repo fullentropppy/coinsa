@@ -13,7 +13,7 @@ struct GroupHeaderView: View {
     
     let icon: String
     let title: LocalizedStringResource
-    let subtitle: LocalizedStringResource?
+    let itemCount: Int?
     
     // MARK: - Тело View
     
@@ -21,29 +21,32 @@ struct GroupHeaderView: View {
     /// - Parameters:
     ///   - icon: Название системной иконки.
     ///   - title: Заголовок.
-    ///   - subtitle: Подазголовок (опционально).
-    init(icon: String, title: LocalizedStringResource, subtitle: LocalizedStringResource? = nil) {
+    ///   - itemCount: Количество элементов в группе (опционально).
+    init(icon: String, title: LocalizedStringResource, itemCount: Int? = nil) {
         self.icon = icon
         self.title = title
-        self.subtitle = subtitle
+        self.itemCount = itemCount
     }
     
     // MARK: - Тело View
     
     var body: some View {
         VStack(alignment: .center) {
-            HStack(alignment: .firstTextBaseline, spacing: 4) {
+            HStack(alignment: .center, spacing: 4) {
+                if let itemCount {
+                    HStack(alignment: .center, spacing: 0) {
+                        Image(systemName: "sum")
+                            .imageScale(.small)
+                            .fontWeight(.light)
+                        Text(String(itemCount))
+                            .fontWeight(.light)
+                    }
+                }
                 Image(systemName: icon)
                     .imageScale(.small)
+                    .fontWeight(.semibold)
                 Text(title)
                     .fontWeight(.semibold)
-            }
-            if let subtitle {
-                Divider()
-                    .frame(width: 80)
-                Text(subtitle)
-                    .font(.caption)
-                    .padding(1)
             }
         }
         .foregroundStyle(.secondary)
@@ -58,7 +61,7 @@ private extension GroupHeaderView {
         GroupHeaderView(
             icon: Location.primaryIcon,
             title: .tripLocations,
-            subtitle: .totalNumber(number: 4.numberFormat(fractionLength: 0))
+            itemCount: 4
         )
             .environment(\.locale, locale)
             .preferredColorScheme(colorScheme)

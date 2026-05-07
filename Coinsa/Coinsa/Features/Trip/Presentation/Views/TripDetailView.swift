@@ -140,7 +140,7 @@ struct TripDetailView: View {
             GroupHeaderView(
                 icon: Location.primaryIcon,
                 title: .tripLocations,
-                subtitle: .totalNumber(number: String(trip.locationsCount))
+                itemCount: trip.locationsCount  
             )
             .listRowBackground(Color.clear)
             
