@@ -11,6 +11,7 @@ enum ExpenseCategory: String, Codable, CaseIterable, Identifiable {
     
     case food
     case transport
+    case accommodation
     case activity
     case shopping
     case medicine

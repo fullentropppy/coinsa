@@ -13,6 +13,7 @@ extension ExpenseCategory: LocalizedResourceProviding {
         switch self {
         case .food: .expenseCategoryFood
         case .transport: .expenseCategoryTransport
+        case .accommodation: .expenseCategoryAccomodation
         case .activity: .expenseCategoryActivity
         case .shopping: .expenseCategoryShopping
         case .medicine: .expenseCategoryMedicine

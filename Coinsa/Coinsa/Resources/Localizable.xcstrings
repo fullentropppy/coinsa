@@ -1737,6 +1737,23 @@
         }
       }
     },
+    "expense.category.accomodation" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Accomodation"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Проживание"
+          }
+        }
+      }
+    },
     "expense.category.activity" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2076,6 +2093,126 @@
           }
         }
       }
+    },
+    "expense.subcategory.accomodationRental" : {
+      "extractionState" : "manual"
+    },
+    "expense.subcategory.activity" : {
+      "extractionState" : "manual"
+    },
+    "expense.subcategory.bankFee" : {
+      "extractionState" : "manual"
+    },
+    "expense.subcategory.breakfast" : {
+      "extractionState" : "manual"
+    },
+    "expense.subcategory.clothing" : {
+      "extractionState" : "manual"
+    },
+    "expense.subcategory.connectivity" : {
+      "extractionState" : "manual"
+    },
+    "expense.subcategory.cosmetics" : {
+      "extractionState" : "manual"
+    },
+    "expense.subcategory.digitalService" : {
+      "extractionState" : "manual"
+    },
+    "expense.subcategory.dinner" : {
+      "extractionState" : "manual"
+    },
+    "expense.subcategory.document" : {
+      "extractionState" : "manual"
+    },
+    "expense.subcategory.donation" : {
+      "extractionState" : "manual"
+    },
+    "expense.subcategory.electronics" : {
+      "extractionState" : "manual"
+    },
+    "expense.subcategory.entertainment" : {
+      "extractionState" : "manual"
+    },
+    "expense.subcategory.ferry" : {
+      "extractionState" : "manual"
+    },
+    "expense.subcategory.fuel" : {
+      "extractionState" : "manual"
+    },
+    "expense.subcategory.groceries" : {
+      "extractionState" : "manual"
+    },
+    "expense.subcategory.healthInsurance" : {
+      "extractionState" : "manual"
+    },
+    "expense.subcategory.homeGoods" : {
+      "extractionState" : "manual"
+    },
+    "expense.subcategory.hotel" : {
+      "extractionState" : "manual"
+    },
+    "expense.subcategory.jewelry" : {
+      "extractionState" : "manual"
+    },
+    "expense.subcategory.landmark" : {
+      "extractionState" : "manual"
+    },
+    "expense.subcategory.laundry" : {
+      "extractionState" : "manual"
+    },
+    "expense.subcategory.luggageStorrage" : {
+      "extractionState" : "manual"
+    },
+    "expense.subcategory.lunch" : {
+      "extractionState" : "manual"
+    },
+    "expense.subcategory.medicalCare" : {
+      "extractionState" : "manual"
+    },
+    "expense.subcategory.medication" : {
+      "extractionState" : "manual"
+    },
+    "expense.subcategory.other" : {
+      "extractionState" : "manual"
+    },
+    "expense.subcategory.park" : {
+      "extractionState" : "manual"
+    },
+    "expense.subcategory.plane" : {
+      "extractionState" : "manual"
+    },
+    "expense.subcategory.postalService" : {
+      "extractionState" : "manual"
+    },
+    "expense.subcategory.publicTransport" : {
+      "extractionState" : "manual"
+    },
+    "expense.subcategory.snack" : {
+      "extractionState" : "manual"
+    },
+    "expense.subcategory.souvenirs" : {
+      "extractionState" : "manual"
+    },
+    "expense.subcategory.Taxi" : {
+      "extractionState" : "manual"
+    },
+    "expense.subcategory.tour" : {
+      "extractionState" : "manual"
+    },
+    "expense.subcategory.touristTax" : {
+      "extractionState" : "manual"
+    },
+    "expense.subcategory.train" : {
+      "extractionState" : "manual"
+    },
+    "expense.subcategory.Transfer" : {
+      "extractionState" : "manual"
+    },
+    "expense.subcategory.transportRental" : {
+      "extractionState" : "manual"
+    },
+    "expense.subcategory.travelPass" : {
+      "extractionState" : "manual"
     },
     "location.add" : {
       "extractionState" : "manual",

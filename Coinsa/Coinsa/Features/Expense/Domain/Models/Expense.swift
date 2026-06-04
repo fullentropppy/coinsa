@@ -34,6 +34,9 @@ class Expense {
     /// Сырое значение категории траты.
     var categoryRaw: String = ""
     
+    /// Сырое значение подкатегории траты.
+    var subcategoryRaw: String = ""
+    
     /// Локация, в которой совершена трата.
     var location: Location?
     
@@ -57,6 +60,7 @@ class Expense {
     ///   - paymentMethodRaw: Сырое значение способа оплаты.
     ///   - exchangeAdjustment: Корректировка курса.
     ///   - categoryRaw: Сырое значение категории.
+    ///   - categoryRaw: Сырое значение подкатегории.
     ///   - location: Локация траты.
     ///   - comment: Комментарий.
     ///   - createdAt: Дата создания.
@@ -68,7 +72,8 @@ class Expense {
         rateLocalToBase: Double,
         paymentMethodRaw: String,
         exchangeAdjustment: Double,
-        categoryRaw: String ,
+        categoryRaw: String,
+        subcategoryRaw: String = "other", // временно
         location: Location,
         comment: String?,
         createdAt: Date,
@@ -84,6 +89,7 @@ class Expense {
         self.paymentMethodRaw = paymentMethodRaw
         self.exchangeAdjustment = exchangeAdjustment
         self.categoryRaw = categoryRaw
+        self.subcategoryRaw = subcategoryRaw
         self.location = location
         self.comment = comment
     }
