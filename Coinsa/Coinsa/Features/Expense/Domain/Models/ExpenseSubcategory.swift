@@ -26,7 +26,7 @@ enum ExpenseSubcategory: String, Codable, CaseIterable, Identifiable {
     case taxi
     case transfer
     case travelPass
-    case transportRental
+    case vehicleRental
     case fuel
     
     // MARK: - Жилье
@@ -35,7 +35,7 @@ enum ExpenseSubcategory: String, Codable, CaseIterable, Identifiable {
     case accommodationRental
     case touristTax
     
-    // MARK: - Активность
+    // MARK: - Досуг
     
     case tour
     case landmark
@@ -58,11 +58,11 @@ enum ExpenseSubcategory: String, Codable, CaseIterable, Identifiable {
     case medicalCare
     case medication
     
-    // MARK: - Другое
+    // MARK: - Прочее
     
     case connectivity
-    case bankFee
-    case document
+    case bankFees
+    case documents
     case laundry
     case donation
     case luggageStorage

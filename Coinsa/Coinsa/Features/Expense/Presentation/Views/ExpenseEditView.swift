@@ -149,6 +149,13 @@ struct ExpenseEditView: View {
                 category.makeLabel()
             }
             LabeledPicker(
+                title: .expenseSubcategory,
+                selection: subcategoryBinding,
+                options: viewModel.category.subcategories
+            ) { subcategory in
+                subcategory.makeLabel()
+            }
+            LabeledPicker(
                 title: .expensePaymentMethod,
                 selection: paymentMethodBinding,
                 options: PaymentMethod.allCases
@@ -245,7 +252,14 @@ struct ExpenseEditView: View {
     private var categoryBinding: Binding<ExpenseCategory> {
         Binding(
             get: { viewModel.category },
-            set: { viewModel.category = $0 }
+            set: { viewModel.updateCategory($0) }
+        )
+    }
+    
+    private var subcategoryBinding: Binding<ExpenseSubcategory> {
+        Binding(
+            get: { viewModel.subcategory },
+            set: { viewModel.subcategory = $0 }
         )
     }
 

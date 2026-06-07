@@ -14,10 +14,10 @@ extension ExpenseCategory: ValueVisualRepresentable {
         case .food: "fork.knife"
         case .transport: "car"
         case .accommodation: "house"
-        case .activity: "sparkles.2"
+        case .leisure: "sparkles.2"
         case .shopping: "bag"
         case .medicine: "cross"
-        case .other: "circle.grid.2x2"
+        case .miscellaneous: "circle.grid.2x2"
         }
     }
     
@@ -27,10 +27,10 @@ extension ExpenseCategory: ValueVisualRepresentable {
         case .food: "fork.knife"
         case .transport: "car.fill"
         case .accommodation: "house.fill"
-        case .activity: "sparkles.2"
+        case .leisure: "sparkles.2"
         case .shopping: "bag.fill"
         case .medicine: "cross.fill"
-        case .other: "circle.grid.2x2.fill"
+        case .miscellaneous: "circle.grid.2x2.fill"
         }
     }
     
@@ -40,10 +40,10 @@ extension ExpenseCategory: ValueVisualRepresentable {
         case .food: .mint
         case .transport: .blue
         case .accommodation: .green
-        case .activity: .yellow
+        case .leisure: .yellow
         case .shopping: .red
         case .medicine: .cyan
-        case .other: .brown
+        case .miscellaneous: .brown
         }
     }
 }

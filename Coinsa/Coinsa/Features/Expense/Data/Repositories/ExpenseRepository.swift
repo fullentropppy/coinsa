@@ -25,6 +25,7 @@ struct ExpenseRepository {
     ///   - paymentMethod: Способ оплаты.
     ///   - exchangeAdjustment: Процентная корректировка курса.
     ///   - category: Категория траты.
+    ///   - subcategory: Подкатегория траты.
     ///   - location: Локация, в которой совершена трата.
     ///   - comment: Комментарий (опционально).
     func add(
@@ -34,6 +35,7 @@ struct ExpenseRepository {
         paymentMethod: PaymentMethod,
         exchangeAdjustment: Double,
         category: ExpenseCategory,
+        subcategory: ExpenseSubcategory,
         location: Location,
         comment: String?
     ) {
@@ -47,6 +49,7 @@ struct ExpenseRepository {
             paymentMethodRaw: paymentMethod.rawValue,
             exchangeAdjustment: normalizedExchangeAdjustment(exchangeAdjustment),
             categoryRaw: category.rawValue,
+            subcategoryRaw: subcategory.rawValue,
             location: location,
             comment: normalizedComment(comment),
             createdAt: now,
@@ -65,6 +68,7 @@ struct ExpenseRepository {
     ///   - paymentMethod: Новый способ оплаты.
     ///   - exchangeAdjustment: Новая корректировка.
     ///   - category: Новая категория.
+    ///   - subcategory: Новая подкатегория.
     ///   - comment: Новый комментарий.
     func update(
         _ expense: Expense,
@@ -74,6 +78,7 @@ struct ExpenseRepository {
         paymentMethod: PaymentMethod,
         exchangeAdjustment: Double,
         category: ExpenseCategory,
+        subcategory: ExpenseSubcategory,
         comment: String?
     ) {
         expense.date = date
@@ -82,6 +87,7 @@ struct ExpenseRepository {
         expense.paymentMethodRaw = paymentMethod.rawValue
         expense.exchangeAdjustment = normalizedExchangeAdjustment(exchangeAdjustment)
         expense.categoryRaw = category.rawValue
+        expense.subcategoryRaw = subcategory.rawValue
         expense.comment = normalizedComment(comment)
         expense.updatedAt = Date()
         try? context.save()

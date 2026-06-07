@@ -8,6 +8,21 @@
 extension ExpenseCategory {
     /// Дочерние подкатегории для категории.
     var subcategories: [ExpenseSubcategory] {
-        ExpenseSubcategory.allCases.filter { $0.parentCategory == self }
+        switch self {
+        case .food:
+            [.breakfast, .lunch, .dinner, .snack, .groceries, .other]
+        case .transport:
+            [.plane, .ferry, .train, .publicTransport, .taxi, .transfer, .travelPass, .vehicleRental, .fuel, .other]
+        case .accommodation:
+            [.hotel, .accommodationRental, .touristTax, .other]
+        case .leisure:
+            [.tour, .landmark, .park, .activity, .entertainment, .other]
+        case .shopping:
+            [.clothing, .cosmetics, .souvenirs, .jewelry, .homeGoods, .electronics, .other]
+        case .medicine:
+            [.healthInsurance, .medicalCare, .medication, .other]
+        case .miscellaneous:
+            [.connectivity, .bankFees, .documents, .laundry, .donation, .luggageStorage, .postalService, .digitalService, .other]
+        }
     }
 }

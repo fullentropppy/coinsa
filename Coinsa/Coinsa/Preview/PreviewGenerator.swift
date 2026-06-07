@@ -141,6 +141,7 @@ private extension PreviewGenerator {
     ///   - paymentMethod: Способ оплаты. По умолчанию `.cash`.
     ///   - exchangeAdjustment: Поправка курса (опционально).
     ///   - category: Категория расхода.
+    ///   - subcategory: Подкатегория расхода.
     ///   - comment: Комментарий (опционально).
     /// - Returns: Сгенерированный расход.
     private static func makeExpense(
@@ -151,6 +152,7 @@ private extension PreviewGenerator {
         paymentMethod: PaymentMethod = .cash,
         exchangeAdjustment: Double? = nil,
         category: ExpenseCategory,
+        subcategory: ExpenseSubcategory,
         comment: String? = nil
     ) -> Expense {
         let now = Date()
@@ -162,6 +164,7 @@ private extension PreviewGenerator {
             paymentMethodRaw: paymentMethod.rawValue,
             exchangeAdjustment: exchangeAdjustment ?? location.exchangeAdjustment,
             categoryRaw: category.rawValue,
+            subcategoryRaw: subcategory.rawValue,
             location: location,
             comment: comment,
             createdAt: now,
@@ -185,51 +188,51 @@ private extension PreviewGenerator {
             budgetsByCategory = [
                 .food: 22000,
                 .transport: 7200,
-                .activity: 12550,
+                .leisure: 12550,
                 .shopping: 29500,
                 .medicine: 2000,
-                .other: 9490
+                .miscellaneous: 9490
             ]
         case .kyoto:
             budgetsByCategory = [
                 .food: 18000,
-                .activity: 5000,
+                .leisure: 5000,
                 .shopping: 19000,
-                .other: 20500
+                .miscellaneous: 20500
             ]
         case .osaka:
             budgetsByCategory = [
                 .food: 14000,
                 .transport: 6500,
-                .other: 30000
+                .miscellaneous: 30000
             ]
         case .saintp:
             budgetsByCategory = [
                 .food: 6000,
                 .transport: 1500,
-                .activity: 4000,
-                .other: 2000
+                .leisure: 4000,
+                .miscellaneous: 2000
             ]
         case .seoul:
             budgetsByCategory = [
                 .food: 26000,
                 .transport: 6200,
-                .activity: 18000,
+                .leisure: 18000,
                 .shopping: 24000
             ]
         case .busan:
             budgetsByCategory = [
                 .food: 14000,
                 .transport: 3200,
-                .other: 16000
+                .miscellaneous: 16000
             ]
         case .istanbul:
             budgetsByCategory = [
                 .food: 21000,
                 .transport: 3600,
-                .activity: 8200,
+                .leisure: 8200,
                 .shopping: 6800,
-                .other: 4200
+                .miscellaneous: 4200
             ]
         }
         
@@ -272,13 +275,15 @@ private extension PreviewGenerator {
                 date: startDate.adding(hours: 8, minutes: 45),
                 baseAmount: 2300,
                 category: .food,
+                subcategory: .breakfast,
                 comment: PreviewExpenseComment.breakfast.rawValue
             ),
             makeExpense(
                 to: location,
                 date: startDate.adding(hours: 13, minutes: 20),
                 baseAmount: 2116.4,
-                category: .other
+                category: .miscellaneous,
+                subcategory: .other
             ),
             makeExpense(
                 to: location,
@@ -286,19 +291,22 @@ private extension PreviewGenerator {
                 baseAmount: 120,
                 paymentMethod: .card,
                 exchangeAdjustment: 0,
-                category: .transport
+                category: .transport,
+                subcategory: .publicTransport
             ),
             makeExpense(
                 to: location,
                 date: startDate.adding(hours: 17, minutes: 11),
                 baseAmount: 3200,
-                category: .activity
+                category: .leisure,
+                subcategory: .entertainment
             ),
             makeExpense(
                 to: location,
                 date: startDate.adding(hours: 23, minutes: 31),
                 baseAmount: 1992,
-                category: .food
+                category: .food,
+                subcategory: .dinner
             ),
             makeExpense(
                 to: location,
@@ -307,6 +315,7 @@ private extension PreviewGenerator {
                 paymentMethod: .card,
                 exchangeAdjustment: 0,
                 category: .transport,
+                subcategory: .publicTransport,
                 comment: PreviewExpenseComment.subway.rawValue
             ),
             makeExpense(
@@ -315,7 +324,8 @@ private extension PreviewGenerator {
                 baseAmount: 2120,
                 paymentMethod: .card,
                 exchangeAdjustment: 3.8,
-                category: .food
+                category: .food,
+                subcategory: .lunch
             ),
             makeExpense(
                 to: location,
@@ -323,13 +333,15 @@ private extension PreviewGenerator {
                 baseAmount: 8902,
                 paymentMethod: .card,
                 exchangeAdjustment: 3.8,
-                category: .activity
+                category: .leisure,
+                subcategory: .activity
             ),
             makeExpense(
                 to: location,
-                date: startDate.adding(days: 1, hours: 18, minutes: 31),
-                baseAmount: 8902,
+                date: startDate.adding(days: 1, hours: 20, minutes: 40),
+                baseAmount: 8150,
                 category: .shopping,
+                subcategory: .clothing,
                 comment: PreviewExpenseComment.clothes.rawValue
             ),
             makeExpense(
@@ -337,19 +349,22 @@ private extension PreviewGenerator {
                 date: startDate.adding(days: 1, hours: 23),
                 baseAmount: 1220,
                 category: .medicine,
+                subcategory: .medication,
                 comment: PreviewExpenseComment.pharmacy.rawValue
             ),
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 2, hours: 8, minutes: 24),
                 baseAmount: 240,
-                category: .transport
+                category: .transport,
+                subcategory: .publicTransport
             ),
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 2, hours: 12, minutes: 01),
                 baseAmount: 3098.4,
                 category: .food,
+                subcategory: .lunch,
                 comment: PreviewExpenseComment.breakfast.rawValue
             ),
             makeExpense(
@@ -357,7 +372,8 @@ private extension PreviewGenerator {
                 date: startDate.adding(days: 2, hours: 15, minutes: 58),
                 baseAmount: 3409.72,
                 paymentMethod: .card,
-                category: .activity,
+                category: .leisure,
+                subcategory: .landmark,
                 comment: PreviewExpenseComment.museum.rawValue
             ),
             makeExpense(
@@ -366,7 +382,8 @@ private extension PreviewGenerator {
                 baseAmount: 312,
                 paymentMethod: .card,
                 exchangeAdjustment: 0,
-                category: .transport
+                category: .transport,
+                subcategory: .publicTransport
             ),
             makeExpense(
                 to: location,
@@ -374,6 +391,7 @@ private extension PreviewGenerator {
                 baseAmount: 12091.07,
                 paymentMethod: .card,
                 category: .shopping,
+                subcategory: .clothing,
                 comment: PreviewExpenseComment.clothes.rawValue
             ),
             makeExpense(
@@ -382,19 +400,22 @@ private extension PreviewGenerator {
                 baseAmount: 887.01,
                 paymentMethod: .card,
                 exchangeAdjustment: 1,
-                category: .medicine
+                category: .medicine,
+                subcategory: .medication
             ),
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 3, hours: 12, minutes: 53),
                 baseAmount: 2590,
-                category: .food
+                category: .food,
+                subcategory: .lunch
             ),
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 3, hours: 14, minutes: 11),
                 baseAmount: 1450,
-                category: .other,
+                category: .miscellaneous,
+                subcategory: .other,
                 comment: PreviewExpenseComment.miscellaneous.rawValue
             ),
             makeExpense(
@@ -403,26 +424,30 @@ private extension PreviewGenerator {
                 baseAmount: 90,
                 paymentMethod: .card,
                 exchangeAdjustment: 0,
-                category: .transport
+                category: .transport,
+                subcategory: .publicTransport
             ),
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 3, hours: 19, minutes: 28),
                 baseAmount: 2500,
                 category: .shopping,
+                subcategory: .cosmetics
             ),
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 3, hours: 23, minutes: 5),
                 baseAmount: 1841.98,
                 category: .food,
+                subcategory: .snack,
                 comment: PreviewExpenseComment.streetFood.rawValue
             ),
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 4, hours: 10, minutes: 15),
                 baseAmount: 1882,
-                category: .food
+                category: .food,
+                subcategory: .breakfast
             ),
             makeExpense(
                 to: location,
@@ -430,13 +455,15 @@ private extension PreviewGenerator {
                 baseAmount: 500,
                 paymentMethod: .card,
                 exchangeAdjustment: 0,
-                category: .transport
+                category: .transport,
+                subcategory: .taxi
             ),
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 4, hours: 14, minutes: 59),
                 baseAmount: 1003.6,
-                category: .other
+                category: .miscellaneous,
+                subcategory: .digitalService
             ),
             makeExpense(
                 to: location,
@@ -444,13 +471,15 @@ private extension PreviewGenerator {
                 baseAmount: 5902,
                 paymentMethod: .card,
                 exchangeAdjustment: 4.5,
-                category: .activity
+                category: .leisure,
+                subcategory: .tour
             ),
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 5, hours: 19, minutes: 30),
                 baseAmount: 2600,
-                category: .other,
+                category: .miscellaneous,
+                subcategory: .other,
                 comment: PreviewExpenseComment.miscellaneous.rawValue
             ),
             makeExpense(
@@ -458,6 +487,7 @@ private extension PreviewGenerator {
                 date: startDate.adding(days: 4, hours: 20, minutes: 50),
                 baseAmount: 202,
                 category: .transport,
+                subcategory: .publicTransport,
                 comment: PreviewExpenseComment.subway.rawValue
             ),
             makeExpense(
@@ -466,7 +496,8 @@ private extension PreviewGenerator {
                 baseAmount: 3850,
                 paymentMethod: .card,
                 exchangeAdjustment: 0,
-                category: .food
+                category: .food,
+                subcategory: .dinner
             ),
         ]
     }
@@ -480,6 +511,7 @@ private extension PreviewGenerator {
                 date: startDate.adding(hours: 8, minutes: 14),
                 baseAmount: 6250,
                 category: .transport,
+                subcategory: .train,
                 comment: PreviewExpenseComment.train.rawValue
             ),
             makeExpense(
@@ -489,6 +521,7 @@ private extension PreviewGenerator {
                 paymentMethod: .card,
                 exchangeAdjustment: 0,
                 category: .food,
+                subcategory: .breakfast,
                 comment: PreviewExpenseComment.snacks.rawValue
             ),
             makeExpense(
@@ -496,7 +529,8 @@ private extension PreviewGenerator {
                 date: startDate.adding(hours: 10, minutes: 19),
                 baseAmount: 3509.9,
                 paymentMethod: .card,
-                category: .transport,
+                category: .leisure,
+                subcategory: .entertainment,
                 comment: PreviewExpenseComment.taxi.rawValue
             ),
             makeExpense(
@@ -504,31 +538,36 @@ private extension PreviewGenerator {
                 date: startDate.adding(hours: 10, minutes: 54),
                 baseAmount: 2500.05,
                 category: .food,
+                subcategory: .lunch
             ),
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 1, hours: 13, minutes: 14),
                 baseAmount: 5209.6,
-                category: .activity,
+                category: .leisure,
+                subcategory: .tour
             ),
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 1, hours: 14, minutes: 20),
                 baseAmount: 120,
                 category: .medicine,
+                subcategory: .medication
             ),
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 1, hours: 14, minutes: 57),
                 baseAmount: 2691,
                 category: .food,
+                subcategory: .lunch,
                 comment: PreviewExpenseComment.lunch.rawValue
             ),
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 1, hours: 16, minutes: 50),
                 baseAmount: 890,
-                category: .activity,
+                category: .leisure,
+                subcategory: .park,
                 comment: PreviewExpenseComment.temple.rawValue
             ),
             makeExpense(
@@ -536,13 +575,15 @@ private extension PreviewGenerator {
                 date: startDate.adding(days: 1, hours: 19, minutes: 10),
                 baseAmount: 212,
                 category: .transport,
+                subcategory: .publicTransport,
                 comment: PreviewExpenseComment.subway.rawValue
             ),
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 1, hours: 20, minutes: 19),
                 baseAmount: 1620.18,
-                category: .other,
+                category: .shopping,
+                subcategory: .souvenirs,
                 comment: PreviewExpenseComment.souvenirs.rawValue
             ),
             makeExpense(
@@ -550,6 +591,7 @@ private extension PreviewGenerator {
                 date: startDate.adding(days: 2, hours: 9, minutes: 36),
                 baseAmount: 2906.7,
                 category: .food,
+                subcategory: .breakfast,
                 comment: PreviewExpenseComment.breakfast.rawValue
             ),
             makeExpense(
@@ -557,6 +599,7 @@ private extension PreviewGenerator {
                 date: startDate.adding(days: 2, hours: 10, minutes: 53),
                 baseAmount: 1105,
                 category: .transport,
+                subcategory: .publicTransport,
                 comment: PreviewExpenseComment.bus.rawValue
             ),
             makeExpense(
@@ -564,33 +607,37 @@ private extension PreviewGenerator {
                 date: startDate.adding(days: 2, hours: 14, minutes: 32),
                 baseAmount: 2000.05,
                 paymentMethod: .card,
-                category: .activity
+                category: .leisure,
+                subcategory: .landmark
             ),
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 2, hours: 16, minutes: 50),
                 baseAmount: 2012,
-                category: .other
+                category: .miscellaneous,
+                subcategory: .other
             ),
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 2, hours: 20, minutes: 15),
                 baseAmount: 29020,
                 paymentMethod: .card,
-                category: .shopping
+                category: .shopping,
+                subcategory: .electronics
             ),
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 2, hours: 22, minutes: 28),
                 baseAmount: 3040.84,
                 category: .food,
-                
+                subcategory: .dinner
             ),
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 2, hours: 9),
                 baseAmount: 706,
                 category: .food,
+                subcategory: .breakfast,
                 comment: PreviewExpenseComment.breakfast.rawValue
             ),
             makeExpense(
@@ -598,6 +645,7 @@ private extension PreviewGenerator {
                 date: startDate.adding(days: 2, hours: 10, minutes: 12),
                 baseAmount: 706,
                 category: .transport,
+                subcategory: .train,
                 comment: PreviewExpenseComment.train.rawValue
             )
         ]
@@ -611,13 +659,15 @@ private extension PreviewGenerator {
                 to: location,
                 date: startDate.adding(hours: 11, minutes: 49),
                 baseAmount: 2099,
-                category: .activity
+                category: .leisure,
+                subcategory: .landmark
             ),
             makeExpense(
                 to: location,
                 date: startDate.adding(hours: 15, minutes: 20),
                 baseAmount: 201,
-                category: .transport
+                category: .transport,
+                subcategory: .publicTransport
             ),
             makeExpense(
                 to: location,
@@ -625,13 +675,15 @@ private extension PreviewGenerator {
                 baseAmount: 2720,
                 paymentMethod: .card,
                 exchangeAdjustment: 0,
-                category: .food
+                category: .food,
+                subcategory: .lunch
             ),
             makeExpense(
                 to: location,
                 date: startDate.adding(hours: 17, minutes: 39),
                 baseAmount: 290,
-                category: .other,
+                category: .miscellaneous,
+                subcategory: .donation,
                 comment: PreviewExpenseComment.miscellaneous.rawValue
             ),
             makeExpense(
@@ -640,13 +692,15 @@ private extension PreviewGenerator {
                 baseAmount: 290,
                 paymentMethod: .card,
                 exchangeAdjustment: 0,
-                category: .food
+                category: .food,
+                subcategory: .snack
             ),
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 1, hours: 10, minutes: 27),
                 baseAmount: 1556,
                 category: .food,
+                subcategory: .breakfast,
                 comment: PreviewExpenseComment.breakfast.rawValue
             ),
             makeExpense(
@@ -654,20 +708,23 @@ private extension PreviewGenerator {
                 date: startDate.adding(days: 1, hours: 14, minutes: 1),
                 baseAmount: 6991.44,
                 paymentMethod: .card,
-                category: .shopping
+                category: .shopping,
+                subcategory: .homeGoods
             ),
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 1, hours: 14, minutes: 32),
                 baseAmount: 4010,
                 paymentMethod: .card,
-                category: .other
+                category: .miscellaneous,
+                subcategory: .other
             ),
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 1, hours: 18, minutes: 49),
                 baseAmount: 1900.04,
-                category: .activity
+                category: .leisure,
+                subcategory: .landmark
             ),
             makeExpense(
                 to: location,
@@ -676,13 +733,15 @@ private extension PreviewGenerator {
                 paymentMethod: .card,
                 exchangeAdjustment: 0,
                 category: .food,
+                subcategory: .snack,
                 comment: PreviewExpenseComment.streetFood.rawValue
             ),
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 2, hours: 10, minutes: 15),
                 baseAmount: 2068,
-                category: .food
+                category: .food,
+                subcategory: .breakfast
             ),
             makeExpense(
                 to: location,
@@ -690,7 +749,8 @@ private extension PreviewGenerator {
                 baseAmount: 2400,
                 paymentMethod: .card,
                 exchangeAdjustment: 2,
-                category: .activity,
+                category: .leisure,
+                subcategory: .landmark,
                 comment: PreviewExpenseComment.museum.rawValue
             ),
             makeExpense(
@@ -698,6 +758,7 @@ private extension PreviewGenerator {
                 date: startDate.adding(days: 2, hours: 14, minutes: 20),
                 baseAmount: 309.06,
                 category: .transport,
+                subcategory: .publicTransport
             ),
             makeExpense(
                 to: location,
@@ -706,13 +767,15 @@ private extension PreviewGenerator {
                 paymentMethod: .card,
                 exchangeAdjustment: 2,
                 category: .shopping,
+                subcategory: .clothing,
                 comment: PreviewExpenseComment.clothes.rawValue
             ),
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 2, hours: 22),
                 baseAmount: 2095,
-                category: .food
+                category: .food,
+                subcategory: .dinner
             ),
             makeExpense(
                 to: location,
@@ -720,13 +783,15 @@ private extension PreviewGenerator {
                 baseAmount: 5252.9,
                 paymentMethod: .card,
                 category: .transport,
+                subcategory: .taxi,
                 comment: PreviewExpenseComment.taxi.rawValue
             ),
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 3, hours: 7, minutes: 26),
                 baseAmount: 4520,
-                category: .food
+                category: .food,
+                subcategory: .breakfast
             ),
             makeExpense(
                 to: location,
@@ -734,7 +799,8 @@ private extension PreviewGenerator {
                 baseAmount: 6270,
                 paymentMethod: .card,
                 exchangeAdjustment: 5.5,
-                category: .other
+                category: .miscellaneous,
+                subcategory: .other
             )
         ]
     }
@@ -748,7 +814,8 @@ private extension PreviewGenerator {
                 date: startDate.adding(hours: 10, minutes: 19),
                 baseAmount: 2990,
                 paymentMethod: .card,
-                category: .food
+                category: .food,
+                subcategory: .breakfast
             ),
             makeExpense(
                 to: location,
@@ -756,6 +823,7 @@ private extension PreviewGenerator {
                 baseAmount: 950,
                 paymentMethod: .card,
                 category: .transport,
+                subcategory: .taxi,
                 comment: PreviewExpenseComment.taxi.rawValue
             ),
             makeExpense(
@@ -763,7 +831,8 @@ private extension PreviewGenerator {
                 date: startDate.adding(hours: 16, minutes: 17),
                 baseAmount: 2400,
                 paymentMethod: .card,
-                category: .activity,
+                category: .leisure,
+                subcategory: .landmark,
                 comment: PreviewExpenseComment.museum.rawValue
             ),
             makeExpense(
@@ -771,7 +840,8 @@ private extension PreviewGenerator {
                 date: startDate.adding(hours: 21, minutes: 33),
                 baseAmount: 1800,
                 paymentMethod: .card,
-                category: .food
+                category: .food,
+                subcategory: .dinner
             )
         ]
     }
@@ -785,6 +855,7 @@ private extension PreviewGenerator {
                 date: startDate.adding(hours: 8, minutes: 15),
                 baseAmount: 3205.92,
                 category: .food,
+                subcategory: .breakfast,
                 comment: PreviewExpenseComment.breakfast.rawValue
             ),
             makeExpense(
@@ -792,6 +863,7 @@ private extension PreviewGenerator {
                 date: startDate.adding(hours: 9, minutes: 14),
                 baseAmount: 312,
                 category: .transport,
+                subcategory: .publicTransport,
                 comment: PreviewExpenseComment.subway.rawValue
             ),
             makeExpense(
@@ -801,13 +873,15 @@ private extension PreviewGenerator {
                 paymentMethod: .card,
                 exchangeAdjustment: 0,
                 category: .food,
+                subcategory: .lunch,
                 comment: PreviewExpenseComment.lunch.rawValue
             ),
             makeExpense(
                 to: location,
                 date: startDate.adding(hours: 15, minutes: 53),
                 baseAmount: 150,
-                category: .other
+                category: .miscellaneous,
+                subcategory: .bankFees
             ),
             makeExpense(
                 to: location,
@@ -815,14 +889,16 @@ private extension PreviewGenerator {
                 baseAmount: 924.13,
                 paymentMethod: .card,
                 exchangeAdjustment: 1,
-                category: .medicine
+                category: .medicine,
+                subcategory: .medication
             ),
             makeExpense(
                 to: location,
                 date: startDate.adding(hours: 19, minutes: 49),
                 baseAmount: 9200.2,
                 paymentMethod: .card,
-                category: .shopping
+                category: .shopping,
+                subcategory: .jewelry
             ),
             makeExpense(
                 to: location,
@@ -830,19 +906,22 @@ private extension PreviewGenerator {
                 baseAmount: 2910,
                 paymentMethod: .card,
                 exchangeAdjustment: 0,
-                category: .food
+                category: .food,
+                subcategory: .dinner
             ),
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 1, hours: 9, minutes: 11),
                 baseAmount: 2450,
-                category: .food
+                category: .food,
+                subcategory: .breakfast
             ),
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 1, hours: 10, minutes: 15),
                 baseAmount: 292.4,
                 category: .transport,
+                subcategory: .publicTransport,
                 comment: PreviewExpenseComment.subway.rawValue
             ),
             makeExpense(
@@ -850,7 +929,8 @@ private extension PreviewGenerator {
                 date: startDate.adding(days: 1, hours: 13, minutes: 13),
                 baseAmount: 1043,
                 paymentMethod: .card,
-                category: .activity,
+                category: .leisure,
+                subcategory: .landmark,
                 comment: PreviewExpenseComment.museum.rawValue
             ),
             makeExpense(
@@ -858,39 +938,45 @@ private extension PreviewGenerator {
                 date: startDate.adding(days: 1, hours: 15, minutes: 16),
                 baseAmount: 1687,
                 category: .food,
+                subcategory: .lunch,
                 comment: PreviewExpenseComment.lunch.rawValue
             ),
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 1, hours: 16, minutes: 37),
                 baseAmount: 300,
-                category: .transport
+                category: .transport,
+                subcategory: .publicTransport
             ),
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 1, hours: 19, minutes: 50),
                 baseAmount: 2540.14,
-                category: .food
+                category: .food,
+                subcategory: .dinner
             ),
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 2, hours: 11),
                 baseAmount: 2051.51,
                 category: .food,
+                subcategory: .snack,
                 comment: PreviewExpenseComment.streetFood.rawValue
             ),
             makeExpense(to: location,
                 date: startDate.adding(days: 2, hours: 12, minutes: 7),
                 baseAmount: 199.3,
                 paymentMethod: .card,
-                category: .transport
+                category: .transport,
+                subcategory: .publicTransport
             ),
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 2, hours: 17, minutes: 59),
                 baseAmount: 14200,
                 paymentMethod: .card,
-                category: .activity
+                category: .leisure,
+                subcategory: .activity
             ),
             makeExpense(
                 to: location,
@@ -898,13 +984,15 @@ private extension PreviewGenerator {
                 baseAmount: 1250,
                 paymentMethod: .card,
                 exchangeAdjustment: 6,
-                category: .other
+                category: .miscellaneous,
+                subcategory: .laundry
             ),
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 2, hours: 22, minutes: 1),
                 baseAmount: 1940.2,
-                category: .food
+                category: .food,
+                subcategory: .dinner
             ),
             makeExpense(
                 to: location,
@@ -912,26 +1000,30 @@ private extension PreviewGenerator {
                 baseAmount: 1001,
                 paymentMethod: .card,
                 exchangeAdjustment: 1,
-                category: .medicine
+                category: .medicine,
+                subcategory: .medication
             ),
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 3, hours: 10, minutes: 14),
                 baseAmount: 2046,
-                category: .food
+                category: .food,
+                subcategory: .breakfast
             ),
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 3, hours: 11, minutes: 35),
                 baseAmount: 199,
-                category: .transport
+                category: .transport,
+                subcategory: .publicTransport
             ),
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 3, hours: 15, minutes: 42),
                 baseAmount: 765,
                 paymentMethod: .card,
-                category: .other,
+                category: .miscellaneous,
+                subcategory: .bankFees,
                 comment: PreviewExpenseComment.miscellaneous.rawValue
             )
         ]

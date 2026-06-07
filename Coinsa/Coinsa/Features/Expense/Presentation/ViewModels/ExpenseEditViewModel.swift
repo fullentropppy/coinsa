@@ -59,6 +59,7 @@ final class ExpenseEditViewModel {
     
     var date: Date
     var category: ExpenseCategory
+    var subcategory: ExpenseSubcategory
     var comment: String
     
     // MARK: - Состояние UI. Сумма
@@ -133,6 +134,7 @@ final class ExpenseEditViewModel {
             paymentMethod: preselectedPaymentMethod ?? .card,
             exchangeAdjustment: location.exchangeAdjustment,
             category: preselectedCategory ?? .defaultValue,
+            subcategory: .defaultValue,
             comment: ""
         )
     }
@@ -150,6 +152,7 @@ final class ExpenseEditViewModel {
             paymentMethod: expense.paymentMethod,
             exchangeAdjustment: expense.exchangeAdjustment,
             category: expense.category,
+            subcategory: expense.subcategory,
             comment: expense.comment ?? ""
         )
     }
@@ -164,6 +167,7 @@ final class ExpenseEditViewModel {
         paymentMethod: PaymentMethod,
         exchangeAdjustment: Double,
         category: ExpenseCategory,
+        subcategory: ExpenseSubcategory,
         comment: String
     ) {
         self.location = location
@@ -172,6 +176,7 @@ final class ExpenseEditViewModel {
         self.paymentMethod = paymentMethod
         self.exchangeAdjustment = exchangeAdjustment
         self.category = category
+        self.subcategory = subcategory
         self.comment = comment
         
         let exchangeRateProvider = ExchangeRateProvider(service: HexarateService())
@@ -197,6 +202,7 @@ final class ExpenseEditViewModel {
             paymentMethod: paymentMethod,
             exchangeAdjustment: exchangeAdjustment,
             category: category,
+            subcategory: subcategory,
             comment: comment
         )
         
@@ -251,9 +257,17 @@ final class ExpenseEditViewModel {
                 paymentMethod: initialSnapshot.paymentMethod,
                 exchangeAdjustment: initialSnapshot.exchangeAdjustment,
                 category: initialSnapshot.category,
+                subcategory: initialSnapshot.subcategory,
                 comment: initialSnapshot.comment
             )
         }
+    }
+    
+    // MARK: - Операции с категорией
+    
+    func updateCategory(_ newCategory: ExpenseCategory) {
+        category = newCategory
+        subcategory = .defaultValue
     }
     
     func requestRateRefresh(for inputCurrency: InputCurrency = .base) {
@@ -295,6 +309,7 @@ final class ExpenseEditViewModel {
                 paymentMethod: paymentMethod,
                 exchangeAdjustment: exchangeAdjustment,
                 category: category,
+                subcategory: subcategory,
                 comment: comment
             )
         } else {
@@ -305,6 +320,7 @@ final class ExpenseEditViewModel {
                 paymentMethod: paymentMethod,
                 exchangeAdjustment: exchangeAdjustment,
                 category: category,
+                subcategory: subcategory,
                 location: location,
                 comment: comment
             )
@@ -324,6 +340,7 @@ private extension ExpenseEditViewModel {
         let paymentMethod: PaymentMethod
         let exchangeAdjustment: Double
         let category: ExpenseCategory
+        let subcategory: ExpenseSubcategory
         let comment: String?
         
         // MARK: - Инициализация
@@ -336,6 +353,7 @@ private extension ExpenseEditViewModel {
                 paymentMethod: viewModel.paymentMethod,
                 exchangeAdjustment: viewModel.exchangeAdjustment,
                 category: viewModel.category,
+                subcategory: viewModel.subcategory,
                 comment: viewModel.comment
             )
         }
@@ -347,6 +365,7 @@ private extension ExpenseEditViewModel {
             paymentMethod: PaymentMethod,
             exchangeAdjustment: Double,
             category: ExpenseCategory,
+            subcategory: ExpenseSubcategory,
             comment: String?
         ) {
             self.date = date
@@ -355,6 +374,7 @@ private extension ExpenseEditViewModel {
             self.paymentMethod = paymentMethod
             self.exchangeAdjustment = exchangeAdjustment
             self.category = category
+            self.subcategory = subcategory
             self.comment = comment
         }
     }

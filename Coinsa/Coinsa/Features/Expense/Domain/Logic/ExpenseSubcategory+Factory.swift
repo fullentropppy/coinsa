@@ -10,6 +10,6 @@ extension ExpenseSubcategory {
     /// - Parameter name: Строковое представление подкатегории.
     /// - Returns: Подкатегория траты или значение по умолчанию.
     static func from(_ name: String) -> ExpenseSubcategory {
-        ExpenseSubcategory(rawValue: name.lowercased()) ?? .defaultValue
+        ExpenseSubcategory(rawValue: name) ?? .defaultValue
     }
 }

@@ -7,7 +7,7 @@
 
 extension ExpenseCategory {
     /// Категория траты по умолчанию (прочее).
-    static var defaultValue: ExpenseCategory { ExpenseCategory.other }
+    static var defaultValue: ExpenseCategory { ExpenseCategory.miscellaneous }
     
     /// Сырое значение категории по умолчанию.
     static var defaultCode: String { defaultValue.rawValue }

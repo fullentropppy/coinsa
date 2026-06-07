@@ -24,7 +24,7 @@ extension ExpenseSubcategory: LocalizedResourceProviding {
         case .taxi: .expenseSubcategoryTaxi
         case .transfer: .expenseSubcategoryTransfer
         case .travelPass: .expenseSubcategoryTravelPass
-        case .transportRental: .expenseSubcategoryTransportRental
+        case .vehicleRental: .expenseSubcategoryVehicleRental
         case .fuel: .expenseSubcategoryFuel
         
         case .hotel: .expenseSubcategoryHotel
@@ -49,8 +49,8 @@ extension ExpenseSubcategory: LocalizedResourceProviding {
         case .medication: .expenseSubcategoryMedication
         
         case .connectivity: .expenseSubcategoryConnectivity
-        case .bankFee: .expenseSubcategoryBankFee
-        case .document: .expenseSubcategoryDocument
+        case .bankFees: .expenseSubcategoryBankFees
+        case .documents: .expenseSubcategoryDocuments
         case .laundry: .expenseSubcategoryLaundry
         case .donation: .expenseSubcategoryDonation
         case .luggageStorage: .expenseSubcategoryLuggageStorrage

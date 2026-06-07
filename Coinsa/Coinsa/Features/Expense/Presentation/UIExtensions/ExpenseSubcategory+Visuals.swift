@@ -24,7 +24,7 @@ extension ExpenseSubcategory: ValueVisualRepresentable {
         case .taxi: "car"
         case .transfer: "point.topright.filled.arrow.triangle.backward.to.point.bottomleft.scurvepath"
         case .travelPass: "ticket"
-        case .transportRental: "key"
+        case .vehicleRental: "key"
         case .fuel: "fuelpump"
         
         case .hotel: "bed.double"
@@ -49,8 +49,8 @@ extension ExpenseSubcategory: ValueVisualRepresentable {
         case .medication: "pills"
         
         case .connectivity: "wifi"
-        case .bankFee: "percent"
-        case .document: "text.document"
+        case .bankFees: "percent"
+        case .documents: "text.document"
         case .laundry: "washer"
         case .donation: "heart"
         case .luggageStorage: "suitcase.rolling"
@@ -76,7 +76,7 @@ extension ExpenseSubcategory: ValueVisualRepresentable {
         case .taxi: "car.fill"
         case .transfer: "point.topright.filled.arrow.triangle.backward.to.point.bottomleft.scurvepath"
         case .travelPass: "ticket.fill"
-        case .transportRental: "key.fill"
+        case .vehicleRental: "key.fill"
         case .fuel: "fuelpump.fill"
         
         case .hotel: "bed.double.fill"
@@ -101,8 +101,8 @@ extension ExpenseSubcategory: ValueVisualRepresentable {
         case .medication: "pills.fill"
         
         case .connectivity: "wifi"
-        case .bankFee: "percent"
-        case .document: "text.document.fill"
+        case .bankFees: "percent"
+        case .documents: "text.document.fill"
         case .laundry: "washer.fill"
         case .donation: "heart.fill"
         case .luggageStorage: "suitcase.rolling.fill"

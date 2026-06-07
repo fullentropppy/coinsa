@@ -14,10 +14,10 @@ extension ExpenseCategory: LocalizedResourceProviding {
         case .food: .expenseCategoryFood
         case .transport: .expenseCategoryTransport
         case .accommodation: .expenseCategoryAccomodation
-        case .activity: .expenseCategoryActivity
+        case .leisure: .expenseCategoryLeisure
         case .shopping: .expenseCategoryShopping
         case .medicine: .expenseCategoryMedicine
-        case .other: .expenseCategoryOther
+        case .miscellaneous: .expenseCategoryMiscellaneous
         }
     }
 }

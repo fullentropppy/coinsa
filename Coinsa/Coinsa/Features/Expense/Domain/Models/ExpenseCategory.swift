@@ -12,10 +12,10 @@ enum ExpenseCategory: String, Codable, CaseIterable, Identifiable {
     case food
     case transport
     case accommodation
-    case activity
+    case leisure
     case shopping
     case medicine
-    case other
+    case miscellaneous
     
     // MARK: - Основные свойства
     
