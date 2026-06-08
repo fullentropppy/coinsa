@@ -22,7 +22,6 @@ enum PreviewScenario: String, CaseIterable {
 struct PreviewOptions {
     var includeTrips = true
     var includeLocations = true
-    var includeBudgets = true
     var includeExpenses = true
 }
 
@@ -114,17 +113,13 @@ private extension PreviewGenerator {
             localCurrencyCode: data.currency.code,
             rateLocalToBase: data.rateLocalToBase,
             exchangeAdjustment: data.exchangeAdjustment,
+            budget: data.budget,
             trip: trip,
-            budgets: [],
             expenses: [],
             createdAt: now,
             updatedAt: now
         )
         
-        if options.includeBudgets {
-            includeBudgets(of: data, to: location)
-        }
-    
         if options.includeExpenses {
             includeExpenses(of: data, to: location)
         }
@@ -176,69 +171,6 @@ private extension PreviewGenerator {
 // MARK: - Генерация подчиненных объектов наборов данных
 
 private extension PreviewGenerator {
-    /// Добавляет бюджеты в локацию на основе предопределенных данных.
-    /// - Parameters:
-    ///   - previewLocation: Предопределенные данные локации.
-    ///   - location: Локация для добавления бюджетов.
-    private static func includeBudgets(of previewLocation: PreviewLocation, to location: Location) {
-        var budgetsByCategory: [ExpenseCategory: Double] = [:]
-        
-        switch previewLocation {
-        case .tokyo:
-            budgetsByCategory = [
-                .food: 22000,
-                .transport: 7200,
-                .leisure: 12550,
-                .shopping: 29500,
-                .medicine: 2000,
-                .miscellaneous: 9490
-            ]
-        case .kyoto:
-            budgetsByCategory = [
-                .food: 18000,
-                .leisure: 5000,
-                .shopping: 19000,
-                .miscellaneous: 20500
-            ]
-        case .osaka:
-            budgetsByCategory = [
-                .food: 14000,
-                .transport: 6500,
-                .miscellaneous: 30000
-            ]
-        case .saintp:
-            budgetsByCategory = [
-                .food: 6000,
-                .transport: 1500,
-                .leisure: 4000,
-                .miscellaneous: 2000
-            ]
-        case .seoul:
-            budgetsByCategory = [
-                .food: 26000,
-                .transport: 6200,
-                .leisure: 18000,
-                .shopping: 24000
-            ]
-        case .busan:
-            budgetsByCategory = [
-                .food: 14000,
-                .transport: 3200,
-                .miscellaneous: 16000
-            ]
-        case .istanbul:
-            budgetsByCategory = [
-                .food: 21000,
-                .transport: 3600,
-                .leisure: 8200,
-                .shopping: 6800,
-                .miscellaneous: 4200
-            ]
-        }
-        
-        location.applyBudgets(budgetsByCategory)
-    }
-    
     /// Добавляет расходы в локацию на основе предопределенных данных.
     /// - Parameters:
     ///   - previewLocation: Предопределенные данные локации.

@@ -68,7 +68,7 @@ extension Location {
         return remainingDays == 0 ? difference : max(0, difference / Double(remainingDays + 1))
     }
     
-    /// Рассчитывает общую плановую сумму по бюджетам.
+    /// Рассчитывает общую плановую сумму по бюджету.
     /// - Parameters:
     ///   - asBaseCurrency: Если `true`, возвращает в основной валюте, иначе в локальной.
     ///   - asDailyAverage: Если `true`, возвращает среднюю сумму в день.
@@ -80,30 +80,10 @@ extension Location {
         using calendar: Calendar = .current
     ) -> Double {
         let exchangeRate = asBaseCurrency ? 1 : effectiveRateBaseToLocal
-        let plannedAmount = (budgets?.reduce(0) { $0 + $1.baseAmount } ?? 0) * exchangeRate
+        let plannedAmount = budget * exchangeRate
         let totalDays = totalDays(using: calendar)
         
         return asDailyAverage ? plannedAmount / Double(totalDays).rounded() : plannedAmount
-    }
-    
-    /// Рассчитывает плановые суммы по категориям.
-    /// - Parameters:
-    ///   - asBaseCurrency: Если `true`, возвращает в основной валюте, иначе в локальной.
-    ///   - targetRange: Опциональный диапазон дат для фильтрации.
-    ///   - calendar: Календарь для вычислений. По умолчанию `.current`.
-    /// - Returns: Словарь из категорий и сумм.
-    func calculatePlannedAmountByCategory(
-        asBaseCurrency: Bool = true,
-        withinDateRange targetRange: ClosedRange<Date>? = nil,
-        using calendar: Calendar = .current
-    ) -> [ExpenseCategory: Double] {
-        let exchangeRate = asBaseCurrency ? 1 : effectiveRateBaseToLocal
-        let periodRatio = plannedAmountRatio(withinDateRange: targetRange, using: calendar)
-        
-        return ExpenseCategory.allCases.reduce(into: [:]) { result, category in
-            let baseAmount = budgetAmount(for: category)
-            result[category] = baseAmount * exchangeRate * periodRatio
-        }
     }
     
     // MARK: - Публичные методы. Фактическая сумма

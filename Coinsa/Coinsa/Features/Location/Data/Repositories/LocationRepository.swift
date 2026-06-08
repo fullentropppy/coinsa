@@ -26,8 +26,8 @@ struct LocationRepository {
     ///   - localCurrency: Локальная валюта.
     ///   - rateLocalToBase: Курс к основной валюте.
     ///   - exchangeAdjustment: Процентная корректировка курса.
+    ///   - budget: Сумма бюджета в основной валюте.
     ///   - trip: Родительская поездка.
-    ///   - budgetsByCategory: Бюджеты по категориям.
     func add(
         name: String,
         startDate: Date,
@@ -36,8 +36,8 @@ struct LocationRepository {
         localCurrency: Currency,
         rateLocalToBase: Double,
         exchangeAdjustment: Double,
-        trip: Trip,
-        budgetsByCategory: [ExpenseCategory: Double]
+        budget: Double,
+        trip: Trip
     ) {
         let now = Date()
         
@@ -50,13 +50,12 @@ struct LocationRepository {
             localCurrencyCode: localCurrency.code,
             rateLocalToBase: normalizedRateLocalToBase(rateLocalToBase),
             exchangeAdjustment: normalizedRateLocalToBase(exchangeAdjustment),
+            budget: normalizedAmount(budget),
             trip: trip,
-            budgets: [],
             expenses: [],
             createdAt: now,
             updatedAt: now
         )
-        location.applyBudgets(budgetsByCategory)
         
         context.insert(location)
         try? context.save()
@@ -71,8 +70,8 @@ struct LocationRepository {
     ///   - majorTimeZone: Новый часовой пояс.
     ///   - localCurrency: Новая локальная валюта.
     ///   - rateLocalToBase: Новый курс.
+    ///   - budget: Новый бюджет.
     ///   - exchangeAdjustment: Новая корректировка.
-    ///   - budgetsByCategory: Новые бюджеты по категориям.
     func update(
         _ location: Location,
         name: String,
@@ -82,7 +81,7 @@ struct LocationRepository {
         localCurrency: Currency,
         rateLocalToBase: Double,
         exchangeAdjustment: Double,
-        budgetsByCategory: [ExpenseCategory: Double]
+        budget: Double
     ) {
         location.name = name.trimmed
         location.startDate = normalizedStartDate(startDate)
@@ -91,8 +90,8 @@ struct LocationRepository {
         location.localCurrencyCode = localCurrency.code
         location.rateLocalToBase = normalizedRateLocalToBase(rateLocalToBase)
         location.exchangeAdjustment = normalizedRateLocalToBase(exchangeAdjustment)
+        location.budget = normalizedAmount(budget)
         location.updatedAt = Date()
-        location.applyBudgets(budgetsByCategory)
         
         try? context.save()
     }

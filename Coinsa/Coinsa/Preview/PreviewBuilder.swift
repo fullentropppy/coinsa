@@ -27,7 +27,7 @@ struct PreviewBuilder {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
 
         let container = try! ModelContainer(
-            for: Trip.self, Location.self, Budget.self, Expense.self,
+            for: Trip.self, Location.self, Expense.self,
             configurations: config
         )
 
@@ -88,12 +88,6 @@ extension PreviewBuilder {
         /// Включает/выключает генерацию локаций.
         func withLocations(_ value: Bool) -> Builder {
             options.includeLocations = value
-            return self
-        }
-
-        /// Включает/выключает генерацию бюджетов.
-        func withBudgets(_ value: Bool) -> Builder {
-            options.includeBudgets = value
             return self
         }
 

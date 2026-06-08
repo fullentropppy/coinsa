@@ -53,7 +53,7 @@ struct TripRowView: View {
 
 private extension TripRowView {
     static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
-        let builder = PreviewBuilder.builder().withBudgets(false).withExpenses(false)
+        let builder = PreviewBuilder.builder().withExpenses(false)
         let data = builder.buildData()
         let trip = builder.getTrip(from: data)
 

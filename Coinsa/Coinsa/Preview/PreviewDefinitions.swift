@@ -123,6 +123,18 @@ enum PreviewLocation: String {
         case .istanbul: 3
         }
     }
+    
+    var budget: Double {
+        switch self {
+        case .tokyo: 82740
+        case .kyoto: 62500
+        case .osaka: 50500
+        case .saintp: 13500
+        case .seoul: 74200
+        case .busan: 33200
+        case .istanbul: 43800
+        }
+    }
 }
 
 /// Предопределенные комментарии к тратам для превью.

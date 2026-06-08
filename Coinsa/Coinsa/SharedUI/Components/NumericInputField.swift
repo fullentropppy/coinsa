@@ -14,7 +14,7 @@ enum NumericEditField: Hashable {
     case amount
     case exchangeRate
     case exchangeAdjustment
-    case budget(String)
+    case budget
 }
 
 /// Кастомное поле для ввода числовых значений с форматированием и поддержкой фокуса.

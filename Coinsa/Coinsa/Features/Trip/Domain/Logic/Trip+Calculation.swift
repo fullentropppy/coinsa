@@ -30,30 +30,6 @@ extension Trip {
         } ?? 0
     }
     
-    /// Рассчитывает плановые суммы по категориям для всех локаций поездки.
-    /// - Parameters:
-    ///   - asBaseCurrency: Если `true`, суммы возвращаются в основной валюте, иначе в локальной.
-    ///   - withinDateRange: Опциональный диапазон дат для фильтрации.
-    ///   - calendar: Календарь для вычислений. По умолчанию `.current`.
-    /// - Returns: Словарь из категорий и сумм.
-    func calculatePlannedAmountByCategory(
-        asBaseCurrency: Bool = true,
-        withinDateRange: ClosedRange<Date>? = nil,
-        using calendar: Calendar = .current
-    ) -> [ExpenseCategory: Double] {
-        locations?.reduce(into: [:]) { result, location in
-            let locationValues = location.calculatePlannedAmountByCategory(
-                asBaseCurrency: asBaseCurrency,
-                withinDateRange: withinDateRange,
-                using: calendar
-            )
-            
-            for (category, amount) in locationValues {
-                result[category, default: 0] += amount
-            }
-        } ?? [:]
-    }
-    
     // MARK: - Фактическая сумма
     
     /// Рассчитывает общую фактическую сумму по всем локациям поездки.

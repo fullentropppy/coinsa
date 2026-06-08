@@ -26,11 +26,11 @@ struct EventAnalyticsView: View {
     
     // MARK: - Вычисляемые свойства
 
-    private var displayedSlicesSortedByID: [CategoryAnalyticsSlice] {
+    private var displayedSlicesSortedByID: [ExpenseAnalyticsSlice] {
         viewModel.displayedSlicesSortedByID(for: selectedMetric)
     }
 
-    private var displayedSlicesSortedByAmout: [CategoryAnalyticsSlice] {
+    private var displayedSlicesSortedByAmout: [ExpenseAnalyticsSlice] {
         viewModel.displayedSlicesSortedByAmount(for: selectedMetric)
     }
 
@@ -66,7 +66,7 @@ struct EventAnalyticsView: View {
             if viewModel.hasAnalytics(for: selectedMetric) {
                 switch selectedMetric {
                 case .summary: summaryMainContent
-                case .plan, .actual: planActualMainContent
+                case .actual: planActualMainContent
                 }
             } else {
                 emptyAnalyticsContent
@@ -113,7 +113,6 @@ struct EventAnalyticsView: View {
             if viewModel.hasAnalytics(for: selectedMetric) {
                 switch selectedMetric {
                 case .summary: summaryHeaderContent
-                case .plan: planHeaderContent
                 case .actual: actualHeaderContent
                 }
             }
@@ -184,26 +183,6 @@ struct EventAnalyticsView: View {
         EventSummaryView(data: viewModel.eventSummaryData)
     }
     
-    private var planHeaderContent: some View {
-        HStack {
-            EventAmountCardView(
-                title: .amountPlan,
-                baseAmount: viewModel.plannedTotalBaseAmount,
-                baseCurrency: viewModel.baseCurrency,
-                localAmount: viewModel.plannedTotalLocalAmount,
-                localCurrency: viewModel.localCurrency
-            )
-            if viewModel.totalDays > 1 {
-                EventAmountCardView(
-                    title: .amountPlanDaily,
-                    baseAmount: viewModel.dailyBasePlannedAmount,
-                    baseCurrency: viewModel.baseCurrency,
-                    localAmount: viewModel.dailyLocalPlannedAmount,
-                    localCurrency: viewModel.localCurrency
-                )}
-        }
-    }
-    
     private var actualHeaderContent: some View {
         HStack {
             EventAmountCardView(
@@ -226,7 +205,7 @@ struct EventAnalyticsView: View {
         
     }
     
-    private func legendRow(for slice: CategoryAnalyticsSlice) -> some View {
+    private func legendRow(for slice: ExpenseAnalyticsSlice) -> some View {
         HStack {
             VStack(alignment: .leading, spacing: 10) {
                 Text(slice.category.localizedResource)
@@ -251,7 +230,7 @@ struct EventAnalyticsView: View {
 
     // MARK: - Вспомогательные методы
 
-    private func shareValue(for slice: CategoryAnalyticsSlice) -> Double {
+    private func shareValue(for slice: ExpenseAnalyticsSlice) -> Double {
         viewModel.shareValue(for: slice, metric: selectedMetric)
     }
 }
@@ -265,9 +244,7 @@ private extension EventAnalyticsView {
         forTrip: Bool = true,
         withSignificantData: Bool = true
     ) -> some View {
-        let builder = PreviewBuilder.builder()
-            .withBudgets(withSignificantData)
-            .withExpenses(withSignificantData)
+        let builder = PreviewBuilder.builder().withExpenses(withSignificantData)
         let data = builder.buildData()
         
         let screenContextSubtitle: String

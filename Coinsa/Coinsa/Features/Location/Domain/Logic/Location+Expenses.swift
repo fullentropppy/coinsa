@@ -6,6 +6,11 @@
 //
 
 extension Location {
+    /// Признак наличия бюджета в локации.
+    var hasBudget: Bool {
+        budget > 0
+    }
+    
     /// Признак наличия трат в локации.
     var hasExpenses: Bool {
         expenses?.isEmpty == false

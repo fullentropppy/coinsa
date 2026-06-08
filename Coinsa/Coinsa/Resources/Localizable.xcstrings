@@ -2842,23 +2842,6 @@
         }
       }
     },
-    "location.budget.total" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Total"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Итого"
-          }
-        }
-      }
-    },
     "location.currency" : {
       "extractionState" : "manual",
       "localizations" : {

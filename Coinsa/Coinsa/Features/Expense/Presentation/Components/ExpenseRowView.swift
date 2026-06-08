@@ -72,7 +72,7 @@ struct ExpenseRowView: View {
 
 private extension ExpenseRowView {
     static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
-        let builder = PreviewBuilder.builder().withBudgets(false)
+        let builder = PreviewBuilder.builder()
         let data = builder.buildData()
         let expense = builder.getExpense(from: data)
         

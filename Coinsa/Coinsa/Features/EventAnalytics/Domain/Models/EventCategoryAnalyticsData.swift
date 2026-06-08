@@ -12,6 +12,7 @@ struct EventCategoryAnalyticsData {
     let dateRange: ClosedRange<Date>
     let baseCurrency: Currency
     let localCurrency: Currency?
-    let plannedAmountByCategory: [CategoryAnalyticsSlice]
-    let actualAmountByCategory: [CategoryAnalyticsSlice]
+    let baseBudget: Double
+    let localBudget: Double?
+    let actualAmountByCategory: [ExpenseAnalyticsSlice]
 }

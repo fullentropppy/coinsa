@@ -33,14 +33,16 @@ struct TripDetailViewModel {
     }
 
     var eventAnalyticsData: EventCategoryAnalyticsData {
-        let plannedAmountByCategory = trip.calculatePlannedAmountByCategory(asBaseCurrency: true)
+        let baseBudget = trip.calculatePlannedAmount(asBaseCurrency: true)
+        let localBudget = trip.calculatePlannedAmount(asBaseCurrency: false)
         let actualAmountByCategory = trip.calculateActualAmountByCategory(asBaseCurrency: true)
 
         return EventCategoryAnalyticsData(
             dateRange: trip.range,
             baseCurrency: trip.baseCurrency,
             localCurrency: nil,
-            plannedAmountByCategory: slices(from: plannedAmountByCategory, localValues: nil),
+            baseBudget: baseBudget,
+            localBudget: localBudget,
             actualAmountByCategory: slices(from: actualAmountByCategory, localValues: nil)
         )
     }
@@ -98,9 +100,9 @@ struct TripDetailViewModel {
     private func slices(
         from baseValues: [ExpenseCategory: Double],
         localValues: [ExpenseCategory: Double]?
-    ) -> [CategoryAnalyticsSlice] {
+    ) -> [ExpenseAnalyticsSlice] {
         ExpenseCategory.allCases.map { category in
-            CategoryAnalyticsSlice(
+            ExpenseAnalyticsSlice(
                 category: category,
                 baseAmount: baseValues[category] ?? 0,
                 localAmount: localValues?[category]

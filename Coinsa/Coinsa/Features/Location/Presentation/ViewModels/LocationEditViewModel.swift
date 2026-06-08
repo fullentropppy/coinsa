@@ -15,7 +15,7 @@ final class LocationEditViewModel {
     // MARK: - Зависимости
     
     private let currencyConverter: CurrencyConverter
-    private let budgetManager: BudgetManager
+    private let amountManager: AmountManager
     
     let trip: Trip
     let location: Location?
@@ -112,16 +112,12 @@ final class LocationEditViewModel {
     
     // MARK: - Состояние UI. Бюджет
     
-    var budgetAmounts: [ExpenseCategory: Double] {
-        budgetManager.budgetsBase
+    var budgetBaseAmount: Double {
+        amountManager.baseAmount
     }
     
-    var plannedBaseTotal: Double {
-        budgetManager.totalBaseAmount
-    }
-    
-    var plannedLocalTotal: Double {
-        budgetManager.totalLocalAmount
+    var budgetLocalAmount: Double {
+        amountManager.localAmount
     }
     
     // MARK: - Инициализация
@@ -141,7 +137,7 @@ final class LocationEditViewModel {
             localCurrency: trip.baseCurrency,
             rateLocalToBase: 1,
             exchangeAdjustment: preselectedExchangeAdjustment ?? 0,
-            budgetAmounts: [:]
+            budget: 0
         )
     }
     
@@ -158,7 +154,7 @@ final class LocationEditViewModel {
             localCurrency: location.localCurrency,
             rateLocalToBase: location.rateLocalToBase,
             exchangeAdjustment: location.exchangeAdjustment,
-            budgetAmounts: location.budgetsByCategory
+            budget: location.budget
         )
     }
     
@@ -172,7 +168,7 @@ final class LocationEditViewModel {
         localCurrency: Currency,
         rateLocalToBase: Double,
         exchangeAdjustment: Double,
-        budgetAmounts: [ExpenseCategory: Double]
+        budget: Double
     ) {
         self.trip = trip
         self.location = location
@@ -192,9 +188,10 @@ final class LocationEditViewModel {
             exchangeAdjustment: exchangeAdjustment
         )
         
-        self.budgetManager = BudgetManager(
+        self.amountManager = AmountManager(
             converter: currencyConverter,
-            initialBudgets: budgetAmounts
+            baseAmount: budget,
+            localAmount: currencyConverter.convertToLocal(fromBase: budget)
         )
         
         initialSnapshot = Snapshot(
@@ -205,7 +202,7 @@ final class LocationEditViewModel {
             localCurrency: localCurrency,
             rateLocalToBase: rateLocalToBase,
             exchangeAdjustment: exchangeAdjustment,
-            budgetAmounts: budgetAmounts
+            budget: budget
         )
     }
     
@@ -215,7 +212,7 @@ final class LocationEditViewModel {
         guard newCurrency != localCurrency else { return }
         
         currencyConverter.updateLocalCurrency(newCurrency) { [weak self] in
-            self?.budgetManager.updateFromRateChange(inputCurrency: currentInput)
+            self?.amountManager.updateFromRateChange(inputCurrency: currentInput)
         }
     }
     
@@ -223,12 +220,12 @@ final class LocationEditViewModel {
     
     func updateRate(_ newRate: Double, currentInput: InputCurrency) {
         currencyConverter.updateRate(newRate)
-        budgetManager.updateFromRateChange(inputCurrency: currentInput)
+        amountManager.updateFromRateChange(inputCurrency: currentInput)
     }
     
     func requestRateRefresh(for inputCurrency: InputCurrency = .base) {
         currencyConverter.requestRateRefresh { [weak self] _ in
-            self?.budgetManager.updateFromRateChange(inputCurrency: inputCurrency)
+            self?.amountManager.updateFromRateChange(inputCurrency: inputCurrency)
         }
     }
     
@@ -249,7 +246,7 @@ final class LocationEditViewModel {
                 localCurrency: initialSnapshot.localCurrency,
                 rateLocalToBase: rateLocalToBase,
                 exchangeAdjustment: exchangeAdjustment,
-                budgetAmounts: initialSnapshot.budgetAmounts
+                budget: initialSnapshot.budget
             )
         }
     }
@@ -258,22 +255,14 @@ final class LocationEditViewModel {
     
     func updateExchangeAdjustment(_ newAdjustment: Double, currentInput: InputCurrency) {
         exchangeAdjustment = newAdjustment
-        budgetManager.updateFromRateChange(inputCurrency: currentInput)
         currencyConverter.updateExchangeAdjustment(exchangeAdjustment)
+        amountManager.updateFromRateChange(inputCurrency: currentInput)
     }
     
     // MARK: - Операции с бюджетом
     
-    func updateBudget(_ amount: Double, for category: ExpenseCategory, in inputCurrency: InputCurrency) {
-        budgetManager.updateBudget(amount, for: category, in: inputCurrency)
-    }
-    
-    func budgetBaseAmount(for category: ExpenseCategory) -> Double {
-        budgetManager.budgetBase(for: category)
-    }
-    
-    func budgetLocalAmount(for category: ExpenseCategory) -> Double {
-        budgetManager.budgetLocal(for: category)
+    func updateBudget(_ amount: Double, in inputCurrency: InputCurrency) {
+        amountManager.updateAmount(amount, for: inputCurrency)
     }
     
     // MARK: - Операции с хранилищем
@@ -289,7 +278,7 @@ final class LocationEditViewModel {
                 localCurrency: localCurrency,
                 rateLocalToBase: rateLocalToBase,
                 exchangeAdjustment: exchangeAdjustment,
-                budgetsByCategory: budgetAmounts
+                budget: budgetBaseAmount
             )
         } else {
             repository.add(
@@ -300,8 +289,8 @@ final class LocationEditViewModel {
                 localCurrency: localCurrency,
                 rateLocalToBase: rateLocalToBase,
                 exchangeAdjustment: exchangeAdjustment,
+                budget: budgetBaseAmount,
                 trip: trip,
-                budgetsByCategory: budgetAmounts
             )
         }
     }
@@ -321,7 +310,7 @@ private extension LocationEditViewModel {
         let localCurrency: Currency
         let rateLocalToBase: Double
         let exchangeAdjustment: Double
-        let budgetAmounts: [ExpenseCategory: Double]
+        let budget: Double
         
         // MARK: - Инициализация
         
@@ -334,7 +323,7 @@ private extension LocationEditViewModel {
                 localCurrency: viewModel.localCurrency,
                 rateLocalToBase: viewModel.rateLocalToBase,
                 exchangeAdjustment: viewModel.exchangeAdjustment,
-                budgetAmounts: viewModel.budgetAmounts
+                budget: viewModel.budgetBaseAmount
             )
         }
         
@@ -346,7 +335,7 @@ private extension LocationEditViewModel {
             localCurrency: Currency,
             rateLocalToBase: Double,
             exchangeAdjustment: Double,
-            budgetAmounts: [ExpenseCategory: Double]
+            budget: Double
         ) {
             self.name = name.trimmed
             self.startDate = startDate
@@ -355,11 +344,7 @@ private extension LocationEditViewModel {
             self.localCurrency = localCurrency
             self.rateLocalToBase = rateLocalToBase
             self.exchangeAdjustment = exchangeAdjustment
-            self.budgetAmounts = Dictionary(
-                uniqueKeysWithValues: ExpenseCategory.allCases.map { category in
-                    (category, (budgetAmounts[category] ?? 0).rounded())
-                }
-            )
+            self.budget = budget.rounded()
         }
     }
 }

@@ -44,8 +44,8 @@ struct LocationEditView: View {
 
     private var budgetTotalValue: Double {
         switch inputCurrency {
-        case .base: viewModel.plannedBaseTotal
-        case .local: viewModel.plannedLocalTotal
+        case .base: viewModel.budgetBaseAmount
+        case .local: viewModel.budgetLocalAmount
         }
     }
     
@@ -220,32 +220,18 @@ struct LocationEditView: View {
     
     private var budgetsSection: some View {
         Section {
-            ForEach(ExpenseCategory.allCases, id: \.id) { (category: ExpenseCategory) in
+            LabeledContent(.locationBudget) {
                 HStack {
-                    category.makeLabel()
-                    Spacer()
                     NumericInputField.standard(
-                        budgetInputBinding(for: category),
+                        budgetInputBinding,
                         focusedField: $focusedField,
-                        focusId: .budget(category.id),
+                        focusId: .budget,
                         fractionDigits: 2
                     )
-                }
-            }
-            
-            HStack {
-                LabelView(style: .withIcon(title: .locationBudgetTotal, icon: "sum", iconWidth: 28))
-                Spacer()
-                AmountText.standard(budgetTotalValue)
-            }
-            .listRowSeparatorTint(.gray)
-        } header: {
-            HStack {
-                Text(.locationBudget)
-                Spacer()
-                CurrencyCodeText.standard(budgetInputCurrencyValue)
-                if !viewModel.isHomeLocation {
-                    InputCurrencySwitchButton(action: switchInputCurrency)
+                    CurrencyCodeText.standard(budgetInputCurrencyValue)
+                    if !viewModel.isHomeLocation {
+                        InputCurrencySwitchButton(action: switchInputCurrency)
+                    }
                 }
             }
         }
@@ -328,16 +314,13 @@ struct LocationEditView: View {
         )
     }
     
-    private func budgetInputBinding(for category: ExpenseCategory) -> Binding<Double> {
+    private var budgetInputBinding: Binding<Double> {
         Binding(
             get: {
-                switch inputCurrency {
-                case .base: viewModel.budgetBaseAmount(for: category)
-                case .local: viewModel.budgetLocalAmount(for: category)
-                }
+                budgetTotalValue
             },
             set: { newValue in
-                viewModel.updateBudget(newValue, for: category, in: inputCurrency)
+                viewModel.updateBudget(newValue, in: inputCurrency)
             }
         )
     }

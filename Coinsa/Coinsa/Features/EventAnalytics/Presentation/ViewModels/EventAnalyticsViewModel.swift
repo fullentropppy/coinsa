@@ -44,17 +44,13 @@ struct EventAnalyticsViewModel {
     }
     
     // MARK: - Хранимые свойства. Сумма в основной валюте
-    
-    var plannedTotalBaseAmount: Double {
-        data.plannedAmountByCategory.reduce(0) { $0 + $1.baseAmount }
-    }
 
     var actualTotalBaseAmount: Double {
         data.actualAmountByCategory.reduce(0) { $0 + $1.baseAmount }
     }
 
     var dailyBasePlannedAmount: Double {
-        plannedTotalBaseAmount / totalDays
+        data.baseBudget / totalDays
     }
     
     var dailyBaseActualAmount: Double {
@@ -62,19 +58,11 @@ struct EventAnalyticsViewModel {
     }
     
     var baseAmountBalance: Double {
-        plannedTotalBaseAmount - actualTotalBaseAmount
+        data.baseBudget - actualTotalBaseAmount
     }
     
     // MARK: - Хранимые свойства. Сумма в локальной валюте
     
-    var plannedTotalLocalAmount: Double? {
-        if localCurrency != nil {
-            data.plannedAmountByCategory.reduce(0) { $0 + ($1.localAmount ?? 0) }
-        } else {
-            nil
-        }
-    }
-
     var actualTotalLocalAmount: Double? {
         if localCurrency != nil {
             data.actualAmountByCategory.reduce(0) { $0 + ($1.localAmount ?? 0) }
@@ -84,8 +72,8 @@ struct EventAnalyticsViewModel {
     }
     
     var dailyLocalPlannedAmount: Double? {
-        if let plannedTotalLocalAmount {
-            plannedTotalLocalAmount / totalDays
+        if let localBudget = data.localBudget {
+            localBudget / totalDays
         } else {
             nil
         }
@@ -100,8 +88,8 @@ struct EventAnalyticsViewModel {
     }
     
     var localAmountBalance: Double? {
-        if let plannedTotalLocalAmount, let actualTotalLocalAmount {
-            plannedTotalLocalAmount - actualTotalLocalAmount
+        if let localBudget = data.localBudget, let actualTotalLocalAmount {
+            localBudget - actualTotalLocalAmount
         } else {
             nil
         }
@@ -111,28 +99,26 @@ struct EventAnalyticsViewModel {
     
     var eventSummaryData: EventSummaryData {
         EventSummaryData(
-            plannedBaseAmount: plannedTotalBaseAmount,
+            plannedBaseAmount: data.baseBudget,
             actualBaseAmount: actualTotalBaseAmount,
             baseCurrency: baseCurrency,
-            plannedLocalAmount: plannedTotalLocalAmount,
+            plannedLocalAmount: data.localBudget,
             actualLocalAmount: actualTotalLocalAmount,
             localCurrency: localCurrency
         )
     }
 
     var rawCategoryProgressItems: [EventAnalyticsCategoryProgressItem] {
-        let plannedByCategory = Dictionary(uniqueKeysWithValues: data.plannedAmountByCategory.map { ($0.category, $0) })
         let actualByCategory = Dictionary(uniqueKeysWithValues: data.actualAmountByCategory.map { ($0.category, $0) })
 
         return ExpenseCategory.allCases.map { category in
-            let plannedSlice = plannedByCategory[category]
             let actualSlice = actualByCategory[category]
             
             return EventAnalyticsCategoryProgressItem(
                 category: category,
-                plannedBaseAmount: plannedSlice?.baseAmount ?? 0,
+                plannedBaseAmount: data.baseBudget,
                 actualBaseAmount: actualSlice?.baseAmount ?? 0,
-                plannedLocalAmount: plannedSlice?.localAmount,
+                plannedLocalAmount: data.localBudget,
                 actualLocalAmount: actualSlice?.localAmount
             )
         }
@@ -140,13 +126,13 @@ struct EventAnalyticsViewModel {
 
     private var effectiveCategoryProgressItems: [EventAnalyticsCategoryProgressItem] {
         let rawItems = rawCategoryProgressItems
-        let globalBaseRemaining = max(0, plannedTotalBaseAmount - actualTotalBaseAmount)
+        let globalBaseRemaining = max(0, data.baseBudget - actualTotalBaseAmount)
         let rawBaseRemainders = rawItems.map { max(0, $0.plannedBaseAmount - $0.actualBaseAmount) }
         let totalRawBaseRemaining = rawBaseRemainders.reduce(0, +)
 
         let globalLocalRemaining: Double? = {
-            if let plannedTotalLocalAmount, let actualTotalLocalAmount {
-                max(0, plannedTotalLocalAmount - actualTotalLocalAmount)
+            if let localBudget = data.localBudget, let actualTotalLocalAmount {
+                max(0, localBudget - actualTotalLocalAmount)
             } else {
                 nil
             }
@@ -190,11 +176,11 @@ struct EventAnalyticsViewModel {
     
     // MARK: - Публичные методы
 
-    func displayedSlicesSortedByID(for metric: EventAnalyticsMetric) -> [CategoryAnalyticsSlice] {
+    func displayedSlicesSortedByID(for metric: EventAnalyticsMetric) -> [ExpenseAnalyticsSlice] {
         slices(for: metric).sorted { $0.category.id > $1.category.id }
     }
 
-    func displayedSlicesSortedByAmount(for metric: EventAnalyticsMetric) -> [CategoryAnalyticsSlice] {
+    func displayedSlicesSortedByAmount(for metric: EventAnalyticsMetric) -> [ExpenseAnalyticsSlice] {
         slices(for: metric).sorted { $0.baseAmount > $1.baseAmount }
     }
 
@@ -208,23 +194,23 @@ struct EventAnalyticsViewModel {
     func hasAnalytics(for metric: EventAnalyticsMetric) -> Bool {
         switch metric {
         case .summary: true
-        case .plan, .actual: !displayedSlicesSortedByID(for: metric).isEmpty
+        case .actual: !displayedSlicesSortedByID(for: metric).isEmpty
         }
     }
 
-    func shareValue(for slice: CategoryAnalyticsSlice, metric: EventAnalyticsMetric) -> Double {
+    func shareValue(for slice: ExpenseAnalyticsSlice, metric: EventAnalyticsMetric) -> Double {
         let totalBaseAmount = displayedSlicesSortedByID(for: metric).reduce(0) { $0 + $1.baseAmount }
         return totalBaseAmount > 0 ? slice.baseAmount / totalBaseAmount : 0
     }
 
     // MARK: - Приватные методы
 
-    private func slices(for metric: EventAnalyticsMetric) -> [CategoryAnalyticsSlice] {
-        let slices: [CategoryAnalyticsSlice]
+    private func slices(for metric: EventAnalyticsMetric) -> [ExpenseAnalyticsSlice] {
+        let slices: [ExpenseAnalyticsSlice]
 
         switch metric {
-        case .summary, .plan:
-            slices = data.plannedAmountByCategory
+        case .summary:
+            slices = data.actualAmountByCategory /// Замениить
         case .actual:
             slices = data.actualAmountByCategory
         }

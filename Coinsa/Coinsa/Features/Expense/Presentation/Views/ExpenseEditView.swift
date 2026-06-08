@@ -352,7 +352,7 @@ private extension ExpenseEditView {
         colorScheme: ColorScheme,
         withNewExpense: Bool = false
     ) -> some View {
-        let builder = PreviewBuilder.builder().withBudgets(false)
+        let builder = PreviewBuilder.builder()
         let container = builder.buildContainer()
         let settingsStore = AppSettingsStore()
         let location = builder.fetchLocation(from: container)

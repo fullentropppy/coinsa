@@ -37,13 +37,11 @@ class Location: DateRangeProviding {
     /// Корректировка к курсу обмена.
     var exchangeAdjustment: Double = 0
     
+    /// Общий бюджет локации в основной валюте поездки.
+    var budget: Double = 0
+    
     /// Поездка, к которой относится локация.
     var trip: Trip? = nil
-
-    /// Список бюджетов по категориям для данной локации.
-    /// При удалении локации все связанные бюджеты удаляются.
-    @Relationship(deleteRule: .cascade, inverse: \Budget.location)
-    var budgets: [Budget]?
     
     /// Список трат в данной локации.
     /// При удалении локации все связанные расходы удаляются.
@@ -68,8 +66,8 @@ class Location: DateRangeProviding {
     ///   - localCurrencyCode: Код локальной валюты.
     ///   - rateLocalToBase: Курс к основной валюте.
     ///   - exchangeAdjustment: Корректировка курса.
+    ///   - budget: Сумма бюджета.
     ///   - trip: Поездка-родитель.
-    ///   - budgets: Список бюджетов.
     ///   - expenses: Список расходов.
     ///   - createdAt: Дата создания.
     ///   - updatedAt: Дата обновления.
@@ -82,8 +80,8 @@ class Location: DateRangeProviding {
         localCurrencyCode: String,
         rateLocalToBase: Double,
         exchangeAdjustment: Double,
+        budget: Double,
         trip: Trip,
-        budgets: [Budget],
         expenses: [Expense],
         createdAt: Date,
         updatedAt: Date,
@@ -99,8 +97,8 @@ class Location: DateRangeProviding {
         self.localCurrencyCode = localCurrencyCode
         self.rateLocalToBase = rateLocalToBase
         self.exchangeAdjustment = exchangeAdjustment
+        self.budget = budget
         self.trip = trip
-        self.budgets = budgets
         self.expenses = expenses
     }
 }
