@@ -2117,13 +2117,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Accommodation Rental"
+            "value" : "Rental"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Аренда жилья"
+            "value" : "Аренда"
           }
         }
       }
@@ -2157,7 +2157,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Банковские комиссии"
+            "value" : "Банк. комиссии"
           }
         }
       }
@@ -2242,7 +2242,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Цифровые сервисы"
+            "value" : "Цифр. сервисы"
           }
         }
       }
@@ -2463,7 +2463,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Достопримечательность"
+            "value" : "Объект"
           }
         }
       }
@@ -2531,7 +2531,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Медицинские услуги"
+            "value" : "Мед. услуги"
           }
         }
       }
@@ -2633,7 +2633,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Общественный транспорт"
+            "value" : "Общ. транспорт"
           }
         }
       }
@@ -2718,7 +2718,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Туристический налог"
+            "value" : "Тур. налог"
           }
         }
       }
@@ -2780,13 +2780,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Vehicle Rental"
+            "value" : "Rental"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Аренда транспорта"
+            "value" : "Аренда"
           }
         }
       }

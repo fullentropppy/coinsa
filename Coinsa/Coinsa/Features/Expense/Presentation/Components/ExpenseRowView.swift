@@ -35,7 +35,7 @@ struct ExpenseRowView: View {
     
     private var leftStack: some View {
         VStack(alignment: .leading, spacing: 10) {
-            expense.category.makeBadge()
+            expense.subcategory.makeBadge()
             HStack(alignment: .lastTextBaseline, spacing: 4) {
                 DateLabel.secondarySmall(expense.date)
                 commentIcon

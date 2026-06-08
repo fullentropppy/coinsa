@@ -283,7 +283,7 @@ private extension PreviewGenerator {
                 date: startDate.adding(hours: 13, minutes: 20),
                 baseAmount: 2116.4,
                 category: .miscellaneous,
-                subcategory: .other
+                subcategory: .otherMiscellaneous
             ),
             makeExpense(
                 to: location,
@@ -415,7 +415,7 @@ private extension PreviewGenerator {
                 date: startDate.adding(days: 3, hours: 14, minutes: 11),
                 baseAmount: 1450,
                 category: .miscellaneous,
-                subcategory: .other,
+                subcategory: .otherMiscellaneous,
                 comment: PreviewExpenseComment.miscellaneous.rawValue
             ),
             makeExpense(
@@ -479,7 +479,7 @@ private extension PreviewGenerator {
                 date: startDate.adding(days: 5, hours: 19, minutes: 30),
                 baseAmount: 2600,
                 category: .miscellaneous,
-                subcategory: .other,
+                subcategory: .otherMiscellaneous,
                 comment: PreviewExpenseComment.miscellaneous.rawValue
             ),
             makeExpense(
@@ -615,7 +615,7 @@ private extension PreviewGenerator {
                 date: startDate.adding(days: 2, hours: 16, minutes: 50),
                 baseAmount: 2012,
                 category: .miscellaneous,
-                subcategory: .other
+                subcategory: .otherMiscellaneous
             ),
             makeExpense(
                 to: location,
@@ -717,7 +717,7 @@ private extension PreviewGenerator {
                 baseAmount: 4010,
                 paymentMethod: .card,
                 category: .miscellaneous,
-                subcategory: .other
+                subcategory: .otherMiscellaneous
             ),
             makeExpense(
                 to: location,
@@ -800,7 +800,7 @@ private extension PreviewGenerator {
                 paymentMethod: .card,
                 exchangeAdjustment: 5.5,
                 category: .miscellaneous,
-                subcategory: .other
+                subcategory: .otherMiscellaneous
             )
         ]
     }

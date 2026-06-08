@@ -123,6 +123,7 @@ final class ExpenseEditViewModel {
     ) {
         let now = Date()
         let date = min(max(now, location.startDate.startOfDay), location.endDate.endOfDay)
+        let category = preselectedCategory ?? .defaultValue
         
         self.init(
             location: location,
@@ -134,7 +135,7 @@ final class ExpenseEditViewModel {
             paymentMethod: preselectedPaymentMethod ?? .card,
             exchangeAdjustment: location.exchangeAdjustment,
             category: preselectedCategory ?? .defaultValue,
-            subcategory: .defaultValue,
+            subcategory: .defaultValue(with: category),
             comment: ""
         )
     }
@@ -267,7 +268,7 @@ final class ExpenseEditViewModel {
     
     func updateCategory(_ newCategory: ExpenseCategory) {
         category = newCategory
-        subcategory = .defaultValue
+        subcategory = .defaultValue(with: category)
     }
     
     func requestRateRefresh(for inputCurrency: InputCurrency = .base) {

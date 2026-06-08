@@ -10,19 +10,19 @@ extension ExpenseCategory {
     var subcategories: [ExpenseSubcategory] {
         switch self {
         case .food:
-            [.breakfast, .lunch, .dinner, .snack, .groceries, .other]
+            [.breakfast, .lunch, .dinner, .snack, .groceries, .otherFood]
         case .transport:
-            [.plane, .ferry, .train, .publicTransport, .taxi, .transfer, .travelPass, .vehicleRental, .fuel, .other]
+            [.plane, .ferry, .train, .publicTransport, .taxi, .transfer, .travelPass, .vehicleRental, .fuel, .otherTransport]
         case .accommodation:
-            [.hotel, .accommodationRental, .touristTax, .other]
+            [.hotel, .accommodationRental, .touristTax, .otherAccomodation]
         case .leisure:
-            [.tour, .landmark, .park, .activity, .entertainment, .other]
+            [.tour, .landmark, .park, .activity, .entertainment, .otherLeisure]
         case .shopping:
-            [.clothing, .cosmetics, .souvenirs, .jewelry, .homeGoods, .electronics, .other]
+            [.clothing, .cosmetics, .souvenirs, .jewelry, .homeGoods, .electronics, .otherShopping]
         case .medicine:
-            [.healthInsurance, .medicalCare, .medication, .other]
+            [.healthInsurance, .medicalCare, .medication, .otherMedicine]
         case .miscellaneous:
-            [.connectivity, .bankFees, .documents, .laundry, .donation, .luggageStorage, .postalService, .digitalService, .other]
+            [.connectivity, .bankFees, .documents, .laundry, .donation, .luggageStorage, .postalService, .digitalService, .otherMiscellaneous]
         }
     }
 }
