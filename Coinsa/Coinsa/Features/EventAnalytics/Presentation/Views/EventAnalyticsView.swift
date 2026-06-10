@@ -139,7 +139,7 @@ struct EventAnalyticsView: View {
                     baseCurrency: viewModel.baseCurrency,
                     localPlannedAmount: item.plannedLocalAmount,
                     localActualAmount: item.actualLocalAmount,
-                    localCurrency: viewModel.localCurrency,
+                    locationCurrency: viewModel.locationCurrency,
                     showsPlannedIfZero: selectedSummaryMode == .fromTotal
                 ) {
                     HStack(spacing: 8) {
@@ -190,7 +190,7 @@ struct EventAnalyticsView: View {
                 baseAmount: viewModel.actualTotalBaseAmount,
                 baseCurrency: viewModel.baseCurrency,
                 localAmount: viewModel.actualTotalLocalAmount,
-                localCurrency: viewModel.localCurrency
+                locationCurrency: viewModel.locationCurrency
             )
             if viewModel.totalDays > 1 {
                 EventAmountCardView(
@@ -198,7 +198,7 @@ struct EventAnalyticsView: View {
                     baseAmount: viewModel.dailyBaseActualAmount,
                     baseCurrency: viewModel.baseCurrency,
                     localAmount: viewModel.dailyLocalActualAmount,
-                    localCurrency: viewModel.localCurrency
+                    locationCurrency: viewModel.locationCurrency
                 )
             }
         }
@@ -218,8 +218,8 @@ struct EventAnalyticsView: View {
             }
             Spacer()
             VStack(alignment: .trailing, spacing: 10) {
-                if let localCurrency = viewModel.localCurrency, let localAmount = slice.localAmount {
-                    AmountText.standard(localAmount, currency: localCurrency)
+                if let locationCurrency = viewModel.locationCurrency, let localAmount = slice.localAmount {
+                    AmountText.standard(localAmount, currency: locationCurrency)
                     AmountText.secondarySmall(slice.baseAmount, currency: viewModel.baseCurrency)
                 } else {
                     AmountText.standard(slice.baseAmount, currency: viewModel.baseCurrency)

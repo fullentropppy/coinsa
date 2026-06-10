@@ -68,7 +68,7 @@ struct ExpenseEditView: View {
     private init(initialViewModel: ExpenseEditViewModel, onDelete: (() -> Void)? = nil) {
         _viewModel = State(initialValue: initialViewModel)
         _inputCurrency = State(
-            initialValue: initialViewModel.baseCurrency == initialViewModel.localCurrency ? .base : .local
+            initialValue: initialViewModel.baseCurrency == initialViewModel.expenseCurrency ? .base : .local
         )
         self.onDelete = onDelete
     }
@@ -167,6 +167,14 @@ struct ExpenseEditView: View {
     
     private var amountSection: some View {
         Section {
+            LabeledPicker(
+                title: .expenseCurrency,
+                selection: expenseCurrencyBinding,
+                options: Currency.allCasesSortedByName
+            ) { currency in
+                currency.makeLabel()
+            }
+            
             LabeledContent(.expenseAmount) {
                 HStack {
                     NumericInputField.standard(
@@ -176,32 +184,45 @@ struct ExpenseEditView: View {
                         fractionDigits: 2
                     )
                     CurrencyCodeText.standard(viewModel.currency(for: inputCurrency))
-                    if !viewModel.isHomeLocation {
+                    if !viewModel.isExpenseBaseCurrency {
                         InputCurrencySwitchButton(action: switchInputCurrency)
                     }
                 }
             }
             
-            if !viewModel.isHomeLocation {
-                LabeledContent(.expenseExchangeRate(localCurrencyCode: viewModel.localCurrency.code)) {
+            if viewModel.shouldShowRateExpenseToBase {
+                LabeledContent(.expenseExchangeRate(localCurrencyCode: viewModel.expenseCurrency.code)) {
                     ExchangeRateInputField.standard(
-                        rateInputBinding,
+                        rateExpenseToBaseInputBinding,
                         currency: viewModel.baseCurrency,
-                        isLoading: viewModel.isRateLoading,
+                        isLoading: viewModel.isRateExpenseToBaseLoading,
                         focusedField: $focusedField,
                         focusId: .exchangeRate,
-                        onRefresh: { viewModel.requestRateRefresh(for: inputCurrency) }
+                        onRefresh: { viewModel.requestRateExpenseToBaseRefresh(for: inputCurrency) }
                     )
                 }
-                
-                if viewModel.useExchangeAdjustment {
-                    LabeledContent(.locationExchangeAdjustment) {
-                        PercentInputField.standard(
-                            exchangeAdjustmentInputBinding,
-                            focusedField: $focusedField,
-                            focusId: .exchangeAdjustment
-                        )
-                    }
+            }
+            
+            if viewModel.shouldShowRateExpenseToLocation {
+                LabeledContent(.expenseExchangeRate(localCurrencyCode: viewModel.expenseCurrency.code)) {
+                    ExchangeRateInputField.standard(
+                        rateExpenseToLocationInputBinding,
+                        currency: viewModel.locationCurrency,
+                        isLoading: viewModel.isRateExpenseToLocationLoading,
+                        focusedField: $focusedField,
+                        focusId: .locationExchangeRate,
+                        onRefresh: { viewModel.requestRateExpenseToLocationRefresh() }
+                    )
+                }
+            }
+            
+            if viewModel.useExchangeAdjustment {
+                LabeledContent(.locationExchangeAdjustment) {
+                    PercentInputField.standard(
+                        exchangeAdjustmentInputBinding,
+                        focusedField: $focusedField,
+                        focusId: .exchangeAdjustment
+                    )
                 }
             }
         } footer: {
@@ -273,6 +294,15 @@ struct ExpenseEditView: View {
         )
     }
     
+    private var expenseCurrencyBinding: Binding<Currency> {
+        Binding(
+            get: { viewModel.expenseCurrency },
+            set: { newCurrency in
+                viewModel.updateExpenseCurrency(newCurrency, currentInput: inputCurrency)
+            }
+        )
+    }
+    
     private var amountInputBinding: Binding<Double> {
         Binding(
             get: { viewModel.amount(for: inputCurrency) },
@@ -282,11 +312,20 @@ struct ExpenseEditView: View {
         )
     }
     
-    private var rateInputBinding: Binding<Double> {
+    private var rateExpenseToBaseInputBinding: Binding<Double> {
         Binding(
-            get: { viewModel.rateLocalToBase },
+            get: { viewModel.rateExpenseToBase },
             set: { newValue in
-                viewModel.updateRate(newValue, currentInput: inputCurrency)
+                viewModel.updateRateExpenseToBase(newValue, currentInput: inputCurrency)
+            }
+        )
+    }
+    
+    private var rateExpenseToLocationInputBinding: Binding<Double> {
+        Binding(
+            get: { viewModel.rateExpenseToLocation },
+            set: { newValue in
+                viewModel.updateRateExpenseToLocation(newValue)
             }
         )
     }

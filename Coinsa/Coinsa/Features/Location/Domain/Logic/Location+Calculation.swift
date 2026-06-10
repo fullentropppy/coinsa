@@ -12,24 +12,24 @@ extension Location {
     
     /// Обратный курс (основная к локальной).
     var rateBaseToLocal: Double {
-        rateLocalToBase > 0 ? (1 / rateLocalToBase) : 0
+        rateLocationToBase > 0 ? (1 / rateLocationToBase) : 0
     }
     
     /// Эффективный курс локальной к основной (с учетом корректировки).
-    var effectiveRateLocalToBase: Double {
-        adjustedRateLocalToBase
+    var effectiveRateLocationToBase: Double {
+        adjustedRateLocationToBase
     }
     
     /// Эффективный курс основной к локальной (с учетом корректировки).
     var effectiveRateBaseToLocal: Double {
-        adjustedRateLocalToBase > 0 ? (1 / adjustedRateLocalToBase) : 0
+        adjustedRateLocationToBase > 0 ? (1 / adjustedRateLocationToBase) : 0
     }
     
     // MARK: - Приватные свойства
     
     /// Скорректированный курс с учетом процента корректировки.
-    private var adjustedRateLocalToBase: Double {
-        rateLocalToBase * (1 + (exchangeAdjustment / 100))
+    private var adjustedRateLocationToBase: Double {
+        rateLocationToBase * (1 + (exchangeAdjustment / 100))
     }
     
     // MARK: - Публичные методы. Плановая сумма

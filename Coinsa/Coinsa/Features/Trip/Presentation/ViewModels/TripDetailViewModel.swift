@@ -40,7 +40,7 @@ struct TripDetailViewModel {
         return EventCategoryAnalyticsData(
             dateRange: trip.range,
             baseCurrency: trip.baseCurrency,
-            localCurrency: nil,
+            locationCurrency: nil,
             baseBudget: baseBudget,
             localBudget: localBudget,
             actualAmountByCategory: slices(from: actualAmountByCategory, localValues: nil)

@@ -15,7 +15,7 @@ struct EventAmountCardView: View {
     private let baseAmount: Double
     private let baseCurrency: Currency
     private let localAmount: Double?
-    private let localCurrency: Currency?
+    private let locationCurrency: Currency?
     
     // MARK: - Инициализация
     
@@ -25,19 +25,19 @@ struct EventAmountCardView: View {
     ///   - baseAmount: Сумма в основной валюте.
     ///   - baseCurrency: Основная валюта.
     ///   - localAmount: Сумма в локальной валюте (опционально).
-    ///   - localCurrency: Локальная валюта (опционально).
+    ///   - locationCurrency: Локальная валюта (опционально).
     init(
         title: LocalizedStringResource,
         baseAmount: Double,
         baseCurrency: Currency,
         localAmount: Double? = nil,
-        localCurrency: Currency? = nil
+        locationCurrency: Currency? = nil
     ) {
         self.title = title
         self.baseAmount = baseAmount
         self.baseCurrency = baseCurrency
         self.localAmount = localAmount
-        self.localCurrency = localCurrency
+        self.locationCurrency = locationCurrency
     }
     
     // MARK: - Тело View
@@ -45,8 +45,8 @@ struct EventAmountCardView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(title).font(.footnote).foregroundStyle(.secondary)
-            if let localAmount, let localCurrency {
-                AmountText.standard(localAmount, currency: localCurrency)
+            if let localAmount, let locationCurrency {
+                AmountText.standard(localAmount, currency: locationCurrency)
                 Spacer()
                 Divider()
                 AmountText.secondarySmall(baseAmount, currency: baseCurrency)
@@ -71,7 +71,7 @@ private extension EventAmountCardView {
                     baseAmount: 24600,
                     baseCurrency: .defaultValue,
                     localAmount: 41000,
-                    localCurrency: .jpy
+                    locationCurrency: .jpy
                 )
                 EventAmountCardView(
                     title: .amountActual,

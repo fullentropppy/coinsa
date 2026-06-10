@@ -105,7 +105,7 @@ struct EventSummaryView: View {
                     baseAmount: data.plannedBaseAmount,
                     baseCurrency: data.baseCurrency,
                     localAmount: data.plannedLocalAmount,
-                    localCurrency: data.localCurrency
+                    locationCurrency: data.locationCurrency
                 )
             }
             EventAmountCardView(
@@ -113,7 +113,7 @@ struct EventSummaryView: View {
                 baseAmount: data.actualBaseAmount,
                 baseCurrency: data.baseCurrency,
                 localAmount: data.actualLocalAmount,
-                localCurrency: data.localCurrency
+                locationCurrency: data.locationCurrency
             )
         }
     }
@@ -127,7 +127,7 @@ struct EventSummaryView: View {
                     baseAmountBalance: baseAmountBalance,
                     baseCurrency: data.baseCurrency,
                     localAmountBalance: localAmountBalance,
-                    localCurrency: data.localCurrency
+                    locationCurrency: data.locationCurrency
                 )
             }
         }

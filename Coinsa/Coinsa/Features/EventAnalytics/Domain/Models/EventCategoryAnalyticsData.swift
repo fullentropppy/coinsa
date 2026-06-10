@@ -11,7 +11,7 @@ import Foundation
 struct EventCategoryAnalyticsData {
     let dateRange: ClosedRange<Date>
     let baseCurrency: Currency
-    let localCurrency: Currency?
+    let locationCurrency: Currency?
     let baseBudget: Double
     let localBudget: Double?
     let actualAmountByCategory: [ExpenseAnalyticsSlice]

@@ -110,8 +110,8 @@ private extension PreviewGenerator {
             startDate: data.startDate.startOfDay.utcNoon,
             endDate: data.endDate.endOfDay.utcNoon,
             timeZoneID: data.majorTimeZone.id,
-            localCurrencyCode: data.currency.code,
-            rateLocalToBase: data.rateLocalToBase,
+            locationCurrencyCode: data.currency.code,
+            rateLocationToBase: data.rateLocationToBase,
             exchangeAdjustment: data.exchangeAdjustment,
             budget: data.budget,
             trip: trip,
@@ -132,7 +132,9 @@ private extension PreviewGenerator {
     ///   - location: Локация расхода.
     ///   - date: Дата расхода.
     ///   - baseAmount: Сумма в основной валюте.
-    ///   - rateLocalToBase: Курс местной валюты (опционально).
+    ///   - expenseCurrencyCode: Код валюты траты (опицонально).
+    ///   - rateExpenseToBase: Курс валюты траты к основной (опционально).
+    ///   - rateExpenseToLocation: Курс валюты траты к валюте локации (опционально).
     ///   - paymentMethod: Способ оплаты. По умолчанию `.cash`.
     ///   - exchangeAdjustment: Поправка курса (опционально).
     ///   - category: Категория расхода.
@@ -143,7 +145,9 @@ private extension PreviewGenerator {
         to location: Location,
         date: Date,
         baseAmount: Double,
-        rateLocalToBase: Double? = nil,
+        expenseCurrencyCode: Currency? = nil,
+        rateExpenseToBase: Double? = nil,
+        rateExpenseToLocation: Double? = nil,
         paymentMethod: PaymentMethod = .cash,
         exchangeAdjustment: Double? = nil,
         category: ExpenseCategory,
@@ -155,7 +159,9 @@ private extension PreviewGenerator {
             id: UUID(),
             date: date,
             baseAmount: baseAmount,
-            rateLocalToBase: rateLocalToBase ?? location.rateLocalToBase,
+            expenseCurrencyCode: expenseCurrencyCode?.code ?? location.locationCurrency.code,
+            rateExpenseToBase: rateExpenseToBase ?? location.rateLocationToBase,
+            rateExpenseToLocation: rateExpenseToLocation ?? 1,
             paymentMethodRaw: paymentMethod.rawValue,
             exchangeAdjustment: exchangeAdjustment ?? location.exchangeAdjustment,
             categoryRaw: category.rawValue,

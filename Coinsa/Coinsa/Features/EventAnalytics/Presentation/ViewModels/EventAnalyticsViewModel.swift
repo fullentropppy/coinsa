@@ -19,8 +19,8 @@ struct EventAnalyticsViewModel {
         data.baseCurrency
     }
 
-    var localCurrency: Currency? {
-        data.localCurrency
+    var locationCurrency: Currency? {
+        data.locationCurrency
     }
 
     // MARK: - Хранимые свойства. Дни
@@ -64,7 +64,7 @@ struct EventAnalyticsViewModel {
     // MARK: - Хранимые свойства. Сумма в локальной валюте
     
     var actualTotalLocalAmount: Double? {
-        if localCurrency != nil {
+        if locationCurrency != nil {
             data.actualAmountByCategory.reduce(0) { $0 + ($1.localAmount ?? 0) }
         } else {
             nil
@@ -104,7 +104,7 @@ struct EventAnalyticsViewModel {
             baseCurrency: baseCurrency,
             plannedLocalAmount: data.localBudget,
             actualLocalAmount: actualTotalLocalAmount,
-            localCurrency: localCurrency
+            locationCurrency: locationCurrency
         )
     }
 
@@ -139,7 +139,7 @@ struct EventAnalyticsViewModel {
         }()
         
         let rawLocalRemainders: [Double]? = {
-            if localCurrency != nil {
+            if locationCurrency != nil {
                 rawItems.map { max(($0.plannedLocalAmount ?? 0) - ($0.actualLocalAmount ?? 0), 0) }
             } else {
                 nil

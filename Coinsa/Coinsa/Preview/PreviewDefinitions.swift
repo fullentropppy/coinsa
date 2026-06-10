@@ -111,7 +111,7 @@ enum PreviewLocation: String {
         }
     }
 
-    var rateLocalToBase: Double {
+    var rateLocationToBase: Double {
         PreviewCurrency.exchangeRate(for: currency)
     }
     

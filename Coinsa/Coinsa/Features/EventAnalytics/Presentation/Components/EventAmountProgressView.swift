@@ -16,7 +16,7 @@ struct EventAmountProgressView<Header: View>: View {
     private let baseCurrency: Currency
     private let plannedLocalAmount: Double?
     private let actualLocalAmount: Double?
-    private let localCurrency: Currency?
+    private let locationCurrency: Currency?
     private let showsPlannedIfZero: Bool
     private let header: () -> Header
     
@@ -51,7 +51,7 @@ struct EventAmountProgressView<Header: View>: View {
     ///   - baseCurrency: Основная валюта.
     ///   - localPlannedAmount: Плановая сумма в локальной валюте (опционально).
     ///   - localActualAmount: Фактическая сумма в локальной валюте (опционально).
-    ///   - localCurrency: Локальная валюта (опционально).
+    ///   - locationCurrency: Локальная валюта (опционально).
     ///   - showsPlannedIfZero: Отображать плановую сумму если отсутствует. По умолчанию `false`.
     ///   - header: Замыкание для создания кастомного заголовка.
     init(
@@ -60,7 +60,7 @@ struct EventAmountProgressView<Header: View>: View {
         baseCurrency: Currency,
         localPlannedAmount: Double? = nil,
         localActualAmount: Double? = nil,
-        localCurrency: Currency? = nil,
+        locationCurrency: Currency? = nil,
         showsPlannedIfZero: Bool = false,
         @ViewBuilder header: @escaping () -> Header
     ) {
@@ -69,7 +69,7 @@ struct EventAmountProgressView<Header: View>: View {
         self.baseCurrency = baseCurrency
         self.plannedLocalAmount = localPlannedAmount
         self.actualLocalAmount = localActualAmount
-        self.localCurrency = localCurrency
+        self.locationCurrency = locationCurrency
         self.showsPlannedIfZero = showsPlannedIfZero
         self.header = header
     }
@@ -142,11 +142,11 @@ struct EventAmountProgressView<Header: View>: View {
         HStack {
             Text(title)
             Spacer()
-            if let localAmount, let localCurrency {
+            if let localAmount, let locationCurrency {
                 Text(
                     .amountDuo(
                         localAmountBalance: localAmount.numberFormat(),
-                        localCurrencyCode: localCurrency.code,
+                        localCurrencyCode: locationCurrency.code,
                         baseAmountBalance: baseAmount.numberFormat(),
                         baseCurrencyCode: baseCurrency.code
                     )
@@ -175,7 +175,7 @@ private extension EventAmountProgressView where Header == HStack<TupleView<(DotV
                     baseCurrency: .defaultValue,
                     localPlannedAmount: 84000,
                     localActualAmount: 44000,
-                    localCurrency: .jpy
+                    locationCurrency: .jpy
                 ) {
                     HStack {
                         ExpenseCategory.food.makeDot()
@@ -189,7 +189,7 @@ private extension EventAmountProgressView where Header == HStack<TupleView<(DotV
                     baseCurrency: .defaultValue,
                     localPlannedAmount: 84000,
                     localActualAmount: 104000,
-                    localCurrency: .jpy
+                    locationCurrency: .jpy
                 ) {
                     HStack {
                         ExpenseCategory.food.makeDot()
@@ -214,7 +214,7 @@ private extension EventAmountProgressView where Header == HStack<TupleView<(DotV
                     baseCurrency: .defaultValue,
                     localPlannedAmount: 0,
                     localActualAmount: 44000,
-                    localCurrency: .jpy
+                    locationCurrency: .jpy
                 ) {
                     HStack {
                         ExpenseCategory.food.makeDot()

@@ -15,7 +15,7 @@ struct EventAmountBalanceView: View {
     private let baseAmountBalance: Double
     private let baseCurrency: Currency
     private let localAmountBalance: Double?
-    private let localCurrency: Currency?
+    private let locationCurrency: Currency?
     
     // MARK: - Вычисляемые свойства
     
@@ -31,19 +31,19 @@ struct EventAmountBalanceView: View {
     ///   - baseAmountBalance: Остаток в основной валюте.
     ///   - baseCurrency: Основная валюта.
     ///   - localAmountBalance: Остаток в локальной валюте (опционально).
-    ///   - localCurrency: Локальная валюта (опционально).
+    ///   - locationCurrency: Локальная валюта (опционально).
     init(
         plannedBaseAmount: Double,
         baseAmountBalance: Double,
         baseCurrency: Currency,
         localAmountBalance: Double? = nil,
-        localCurrency: Currency? = nil
+        locationCurrency: Currency? = nil
     ) {
         self.plannedBaseAmount = plannedBaseAmount
         self.baseAmountBalance = baseAmountBalance
         self.baseCurrency = baseCurrency
         self.localAmountBalance = localAmountBalance
-        self.localCurrency = localCurrency
+        self.locationCurrency = locationCurrency
     }
     
     // MARK: - Тело View
@@ -65,11 +65,11 @@ struct EventAmountBalanceView: View {
     
     private var differenceInfo: some View {
         Group {
-            if let localAmountBalance, let localCurrency {
+            if let localAmountBalance, let locationCurrency {
                 Text(
                     .amountDuo(
                         localAmountBalance: localAmountBalance.numberFormat(),
-                        localCurrencyCode: localCurrency.code,
+                        localCurrencyCode: locationCurrency.code,
                         baseAmountBalance: baseAmountBalance.numberFormat(),
                         baseCurrencyCode: baseCurrency.code
                     )
@@ -99,21 +99,21 @@ private extension EventAmountBalanceView {
                     baseAmountBalance: -24600,
                     baseCurrency: .defaultValue,
                     localAmountBalance: -41000,
-                    localCurrency: .jpy
+                    locationCurrency: .jpy
                 )
                 EventAmountBalanceView(
                     plannedBaseAmount: 42000,
                     baseAmountBalance: 0,
                     baseCurrency: .defaultValue,
                     localAmountBalance: 0,
-                    localCurrency: .jpy
+                    locationCurrency: .jpy
                 )
                 EventAmountBalanceView(
                     plannedBaseAmount: 42000,
                     baseAmountBalance: 24600,
                     baseCurrency: .defaultValue,
                     localAmountBalance: 41000,
-                    localCurrency: .jpy
+                    locationCurrency: .jpy
                 )
             }
             Section {

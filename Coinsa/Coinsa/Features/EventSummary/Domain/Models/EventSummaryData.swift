@@ -18,7 +18,7 @@ struct EventSummaryData {
     let baseCurrency: Currency
     let plannedLocalAmount: Double?
     let actualLocalAmount: Double?
-    let localCurrency: Currency?
+    let locationCurrency: Currency?
     
     // MARK: - Инициализация
     
@@ -31,7 +31,7 @@ struct EventSummaryData {
     ///   - baseCurrency: Основная валюта.
     ///   - plannedLocalAmount: Плановая сумма в локальной валюте (опционально).
     ///   - actualLocalAmount: Фактическая сумма в локальной валюте (опционально).
-    ///   - localCurrency: Локальная валюта (опционально).
+    ///   - locationCurrency: Локальная валюта (опционально).
     init(
         badgeProvider: TypeBadgeProviding.Type? = nil,
         dateRangeProvider: DateRangeProviding? = nil,
@@ -40,7 +40,7 @@ struct EventSummaryData {
         baseCurrency: Currency,
         plannedLocalAmount: Double? = nil,
         actualLocalAmount: Double? = nil,
-        localCurrency: Currency? = nil
+        locationCurrency: Currency? = nil
     ) {
         self.badgeProvider = badgeProvider
         self.dateRangeProvider = dateRangeProvider
@@ -49,6 +49,6 @@ struct EventSummaryData {
         self.baseCurrency = baseCurrency
         self.plannedLocalAmount = plannedLocalAmount
         self.actualLocalAmount = actualLocalAmount
-        self.localCurrency = localCurrency
+        self.locationCurrency = locationCurrency
     }
 }

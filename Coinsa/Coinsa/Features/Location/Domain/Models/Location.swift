@@ -29,10 +29,10 @@ class Location: DateRangeProviding {
     var timeZoneID: String = ""
     
     /// Трехбуквенный код ISO 4217 локальной валюты.
-    var localCurrencyCode: String = ""
+    var locationCurrencyCode: String = ""
     
     /// Курс локальной валюты к основной валюте поездки.
-    var rateLocalToBase: Double = 0
+    var rateLocationToBase: Double = 0
     
     /// Корректировка к курсу обмена.
     var exchangeAdjustment: Double = 0
@@ -63,8 +63,8 @@ class Location: DateRangeProviding {
     ///   - startDate: Дата начала пребывания.
     ///   - endDate: Дата окончания пребывания.
     ///   - timeZoneID: Идентификатор часового пояса.
-    ///   - localCurrencyCode: Код локальной валюты.
-    ///   - rateLocalToBase: Курс к основной валюте.
+    ///   - locationCurrencyCode: Код локальной валюты.
+    ///   - rateLocationToBase: Курс к основной валюте.
     ///   - exchangeAdjustment: Корректировка курса.
     ///   - budget: Сумма бюджета.
     ///   - trip: Поездка-родитель.
@@ -77,8 +77,8 @@ class Location: DateRangeProviding {
         startDate: Date,
         endDate: Date,
         timeZoneID: String,
-        localCurrencyCode: String,
-        rateLocalToBase: Double,
+        locationCurrencyCode: String,
+        rateLocationToBase: Double,
         exchangeAdjustment: Double,
         budget: Double,
         trip: Trip,
@@ -94,8 +94,8 @@ class Location: DateRangeProviding {
         self.startDate = startDate
         self.endDate = endDate
         self.timeZoneID = timeZoneID
-        self.localCurrencyCode = localCurrencyCode
-        self.rateLocalToBase = rateLocalToBase
+        self.locationCurrencyCode = locationCurrencyCode
+        self.rateLocationToBase = rateLocationToBase
         self.exchangeAdjustment = exchangeAdjustment
         self.budget = budget
         self.trip = trip

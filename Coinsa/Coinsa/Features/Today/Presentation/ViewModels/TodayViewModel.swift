@@ -43,7 +43,7 @@ final class TodayViewModel {
     
     var isHomeLocation: Bool {
         if let selectedLocation {
-            selectedLocation.baseCurrency == selectedLocation.localCurrency
+            selectedLocation.baseCurrency == selectedLocation.locationCurrency
         } else {
             false
         }
@@ -63,20 +63,20 @@ final class TodayViewModel {
     
     // MARK: - Состояние UI. Курс обмена
     
-    private var loadedRateLocalToBase: Double?
+    private var loadedRateLocationToBase: Double?
     
-    var rateLocalToBase: Double {
-        if let loadedRateLocalToBase {
-            return loadedRateLocalToBase
+    var rateLocationToBase: Double {
+        if let loadedRateLocationToBase {
+            return loadedRateLocationToBase
         } else if let selectedLocation {
-            return selectedLocation.rateLocalToBase
+            return selectedLocation.rateLocationToBase
         } else {
             return 1
         }
     }
     
     var rateBaseToLocal: Double {
-        rateLocalToBase > 0 ? (1 / rateLocalToBase) : 0
+        rateLocationToBase > 0 ? (1 / rateLocationToBase) : 0
     }
     
     var rateRefreshKey: Date {
@@ -111,7 +111,7 @@ final class TodayViewModel {
         self.exchangeRateManager = exchangeRateManager
         self.currentLocations = currentLocations
         self.selectedLocationID = selectedLocationID
-        self.loadedRateLocalToBase = nil
+        self.loadedRateLocationToBase = nil
     }
     
     // MARK: - Курс обмена
@@ -119,15 +119,15 @@ final class TodayViewModel {
     func loadInitialRateIfNeeded() {
         guard let selectedLocation else { return }
         
-        loadedRateLocalToBase = nil
+        loadedRateLocationToBase = nil
         
         guard !isHomeLocation else { return }
         
         exchangeRateManager.requestRefresh(
-            from: selectedLocation.localCurrency,
+            from: selectedLocation.locationCurrency,
             to: selectedLocation.baseCurrency
         ) { [weak self] rate in
-            self?.loadedRateLocalToBase = rate
+            self?.loadedRateLocationToBase = rate
         }
     }
     
@@ -154,7 +154,7 @@ final class TodayViewModel {
         let plannedLocalAmount = isHomeLocation ? nil : location.calculatePlannedAmountForToday(asBaseCurrency: false)
         let actualAmountBase = location.calculateActualAmount(asBaseCurrency: true, withinDateRange: todayRange)
         let actualAmountLocal = isHomeLocation ? nil : location.calculateActualAmount(asBaseCurrency: false, withinDateRange: todayRange)
-        let localCurrency = isHomeLocation ? nil : location.localCurrency
+        let locationCurrency = isHomeLocation ? nil : location.locationCurrency
         
         return EventSummaryData(
             badgeProvider: Location.self,
@@ -164,7 +164,7 @@ final class TodayViewModel {
             baseCurrency: location.baseCurrency,
             plannedLocalAmount: plannedLocalAmount,
             actualLocalAmount: actualAmountLocal,
-            localCurrency: localCurrency
+            locationCurrency: locationCurrency
         )
     }
 }

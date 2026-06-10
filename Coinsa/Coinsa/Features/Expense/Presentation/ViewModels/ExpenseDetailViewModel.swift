@@ -15,8 +15,8 @@ struct ExpenseDetailViewModel {
 
     // MARK: - Вычисляемые свойства. Общее
 
-    var isHomeLocation: Bool {
-        baseCurrency == localCurrency
+    var isExpenseBaseCurrency: Bool {
+        baseCurrency == expenseCurrency
     }
     
     var navigationTitle: LocalizedStringResource {
@@ -33,44 +33,48 @@ struct ExpenseDetailViewModel {
         expense.baseCurrency
     }
     
-    var localCurrency: Currency {
-        expense.localCurrency
+    var locationCurrency: Currency {
+        expense.locationCurrency
+    }
+    
+    var expenseCurrency: Currency {
+        expense.expenseCurrency
     }
     
     var primaryAmount: Double {
-        isHomeLocation ? expense.baseAmount : expense.localAmount
+        isExpenseBaseCurrency ? expense.baseAmount : expense.expenseAmount
     }
 
     var primaryCurrency: Currency {
-        isHomeLocation ? baseCurrency : localCurrency
+        isExpenseBaseCurrency ? baseCurrency : expenseCurrency
     }
 
     var secondaryAmount: Double? {
-        isHomeLocation ? nil : expense.baseAmount
+        isExpenseBaseCurrency ? nil : expense.baseAmount
     }
 
     var secondaryCurrency: Currency? {
-        isHomeLocation ? nil : baseCurrency
+        isExpenseBaseCurrency ? nil : baseCurrency
     }
 
     // MARK: - Вычисляемые свойства. Курс обмена
     
     var exchangeRateDescription: LocalizedStringResource? {
-        guard !isHomeLocation else {
+        guard !isExpenseBaseCurrency else {
             return nil
         }
 
         if expense.paymentMethod == .card && expense.exchangeAdjustment > 0 {
             return .expenseAdjustedExchangeRateLong(
-                localCurrencyCode: expense.localCurrency.code,
-                effectiveRateLocalToBase: expense.effectiveRateLocalToBase.numberFormat(fractionLength: 4),
+                localCurrencyCode: expense.expenseCurrency.code,
+                effectiveRateLocalToBase: expense.effectiveRateExpenseToBase.numberFormat(fractionLength: 4),
                 baseCurrencyCode: expense.baseCurrency.code,
                 adjustmentRateLocalToBase: (expense.exchangeAdjustment / 100).percentFormat()
             )
         } else {
             return .expenseBaseExchangeRate(
-                localCurrencyCode: expense.localCurrency.code,
-                rateLocalToBase: expense.rateLocalToBase.numberFormat(fractionLength: 4),
+                localCurrencyCode: expense.expenseCurrency.code,
+                rateLocalToBase: expense.rateExpenseToBase.numberFormat(fractionLength: 4),
                 baseCurrencyCode: expense.baseCurrency.code
             )
         }

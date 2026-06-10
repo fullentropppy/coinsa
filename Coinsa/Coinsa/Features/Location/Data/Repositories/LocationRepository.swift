@@ -23,8 +23,8 @@ struct LocationRepository {
     ///   - startDate: Дата начала пребывания.
     ///   - endDate: Дата окончания пребывания.
     ///   - majorTimeZone: Часовой пояс.
-    ///   - localCurrency: Локальная валюта.
-    ///   - rateLocalToBase: Курс к основной валюте.
+    ///   - locationCurrency: Локальная валюта.
+    ///   - rateLocationToBase: Курс к основной валюте.
     ///   - exchangeAdjustment: Процентная корректировка курса.
     ///   - budget: Сумма бюджета в основной валюте.
     ///   - trip: Родительская поездка.
@@ -33,8 +33,8 @@ struct LocationRepository {
         startDate: Date,
         endDate: Date,
         majorTimeZone: MajorTimeZone,
-        localCurrency: Currency,
-        rateLocalToBase: Double,
+        locationCurrency: Currency,
+        rateLocationToBase: Double,
         exchangeAdjustment: Double,
         budget: Double,
         trip: Trip
@@ -47,9 +47,9 @@ struct LocationRepository {
             startDate: normalizedStartDate(startDate),
             endDate: normalizedEndDate(endDate),
             timeZoneID: majorTimeZone.id,
-            localCurrencyCode: localCurrency.code,
-            rateLocalToBase: normalizedRateLocalToBase(rateLocalToBase),
-            exchangeAdjustment: normalizedRateLocalToBase(exchangeAdjustment),
+            locationCurrencyCode: locationCurrency.code,
+            rateLocationToBase: normalizedRateLocationToBase(rateLocationToBase),
+            exchangeAdjustment: normalizedRateLocationToBase(exchangeAdjustment),
             budget: normalizedAmount(budget),
             trip: trip,
             expenses: [],
@@ -68,8 +68,8 @@ struct LocationRepository {
     ///   - startDate: Новая дата начала.
     ///   - endDate: Новая дата окончания.
     ///   - majorTimeZone: Новый часовой пояс.
-    ///   - localCurrency: Новая локальная валюта.
-    ///   - rateLocalToBase: Новый курс.
+    ///   - locationCurrency: Новая локальная валюта.
+    ///   - rateLocationToBase: Новый курс.
     ///   - budget: Новый бюджет.
     ///   - exchangeAdjustment: Новая корректировка.
     func update(
@@ -78,8 +78,8 @@ struct LocationRepository {
         startDate: Date,
         endDate: Date,
         majorTimeZone: MajorTimeZone,
-        localCurrency: Currency,
-        rateLocalToBase: Double,
+        locationCurrency: Currency,
+        rateLocationToBase: Double,
         exchangeAdjustment: Double,
         budget: Double
     ) {
@@ -87,9 +87,9 @@ struct LocationRepository {
         location.startDate = normalizedStartDate(startDate)
         location.endDate = normalizedEndDate(endDate)
         location.timeZoneID = majorTimeZone.id
-        location.localCurrencyCode = localCurrency.code
-        location.rateLocalToBase = normalizedRateLocalToBase(rateLocalToBase)
-        location.exchangeAdjustment = normalizedRateLocalToBase(exchangeAdjustment)
+        location.locationCurrencyCode = locationCurrency.code
+        location.rateLocationToBase = normalizedRateLocationToBase(rateLocationToBase)
+        location.exchangeAdjustment = normalizedRateLocationToBase(exchangeAdjustment)
         location.budget = normalizedAmount(budget)
         location.updatedAt = Date()
         
@@ -126,7 +126,7 @@ struct LocationRepository {
     }
     
     /// Приводит курс к неотрицательному значению.
-    private func normalizedRateLocalToBase(_ rate: Double) -> Double {
+    private func normalizedRateLocationToBase(_ rate: Double) -> Double {
         rate.nonNegative
     }
     

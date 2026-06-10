@@ -21,7 +21,9 @@ struct ExpenseRepository {
     /// - Parameters:
     ///   - date: Дата совершения траты.
     ///   - baseAmount: Сумма в основной валюте.
-    ///   - rateLocalToBase: Курс локальной валюты к основной.
+    ///   - expenseCurrency: Валюта траты.
+    ///   - rateExpenseToBase: Курс валюты траты к основной.
+    ///   - rateExpenseToLocation: Курс валюты траты к валюте локации.
     ///   - paymentMethod: Способ оплаты.
     ///   - exchangeAdjustment: Процентная корректировка курса.
     ///   - category: Категория траты.
@@ -31,7 +33,9 @@ struct ExpenseRepository {
     func add(
         date: Date,
         baseAmount: Double,
-        rateLocalToBase: Double,
+        expenseCurrency: Currency,
+        rateExpenseToBase: Double,
+        rateExpenseToLocation: Double,
         paymentMethod: PaymentMethod,
         exchangeAdjustment: Double,
         category: ExpenseCategory,
@@ -45,7 +49,9 @@ struct ExpenseRepository {
             id: UUID(),
             date: date,
             baseAmount: normalizedAmount(baseAmount),
-            rateLocalToBase: normalizedRateLocalToBase(rateLocalToBase),
+            expenseCurrencyCode: expenseCurrency.code,
+            rateExpenseToBase: normalizedRate(rateExpenseToBase),
+            rateExpenseToLocation: normalizedRate(rateExpenseToLocation),
             paymentMethodRaw: paymentMethod.rawValue,
             exchangeAdjustment: normalizedExchangeAdjustment(exchangeAdjustment),
             categoryRaw: category.rawValue,
@@ -64,7 +70,9 @@ struct ExpenseRepository {
     ///   - expense: Трата для обновления.
     ///   - date: Новая дата.
     ///   - baseAmount: Новая сумма в основной валюте.
-    ///   - rateLocalToBase: Новый курс.
+    ///   - expenseCurrency: Новая валюта траты.
+    ///   - rateExpenseToBase: Новый курс валюты траты к основной.
+    ///   - rateExpenseToLocation: Новый курс валюты траты к валюте локации.
     ///   - paymentMethod: Новый способ оплаты.
     ///   - exchangeAdjustment: Новая корректировка.
     ///   - category: Новая категория.
@@ -74,7 +82,9 @@ struct ExpenseRepository {
         _ expense: Expense,
         date: Date,
         baseAmount: Double,
-        rateLocalToBase: Double,
+        expenseCurrency: Currency,
+        rateExpenseToBase: Double,
+        rateExpenseToLocation: Double,
         paymentMethod: PaymentMethod,
         exchangeAdjustment: Double,
         category: ExpenseCategory,
@@ -83,7 +93,9 @@ struct ExpenseRepository {
     ) {
         expense.date = date
         expense.baseAmount = normalizedAmount(baseAmount)
-        expense.rateLocalToBase = normalizedRateLocalToBase(rateLocalToBase)
+        expense.expenseCurrencyCode = expenseCurrency.code
+        expense.rateExpenseToBase = normalizedRate(rateExpenseToBase)
+        expense.rateExpenseToLocation = normalizedRate(rateExpenseToLocation)
         expense.paymentMethodRaw = paymentMethod.rawValue
         expense.exchangeAdjustment = normalizedExchangeAdjustment(exchangeAdjustment)
         expense.categoryRaw = category.rawValue
@@ -108,7 +120,7 @@ struct ExpenseRepository {
     }
     
     /// Приводит курс к неотрицательному значению.
-    private func normalizedRateLocalToBase(_ rate: Double) -> Double {
+    private func normalizedRate(_ rate: Double) -> Double {
         rate.nonNegative
     }
     

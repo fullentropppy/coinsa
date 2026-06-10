@@ -29,12 +29,12 @@ struct LocationDetailViewModel {
         location.baseCurrency
     }
     
-    var localCurrency: Currency {
-        location.localCurrency
+    var locationCurrency: Currency {
+        location.locationCurrency
     }
     
     var isHomeLocation: Bool {
-        baseCurrency == localCurrency
+        baseCurrency == locationCurrency
     }
     
     // MARK: - Вычисляемые свойства. Общие данные
@@ -44,7 +44,7 @@ struct LocationDetailViewModel {
         let plannedLocalAmount = isHomeLocation ? nil : location.calculatePlannedAmount(asBaseCurrency: false)
         let actualAmountBase = location.calculateActualAmount(asBaseCurrency: true)
         let actualAmountLocal = isHomeLocation ? nil : location.calculateActualAmount(asBaseCurrency: false)
-        let localCurrency = isHomeLocation ? nil : localCurrency
+        let locationCurrency = isHomeLocation ? nil : locationCurrency
 
         return EventSummaryData(
             badgeProvider: Location.self,
@@ -54,12 +54,12 @@ struct LocationDetailViewModel {
             baseCurrency: baseCurrency,
             plannedLocalAmount: plannedLocalAmount,
             actualLocalAmount: actualAmountLocal,
-            localCurrency: localCurrency
+            locationCurrency: locationCurrency
         )
     }
 
     var eventAnalyticsData: EventCategoryAnalyticsData {
-        let isHomeLocation = localCurrency == baseCurrency
+        let isHomeLocation = locationCurrency == baseCurrency
         
         let actualAmountByCategoryBase = location.calculateActualAmountByCategory(
             asBaseCurrency: true,
@@ -73,7 +73,7 @@ struct LocationDetailViewModel {
         return EventCategoryAnalyticsData(
             dateRange: location.range,
             baseCurrency: baseCurrency,
-            localCurrency: isHomeLocation ? nil : localCurrency,
+            locationCurrency: isHomeLocation ? nil : locationCurrency,
             baseBudget: location.budget,
             localBudget: location.budget, // Скорректировать
             actualAmountByCategory: slices(from: actualAmountByCategoryBase, localValues: actualLocalAmountByCategory)

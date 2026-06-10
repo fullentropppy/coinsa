@@ -213,15 +213,15 @@ struct TodayView: View {
             VStack(alignment: .leading) {
                 Text(
                     .todayExchangeRate(
-                        currencyCode1: location.localCurrencyCode,
-                        rate1To2: viewModel.rateLocalToBase.numberFormat(fractionLength: 4),
+                        currencyCode1: location.locationCurrencyCode,
+                        rate1To2: viewModel.rateLocationToBase.numberFormat(fractionLength: 4),
                         currencyCode2: location.trip?.baseCurrencyCode ?? "")
                 )
                 Text(
                     .todayExchangeRate(
                         currencyCode1: location.trip?.baseCurrencyCode ?? "",
                         rate1To2: viewModel.rateBaseToLocal.numberFormat(fractionLength: 4),
-                        currencyCode2: location.localCurrencyCode)
+                        currencyCode2: location.locationCurrencyCode)
                 )
             }
             .font(.caption)

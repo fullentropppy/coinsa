@@ -11,8 +11,17 @@ extension Expense {
         location?.baseCurrency ?? .defaultValue
     }
     
-    /// Локальная валюта траты (из локации).
-    var localCurrency: Currency {
-        location?.localCurrency ?? .defaultValue
+    /// Валюта локации, в которой совершена трата.
+    var locationCurrency: Currency {
+        location?.locationCurrency ?? .defaultValue
+    }
+    
+    /// Валюта, в которой была совершена трата.
+    var expenseCurrency: Currency {
+        if expenseCurrencyCode.isBlank {
+            locationCurrency
+        } else {
+            Currency.from(expenseCurrencyCode)
+        }
     }
 }

@@ -13,6 +13,7 @@ import SwiftUI
 enum NumericEditField: Hashable {
     case amount
     case exchangeRate
+    case locationExchangeRate
     case exchangeAdjustment
     case budget
 }

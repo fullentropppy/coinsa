@@ -22,8 +22,14 @@ class Expense {
     /// Сумма траты в основной валюте поездки.
     var baseAmount: Double = 0
     
-    /// Курс локальной валюты к основной на момент траты.
-    var rateLocalToBase: Double = 0
+    /// Трехбуквенный код ISO 4217 валюты траты.
+    var expenseCurrencyCode: String = ""
+    
+    /// Курс валюты траты к основной в момент траты.
+    var rateExpenseToBase: Double = 0
+    
+    /// Курс валюты траты к валюте локации в момент траты.
+    var rateExpenseToLocation: Double = 0
     
     /// Сырое значение способа оплаты.
     var paymentMethodRaw: String = ""
@@ -56,7 +62,9 @@ class Expense {
     ///   - id: Уникальный идентификатор.
     ///   - date: Дата траты.
     ///   - baseAmount: Сумма в основной валюте.
-    ///   - rateLocalToBase: Курс локальной валюты к основной.
+    ///   - expenseCurrencyCode: Код валюты траты.
+    ///   - rateExpenseToBase: Курс валюты траты к основной.
+    ///   - rateExpenseToLocation: Курс валюты траты к валюте локации.
     ///   - paymentMethodRaw: Сырое значение способа оплаты.
     ///   - exchangeAdjustment: Корректировка курса.
     ///   - categoryRaw: Сырое значение категории.
@@ -69,11 +77,13 @@ class Expense {
         id: UUID,
         date: Date,
         baseAmount: Double,
-        rateLocalToBase: Double,
+        expenseCurrencyCode: String,
+        rateExpenseToBase: Double,
+        rateExpenseToLocation: Double,
         paymentMethodRaw: String,
         exchangeAdjustment: Double,
         categoryRaw: String,
-        subcategoryRaw: String = "other", // временно
+        subcategoryRaw: String,
         location: Location,
         comment: String?,
         createdAt: Date,
@@ -85,7 +95,9 @@ class Expense {
         
         self.date = date
         self.baseAmount = baseAmount
-        self.rateLocalToBase = rateLocalToBase
+        self.expenseCurrencyCode = expenseCurrencyCode
+        self.rateExpenseToBase = rateExpenseToBase
+        self.rateExpenseToLocation = rateExpenseToLocation
         self.paymentMethodRaw = paymentMethodRaw
         self.exchangeAdjustment = exchangeAdjustment
         self.categoryRaw = categoryRaw
