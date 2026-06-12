@@ -133,8 +133,7 @@ struct ExpenseEditView: View {
         Section {
             DatePicker(
                 .expenseDate,
-                selection: $viewModel.date,
-                in: viewModel.location.range
+                selection: $viewModel.date
             )
         }
     }
@@ -190,7 +189,7 @@ struct ExpenseEditView: View {
                 }
             }
             
-            if viewModel.shouldShowRateExpenseToBase {
+            if viewModel.showsRateExpenseToBase {
                 LabeledContent(.expenseExchangeRate(localCurrencyCode: viewModel.expenseCurrency.code)) {
                     ExchangeRateInputField.standard(
                         rateExpenseToBaseInputBinding,
@@ -203,7 +202,7 @@ struct ExpenseEditView: View {
                 }
             }
             
-            if viewModel.shouldShowRateExpenseToLocation {
+            if viewModel.showsRateExpenseToLocation {
                 LabeledContent(.expenseExchangeRate(localCurrencyCode: viewModel.expenseCurrency.code)) {
                     ExchangeRateInputField.standard(
                         rateExpenseToLocationInputBinding,
@@ -333,8 +332,8 @@ struct ExpenseEditView: View {
     private var rateErrorBinding: Binding<Bool> {
         Binding(
             get: { viewModel.rateLoadingError != nil },
-            set: { shouldShow in
-                if !shouldShow {
+            set: { shows in
+                if !shows {
                     viewModel.rateLoadingError = nil
                 }
             }

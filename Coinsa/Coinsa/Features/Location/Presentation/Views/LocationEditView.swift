@@ -297,8 +297,8 @@ struct LocationEditView: View {
     private var rateErrorBinding: Binding<Bool> {
         Binding(
             get: { viewModel.rateLoadingError != nil },
-            set: { shouldShow in
-                if !shouldShow {
+            set: { shows in
+                if !shows {
                     viewModel.rateLoadingError = nil
                 }
             }

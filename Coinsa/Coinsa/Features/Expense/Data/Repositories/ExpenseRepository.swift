@@ -48,19 +48,21 @@ struct ExpenseRepository {
         let expense = Expense(
             id: UUID(),
             date: date,
-            baseAmount: normalizedAmount(baseAmount),
+            baseAmount: baseAmount,
             expenseCurrencyCode: expenseCurrency.code,
-            rateExpenseToBase: normalizedRate(rateExpenseToBase),
-            rateExpenseToLocation: normalizedRate(rateExpenseToLocation),
+            rateExpenseToBase: rateExpenseToBase,
+            rateExpenseToLocation: rateExpenseToLocation,
             paymentMethodRaw: paymentMethod.rawValue,
-            exchangeAdjustment: normalizedExchangeAdjustment(exchangeAdjustment),
+            exchangeAdjustment: exchangeAdjustment,
             categoryRaw: category.rawValue,
             subcategoryRaw: subcategory.rawValue,
             location: location,
-            comment: normalizedComment(comment),
+            comment: comment,
             createdAt: now,
             updatedAt: now
         )
+        
+        normalizeExpenseData(expense)
         context.insert(expense)
         try? context.save()
     }
@@ -92,16 +94,18 @@ struct ExpenseRepository {
         comment: String?
     ) {
         expense.date = date
-        expense.baseAmount = normalizedAmount(baseAmount)
+        expense.baseAmount = baseAmount
         expense.expenseCurrencyCode = expenseCurrency.code
-        expense.rateExpenseToBase = normalizedRate(rateExpenseToBase)
-        expense.rateExpenseToLocation = normalizedRate(rateExpenseToLocation)
+        expense.rateExpenseToBase = rateExpenseToBase
+        expense.rateExpenseToLocation = rateExpenseToLocation
         expense.paymentMethodRaw = paymentMethod.rawValue
-        expense.exchangeAdjustment = normalizedExchangeAdjustment(exchangeAdjustment)
+        expense.exchangeAdjustment = exchangeAdjustment
         expense.categoryRaw = category.rawValue
         expense.subcategoryRaw = subcategory.rawValue
-        expense.comment = normalizedComment(comment)
+        expense.comment = comment
         expense.updatedAt = Date()
+        
+        normalizeExpenseData(expense)
         try? context.save()
     }
     
@@ -114,24 +118,30 @@ struct ExpenseRepository {
     
     // MARK: - Нормализация значений
     
-    /// Приводит сумму к неотрицательному значению.
-    private func normalizedAmount(_ amount: Double) -> Double {
-        amount.nonNegative
+    /// Нормализует значения траты.
+    /// - Parameter expense: Трата для нормализации значений.
+    private func normalizeExpenseData(_ expense: Expense) {
+        expense.baseAmount = expense.baseAmount.nonNegative
+        expense.rateExpenseToBase = expense.rateExpenseToBase.nonNegative
+        expense.rateExpenseToLocation = normalizedRateExpenseToLocation(of: expense)
+        expense.exchangeAdjustment = expense.exchangeAdjustment.nonNegative
+        expense.comment = normalizedComment(of: expense)
     }
     
-    /// Приводит курс к неотрицательному значению.
-    private func normalizedRate(_ rate: Double) -> Double {
-        rate.nonNegative
-    }
-    
-    /// Приводит корректирвоку курса к неотрицательному значению.
-    private func normalizedExchangeAdjustment(_ adjustment: Double) -> Double {
-        adjustment.nonNegative
+    /// Нормализует значение курса обмена валюты траты к валюте локации.
+    /// - Parameter expense: Трата-источник данных.
+    private func normalizedRateExpenseToLocation(of expense: Expense) -> Double {
+        if expense.expenseCurrency == expense.locationCurrency {
+            1
+        } else {
+            expense.rateExpenseToLocation.nonNegative
+        }
     }
     
     /// Очищает комментарий от лишних пробелов.
-    private func normalizedComment(_ comment: String?) -> String? {
-        if let comment, !comment.isBlank {
+    /// - Parameter expense: Трата-источник данных.
+    private func normalizedComment(of expense: Expense) -> String? {
+        if let comment = expense.comment, !comment.isBlank {
             comment.trimmed
         } else {
             nil

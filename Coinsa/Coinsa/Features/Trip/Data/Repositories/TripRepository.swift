@@ -33,15 +33,16 @@ struct TripRepository {
         
         let trip = Trip(
             id: UUID(),
-            name: normalizedName(name),
-            startDate: normalizedStartDate(startDate),
-            endDate: normalizedEndDate(endDate),
+            name: name,
+            startDate: startDate,
+            endDate: endDate,
             baseCurrencyCode: baseCurrency.code,
             locations: [],
             createdAt: now,
             updatedAt: now
         )
         
+        normalizeTripData(trip)
         context.insert(trip)
         try? context.save()
     }
@@ -61,12 +62,13 @@ struct TripRepository {
         endDate: Date,
         baseCurrency: Currency
     ) {
-        trip.name = normalizedName(name)
-        trip.startDate = normalizedStartDate(startDate)
-        trip.endDate = normalizedEndDate(endDate)
+        trip.name = name
+        trip.startDate = startDate
+        trip.endDate = endDate
         trip.baseCurrencyCode = baseCurrency.code
         trip.updatedAt = Date()
 
+        normalizeTripData(trip)
         try? context.save()
     }
     
@@ -79,18 +81,11 @@ struct TripRepository {
     
     // MARK: - Номализация
     
-    /// Очищает название от лишних пробелов.
-    private func normalizedName(_ name: String) -> String {
-        name.trimmed
-    }
-    
-    /// Нормализует дату начала к полудню UTC.
-    private func normalizedStartDate(_ startDate: Date) -> Date {
-        startDate.utcNoon
-    }
-    
-    /// Нормализует дату окончания к полудню UTC.
-    private func normalizedEndDate(_ endDate: Date) -> Date {
-        endDate.utcNoon
+    /// Нормализует значения поездки.
+    /// - Parameter trip: Поездка для нормализации значений.
+    private func normalizeTripData(_ trip: Trip) {
+        trip.name = trip.name.trimmed
+        trip.startDate = trip.startDate.utcNoon
+        trip.endDate = trip.endDate.utcNoon
     }
 }

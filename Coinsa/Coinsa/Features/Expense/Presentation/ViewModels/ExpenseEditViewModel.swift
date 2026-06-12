@@ -40,11 +40,11 @@ final class ExpenseEditViewModel {
         expenseCurrency == locationCurrency
     }
     
-    var shouldShowRateExpenseToBase: Bool {
+    var showsRateExpenseToBase: Bool {
         !isExpenseBaseCurrency
     }
     
-    var shouldShowRateExpenseToLocation: Bool {
+    var showsRateExpenseToLocation: Bool {
         !isExpenseLocationCurrency
     }
     
@@ -58,8 +58,8 @@ final class ExpenseEditViewModel {
     
     var canSave: Bool {
         baseAmount > 0
-        && (!shouldShowRateExpenseToBase || rateExpenseToBase > 0)
-        && (!shouldShowRateExpenseToLocation || rateExpenseToLocation > 0)
+        && (!showsRateExpenseToBase || rateExpenseToBase > 0)
+        && (!showsRateExpenseToLocation || rateExpenseToLocation > 0)
     }
     
     var baseCurrency: Currency {
@@ -333,7 +333,7 @@ final class ExpenseEditViewModel {
     }
     
     private func requestInitialRateExpenseToBaseIfNeeded() {
-        guard shouldShowRateExpenseToBase else { return }
+        guard showsRateExpenseToBase else { return }
         
         baseCurrencyConverter.requestRateRefresh { [weak self] _ in
             self?.syncInitialSnapshotWithCurrentRates()
@@ -341,7 +341,7 @@ final class ExpenseEditViewModel {
     }
     
     private func requestInitialRateExpenseToLocationIfNeeded() {
-        guard shouldShowRateExpenseToLocation else { return }
+        guard showsRateExpenseToLocation else { return }
         
         locationCurrencyConverter.requestRateRefresh { [weak self] _ in
             self?.syncInitialSnapshotWithCurrentRates()

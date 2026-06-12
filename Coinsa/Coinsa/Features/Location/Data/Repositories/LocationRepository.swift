@@ -44,19 +44,20 @@ struct LocationRepository {
         let location = Location(
             id: UUID(),
             name: name.trimmed,
-            startDate: normalizedStartDate(startDate),
-            endDate: normalizedEndDate(endDate),
+            startDate: startDate,
+            endDate: endDate,
             timeZoneID: majorTimeZone.id,
             locationCurrencyCode: locationCurrency.code,
-            rateLocationToBase: normalizedRateLocationToBase(rateLocationToBase),
-            exchangeAdjustment: normalizedRateLocationToBase(exchangeAdjustment),
-            budget: normalizedAmount(budget),
+            rateLocationToBase: rateLocationToBase,
+            exchangeAdjustment: exchangeAdjustment,
+            budget: budget,
             trip: trip,
             expenses: [],
             createdAt: now,
             updatedAt: now
         )
         
+        normalizedLocationData(location)
         context.insert(location)
         try? context.save()
     }
@@ -83,16 +84,17 @@ struct LocationRepository {
         exchangeAdjustment: Double,
         budget: Double
     ) {
-        location.name = name.trimmed
-        location.startDate = normalizedStartDate(startDate)
-        location.endDate = normalizedEndDate(endDate)
+        location.name = name
+        location.startDate = startDate
+        location.endDate = endDate
         location.timeZoneID = majorTimeZone.id
         location.locationCurrencyCode = locationCurrency.code
-        location.rateLocationToBase = normalizedRateLocationToBase(rateLocationToBase)
-        location.exchangeAdjustment = normalizedRateLocationToBase(exchangeAdjustment)
-        location.budget = normalizedAmount(budget)
+        location.rateLocationToBase = rateLocationToBase
+        location.exchangeAdjustment = exchangeAdjustment
+        location.budget = budget
         location.updatedAt = Date()
         
+        normalizedLocationData(location)
         try? context.save()
     }
     
@@ -105,33 +107,14 @@ struct LocationRepository {
     
     // MARK: - Номализация
     
-    /// Очищает название от лишних пробелов.
-    private func normalizedName(_ name: String) -> String {
-        name.trimmed
-    }
-    
-    /// Нормализует дату начала к полудню UTC.
-    private func normalizedStartDate(_ startDate: Date) -> Date {
-        startDate.utcNoon
-    }
-    
-    /// Нормализует дату окончания к полудню UTC.
-    private func normalizedEndDate(_ endDate: Date) -> Date {
-        endDate.utcNoon
-    }
-    
-    /// Приводит сумму к неотрицательному значению.
-    private func normalizedAmount(_ amount: Double) -> Double {
-        amount.nonNegative
-    }
-    
-    /// Приводит курс к неотрицательному значению.
-    private func normalizedRateLocationToBase(_ rate: Double) -> Double {
-        rate.nonNegative
-    }
-    
-    /// Приводит корректировку курса к неотрицательному значению.
-    private func normalizedExchangeAdjustment(_ adjustment: Double) -> Double {
-        adjustment.nonNegative
+    /// Нормализует значения локации.
+    /// - Parameter location: Локация для нормализации значений.
+    private func normalizedLocationData(_ location: Location) {
+        location.name = location.name.trimmed
+        location.startDate = location.startDate.utcNoon
+        location.endDate = location.endDate.utcNoon
+        location.rateLocationToBase = location.rateLocationToBase.nonNegative
+        location.exchangeAdjustment = location.exchangeAdjustment
+        location.budget = location.budget.nonNegative
     }
 }
