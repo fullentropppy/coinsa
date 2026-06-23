@@ -23,9 +23,9 @@ extension Trip {
     ) -> Double {
         locations?.reduce(0) {
             $0 + $1.calculatePlannedAmount(
-                asBaseCurrency: asBaseCurrency,
+                in: asBaseCurrency ? CurrencyContext.base : CurrencyContext.location,
                 asDailyAverage: asDailyAverage,
-                using: calendar
+                calendar: calendar
             )
         } ?? 0
     }
@@ -42,7 +42,10 @@ extension Trip {
         withinDateRange: ClosedRange<Date>? = nil
     ) -> Double {
         locations?.reduce(0) {
-            $0 + $1.calculateActualAmount(asBaseCurrency: asBaseCurrency, withinDateRange: withinDateRange)
+            $0 + $1.calculateActualAmount(
+                in: asBaseCurrency ? CurrencyContext.base : CurrencyContext.location,
+                withinDateRange: withinDateRange
+            )
         } ?? 0
     }
     
@@ -57,7 +60,7 @@ extension Trip {
     ) -> [ExpenseCategory: Double] {
         locations?.reduce(into: [:]) { result, location in
             let locationValues = location.calculateActualAmountByCategory(
-                asBaseCurrency: asBaseCurrency,
+                in: asBaseCurrency ? CurrencyContext.base : CurrencyContext.location,
                 withinDateRange: withinDateRange
             )
             

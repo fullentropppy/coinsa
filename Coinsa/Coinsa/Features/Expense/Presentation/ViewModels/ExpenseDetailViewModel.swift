@@ -42,7 +42,7 @@ struct ExpenseDetailViewModel {
     }
     
     var primaryAmount: Double {
-        isExpenseBaseCurrency ? expense.baseAmount : expense.expenseAmount
+        isExpenseBaseCurrency ? expense.baseAmount : expense.amount(in: .expense)
     }
 
     var primaryCurrency: Currency {
@@ -67,7 +67,7 @@ struct ExpenseDetailViewModel {
         if expense.paymentMethod == .card && expense.exchangeAdjustment > 0 {
             return .expenseAdjustedExchangeRateLong(
                 localCurrencyCode: expense.expenseCurrency.code,
-                effectiveRateLocalToBase: expense.effectiveRateExpenseToBase.numberFormat(fractionLength: 4),
+                effectiveRateLocalToBase: expense.exchangeRate(from: .expense, to: .base, using: .effective).numberFormat(fractionLength: 4),
                 baseCurrencyCode: expense.baseCurrency.code,
                 adjustmentRateLocalToBase: (expense.exchangeAdjustment / 100).percentFormat()
             )

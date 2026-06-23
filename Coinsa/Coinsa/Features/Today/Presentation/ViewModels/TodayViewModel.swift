@@ -151,9 +151,9 @@ final class TodayViewModel {
     
     func eventSummaryData(for location: Location) -> EventSummaryData {
         let plannedBaseAmount = location.calculatePlannedAmountForToday()
-        let plannedLocalAmount = isHomeLocation ? nil : location.calculatePlannedAmountForToday(asBaseCurrency: false)
-        let actualAmountBase = location.calculateActualAmount(asBaseCurrency: true, withinDateRange: todayRange)
-        let actualAmountLocal = isHomeLocation ? nil : location.calculateActualAmount(asBaseCurrency: false, withinDateRange: todayRange)
+        let plannedLocalAmount = isHomeLocation ? nil : location.calculatePlannedAmountForToday(in: .location)
+        let actualAmountBase = location.calculateActualAmount(in: .base, withinDateRange: todayRange)
+        let actualAmountLocal = isHomeLocation ? nil : location.calculateActualAmount(in: .location, withinDateRange: todayRange)
         let locationCurrency = isHomeLocation ? nil : location.locationCurrency
         
         return EventSummaryData(

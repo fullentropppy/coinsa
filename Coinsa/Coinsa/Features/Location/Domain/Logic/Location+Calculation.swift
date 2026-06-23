@@ -10,43 +10,29 @@ import Foundation
 extension Location {
     // MARK: - Публичные свойства
     
-    /// Обратный курс (основная к локальной).
-    var rateBaseToLocal: Double {
-        rateLocationToBase > 0 ? (1 / rateLocationToBase) : 0
-    }
-    
-    /// Эффективный курс локальной к основной (с учетом корректировки).
+    /// Эффективный курс локальной валюты к базовой (с учетом корректировки)
     var effectiveRateLocationToBase: Double {
-        adjustedRateLocationToBase
-    }
-    
-    /// Эффективный курс основной к локальной (с учетом корректировки).
-    var effectiveRateBaseToLocal: Double {
-        adjustedRateLocationToBase > 0 ? (1 / adjustedRateLocationToBase) : 0
-    }
-    
-    // MARK: - Приватные свойства
-    
-    /// Скорректированный курс с учетом процента корректировки.
-    private var adjustedRateLocationToBase: Double {
         rateLocationToBase * (1 + (exchangeAdjustment / 100))
     }
     
     // MARK: - Публичные методы. Плановая сумма
     
-    /// Рассчитывает плановую сумму на сегодня (с учетом уже потраченного).
+    /// Рассчитывает плановую сумму на сегодня (с учетом уже потраченного)
     /// - Parameters:
-    ///   - asBaseCurrency: Если `true`, возвращает в основной валюте, иначе в локальной.
-    ///   - calendar: Календарь для вычислений. По умолчанию `.current`.
-    /// - Returns: Рекомендуемая сумма на сегодня.
+    ///   - currency: Валютный контекст результата. Поддерживаются `.base` и `.location`.
+    ///   - rateMode: Режим расчета курса
+    ///   - calendar: Календарь для вычислений. По умолчанию `.current`
+    /// - Returns: Рекомендуемая сумма на сегодня
     func calculatePlannedAmountForToday(
-        asBaseCurrency: Bool = true,
-        using calendar: Calendar = .current
+        in currency: CurrencyContext = .base,
+        using rateMode: RateMode = .effective,
+        calendar: Calendar = .current
     ) -> Double {
         let plannedAmount = calculatePlannedAmount(
-            asBaseCurrency: asBaseCurrency,
+            in: currency,
             asDailyAverage: false,
-            using: calendar
+            using: rateMode,
+            calendar: calendar
         )
         
         if totalDays(using: calendar) == 1 {
@@ -58,7 +44,8 @@ extension Location {
         let endRange = max(startRange, endOfYesterday)
         
         let actualAmount = calculateActualAmount(
-            asBaseCurrency: asBaseCurrency,
+            in: currency,
+            using: rateMode,
             withinDateRange: startRange...endRange
         )
         
@@ -68,18 +55,20 @@ extension Location {
         return remainingDays == 0 ? difference : max(0, difference / Double(remainingDays + 1))
     }
     
-    /// Рассчитывает общую плановую сумму по бюджету.
+    /// Рассчитывает общую плановую сумму по бюджету
     /// - Parameters:
-    ///   - asBaseCurrency: Если `true`, возвращает в основной валюте, иначе в локальной.
-    ///   - asDailyAverage: Если `true`, возвращает среднюю сумму в день.
-    ///   - calendar: Календарь для вычислений. По умолчанию `.current`.
-    /// - Returns: Плановая сумма.
+    ///   - currency: Валютный контекст результата. Поддерживаются `.base` и `.location`.
+    ///   - asDailyAverage: Если `true`, возвращает среднюю сумму в день
+    ///   - rateMode: Режим расчета курса
+    ///   - calendar: Календарь для вычислений. По умолчанию `.current`
+    /// - Returns: Плановая сумма
     func calculatePlannedAmount(
-        asBaseCurrency: Bool = true,
+        in currency: CurrencyContext = .base,
         asDailyAverage: Bool = false,
-        using calendar: Calendar = .current
+        using rateMode: RateMode = .effective,
+        calendar: Calendar = .current
     ) -> Double {
-        let exchangeRate = asBaseCurrency ? 1 : effectiveRateBaseToLocal
+        let exchangeRate = exchangeRateBaseToCurrency(currency, using: rateMode)
         let plannedAmount = budget * exchangeRate
         let totalDays = totalDays(using: calendar)
         
@@ -88,45 +77,70 @@ extension Location {
     
     // MARK: - Публичные методы. Фактическая сумма
     
-    /// Рассчитывает общую фактическую сумму по расходам.
+    /// Рассчитывает общую фактическую сумму по расходам
     /// - Parameters:
-    ///   - asBaseCurrency: Если `true`, возвращает в основной валюте, иначе в локальной.
-    ///   - targetRange: Опциональный диапазон дат для фильтрации.
-    /// - Returns: Фактическая сумма.
+    ///   - currency: Валютный контекст результата. Поддерживаются `.base` и `.location`.
+    ///   - rateMode: Режим расчета курса
+    ///   - targetRange: Опциональный диапазон дат для фильтрации
+    /// - Returns: Фактическая сумма
     func calculateActualAmount(
-        asBaseCurrency: Bool = true,
+        in currency: CurrencyContext = .base,
+        using rateMode: RateMode = .effective,
         withinDateRange targetRange: ClosedRange<Date>? = nil
     ) -> Double {
-        expenses?.reduce(0) { result, expense in
+        guard canAggregateAmounts(in: currency) else { return 0 }
+        
+        return expenses?.reduce(0) { result, expense in
             if let targetRange, !targetRange.contains(expense.date) {
                 return result
             }
-            
-            let exchangeRate = asBaseCurrency ? 1 : expense.effectiveRateBaseToLocal
-            return result + expense.baseAmount * exchangeRate
+            return result + expense.amount(in: currency, using: rateMode)
         } ?? 0
     }
     
-    /// Рассчитывает фактические суммы по категориям.
+    /// Рассчитывает фактические суммы по категориям
     /// - Parameters:
-    ///   - asBaseCurrency: Если `true`, возвращает в основной валюте, иначе в локальной.
-    ///   - targetRange: Опциональный диапазон дат для фильтрации.
-    /// - Returns: Словарь из категорий и сумм.
+    ///   - currency: Валютный контекст результата. Поддерживаются `.base` и `.location`.
+    ///   - rateMode: Режим расчета курса
+    ///   - targetRange: Опциональный диапазон дат для фильтрации
+    /// - Returns: Словарь из категорий и сумм
     func calculateActualAmountByCategory(
-        asBaseCurrency: Bool = true,
+        in currency: CurrencyContext = .base,
+        using rateMode: RateMode = .effective,
         withinDateRange targetRange: ClosedRange<Date>? = nil
     ) -> [ExpenseCategory: Double] {
-        expenses?.reduce(into: [:]) { result, expense in
+        guard canAggregateAmounts(in: currency) else { return [:] }
+        
+        return expenses?.reduce(into: [:]) { result, expense in
             if let targetRange, !targetRange.contains(expense.date) {
                 return
             }
-            
-            let exchangeRate = asBaseCurrency ? 1 : expense.effectiveRateBaseToLocal
-            result[expense.category, default: 0] += expense.baseAmount * exchangeRate
+            result[expense.category, default: 0] += expense.amount(in: currency, using: rateMode)
         } ?? [:]
     }
     
     // MARK: - Приватные методы
+    
+    /// Возвращает курс основной валюты к запрошенному контексту.
+    private func exchangeRateBaseToCurrency(_ currency: CurrencyContext, using rateMode: RateMode) -> Double {
+        switch currency {
+        case .base: 1
+        case .location: exchangeRateBaseToLocation(using: rateMode)
+        case .expense: 0
+        }
+    }
+    
+    /// Возвращает курс основной валюты к валюте локации.
+    private func exchangeRateBaseToLocation(using rateMode: RateMode) -> Double {
+        switch rateMode {
+        case .effective: effectiveRateLocationToBase > 0 ? 1 / effectiveRateLocationToBase : 0
+        case .actual: rateLocationToBase > 0 ? 1 / rateLocationToBase : 0
+        }
+    }
+    
+    private func canAggregateAmounts(in currency: CurrencyContext) -> Bool {
+        currency != .expense
+    }
     
     /// Вычисляет долю периода в общей длительности локации.
     /// - Parameters:

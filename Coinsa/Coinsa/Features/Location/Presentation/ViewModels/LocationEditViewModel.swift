@@ -79,7 +79,7 @@ final class LocationEditViewModel {
     // MARK: - Состояние UI. Курс обмена
     
     var rateLocationToBase: Double {
-        get { currencyConverter.rateLocationToBase }
+        get { currencyConverter.rateBaseToQuote }
         set { currencyConverter.updateRate(newValue) }
     }
     
@@ -91,7 +91,7 @@ final class LocationEditViewModel {
     }
     
     var locationCurrency: Currency {
-        currencyConverter.locationCurrency
+        currencyConverter.quoteCurrency
     }
     
     var adjustedRateDescription: LocalizedStringResource? {
@@ -101,7 +101,7 @@ final class LocationEditViewModel {
         
         return .locationAdjustedExchangeRate(
             localCurrencyCode: locationCurrency.code,
-            effectiveRateLocalToBase: currencyConverter.effectiveRateLocationToBase.numberFormat(fractionLength: 4),
+            effectiveRateLocalToBase: currencyConverter.effectiveRateBaseToQuote.numberFormat(fractionLength: 4),
             baseCurrencyCode: baseCurrency.code
         )
     }
@@ -117,7 +117,7 @@ final class LocationEditViewModel {
     }
     
     var budgetLocalAmount: Double {
-        amountManager.localAmount
+        amountManager.quoteAmount
     }
     
     // MARK: - Инициализация
@@ -183,15 +183,15 @@ final class LocationEditViewModel {
         self.currencyConverter = CurrencyConverter(
             exchangeRateProvider: exchangeRateProvider,
             baseCurrency: trip.baseCurrency,
-            locationCurrency: locationCurrency,
-            rateLocationToBase: rateLocationToBase,
+            quoteCurrency: locationCurrency,
+            rateBaseToQuote: rateLocationToBase,
             exchangeAdjustment: exchangeAdjustment
         )
         
         self.amountManager = AmountManager(
             converter: currencyConverter,
             baseAmount: budget,
-            localAmount: currencyConverter.convertToLocal(fromBase: budget)
+            quoteAmount: currencyConverter.convertToQuote(fromBase: budget)
         )
         
         initialSnapshot = Snapshot(
@@ -208,24 +208,26 @@ final class LocationEditViewModel {
     
     // MARK: - Операции с валютой
     
-    func updateLocalCurrency(_ newCurrency: Currency, currentInput: InputCurrency) {
+    func updateLocalCurrency(_ newCurrency: Currency, currentInput: CurrencyContext) {
         guard newCurrency != locationCurrency else { return }
         
-        currencyConverter.updateLocalCurrency(newCurrency) { [weak self] in
-            self?.amountManager.updateFromRateChange(inputCurrency: currentInput)
+        currencyConverter.updateQuoteCurrency(newCurrency) { [weak self] in
+            guard let self else { return }
+            amountManager.updateFromRateChange(for: currencySide(for: currentInput))
         }
     }
     
     // MARK: - Операции с курсом обмена
     
-    func updateRate(_ newRate: Double, currentInput: InputCurrency) {
+    func updateRate(_ newRate: Double, currentInput: CurrencyContext) {
         currencyConverter.updateRate(newRate)
-        amountManager.updateFromRateChange(inputCurrency: currentInput)
+        amountManager.updateFromRateChange(for: currencySide(for: currentInput))
     }
     
-    func requestRateRefresh(for inputCurrency: InputCurrency = .base) {
+    func requestRateRefresh(for inputCurrency: CurrencyContext = .base) {
         currencyConverter.requestRateRefresh { [weak self] _ in
-            self?.amountManager.updateFromRateChange(inputCurrency: inputCurrency)
+            guard let self else { return }
+            amountManager.updateFromRateChange(for: currencySide(for: inputCurrency))
         }
     }
     
@@ -253,16 +255,25 @@ final class LocationEditViewModel {
     
     // MARK: - Операции с оплатой
     
-    func updateExchangeAdjustment(_ newAdjustment: Double, currentInput: InputCurrency) {
+    func updateExchangeAdjustment(_ newAdjustment: Double, currentInput: CurrencyContext) {
         exchangeAdjustment = newAdjustment
         currencyConverter.updateExchangeAdjustment(exchangeAdjustment)
-        amountManager.updateFromRateChange(inputCurrency: currentInput)
+        amountManager.updateFromRateChange(for: currencySide(for: currentInput))
     }
     
     // MARK: - Операции с бюджетом
     
-    func updateBudget(_ amount: Double, in inputCurrency: InputCurrency) {
-        amountManager.updateAmount(amount, for: inputCurrency)
+    func updateBudget(_ amount: Double, in inputCurrency: CurrencyContext) {
+        amountManager.updateAmount(amount, for: currencySide(for: inputCurrency))
+    }
+    
+    private func currencySide(for currency: CurrencyContext) -> CurrencySide {
+        switch currency {
+        case .base:
+            return .base
+        case .location, .expense:
+            return .quote
+        }
     }
     
     // MARK: - Операции с хранилищем

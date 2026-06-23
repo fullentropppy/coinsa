@@ -15,18 +15,18 @@ final class CurrencyConverter {
     
     private let exchangeRateManager: ExchangeRateManager
     private(set) var baseCurrency: Currency
-    private(set) var locationCurrency: Currency
-    private(set) var rateLocationToBase: Double
+    private(set) var quoteCurrency: Currency
+    private(set) var rateBaseToQuote: Double
     private(set) var exchangeAdjustment: Double
     
     // MARK: - Вычисляемые свойства
     
-    var effectiveRateLocationToBase: Double {
-        effectiveRateLocationToBase(useExchangeAdjustment: true)
+    var effectiveRateBaseToQuote: Double {
+        effectiveRateBaseToQuote(useExchangeAdjustment: true)
     }
     
-    var isHomeLocation: Bool {
-        baseCurrency == locationCurrency
+    var isSameCurrency: Bool {
+        baseCurrency == quoteCurrency
     }
     
     var isRateLoading: Bool {
@@ -44,20 +44,20 @@ final class CurrencyConverter {
     /// - Parameters:
     ///   - exchangeRateProvider: Провайдер курсов обмена.
     ///   - baseCurrency: Основная валюта.
-    ///   - locationCurrency: Локальная валюта.
-    ///   - rateLocationToBase: Начальный курс. По умолчанию `1`.
+    ///   - quoteCurrency: Котируемая валюта.
+    ///   - rateBaseToQuote: Начальный курс. По умолчанию `1`.
     ///   - exchangeAdjustment: Начальная корректировка. По умолчанию `0`.
     init(
         exchangeRateProvider: ExchangeRateProvider,
         baseCurrency: Currency,
-        locationCurrency: Currency,
-        rateLocationToBase: Double = 1,
+        quoteCurrency: Currency,
+        rateBaseToQuote: Double = 1,
         exchangeAdjustment: Double = 0
     ) {
         self.exchangeRateManager = ExchangeRateManager(provider: exchangeRateProvider)
         self.baseCurrency = baseCurrency
-        self.locationCurrency = locationCurrency
-        self.rateLocationToBase = rateLocationToBase
+        self.quoteCurrency = quoteCurrency
+        self.rateBaseToQuote = rateBaseToQuote
         self.exchangeAdjustment = exchangeAdjustment
     }
     
@@ -65,31 +65,31 @@ final class CurrencyConverter {
     
     /// Обновляет основную валюту.
     /// - Parameter newCurrency: Новая основная валюта.
-    func updateBaseCurrency(_ newCurrency: Currency) {
-        let oldBase = baseCurrency
+    func updatebaseCurrency(_ newCurrency: Currency) {
+        let oldCurrency = baseCurrency
         baseCurrency = newCurrency
         
-        if isHomeLocation {
+        if isSameCurrency {
             exchangeRateManager.cancelRefresh()
-            rateLocationToBase = 1
-        } else if baseCurrency != oldBase {
+            rateBaseToQuote = 1
+        } else if baseCurrency != oldCurrency {
             requestRateRefresh()
         }
     }
     
-    /// Обновляет локальную валюту.
+    /// Обновляет котируемую валюту.
     /// - Parameters:
-    ///   - newCurrency: Новая локлаьная валюта.
+    ///   - newCurrency: Новая котируемая валюта.
     ///   - onCompletion: Замыкание после обновления (опционально).
-    func updateLocalCurrency(_ newCurrency: Currency, onCompletion: (() -> Void)? = nil) {
-        let oldCurrency = locationCurrency
-        locationCurrency = newCurrency
+    func updateQuoteCurrency(_ newCurrency: Currency, onCompletion: (() -> Void)? = nil) {
+        let oldCurrency = quoteCurrency
+        quoteCurrency = newCurrency
 
-        if isHomeLocation {
+        if isSameCurrency {
             exchangeRateManager.cancelRefresh()
-            rateLocationToBase = 1
+            rateBaseToQuote = 1
             onCompletion?()
-        } else if locationCurrency != oldCurrency {
+        } else if quoteCurrency != oldCurrency {
             requestRateRefresh { _ in
                 onCompletion?()
             }
@@ -101,58 +101,56 @@ final class CurrencyConverter {
     /// Обновляет курс вручную.
     /// - Parameter newRate: Новый курс.
     func updateRate(_ newRate: Double) {
-        rateLocationToBase = newRate
+        rateBaseToQuote = newRate
     }
     
     /// Запрашивает обновление курса с сервера.
     /// - Parameter completion: Замыкание после обновления курса (опционально).
     func requestRateRefresh(completion: ((Double) -> Void)? = nil) {
         exchangeRateManager.requestRefresh(
-            from: locationCurrency,
+            from: quoteCurrency,
             to: baseCurrency
         ) { [weak self] rate in
-            self?.rateLocationToBase = rate
+            self?.rateBaseToQuote = rate
             completion?(rate)
         }
     }
     
     // MARK: - Конвертация сумм
     
-    /// Конвертирует сумму между основной и локальной валютами.
+    /// Конвертирует сумму между основной и котируемой валютами.
     /// - Parameters:
     ///   - amount: Конвертируемая сумма.
-    ///   - source: Исходная валюта.
-    ///   - target: Целевая валюта.
+    ///   - baseCurrency: Основная валюта.
+    ///   - quoteCurrency: Котируемая валюта.
     ///   - useExchangeAdjustment: Флаг использования корректировки курса обмена.
     /// - Returns: Сконвертированная сумма.
     func convertAmount(
         _ amount: Double,
-        from source: InputCurrency,
-        to target: InputCurrency,
+        from baseCurrency: CurrencyContext,
+        to quoteCurrency: CurrencyContext,
         useExchangeAdjustment: Bool = true
     ) -> Double {
-        switch (source, target) {
-        case (.base, .local):
-            convertToLocal(fromBase: amount, useExchangeAdjustment: useExchangeAdjustment)
-        case (.local, .base):
-            convertToBase(fromLocal: amount, useExchangeAdjustment: useExchangeAdjustment)
-        default: amount
+        if baseCurrency == .base {
+            convertToQuote(fromBase: amount, useExchangeAdjustment: useExchangeAdjustment)
+        } else {
+            convertToBase(fromQuote: amount, useExchangeAdjustment: useExchangeAdjustment)
         }
     }
     
-    /// Конвертирует сумму из основной валюты в локальную.
+    /// Конвертирует сумму из основной валюты в в котируемую.
     /// - Parameter amount: Сумма в основной валюте.
-    /// - Returns: Сумма в локальной валюте.
-    func convertToBase(fromLocal amount: Double, useExchangeAdjustment: Bool = true) -> Double {
-        let effectiveRate = effectiveRateLocationToBase(useExchangeAdjustment: useExchangeAdjustment)
+    /// - Returns: Сумма в котируемой валюте.
+    func convertToBase(fromQuote amount: Double, useExchangeAdjustment: Bool = true) -> Double {
+        let effectiveRate = effectiveRateBaseToQuote(useExchangeAdjustment: useExchangeAdjustment)
         return effectiveRate > 0 ? amount * effectiveRate : 0
     }
     
-    /// Конвертирует сумму из локальной валюты в основную.
-    /// - Parameter amount: Сумма в локальной валюте.
+    /// Конвертирует сумму из котируемой валюты в основную.
+    /// - Parameter amount: Сумма в котируемой валюте.
     /// - Returns: Сумма в основной валюте.
-    func convertToLocal(fromBase amount: Double, useExchangeAdjustment: Bool = true) -> Double {
-        let effectiveRate = effectiveRateLocationToBase(useExchangeAdjustment: useExchangeAdjustment)
+    func convertToQuote(fromBase amount: Double, useExchangeAdjustment: Bool = true) -> Double {
+        let effectiveRate = effectiveRateBaseToQuote(useExchangeAdjustment: useExchangeAdjustment)
         return effectiveRate > 0 ? amount / effectiveRate : 0
     }
     
@@ -166,8 +164,8 @@ final class CurrencyConverter {
     
     // MARK: - Приватные методы
     
-    private func effectiveRateLocationToBase(useExchangeAdjustment: Bool) -> Double {
-        guard useExchangeAdjustment else { return rateLocationToBase }
-        return rateLocationToBase * (1 + (exchangeAdjustment / 100))
+    private func effectiveRateBaseToQuote(useExchangeAdjustment: Bool) -> Double {
+        guard useExchangeAdjustment else { return rateBaseToQuote }
+        return rateBaseToQuote * (1 + (exchangeAdjustment / 100))
     }
 }

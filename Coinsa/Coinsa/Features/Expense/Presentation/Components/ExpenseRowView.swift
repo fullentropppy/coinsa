@@ -61,7 +61,7 @@ struct ExpenseRowView: View {
                 AmountText.standard(expense.baseAmount, currency: expense.baseCurrency)
                 Spacer()
             } else {
-                AmountText.standard(expense.expenseAmount, currency: expense.expenseCurrency)
+                AmountText.standard(expense.amount(in: .expense), currency: expense.expenseCurrency)
                 AmountText.secondarySmall(expense.baseAmount, currency: expense.baseCurrency)
             }
         }

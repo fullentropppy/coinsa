@@ -40,10 +40,10 @@ struct LocationDetailViewModel {
     // MARK: - Вычисляемые свойства. Общие данные
     
     var eventHeaderData: EventSummaryData {
-        let plannedBaseAmount = location.calculatePlannedAmount(asBaseCurrency: true)
-        let plannedLocalAmount = isHomeLocation ? nil : location.calculatePlannedAmount(asBaseCurrency: false)
-        let actualAmountBase = location.calculateActualAmount(asBaseCurrency: true)
-        let actualAmountLocal = isHomeLocation ? nil : location.calculateActualAmount(asBaseCurrency: false)
+        let plannedBaseAmount = location.calculatePlannedAmount(in: CurrencyContext.base)
+        let plannedLocalAmount = isHomeLocation ? nil : location.calculatePlannedAmount(in: CurrencyContext.location)
+        let actualAmountBase = location.calculateActualAmount(in: CurrencyContext.base)
+        let actualAmountLocal = isHomeLocation ? nil : location.calculateActualAmount(in: CurrencyContext.location)
         let locationCurrency = isHomeLocation ? nil : locationCurrency
 
         return EventSummaryData(
@@ -62,20 +62,21 @@ struct LocationDetailViewModel {
         let isHomeLocation = locationCurrency == baseCurrency
         
         let actualAmountByCategoryBase = location.calculateActualAmountByCategory(
-            asBaseCurrency: true,
+            in: CurrencyContext.base,
             withinDateRange: location.range
         )
 
         let actualLocalAmountByCategory = isHomeLocation
             ? nil
-            : location.calculateActualAmountByCategory(asBaseCurrency: false, withinDateRange: location.range)
+            : location.calculateActualAmountByCategory(in: CurrencyContext.location, withinDateRange: location.range)
+        let localBudget = isHomeLocation ? nil : location.calculatePlannedAmount(in: CurrencyContext.location)
 
         return EventCategoryAnalyticsData(
             dateRange: location.range,
             baseCurrency: baseCurrency,
             locationCurrency: isHomeLocation ? nil : locationCurrency,
             baseBudget: location.budget,
-            localBudget: location.budget, // Скорректировать
+            localBudget: localBudget,
             actualAmountByCategory: slices(from: actualAmountByCategoryBase, localValues: actualLocalAmountByCategory)
         )
     }

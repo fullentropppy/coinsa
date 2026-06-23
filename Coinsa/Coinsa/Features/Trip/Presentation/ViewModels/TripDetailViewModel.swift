@@ -34,7 +34,6 @@ struct TripDetailViewModel {
 
     var eventAnalyticsData: EventCategoryAnalyticsData {
         let baseBudget = trip.calculatePlannedAmount(asBaseCurrency: true)
-        let localBudget = trip.calculatePlannedAmount(asBaseCurrency: false)
         let actualAmountByCategory = trip.calculateActualAmountByCategory(asBaseCurrency: true)
 
         return EventCategoryAnalyticsData(
@@ -42,7 +41,7 @@ struct TripDetailViewModel {
             baseCurrency: trip.baseCurrency,
             locationCurrency: nil,
             baseBudget: baseBudget,
-            localBudget: localBudget,
+            localBudget: nil,
             actualAmountByCategory: slices(from: actualAmountByCategory, localValues: nil)
         )
     }

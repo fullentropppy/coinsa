@@ -19,7 +19,7 @@ struct LocationEditView: View {
     
     @State private var viewModel: LocationEditViewModel
     @State private var deletionHandler = DeletionHandler<Location>()
-    @State private var inputCurrency: InputCurrency = .base
+    @State private var inputCurrency: CurrencyContext = .base
     @State private var isShowingDiscardAlert = false
     @FocusState private var focusedField: NumericEditField?
     
@@ -38,14 +38,14 @@ struct LocationEditView: View {
     private var budgetInputCurrencyValue: Currency {
         switch inputCurrency {
         case .base: viewModel.baseCurrency
-        case .local: viewModel.locationCurrency
+        case .location, .expense: viewModel.locationCurrency
         }
     }
 
     private var budgetTotalValue: Double {
         switch inputCurrency {
         case .base: viewModel.budgetBaseAmount
-        case .local: viewModel.budgetLocalAmount
+        case .location, .expense: viewModel.budgetLocalAmount
         }
     }
     
@@ -329,8 +329,8 @@ struct LocationEditView: View {
     
     private func switchInputCurrency() {
         switch inputCurrency {
-        case .base: inputCurrency = .local
-        case .local: inputCurrency = .base
+        case .base: inputCurrency = .location
+        case .location, .expense: inputCurrency = .base
         }
     }
     
