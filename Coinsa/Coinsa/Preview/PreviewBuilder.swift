@@ -115,7 +115,7 @@ extension PreviewBuilder {
             fetchItem(
                 from: container,
                 at: index,
-                sortBy: [SortDescriptor(\Trip.startDate, order: .forward)]
+                sortBy: [SortDescriptor(\Trip.storedStartDate, order: .forward)]
             )
         }
 
@@ -124,7 +124,7 @@ extension PreviewBuilder {
             fetchItem(
                 from: container,
                 at: index,
-                sortBy: [SortDescriptor(\Location.startDate, order: .forward)]
+                sortBy: [SortDescriptor(\Location.storedStartDate, order: .forward)]
             )
         }
 
@@ -133,7 +133,7 @@ extension PreviewBuilder {
             fetchItem(
                 from: container,
                 at: index,
-                sortBy: [SortDescriptor(\Expense.date, order: .forward)]
+                sortBy: [SortDescriptor(\Expense.storedDate, order: .forward)]
             )
         }
 

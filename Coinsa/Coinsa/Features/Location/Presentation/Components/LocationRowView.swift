@@ -41,7 +41,7 @@ struct LocationRowView: View {
     
     private var lowerStack: some View {
         HStack(spacing: 10) {
-            DateLabel.secondarySmall(from: location.startDate, to: location.endDate)
+            DateLabel.secondarySmall(from: location.startPlainDate, to: location.endPlainDate)
             Spacer()
             CountLabel.secondarySmall(location.expensesCount, icon: Expense.primaryIcon)
             CountLabel.daysSecondarySmall(location.totalDays)

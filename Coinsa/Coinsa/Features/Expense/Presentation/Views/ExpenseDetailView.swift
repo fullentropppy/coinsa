@@ -87,7 +87,7 @@ struct ExpenseDetailView: View {
             Expense.makeBadge()
             expense.subcategory.makeBadge()
             Spacer()
-            DateLabel.secondarySmall(expense.date)
+            DateLabel.secondarySmall(expense.civilDateTime)
         }
     }
     

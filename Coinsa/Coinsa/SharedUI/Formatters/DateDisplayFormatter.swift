@@ -22,15 +22,30 @@ struct DateDisplayFormatter {
         showsTime: Bool = true,
         using calendar: Calendar = .current
     ) -> String {        
-        if date.isTomorrow(using: calendar) {
-            String(localized: .tomorrow)
-        } else if date.isToday(using: calendar) {
-            String(localized: .today)
-        } else if date.isYesterday(using: calendar) {
-            String(localized: .yesterday)
+        let referenceDate = referenceDate(using: calendar)
+        
+        if date.isSameDay(as: referenceDate.tomorrow(using: calendar), using: calendar) {
+            return String(localized: .tomorrow)
+        } else if date.isSameDay(as: referenceDate, using: calendar) {
+            return String(localized: .today)
+        } else if date.isSameDay(as: referenceDate.yesterday(using: calendar), using: calendar) {
+            return String(localized: .yesterday)
         } else {
-            format(date, showsTime: showsTime, using: calendar)
+            return format(date, showsTime: showsTime, using: calendar)
         }
+    }
+    
+    static func formatRelative(
+        _ date: CivilDateTime,
+        showsTime: Bool = true
+    ) -> String {
+        formatRelative(date.storedDate, showsTime: showsTime, using: .utc)
+    }
+    
+    static func formatRelative(
+        _ date: PlainDate
+    ) -> String {
+        formatRelative(date.storedDate, showsTime: false, using: .utc)
     }
     
     /// Форматирует дату в стандартном представлении.
@@ -46,11 +61,12 @@ struct DateDisplayFormatter {
         showsWeekday: Bool = false,
         using calendar: Calendar = .current
     ) -> String {
+        let referenceDate = referenceDate(using: calendar)
         let dateTemplate: String
         if showsWeekday {
-            dateTemplate = Date().isSameYear(as: date) ? "EEEEdMMMM" : "EEEEdMMMMy"
+            dateTemplate = referenceDate.isSameYear(as: date, using: calendar) ? "EEEEdMMMM" : "EEEEdMMMMy"
         } else {
-            dateTemplate = Date().isSameYear(as: date) ? "dMMMM" : "dMMMMy"
+            dateTemplate = referenceDate.isSameYear(as: date, using: calendar) ? "dMMMM" : "dMMMMy"
         }
         
         let formatter = DateFormatter()
@@ -61,6 +77,21 @@ struct DateDisplayFormatter {
         )
         
         return formatter.string(from: date)
+    }
+    
+    static func format(
+        _ date: CivilDateTime,
+        showsTime: Bool = true,
+        showsWeekday: Bool = false
+    ) -> String {
+        format(date.storedDate, showsTime: showsTime, showsWeekday: showsWeekday, using: .utc)
+    }
+    
+    static func format(
+        _ date: PlainDate,
+        showsWeekday: Bool = false
+    ) -> String {
+        format(date.storedDate, showsTime: false, showsWeekday: showsWeekday, using: .utc)
     }
 
     /// Форматирует диапазон дат.
@@ -76,8 +107,9 @@ struct DateDisplayFormatter {
         showsTime: Bool = false,
         using calendar: Calendar = .current
     ) -> String {
+        let referenceDate = referenceDate(using: calendar)
         let dateTemplate = startDate.isSameYear(as: endDate, using: calendar)
-        && Date().isSameYear(as: startDate, using: calendar) ? "dMMMM" : "dMy"
+        && referenceDate.isSameYear(as: startDate, using: calendar) ? "dMMMM" : "dMy"
         
         let formatter = DateIntervalFormatter()
         formatter.calendar = calendar
@@ -85,6 +117,13 @@ struct DateDisplayFormatter {
         formatter.dateTemplate = templateWithOptionalTime(dateTemplate: dateTemplate, showsTime: showsTime)
         
         return formatter.string(from: startDate, to: endDate)
+    }
+    
+    static func formatRange(
+        startDate: PlainDate,
+        endDate: PlainDate
+    ) -> String {
+        formatRange(startDate: startDate.storedDate, endDate: endDate.storedDate, using: .utc)
     }
 
     // MARK: - Приватные методы
@@ -96,5 +135,9 @@ struct DateDisplayFormatter {
     /// - Returns: Итоговый шаблон для форматтера.
     private static func templateWithOptionalTime(dateTemplate: String, showsTime: Bool) -> String {
         showsTime ? "\(dateTemplate)jm" : dateTemplate
+    }
+    
+    private static func referenceDate(using calendar: Calendar) -> Date {
+        calendar.timeZone == .utc ? CivilDateTime.now.storedDate : Date()
     }
 }

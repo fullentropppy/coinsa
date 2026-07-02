@@ -89,8 +89,8 @@ struct EventSummaryView: View {
                 dateRangeProvider.status.makeBadge()
                 Spacer()
                 DateLabel.secondarySmall(
-                    from: dateRangeProvider.startDate,
-                    to: dateRangeProvider.endDate
+                    from: dateRangeProvider.startPlainDate,
+                    to: dateRangeProvider.endPlainDate
                 )
                 CountLabel.daysSecondarySmall(dateRangeProvider.totalDays)
             }
@@ -173,4 +173,3 @@ private extension EventSummaryData {
 #Preview("Dark - EN") {
     EventSummaryData.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
 }
-

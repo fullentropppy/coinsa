@@ -66,10 +66,9 @@ final class LocationEditViewModel {
         }
     }
     var endDate: Date
-    var majorTimeZone: MajorTimeZone
     
     var availableRangeForStartDate: ClosedRange<Date> {
-        min(trip.startDate, startDate)...max(endDate, trip.endDate)
+        min(trip.startPlainDate.storedDate, startDate)...max(endDate, trip.endPlainDate.storedDate)
     }
     
     var availableRangeForEndDate: ClosedRange<Date> {
@@ -131,9 +130,8 @@ final class LocationEditViewModel {
             trip: trip,
             location: nil,
             name: "",
-            startDate: trip.startDate,
-            endDate: trip.endDate,
-            majorTimeZone: .defaultValue,
+            startDate: trip.startPlainDate.storedDate,
+            endDate: trip.endPlainDate.storedDate,
             locationCurrency: trip.baseCurrency,
             rateLocationToBase: 1,
             exchangeAdjustment: preselectedExchangeAdjustment ?? 0,
@@ -148,9 +146,8 @@ final class LocationEditViewModel {
             trip: location.trip!,
             location: location,
             name: location.name,
-            startDate: location.startDate,
-            endDate: location.endDate,
-            majorTimeZone: location.majorTimeZone,
+            startDate: location.startPlainDate.storedDate,
+            endDate: location.endPlainDate.storedDate,
             locationCurrency: location.locationCurrency,
             rateLocationToBase: location.rateLocationToBase,
             exchangeAdjustment: location.exchangeAdjustment,
@@ -164,7 +161,6 @@ final class LocationEditViewModel {
         name: String,
         startDate: Date,
         endDate: Date,
-        majorTimeZone: MajorTimeZone,
         locationCurrency: Currency,
         rateLocationToBase: Double,
         exchangeAdjustment: Double,
@@ -175,7 +171,6 @@ final class LocationEditViewModel {
         self.name = name
         self.startDate = startDate
         self.endDate = endDate
-        self.majorTimeZone = majorTimeZone
         self.exchangeAdjustment = exchangeAdjustment
         
         let exchangeRateProvider = ExchangeRateProvider(service: HexarateService())
@@ -198,7 +193,6 @@ final class LocationEditViewModel {
             name: name,
             startDate: startDate,
             endDate: endDate,
-            majorTimeZone: majorTimeZone,
             locationCurrency: locationCurrency,
             rateLocationToBase: rateLocationToBase,
             exchangeAdjustment: exchangeAdjustment,
@@ -244,7 +238,6 @@ final class LocationEditViewModel {
                 name: initialSnapshot.name,
                 startDate: initialSnapshot.startDate,
                 endDate: initialSnapshot.endDate,
-                majorTimeZone: initialSnapshot.majorTimeZone,
                 locationCurrency: initialSnapshot.locationCurrency,
                 rateLocationToBase: rateLocationToBase,
                 exchangeAdjustment: exchangeAdjustment,
@@ -285,7 +278,6 @@ final class LocationEditViewModel {
                 name: name,
                 startDate: startDate,
                 endDate: endDate,
-                majorTimeZone: majorTimeZone,
                 locationCurrency: locationCurrency,
                 rateLocationToBase: rateLocationToBase,
                 exchangeAdjustment: exchangeAdjustment,
@@ -296,7 +288,6 @@ final class LocationEditViewModel {
                 name: name,
                 startDate: startDate,
                 endDate: endDate,
-                majorTimeZone: majorTimeZone,
                 locationCurrency: locationCurrency,
                 rateLocationToBase: rateLocationToBase,
                 exchangeAdjustment: exchangeAdjustment,
@@ -317,7 +308,6 @@ private extension LocationEditViewModel {
         let name: String
         let startDate: Date
         let endDate: Date
-        let majorTimeZone: MajorTimeZone
         let locationCurrency: Currency
         let rateLocationToBase: Double
         let exchangeAdjustment: Double
@@ -330,7 +320,6 @@ private extension LocationEditViewModel {
                 name: viewModel.name,
                 startDate: viewModel.startDate,
                 endDate: viewModel.endDate,
-                majorTimeZone: viewModel.majorTimeZone,
                 locationCurrency: viewModel.locationCurrency,
                 rateLocationToBase: viewModel.rateLocationToBase,
                 exchangeAdjustment: viewModel.exchangeAdjustment,
@@ -342,7 +331,6 @@ private extension LocationEditViewModel {
             name: String,
             startDate: Date,
             endDate: Date,
-            majorTimeZone: MajorTimeZone,
             locationCurrency: Currency,
             rateLocationToBase: Double,
             exchangeAdjustment: Double,
@@ -351,7 +339,6 @@ private extension LocationEditViewModel {
             self.name = name.trimmed
             self.startDate = startDate
             self.endDate = endDate
-            self.majorTimeZone = majorTimeZone
             self.locationCurrency = locationCurrency
             self.rateLocationToBase = rateLocationToBase
             self.exchangeAdjustment = exchangeAdjustment

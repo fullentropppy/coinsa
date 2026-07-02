@@ -26,7 +26,7 @@ extension Location {
     func calculatePlannedAmountForToday(
         in currency: CurrencyContext = .base,
         using rateMode: RateMode = .effective,
-        calendar: Calendar = .current
+        calendar: Calendar = .utc
     ) -> Double {
         let plannedAmount = calculatePlannedAmount(
             in: currency,
@@ -39,8 +39,9 @@ extension Location {
             return plannedAmount
         }
         
-        let endOfYesterday = Date().yesterday(using: calendar).endOfDay(using: calendar)
-        let startRange = min(startDate.startOfDay(using: calendar), endOfYesterday)
+        let today = PlainDate.today
+        let endOfYesterday = today.adding(days: -1).endOfDay
+        let startRange = min(startPlainDate.startOfDay, endOfYesterday)
         let endRange = max(startRange, endOfYesterday)
         
         let actualAmount = calculateActualAmount(
@@ -49,7 +50,7 @@ extension Location {
             withinDateRange: startRange...endRange
         )
         
-        let remainingDays = remainingDays(on: .now, using: calendar)
+        let remainingDays = remainingDays(on: today, using: calendar)
         let difference = plannedAmount - actualAmount
         
         return remainingDays == 0 ? difference : max(0, difference / Double(remainingDays + 1))
@@ -66,7 +67,7 @@ extension Location {
         in currency: CurrencyContext = .base,
         asDailyAverage: Bool = false,
         using rateMode: RateMode = .effective,
-        calendar: Calendar = .current
+        calendar: Calendar = .utc
     ) -> Double {
         let exchangeRate = exchangeRateBaseToCurrency(currency, using: rateMode)
         let plannedAmount = budget * exchangeRate
@@ -91,7 +92,7 @@ extension Location {
         guard canAggregateAmounts(in: currency) else { return 0 }
         
         return expenses?.reduce(0) { result, expense in
-            if let targetRange, !targetRange.contains(expense.date) {
+            if let targetRange, !targetRange.contains(expense.civilDateTime.storedDate) {
                 return result
             }
             return result + expense.amount(in: currency, using: rateMode)
@@ -112,7 +113,7 @@ extension Location {
         guard canAggregateAmounts(in: currency) else { return [:] }
         
         return expenses?.reduce(into: [:]) { result, expense in
-            if let targetRange, !targetRange.contains(expense.date) {
+            if let targetRange, !targetRange.contains(expense.civilDateTime.storedDate) {
                 return
             }
             result[expense.category, default: 0] += expense.amount(in: currency, using: rateMode)
@@ -149,7 +150,7 @@ extension Location {
     /// - Returns: Коэффициент пропорции (0...1).
     private func plannedAmountRatio(
         withinDateRange targetRange: ClosedRange<Date>?,
-        using calendar: Calendar = .current
+        using calendar: Calendar = .utc
     ) -> Double {
         guard let targetRange else { return 1 }
         
@@ -167,7 +168,7 @@ extension Location {
         
         let overlapDays = overlapEnd
             .startOfDay(using: calendar)
-            .days(from: overlapStart.startOfDay, using: calendar) + 1
+            .days(from: overlapStart.startOfDay(using: calendar), using: calendar) + 1
         
         return min(1, max(0, Double(overlapDays) / Double(totalDays)))
     }

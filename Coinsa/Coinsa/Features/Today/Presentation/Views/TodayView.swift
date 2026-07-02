@@ -41,15 +41,13 @@ struct TodayView: View {
         )
         _viewModel = State(initialValue: viewModel)
         
-        let today = Date.now
-        let startOfDay = today.startOfDay
-        let endOfDay = today.endOfDay
+        let today = PlainDate.today.storedDate
         
         _currentLocations = Query(
             filter: #Predicate<Location> { location in
-                location.startDate <= endOfDay && location.endDate >= startOfDay
+                location.storedStartDate <= today && location.storedEndDate >= today
             },
-            sort: \.endDate,
+            sort: \.storedEndDate,
             order: .forward
         )
     }

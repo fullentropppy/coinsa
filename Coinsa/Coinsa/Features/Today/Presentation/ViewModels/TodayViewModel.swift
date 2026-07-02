@@ -21,11 +21,11 @@ final class TodayViewModel {
     // MARK: - Состояние UI. Общее поведение и оформление
     
     var today: Date {
-        .now
+        CivilDateTime.now.storedDate
     }
     
     var todayRange: ClosedRange<Date> {
-        today.startOfDay...today.endOfDay
+        today.startOfDay(using: .utc)...today.endOfDay(using: .utc)
     }
     
     var hasMultipleLocations: Bool {
@@ -93,8 +93,8 @@ final class TodayViewModel {
         guard let selectedLocation else { return [] }
         
         return selectedLocation.expenses?
-            .filter { $0.date.isToday }
-            .sorted { $0.date > $1.date }
+            .filter { todayRange.contains($0.civilDateTime.storedDate) }
+            .sorted { $0.civilDateTime > $1.civilDateTime }
         ?? []
     }
     

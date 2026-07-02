@@ -10,8 +10,8 @@ extension Trip {
     var screenContextSubtitle: String {
         ScreenContextSubtitleFormatter.format(
             parentTitle: name,
-            startDate: startDate,
-            endDate: endDate
+            startDate: startPlainDate,
+            endDate: endPlainDate
         )
     }
 }

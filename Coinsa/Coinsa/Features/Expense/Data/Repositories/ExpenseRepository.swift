@@ -93,7 +93,7 @@ struct ExpenseRepository {
         subcategory: ExpenseSubcategory,
         comment: String?
     ) {
-        expense.date = date
+        expense.storedDate = date
         expense.baseAmount = baseAmount
         expense.expenseCurrencyCode = expenseCurrency.code
         expense.rateExpenseToBase = rateExpenseToBase
@@ -121,6 +121,8 @@ struct ExpenseRepository {
     /// Нормализует значения траты.
     /// - Parameter expense: Трата для нормализации значений.
     private func normalizeExpenseData(_ expense: Expense) {
+        expense.storedDate = expense.storedDate.storedCivilDateTime(using: .utc)
+        expense.actualDate = expense.civilDateTime.actualDate()
         expense.baseAmount = expense.baseAmount.nonNegative
         expense.rateExpenseToBase = expense.rateExpenseToBase.nonNegative
         expense.rateExpenseToLocation = normalizedRateExpenseToLocation(of: expense)

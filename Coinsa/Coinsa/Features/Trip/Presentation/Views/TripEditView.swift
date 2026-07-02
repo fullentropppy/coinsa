@@ -99,6 +99,7 @@ struct TripEditView: View {
                 ),
                 displayedComponents: .date
             )
+            .environment(\.timeZone, .utc)
             DatePicker(
                 .tripEndDate,
                 selection: Binding(
@@ -108,6 +109,7 @@ struct TripEditView: View {
                 in: viewModel.startDate...,
                 displayedComponents: .date
             )
+            .environment(\.timeZone, .utc)
         }
     }
     

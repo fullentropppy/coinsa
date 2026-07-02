@@ -19,11 +19,11 @@ class Trip: DateRangeProviding {
     /// Название поездки.
     var name: String = ""
     
-    /// Дата начала поездки.
-    var startDate: Date = Date()
+    /// Дата начала поездки в формате хранения.
+    var storedStartDate: Date = Date()
     
-    /// Дата окончания поездки.
-    var endDate: Date = Date()
+    /// Дата окончания поездки в формате хранения.
+    var storedEndDate: Date = Date()
     
     /// Трехбуквенный код ISO 4217 основной валюты в которой записываются все суммы.
     var baseCurrencyCode: String = ""
@@ -66,9 +66,19 @@ class Trip: DateRangeProviding {
         self.updatedAt = updatedAt
         
         self.name = name
-        self.startDate = startDate
-        self.endDate = endDate
+        self.storedStartDate = startDate
+        self.storedEndDate = endDate
         self.baseCurrencyCode = baseCurrencyCode
         self.locations = locations
+    }
+}
+
+extension Trip {
+    var startPlainDate: PlainDate {
+        PlainDate(storedStartDate, using: .utc)
+    }
+    
+    var endPlainDate: PlainDate {
+        PlainDate(storedEndDate, using: .utc)
     }
 }

@@ -81,26 +81,26 @@ struct LocationDetailViewModel {
         )
     }
     
-    var groupedExpenses: [(date: Date, expenses: [Expense])] {
+    var groupedExpenses: [(date: CivilDateTime, expenses: [Expense])] {
         guard let expenses = location.expenses, !expenses.isEmpty else { return [] }
         
-        let today = Date().startOfDay
-        let yesterday = today.adding(days: -1)
+        let today = CivilDateTime.now.startOfDay
+        let yesterday = today.adding(days: -1, using: .utc)
         
-        var grouped: [Date: [Expense]] = [:]
+        var grouped: [CivilDateTime: [Expense]] = [:]
         
         for expense in expenses {
-            grouped[expense.date.startOfDay, default: []].append(expense)
+            grouped[CivilDateTime(expense.civilDateTime.startOfDay, using: .utc), default: []].append(expense)
         }
         
         for day in grouped.keys {
-            grouped[day] = grouped[day]?.sorted { $0.date > $1.date }
+            grouped[day] = grouped[day]?.sorted { $0.civilDateTime > $1.civilDateTime }
         }
         
-        var result: [(date: Date, expenses: [Expense])] = []
+        var result: [(date: CivilDateTime, expenses: [Expense])] = []
         
         let futureDates = grouped.keys
-            .filter { $0 > today }
+            .filter { $0.storedDate > today }
             .sorted(by: >)
         
         for date in futureDates {
@@ -109,16 +109,18 @@ struct LocationDetailViewModel {
             }
         }
         
-        if let todayExpenses = grouped[today] {
-            result.append((date: today, expenses: todayExpenses))
+        let todayDateTime = CivilDateTime(today, using: .utc)
+        if let todayExpenses = grouped[todayDateTime] {
+            result.append((date: todayDateTime, expenses: todayExpenses))
         }
         
-        if let yesterdayExpenses = grouped[yesterday] {
-            result.append((date: yesterday, expenses: yesterdayExpenses))
+        let yesterdayDateTime = CivilDateTime(yesterday, using: .utc)
+        if let yesterdayExpenses = grouped[yesterdayDateTime] {
+            result.append((date: yesterdayDateTime, expenses: yesterdayExpenses))
         }
         
         let pastDates = grouped.keys
-            .filter { $0 < yesterday }
+            .filter { $0.storedDate < yesterday }
             .sorted(by: >)
         
         for date in pastDates {

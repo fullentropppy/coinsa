@@ -46,6 +46,14 @@ struct DateLabel: View {
         self.color = color
     }
     
+    init(
+        _ date: CivilDateTime,
+        font: Font = .body,
+        color: Color = .primary
+    ) {
+        self.init(date.storedDate, using: .utc, font: font, color: color)
+    }
+    
     /// Создает метку для диапазона дат.
     /// - Parameters:
     ///   - startDate: Начальная дата диапазона.
@@ -65,6 +73,15 @@ struct DateLabel: View {
         self.calendar = calendar
         self.font = font
         self.color = color
+    }
+    
+    init(
+        from startDate: PlainDate,
+        to endDate: PlainDate,
+        font: Font = .body,
+        color: Color = .primary
+    ) {
+        self.init(from: startDate.storedDate, to: endDate.storedDate, using: .utc, font: font, color: color)
     }
     
     // MARK: - Тело View
@@ -88,6 +105,10 @@ extension DateLabel {
         DateLabel(date, using: calendar, font: .footnote, color: .secondary)
     }
     
+    static func secondarySmall(_ date: CivilDateTime) -> some View {
+        DateLabel(date, font: .footnote, color: .secondary)
+    }
+    
     /// Вторичная компактная метка для диапазона дат.
     /// - Parameters:
     ///   - startDate: Начальная дата диапазона.
@@ -100,6 +121,13 @@ extension DateLabel {
         using calendar: Calendar = .current
     ) -> some View {
         DateLabel(from: startDate, to: endDate, using: calendar, font: .footnote, color: .secondary)
+    }
+    
+    static func secondarySmall(
+        from startDate: PlainDate,
+        to endDate: PlainDate
+    ) -> some View {
+        DateLabel(from: startDate, to: endDate, font: .footnote, color: .secondary)
     }
 }
 

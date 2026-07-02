@@ -31,7 +31,7 @@ struct PreviewOptions {
 enum PreviewGenerator {
     // MARK: - Свойства
     
-    private static let now = Date().startOfDay
+    private static let now = PlainDate.today.storedDate
     
     // MARK: - Публичные методы
     
@@ -76,8 +76,8 @@ private extension PreviewGenerator {
         let trip = Trip(
             id: UUID(),
             name: data.name,
-            startDate: data.startDate.startOfDay.utcNoon,
-            endDate: data.endDate.endOfDay.utcNoon,
+            startDate: PlainDate(data.startDate).storedDate,
+            endDate: PlainDate(data.endDate).storedDate,
             baseCurrencyCode: Currency.defaultValue.code,
             locations: [],
             createdAt: now,
@@ -107,9 +107,8 @@ private extension PreviewGenerator {
         let location =  Location(
             id: UUID(),
             name: data.name,
-            startDate: data.startDate.startOfDay.utcNoon,
-            endDate: data.endDate.endOfDay.utcNoon,
-            timeZoneID: data.majorTimeZone.id,
+            startDate: PlainDate(data.startDate).storedDate,
+            endDate: PlainDate(data.endDate).storedDate,
             locationCurrencyCode: data.currency.code,
             rateLocationToBase: data.rateLocationToBase,
             exchangeAdjustment: data.exchangeAdjustment,
@@ -158,6 +157,7 @@ private extension PreviewGenerator {
         return Expense(
             id: UUID(),
             date: date,
+            actualDate: CivilDateTime(date, using: .utc).actualDate(),
             baseAmount: baseAmount,
             expenseCurrencyCode: expenseCurrencyCode?.code ?? location.locationCurrency.code,
             rateExpenseToBase: rateExpenseToBase ?? location.rateLocationToBase,
@@ -205,7 +205,7 @@ private extension PreviewGenerator {
 
 private extension PreviewGenerator {
     private static func makeTokyoExpenses(_ location: Location) -> [Expense] {
-        let startDate = location.startDate.startOfDay
+        let startDate = location.startPlainDate.startOfDay
         
         return [
             makeExpense(
@@ -441,7 +441,7 @@ private extension PreviewGenerator {
     }
     
     private static func makeKyotoExpenses(_ location: Location) -> [Expense] {
-        let startDate = location.startDate.startOfDay
+        let startDate = location.startPlainDate.startOfDay
         
         return [
             makeExpense(
@@ -590,7 +590,7 @@ private extension PreviewGenerator {
     }
     
     private static func makeOsakaExpenses(_ location: Location) -> [Expense] {
-        let startDate = location.startDate.startOfDay
+        let startDate = location.startPlainDate.startOfDay
         
         return [
             makeExpense(
@@ -744,7 +744,7 @@ private extension PreviewGenerator {
     }
 
     private static func makeSaintpExpenses(_ location: Location) -> [Expense] {
-        let startDate = location.startDate.startOfDay
+        let startDate = location.startPlainDate.startOfDay
         
         return [
             makeExpense(
@@ -785,7 +785,7 @@ private extension PreviewGenerator {
     }
     
     private static func makeSeoulExpenses(_ location: Location) -> [Expense] {
-        let startDate = location.startDate.startOfDay
+        let startDate = location.startPlainDate.startOfDay
         
         return [
             makeExpense(

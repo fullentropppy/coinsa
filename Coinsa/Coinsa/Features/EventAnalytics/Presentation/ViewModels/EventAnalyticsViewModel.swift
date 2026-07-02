@@ -26,20 +26,21 @@ struct EventAnalyticsViewModel {
     // MARK: - Хранимые свойства. Дни
     
     var startDate: Date {
-        data.dateRange.lowerBound.startOfDay
+        data.dateRange.lowerBound.startOfDay(using: .utc)
     }
     
     var endDate: Date {
-        data.dateRange.upperBound.endOfDay
+        data.dateRange.upperBound.endOfDay(using: .utc)
     }
     
     var totalDays: Double {
-        let daysInt = endDate.days(from: startDate) + 1
+        let daysInt = endDate.days(from: startDate, using: .utc) + 1
         return Double(daysInt).rounded()
     }
     
     var remainingDays: Double {
-        let daysInt = min(Date().endOfDay, endDate).days(from: startDate) + 1
+        let today = PlainDate.today.endOfDay
+        let daysInt = min(today, endDate).days(from: startDate, using: .utc) + 1
         return Double(daysInt).rounded()
     }
     

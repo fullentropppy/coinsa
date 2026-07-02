@@ -22,7 +22,6 @@ struct LocationRepository {
     ///   - name: Название локации.
     ///   - startDate: Дата начала пребывания.
     ///   - endDate: Дата окончания пребывания.
-    ///   - majorTimeZone: Часовой пояс.
     ///   - locationCurrency: Локальная валюта.
     ///   - rateLocationToBase: Курс к основной валюте.
     ///   - exchangeAdjustment: Процентная корректировка курса.
@@ -32,7 +31,6 @@ struct LocationRepository {
         name: String,
         startDate: Date,
         endDate: Date,
-        majorTimeZone: MajorTimeZone,
         locationCurrency: Currency,
         rateLocationToBase: Double,
         exchangeAdjustment: Double,
@@ -46,7 +44,6 @@ struct LocationRepository {
             name: name.trimmed,
             startDate: startDate,
             endDate: endDate,
-            timeZoneID: majorTimeZone.id,
             locationCurrencyCode: locationCurrency.code,
             rateLocationToBase: rateLocationToBase,
             exchangeAdjustment: exchangeAdjustment,
@@ -68,7 +65,6 @@ struct LocationRepository {
     ///   - name: Новое название.
     ///   - startDate: Новая дата начала.
     ///   - endDate: Новая дата окончания.
-    ///   - majorTimeZone: Новый часовой пояс.
     ///   - locationCurrency: Новая локальная валюта.
     ///   - rateLocationToBase: Новый курс.
     ///   - budget: Новый бюджет.
@@ -78,16 +74,14 @@ struct LocationRepository {
         name: String,
         startDate: Date,
         endDate: Date,
-        majorTimeZone: MajorTimeZone,
         locationCurrency: Currency,
         rateLocationToBase: Double,
         exchangeAdjustment: Double,
         budget: Double
     ) {
         location.name = name
-        location.startDate = startDate
-        location.endDate = endDate
-        location.timeZoneID = majorTimeZone.id
+        location.storedStartDate = startDate
+        location.storedEndDate = endDate
         location.locationCurrencyCode = locationCurrency.code
         location.rateLocationToBase = rateLocationToBase
         location.exchangeAdjustment = exchangeAdjustment
@@ -111,8 +105,8 @@ struct LocationRepository {
     /// - Parameter location: Локация для нормализации значений.
     private func normalizedLocationData(_ location: Location) {
         location.name = location.name.trimmed
-        location.startDate = location.startDate.utcNoon
-        location.endDate = location.endDate.utcNoon
+        location.storedStartDate = location.storedStartDate.storedPlainDate(using: .utc)
+        location.storedEndDate = location.storedEndDate.storedPlainDate(using: .utc)
         location.rateLocationToBase = location.rateLocationToBase.nonNegative
         location.exchangeAdjustment = location.exchangeAdjustment
         location.budget = location.budget.nonNegative

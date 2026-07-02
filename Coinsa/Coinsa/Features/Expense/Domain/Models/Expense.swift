@@ -16,8 +16,11 @@ class Expense {
     /// Уникальный идентификатор траты.
     var id: UUID = UUID()
     
-    /// Дата траты.
-    var date: Date = Date()
+    /// Дата и время траты в формате хранения.
+    var storedDate: Date = Date()
+    
+    /// Фактический момент траты в UTC.
+    var actualDate: Date?
     
     /// Сумма траты в основной валюте поездки.
     var baseAmount: Double = 0
@@ -61,6 +64,7 @@ class Expense {
     /// - Parameters:
     ///   - id: Уникальный идентификатор.
     ///   - date: Дата траты.
+    ///   - actualDate: Фактический момент траты.
     ///   - baseAmount: Сумма в основной валюте.
     ///   - expenseCurrencyCode: Код валюты траты.
     ///   - rateExpenseToBase: Курс валюты траты к основной.
@@ -76,6 +80,7 @@ class Expense {
     init(
         id: UUID,
         date: Date,
+        actualDate: Date? = nil,
         baseAmount: Double,
         expenseCurrencyCode: String,
         rateExpenseToBase: Double,
@@ -93,7 +98,8 @@ class Expense {
         self.createdAt = createdAt
         self.updatedAt = updatedAt
         
-        self.date = date
+        self.storedDate = date
+        self.actualDate = actualDate
         self.baseAmount = baseAmount
         self.expenseCurrencyCode = expenseCurrencyCode
         self.rateExpenseToBase = rateExpenseToBase
@@ -104,5 +110,11 @@ class Expense {
         self.subcategoryRaw = subcategoryRaw
         self.location = location
         self.comment = comment
+    }
+}
+
+extension Expense {
+    var civilDateTime: CivilDateTime {
+        CivilDateTime(storedDate, using: .utc)
     }
 }

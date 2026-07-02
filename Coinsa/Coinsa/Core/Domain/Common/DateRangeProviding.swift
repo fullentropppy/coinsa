@@ -12,10 +12,10 @@ import Foundation
 /// Протокол для объектов, имеющих временной диапазон с начальной и конечной датой.
 protocol DateRangeProviding {
     /// Начальная дата диапазона.
-    var startDate: Date { get }
+    var startPlainDate: PlainDate { get }
     
     /// Конечная дата диапазона.
-    var endDate: Date { get }
+    var endPlainDate: PlainDate { get }
     
     /// Текущий статус события.
     var status: EventStatus { get }
@@ -60,7 +60,7 @@ extension DateRangeProviding {
     
     /// Закрытый интервал дат от начала дня `startDate` до конца дня `endDate`.
     var range: ClosedRange<Date> {
-        startDate.startOfDay...endDate.endOfDay
+        range(using: .utc)
     }
     
     // MARK: - Методы. Расчет с поддержкой календаря
@@ -68,11 +68,11 @@ extension DateRangeProviding {
     /// Определяет статус события относительно текущей даты.
     /// - Parameter calendar: Календарь для вычислений. По умолчанию `.current`.
     /// - Returns: Статус события.
-    func status(using calendar: Calendar = .current) -> EventStatus {
-        let today = Date().startOfDay(using: calendar)
+    func status(using calendar: Calendar = .utc) -> EventStatus {
+        let today = PlainDate.today.startOfDay
         
-        let startDateStartOfDay = startDate.startOfDay(using: calendar)
-        let endDateEndOfDay = endDate.endOfDay(using: calendar)
+        let startDateStartOfDay = startPlainDate.startOfDay
+        let endDateEndOfDay = endPlainDate.endOfDay
         
         if today > endDateEndOfDay {
             return .completed
@@ -86,8 +86,8 @@ extension DateRangeProviding {
     /// Возвращает общее количество дней в диапазоне (включительно).
     /// - Parameter calendar: Календарь для вычислений. По умолчанию `.current`.
     /// - Returns: Количество дней.
-    func totalDays(using calendar: Calendar = .current) -> Int {
-        endDate.days(from: startDate, using: calendar) + 1
+    func totalDays(using calendar: Calendar = .utc) -> Int {
+        endPlainDate.days(from: startPlainDate) + 1
     }
     
     /// Возвращает количество прошедших дней от начала диапазона до указанной даты.
@@ -95,8 +95,8 @@ extension DateRangeProviding {
     ///   - date: Дата, для которой вычисляется количество прошедших дней. По умолчанию `.now`.
     ///   - calendar: Календарь для вычислений. По умолчанию `.current`.
     /// - Returns: Количество прошедших дней (ограничено общим количеством дней).
-    func elapsedDays(on date: Date = .now, using calendar: Calendar = .current) -> Int {
-        max(0, min(totalDays(using: calendar), date.days(from: startDate, using: calendar) + 1))
+    func elapsedDays(on date: PlainDate = .today, using calendar: Calendar = .utc) -> Int {
+        max(0, min(totalDays(using: calendar), date.days(from: startPlainDate) + 1))
     }
     
     /// Возвращает количество оставшихся дней от указанной даты до конца диапазона.
@@ -104,17 +104,17 @@ extension DateRangeProviding {
     ///   - date: Дата, для которой вычисляется количество оставшихся дней. По умолчанию `.now`.
     ///   - calendar: Календарь для вычислений. По умолчанию `.current`.
     /// - Returns: Количество оставшихся дней (неотрицательное, ограниченное общим количеством дней).
-    func remainingDays(on date: Date = .now, using calendar: Calendar = .current) -> Int {
+    func remainingDays(on date: PlainDate = .today, using calendar: Calendar = .utc) -> Int {
         min(
             totalDays(using: calendar),
-            max(0, endDate.endOfDay(using: calendar).days(from: date, using: calendar))
+            max(0, endPlainDate.endOfDay.days(from: date.storedDate, using: .utc))
         )
     }
     
     /// Возвращает закрытый интервал дат от начала дня `startDate` до конца дня `endDate`.
     /// - Parameter calendar: Календарь для вычислений. По умолчанию `.current`.
     /// - Returns: Закрытый интервал дат.
-    func range(using calendar: Calendar = .current) -> ClosedRange<Date> {
-        startDate.startOfDay(using: calendar)...endDate.endOfDay(using: calendar)
+    func range(using calendar: Calendar = .utc) -> ClosedRange<Date> {
+        startPlainDate.startOfDay...endPlainDate.endOfDay
     }
 }

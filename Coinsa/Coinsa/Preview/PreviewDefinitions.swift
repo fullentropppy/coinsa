@@ -95,13 +95,6 @@ enum PreviewLocation: String {
         }
     }
 
-    var majorTimeZone: MajorTimeZone {
-        switch self {
-        case .tokyo, .kyoto, .osaka, .seoul, .busan: MajorTimeZone.tokyo
-        case .saintp, .istanbul: MajorTimeZone.moscow
-        }
-    }
-    
     var currency: Currency {
         switch self {
         case .tokyo, .kyoto, .osaka: Currency.jpy

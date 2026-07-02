@@ -19,14 +19,11 @@ class Location: DateRangeProviding {
     /// Название локации.
     var name: String = ""
     
-    /// Дата начала пребывания в локации.
-    var startDate: Date = Date()
+    /// Дата начала пребывания в локации в формате хранения.
+    var storedStartDate: Date = Date()
     
-    /// Дата окончания пребывания в локации.
-    var endDate: Date = Date()
-    
-    /// Идентификатор IANA часового пояса локации
-    var timeZoneID: String = ""
+    /// Дата окончания пребывания в локации в формате хранения.
+    var storedEndDate: Date = Date()
     
     /// Трехбуквенный код ISO 4217 локальной валюты.
     var locationCurrencyCode: String = ""
@@ -62,7 +59,6 @@ class Location: DateRangeProviding {
     ///   - name: Название локации.
     ///   - startDate: Дата начала пребывания.
     ///   - endDate: Дата окончания пребывания.
-    ///   - timeZoneID: Идентификатор часового пояса.
     ///   - locationCurrencyCode: Код локальной валюты.
     ///   - rateLocationToBase: Курс к основной валюте.
     ///   - exchangeAdjustment: Корректировка курса.
@@ -76,7 +72,6 @@ class Location: DateRangeProviding {
         name: String,
         startDate: Date,
         endDate: Date,
-        timeZoneID: String,
         locationCurrencyCode: String,
         rateLocationToBase: Double,
         exchangeAdjustment: Double,
@@ -91,14 +86,23 @@ class Location: DateRangeProviding {
         self.updatedAt = updatedAt
         
         self.name = name
-        self.startDate = startDate
-        self.endDate = endDate
-        self.timeZoneID = timeZoneID
+        self.storedStartDate = startDate
+        self.storedEndDate = endDate
         self.locationCurrencyCode = locationCurrencyCode
         self.rateLocationToBase = rateLocationToBase
         self.exchangeAdjustment = exchangeAdjustment
         self.budget = budget
         self.trip = trip
         self.expenses = expenses
+    }
+}
+
+extension Location {
+    var startPlainDate: PlainDate {
+        PlainDate(storedStartDate, using: .utc)
+    }
+    
+    var endPlainDate: PlainDate {
+        PlainDate(storedEndDate, using: .utc)
     }
 }

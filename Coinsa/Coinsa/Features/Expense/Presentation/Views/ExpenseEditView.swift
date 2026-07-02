@@ -135,6 +135,7 @@ struct ExpenseEditView: View {
                 .expenseDate,
                 selection: $viewModel.date
             )
+            .environment(\.timeZone, .utc)
         }
     }
     

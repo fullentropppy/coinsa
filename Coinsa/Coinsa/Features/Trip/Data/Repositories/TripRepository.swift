@@ -63,8 +63,8 @@ struct TripRepository {
         baseCurrency: Currency
     ) {
         trip.name = name
-        trip.startDate = startDate
-        trip.endDate = endDate
+        trip.storedStartDate = startDate
+        trip.storedEndDate = endDate
         trip.baseCurrencyCode = baseCurrency.code
         trip.updatedAt = Date()
 
@@ -85,7 +85,7 @@ struct TripRepository {
     /// - Parameter trip: Поездка для нормализации значений.
     private func normalizeTripData(_ trip: Trip) {
         trip.name = trip.name.trimmed
-        trip.startDate = trip.startDate.utcNoon
-        trip.endDate = trip.endDate.utcNoon
+        trip.storedStartDate = trip.storedStartDate.storedPlainDate(using: .utc)
+        trip.storedEndDate = trip.storedEndDate.storedPlainDate(using: .utc)
     }
 }

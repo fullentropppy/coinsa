@@ -19,7 +19,7 @@ extension Trip {
     func calculatePlannedAmount(
         asBaseCurrency: Bool = true,
         asDailyAverage: Bool = false,
-        using calendar: Calendar = .current
+        using calendar: Calendar = .utc
     ) -> Double {
         locations?.reduce(0) {
             $0 + $1.calculatePlannedAmount(
