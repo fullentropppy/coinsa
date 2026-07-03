@@ -9,7 +9,13 @@ import Foundation
 
 /// Календарная дата без времени и часового пояса.
 struct PlainDate: Comparable, Hashable {
-    // MARK: - Свойства
+    // MARK: - Статичные свойства
+    
+    static var today: PlainDate {
+        PlainDate(.now, using: .current)
+    }
+    
+    // MARK: - Свойства объекта
     
     let storedDate: Date
     
@@ -37,15 +43,9 @@ struct PlainDate: Comparable, Hashable {
         storedDate.days(from: date.storedDate, using: .utc)
     }
     
-    // MARK: - Comparable
+    // MARK: - Сравнение
     
     static func < (lhs: PlainDate, rhs: PlainDate) -> Bool {
         lhs.storedDate < rhs.storedDate
-    }
-}
-
-extension PlainDate {
-    static var today: PlainDate {
-        PlainDate(.now, using: .current)
     }
 }

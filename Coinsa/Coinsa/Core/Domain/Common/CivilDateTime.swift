@@ -9,7 +9,13 @@ import Foundation
 
 /// Календарная дата и время без привязки к часовому поясу.
 struct CivilDateTime: Comparable, Hashable {
-    // MARK: - Свойства
+    // MARK: - Статичные свойства
+    
+    static var now: CivilDateTime {
+        CivilDateTime(.now, using: .current)
+    }
+    
+    // MARK: - Свойства объекта
     
     let storedDate: Date
     
@@ -37,15 +43,9 @@ struct CivilDateTime: Comparable, Hashable {
         CivilDateTime(storedDate.adding(days: days, using: .utc), using: .utc)
     }
     
-    // MARK: - Comparable
+    // MARK: - Сравнение
     
     static func < (lhs: CivilDateTime, rhs: CivilDateTime) -> Bool {
         lhs.storedDate < rhs.storedDate
-    }
-}
-
-extension CivilDateTime {
-    static var now: CivilDateTime {
-        CivilDateTime(.now, using: .current)
     }
 }

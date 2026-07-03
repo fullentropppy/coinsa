@@ -96,13 +96,3 @@ class Location: DateRangeProviding {
         self.expenses = expenses
     }
 }
-
-extension Location {
-    var startPlainDate: PlainDate {
-        PlainDate(storedStartDate, using: .utc)
-    }
-    
-    var endPlainDate: PlainDate {
-        PlainDate(storedEndDate, using: .utc)
-    }
-}

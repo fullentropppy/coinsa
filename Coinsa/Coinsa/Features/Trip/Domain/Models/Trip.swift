@@ -72,13 +72,3 @@ class Trip: DateRangeProviding {
         self.locations = locations
     }
 }
-
-extension Trip {
-    var startPlainDate: PlainDate {
-        PlainDate(storedStartDate, using: .utc)
-    }
-    
-    var endPlainDate: PlainDate {
-        PlainDate(storedEndDate, using: .utc)
-    }
-}

@@ -112,9 +112,3 @@ class Expense {
         self.comment = comment
     }
 }
-
-extension Expense {
-    var civilDateTime: CivilDateTime {
-        CivilDateTime(storedDate, using: .utc)
-    }
-}
