@@ -17,7 +17,6 @@ struct EventAnalyticsView: View {
     // MARK: - Состояние
 
     @State private var selectedMetric: EventAnalyticsMetric = .summary
-    @State private var selectedSummaryMode: EventAnalyticsSummaryMode = .perCategory
     
     // MARK: - Хранимые свойства
 
@@ -32,10 +31,6 @@ struct EventAnalyticsView: View {
 
     private var displayedSlicesSortedByAmout: [ExpenseAnalyticsSlice] {
         viewModel.displayedSlicesSortedByAmount(for: selectedMetric)
-    }
-
-    private var categoryProgressItems: [EventAnalyticsCategoryProgressItem] {
-        viewModel.categoryProgressItems(for: selectedSummaryMode)
     }
     
     // MARK: - Инициализация
@@ -65,7 +60,7 @@ struct EventAnalyticsView: View {
             sharedHeaderSection
             if viewModel.hasAnalytics(for: selectedMetric) {
                 switch selectedMetric {
-                case .summary: summaryMainContent
+                case .summary: EmptyView()
                 case .actual: planActualMainContent
                 }
             } else {
@@ -81,12 +76,7 @@ struct EventAnalyticsView: View {
         )
         .listRowBackground(Color.clear)
     }
-    
-    private var summaryMainContent: some View {
-        Group {
-            summaryCategoriesSection
-        }
-    }
+
     
     private var planActualMainContent: some View {
         Group {
@@ -114,38 +104,6 @@ struct EventAnalyticsView: View {
                 switch selectedMetric {
                 case .summary: summaryHeaderContent
                 case .actual: actualHeaderContent
-                }
-            }
-        }
-    }
-    
-    private var summaryCategoriesSection: some View {
-        Section {
-            Picker("", selection: $selectedSummaryMode) {
-                ForEach(EventAnalyticsSummaryMode.allCases) { mode in
-                    Text(mode.localizedResource).tag(mode)
-                }
-            }
-            .pickerStyle(.segmented)
-            .onChange(of: selectedSummaryMode) {
-                haptics.trigger(.tap)
-            }
-            .listRowSeparator(.hidden)
-            
-            ForEach(categoryProgressItems) { item in
-                EventAmountProgressView(
-                    plannedBaseAmount: item.plannedBaseAmount,
-                    baseActualAmount: item.actualBaseAmount,
-                    baseCurrency: viewModel.baseCurrency,
-                    localPlannedAmount: item.plannedLocalAmount,
-                    localActualAmount: item.actualLocalAmount,
-                    locationCurrency: viewModel.locationCurrency,
-                    showsPlannedIfZero: selectedSummaryMode == .fromTotal
-                ) {
-                    HStack(spacing: 8) {
-                        item.category.makeDot()
-                        Text(item.category.localizedResource)
-                    }
                 }
             }
         }

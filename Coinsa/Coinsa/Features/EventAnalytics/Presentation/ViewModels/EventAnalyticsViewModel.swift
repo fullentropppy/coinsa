@@ -108,72 +108,6 @@ struct EventAnalyticsViewModel {
             locationCurrency: locationCurrency
         )
     }
-
-    var rawCategoryProgressItems: [EventAnalyticsCategoryProgressItem] {
-        let actualByCategory = Dictionary(uniqueKeysWithValues: data.actualAmountByCategory.map { ($0.category, $0) })
-
-        return ExpenseCategory.allCases.map { category in
-            let actualSlice = actualByCategory[category]
-            
-            return EventAnalyticsCategoryProgressItem(
-                category: category,
-                plannedBaseAmount: data.baseBudget,
-                actualBaseAmount: actualSlice?.baseAmount ?? 0,
-                plannedLocalAmount: data.localBudget,
-                actualLocalAmount: actualSlice?.localAmount
-            )
-        }
-    }
-
-    private var effectiveCategoryProgressItems: [EventAnalyticsCategoryProgressItem] {
-        let rawItems = rawCategoryProgressItems
-        let globalBaseRemaining = max(0, data.baseBudget - actualTotalBaseAmount)
-        let rawBaseRemainders = rawItems.map { max(0, $0.plannedBaseAmount - $0.actualBaseAmount) }
-        let totalRawBaseRemaining = rawBaseRemainders.reduce(0, +)
-
-        let globalLocalRemaining: Double? = {
-            if let localBudget = data.localBudget, let actualTotalLocalAmount {
-                max(0, localBudget - actualTotalLocalAmount)
-            } else {
-                nil
-            }
-        }()
-        
-        let rawLocalRemainders: [Double]? = {
-            if locationCurrency != nil {
-                rawItems.map { max(($0.plannedLocalAmount ?? 0) - ($0.actualLocalAmount ?? 0), 0) }
-            } else {
-                nil
-            }
-        }()
-        
-        let totalRawLocalRemaining = rawLocalRemainders?.reduce(0, +) ?? 0
-        
-        return rawItems.enumerated().map { index, item in
-            var effectivePlannedBaseAmount = item.plannedBaseAmount
-            var effectivePlannedLocalAmount = item.plannedLocalAmount
-            
-            let baseWeight = totalRawBaseRemaining > 0 ? rawBaseRemainders[index] / totalRawBaseRemaining : 0
-            let effectiveBaseRemaining = baseWeight * globalBaseRemaining
-            effectivePlannedBaseAmount = item.actualBaseAmount + effectiveBaseRemaining
-            
-            effectivePlannedLocalAmount = {
-                guard let globalLocalRemaining, let rawLocalRemainders else { return nil }
-                let localWeight = totalRawLocalRemaining > 0 ? rawLocalRemainders[index] / totalRawLocalRemaining : 0
-                let effectiveLocalRemaining = localWeight * globalLocalRemaining
-                let actualLocalAmount = item.actualLocalAmount ?? 0
-                return actualLocalAmount + effectiveLocalRemaining
-            }()
-            
-            return EventAnalyticsCategoryProgressItem(
-                category: item.category,
-                plannedBaseAmount: effectivePlannedBaseAmount,
-                actualBaseAmount: item.actualBaseAmount,
-                plannedLocalAmount: effectivePlannedLocalAmount,
-                actualLocalAmount: item.actualLocalAmount
-            )
-        }
-    }
     
     // MARK: - Публичные методы
 
@@ -183,13 +117,6 @@ struct EventAnalyticsViewModel {
 
     func displayedSlicesSortedByAmount(for metric: EventAnalyticsMetric) -> [ExpenseAnalyticsSlice] {
         slices(for: metric).sorted { $0.baseAmount > $1.baseAmount }
-    }
-
-    func categoryProgressItems(for mode: EventAnalyticsSummaryMode) -> [EventAnalyticsCategoryProgressItem] {
-        switch mode {
-        case .perCategory: rawCategoryProgressItems
-        case .fromTotal: effectiveCategoryProgressItems
-        }
     }
     
     func hasAnalytics(for metric: EventAnalyticsMetric) -> Bool {
