@@ -117,9 +117,11 @@ struct LocationEditView: View {
     
     private var locationEditForm: some View {
         Form {
-            mainDataSection
+            titleSection
+            rangeSection
             currencySection
             exchangeRateSection
+            exchangeAdjustmentSection
             budgetsSection
             actionsSection
         }
@@ -127,29 +129,56 @@ struct LocationEditView: View {
     
     // MARK: - Секции
     
-    private var mainDataSection: some View {
+    private var titleSection: some View {
         Section {
+            Image(systemName: Location.primaryIcon)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(maxWidth: .infinity, alignment: .center)
+                .frame(height: 32)
+                .foregroundStyle(.secondary)
             TextField(.locationName, text: $viewModel.name)
+                .multilineTextAlignment(.center)
+                .font(.largeTitle)
+        }
+        .listRowSeparator(.hidden)
+        .listRowBackground(Color.clear)
+    }
+    
+    private var rangeSection: some View {
+        Section {
             DatePicker(
-                .locationStartDate,
                 selection: Binding(
                     get: { viewModel.startDate },
                     set: { viewModel.startDate = $0 }
                 ),
                 in: viewModel.availableRangeForStartDate,
                 displayedComponents: .date
-            )
+            ) {
+                HStack {
+                    Image(systemName: "calendar.badge.plus")
+                        .foregroundStyle(.secondary)
+                    Text(.locationStartDate)
+                }
+            }
             .environment(\.timeZone, .utc)
             DatePicker(
-                .locationEndDate,
                 selection: Binding(
                     get: { viewModel.endDate },
                     set: { viewModel.endDate = $0 }
                 ),
                 in: viewModel.availableRangeForEndDate,
                 displayedComponents: .date
-            )
+            ) {
+                HStack {
+                    Image(systemName: "calendar.badge.checkmark")
+                        .foregroundStyle(.secondary)
+                    Text(.locationEndDate)
+                }
+            }
             .environment(\.timeZone, .utc)
+        } footer: {
+            Text(.totalDays(totalDays: viewModel.totalDays))
         }
     }
     
@@ -167,7 +196,7 @@ struct LocationEditView: View {
             Text(.locationCurrencyHint)
         }
     }
-    
+ 
     @ViewBuilder
     private var exchangeRateSection: some View {
         if !viewModel.isHomeLocation {
@@ -182,23 +211,25 @@ struct LocationEditView: View {
                         onRefresh: { viewModel.requestRateRefresh(for: inputCurrency) }
                     )
                 }
-                
+            } footer: {
+                Text(.locationExchangeRateHint)
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private var exchangeAdjustmentSection: some View {
+        if !viewModel.isHomeLocation {
+            Section {
                 LabeledContent(.locationExchangeAdjustment) {
                     PercentInputField.standard(
-                        exchangeAdjustmentInputBinding,
+                        $viewModel.exchangeAdjustment,
                         focusedField: $focusedField,
                         focusId: .exchangeAdjustment
                     )
                 }
-                
             } footer: {
-                VStack(alignment: .leading, spacing: 10) {
-                    if let adjustedExchangeRateDescription = viewModel.adjustedRateDescription {
-                        Text(adjustedExchangeRateDescription)
-                    }
-                    
-                    Text(.locationExchangeAdjustmentHint)
-                }
+                Text(.locationExchangeAdjustmentHint)
             }
         }
     }
@@ -219,6 +250,8 @@ struct LocationEditView: View {
                     }
                 }
             }
+        } footer: {
+            Text(.locationBudgetHint)
         }
     }
 
@@ -226,8 +259,13 @@ struct LocationEditView: View {
     private var actionsSection: some View {
         if viewModel.isEdit {
             Section {
-                Button(.locationDelete, role: .destructive) {
+                Button(role: .destructive) {
                     requestDelete()
+                } label: {
+                    HStack {
+                        Image(systemName: "trash")
+                        Text(.locationDelete)
+                    }
                 }
             }
         }
@@ -279,15 +317,6 @@ struct LocationEditView: View {
                 if !shows {
                     viewModel.rateLoadingError = nil
                 }
-            }
-        )
-    }
-    
-    private var exchangeAdjustmentInputBinding: Binding<Double> {
-        Binding(
-            get: { viewModel.exchangeAdjustment },
-            set: { newValue in
-                viewModel.updateExchangeAdjustment(newValue, currentInput: inputCurrency)
             }
         )
     }

@@ -47,6 +47,18 @@ final class LocationEditViewModel {
         !name.isBlank && startDate <= endDate && rateLocationToBase > 0
     }
     
+    var totalDays: Int {
+        endDate.days(from: startDate) + 1
+    }
+    
+    var availableRangeForStartDate: ClosedRange<Date> {
+        min(trip.startPlainDate.storedDate, startDate)...max(endDate, trip.endPlainDate.storedDate)
+    }
+    
+    var availableRangeForEndDate: ClosedRange<Date> {
+        startDate...availableRangeForStartDate.upperBound
+    }
+    
     var hasExpenses: Bool {
         location?.hasExpenses ?? false
     }
@@ -67,14 +79,6 @@ final class LocationEditViewModel {
     }
     var endDate: Date
     
-    var availableRangeForStartDate: ClosedRange<Date> {
-        min(trip.startPlainDate.storedDate, startDate)...max(endDate, trip.endPlainDate.storedDate)
-    }
-    
-    var availableRangeForEndDate: ClosedRange<Date> {
-        startDate...availableRangeForStartDate.upperBound
-    }
-    
     // MARK: - Состояние UI. Курс обмена
     
     var rateLocationToBase: Double {
@@ -91,18 +95,6 @@ final class LocationEditViewModel {
     
     var locationCurrency: Currency {
         currencyConverter.quoteCurrency
-    }
-    
-    var adjustedRateDescription: LocalizedStringResource? {
-        guard !isHomeLocation && exchangeAdjustment > 0 else {
-            return nil
-        }
-        
-        return .locationAdjustedExchangeRate(
-            localCurrencyCode: locationCurrency.code,
-            effectiveRateLocalToBase: currencyConverter.effectiveRateBaseToQuote.numberFormat(fractionLength: 4),
-            baseCurrencyCode: baseCurrency.code
-        )
     }
     
     // MARK: - Состояние UI. Оплата
@@ -171,7 +163,7 @@ final class LocationEditViewModel {
         self.name = name
         self.startDate = startDate
         self.endDate = endDate
-        self.exchangeAdjustment = exchangeAdjustment
+        self.exchangeAdjustment = exchangeAdjustment.nonNegative
         
         let exchangeRateProvider = ExchangeRateProvider(service: HexarateService())
         
@@ -179,14 +171,13 @@ final class LocationEditViewModel {
             exchangeRateProvider: exchangeRateProvider,
             baseCurrency: trip.baseCurrency,
             quoteCurrency: locationCurrency,
-            rateBaseToQuote: rateLocationToBase,
-            exchangeAdjustment: exchangeAdjustment
+            rateBaseToQuote: rateLocationToBase
         )
         
         self.amountManager = AmountManager(
             converter: currencyConverter,
             baseAmount: budget,
-            quoteAmount: currencyConverter.convertToQuote(fromBase: budget)
+            quoteAmount: currencyConverter.convertToQuote(fromBase: budget, useExchangeAdjustment: false)
         )
         
         initialSnapshot = Snapshot(
@@ -207,7 +198,10 @@ final class LocationEditViewModel {
         
         currencyConverter.updateQuoteCurrency(newCurrency) { [weak self] in
             guard let self else { return }
-            amountManager.updateFromRateChange(for: currencySide(for: currentInput))
+            amountManager.updateFromRateChange(
+                for: currencySide(for: currentInput),
+                useExchangeAdjustment: false
+            )
         }
     }
     
@@ -215,13 +209,19 @@ final class LocationEditViewModel {
     
     func updateRate(_ newRate: Double, currentInput: CurrencyContext) {
         currencyConverter.updateRate(newRate)
-        amountManager.updateFromRateChange(for: currencySide(for: currentInput))
+        amountManager.updateFromRateChange(
+            for: currencySide(for: currentInput),
+            useExchangeAdjustment: false
+        )
     }
     
     func requestRateRefresh(for inputCurrency: CurrencyContext = .base) {
         currencyConverter.requestRateRefresh { [weak self] _ in
             guard let self else { return }
-            amountManager.updateFromRateChange(for: currencySide(for: inputCurrency))
+            amountManager.updateFromRateChange(
+                for: currencySide(for: inputCurrency),
+                useExchangeAdjustment: false
+            )
         }
     }
     
@@ -240,24 +240,20 @@ final class LocationEditViewModel {
                 endDate: initialSnapshot.endDate,
                 locationCurrency: initialSnapshot.locationCurrency,
                 rateLocationToBase: rateLocationToBase,
-                exchangeAdjustment: exchangeAdjustment,
+                exchangeAdjustment: 1,
                 budget: initialSnapshot.budget
             )
         }
     }
     
-    // MARK: - Операции с оплатой
-    
-    func updateExchangeAdjustment(_ newAdjustment: Double, currentInput: CurrencyContext) {
-        exchangeAdjustment = newAdjustment
-        currencyConverter.updateExchangeAdjustment(exchangeAdjustment)
-        amountManager.updateFromRateChange(for: currencySide(for: currentInput))
-    }
-    
     // MARK: - Операции с бюджетом
     
     func updateBudget(_ amount: Double, in inputCurrency: CurrencyContext) {
-        amountManager.updateAmount(amount, for: currencySide(for: inputCurrency))
+        amountManager.updateAmount(
+            amount,
+            for: currencySide(for: inputCurrency),
+            useExchangeAdjustment: false
+        )
     }
     
     private func currencySide(for currency: CurrencyContext) -> CurrencySide {

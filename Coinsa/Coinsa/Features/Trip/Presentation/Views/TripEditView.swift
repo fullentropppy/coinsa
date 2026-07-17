@@ -80,7 +80,8 @@ struct TripEditView: View {
     
     private var tripEditForm: some View {
         Form {
-            mainDataSection
+            titleSection
+            rangeSection
             currencySection
             actionsSection
         }
@@ -88,28 +89,55 @@ struct TripEditView: View {
     
     // MARK: - Секции
     
-    private var mainDataSection: some View {
+    private var titleSection: some View {
         Section {
+            Image(systemName: Trip.primaryIcon)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(maxWidth: .infinity, alignment: .center)
+                .frame(height: 32)
+                .foregroundStyle(.secondary)
             TextField(.tripName, text: $viewModel.name)
+                .multilineTextAlignment(.center)
+                .font(.largeTitle)
+        }
+        .listRowSeparator(.hidden)
+        .listRowBackground(Color.clear)
+    }
+    
+    private var rangeSection: some View {
+        Section {
             DatePicker(
-                .tripStartDate,
                 selection: Binding(
                     get: { viewModel.startDate },
                     set: { viewModel.startDate = $0 }
                 ),
                 displayedComponents: .date
-            )
+            ) {
+                HStack {
+                    Image(systemName: "calendar.badge.plus")
+                        .foregroundStyle(.secondary)
+                    Text(.tripStartDate)
+                }
+            }
             .environment(\.timeZone, .utc)
             DatePicker(
-                .tripEndDate,
                 selection: Binding(
                     get: { viewModel.endDate },
                     set: { viewModel.endDate = $0 }
                 ),
                 in: viewModel.startDate...,
                 displayedComponents: .date
-            )
+            ) {
+                HStack {
+                    Image(systemName: "calendar.badge.checkmark")
+                        .foregroundStyle(.secondary)
+                    Text(.tripEndDate)
+                }
+            }
             .environment(\.timeZone, .utc)
+        } footer: {
+            Text(.totalDays(totalDays: viewModel.totalDays))
         }
     }
     
@@ -132,8 +160,13 @@ struct TripEditView: View {
     private var actionsSection: some View {
         if viewModel.isEditing {
             Section {
-                Button(.tripDelete, role: .destructive) {
+                Button(role: .destructive) {
                     requestDelete()
+                } label: {
+                    HStack {
+                        Image(systemName: "trash")
+                        Text(.tripDelete)
+                    }
                 }
             }
         }

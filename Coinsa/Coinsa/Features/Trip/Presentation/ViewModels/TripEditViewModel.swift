@@ -42,6 +42,10 @@ final class TripEditViewModel {
         trip?.hasLocations ?? false
     }
     
+    var totalDays: Int {
+        endDate.days(from: startDate) + 1
+    }
+    
     // MARK: - Состояние UI. Общие данные
     
     var name: String
