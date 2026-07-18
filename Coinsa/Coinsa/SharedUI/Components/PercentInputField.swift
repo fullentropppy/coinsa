@@ -45,7 +45,8 @@ struct PercentInputField: View {
                 focusedField: focusedField,
                 focusId: focusId,
                 fractionDigits: 2,
-                font: font
+                font: font,
+                textAlignment: .trailing
             )
             Image(systemName: "percent")
                 .fontWeight(.semibold)

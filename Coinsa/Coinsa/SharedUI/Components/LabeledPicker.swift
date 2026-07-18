@@ -11,23 +11,23 @@ import SwiftUI
 struct LabeledPicker<SelectionValue: Hashable, Content: View>: View {
     // MARK: - Свойства
     
-    let title: LocalizedStringResource
-    let selection: Binding<SelectionValue>
-    let options: [SelectionValue]
-    let disabled: Bool
-    @ViewBuilder let content: (SelectionValue) -> Content
-    
+    private let title: LocalizedStringResource?
+    private let selection: Binding<SelectionValue>
+    private let options: [SelectionValue]
+    private let disabled: Bool
+    @ViewBuilder private let content: (SelectionValue) -> Content
+
     // MARK: - Инициализация
     
     /// Создает пикер с заголовком.
     /// - Parameters:
-    ///   - title: Заголовок пикера.
+    ///   - title: Заголовок пикера (по умолчанию `nil`).
     ///   - selection: Привязка к выбранному значению.
     ///   - options: Массив доступных опций.
     ///   - disabled: Флаг блокировки (по умолчанию `false`).
     ///   - content: Замыкание для построения представления каждой опции.
     init(
-        title: LocalizedStringResource,
+        title: LocalizedStringResource? = nil,
         selection: Binding<SelectionValue>,
         options: [SelectionValue],
         disabled: Bool = false,
@@ -53,17 +53,25 @@ struct LabeledPicker<SelectionValue: Hashable, Content: View>: View {
     // MARK: - Компоненты
     
     private var disabledContent: some View {
-        LabeledContent(title) {
+        LabeledContent {
             content(selection.wrappedValue)
+        } label: {
+            if let title {
+                Text(title)
+            }
         }
     }
     
     private var enabledContent: some View {
         HStack {
-            Picker(title, selection: selection) {
+            Picker(selection: selection) {
                 ForEach(options, id: \.self) { option in
                     content(option)
                         .tag(option)
+                }
+            } label: {
+                if let title {
+                    Text(title)
                 }
             }
             .pickerStyle(.navigationLink)

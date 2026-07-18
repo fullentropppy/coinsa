@@ -76,7 +76,11 @@ final class ExpenseEditViewModel {
     
     // MARK: - Состояние UI. Общие данные
     
-    var date: Date
+    var date: Date {
+        didSet { timeZone = .current }
+    }
+    
+    var timeZone: TimeZone
     var category: ExpenseCategory
     var subcategory: ExpenseSubcategory
     var comment: String
@@ -152,16 +156,14 @@ final class ExpenseEditViewModel {
         preselectedCategory: ExpenseCategory? = nil,
         preselectedPaymentMethod: PaymentMethod? = nil
     ) {
-        let now = CivilDateTime.now.storedDate
-        let startDate = location.startPlainDate.startOfDay
-        let endDate = location.endPlainDate.endOfDay
-        let date = min(max(now, startDate), endDate)
+        let date = CivilDateTime.now.storedDate
         let category = preselectedCategory ?? .defaultValue
         
         self.init(
             location: location,
             expense: nil,
             date: date,
+            timeZone: .current,
             baseAmount: 0,
             expenseAmount: 0,
             expenseCurrency: location.locationCurrency,
@@ -182,6 +184,7 @@ final class ExpenseEditViewModel {
             location: expense.location!,
             expense: expense,
             date: expense.civilDateTime.storedDate,
+            timeZone: expense.timeZone,
             baseAmount: expense.baseAmount,
             expenseAmount: expense.amount(in: .expense),
             expenseCurrency: expense.expenseCurrency,
@@ -199,6 +202,7 @@ final class ExpenseEditViewModel {
         location: Location,
         expense: Expense?,
         date: Date,
+        timeZone: TimeZone,
         baseAmount: Double,
         expenseAmount: Double,
         expenseCurrency: Currency,
@@ -213,6 +217,7 @@ final class ExpenseEditViewModel {
         self.location = location
         self.expense = expense
         self.date = date
+        self.timeZone = timeZone
         self.paymentMethod = paymentMethod
         self.exchangeAdjustment = exchangeAdjustment
         self.category = category

@@ -2791,6 +2791,23 @@
         }
       }
     },
+    "expense.timeZone.hint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Time zone: %1$(gmtOffsetDisplay)@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Часовой пояс: %(gmtOffsetDisplay)@"
+          }
+        }
+      }
+    },
     "location.add" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -3144,40 +3161,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Начинается"
-          }
-        }
-      }
-    },
-    "location.timeZone" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Time zone"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Часовой пояс"
-          }
-        }
-      }
-    },
-    "location.timeZone.hint" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "The dates of the Location and the dates of all Expenses of the current Location are entered in the selected time zone."
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Даты локации и даты всех трат текущей локации вводятся в выбранном часовом поясе."
           }
         }
       }

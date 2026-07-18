@@ -158,16 +158,18 @@ struct TodayView: View {
     @ViewBuilder
     private func locationPickerContent(location: Location) -> some View {
         if viewModel.hasMultipleLocations {
-            Picker("", selection: selectedLocationBinding(location: location)) {
+            Picker(selection: selectedLocationBinding(location: location)) {
                 ForEach(viewModel.currentLocations) { currentLocation in
                     Text(currentLocation.name)
                         .tag(currentLocation.id)
                 }
+            } label: {
+                EmptyView()
             }
-            .pickerStyle(.segmented)
             .onChange(of: selectedLocationBinding(location: location).wrappedValue) {
                 haptics.trigger(.tap)
             }
+            .pickerStyle(.segmented)
         }
     }
     

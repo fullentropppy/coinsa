@@ -68,7 +68,8 @@ struct ExchangeRateInputField: View {
             focusedField: focusedField,
             focusId: focusId,
             fractionDigits: 4,
-            font: font
+            font: font,
+            textAlignment: .trailing
         )
         .loadingState(isLoading)
     }

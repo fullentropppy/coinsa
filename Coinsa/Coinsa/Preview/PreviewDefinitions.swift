@@ -95,6 +95,15 @@ enum PreviewLocation: String {
         }
     }
 
+    var timeZoneId: String {
+        switch self {
+        case .tokyo, .kyoto, .osaka: "Asia/Tokyo"
+        case .saintp: "Europe/Moscow"
+        case .seoul, .busan: "Asia/Seoul"
+        case .istanbul: "Europe/Istanbul"
+        }
+    }
+    
     var currency: Currency {
         switch self {
         case .tokyo, .kyoto, .osaka: Currency.jpy

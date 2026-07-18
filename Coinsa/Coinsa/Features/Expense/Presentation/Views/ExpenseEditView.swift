@@ -119,9 +119,10 @@ struct ExpenseEditView: View {
     
     private var expenseEditForm: some View {
         Form {
-            dateSection
-            specificationsSection
             amountSection
+            specificationsSection
+            currencySection
+            dateSection
             commentSection
             actionsSection
         }
@@ -129,65 +130,75 @@ struct ExpenseEditView: View {
     
     // MARK: - Секции
     
-    private var dateSection: some View {
+    private var amountSection: some View {
         Section {
-            DatePicker(
-                .expenseDate,
-                selection: $viewModel.date
-            )
-            .environment(\.timeZone, .utc)
+            VStack {
+                NumericInputField(
+                    amountInputBinding,
+                    focusedField: $focusedField,
+                    focusId: .amount,
+                    fractionDigits: 2,
+                    font: .title,
+                    textAlignment: .center
+                )
+                HStack {
+                    CurrencyCodeText.standard(viewModel.currency(for: currencySide))
+                    if !viewModel.isExpenseBaseCurrency {
+                        InputCurrencySwitchButton(action: switchInputCurrency)
+                    }
+                }
+            }
         }
+        .listRowBackground(Color.clear)
     }
     
     private var specificationsSection: some View {
         Section {
-            LabeledPicker(
-                title: .expenseCategory,
-                selection: categoryBinding,
-                options: ExpenseCategory.allCases
-            ) { category in
-                category.makeLabel()
+            Picker(selection: categoryBinding) {
+                ForEach(ExpenseCategory.allCases, id: \.self) { category in
+                    Image(systemName: category.primaryIcon)
+                        .tag(category.id)
+                }
+            } label: {
+                EmptyView()
             }
+            .onChange(of: categoryBinding.id) {
+                haptics.trigger(.tap)
+            }
+            .pickerStyle(.segmented)
+            .navigationLinkIndicatorVisibility(.hidden)
+            .listRowSeparator(.hidden)
+            
             LabeledPicker(
-                title: .expenseSubcategory,
+                title: viewModel.category.localizedResource,
                 selection: subcategoryBinding,
                 options: viewModel.category.subcategories
             ) { subcategory in
                 subcategory.makeLabel()
             }
-            LabeledPicker(
-                title: .expensePaymentMethod,
-                selection: paymentMethodBinding,
-                options: PaymentMethod.allCases
-            ) { method in
-                method.makeLabel()
-            }
         }
     }
     
-    private var amountSection: some View {
+    private var currencySection: some View {
         Section {
+            Picker(.expensePaymentMethod, selection: paymentMethodBinding) {
+                ForEach(PaymentMethod.allCases, id: \.self) { paymentMethod in
+                    Image(systemName: paymentMethod.primaryIcon)
+                       .tag(paymentMethod.id)
+                }
+            }
+            .onChange(of: paymentMethodBinding.id) {
+                haptics.trigger(.tap)
+            }
+            .pickerStyle(.segmented)
+            .listRowSeparator(.hidden)
+            
             LabeledPicker(
                 title: .expenseCurrency,
                 selection: expenseCurrencyBinding,
                 options: Currency.allCasesSortedByName
             ) { currency in
                 currency.makeLabel()
-            }
-            
-            LabeledContent(.expenseAmount) {
-                HStack {
-                    NumericInputField.standard(
-                        amountInputBinding,
-                        focusedField: $focusedField,
-                        focusId: .amount,
-                        fractionDigits: 2
-                    )
-                    CurrencyCodeText.standard(viewModel.currency(for: currencySide))
-                    if !viewModel.isExpenseBaseCurrency {
-                        InputCurrencySwitchButton(action: switchInputCurrency)
-                    }
-                }
             }
             
             if viewModel.showsRateExpenseToBase {
@@ -232,9 +243,31 @@ struct ExpenseEditView: View {
         }
     }
     
+    private var dateSection: some View {
+        Section {
+            DatePicker(
+                selection: $viewModel.date
+            ) {
+                HStack {
+                    Image(systemName: "calendar")
+                        .foregroundStyle(.secondary)
+                    Text(.expenseDate)
+                }
+            }
+            .environment(\.timeZone, .utc)
+        } footer: {
+            Text(.expenseTimeZoneHint(gmtOffsetDisplay: viewModel.timeZone.gmtOffsetDisplay))
+        }
+    }
+    
     private var commentSection: some View {
         Section {
-            TextField(.expenseComment, text: $viewModel.comment)
+            HStack {
+                Image(systemName: "ellipsis.bubble")
+                    .foregroundStyle(.secondary)
+                
+                TextField(.expenseComment, text: $viewModel.comment)
+            }
         }
     }
 
@@ -242,8 +275,13 @@ struct ExpenseEditView: View {
     private var actionsSection: some View {
         if viewModel.isEdit {
             Section {
-                Button(.expenseDelete, role: .destructive) {
+                Button(role: .destructive) {
                     requestDelete()
+                } label: {
+                    HStack {
+                        Image(systemName: "trash")
+                        Text(.expenseDelete)
+                    }
                 }
             }
         }

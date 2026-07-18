@@ -135,11 +135,11 @@ struct LocationEditView: View {
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(maxWidth: .infinity, alignment: .center)
-                .frame(height: 32)
+                .frame(height: 26)
                 .foregroundStyle(.secondary)
             TextField(.locationName, text: $viewModel.name)
                 .multilineTextAlignment(.center)
-                .font(.largeTitle)
+                .font(.title)
         }
         .listRowSeparator(.hidden)
         .listRowBackground(Color.clear)
