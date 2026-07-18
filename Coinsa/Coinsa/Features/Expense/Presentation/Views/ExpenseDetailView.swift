@@ -75,7 +75,12 @@ struct ExpenseDetailView: View {
     private var commentSection: some View {
         if let comment = expense.comment {
             Section {
-                Text(comment)
+                HStack {
+                    Image(systemName: "ellipsis.bubble")
+                        .foregroundStyle(.secondary)
+                    
+                    Text(comment)
+                }
             }
         }
     }
@@ -132,10 +137,17 @@ struct ExpenseDetailView: View {
     
     @ViewBuilder
     private var additionalInfoContent: some View {
-        if let exchangeRateDescription = viewModel.exchangeRateDescription {
-            Text(exchangeRateDescription)
-                .font(.footnote)
-                .foregroundStyle(.secondary)
+        VStack {
+            if let exchangeRateExpenseToLocationDescription = viewModel.exchangeRateExpenseToLocationDescription {
+                Text(exchangeRateExpenseToLocationDescription)
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+            }
+            if let exchangeRateExpenseToBaseDescription = viewModel.exchangeRateExpenseToBaseDescription {
+                Text(exchangeRateExpenseToBaseDescription)
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+            }
         }
     }
     

@@ -131,17 +131,10 @@ struct LocationEditView: View {
     
     private var titleSection: some View {
         Section {
-            Image(systemName: Location.primaryIcon)
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(maxWidth: .infinity, alignment: .center)
-                .frame(height: 26)
-                .foregroundStyle(.secondary)
             TextField(.locationName, text: $viewModel.name)
                 .multilineTextAlignment(.center)
-                .font(.title)
+                .font(.largeTitle)
         }
-        .listRowSeparator(.hidden)
         .listRowBackground(Color.clear)
     }
     

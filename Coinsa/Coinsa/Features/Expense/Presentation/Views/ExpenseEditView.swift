@@ -138,7 +138,7 @@ struct ExpenseEditView: View {
                     focusedField: $focusedField,
                     focusId: .amount,
                     fractionDigits: 2,
-                    font: .title,
+                    font: .largeTitle,
                     textAlignment: .center
                 )
                 HStack {
@@ -237,7 +237,7 @@ struct ExpenseEditView: View {
                 }
             }
         } footer: {
-            if let adjustedExchangeRateDescription = viewModel.adjustedRateDescription {
+            if let adjustedExchangeRateDescription = viewModel.adjustedRateExpenseToBaseDescription {
                 Text(adjustedExchangeRateDescription)
             }
         }
@@ -256,7 +256,12 @@ struct ExpenseEditView: View {
             }
             .environment(\.timeZone, .utc)
         } footer: {
-            Text(.expenseTimeZoneHint(gmtOffsetDisplay: viewModel.timeZone.gmtOffsetDisplay))
+            Text(
+                .expenseTimeZoneHint(
+                    gmtOffsetDisplay: viewModel.timeZone.gmtOffsetDisplay,
+                    timeZoneId: viewModel.timeZone.identifier
+                )
+            )
         }
     }
     

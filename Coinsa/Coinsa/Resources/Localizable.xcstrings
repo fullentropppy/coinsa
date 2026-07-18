@@ -1624,13 +1624,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "1 %1$(localCurrencyCode)@ = %2$(effectiveRateLocalToBase)@ %3$(baseCurrencyCode)@ (with adjustment %4$(adjustmentRateLocalToBase)@)"
+            "value" : "1 %1$(quoteCurrencyCode)@ = %2$(effectiveRateQuoteToBase)@ %3$(baseCurrencyCode)@ (with adjustment %4$(adjustmentRateQuoteToBase)@)"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "1 %1$(localCurrencyCode)@ = %2$(effectiveRateLocalToBase)@ %3$(baseCurrencyCode)@ (с корректировкой %4$(adjustmentRateLocalToBase)@)"
+            "value" : "1 %1$(quoteCurrencyCode)@ = %2$(effectiveRateQuoteToBase)@ %3$(baseCurrencyCode)@ (с корректировкой %4$(adjustmentRateQuoteToBase)@)"
           }
         }
       }
@@ -1641,13 +1641,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Adjusted exchange rate of %1$(localCurrencyCode)@: %2$(effectiveRateLocalToBase)@ %3$(baseCurrencyCode)@"
+            "value" : "Adjusted exchange rate of %1$(quoteCurrencyCode)@: %2$(effectiveRateQuoteToBase)@ %3$(baseCurrencyCode)@"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Скорректированный курс %1$(localCurrencyCode)@: %2$(effectiveRateLocalToBase)@ %3$(baseCurrencyCode)@"
+            "value" : "Скорректированный курс %1$(quoteCurrencyCode)@: %2$(effectiveRateQuoteToBase)@ %3$(baseCurrencyCode)@"
           }
         }
       }
@@ -1709,13 +1709,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "1 %1$(localCurrencyCode)@ = %2$(rateLocalToBase)@ %3$(baseCurrencyCode)@"
+            "value" : "1 %1$(quoteCurrencyCode)@ = %2$(rateQuoteToBase)@ %3$(baseCurrencyCode)@"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "1 %1$(localCurrencyCode)@ = %2$(rateLocalToBase)@ %3$(baseCurrencyCode)@"
+            "value" : "1 %1$(quoteCurrencyCode)@ = %2$(rateQuoteToBase)@ %3$(baseCurrencyCode)@"
           }
         }
       }
@@ -2797,13 +2797,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Time zone: %1$(gmtOffsetDisplay)@"
+            "value" : "Time zone: %1$(gmtOffsetDisplay)@  (%2$(timeZoneId)@"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Часовой пояс: %(gmtOffsetDisplay)@"
+            "state" : "translated",
+            "value" : "Часовой пояс: %1$(gmtOffsetDisplay)@ (%2$(timeZoneId)@)"
           }
         }
       }

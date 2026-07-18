@@ -125,12 +125,26 @@ final class ExpenseEditViewModel {
         }
     }
     
-    var adjustedRateDescription: LocalizedStringResource? {
-        guard useExchangeAdjustment && exchangeAdjustment > 0 else { return nil }
+//    var adjustedRateExpenseToLocationDescription: LocalizedStringResource? {
+//        guard useExchangeAdjustment && exchangeAdjustment > 0 && expenseCurrency != locationCurrency else {
+//            return nil
+//        }
+//        
+//        return .expenseAdjustedExchangeRateShort(
+//            quoteCurrencyCode: expenseCurrency.code,
+//            effectiveRateQuoteToBase: baseCurrencyConverter.effectiveRateBaseToQuote.numberFormat(fractionLength: 4),
+//            baseCurrencyCode: locationCurrency.code
+//        )
+//    }
+    
+    var adjustedRateExpenseToBaseDescription: LocalizedStringResource? {
+        guard useExchangeAdjustment && exchangeAdjustment > 0 else {
+            return nil
+        }
         
         return .expenseAdjustedExchangeRateShort(
-            localCurrencyCode: expenseCurrency.code,
-            effectiveRateLocalToBase: baseCurrencyConverter.effectiveRateBaseToQuote.numberFormat(fractionLength: 4),
+            quoteCurrencyCode: expenseCurrency.code,
+            effectiveRateQuoteToBase: baseCurrencyConverter.effectiveRateBaseToQuote.numberFormat(fractionLength: 4),
             baseCurrencyCode: baseCurrency.code
         )
     }
