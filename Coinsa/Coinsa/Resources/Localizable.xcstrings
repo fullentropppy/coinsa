@@ -1624,13 +1624,30 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "1 %1$(quoteCurrencyCode)@ = %2$(effectiveRateQuoteToBase)@ %3$(baseCurrencyCode)@ (with adjustment %4$(adjustmentRateQuoteToBase)@)"
+            "value" : "1 %1$(expenseCurrencyCode)@ = %2$(effectiveRateExpenseToBase)@ %3$(baseCurrencyCode)@ (with adjustment %4$(exchangeAdjustment)@)"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "1 %1$(quoteCurrencyCode)@ = %2$(effectiveRateQuoteToBase)@ %3$(baseCurrencyCode)@ (с корректировкой %4$(adjustmentRateQuoteToBase)@)"
+            "value" : "1 %1$(expenseCurrencyCode)@ = %2$(effectiveRateExpenseToBase)@ %3$(baseCurrencyCode)@ (с корректировкой %4$(exchangeAdjustment)@)"
+          }
+        }
+      }
+    },
+    "expense.adjustedExchangeRate.longDouble" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 %1$(expenseCurrencyCode)@ = %2$(effectiveRateExpenseToBase)@ %3$(baseCurrencyCode)@  • %4$(effectiveRateExpenseToLocation)@ %5$(locationCurrencyCode)@\n(with adjustment %6$(exchangeAdjustment)@)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 %1$(expenseCurrencyCode)@ = %2$(effectiveRateExpenseToBase)@ %3$(baseCurrencyCode)@  • %4$(effectiveRateExpenseToLocation)@ %5$(locationCurrencyCode)@\n(с корректировкой %6$(exchangeAdjustment)@)"
           }
         }
       }
@@ -1641,13 +1658,30 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Adjusted exchange rate of %1$(quoteCurrencyCode)@: %2$(effectiveRateQuoteToBase)@ %3$(baseCurrencyCode)@"
+            "value" : "Adjusted exchange rate of %1$(expenseCurrencyCode)@: %2$(effectiveRateExpenseToBase)@ %3$(baseCurrencyCode)@"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Скорректированный курс %1$(quoteCurrencyCode)@: %2$(effectiveRateQuoteToBase)@ %3$(baseCurrencyCode)@"
+            "value" : "Скорректированный курс %1$(expenseCurrencyCode)@: %2$(effectiveRateExpenseToBase)@ %3$(baseCurrencyCode)@"
+          }
+        }
+      }
+    },
+    "expense.adjustedExchangeRate.shortDouble" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adjusted exchange rate of %1$(expenseCurrencyCode)@:\n%2$(effectiveRateExpenseToBase)@ %3$(baseCurrencyCode)@ • %4$(effectiveRateExpenseToLocation)@ %5$(locationCurrencyCode)@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Скорректированный курс %1$(expenseCurrencyCode)@:\n%2$(effectiveRateExpenseToBase)@ %3$(baseCurrencyCode)@ • %4$(effectiveRateExpenseToLocation)@ %5$(locationCurrencyCode)@"
           }
         }
       }
@@ -1699,23 +1733,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Локальная"
-          }
-        }
-      }
-    },
-    "expense.baseExchangeRate" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "1 %1$(quoteCurrencyCode)@ = %2$(rateQuoteToBase)@ %3$(baseCurrencyCode)@"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "1 %1$(quoteCurrencyCode)@ = %2$(rateQuoteToBase)@ %3$(baseCurrencyCode)@"
           }
         }
       }
@@ -2039,6 +2056,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Курс обмена %(localCurrencyCode)@"
+          }
+        }
+      }
+    },
+    "expense.exchangeRateSourceToTarget" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 %1$(sourceCurrencyCode)@ = %2$(exchangeRateSourceToTarget)@ %3$(targetCurrencyCode)@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "1 %1$(sourceCurrencyCode)@ = %2$(exchangeRateSourceToTarget)@ %3$(targetCurrencyCode)@"
           }
         }
       }

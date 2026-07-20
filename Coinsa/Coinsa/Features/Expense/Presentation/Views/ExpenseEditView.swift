@@ -237,8 +237,8 @@ struct ExpenseEditView: View {
                 }
             }
         } footer: {
-            if let adjustedExchangeRateDescription = viewModel.adjustedRateExpenseToBaseDescription {
-                Text(adjustedExchangeRateDescription)
+            if let adjustedRateDescription = viewModel.adjustedRateDescription {
+                Text(adjustedRateDescription)
             }
         }
     }

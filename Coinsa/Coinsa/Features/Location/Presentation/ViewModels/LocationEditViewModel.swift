@@ -82,7 +82,7 @@ final class LocationEditViewModel {
     // MARK: - Состояние UI. Курс обмена
     
     var rateLocationToBase: Double {
-        get { currencyConverter.rateBaseToQuote }
+        get { currencyConverter.rateQuoteToBase }
         set { currencyConverter.updateRate(newValue) }
     }
     
@@ -171,7 +171,7 @@ final class LocationEditViewModel {
             exchangeRateProvider: exchangeRateProvider,
             baseCurrency: trip.baseCurrency,
             quoteCurrency: locationCurrency,
-            rateBaseToQuote: rateLocationToBase
+            rateQuoteToBase: rateLocationToBase
         )
         
         self.amountManager = AmountManager(

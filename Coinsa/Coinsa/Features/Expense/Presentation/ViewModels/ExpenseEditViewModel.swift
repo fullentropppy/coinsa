@@ -25,6 +25,17 @@ final class ExpenseEditViewModel {
     
     private var initialSnapshot: Snapshot
     private var hasLoadedInitialRates = false
+    private var calculationContext: ExpenseCalculationContext {
+        ExpenseCalculationContext(
+            baseAmount: baseAmount,
+            baseCurrency: baseCurrency,
+            expenseCurrency: expenseCurrency,
+            rateExpenseToBase: rateExpenseToBase,
+            rateExpenseToLocation: rateExpenseToLocation,
+            paymentMethod: paymentMethod,
+            exchangeAdjustment: exchangeAdjustment
+        )
+    }
     
     // MARK: - Состояние UI. Общее поведение и оформление
     
@@ -100,12 +111,12 @@ final class ExpenseEditViewModel {
     // MARK: - Состояние UI. Курс обмена
     
     var rateExpenseToBase: Double {
-        get { baseCurrencyConverter.rateBaseToQuote }
+        get { baseCurrencyConverter.rateQuoteToBase }
         set { baseCurrencyConverter.updateRate(newValue) }
     }
     
     var rateExpenseToLocation: Double {
-        get { locationCurrencyConverter.rateBaseToQuote }
+        get { locationCurrencyConverter.rateQuoteToBase }
         set { locationCurrencyConverter.updateRate(newValue) }
     }
     
@@ -125,28 +136,26 @@ final class ExpenseEditViewModel {
         }
     }
     
-//    var adjustedRateExpenseToLocationDescription: LocalizedStringResource? {
-//        guard useExchangeAdjustment && exchangeAdjustment > 0 && expenseCurrency != locationCurrency else {
-//            return nil
-//        }
-//        
-//        return .expenseAdjustedExchangeRateShort(
-//            quoteCurrencyCode: expenseCurrency.code,
-//            effectiveRateQuoteToBase: baseCurrencyConverter.effectiveRateBaseToQuote.numberFormat(fractionLength: 4),
-//            baseCurrencyCode: locationCurrency.code
-//        )
-//    }
-    
-    var adjustedRateExpenseToBaseDescription: LocalizedStringResource? {
+    var adjustedRateDescription: LocalizedStringResource? {
         guard useExchangeAdjustment && exchangeAdjustment > 0 else {
             return nil
         }
         
-        return .expenseAdjustedExchangeRateShort(
-            quoteCurrencyCode: expenseCurrency.code,
-            effectiveRateQuoteToBase: baseCurrencyConverter.effectiveRateBaseToQuote.numberFormat(fractionLength: 4),
-            baseCurrencyCode: baseCurrency.code
-        )
+        if expenseCurrency == locationCurrency {
+            return .expenseAdjustedExchangeRateShort(
+                expenseCurrencyCode: expenseCurrency.code,
+                effectiveRateExpenseToBase: calculationContext.rateExpenseToBase.numberFormat(fractionLength: 4),
+                baseCurrencyCode: baseCurrency.code
+            )
+        } else {
+            return .expenseAdjustedExchangeRateShortDouble(
+                expenseCurrencyCode: expenseCurrency.code,
+                effectiveRateExpenseToBase: calculationContext.rateExpenseToBase.numberFormat(fractionLength: 4),
+                baseCurrencyCode: baseCurrency.code,
+                effectiveRateExpenseToLocation: calculationContext.rateExpenseToLocation.numberFormat(fractionLength: 4),
+                locationCurrencyCode: locationCurrency.code
+            )
+        }
     }
     
     // MARK: - Состояние UI. Оплата
@@ -247,7 +256,7 @@ final class ExpenseEditViewModel {
             exchangeRateProvider: baseExchangeRateProvider,
             baseCurrency: location.baseCurrency,
             quoteCurrency: expenseCurrency,
-            rateBaseToQuote: normalizedRateExpenseToBase,
+            rateQuoteToBase: normalizedRateExpenseToBase,
             exchangeAdjustment: exchangeAdjustment
         )
         
@@ -255,7 +264,7 @@ final class ExpenseEditViewModel {
             exchangeRateProvider: locationExchangeRateProvider,
             baseCurrency: location.locationCurrency,
             quoteCurrency: expenseCurrency,
-            rateBaseToQuote: normalizedRateExpenseToLocation,
+            rateQuoteToBase: normalizedRateExpenseToLocation,
             exchangeAdjustment: 0
         )
         

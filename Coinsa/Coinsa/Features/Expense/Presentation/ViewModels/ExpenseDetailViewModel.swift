@@ -59,46 +59,26 @@ struct ExpenseDetailViewModel {
 
     // MARK: - Вычисляемые свойства. Курс обмена
     
-    var exchangeRateExpenseToLocationDescription: LocalizedStringResource? {
-        guard !isExpenseBaseCurrency && expenseCurrency != locationCurrency else {
-            return nil
-        }
-
-        if expense.paymentMethod == .card && expense.exchangeAdjustment > 0 {
-            return .expenseAdjustedExchangeRateLong(
-                quoteCurrencyCode: expense.expenseCurrency.code,
-                effectiveRateQuoteToBase: expense.exchangeRate(from: .expense, to: .location, using: .effective)
-                    .numberFormat(fractionLength: 4),
-                baseCurrencyCode: expense.locationCurrency.code,
-                adjustmentRateQuoteToBase: (expense.exchangeAdjustment / 100).percentFormat()
-            )
-        } else {
-            return .expenseBaseExchangeRate(
-                quoteCurrencyCode: expense.expenseCurrency.code,
-                rateQuoteToBase: expense.rateExpenseToLocation.numberFormat(fractionLength: 4),
-                baseCurrencyCode: expense.locationCurrency.code
-            )
-        }
-    }
-    
-    var exchangeRateExpenseToBaseDescription: LocalizedStringResource? {
+    var adjustedRateDescription: LocalizedStringResource? {
         guard !isExpenseBaseCurrency else {
             return nil
         }
-
-        if expense.paymentMethod == .card && expense.exchangeAdjustment > 0 {
+        
+        if expenseCurrency == locationCurrency {
             return .expenseAdjustedExchangeRateLong(
-                quoteCurrencyCode: expense.expenseCurrency.code,
-                effectiveRateQuoteToBase: expense.exchangeRate(from: .expense, to: .base, using: .effective)
-                    .numberFormat(fractionLength: 4),
-                baseCurrencyCode: expense.baseCurrency.code,
-                adjustmentRateQuoteToBase: (expense.exchangeAdjustment / 100).percentFormat()
+                expenseCurrencyCode: expenseCurrency.code,
+                effectiveRateExpenseToBase: expense.rateExpenseToBase.numberFormat(fractionLength: 4),
+                baseCurrencyCode: baseCurrency.code,
+                exchangeAdjustment: (expense.exchangeAdjustment / 100).percentFormat()
             )
         } else {
-            return .expenseBaseExchangeRate(
-                quoteCurrencyCode: expense.expenseCurrency.code,
-                rateQuoteToBase: expense.rateExpenseToBase.numberFormat(fractionLength: 4),
-                baseCurrencyCode: expense.baseCurrency.code
+            return .expenseAdjustedExchangeRateLongDouble(
+                expenseCurrencyCode: expenseCurrency.code,
+                effectiveRateExpenseToBase: expense.rateExpenseToBase.numberFormat(fractionLength: 4),
+                baseCurrencyCode: baseCurrency.code,
+                effectiveRateExpenseToLocation: expense.rateExpenseToLocation.numberFormat(fractionLength: 4),
+                locationCurrencyCode: locationCurrency.code,
+                exchangeAdjustment: (expense.exchangeAdjustment / 100).percentFormat()
             )
         }
     }

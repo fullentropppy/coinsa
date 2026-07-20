@@ -137,17 +137,12 @@ struct ExpenseDetailView: View {
     
     @ViewBuilder
     private var additionalInfoContent: some View {
-        VStack {
-            if let exchangeRateExpenseToLocationDescription = viewModel.exchangeRateExpenseToLocationDescription {
-                Text(exchangeRateExpenseToLocationDescription)
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-            }
-            if let exchangeRateExpenseToBaseDescription = viewModel.exchangeRateExpenseToBaseDescription {
-                Text(exchangeRateExpenseToBaseDescription)
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-            }
+        if let adjustedRateDescription = viewModel.adjustedRateDescription {
+            Text(adjustedRateDescription)
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+                .frame(maxWidth: .infinity, alignment: .center)
         }
     }
     
