@@ -40,20 +40,20 @@ struct LocationDetailViewModel {
     // MARK: - Вычисляемые свойства. Общие данные
     
     var eventHeaderData: EventSummaryData {
-        let plannedBaseAmount = location.calculatePlannedAmount(in: CurrencyContext.base)
-        let plannedLocalAmount = isHomeLocation ? nil : location.calculatePlannedAmount(in: CurrencyContext.location)
-        let actualAmountBase = location.calculateActualAmount(in: CurrencyContext.base)
-        let actualAmountLocal = isHomeLocation ? nil : location.calculateActualAmount(in: CurrencyContext.location)
+        let budgetBaseAmount = location.calculateBudgetAmount(in: CurrencyContext.base)
+        let budgetLocationAmount = isHomeLocation ? nil : location.calculateBudgetAmount(in: CurrencyContext.location)
+        let expensesAmountBase = location.calculateExpensesAmount(in: CurrencyContext.base)
+        let expensesAmountLocal = isHomeLocation ? nil : location.calculateExpensesAmount(in: CurrencyContext.location)
         let locationCurrency = isHomeLocation ? nil : locationCurrency
 
         return EventSummaryData(
             badgeProvider: Location.self,
             dateRangeProvider: location,
-            plannedBaseAmount: plannedBaseAmount,
-            actualBaseAmount: actualAmountBase,
+            budgetBaseAmount: budgetBaseAmount,
+            expensesBaseAmount: expensesAmountBase,
             baseCurrency: baseCurrency,
-            plannedLocalAmount: plannedLocalAmount,
-            actualLocalAmount: actualAmountLocal,
+            budgetLocationAmount: budgetLocationAmount,
+            expensesLocationAmount: expensesAmountLocal,
             locationCurrency: locationCurrency
         )
     }
@@ -61,15 +61,15 @@ struct LocationDetailViewModel {
     var eventAnalyticsData: EventCategoryAnalyticsData {
         let isHomeLocation = locationCurrency == baseCurrency
         
-        let actualAmountByCategoryBase = location.calculateActualAmountByCategory(
+        let expensesAmountByCategoryBase = location.calculateExpensesAmountByCategory(
             in: CurrencyContext.base,
             withinDateRange: location.range
         )
 
-        let actualLocalAmountByCategory = isHomeLocation
+        let expensesLocationAmountByCategory = isHomeLocation
             ? nil
-            : location.calculateActualAmountByCategory(in: CurrencyContext.location, withinDateRange: location.range)
-        let localBudget = isHomeLocation ? nil : location.calculatePlannedAmount(in: CurrencyContext.location)
+            : location.calculateExpensesAmountByCategory(in: CurrencyContext.location, withinDateRange: location.range)
+        let localBudget = isHomeLocation ? nil : location.calculateBudgetAmount(in: CurrencyContext.location)
 
         return EventCategoryAnalyticsData(
             dateRange: location.range,
@@ -77,7 +77,7 @@ struct LocationDetailViewModel {
             locationCurrency: isHomeLocation ? nil : locationCurrency,
             baseBudget: location.budget,
             localBudget: localBudget,
-            actualAmountByCategory: slices(from: actualAmountByCategoryBase, localValues: actualLocalAmountByCategory)
+            expensesAmountByCategory: slices(from: expensesAmountByCategoryBase, localValues: expensesLocationAmountByCategory)
         )
     }
     
@@ -142,7 +142,7 @@ struct LocationDetailViewModel {
             ExpenseAnalyticsSlice(
                 category: category,
                 baseAmount: baseValues[category] ?? 0,
-                localAmount: localValues?[category]
+                locationAmount: localValues?[category]
             )
         }
     }

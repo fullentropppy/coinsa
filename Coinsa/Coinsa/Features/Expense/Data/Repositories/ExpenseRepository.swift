@@ -29,6 +29,9 @@ struct ExpenseRepository {
     ///   - category: Категория траты.
     ///   - subcategory: Подкатегория траты.
     ///   - location: Локация, в которой совершена трата.
+    ///   - latitude: Географическая широта места траты.
+    ///   - longitude: Географическая долгота места траты.
+    ///   - horizontalAccuracy: Точность определения координат в метрах.
     ///   - comment: Комментарий (опционально).
     func add(
         date: Date,
@@ -41,6 +44,9 @@ struct ExpenseRepository {
         category: ExpenseCategory,
         subcategory: ExpenseSubcategory,
         location: Location,
+        latitude: Double?,
+        longitude: Double?,
+        horizontalAccuracy: Double?,
         comment: String?
     ) {
         let now = Date()
@@ -59,6 +65,9 @@ struct ExpenseRepository {
             categoryRaw: category.rawValue,
             subcategoryRaw: subcategory.rawValue,
             location: location,
+            latitude: latitude,
+            longitude: longitude,
+            horizontalAccuracy: horizontalAccuracy,
             comment: comment,
             createdAt: now,
             updatedAt: now
@@ -81,6 +90,9 @@ struct ExpenseRepository {
     ///   - exchangeAdjustment: Новая корректировка.
     ///   - category: Новая категория.
     ///   - subcategory: Новая подкатегория.
+    ///   - latitude: Новая географическая широта места траты.
+    ///   - longitude: Новая географическая долгота места траты.
+    ///   - horizontalAccuracy: Новая точность определения координат в метрах.
     ///   - comment: Новый комментарий.
     func update(
         _ expense: Expense,
@@ -93,6 +105,9 @@ struct ExpenseRepository {
         exchangeAdjustment: Double,
         category: ExpenseCategory,
         subcategory: ExpenseSubcategory,
+        latitude: Double?,
+        longitude: Double?,
+        horizontalAccuracy: Double?,
         comment: String?
     ) {
         expense.storedDate = date
@@ -104,6 +119,9 @@ struct ExpenseRepository {
         expense.exchangeAdjustment = exchangeAdjustment
         expense.categoryRaw = category.rawValue
         expense.subcategoryRaw = subcategory.rawValue
+        expense.latitude = latitude
+        expense.longitude = longitude
+        expense.horizontalAccuracy = horizontalAccuracy
         expense.comment = comment
         expense.updatedAt = Date()
         

@@ -11,38 +11,38 @@ import SwiftUI
 struct EventAmountBalanceView: View {
     // MARK: - Хранимые свойства
     
-    private let plannedBaseAmount: Double
+    private let budgetBaseAmount: Double
     private let baseAmountBalance: Double
     private let baseCurrency: Currency
-    private let localAmountBalance: Double?
+    private let locationAmountBalance: Double?
     private let locationCurrency: Currency?
     
     // MARK: - Вычисляемые свойства
     
     private var progress: Double {
-        plannedBaseAmount > 0 ? baseAmountBalance / plannedBaseAmount : 0
+        budgetBaseAmount > 0 ? baseAmountBalance / budgetBaseAmount : 0
     }
     
     // MARK: - Инициализация
     
     /// Создает представление баланса.
     /// - Parameters:
-    ///   - plannedBaseAmount: Плановая сумма.
+    ///   - budgetBaseAmount: Плановая сумма.
     ///   - baseAmountBalance: Остаток в основной валюте.
     ///   - baseCurrency: Основная валюта.
-    ///   - localAmountBalance: Остаток в локальной валюте (опционально).
+    ///   - locationAmountBalance: Остаток в локальной валюте (опционально).
     ///   - locationCurrency: Локальная валюта (опционально).
     init(
-        plannedBaseAmount: Double,
+        budgetBaseAmount: Double,
         baseAmountBalance: Double,
         baseCurrency: Currency,
-        localAmountBalance: Double? = nil,
+        locationAmountBalance: Double? = nil,
         locationCurrency: Currency? = nil
     ) {
-        self.plannedBaseAmount = plannedBaseAmount
+        self.budgetBaseAmount = budgetBaseAmount
         self.baseAmountBalance = baseAmountBalance
         self.baseCurrency = baseCurrency
-        self.localAmountBalance = localAmountBalance
+        self.locationAmountBalance = locationAmountBalance
         self.locationCurrency = locationCurrency
     }
     
@@ -50,7 +50,7 @@ struct EventAmountBalanceView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            ProgressBar(currentValue: baseAmountBalance, maxValue: plannedBaseAmount, style: .positive)
+            ProgressBar(currentValue: baseAmountBalance, maxValue: budgetBaseAmount, style: .positive)
             HStack {
                 Text(.amountBalancePersentage(balancePercent: progress.percentFormat()))
                     .font(.footnote)
@@ -65,11 +65,11 @@ struct EventAmountBalanceView: View {
     
     private var differenceInfo: some View {
         Group {
-            if let localAmountBalance, let locationCurrency {
+            if let locationAmountBalance, let locationCurrency {
                 Text(
                     .amountDuo(
-                        localAmountBalance: localAmountBalance.numberFormat(),
-                        localCurrencyCode: locationCurrency.code,
+                        locationAmountBalance: locationAmountBalance.numberFormat(),
+                        locationCurrencyCode: locationCurrency.code,
                         baseAmountBalance: baseAmountBalance.numberFormat(),
                         baseCurrencyCode: baseCurrency.code
                     )
@@ -95,40 +95,40 @@ private extension EventAmountBalanceView {
         Form {
             Section {
                 EventAmountBalanceView(
-                    plannedBaseAmount: 42000,
+                    budgetBaseAmount: 42000,
                     baseAmountBalance: -24600,
                     baseCurrency: .defaultValue,
-                    localAmountBalance: -41000,
+                    locationAmountBalance: -41000,
                     locationCurrency: .jpy
                 )
                 EventAmountBalanceView(
-                    plannedBaseAmount: 42000,
+                    budgetBaseAmount: 42000,
                     baseAmountBalance: 0,
                     baseCurrency: .defaultValue,
-                    localAmountBalance: 0,
+                    locationAmountBalance: 0,
                     locationCurrency: .jpy
                 )
                 EventAmountBalanceView(
-                    plannedBaseAmount: 42000,
+                    budgetBaseAmount: 42000,
                     baseAmountBalance: 24600,
                     baseCurrency: .defaultValue,
-                    localAmountBalance: 41000,
+                    locationAmountBalance: 41000,
                     locationCurrency: .jpy
                 )
             }
             Section {
                 EventAmountBalanceView(
-                    plannedBaseAmount: 42000,
+                    budgetBaseAmount: 42000,
                     baseAmountBalance: -24600,
                     baseCurrency: .defaultValue
                 )
                 EventAmountBalanceView(
-                    plannedBaseAmount: 42000,
+                    budgetBaseAmount: 42000,
                     baseAmountBalance: 0,
                     baseCurrency: .defaultValue
                 )
                 EventAmountBalanceView(
-                    plannedBaseAmount: 42000,
+                    budgetBaseAmount: 42000,
                     baseAmountBalance: 24600,
                     baseCurrency: .defaultValue
                 )

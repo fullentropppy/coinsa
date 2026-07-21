@@ -144,18 +144,18 @@ struct EventAnalyticsView: View {
     private var actualHeaderContent: some View {
         HStack {
             EventAmountCardView(
-                title: .amountActual,
-                baseAmount: viewModel.actualTotalBaseAmount,
+                title: .amountExpenses,
+                baseAmount: viewModel.expensesTotalBaseAmount,
                 baseCurrency: viewModel.baseCurrency,
-                localAmount: viewModel.actualTotalLocalAmount,
+                locationAmount: viewModel.expensesTotalLocationAmount,
                 locationCurrency: viewModel.locationCurrency
             )
             if viewModel.totalDays > 1 {
                 EventAmountCardView(
                     title: .amountActualDaily,
-                    baseAmount: viewModel.dailyBaseActualAmount,
+                    baseAmount: viewModel.dailyBaseExpensesAmount,
                     baseCurrency: viewModel.baseCurrency,
-                    localAmount: viewModel.dailyLocalActualAmount,
+                    locationAmount: viewModel.dailyLocalExpensesAmount,
                     locationCurrency: viewModel.locationCurrency
                 )
             }
@@ -176,8 +176,8 @@ struct EventAnalyticsView: View {
             }
             Spacer()
             VStack(alignment: .trailing, spacing: 10) {
-                if let locationCurrency = viewModel.locationCurrency, let localAmount = slice.localAmount {
-                    AmountText.standard(localAmount, currency: locationCurrency)
+                if let locationCurrency = viewModel.locationCurrency, let locationAmount = slice.locationAmount {
+                    AmountText.standard(locationAmount, currency: locationCurrency)
                     AmountText.secondarySmall(slice.baseAmount, currency: viewModel.baseCurrency)
                 } else {
                     AmountText.standard(slice.baseAmount, currency: viewModel.baseCurrency)

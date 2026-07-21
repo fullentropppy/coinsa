@@ -9,7 +9,7 @@
 struct ExpenseAnalyticsSlice: Identifiable {
     let category: ExpenseCategory
     let baseAmount: Double
-    let localAmount: Double?
+    let locationAmount: Double?
     
     var id: String { category.id }
 }

@@ -20,23 +20,6 @@
         }
       }
     },
-    "amount.actual" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Actual"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Факт"
-          }
-        }
-      }
-    },
     "amount.actual.daily" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -88,19 +71,53 @@
         }
       }
     },
+    "amount.budget" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Budget"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Бюджет"
+          }
+        }
+      }
+    },
     "amount.duo" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$(localAmountBalance)@ %2$(localCurrencyCode)@ • %3$(baseAmountBalance)@ %4$(baseCurrencyCode)@"
+            "value" : "%1$(locationAmountBalance)@ %2$(locationCurrencyCode)@ • %3$(baseAmountBalance)@ %4$(baseCurrencyCode)@"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$(localAmountBalance)@ %2$(localCurrencyCode)@ • %3$(baseAmountBalance)@ %4$(baseCurrencyCode)@"
+            "value" : "%1$(locationAmountBalance)@ %2$(locationCurrencyCode)@ • %3$(baseAmountBalance)@ %4$(baseCurrencyCode)@"
+          }
+        }
+      }
+    },
+    "amount.expenses" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Expenses"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Траты"
           }
         }
       }
@@ -118,23 +135,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$(baseAmountBalance)@ %2$(baseCurrencyCode)@"
-          }
-        }
-      }
-    },
-    "amount.plan" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Plan"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "План"
           }
         }
       }
@@ -2049,13 +2049,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Exchange rate of %1$(localCurrencyCode)@"
+            "value" : "Exchange rate of %1$(locationCurrencyCode)@"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Курс обмена %(localCurrencyCode)@"
+            "value" : "Курс обмена %(locationCurrencyCode)@"
           }
         }
       }
@@ -2071,7 +2071,7 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "1 %1$(sourceCurrencyCode)@ = %2$(exchangeRateSourceToTarget)@ %3$(targetCurrencyCode)@"
           }
         }
@@ -2865,13 +2865,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Adjusted exchange rate of %1$(localCurrencyCode)@: %2$(effectiveRateLocalToBase)@ %3$(baseCurrencyCode)@"
+            "value" : "Adjusted exchange rate of %1$(locationCurrencyCode)@: %2$(effectiveRateLocationToBase)@ %3$(baseCurrencyCode)@"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Скорректированный курс %1$(localCurrencyCode)@: %2$(effectiveRateLocalToBase)@ %3$(baseCurrencyCode)@"
+            "value" : "Скорректированный курс %1$(locationCurrencyCode)@: %2$(effectiveRateLocationToBase)@ %3$(baseCurrencyCode)@"
           }
         }
       }
@@ -3086,13 +3086,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Exchange rate of %1$(localCurrencyCode)@"
+            "value" : "Exchange rate of %1$(locationCurrencyCode)@"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Курс обмена %(localCurrencyCode)@"
+            "value" : "Курс обмена %(locationCurrencyCode)@"
           }
         }
       }

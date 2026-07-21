@@ -107,7 +107,7 @@ final class LocationEditViewModel {
         amountManager.baseAmount
     }
     
-    var budgetLocalAmount: Double {
+    var budgetLocationAmount: Double {
         amountManager.quoteAmount
     }
     
@@ -193,7 +193,7 @@ final class LocationEditViewModel {
     
     // MARK: - Операции с валютой
     
-    func updateLocalCurrency(_ newCurrency: Currency, currentInput: CurrencyContext) {
+    func updateLocationCurrency(_ newCurrency: Currency, currentInput: CurrencyContext) {
         guard newCurrency != locationCurrency else { return }
         
         currencyConverter.updateQuoteCurrency(newCurrency) { [weak self] in

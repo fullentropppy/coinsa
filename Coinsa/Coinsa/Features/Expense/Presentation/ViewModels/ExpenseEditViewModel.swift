@@ -440,6 +440,9 @@ final class ExpenseEditViewModel {
                 exchangeAdjustment: exchangeAdjustment,
                 category: category,
                 subcategory: subcategory,
+                latitude: nil,
+                longitude: nil,
+                horizontalAccuracy: nil,
                 comment: comment
             )
         } else {
@@ -454,6 +457,9 @@ final class ExpenseEditViewModel {
                 category: category,
                 subcategory: subcategory,
                 location: location,
+                latitude: nil,
+                longitude: nil,
+                horizontalAccuracy: nil,
                 comment: comment
             )
         }

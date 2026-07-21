@@ -52,6 +52,15 @@ class Expense {
     /// Локация, в которой совершена трата.
     var location: Location?
     
+    /// Географическая широта места траты.
+    var latitude: Double?
+
+    /// Географическая долгота места траты.
+    var longitude: Double?
+
+    /// Точность определения координат в метрах.
+    var horizontalAccuracy: Double?
+    
     /// Комментарий к трате.
     var comment: String?
 
@@ -78,6 +87,9 @@ class Expense {
     ///   - categoryRaw: Сырое значение категории.
     ///   - categoryRaw: Сырое значение подкатегории.
     ///   - location: Локация траты.
+    ///   - latitude: Географическая широта места траты.
+    ///   - longitude: Географическая долгота места траты.
+    ///   - horizontalAccuracy: Точность определения координат в метрах.
     ///   - comment: Комментарий.
     ///   - createdAt: Дата создания.
     ///   - updatedAt: Дата обновления.
@@ -95,6 +107,9 @@ class Expense {
         categoryRaw: String,
         subcategoryRaw: String,
         location: Location,
+        latitude: Double?,
+        longitude: Double?,
+        horizontalAccuracy: Double?,
         comment: String?,
         createdAt: Date,
         updatedAt: Date
@@ -115,6 +130,9 @@ class Expense {
         self.categoryRaw = categoryRaw
         self.subcategoryRaw = subcategoryRaw
         self.location = location
+        self.latitude = latitude
+        self.longitude = longitude
+        self.horizontalAccuracy = horizontalAccuracy
         self.comment = comment
     }
 }

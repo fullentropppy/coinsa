@@ -14,5 +14,5 @@ struct EventCategoryAnalyticsData {
     let locationCurrency: Currency?
     let baseBudget: Double
     let localBudget: Double?
-    let actualAmountByCategory: [ExpenseAnalyticsSlice]
+    let expensesAmountByCategory: [ExpenseAnalyticsSlice]
 }

@@ -170,6 +170,9 @@ private extension PreviewGenerator {
             categoryRaw: category.rawValue,
             subcategoryRaw: subcategory.rawValue,
             location: location,
+            latitude: nil,
+            longitude: nil,
+            horizontalAccuracy: nil,
             comment: comment,
             createdAt: now,
             updatedAt: now

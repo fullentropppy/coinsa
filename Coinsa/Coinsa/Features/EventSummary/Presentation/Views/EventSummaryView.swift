@@ -15,21 +15,21 @@ struct EventSummaryView: View {
     private let showsHeader: Bool
     private let showsAmounts: Bool
     private let showsAmountBalance: Bool
-    private let showsPlannedIfZero: Bool
+    private let showsBudgetIfZero: Bool
     
     // MARK: - Вычисляемые свойства
     
-    private var showsPlannedAmount: Bool {
-        data.plannedBaseAmount > 0 || showsPlannedIfZero
+    private var showsBudgetAmount: Bool {
+        data.budgetBaseAmount > 0 || showsBudgetIfZero
     }
     
     private var baseAmountBalance: Double {
-        data.plannedBaseAmount - data.actualBaseAmount
+        data.budgetBaseAmount - data.expensesBaseAmount
     }
     
-    private var localAmountBalance: Double? {
-        if let planned = data.plannedLocalAmount, let actual = data.actualLocalAmount {
-            planned - actual
+    private var locationAmountBalance: Double? {
+        if let budget = data.budgetLocationAmount, let expenses = data.expensesLocationAmount {
+            budget - expenses
         } else {
             nil
         }
@@ -43,19 +43,19 @@ struct EventSummaryView: View {
     ///   - showsHeader: Показывать заголовок. По умолчанию `true`.
     ///   - showsAmounts: Показывать карточки сумм. По умолчанию `true`.
     ///   - showsAmountBalance: Показывать баланс. По умолчанию `true`.
-    ///   - showsPlannedIfZero: Показывать плановые суммы при нуле. По умолчанию `false`.
+    ///   - showsBudgetIfZero: Показывать плановые суммы при нуле. По умолчанию `false`.
     init(
         data: EventSummaryData,
         showsHeader: Bool = true,
         showsAmounts: Bool = true,
         showsAmountBalance: Bool = true,
-        showsPlannedIfZero: Bool = false,
+        showsBudgetIfZero: Bool = false,
     ) {
         self.data = data
         self.showsHeader = showsHeader
         self.showsAmounts = showsAmounts
         self.showsAmountBalance = showsAmountBalance
-        self.showsPlannedIfZero = showsPlannedIfZero
+        self.showsBudgetIfZero = showsBudgetIfZero
     }
     
     // MARK: - Тело View
@@ -99,20 +99,20 @@ struct EventSummaryView: View {
     
     private var amountsContent: some View {
         HStack {
-            if showsPlannedAmount {
+            if showsBudgetAmount {
                 EventAmountCardView(
-                    title: .amountPlan,
-                    baseAmount: data.plannedBaseAmount,
+                    title: .amountBudget,
+                    baseAmount: data.budgetBaseAmount,
                     baseCurrency: data.baseCurrency,
-                    localAmount: data.plannedLocalAmount,
+                    locationAmount: data.budgetLocationAmount,
                     locationCurrency: data.locationCurrency
                 )
             }
             EventAmountCardView(
-                title: .amountActual,
-                baseAmount: data.actualBaseAmount,
+                title: .amountExpenses,
+                baseAmount: data.expensesBaseAmount,
                 baseCurrency: data.baseCurrency,
-                localAmount: data.actualLocalAmount,
+                locationAmount: data.expensesLocationAmount,
                 locationCurrency: data.locationCurrency
             )
         }
@@ -120,13 +120,13 @@ struct EventSummaryView: View {
     
     @ViewBuilder
     private var amountBalanceContent: some View {
-        if showsPlannedAmount {
+        if showsBudgetAmount {
             VStack {
                 EventAmountBalanceView(
-                    plannedBaseAmount: data.plannedBaseAmount,
+                    budgetBaseAmount: data.budgetBaseAmount,
                     baseAmountBalance: baseAmountBalance,
                     baseCurrency: data.baseCurrency,
-                    localAmountBalance: localAmountBalance,
+                    locationAmountBalance: locationAmountBalance,
                     locationCurrency: data.locationCurrency
                 )
             }

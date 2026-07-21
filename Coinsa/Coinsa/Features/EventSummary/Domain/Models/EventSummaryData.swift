@@ -13,11 +13,11 @@ struct EventSummaryData {
     
     let badgeProvider: TypeBadgeProviding.Type?
     let dateRangeProvider: DateRangeProviding?
-    let plannedBaseAmount: Double
-    let actualBaseAmount: Double
+    let budgetBaseAmount: Double
+    let expensesBaseAmount: Double
     let baseCurrency: Currency
-    let plannedLocalAmount: Double?
-    let actualLocalAmount: Double?
+    let budgetLocationAmount: Double?
+    let expensesLocationAmount: Double?
     let locationCurrency: Currency?
     
     // MARK: - Инициализация
@@ -26,29 +26,29 @@ struct EventSummaryData {
     /// - Parameters:
     ///   - badgeProvider: Провайдер бейджа (опционально).
     ///   - dateRangeProvider: Провайдер диапазона дат (опционально).
-    ///   - plannedBaseAmount: Плановая сумма в основной валюте.
-    ///   - actualBaseAmount: Фактическая сумма в основной валюте.
+    ///   - budgetBaseAmount: Cумма бюджета в основной валюте.
+    ///   - expensesBaseAmount: Сумма трат в основной валюте.
     ///   - baseCurrency: Основная валюта.
-    ///   - plannedLocalAmount: Плановая сумма в локальной валюте (опционально).
-    ///   - actualLocalAmount: Фактическая сумма в локальной валюте (опционально).
-    ///   - locationCurrency: Локальная валюта (опционально).
+    ///   - budgetLocationAmount: Сумма бюджета в валюте локации (опционально).
+    ///   - expensesLocationAmount: Сумма трат в валюте локации (опционально).
+    ///   - locationCurrency: Валюта локации (опционально).
     init(
         badgeProvider: TypeBadgeProviding.Type? = nil,
         dateRangeProvider: DateRangeProviding? = nil,
-        plannedBaseAmount: Double,
-        actualBaseAmount: Double,
+        budgetBaseAmount: Double,
+        expensesBaseAmount: Double,
         baseCurrency: Currency,
-        plannedLocalAmount: Double? = nil,
-        actualLocalAmount: Double? = nil,
+        budgetLocationAmount: Double? = nil,
+        expensesLocationAmount: Double? = nil,
         locationCurrency: Currency? = nil
     ) {
         self.badgeProvider = badgeProvider
         self.dateRangeProvider = dateRangeProvider
-        self.plannedBaseAmount = plannedBaseAmount
-        self.actualBaseAmount = actualBaseAmount
+        self.budgetBaseAmount = budgetBaseAmount
+        self.expensesBaseAmount = expensesBaseAmount
         self.baseCurrency = baseCurrency
-        self.plannedLocalAmount = plannedLocalAmount
-        self.actualLocalAmount = actualLocalAmount
+        self.budgetLocationAmount = budgetLocationAmount
+        self.expensesLocationAmount = expensesLocationAmount
         self.locationCurrency = locationCurrency
     }
 }

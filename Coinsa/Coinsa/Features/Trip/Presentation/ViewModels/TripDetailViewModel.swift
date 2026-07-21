@@ -20,21 +20,21 @@ struct TripDetailViewModel {
     }
     
     var eventHeaderData: EventSummaryData {
-        let plannedAmount = trip.calculatePlannedAmount(asBaseCurrency: true)
-        let actualAmount = trip.calculateActualAmount(asBaseCurrency: true)
+        let budgetAmount = trip.calculateBudgetAmount(asBaseCurrency: true)
+        let expensesAmount = trip.calculateExpensesAmount(asBaseCurrency: true)
         
         return EventSummaryData(
             badgeProvider: Trip.self,
             dateRangeProvider: trip,
-            plannedBaseAmount: plannedAmount,
-            actualBaseAmount: actualAmount,
+            budgetBaseAmount: budgetAmount,
+            expensesBaseAmount: expensesAmount,
             baseCurrency: trip.baseCurrency
         )
     }
 
     var eventAnalyticsData: EventCategoryAnalyticsData {
-        let baseBudget = trip.calculatePlannedAmount(asBaseCurrency: true)
-        let actualAmountByCategory = trip.calculateActualAmountByCategory(asBaseCurrency: true)
+        let baseBudget = trip.calculateBudgetAmount(asBaseCurrency: true)
+        let expensesAmountByCategory = trip.calculateExpensesAmountByCategory(asBaseCurrency: true)
 
         return EventCategoryAnalyticsData(
             dateRange: trip.range,
@@ -42,7 +42,7 @@ struct TripDetailViewModel {
             locationCurrency: nil,
             baseBudget: baseBudget,
             localBudget: nil,
-            actualAmountByCategory: slices(from: actualAmountByCategory, localValues: nil)
+            expensesAmountByCategory: slices(from: expensesAmountByCategory, localValues: nil)
         )
     }
     
@@ -104,7 +104,7 @@ struct TripDetailViewModel {
             ExpenseAnalyticsSlice(
                 category: category,
                 baseAmount: baseValues[category] ?? 0,
-                localAmount: localValues?[category]
+                locationAmount: localValues?[category]
             )
         }
     }

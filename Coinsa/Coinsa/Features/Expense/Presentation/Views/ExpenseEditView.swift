@@ -202,7 +202,7 @@ struct ExpenseEditView: View {
             }
             
             if viewModel.showsRateExpenseToBase {
-                LabeledContent(.expenseExchangeRate(localCurrencyCode: viewModel.expenseCurrency.code)) {
+                LabeledContent(.expenseExchangeRate(locationCurrencyCode: viewModel.expenseCurrency.code)) {
                     ExchangeRateInputField.standard(
                         rateExpenseToBaseInputBinding,
                         currency: viewModel.baseCurrency,
@@ -215,7 +215,7 @@ struct ExpenseEditView: View {
             }
             
             if viewModel.showsRateExpenseToLocation {
-                LabeledContent(.expenseExchangeRate(localCurrencyCode: viewModel.expenseCurrency.code)) {
+                LabeledContent(.expenseExchangeRate(locationCurrencyCode: viewModel.expenseCurrency.code)) {
                     ExchangeRateInputField.standard(
                         rateExpenseToLocationInputBinding,
                         currency: viewModel.locationCurrency,

@@ -177,7 +177,7 @@ struct TodayView: View {
         EventSummaryView(
             data: viewModel.eventSummaryData(for: location),
             showsHeader: false,
-            showsPlannedIfZero: location.hasBudget
+            showsBudgetIfZero: location.hasBudget
         )
     }
     

@@ -23,12 +23,12 @@ extension Location {
     ///   - rateMode: Режим расчета курса
     ///   - calendar: Календарь для вычислений. По умолчанию `.current`
     /// - Returns: Рекомендуемая сумма на сегодня
-    func calculatePlannedAmountForToday(
+    func calculateBudgetAmountForToday(
         in currency: CurrencyContext = .base,
         using rateMode: RateMode = .effective,
         calendar: Calendar = .utc
     ) -> Double {
-        let plannedAmount = calculatePlannedAmount(
+        let budgetAmount = calculateBudgetAmount(
             in: currency,
             asDailyAverage: false,
             using: rateMode,
@@ -36,7 +36,7 @@ extension Location {
         )
         
         if totalDays(using: calendar) == 1 {
-            return plannedAmount
+            return budgetAmount
         }
         
         let today = PlainDate.today
@@ -44,14 +44,14 @@ extension Location {
         let startRange = min(startPlainDate.startOfDay, endOfYesterday)
         let endRange = max(startRange, endOfYesterday)
         
-        let actualAmount = calculateActualAmount(
+        let expensesAmount = calculateExpensesAmount(
             in: currency,
             using: rateMode,
             withinDateRange: startRange...endRange
         )
         
         let remainingDays = remainingDays(on: today, using: calendar)
-        let difference = plannedAmount - actualAmount
+        let difference = budgetAmount - expensesAmount
         
         return remainingDays == 0 ? difference : max(0, difference / Double(remainingDays + 1))
     }
@@ -63,17 +63,17 @@ extension Location {
     ///   - rateMode: Режим расчета курса
     ///   - calendar: Календарь для вычислений. По умолчанию `.current`
     /// - Returns: Плановая сумма
-    func calculatePlannedAmount(
+    func calculateBudgetAmount(
         in currency: CurrencyContext = .base,
         asDailyAverage: Bool = false,
         using rateMode: RateMode = .effective,
         calendar: Calendar = .utc
     ) -> Double {
         let exchangeRate = exchangeRateBaseToCurrency(currency, using: rateMode)
-        let plannedAmount = budget * exchangeRate
+        let budgetAmount = budget * exchangeRate
         let totalDays = totalDays(using: calendar)
         
-        return asDailyAverage ? plannedAmount / Double(totalDays).rounded() : plannedAmount
+        return asDailyAverage ? budgetAmount / Double(totalDays).rounded() : budgetAmount
     }
     
     // MARK: - Публичные методы. Фактическая сумма
@@ -84,7 +84,7 @@ extension Location {
     ///   - rateMode: Режим расчета курса
     ///   - targetRange: Опциональный диапазон дат для фильтрации
     /// - Returns: Фактическая сумма
-    func calculateActualAmount(
+    func calculateExpensesAmount(
         in currency: CurrencyContext = .base,
         using rateMode: RateMode = .effective,
         withinDateRange targetRange: ClosedRange<Date>? = nil
@@ -105,7 +105,7 @@ extension Location {
     ///   - rateMode: Режим расчета курса
     ///   - targetRange: Опциональный диапазон дат для фильтрации
     /// - Returns: Словарь из категорий и сумм
-    func calculateActualAmountByCategory(
+    func calculateExpensesAmountByCategory(
         in currency: CurrencyContext = .base,
         using rateMode: RateMode = .effective,
         withinDateRange targetRange: ClosedRange<Date>? = nil
@@ -148,7 +148,7 @@ extension Location {
     ///   - targetRange: Целевой диапазон дат.
     ///   - calendar: Календарь для вычислений. По умолчанию `.current`.
     /// - Returns: Коэффициент пропорции (0...1).
-    private func plannedAmountRatio(
+    private func budgetAmountRatio(
         withinDateRange targetRange: ClosedRange<Date>?,
         using calendar: Calendar = .utc
     ) -> Double {

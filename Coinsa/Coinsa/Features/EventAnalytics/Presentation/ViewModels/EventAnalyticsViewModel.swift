@@ -46,33 +46,33 @@ struct EventAnalyticsViewModel {
     
     // MARK: - Хранимые свойства. Сумма в основной валюте
 
-    var actualTotalBaseAmount: Double {
-        data.actualAmountByCategory.reduce(0) { $0 + $1.baseAmount }
+    var expensesTotalBaseAmount: Double {
+        data.expensesAmountByCategory.reduce(0) { $0 + $1.baseAmount }
     }
 
-    var dailyBasePlannedAmount: Double {
+    var dailyBaseBudgetAmount: Double {
         data.baseBudget / totalDays
     }
     
-    var dailyBaseActualAmount: Double {
-        actualTotalBaseAmount / remainingDays
+    var dailyBaseExpensesAmount: Double {
+        expensesTotalBaseAmount / remainingDays
     }
     
     var baseAmountBalance: Double {
-        data.baseBudget - actualTotalBaseAmount
+        data.baseBudget - expensesTotalBaseAmount
     }
     
     // MARK: - Хранимые свойства. Сумма в локальной валюте
     
-    var actualTotalLocalAmount: Double? {
+    var expensesTotalLocationAmount: Double? {
         if locationCurrency != nil {
-            data.actualAmountByCategory.reduce(0) { $0 + ($1.localAmount ?? 0) }
+            data.expensesAmountByCategory.reduce(0) { $0 + ($1.locationAmount ?? 0) }
         } else {
             nil
         }
     }
     
-    var dailyLocalPlannedAmount: Double? {
+    var dailyLocalBudgetAmount: Double? {
         if let localBudget = data.localBudget {
             localBudget / totalDays
         } else {
@@ -80,17 +80,17 @@ struct EventAnalyticsViewModel {
         }
     }
     
-    var dailyLocalActualAmount: Double? {
-        if let actualTotalLocalAmount {
-            actualTotalLocalAmount / remainingDays
+    var dailyLocalExpensesAmount: Double? {
+        if let expensesTotalLocationAmount {
+            expensesTotalLocationAmount / remainingDays
         } else {
             nil
         }
     }
     
-    var localAmountBalance: Double? {
-        if let localBudget = data.localBudget, let actualTotalLocalAmount {
-            localBudget - actualTotalLocalAmount
+    var locationAmountBalance: Double? {
+        if let localBudget = data.localBudget, let expensesTotalLocationAmount {
+            localBudget - expensesTotalLocationAmount
         } else {
             nil
         }
@@ -100,11 +100,11 @@ struct EventAnalyticsViewModel {
     
     var eventSummaryData: EventSummaryData {
         EventSummaryData(
-            plannedBaseAmount: data.baseBudget,
-            actualBaseAmount: actualTotalBaseAmount,
+            budgetBaseAmount: data.baseBudget,
+            expensesBaseAmount: expensesTotalBaseAmount,
             baseCurrency: baseCurrency,
-            plannedLocalAmount: data.localBudget,
-            actualLocalAmount: actualTotalLocalAmount,
+            budgetLocationAmount: data.localBudget,
+            expensesLocationAmount: expensesTotalLocationAmount,
             locationCurrency: locationCurrency
         )
     }
@@ -138,9 +138,9 @@ struct EventAnalyticsViewModel {
 
         switch metric {
         case .summary:
-            slices = data.actualAmountByCategory /// Замениить
+            slices = data.expensesAmountByCategory /// Замениить
         case .actual:
-            slices = data.actualAmountByCategory
+            slices = data.expensesAmountByCategory
         }
 
         return slices.contains { $0.baseAmount > 0 } ? slices : []

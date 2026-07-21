@@ -45,7 +45,7 @@ struct LocationEditView: View {
     private var budgetTotalValue: Double {
         switch inputCurrency {
         case .base: viewModel.budgetBaseAmount
-        case .location, .expense: viewModel.budgetLocalAmount
+        case .location, .expense: viewModel.budgetLocationAmount
         }
     }
     
@@ -194,7 +194,7 @@ struct LocationEditView: View {
     private var exchangeRateSection: some View {
         if !viewModel.isHomeLocation {
             Section {
-                LabeledContent(.locationExchangeRate(localCurrencyCode: viewModel.locationCurrency.code)) {
+                LabeledContent(.locationExchangeRate(locationCurrencyCode: viewModel.locationCurrency.code)) {
                     ExchangeRateInputField.standard(
                         rateInputBinding,
                         currency: viewModel.baseCurrency,
@@ -289,7 +289,7 @@ struct LocationEditView: View {
         Binding(
             get: { viewModel.locationCurrency },
             set: { newCurrency in
-                viewModel.updateLocalCurrency(newCurrency, currentInput: inputCurrency)
+                viewModel.updateLocationCurrency(newCurrency, currentInput: inputCurrency)
             }
         )
     }
