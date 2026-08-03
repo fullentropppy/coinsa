@@ -60,7 +60,7 @@ struct EventAnalyticsView: View {
             sharedHeaderSection
             if viewModel.hasAnalytics(for: selectedMetric) {
                 switch selectedMetric {
-                case .summary: EmptyView()
+                case .summary: summaryMainContent
                 case .actual: planActualMainContent
                 }
             } else {
@@ -82,6 +82,33 @@ struct EventAnalyticsView: View {
         Group {
             sectorMarkSection
             sectorMarkLegendSection
+        }
+    }
+    
+    private var summaryMainContent: some View {
+        Group {
+            summaryExpensesCountRow
+            if let peakTime = viewModel.peakTime {
+                summaryTimeOfDayRow(peakTime)
+            }
+            if let mostOftenCategorySummary = viewModel.mostOftenCategorySummary {
+                summaryCategoryRow(
+                    title: .analyticsSummaryMostOften,
+                    summary: mostOftenCategorySummary
+                )
+            }
+            if let biggestCostCategorySummary = viewModel.biggestCostCategorySummary {
+                summaryCategoryRow(
+                    title: .analyticsSummaryBiggestCost,
+                    summary: biggestCostCategorySummary
+                )
+            }
+            if let largestExpense = viewModel.largestExpense {
+                summaryLargestExpenseRow(largestExpense)
+            }
+            if let todayYesterdayDifference = viewModel.todayYesterdayDifference {
+                summaryTodayYesterdayDifferenceRow(todayYesterdayDifference)
+            }
         }
     }
     
@@ -130,7 +157,17 @@ struct EventAnalyticsView: View {
     private var sectorMarkLegendSection: some View {
         Section {
             ForEach(displayedSlicesSortedByAmout) { slice in
-                legendRow(for: slice)
+                if slice.baseAmount > 0 {
+                    NavigationLink {
+                        EventSubcategoryAnalyticsView(
+                            category: slice.category,
+                            data: viewModel.data,
+                            screenContextSubtitle: screenContextSubtitle
+                        )
+                    } label: {
+                        legendRow(for: slice)
+                    }
+                }
             }
         }
     }
@@ -141,6 +178,73 @@ struct EventAnalyticsView: View {
         EventSummaryView(data: viewModel.eventSummaryData)
     }
     
+    private var summaryExpensesCountRow: some View {
+        GroupHeaderView(
+            icon: Expense.primaryIcon,
+            title: .analyticsSummaryTotalExpenses,
+            itemCount: viewModel.totalExpensesCount
+        )
+        .listRowBackground(Color.clear)
+    }
+    
+    private func summaryTimeOfDayRow(_ data: EventDaySegmentAnalyticsData) -> some View {
+        Section(.analyticsSummaryPeakTime) {
+            HStack {
+                Text(data.timeOfDay.localizedResource)
+                Spacer()
+                amountStack(baseAmount: data.baseAverageAmount, locationAmount: data.locationAverageAmount)
+            }
+        }
+    }
+    
+    private func summaryCategoryRow(title: LocalizedStringResource, summary: EventCategoryAnalyticsSummary) -> some View {
+        Section(title) {
+            HStack {
+                VStack(alignment: .leading, spacing: 10) {
+                    HStack {
+                        summary.category.makeBadge()
+                        summary.subcategory.makeBadge()
+                    }
+                    HStack {
+                        CountLabel.secondarySmall(summary.categoryExpenseCount, icon: summary.category.primaryIcon)
+                        CountLabel.secondarySmall(summary.subcategoryExpenseCount, icon: summary.subcategory.primaryIcon)
+                    }
+                }
+                Spacer()
+                amountStack(baseAmount: summary.baseAmount, locationAmount: summary.locationAmount)
+            }
+        }
+    }
+    
+    private func summaryLargestExpenseRow(_ expense: Expense) -> some View {
+        Section(.analyticsSummaryLargestExpense) {
+            NavigationLink {
+                ExpenseDetailView(expense)
+            } label: {
+                ExpenseRowView(expense)
+            }
+        }
+    }
+    
+    private func summaryTodayYesterdayDifferenceRow(_ data: EventAmountDifferenceData) -> some View {
+        Section(.analyticsSummaryTrend) {
+            amountStack(baseAmount: data.baseAmount, locationAmount: data.locationAmount)
+        }
+    }
+    
+    private func amountStack(baseAmount: Double, locationAmount: Double?) -> some View {
+        VStack(alignment: .trailing, spacing: 10) {
+            if let locationCurrency = viewModel.locationCurrency,
+               locationCurrency != viewModel.baseCurrency,
+               let locationAmount {
+                AmountText.standard(locationAmount, currency: locationCurrency)
+                AmountText.secondarySmall(baseAmount, currency: viewModel.baseCurrency)
+            } else {
+                AmountText.standard(baseAmount, currency: viewModel.baseCurrency)
+            }
+        }
+    }
+
     private var actualHeaderContent: some View {
         HStack {
             EventAmountCardView(
@@ -175,21 +279,22 @@ struct EventAnalyticsView: View {
                 }
             }
             Spacer()
-            VStack(alignment: .trailing, spacing: 10) {
-                if let locationCurrency = viewModel.locationCurrency, let locationAmount = slice.locationAmount {
-                    AmountText.standard(locationAmount, currency: locationCurrency)
-                    AmountText.secondarySmall(slice.baseAmount, currency: viewModel.baseCurrency)
-                } else {
-                    AmountText.standard(slice.baseAmount, currency: viewModel.baseCurrency)
-                }
-            }
+            amountStack(baseAmount: slice.baseAmount, locationAmount: slice.locationAmount)
         }
     }
-
+    
     // MARK: - Вспомогательные методы
 
     private func shareValue(for slice: ExpenseAnalyticsSlice) -> Double {
         viewModel.shareValue(for: slice, metric: selectedMetric)
+    }
+    
+    private func locationAmount(for expense: Expense) -> Double? {
+        if viewModel.locationCurrency != nil {
+            expense.amount(in: .location)
+        } else {
+            nil
+        }
     }
 }
 
@@ -202,7 +307,11 @@ private extension EventAnalyticsView {
         forTrip: Bool = true,
         withSignificantData: Bool = true
     ) -> some View {
-        let builder = PreviewBuilder.builder().withExpenses(withSignificantData)
+        let builder = PreviewBuilder
+            .builder()
+            .withScenario(.southKorea)
+            .withExpenses(withSignificantData)
+        
         let data = builder.buildData()
         
         let screenContextSubtitle: String

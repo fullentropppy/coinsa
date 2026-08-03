@@ -988,6 +988,14 @@ private extension PreviewGenerator {
                 category: .transport,
                 subcategory: .publicTransport
             ),
+            makeExpense(to: location,
+                date: startDate.adding(days: 2, hours: 14, minutes: 41),
+                timeZoneId: previewLocation.timeZoneId,
+                baseAmount: 42900,
+                paymentMethod: .card,
+                category: .shopping,
+                subcategory: .electronics
+            ),
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 2, hours: 17, minutes: 59),

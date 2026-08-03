@@ -241,36 +241,104 @@
         }
       }
     },
-    "analytics.summary.fromTotal" : {
+    "analytics.summary.biggestCost" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "From total"
+            "value" : "Biggest cost"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "От общего"
+            "value" : "Больше всего"
           }
         }
       }
     },
-    "analytics.summary.perCategory" : {
+    "analytics.summary.largestExpense" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Per category"
+            "value" : "Largest expense"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "По категории"
+            "value" : "Самая крупная трата"
+          }
+        }
+      }
+    },
+    "analytics.summary.mostOften" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Most often"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Чаще всего"
+          }
+        }
+      }
+    },
+    "analytics.summary.peakTime" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Peak time"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Пик трат"
+          }
+        }
+      }
+    },
+    "analytics.summary.totalExpenses" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Total expenses"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Всего трат"
+          }
+        }
+      }
+    },
+    "analytics.summary.trend" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trend"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Динамика"
           }
         }
       }
@@ -1138,6 +1206,74 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Южноафриканский рэнд"
+          }
+        }
+      }
+    },
+    "daySegment.afternoon" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afternoon"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "День"
+          }
+        }
+      }
+    },
+    "daySegment.evening" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Evening"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вечер"
+          }
+        }
+      }
+    },
+    "daySegment.morning" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Morning"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Утро"
+          }
+        }
+      }
+    },
+    "daySegment.night" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Night"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ночь"
           }
         }
       }

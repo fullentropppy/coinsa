@@ -35,6 +35,7 @@ struct TripDetailViewModel {
     var eventAnalyticsData: EventCategoryAnalyticsData {
         let baseBudget = trip.calculateBudgetAmount(asBaseCurrency: true)
         let expensesAmountByCategory = trip.calculateExpensesAmountByCategory(asBaseCurrency: true)
+        let expenses = trip.locations?.flatMap { $0.expenses ?? [] } ?? []
 
         return EventCategoryAnalyticsData(
             dateRange: trip.range,
@@ -42,7 +43,8 @@ struct TripDetailViewModel {
             locationCurrency: nil,
             baseBudget: baseBudget,
             localBudget: nil,
-            expensesAmountByCategory: slices(from: expensesAmountByCategory, localValues: nil)
+            expensesAmountByCategory: slices(from: expensesAmountByCategory, localValues: nil),
+            expenses: expenses
         )
     }
     

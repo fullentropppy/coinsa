@@ -109,6 +109,107 @@ struct EventAnalyticsViewModel {
         )
     }
     
+    var totalExpensesCount: Int {
+        data.expenses.count
+    }
+    
+    var peakTime: EventDaySegmentAnalyticsData? {
+        let grouped = Dictionary(grouping: data.expenses) { expense in
+            daySegment.from(hour: expense.civilDateTime.storedDate.hour(using: .utc))
+        }
+        
+        return grouped.values
+            .compactMap { (expenses: [Expense]) -> EventDaySegmentAnalyticsData? in
+                guard let firstExpense = expenses.first else { return nil }
+                
+                let count = expenses.count
+                let baseAmount = baseAmount(for: expenses)
+                
+                return EventDaySegmentAnalyticsData(
+                    timeOfDay: daySegment.from(hour: firstExpense.civilDateTime.storedDate.hour(using: .utc)),
+                    expenseCount: count,
+                    baseAverageAmount: count > 0 ? baseAmount / Double(count) : 0,
+                    locationAverageAmount: locationAmount(for: expenses).map { $0 / Double(count) }
+                )
+            }
+            .sorted {
+                if $0.baseAverageAmount != $1.baseAverageAmount {
+                    return $0.baseAverageAmount > $1.baseAverageAmount
+                }
+                return $0.expenseCount > $1.expenseCount
+            }
+            .first
+    }
+    
+    var mostOftenCategorySummary: EventCategoryAnalyticsSummary? {
+        let categoryExpenses = Dictionary(grouping: data.expenses) { $0.category }
+            .values
+            .sorted {
+                if $0.count != $1.count {
+                    return $0.count > $1.count
+                }
+                return baseAmount(for: $0) > baseAmount(for: $1)
+            }
+            .first
+        
+        return categoryExpenses.flatMap {
+            categorySummary(for: $0) { lhs, rhs in
+                if lhs.count != rhs.count {
+                    return lhs.count > rhs.count
+                }
+                return baseAmount(for: lhs) > baseAmount(for: rhs)
+            }
+        }
+    }
+    
+    var biggestCostCategorySummary: EventCategoryAnalyticsSummary? {
+        let categoryExpenses = Dictionary(grouping: data.expenses) { $0.category }
+            .values
+            .sorted {
+                if baseAmount(for: $0) != baseAmount(for: $1) {
+                    return baseAmount(for: $0) > baseAmount(for: $1)
+                }
+                return $0.count > $1.count
+            }
+            .first
+        
+        let summary = categoryExpenses.flatMap {
+            categorySummary(for: $0) { lhs, rhs in
+                if baseAmount(for: lhs) != baseAmount(for: rhs) {
+                    return baseAmount(for: lhs) > baseAmount(for: rhs)
+                }
+                return lhs.count > rhs.count
+            }
+        }
+        
+        if let summary, let mostOftenCategorySummary, summary.hasSameTarget(as: mostOftenCategorySummary) {
+            return nil
+        }
+        
+        return summary
+    }
+    
+    var largestExpense: Expense? {
+        data.expenses.max { $0.baseAmount < $1.baseAmount }
+    }
+    
+    var todayYesterdayDifference: EventAmountDifferenceData? {
+        let today = PlainDate.today
+        let startDate = PlainDate(data.dateRange.lowerBound, using: .utc)
+        let endDate = PlainDate(data.dateRange.upperBound, using: .utc)
+        
+        guard today <= endDate, today > startDate else { return nil }
+        
+        let yesterday = today.adding(days: -1)
+        let todayExpenses = expenses(on: today)
+        let yesterdayExpenses = expenses(on: yesterday)
+        
+        return EventAmountDifferenceData(
+            baseAmount: baseAmount(for: todayExpenses) - baseAmount(for: yesterdayExpenses),
+            locationAmount: locationAmountDifference(todayExpenses: todayExpenses, yesterdayExpenses: yesterdayExpenses)
+        )
+    }
+    
     // MARK: - Публичные методы
 
     func displayedSlicesSortedByID(for metric: EventAnalyticsMetric) -> [ExpenseAnalyticsSlice] {
@@ -117,6 +218,32 @@ struct EventAnalyticsViewModel {
 
     func displayedSlicesSortedByAmount(for metric: EventAnalyticsMetric) -> [ExpenseAnalyticsSlice] {
         slices(for: metric).sorted { $0.baseAmount > $1.baseAmount }
+    }
+    
+    func displayedSubcategorySlicesSortedByAmount(for category: ExpenseCategory) -> [ExpenseSubcategoryAnalyticsSlice] {
+        let categoryExpenses = data.expenses.filter { $0.category == category }
+        let grouped = Dictionary(grouping: categoryExpenses) { $0.subcategory }
+        
+        return category.subcategories.compactMap { subcategory in
+            let expenses = grouped[subcategory] ?? []
+            let baseAmount = baseAmount(for: expenses)
+            
+            guard baseAmount > 0 else { return nil }
+            
+            return ExpenseSubcategoryAnalyticsSlice(
+                category: category,
+                subcategory: subcategory,
+                expenseCount: expenses.count,
+                baseAmount: baseAmount,
+                locationAmount: locationAmount(for: expenses)
+            )
+        }
+        .sorted {
+            if $0.baseAmount != $1.baseAmount {
+                return $0.baseAmount > $1.baseAmount
+            }
+            return $0.expenseCount > $1.expenseCount
+        }
     }
     
     func hasAnalytics(for metric: EventAnalyticsMetric) -> Bool {
@@ -128,6 +255,11 @@ struct EventAnalyticsViewModel {
 
     func shareValue(for slice: ExpenseAnalyticsSlice, metric: EventAnalyticsMetric) -> Double {
         let totalBaseAmount = displayedSlicesSortedByID(for: metric).reduce(0) { $0 + $1.baseAmount }
+        return totalBaseAmount > 0 ? slice.baseAmount / totalBaseAmount : 0
+    }
+    
+    func shareValue(for slice: ExpenseSubcategoryAnalyticsSlice, category: ExpenseCategory) -> Double {
+        let totalBaseAmount = displayedSubcategorySlicesSortedByAmount(for: category).reduce(0) { $0 + $1.baseAmount }
         return totalBaseAmount > 0 ? slice.baseAmount / totalBaseAmount : 0
     }
 
@@ -144,5 +276,55 @@ struct EventAnalyticsViewModel {
         }
 
         return slices.contains { $0.baseAmount > 0 } ? slices : []
+    }
+    
+    private func categorySummary(
+        for categoryExpenses: [Expense],
+        sortSubcategories: ([Expense], [Expense]) -> Bool
+    ) -> EventCategoryAnalyticsSummary? {
+        guard let category = categoryExpenses.first?.category else { return nil }
+        
+        let subcategoryExpenses = Dictionary(grouping: categoryExpenses) { $0.subcategory }
+            .values
+            .sorted(by: sortSubcategories)
+            .first
+        
+        guard let subcategory = subcategoryExpenses?.first?.subcategory else { return nil }
+        
+        return EventCategoryAnalyticsSummary(
+            category: category,
+            subcategory: subcategory,
+            categoryExpenseCount: categoryExpenses.count,
+            subcategoryExpenseCount: subcategoryExpenses?.count ?? 0,
+            baseAmount: baseAmount(for: categoryExpenses),
+            locationAmount: locationAmount(for: categoryExpenses)
+        )
+    }
+    
+    private func expenses(on date: PlainDate) -> [Expense] {
+        data.expenses.filter { expense in
+            PlainDate(expense.civilDateTime.storedDate, using: .utc) == date
+        }
+    }
+    
+    private func baseAmount(for expenses: [Expense]) -> Double {
+        expenses.reduce(0) { $0 + $1.baseAmount }
+    }
+    
+    private func locationAmount(for expenses: [Expense]) -> Double? {
+        if locationCurrency != nil {
+            expenses.reduce(0) { $0 + $1.amount(in: .location) }
+        } else {
+            nil
+        }
+    }
+    
+    private func locationAmountDifference(todayExpenses: [Expense], yesterdayExpenses: [Expense]) -> Double? {
+        if let todayLocationAmount = locationAmount(for: todayExpenses),
+           let yesterdayLocationAmount = locationAmount(for: yesterdayExpenses) {
+            todayLocationAmount - yesterdayLocationAmount
+        } else {
+            nil
+        }
     }
 }

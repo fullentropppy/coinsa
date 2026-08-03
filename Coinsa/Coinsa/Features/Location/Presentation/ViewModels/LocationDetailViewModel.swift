@@ -77,7 +77,8 @@ struct LocationDetailViewModel {
             locationCurrency: isHomeLocation ? nil : locationCurrency,
             baseBudget: location.budget,
             localBudget: localBudget,
-            expensesAmountByCategory: slices(from: expensesAmountByCategoryBase, localValues: expensesLocationAmountByCategory)
+            expensesAmountByCategory: slices(from: expensesAmountByCategoryBase, localValues: expensesLocationAmountByCategory),
+            expenses: location.expenses ?? []
         )
     }
     

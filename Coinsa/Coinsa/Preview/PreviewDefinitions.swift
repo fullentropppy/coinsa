@@ -132,7 +132,7 @@ enum PreviewLocation: String {
         case .kyoto: 62500
         case .osaka: 50500
         case .saintp: 13500
-        case .seoul: 74200
+        case .seoul: 115200
         case .busan: 33200
         case .istanbul: 43800
         }
