@@ -115,7 +115,7 @@ struct EventAnalyticsViewModel {
     
     var peakTime: EventDaySegmentAnalyticsData? {
         let grouped = Dictionary(grouping: data.expenses) { expense in
-            daySegment.from(hour: expense.civilDateTime.storedDate.hour(using: .utc))
+            DaySegment.from(hour: expense.civilDateTime.storedDate.hour(using: .utc))
         }
         
         return grouped.values
@@ -126,7 +126,7 @@ struct EventAnalyticsViewModel {
                 let baseAmount = baseAmount(for: expenses)
                 
                 return EventDaySegmentAnalyticsData(
-                    timeOfDay: daySegment.from(hour: firstExpense.civilDateTime.storedDate.hour(using: .utc)),
+                    timeOfDay: DaySegment.from(hour: firstExpense.civilDateTime.storedDate.hour(using: .utc)),
                     expenseCount: count,
                     baseAverageAmount: count > 0 ? baseAmount / Double(count) : 0,
                     locationAverageAmount: locationAmount(for: expenses).map { $0 / Double(count) }

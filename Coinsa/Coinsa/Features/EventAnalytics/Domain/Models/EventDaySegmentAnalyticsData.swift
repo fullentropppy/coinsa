@@ -7,7 +7,7 @@
 
 /// Сводные данные по части суток.
 struct EventDaySegmentAnalyticsData {
-    let timeOfDay: daySegment
+    let timeOfDay: DaySegment
     let expenseCount: Int
     let baseAverageAmount: Double
     let locationAverageAmount: Double?

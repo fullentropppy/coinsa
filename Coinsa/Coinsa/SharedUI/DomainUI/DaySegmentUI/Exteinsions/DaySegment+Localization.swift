@@ -1,5 +1,5 @@
 //
-//  daySegment+Localization.swift
+//  DaySegment+Localization.swift
 //  Coinsa
 //
 //  Created by Daniil Gritsenko on 03.08.2026.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension daySegment {
+extension DaySegment {
     /// Локализованное название части суток.
     var localizedResource: LocalizedStringResource {
         switch self {
