@@ -17,6 +17,7 @@ struct EventAnalyticsView: View {
     // MARK: - Состояние
 
     @State private var selectedMetric: EventAnalyticsMetric = .summary
+    @State private var categoryAmountMode: CategoryAmountMode = .total
     
     // MARK: - Хранимые свойства
 
@@ -31,6 +32,13 @@ struct EventAnalyticsView: View {
 
     private var displayedSlicesSortedByAmout: [ExpenseAnalyticsSlice] {
         viewModel.displayedSlicesSortedByAmount(for: selectedMetric)
+    }
+    
+    private var categoryAmountDivisor: Double {
+        switch categoryAmountMode {
+        case .total: 1
+        case .daily: max(viewModel.totalDays, 1)
+        }
     }
     
     // MARK: - Инициализация
@@ -61,7 +69,7 @@ struct EventAnalyticsView: View {
             if viewModel.hasAnalytics(for: selectedMetric) {
                 switch selectedMetric {
                 case .summary: summaryMainContent
-                case .actual: planActualMainContent
+                case .categories: planActualMainContent
                 }
             } else {
                 emptyAnalyticsContent
@@ -86,7 +94,7 @@ struct EventAnalyticsView: View {
     }
     
     private var summaryMainContent: some View {
-        Group {
+        Section {
             summaryExpensesCountRow
             if let peakTime = viewModel.peakTime {
                 summaryTimeOfDayRow(peakTime)
@@ -94,20 +102,19 @@ struct EventAnalyticsView: View {
             if let mostOftenCategorySummary = viewModel.mostOftenCategorySummary {
                 summaryCategoryRow(
                     title: .analyticsSummaryMostOften,
+                    icon: "repeat",
                     summary: mostOftenCategorySummary
                 )
             }
             if let biggestCostCategorySummary = viewModel.biggestCostCategorySummary {
                 summaryCategoryRow(
                     title: .analyticsSummaryBiggestCost,
+                    icon: "scalemass",
                     summary: biggestCostCategorySummary
                 )
             }
             if let largestExpense = viewModel.largestExpense {
                 summaryLargestExpenseRow(largestExpense)
-            }
-            if let todayYesterdayDifference = viewModel.todayYesterdayDifference {
-                summaryTodayYesterdayDifferenceRow(todayYesterdayDifference)
             }
         }
     }
@@ -130,7 +137,7 @@ struct EventAnalyticsView: View {
             if viewModel.hasAnalytics(for: selectedMetric) {
                 switch selectedMetric {
                 case .summary: summaryHeaderContent
-                case .actual: actualHeaderContent
+                case .categories: categoriesHeaderContent
                 }
             }
         }
@@ -156,6 +163,17 @@ struct EventAnalyticsView: View {
     @ViewBuilder
     private var sectorMarkLegendSection: some View {
         Section {
+            Picker("", selection: $categoryAmountMode) {
+                ForEach(CategoryAmountMode.allCases) { mode in
+                    Text(mode.localizedResource).tag(mode)
+                }
+            }
+            .pickerStyle(.segmented)
+            .onChange(of: categoryAmountMode) {
+                haptics.trigger(.tap)
+            }
+            .listRowSeparator(.hidden)
+            
             ForEach(displayedSlicesSortedByAmout) { slice in
                 if slice.baseAmount > 0 {
                     NavigationLink {
@@ -175,39 +193,101 @@ struct EventAnalyticsView: View {
     // MARK: - Компоненты
 
     private var summaryHeaderContent: some View {
-        EventSummaryView(data: viewModel.eventSummaryData)
+        VStack(spacing: 14) {
+            HStack {
+                EventAmountCardView(
+                    title: .amountBudget,
+                    baseAmount: viewModel.eventSummaryData.budgetBaseAmount,
+                    baseCurrency: viewModel.baseCurrency,
+                    locationAmount: viewModel.eventSummaryData.budgetLocationAmount,
+                    locationCurrency: viewModel.locationCurrency
+                )
+                EventAmountCardView(
+                    title: .amountBudgetDaily,
+                    baseAmount: viewModel.dailyBaseBudgetAmount,
+                    baseCurrency: viewModel.baseCurrency,
+                    locationAmount: viewModel.dailyLocationBudgetAmount,
+                    locationCurrency: viewModel.locationCurrency
+                )
+            }
+            HStack {
+                EventAmountCardView(
+                    title: .amountExpenses,
+                    baseAmount: viewModel.eventSummaryData.expensesBaseAmount,
+                    baseCurrency: viewModel.baseCurrency,
+                    locationAmount: viewModel.eventSummaryData.expensesLocationAmount,
+                    locationCurrency: viewModel.locationCurrency
+                )
+                EventAmountCardView(
+                    title: .amountExpensesDaily,
+                    baseAmount: viewModel.dailyBaseExpensesAmount,
+                    baseCurrency: viewModel.baseCurrency,
+                    locationAmount: viewModel.dailyLocationExpensesAmount,
+                    locationCurrency: viewModel.locationCurrency
+                )
+            }
+            EventAmountBalanceView(
+                budgetBaseAmount: viewModel.eventSummaryData.budgetBaseAmount,
+                baseAmountBalance: viewModel.baseAmountBalance,
+                baseCurrency: viewModel.baseCurrency,
+                locationAmountBalance: viewModel.locationAmountBalance,
+                locationCurrency: viewModel.locationCurrency
+            )
+        }
     }
     
     private var summaryExpensesCountRow: some View {
-        GroupHeaderView(
-            icon: Expense.primaryIcon,
-            title: .analyticsSummaryTotalExpenses,
-            itemCount: viewModel.totalExpensesCount
-        )
-        .listRowBackground(Color.clear)
+        HStack {
+            Image(systemName: Expense.primaryIcon)
+                .foregroundStyle(.secondary)
+            Text(.analyticsSummaryTotalExpenses)
+            Spacer()
+            Text(viewModel.totalExpensesCount.formatted())
+        }
     }
     
     private func summaryTimeOfDayRow(_ data: EventDaySegmentAnalyticsData) -> some View {
-        Section(.analyticsSummaryPeakTime) {
+        VStack (spacing: 14) {
             HStack {
+                Image(systemName: data.timeOfDay.primaryIcon)
+                    .foregroundStyle(.secondary)
+                Text(.analyticsSummaryPeakTime)
+                Spacer()
                 Text(data.timeOfDay.localizedResource)
+            }
+            HStack {
                 Spacer()
                 amountStack(baseAmount: data.baseAverageAmount, locationAmount: data.locationAverageAmount)
             }
         }
     }
     
-    private func summaryCategoryRow(title: LocalizedStringResource, summary: EventCategoryAnalyticsSummary) -> some View {
-        Section(title) {
+    private func summaryCategoryRow(
+        title: LocalizedStringResource,
+        icon: String,
+        summary: EventCategoryAnalyticsSummary
+    ) -> some View {
+        VStack(spacing: 14) {
+            HStack {
+                Image(systemName: icon)
+                    .foregroundStyle(.secondary)
+                Text(title)
+                Spacer()
+                Text(summary.category.localizedResource)
+            }
             HStack {
                 VStack(alignment: .leading, spacing: 10) {
                     HStack {
-                        summary.category.makeBadge()
-                        summary.subcategory.makeBadge()
+                        CountLabel.secondarySmall(summary.categoryExpenseCount, icon: summary.category.primaryIcon)
+                        Text(summary.category.localizedResource)
+                            .font(.footnote)
+                            .foregroundStyle(.secondary)
                     }
                     HStack {
-                        CountLabel.secondarySmall(summary.categoryExpenseCount, icon: summary.category.primaryIcon)
                         CountLabel.secondarySmall(summary.subcategoryExpenseCount, icon: summary.subcategory.primaryIcon)
+                        Text(summary.subcategory.localizedResource)
+                            .font(.footnote)
+                            .foregroundStyle(.secondary)
                     }
                 }
                 Spacer()
@@ -226,12 +306,6 @@ struct EventAnalyticsView: View {
         }
     }
     
-    private func summaryTodayYesterdayDifferenceRow(_ data: EventAmountDifferenceData) -> some View {
-        Section(.analyticsSummaryTrend) {
-            amountStack(baseAmount: data.baseAmount, locationAmount: data.locationAmount)
-        }
-    }
-    
     private func amountStack(baseAmount: Double, locationAmount: Double?) -> some View {
         VStack(alignment: .trailing, spacing: 10) {
             if let locationCurrency = viewModel.locationCurrency,
@@ -245,7 +319,7 @@ struct EventAnalyticsView: View {
         }
     }
 
-    private var actualHeaderContent: some View {
+    private var categoriesHeaderContent: some View {
         HStack {
             EventAmountCardView(
                 title: .amountExpenses,
@@ -256,10 +330,10 @@ struct EventAnalyticsView: View {
             )
             if viewModel.totalDays > 1 {
                 EventAmountCardView(
-                    title: .amountActualDaily,
+                    title: .amountExpensesDaily,
                     baseAmount: viewModel.dailyBaseExpensesAmount,
                     baseCurrency: viewModel.baseCurrency,
-                    locationAmount: viewModel.dailyLocalExpensesAmount,
+                    locationAmount: viewModel.dailyLocationExpensesAmount,
                     locationCurrency: viewModel.locationCurrency
                 )
             }
@@ -279,7 +353,10 @@ struct EventAnalyticsView: View {
                 }
             }
             Spacer()
-            amountStack(baseAmount: slice.baseAmount, locationAmount: slice.locationAmount)
+            amountStack(
+                baseAmount: slice.baseAmount / categoryAmountDivisor,
+                locationAmount: slice.locationAmount.map { $0 / categoryAmountDivisor }
+            )
         }
     }
     

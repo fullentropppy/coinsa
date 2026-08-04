@@ -72,7 +72,7 @@ struct EventAnalyticsViewModel {
         }
     }
     
-    var dailyLocalBudgetAmount: Double? {
+    var dailyLocationBudgetAmount: Double? {
         if let localBudget = data.localBudget {
             localBudget / totalDays
         } else {
@@ -80,7 +80,7 @@ struct EventAnalyticsViewModel {
         }
     }
     
-    var dailyLocalExpensesAmount: Double? {
+    var dailyLocationExpensesAmount: Double? {
         if let expensesTotalLocationAmount {
             expensesTotalLocationAmount / remainingDays
         } else {
@@ -193,23 +193,6 @@ struct EventAnalyticsViewModel {
         data.expenses.max { $0.baseAmount < $1.baseAmount }
     }
     
-    var todayYesterdayDifference: EventAmountDifferenceData? {
-        let today = PlainDate.today
-        let startDate = PlainDate(data.dateRange.lowerBound, using: .utc)
-        let endDate = PlainDate(data.dateRange.upperBound, using: .utc)
-        
-        guard today <= endDate, today > startDate else { return nil }
-        
-        let yesterday = today.adding(days: -1)
-        let todayExpenses = expenses(on: today)
-        let yesterdayExpenses = expenses(on: yesterday)
-        
-        return EventAmountDifferenceData(
-            baseAmount: baseAmount(for: todayExpenses) - baseAmount(for: yesterdayExpenses),
-            locationAmount: locationAmountDifference(todayExpenses: todayExpenses, yesterdayExpenses: yesterdayExpenses)
-        )
-    }
-    
     // MARK: - Публичные методы
 
     func displayedSlicesSortedByID(for metric: EventAnalyticsMetric) -> [ExpenseAnalyticsSlice] {
@@ -249,7 +232,7 @@ struct EventAnalyticsViewModel {
     func hasAnalytics(for metric: EventAnalyticsMetric) -> Bool {
         switch metric {
         case .summary: true
-        case .actual: !displayedSlicesSortedByID(for: metric).isEmpty
+        case .categories: !displayedSlicesSortedByID(for: metric).isEmpty
         }
     }
 
@@ -271,7 +254,7 @@ struct EventAnalyticsViewModel {
         switch metric {
         case .summary:
             slices = data.expensesAmountByCategory /// Замениить
-        case .actual:
+        case .categories:
             slices = data.expensesAmountByCategory
         }
 

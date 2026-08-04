@@ -12,7 +12,7 @@ extension EventAnalyticsMetric: LocalizedResourceProviding {
     var localizedResource: LocalizedStringResource {
         switch self {
         case .summary: .analyticsSummary
-        case .actual: .analyticsActual
+        case .categories: .analyticsCategories
         }
     }
 }

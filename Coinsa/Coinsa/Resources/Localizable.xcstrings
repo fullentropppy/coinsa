@@ -20,23 +20,6 @@
         }
       }
     },
-    "amount.actual.daily" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Daily actual"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Дневной факт"
-          }
-        }
-      }
-    },
     "amount.balance" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -88,6 +71,23 @@
         }
       }
     },
+    "amount.budget.daily" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Daily budget"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Бюджет на день"
+          }
+        }
+      }
+    },
     "amount.duo" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -122,6 +122,23 @@
         }
       }
     },
+    "amount.expenses.daily" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Daily expenses"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Траты в день"
+          }
+        }
+      }
+    },
     "amount.mono" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -135,23 +152,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$(baseAmountBalance)@ %2$(baseCurrencyCode)@"
-          }
-        }
-      }
-    },
-    "amount.plan.daily" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Daily plan"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Дневной план"
           }
         }
       }
@@ -173,19 +173,19 @@
         }
       }
     },
-    "analytics.actual" : {
+    "analytics.categories" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Actual"
+            "value" : "Categories"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Факт"
+            "value" : "Категории"
           }
         }
       }
@@ -207,19 +207,36 @@
         }
       }
     },
-    "analytics.plan" : {
+    "analytics.category.amount.daily" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Plan"
+            "value" : "Per day"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "План"
+            "value" : "В день"
+          }
+        }
+      }
+    },
+    "analytics.category.amount.total" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Total"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Всего"
           }
         }
       }
@@ -322,23 +339,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Всего трат"
-          }
-        }
-      }
-    },
-    "analytics.summary.trend" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Trend"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Динамика"
           }
         }
       }
