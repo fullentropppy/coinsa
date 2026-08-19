@@ -145,6 +145,10 @@ private extension DateLabel {
                 DateLabel(now, font: .footnote, color: .accent)
             }
             VStack(spacing: 20) {
+                DateLabel(yearAhead)
+                DateLabel(yearAhead, font: .footnote, color: .accent)
+            }
+            VStack(spacing: 20) {
                 DateLabel(from: now, to: weekAhead)
                 DateLabel(from: now, to: yearAhead, font: .footnote, color: .accent)
             }

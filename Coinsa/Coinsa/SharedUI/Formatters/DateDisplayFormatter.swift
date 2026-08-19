@@ -66,7 +66,7 @@ struct DateDisplayFormatter {
         if showsWeekday {
             dateTemplate = referenceDate.isSameYear(as: date, using: calendar) ? "EEEEdMMMM" : "EEEEdMMMMy"
         } else {
-            dateTemplate = referenceDate.isSameYear(as: date, using: calendar) ? "dMMMM" : "dMMMMy"
+            dateTemplate = referenceDate.isSameYear(as: date, using: calendar) ? "dMMMM" : "dMMy"
         }
         
         let formatter = DateFormatter()
