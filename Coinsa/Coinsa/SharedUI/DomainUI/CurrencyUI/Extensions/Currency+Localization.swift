@@ -37,6 +37,7 @@ extension Currency: LocalizedResourceProviding {
         case .jpy: .currencyNameJpy
         case .krw: .currencyNameKrw
         case .kzt: .currencyNameKzt
+        case .lak: .currencyNameLak
         case .mad: .currencyNameMad
         case .mop: .currencyNameMop
         case .mxn: .currencyNameMxn
@@ -51,6 +52,7 @@ extension Currency: LocalizedResourceProviding {
         case .sgd: .currencyNameSgd
         case .thb: .currencyNameThb
         case .try: .currencyNameTry
+        case .twd: .currencyNameTwd
         case .usd: .currencyNameUsd
         case .uzs: .currencyNameUzs
         case .vnd: .currencyNameVnd

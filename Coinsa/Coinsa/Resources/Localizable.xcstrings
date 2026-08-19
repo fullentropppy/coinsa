@@ -190,23 +190,6 @@
         }
       }
     },
-    "analytics.emptyState" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No Data"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Нет данных"
-          }
-        }
-      }
-    },
     "analytics.category.amount.daily" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -237,6 +220,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Всего"
+          }
+        }
+      }
+    },
+    "analytics.emptyState" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No Data"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нет данных"
           }
         }
       }
@@ -904,6 +904,23 @@
         }
       }
     },
+    "currency.name.lak" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lao Kip"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Лаосский кип"
+          }
+        }
+      }
+    },
     "currency.name.mad" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1138,6 +1155,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Турецкая лира"
+          }
+        }
+      }
+    },
+    "currency.name.twd" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New Taiwan Dollar"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нов. тайваньский доллар"
           }
         }
       }
