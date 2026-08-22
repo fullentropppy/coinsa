@@ -9,7 +9,7 @@ import SwiftUI
 
 extension Trip: TypeBadgeProviding {
     /// Стиль бейджа для поездки (иконка с акцентным цветом).
-    static var badgeStyle: BadgeView.Style {
+    static var badgeStyle: Badge.Style {
         .icon(icon: secondaryIcon, fill: accentColor)
     }
 }

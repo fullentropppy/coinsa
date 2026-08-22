@@ -65,30 +65,22 @@ struct EventSubcategoryAnalyticsView: View {
                     Image(systemName: slice.subcategory.secondaryIcon)
                         .imageScale(.small)
                         .foregroundStyle(slice.subcategory.accentColor)
-                        .frame(width: 18)
+                        .frame(width: 20)
                     Text(shareValue(for: slice).percentFormat())
                         .font(.footnote.monospacedDigit())
                         .foregroundStyle(.secondary)
                 }
             }
             Spacer()
-            amountStack(baseAmount: slice.baseAmount, locationAmount: slice.locationAmount)
+            AmountStack(
+                baseAmount: slice.baseAmount,
+                baseCurrency: viewModel.baseCurrency,
+                expenseAmount: slice.locationAmount,
+                expenseCurrency: viewModel.locationCurrency
+            )
         }
     }
-    
-    private func amountStack(baseAmount: Double, locationAmount: Double?) -> some View {
-        VStack(alignment: .trailing, spacing: 10) {
-            if let locationCurrency = viewModel.locationCurrency,
-               locationCurrency != viewModel.baseCurrency,
-               let locationAmount {
-                AmountText.standard(locationAmount, currency: locationCurrency)
-                AmountText.secondarySmall(baseAmount, currency: viewModel.baseCurrency)
-            } else {
-                AmountText.standard(baseAmount, currency: viewModel.baseCurrency)
-            }
-        }
-    }
-    
+
     // MARK: - Вспомогательные методы
     
     private func shareValue(for slice: ExpenseSubcategoryAnalyticsSlice) -> Double {

@@ -26,22 +26,23 @@ struct EventAnalyticsViewModel {
     // MARK: - Хранимые свойства. Дни
     
     var startDate: Date {
-        data.dateRange.lowerBound.startOfDay(using: .utc)
+        data.dateRangeProvider.startPlainDate.startOfDay
     }
     
     var endDate: Date {
-        data.dateRange.upperBound.endOfDay(using: .utc)
+        data.dateRangeProvider.endPlainDate.endOfDay
     }
     
-    var totalDays: Double {
-        let daysInt = endDate.days(from: startDate, using: .utc) + 1
-        return Double(daysInt).rounded()
+    var totalDays: Int {
+        data.dateRangeProvider.totalDays
     }
     
-    var remainingDays: Double {
-        let today = PlainDate.today.endOfDay
-        let daysInt = min(today, endDate).days(from: startDate, using: .utc) + 1
-        return Double(daysInt).rounded()
+    var remainingDays: Int {
+        data.dateRangeProvider.remainingDays
+    }
+
+    private var totalDayDivisor: Double {
+        max(Double(totalDays), 1)
     }
     
     // MARK: - Хранимые свойства. Сумма в основной валюте
@@ -51,11 +52,11 @@ struct EventAnalyticsViewModel {
     }
 
     var dailyBaseBudgetAmount: Double {
-        data.baseBudget / totalDays
+        data.baseBudget / totalDayDivisor
     }
     
     var dailyBaseExpensesAmount: Double {
-        expensesTotalBaseAmount / remainingDays
+        expensesTotalBaseAmount / totalDayDivisor
     }
     
     var baseAmountBalance: Double {
@@ -74,7 +75,7 @@ struct EventAnalyticsViewModel {
     
     var dailyLocationBudgetAmount: Double? {
         if let localBudget = data.localBudget {
-            localBudget / totalDays
+            localBudget / totalDayDivisor
         } else {
             nil
         }
@@ -82,7 +83,7 @@ struct EventAnalyticsViewModel {
     
     var dailyLocationExpensesAmount: Double? {
         if let expensesTotalLocationAmount {
-            expensesTotalLocationAmount / remainingDays
+            expensesTotalLocationAmount / totalDayDivisor
         } else {
             nil
         }
@@ -123,70 +124,19 @@ struct EventAnalyticsViewModel {
                 guard let firstExpense = expenses.first else { return nil }
                 
                 let count = expenses.count
-                let baseAmount = baseAmount(for: expenses)
                 
                 return EventDaySegmentAnalyticsData(
                     timeOfDay: DaySegment.from(hour: firstExpense.civilDateTime.storedDate.hour(using: .utc)),
-                    expenseCount: count,
-                    baseAverageAmount: count > 0 ? baseAmount / Double(count) : 0,
-                    locationAverageAmount: locationAmount(for: expenses).map { $0 / Double(count) }
+                    expenseCount: count
                 )
             }
             .sorted {
-                if $0.baseAverageAmount != $1.baseAverageAmount {
-                    return $0.baseAverageAmount > $1.baseAverageAmount
+                if $0.expenseCount != $1.expenseCount {
+                    return $0.expenseCount > $1.expenseCount
                 }
                 return $0.expenseCount > $1.expenseCount
             }
             .first
-    }
-    
-    var mostOftenCategorySummary: EventCategoryAnalyticsSummary? {
-        let categoryExpenses = Dictionary(grouping: data.expenses) { $0.category }
-            .values
-            .sorted {
-                if $0.count != $1.count {
-                    return $0.count > $1.count
-                }
-                return baseAmount(for: $0) > baseAmount(for: $1)
-            }
-            .first
-        
-        return categoryExpenses.flatMap {
-            categorySummary(for: $0) { lhs, rhs in
-                if lhs.count != rhs.count {
-                    return lhs.count > rhs.count
-                }
-                return baseAmount(for: lhs) > baseAmount(for: rhs)
-            }
-        }
-    }
-    
-    var biggestCostCategorySummary: EventCategoryAnalyticsSummary? {
-        let categoryExpenses = Dictionary(grouping: data.expenses) { $0.category }
-            .values
-            .sorted {
-                if baseAmount(for: $0) != baseAmount(for: $1) {
-                    return baseAmount(for: $0) > baseAmount(for: $1)
-                }
-                return $0.count > $1.count
-            }
-            .first
-        
-        let summary = categoryExpenses.flatMap {
-            categorySummary(for: $0) { lhs, rhs in
-                if baseAmount(for: lhs) != baseAmount(for: rhs) {
-                    return baseAmount(for: lhs) > baseAmount(for: rhs)
-                }
-                return lhs.count > rhs.count
-            }
-        }
-        
-        if let summary, let mostOftenCategorySummary, summary.hasSameTarget(as: mostOftenCategorySummary) {
-            return nil
-        }
-        
-        return summary
     }
     
     var largestExpense: Expense? {

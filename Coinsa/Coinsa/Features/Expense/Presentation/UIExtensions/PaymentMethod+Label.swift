@@ -9,7 +9,7 @@ import Foundation
 
 extension PaymentMethod: LabelProviding {
     /// Стиль метки для способа оплаты (иконка с фиксированной шириной).
-    var labelSyle: LabelView.Style {
+    var labelSyle: ItemLabel.Style {
         .withIcon(title: localizedResource, icon: primaryIcon, iconWidth: 28)
     }
 }

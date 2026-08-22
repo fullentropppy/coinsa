@@ -1,5 +1,5 @@
 //
-//  ThirdPartyLink.swift
+//  LinkView.swift
 //  Coinsa
 //
 //  Created by Daniil Gritsenko on 11.04.2026.

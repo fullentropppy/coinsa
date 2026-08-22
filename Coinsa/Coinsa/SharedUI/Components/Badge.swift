@@ -1,5 +1,5 @@
 //
-//  BadgeView.swift
+//  Badge.swift
 //  Coinsa
 //
 //  Created by Daniil Gritsenko on 30.03.2026.
@@ -8,7 +8,7 @@
 import SwiftUI
 
 /// Представление бейджа с иконкой, текстом или комбинированным содержимым.
-struct BadgeView: View {
+struct Badge: View {
     // MARK: - Вложенные типы
     
     /// Стили бейджа, определяющие его содержимое и цвет.
@@ -101,7 +101,7 @@ struct BadgeView: View {
 
 // MARK: - Превью
 
-private extension BadgeView {
+private extension Badge {
     static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
         VStack(spacing: 40) {
             VStack(spacing: 20) {
@@ -126,9 +126,9 @@ private extension BadgeView {
 }
 
 #Preview("Light - RU") {
-    BadgeView.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
+    Badge.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
 }
 
 #Preview("Dark - EN") {
-    BadgeView.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
+    Badge.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
 }

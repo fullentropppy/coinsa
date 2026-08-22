@@ -72,7 +72,7 @@ struct LocationDetailViewModel {
         let localBudget = isHomeLocation ? nil : location.calculateBudgetAmount(in: CurrencyContext.location)
 
         return EventCategoryAnalyticsData(
-            dateRange: location.range,
+            dateRangeProvider: location,
             baseCurrency: baseCurrency,
             locationCurrency: isHomeLocation ? nil : locationCurrency,
             baseBudget: location.budget,

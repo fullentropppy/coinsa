@@ -145,7 +145,7 @@ struct TodayView: View {
     private var todayExpensesSection: some View {
         Group {
             if viewModel.todayExpenses.isEmpty {
-                GroupHeaderView(icon: Expense.primaryIcon, title: .todayNoExpenses)
+                GroupHeader(icon: Expense.primaryIcon, title: .todayNoExpenses)
                     .listRowBackground(Color.clear)
             } else {
                 todayExpenseListContent

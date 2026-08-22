@@ -14,12 +14,12 @@ protocol ValueBadgeProviding: ValueVisualRepresentable {
     // MARK: - Свойства
     
     /// Стиль бейджа для отображения.
-    var badgeStyle: BadgeView.Style { get }
+    var badgeStyle: Badge.Style { get }
     
     // MARK: - Методы
     
     /// Создает представление бейджа.
-    func makeBadge() -> BadgeView
+    func makeBadge() -> Badge
     
     /// Создает представление точки.
     func makeDot() -> DotView
@@ -29,8 +29,8 @@ protocol ValueBadgeProviding: ValueVisualRepresentable {
 
 extension ValueBadgeProviding {
     /// Создает бейдж на основе свойства `badgeStyle`.
-    func makeBadge() -> BadgeView {
-        BadgeView(style: badgeStyle)
+    func makeBadge() -> Badge {
+        Badge(style: badgeStyle)
     }
     
     /// Создает точку с акцентным цветом типа.

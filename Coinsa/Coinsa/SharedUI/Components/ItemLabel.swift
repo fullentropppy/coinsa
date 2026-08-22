@@ -1,5 +1,5 @@
 //
-//  LabelView.swift
+//  ItemLabel.swift
 //  Coinsa
 //
 //  Created by Daniil Gritsenko on 15.04.2026.
@@ -8,7 +8,7 @@
 import SwiftUI
 
 /// Кастомизированное представление метки.
-struct LabelView: View {
+struct ItemLabel: View {
     // MARK: - Вложенные типы
     
     /// Стили отображения метки.
@@ -67,7 +67,7 @@ struct LabelView: View {
 
 // MARK: - Превью
 
-private extension LabelView {
+private extension ItemLabel {
     static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
         VStack(spacing: 40) {
             VStack(alignment: .leading, spacing: 20) {
@@ -87,9 +87,9 @@ private extension LabelView {
 }
 
 #Preview("Light - RU") {
-    LabelView.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
+    ItemLabel.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
 }
 
 #Preview("Dark - EN") {
-    LabelView.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
+    ItemLabel.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
 }

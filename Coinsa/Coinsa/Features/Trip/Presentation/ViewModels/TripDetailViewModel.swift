@@ -38,7 +38,7 @@ struct TripDetailViewModel {
         let expenses = trip.locations?.flatMap { $0.expenses ?? [] } ?? []
 
         return EventCategoryAnalyticsData(
-            dateRange: trip.range,
+            dateRangeProvider: trip,
             baseCurrency: trip.baseCurrency,
             locationCurrency: nil,
             baseBudget: baseBudget,

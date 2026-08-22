@@ -137,7 +137,7 @@ struct TripDetailView: View {
     
     private var locationListContent: some View {
         Group {
-            GroupHeaderView(
+            GroupHeader(
                 icon: Location.primaryIcon,
                 title: .tripLocations,
                 itemCount: trip.locationsCount  

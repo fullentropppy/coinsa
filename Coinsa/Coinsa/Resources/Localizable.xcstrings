@@ -258,23 +258,6 @@
         }
       }
     },
-    "analytics.summary.biggestCost" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Biggest cost"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Больше всего"
-          }
-        }
-      }
-    },
     "analytics.summary.expenses" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -305,23 +288,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Самая крупная"
-          }
-        }
-      }
-    },
-    "analytics.summary.mostOften" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Most often"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Чаще всего"
           }
         }
       }

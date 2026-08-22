@@ -14,20 +14,20 @@ protocol LabelProviding {
     // MARK: - Свойства
     
     /// Стиль метки для отображения.
-    var labelSyle: LabelView.Style { get }
+    var labelSyle: ItemLabel.Style { get }
     
     // MARK: - Методы
     
     /// Создает представление метки.
     /// - Returns: Настроенное представление `LabelView`.
-    func makeLabel() -> LabelView
+    func makeLabel() -> ItemLabel
 }
 
 // MARK: - Стандартная реализация
 
 extension LabelProviding {
     /// Создает метку на основе свойства `labelSyle`.
-    func makeLabel() -> LabelView {
-        LabelView(style: labelSyle)
+    func makeLabel() -> ItemLabel {
+        ItemLabel(style: labelSyle)
     }
 }

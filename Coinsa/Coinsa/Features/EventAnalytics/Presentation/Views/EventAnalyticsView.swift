@@ -37,7 +37,7 @@ struct EventAnalyticsView: View {
     private var categoryAmountDivisor: Double {
         switch categoryAmountMode {
         case .total: 1
-        case .daily: max(viewModel.totalDays, 1)
+        case .daily: max(Double(viewModel.totalDays), 1)
         }
     }
 
@@ -90,20 +90,6 @@ struct EventAnalyticsView: View {
             summaryExpensesCountRow
             if let peakTime = viewModel.peakTime {
                 summaryTimeOfDayRow(peakTime)
-            }
-            if let mostOftenCategorySummary = viewModel.mostOftenCategorySummary {
-                summaryCategoryRow(
-                    title: .analyticsSummaryMostOften,
-                    icon: "repeat",
-                    summary: mostOftenCategorySummary
-                )
-            }
-            if let biggestCostCategorySummary = viewModel.biggestCostCategorySummary {
-                summaryCategoryRow(
-                    title: .analyticsSummaryBiggestCost,
-                    icon: "scalemass",
-                    summary: biggestCostCategorySummary
-                )
             }
             if let largestExpense = viewModel.largestExpense {
                 summaryLargestExpenseRow(largestExpense)
@@ -258,24 +244,34 @@ struct EventAnalyticsView: View {
                     DateLabel(expense.civilDateTime)
                 }
                 HStack {
-                    VStack(alignment: .center, spacing: 10) {
-                        Image(systemName: expense.category.primaryIcon)
-                            .foregroundStyle(.secondary)
-                            .imageScale(.small)
-                        Image(systemName: expense.subcategory.primaryIcon)
-                            .foregroundStyle(.secondary)
-                            .imageScale(.small)
-                    }
                     VStack(alignment: .leading, spacing: 10) {
-                        Text(expense.category.localizedResource)
-                            .font(.footnote)
-                            .foregroundStyle(.secondary)
-                        Text(expense.subcategory.localizedResource)
-                            .font(.footnote)
-                            .foregroundStyle(.secondary)
+                        HStack {
+                            Image(systemName: expense.category.primaryIcon)
+                                .imageScale(.small)
+                                .frame(width: 20)
+                            
+                            Text(expense.category.localizedResource)
+                                .font(.footnote)
+                        }
+                        HStack {
+                            Image(systemName: expense.subcategory.primaryIcon)
+                                .imageScale(.small)
+                                .frame(width: 20)
+                            
+                            Text(expense.subcategory.localizedResource)
+                                .font(.footnote)
+                        }
                     }
+                    .foregroundStyle(.secondary)
+                    
                     Spacer()
-                    amountStack(baseAmount: expense.baseAmount, locationAmount: expense.amount(in: .location))
+                    
+                    AmountStack(
+                        baseAmount: expense.baseAmount,
+                        baseCurrency: viewModel.baseCurrency,
+                        expenseAmount: expense.amount(in: .location),
+                        expenseCurrency: expense.expenseCurrency
+                    )
                 }
             }
         }
@@ -289,43 +285,10 @@ struct EventAnalyticsView: View {
         HStack {
             Image(systemName: icon)
                 .foregroundStyle(.secondary)
+                .frame(width: 20)
             Text(title)
             Spacer()
             content()
-        }
-    }
-    
-    private func summaryCategoryRow(
-        title: LocalizedStringResource,
-        icon: String,
-        summary: EventCategoryAnalyticsSummary
-    ) -> some View {
-        VStack(spacing: 14) {
-            summaryRowHeader(icon: icon, title: title) {
-                Text(summary.category.localizedResource)
-            }
-            HStack {
-                VStack(alignment: .center, spacing: 10) {
-                    CountLabel.secondarySmall(
-                        summary.categoryExpenseCount,
-                        icon: summary.category.primaryIcon
-                    )
-                    CountLabel.secondarySmall(
-                        summary.subcategoryExpenseCount,
-                        icon: summary.subcategory.primaryIcon
-                    )
-                }
-                VStack(alignment: .leading, spacing: 10) {
-                    Text(summary.category.localizedResource)
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
-                    Text(summary.subcategory.localizedResource)
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
-                }
-                Spacer()
-                amountStack(baseAmount: summary.baseAmount, locationAmount: summary.locationAmount)
-            }
         }
     }
     
@@ -362,25 +325,12 @@ struct EventAnalyticsView: View {
                 }
             }
             Spacer()
-            amountStack(
+            AmountStack(
                 baseAmount: slice.baseAmount / categoryAmountDivisor,
-                locationAmount: slice.locationAmount.map { $0 / categoryAmountDivisor }
+                baseCurrency: viewModel.baseCurrency,
+                expenseAmount: slice.locationAmount.map { $0 / categoryAmountDivisor },
+                expenseCurrency: viewModel.locationCurrency
             )
-        }
-    }
-
-    private func amountStack(baseAmount: Double, locationAmount: Double?) -> some View {
-        VStack(alignment: .trailing, spacing: 10) {
-            if let locationCurrency = viewModel.locationCurrency,
-                locationCurrency != viewModel.baseCurrency,
-                let locationAmount
-            {
-                AmountText.standard(locationAmount, currency: locationCurrency)
-                AmountText.secondarySmall(baseAmount, currency: viewModel.baseCurrency)
-            } else {
-                Spacer()
-                AmountText.standard(baseAmount, currency: viewModel.baseCurrency)
-            }
         }
     }
     
@@ -388,10 +338,6 @@ struct EventAnalyticsView: View {
 
     private func shareValue(for slice: ExpenseAnalyticsSlice) -> Double {
         viewModel.shareValue(for: slice, metric: selectedMetric)
-    }
-
-    private func locationAmount(for expense: Expense) -> Double? {
-        viewModel.locationCurrency != nil ? expense.amount(in: .location) : nil
     }
 }
 

@@ -9,6 +9,4 @@
 struct EventDaySegmentAnalyticsData {
     let timeOfDay: DaySegment
     let expenseCount: Int
-    let baseAverageAmount: Double
-    let locationAverageAmount: Double?
 }

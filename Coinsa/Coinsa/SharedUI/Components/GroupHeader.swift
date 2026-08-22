@@ -1,5 +1,5 @@
 //
-//  GroupHeaderView.swift
+//  GroupHeader.swift
 //  Coinsa
 //
 //  Created by Daniil Gritsenko on 10.04.2026.
@@ -8,7 +8,7 @@
 import SwiftUI
 
 /// Заголовок для секции группы, отображающий иконку, основной текст и опционально подтекст.
-struct GroupHeaderView: View {
+struct GroupHeader: View {
     // MARK: - Свойства
     
     let icon: String
@@ -56,9 +56,9 @@ struct GroupHeaderView: View {
 
 // MARK: - Превью
 
-private extension GroupHeaderView {
+private extension GroupHeader {
     static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
-        GroupHeaderView(
+        GroupHeader(
             icon: Location.primaryIcon,
             title: .tripLocations,
             itemCount: 4
@@ -69,9 +69,9 @@ private extension GroupHeaderView {
 }
 
 #Preview("Light - RU") {
-    GroupHeaderView.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
+    GroupHeader.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
 }
 
 #Preview("Dark - EN") {
-    GroupHeaderView.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
+    GroupHeader.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
 }
