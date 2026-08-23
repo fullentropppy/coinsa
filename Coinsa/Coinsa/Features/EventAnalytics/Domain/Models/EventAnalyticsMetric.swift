@@ -10,6 +10,7 @@ enum EventAnalyticsMetric: String, CaseIterable, Identifiable {
     // MARK: - Значения
     
     case summary
+    case days
     case categories
 
     // MARK: - Основные свойства

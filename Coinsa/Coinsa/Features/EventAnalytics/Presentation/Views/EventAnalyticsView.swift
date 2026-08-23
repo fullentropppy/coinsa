@@ -5,7 +5,6 @@
 //  Created by Daniil Gritsenko on 24.04.2026.
 //
 
-import Charts
 import SwiftUI
 
 /// Экран аналитики события с сводными данными и графиками.
@@ -17,29 +16,11 @@ struct EventAnalyticsView: View {
     // MARK: - Состояние
 
     @State private var selectedMetric: EventAnalyticsMetric = .summary
-    @State private var categoryAmountMode: CategoryAmountMode = .total
 
     // MARK: - Хранимые свойства
 
     private let viewModel: EventAnalyticsViewModel
     private let screenContextSubtitle: String
-
-    // MARK: - Вычисляемые свойства
-
-    private var displayedSlicesSortedByID: [ExpenseAnalyticsSlice] {
-        viewModel.displayedSlicesSortedByID(for: selectedMetric)
-    }
-
-    private var displayedSlicesSortedByAmout: [ExpenseAnalyticsSlice] {
-        viewModel.displayedSlicesSortedByAmount(for: selectedMetric)
-    }
-
-    private var categoryAmountDivisor: Double {
-        switch categoryAmountMode {
-        case .total: 1
-        case .daily: max(Double(viewModel.totalDays), 1)
-        }
-    }
 
     // MARK: - Инициализация
 
@@ -55,7 +36,7 @@ struct EventAnalyticsView: View {
     // MARK: - Тело View
 
     var body: some View {
-        eventAnalyticsForm
+        eventAnalyticsList
             .navigationTitle(.analytics)
             .navigationSubtitle(screenContextSubtitle)
             .navigationBarTitleDisplayMode(.inline)
@@ -63,17 +44,29 @@ struct EventAnalyticsView: View {
 
     // MARK: - Основной контент
 
-    private var eventAnalyticsForm: some View {
+    private var eventAnalyticsList: some View {
         List {
-            sharedHeaderSection
+            metricPickerSection
             if viewModel.hasAnalytics(for: selectedMetric) {
-                switch selectedMetric {
-                case .summary: summaryContent
-                case .categories: categoriesContent
-                }
+                selectedMetricContent
             } else {
                 emptyAnalyticsContent
             }
+        }
+    }
+
+    @ViewBuilder
+    private var selectedMetricContent: some View {
+        switch selectedMetric {
+        case .summary:
+            EventAnalyticsSummaryView(viewModel: viewModel)
+        case .days:
+            EventAnalyticsDaysView(viewModel: viewModel)
+        case .categories:
+            EventAnalyticsCategoriesView(
+                viewModel: viewModel,
+                screenContextSubtitle: screenContextSubtitle
+            )
         }
     }
 
@@ -85,28 +78,9 @@ struct EventAnalyticsView: View {
         .listRowBackground(Color.clear)
     }
 
-    private var summaryContent: some View {
-        Section(.analyticsSummaryExpenses) {
-            summaryExpensesCountRow
-            if let peakTime = viewModel.peakTime {
-                summaryTimeOfDayRow(peakTime)
-            }
-            if let largestExpense = viewModel.largestExpense {
-                summaryLargestExpenseRow(largestExpense)
-            }
-        }
-    }
-
-    private var categoriesContent: some View {
-        Group {
-            categoriesChartSection
-            categoriesChartLegend
-        }
-    }
-    
     // MARK: - Секции
 
-    private var sharedHeaderSection: some View {
+    private var metricPickerSection: some View {
         Section {
             Picker("", selection: $selectedMetric) {
                 ForEach(EventAnalyticsMetric.allCases) { metric in
@@ -118,226 +92,7 @@ struct EventAnalyticsView: View {
                 haptics.trigger(.tap)
             }
             .listRowSeparator(.hidden)
-
-            if viewModel.hasAnalytics(for: selectedMetric) {
-                switch selectedMetric {
-                case .summary: summaryHeaderContent
-                case .categories: categoriesHeaderContent
-                }
-            }
         }
-    }
-
-    private var categoriesChartSection: some View {
-        Section {
-            Chart(displayedSlicesSortedByID, id: \.category.id) { slice in
-                SectorMark(
-                    angle: .value("", slice.baseAmount),
-                    innerRadius: 68,
-                    angularInset: 1,
-                )
-                .cornerRadius(6)
-                .foregroundStyle(slice.category.accentColor.gradient)
-            }
-            .frame(height: 220)
-            .animation(.spring(response: 0.2, dampingFraction: 0.6), value: selectedMetric)
-        }
-        .listRowBackground(Color.clear)
-    }
-
-    @ViewBuilder
-    private var categoriesChartLegend: some View {
-        Section {
-            if viewModel.totalDays > 1 {
-                Picker("", selection: $categoryAmountMode) {
-                    ForEach(CategoryAmountMode.allCases) { mode in
-                        Text(mode.localizedResource).tag(mode)
-                    }
-                }
-                .pickerStyle(.segmented)
-                .onChange(of: categoryAmountMode) {
-                    haptics.trigger(.tap)
-                }
-                .listRowSeparator(.hidden)
-            }
-            
-            ForEach(displayedSlicesSortedByAmout) { slice in
-                if slice.baseAmount > 0 {
-                    NavigationLink {
-                        EventSubcategoryAnalyticsView(
-                            category: slice.category,
-                            data: viewModel.data,
-                            screenContextSubtitle: screenContextSubtitle
-                        )
-                    } label: {
-                        categoriesChartLegendRow(for: slice)
-                    }
-                }
-            }
-        }
-    }
-
-    // MARK: - Компоненты
-
-    private var summaryHeaderContent: some View {
-        VStack(spacing: 14) {
-            HStack {
-                EventAmountCardView(
-                    title: .amountBudget,
-                    baseAmount: viewModel.eventSummaryData.budgetBaseAmount,
-                    baseCurrency: viewModel.baseCurrency,
-                    locationAmount: viewModel.eventSummaryData.budgetLocationAmount,
-                    locationCurrency: viewModel.locationCurrency
-                )
-                EventAmountCardView(
-                    title: .amountBudgetDaily,
-                    baseAmount: viewModel.dailyBaseBudgetAmount,
-                    baseCurrency: viewModel.baseCurrency,
-                    locationAmount: viewModel.dailyLocationBudgetAmount,
-                    locationCurrency: viewModel.locationCurrency
-                )
-            }
-            HStack {
-                EventAmountCardView(
-                    title: .amountExpenses,
-                    baseAmount: viewModel.eventSummaryData.expensesBaseAmount,
-                    baseCurrency: viewModel.baseCurrency,
-                    locationAmount: viewModel.eventSummaryData.expensesLocationAmount,
-                    locationCurrency: viewModel.locationCurrency
-                )
-                EventAmountCardView(
-                    title: .amountExpensesDaily,
-                    baseAmount: viewModel.dailyBaseExpensesAmount,
-                    baseCurrency: viewModel.baseCurrency,
-                    locationAmount: viewModel.dailyLocationExpensesAmount,
-                    locationCurrency: viewModel.locationCurrency
-                )
-            }
-            EventAmountBalanceView(
-                budgetBaseAmount: viewModel.eventSummaryData.budgetBaseAmount,
-                baseAmountBalance: viewModel.baseAmountBalance,
-                baseCurrency: viewModel.baseCurrency,
-                locationAmountBalance: viewModel.locationAmountBalance,
-                locationCurrency: viewModel.locationCurrency
-            )
-        }
-    }
-
-    private var summaryExpensesCountRow: some View {
-        summaryRowHeader(icon: Expense.primaryIcon, title: .analyticsSummaryTotalExpenses) {
-            Text(viewModel.totalExpensesCount.formatted())
-        }
-    }
-
-    private func summaryTimeOfDayRow(_ data: EventDaySegmentAnalyticsData) -> some View {
-        summaryRowHeader(icon: data.timeOfDay.primaryIcon, title: .analyticsSummaryPeakTime) {
-            Text(data.timeOfDay.localizedResource)
-        }
-    }
-
-    private func summaryLargestExpenseRow(_ expense: Expense) -> some View {
-        NavigationLink {
-            ExpenseDetailView(expense)
-        } label: {
-            VStack(spacing: 14) {
-                summaryRowHeader(icon: "dollarsign", title: .analyticsSummaryLargestExpense) {
-                    DateLabel(expense.civilDateTime)
-                }
-                HStack {
-                    VStack(alignment: .leading, spacing: 10) {
-                        HStack {
-                            Image(systemName: expense.category.primaryIcon)
-                                .imageScale(.small)
-                                .frame(width: 20)
-                            
-                            Text(expense.category.localizedResource)
-                                .font(.footnote)
-                        }
-                        HStack {
-                            Image(systemName: expense.subcategory.primaryIcon)
-                                .imageScale(.small)
-                                .frame(width: 20)
-                            
-                            Text(expense.subcategory.localizedResource)
-                                .font(.footnote)
-                        }
-                    }
-                    .foregroundStyle(.secondary)
-                    
-                    Spacer()
-                    
-                    AmountStack(
-                        baseAmount: expense.baseAmount,
-                        baseCurrency: viewModel.baseCurrency,
-                        expenseAmount: expense.amount(in: .location),
-                        expenseCurrency: expense.expenseCurrency
-                    )
-                }
-            }
-        }
-    }
-
-    private func summaryRowHeader<Content: View>(
-        icon: String,
-        title: LocalizedStringResource,
-        @ViewBuilder content: () -> Content
-    ) -> some View {
-        HStack {
-            Image(systemName: icon)
-                .foregroundStyle(.secondary)
-                .frame(width: 20)
-            Text(title)
-            Spacer()
-            content()
-        }
-    }
-    
-    private var categoriesHeaderContent: some View {
-        HStack {
-            EventAmountCardView(
-                title: .amountExpenses,
-                baseAmount: viewModel.expensesTotalBaseAmount,
-                baseCurrency: viewModel.baseCurrency,
-                locationAmount: viewModel.expensesTotalLocationAmount,
-                locationCurrency: viewModel.locationCurrency
-            )
-            if viewModel.totalDays > 1 {
-                EventAmountCardView(
-                    title: .amountExpensesDaily,
-                    baseAmount: viewModel.dailyBaseExpensesAmount,
-                    baseCurrency: viewModel.baseCurrency,
-                    locationAmount: viewModel.dailyLocationExpensesAmount,
-                    locationCurrency: viewModel.locationCurrency
-                )
-            }
-        }
-    }
-        
-    private func categoriesChartLegendRow(for slice: ExpenseAnalyticsSlice) -> some View {
-        HStack {
-            VStack(alignment: .leading, spacing: 10) {
-                Text(slice.category.localizedResource)
-                HStack {
-                    slice.category.makeDot()
-                    Text(shareValue(for: slice).percentFormat())
-                        .font(.footnote.monospacedDigit())
-                        .foregroundStyle(.secondary)
-                }
-            }
-            Spacer()
-            AmountStack(
-                baseAmount: slice.baseAmount / categoryAmountDivisor,
-                baseCurrency: viewModel.baseCurrency,
-                expenseAmount: slice.locationAmount.map { $0 / categoryAmountDivisor },
-                expenseCurrency: viewModel.locationCurrency
-            )
-        }
-    }
-    
-    // MARK: - Вспомогательные методы
-
-    private func shareValue(for slice: ExpenseAnalyticsSlice) -> Double {
-        viewModel.shareValue(for: slice, metric: selectedMetric)
     }
 }
 

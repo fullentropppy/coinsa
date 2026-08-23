@@ -12,6 +12,7 @@ extension EventAnalyticsMetric: LocalizedResourceProviding {
     var localizedResource: LocalizedStringResource {
         switch self {
         case .summary: .analyticsSummary
+        case .days: .analyticsDays
         case .categories: .analyticsCategories
         }
     }

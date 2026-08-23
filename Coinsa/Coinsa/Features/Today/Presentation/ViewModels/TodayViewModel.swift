@@ -150,11 +150,21 @@ final class TodayViewModel {
     }
     
     func eventSummaryData(for location: Location) -> EventSummaryData {
-        let budgetBaseAmount = location.calculateBudgetAmountForToday()
-        let budgetLocationAmount = isHomeLocation ? nil : location.calculateBudgetAmountForToday(in: .location)
-        let expensesAmountBase = location.calculateExpensesAmount(in: .base, withinDateRange: todayRange)
-        let expensesAmountLocal = isHomeLocation ? nil : location.calculateExpensesAmount(in: .location, withinDateRange: todayRange)
-        let locationCurrency = isHomeLocation ? nil : location.locationCurrency
+        var budgetBaseAmount = location.calculateBudgetAmountForToday()
+        var expensesAmountBase = location.calculateExpensesAmount(withinDateRange: todayRange)
+        
+        var budgetLocationAmount: Double?
+        var expensesLocationAmount: Double?
+        
+        if expensesAmountBase > budgetBaseAmount && expensesAmountBase > budgetBaseAmount + budgetBaseAmount * 0.2 {
+            budgetBaseAmount = location.budget
+            budgetLocationAmount = isHomeLocation ? nil : location.calculateBudgetAmount(in: .location)
+            expensesAmountBase = location.calculateExpensesAmount(in: .base)
+            expensesLocationAmount = isHomeLocation ? nil : location.calculateExpensesAmount(in: .location)
+        } else {
+            budgetLocationAmount = isHomeLocation ? nil : location.calculateBudgetAmountForToday(in: .location)
+            expensesLocationAmount = isHomeLocation ? nil : location.calculateExpensesAmount(in: .location, withinDateRange: todayRange)
+        }
         
         return EventSummaryData(
             badgeProvider: Location.self,
@@ -163,8 +173,8 @@ final class TodayViewModel {
             expensesBaseAmount: expensesAmountBase,
             baseCurrency: location.baseCurrency,
             budgetLocationAmount: budgetLocationAmount,
-            expensesLocationAmount: expensesAmountLocal,
-            locationCurrency: locationCurrency
+            expensesLocationAmount: expensesLocationAmount,
+            locationCurrency: location.locationCurrency
         )
     }
 }

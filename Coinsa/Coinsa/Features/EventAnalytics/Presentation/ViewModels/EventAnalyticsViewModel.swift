@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-/// ViewModel для отображения аналитики события.ц
+/// ViewModel для отображения аналитики события.
 struct EventAnalyticsViewModel {
     // MARK: - Зависимости
 
@@ -25,20 +25,8 @@ struct EventAnalyticsViewModel {
 
     // MARK: - Хранимые свойства. Дни
     
-    var startDate: Date {
-        data.dateRangeProvider.startPlainDate.startOfDay
-    }
-    
-    var endDate: Date {
-        data.dateRangeProvider.endPlainDate.endOfDay
-    }
-    
     var totalDays: Int {
         data.dateRangeProvider.totalDays
-    }
-    
-    var remainingDays: Int {
-        data.dateRangeProvider.remainingDays
     }
 
     private var totalDayDivisor: Double {
@@ -113,7 +101,7 @@ struct EventAnalyticsViewModel {
     var totalExpensesCount: Int {
         data.expenses.count
     }
-    
+
     var peakTime: EventDaySegmentAnalyticsData? {
         let grouped = Dictionary(grouping: data.expenses) { expense in
             DaySegment.from(hour: expense.civilDateTime.storedDate.hour(using: .utc))
@@ -123,24 +111,104 @@ struct EventAnalyticsViewModel {
             .compactMap { (expenses: [Expense]) -> EventDaySegmentAnalyticsData? in
                 guard let firstExpense = expenses.first else { return nil }
                 
-                let count = expenses.count
-                
                 return EventDaySegmentAnalyticsData(
                     timeOfDay: DaySegment.from(hour: firstExpense.civilDateTime.storedDate.hour(using: .utc)),
-                    expenseCount: count
+                    expenseCount: expenses.count
                 )
             }
-            .sorted {
-                if $0.expenseCount != $1.expenseCount {
-                    return $0.expenseCount > $1.expenseCount
-                }
-                return $0.expenseCount > $1.expenseCount
-            }
+            .sorted { $0.expenseCount > $1.expenseCount }
             .first
     }
     
     var largestExpense: Expense? {
         data.expenses.max { $0.baseAmount < $1.baseAmount }
+    }
+
+    // MARK: - Хранимые свойства. Дневная аналитика
+
+    var summaryExpenseChartPoints: [EventDailyExpenseAnalyticsData] {
+        let expensesByDate = Dictionary(grouping: data.expenses) { expense in
+            PlainDate(expense.civilDateTime.storedDate, using: .utc)
+        }
+
+        return eventPlainDates.map { date in
+            let expenses = expensesByDate[date] ?? []
+
+            return EventDailyExpenseAnalyticsData(
+                date: date,
+                baseAmount: baseAmount(for: expenses),
+                locationAmount: locationAmount(for: expenses)
+            )
+        }
+    }
+
+    var summaryChartPeakPoint: EventDailyExpenseAnalyticsData? {
+        summaryExpenseChartPoints.max { $0.baseAmount < $1.baseAmount }
+    }
+
+    var maxDailyBaseExpenseAmount: Double {
+        summaryChartPeakPoint?.baseAmount ?? 0
+    }
+
+    var maxDailyLocationExpenseAmount: Double? {
+        summaryChartPeakPoint?.locationAmount
+    }
+
+    var averageDailyBaseExpenseAmount: Double {
+        dailyBaseExpensesAmount
+    }
+
+    var averageDailyLocationExpenseAmount: Double? {
+        dailyLocationExpensesAmount
+    }
+
+    var summaryChartUpperBaseAmount: Double {
+        max(maxDailyBaseExpenseAmount, averageDailyBaseExpenseAmount, 1)
+    }
+
+    var summaryChartXDomain: ClosedRange<Date> {
+        let startDate = data.dateRangeProvider.startPlainDate.startOfDay
+        let endDate = data.dateRangeProvider.endPlainDate.startOfDay
+
+        if startDate < endDate {
+            return startDate...endDate
+        } else {
+            return startDate...startDate.adding(days: 1, using: .utc)
+        }
+    }
+
+    var summaryChartXAxisValues: [Date] {
+        let dates = eventPlainDates
+        guard let lastIndex = dates.indices.last else { return [] }
+
+        let maxVisibleLabels = 10
+        guard dates.count > maxVisibleLabels else {
+            return dates.map { $0.startOfDay }
+        }
+
+        let step = max(Int(ceil(Double(lastIndex) / Double(maxVisibleLabels - 1))), 1)
+        var indices = Array(stride(from: dates.startIndex, through: lastIndex, by: step))
+
+        if indices.last != lastIndex {
+            indices.append(lastIndex)
+        }
+
+        return indices.map { dates[$0].startOfDay }
+    }
+
+    var summaryChartXAxisInteriorValues: [Date] {
+        guard let startDate = summaryChartStartDate,
+              let endDate = summaryChartEndDate,
+              startDate != endDate else { return [] }
+
+        return summaryChartXAxisValues.filter { $0 != startDate && $0 != endDate }
+    }
+
+    var summaryChartXAxisEdgeValues: [Date] {
+        guard let startDate = summaryChartStartDate else { return [] }
+        guard let endDate = summaryChartEndDate, startDate != endDate else { return [startDate] }
+
+        return [startDate, endDate]
     }
     
     // MARK: - Публичные методы
@@ -182,6 +250,7 @@ struct EventAnalyticsViewModel {
     func hasAnalytics(for metric: EventAnalyticsMetric) -> Bool {
         switch metric {
         case .summary: true
+        case .days: totalDays > 1
         case .categories: !displayedSlicesSortedByID(for: metric).isEmpty
         }
     }
@@ -196,48 +265,34 @@ struct EventAnalyticsViewModel {
         return totalBaseAmount > 0 ? slice.baseAmount / totalBaseAmount : 0
     }
 
+    // MARK: - Приватные свойства
+
+    private var eventPlainDates: [PlainDate] {
+        let daysCount = max(totalDays, 0)
+        return (0..<daysCount).map { data.dateRangeProvider.startPlainDate.adding(days: $0) }
+    }
+
+    private var summaryChartStartDate: Date? {
+        eventPlainDates.first?.startOfDay
+    }
+
+    private var summaryChartEndDate: Date? {
+        eventPlainDates.last?.startOfDay
+    }
+
     // MARK: - Приватные методы
 
     private func slices(for metric: EventAnalyticsMetric) -> [ExpenseAnalyticsSlice] {
         let slices: [ExpenseAnalyticsSlice]
 
         switch metric {
-        case .summary:
-            slices = data.expensesAmountByCategory /// Замениить
+        case .summary, .days:
+            slices = []
         case .categories:
             slices = data.expensesAmountByCategory
         }
 
         return slices.contains { $0.baseAmount > 0 } ? slices : []
-    }
-    
-    private func categorySummary(
-        for categoryExpenses: [Expense],
-        sortSubcategories: ([Expense], [Expense]) -> Bool
-    ) -> EventCategoryAnalyticsSummary? {
-        guard let category = categoryExpenses.first?.category else { return nil }
-        
-        let subcategoryExpenses = Dictionary(grouping: categoryExpenses) { $0.subcategory }
-            .values
-            .sorted(by: sortSubcategories)
-            .first
-        
-        guard let subcategory = subcategoryExpenses?.first?.subcategory else { return nil }
-        
-        return EventCategoryAnalyticsSummary(
-            category: category,
-            subcategory: subcategory,
-            categoryExpenseCount: categoryExpenses.count,
-            subcategoryExpenseCount: subcategoryExpenses?.count ?? 0,
-            baseAmount: baseAmount(for: categoryExpenses),
-            locationAmount: locationAmount(for: categoryExpenses)
-        )
-    }
-    
-    private func expenses(on date: PlainDate) -> [Expense] {
-        data.expenses.filter { expense in
-            PlainDate(expense.civilDateTime.storedDate, using: .utc) == date
-        }
     }
     
     private func baseAmount(for expenses: [Expense]) -> Double {
@@ -247,15 +302,6 @@ struct EventAnalyticsViewModel {
     private func locationAmount(for expenses: [Expense]) -> Double? {
         if locationCurrency != nil {
             expenses.reduce(0) { $0 + $1.amount(in: .location) }
-        } else {
-            nil
-        }
-    }
-    
-    private func locationAmountDifference(todayExpenses: [Expense], yesterdayExpenses: [Expense]) -> Double? {
-        if let todayLocationAmount = locationAmount(for: todayExpenses),
-           let yesterdayLocationAmount = locationAmount(for: yesterdayExpenses) {
-            todayLocationAmount - yesterdayLocationAmount
         } else {
             nil
         }

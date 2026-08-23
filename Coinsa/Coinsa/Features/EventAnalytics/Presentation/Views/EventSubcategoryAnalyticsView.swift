@@ -87,3 +87,34 @@ struct EventSubcategoryAnalyticsView: View {
         viewModel.shareValue(for: slice, category: category)
     }
 }
+// MARK: - Превью
+
+private extension EventSubcategoryAnalyticsView {
+    static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
+        let builder = PreviewBuilder.builder().withScenario(.southKorea).withExpenses(true)
+        let data = builder.buildData()
+        let trip = builder.getTrip(from: data)
+        let viewModel = TripDetailViewModel(trip: trip)
+        let analyticsViewModel = EventAnalyticsViewModel(data: viewModel.eventAnalyticsData)
+        let category = analyticsViewModel.displayedSlicesSortedByAmount(for: .categories).first?.category ?? .defaultValue
+
+        return NavigationStack {
+            EventSubcategoryAnalyticsView(
+                category: category,
+                data: viewModel.eventAnalyticsData,
+                screenContextSubtitle: trip.screenContextSubtitle
+            )
+        }
+        .environment(\.locale, locale)
+        .preferredColorScheme(colorScheme)
+    }
+}
+
+#Preview("Light - RU") {
+    EventSubcategoryAnalyticsView.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
+}
+
+#Preview("Dark - EN") {
+    EventSubcategoryAnalyticsView.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
+}
+

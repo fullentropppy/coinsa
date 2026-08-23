@@ -139,6 +139,40 @@
         }
       }
     },
+    "amount.expenses.dailyAverage" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Daily average"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Среднее"
+          }
+        }
+      }
+    },
+    "amount.expenses.dailyMax" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Daily max"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Максимум"
+          }
+        }
+      }
+    },
     "amount.mono" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -224,6 +258,23 @@
         }
       }
     },
+    "analytics.days" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Days"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Дни"
+          }
+        }
+      }
+    },
     "analytics.emptyState" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -254,6 +305,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Сводка"
+          }
+        }
+      }
+    },
+    "analytics.summary.expenseChart" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Expense chart"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "График трат"
           }
         }
       }
