@@ -15,6 +15,7 @@ struct ExpenseDetailView: View {
     @Environment(\.dismiss) private var dismiss
     
     @State private var isShowingExpenseEdit = false
+    @State private var isShowingLocationMap = false
 
     private let expense: Expense
     
@@ -45,6 +46,15 @@ struct ExpenseDetailView: View {
                     dismiss()
                 }
             }
+            .fullScreenCover(isPresented: $isShowingLocationMap) {
+                if let coordinate = expense.coordinate {
+                    CoordinateMapFullScreenView(
+                        coordinate: coordinate,
+                        title: "expense.location",
+                        accentColor: Expense.accentColor
+                    )
+                }
+            }
             .onAppear {
                 checkIfDeleted()
             }
@@ -56,6 +66,7 @@ struct ExpenseDetailView: View {
         Form {
             mainSection
             commentSection
+            locationSection
         }
     }
     
@@ -68,6 +79,22 @@ struct ExpenseDetailView: View {
                 cardContent
                 additionalInfoContent
             }
+        }
+    }
+    
+    @ViewBuilder
+    private var locationSection: some View {
+        if let coordinate = expense.coordinate {
+            Section {
+                Button {
+                    isShowingLocationMap = true
+                } label: {
+                    ExpenseLocationMapView(coordinate: coordinate)
+                }
+                .buttonStyle(.plain)
+            }
+            .listRowInsets(EdgeInsets())
+            .listRowBackground(Color.clear)
         }
     }
     

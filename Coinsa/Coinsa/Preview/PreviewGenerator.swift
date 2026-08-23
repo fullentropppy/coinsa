@@ -153,7 +153,10 @@ private extension PreviewGenerator {
         exchangeAdjustment: Double? = nil,
         category: ExpenseCategory,
         subcategory: ExpenseSubcategory,
-        comment: String? = nil
+        comment: String? = nil,
+        latitude: Double? = nil,
+        longitude: Double? = nil,
+        horizontalAccuracy: Double? = nil
     ) -> Expense {
         let now = Date()
         return Expense(
@@ -170,9 +173,9 @@ private extension PreviewGenerator {
             categoryRaw: category.rawValue,
             subcategoryRaw: subcategory.rawValue,
             location: location,
-            latitude: nil,
-            longitude: nil,
-            horizontalAccuracy: nil,
+            latitude: latitude,
+            longitude: longitude,
+            horizontalAccuracy: horizontalAccuracy,
             comment: comment,
             createdAt: now,
             updatedAt: now
@@ -221,7 +224,10 @@ private extension PreviewGenerator {
                 baseAmount: 2300,
                 category: .food,
                 subcategory: .breakfast,
-                comment: PreviewExpenseComment.breakfast.rawValue
+                comment: PreviewExpenseComment.breakfast.rawValue,
+                latitude: 35.6595,
+                longitude: 139.7004,
+                horizontalAccuracy: 15.0
             ),
             makeExpense(
                 to: location,
@@ -229,7 +235,10 @@ private extension PreviewGenerator {
                 timeZoneId: previewLocation.timeZoneId,
                 baseAmount: 2116.4,
                 category: .miscellaneous,
-                subcategory: .otherMiscellaneous
+                subcategory: .otherMiscellaneous,
+                latitude: 35.6812,
+                longitude: 139.7671,
+                horizontalAccuracy: 20.0
             ),
             makeExpense(
                 to: location,
@@ -239,7 +248,10 @@ private extension PreviewGenerator {
                 paymentMethod: .card,
                 exchangeAdjustment: 0,
                 category: .transport,
-                subcategory: .publicTransport
+                subcategory: .publicTransport,
+                latitude: 35.6814,
+                longitude: 139.7663,
+                horizontalAccuracy: 10.0
             ),
             makeExpense(
                 to: location,
@@ -247,7 +259,10 @@ private extension PreviewGenerator {
                 timeZoneId: previewLocation.timeZoneId,
                 baseAmount: 3200,
                 category: .leisure,
-                subcategory: .entertainment
+                subcategory: .entertainment,
+                latitude: 35.6594,
+                longitude: 139.7005,
+                horizontalAccuracy: 12.0
             ),
             makeExpense(
                 to: location,
@@ -255,7 +270,10 @@ private extension PreviewGenerator {
                 timeZoneId: previewLocation.timeZoneId,
                 baseAmount: 1992,
                 category: .food,
-                subcategory: .dinner
+                subcategory: .dinner,
+                latitude: 35.6601,
+                longitude: 139.6998,
+                horizontalAccuracy: 18.0
             ),
             makeExpense(
                 to: location,
@@ -266,7 +284,10 @@ private extension PreviewGenerator {
                 exchangeAdjustment: 0,
                 category: .transport,
                 subcategory: .publicTransport,
-                comment: PreviewExpenseComment.subway.rawValue
+                comment: PreviewExpenseComment.subway.rawValue,
+                latitude: 35.6815,
+                longitude: 139.7665,
+                horizontalAccuracy: 8.0
             ),
             makeExpense(
                 to: location,
@@ -276,7 +297,10 @@ private extension PreviewGenerator {
                 paymentMethod: .card,
                 exchangeAdjustment: 3.8,
                 category: .food,
-                subcategory: .lunch
+                subcategory: .lunch,
+                latitude: 35.6598,
+                longitude: 139.7002,
+                horizontalAccuracy: 14.0
             ),
             makeExpense(
                 to: location,
@@ -286,7 +310,10 @@ private extension PreviewGenerator {
                 paymentMethod: .card,
                 exchangeAdjustment: 3.8,
                 category: .leisure,
-                subcategory: .activity
+                subcategory: .activity,
+                latitude: 35.6603,
+                longitude: 139.6995,
+                horizontalAccuracy: 25.0
             ),
             makeExpense(
                 to: location,
@@ -295,7 +322,10 @@ private extension PreviewGenerator {
                 baseAmount: 8150,
                 category: .shopping,
                 subcategory: .clothing,
-                comment: PreviewExpenseComment.clothes.rawValue
+                comment: PreviewExpenseComment.clothes.rawValue,
+                latitude: 35.6593,
+                longitude: 139.7006,
+                horizontalAccuracy: 10.0
             ),
             makeExpense(
                 to: location,
@@ -304,7 +334,10 @@ private extension PreviewGenerator {
                 baseAmount: 1220,
                 category: .medicine,
                 subcategory: .medication,
-                comment: PreviewExpenseComment.pharmacy.rawValue
+                comment: PreviewExpenseComment.pharmacy.rawValue,
+                latitude: 35.6605,
+                longitude: 139.6992,
+                horizontalAccuracy: 22.0
             ),
             makeExpense(
                 to: location,
@@ -312,7 +345,10 @@ private extension PreviewGenerator {
                 timeZoneId: previewLocation.timeZoneId,
                 baseAmount: 240,
                 category: .transport,
-                subcategory: .publicTransport
+                subcategory: .publicTransport,
+                latitude: 35.6813,
+                longitude: 139.7664,
+                horizontalAccuracy: 12.0
             ),
             makeExpense(
                 to: location,
@@ -321,7 +357,10 @@ private extension PreviewGenerator {
                 baseAmount: 3098.4,
                 category: .food,
                 subcategory: .lunch,
-                comment: PreviewExpenseComment.breakfast.rawValue
+                comment: PreviewExpenseComment.breakfast.rawValue,
+                latitude: 35.6597,
+                longitude: 139.7003,
+                horizontalAccuracy: 16.0
             ),
             makeExpense(
                 to: location,
@@ -331,7 +370,10 @@ private extension PreviewGenerator {
                 paymentMethod: .card,
                 category: .leisure,
                 subcategory: .landmark,
-                comment: PreviewExpenseComment.museum.rawValue
+                comment: PreviewExpenseComment.museum.rawValue,
+                latitude: 35.7147,
+                longitude: 139.7967,
+                horizontalAccuracy: 30.0
             ),
             makeExpense(
                 to: location,
@@ -341,7 +383,10 @@ private extension PreviewGenerator {
                 paymentMethod: .card,
                 exchangeAdjustment: 0,
                 category: .transport,
-                subcategory: .publicTransport
+                subcategory: .publicTransport,
+                latitude: 35.6816,
+                longitude: 139.7662,
+                horizontalAccuracy: 10.0
             ),
             makeExpense(
                 to: location,
@@ -351,7 +396,10 @@ private extension PreviewGenerator {
                 paymentMethod: .card,
                 category: .shopping,
                 subcategory: .clothing,
-                comment: PreviewExpenseComment.clothes.rawValue
+                comment: PreviewExpenseComment.clothes.rawValue,
+                latitude: 35.6590,
+                longitude: 139.7008,
+                horizontalAccuracy: 15.0
             ),
             makeExpense(
                 to: location,
@@ -361,7 +409,10 @@ private extension PreviewGenerator {
                 paymentMethod: .card,
                 exchangeAdjustment: 1,
                 category: .medicine,
-                subcategory: .medication
+                subcategory: .medication,
+                latitude: 35.6602,
+                longitude: 139.6994,
+                horizontalAccuracy: 20.0
             ),
             makeExpense(
                 to: location,
@@ -369,7 +420,10 @@ private extension PreviewGenerator {
                 timeZoneId: previewLocation.timeZoneId,
                 baseAmount: 2590,
                 category: .food,
-                subcategory: .lunch
+                subcategory: .lunch,
+                latitude: 35.6599,
+                longitude: 139.7001,
+                horizontalAccuracy: 14.0
             ),
             makeExpense(
                 to: location,
@@ -378,7 +432,10 @@ private extension PreviewGenerator {
                 baseAmount: 1450,
                 category: .miscellaneous,
                 subcategory: .otherMiscellaneous,
-                comment: PreviewExpenseComment.miscellaneous.rawValue
+                comment: PreviewExpenseComment.miscellaneous.rawValue,
+                latitude: 35.6604,
+                longitude: 139.6996,
+                horizontalAccuracy: 18.0
             ),
             makeExpense(
                 to: location,
@@ -388,7 +445,10 @@ private extension PreviewGenerator {
                 paymentMethod: .card,
                 exchangeAdjustment: 0,
                 category: .transport,
-                subcategory: .publicTransport
+                subcategory: .publicTransport,
+                latitude: 35.6812,
+                longitude: 139.7666,
+                horizontalAccuracy: 8.0
             ),
             makeExpense(
                 to: location,
@@ -396,7 +456,10 @@ private extension PreviewGenerator {
                 timeZoneId: previewLocation.timeZoneId,
                 baseAmount: 2500,
                 category: .shopping,
-                subcategory: .cosmetics
+                subcategory: .cosmetics,
+                latitude: 35.6592,
+                longitude: 139.7007,
+                horizontalAccuracy: 12.0
             ),
             makeExpense(
                 to: location,
@@ -405,7 +468,10 @@ private extension PreviewGenerator {
                 baseAmount: 1841.98,
                 category: .food,
                 subcategory: .snack,
-                comment: PreviewExpenseComment.streetFood.rawValue
+                comment: PreviewExpenseComment.streetFood.rawValue,
+                latitude: 35.6600,
+                longitude: 139.7000,
+                horizontalAccuracy: 20.0
             ),
             makeExpense(
                 to: location,
@@ -413,7 +479,10 @@ private extension PreviewGenerator {
                 timeZoneId: previewLocation.timeZoneId,
                 baseAmount: 1882,
                 category: .food,
-                subcategory: .breakfast
+                subcategory: .breakfast,
+                latitude: 35.6596,
+                longitude: 139.7004,
+                horizontalAccuracy: 15.0
             ),
             makeExpense(
                 to: location,
@@ -423,7 +492,10 @@ private extension PreviewGenerator {
                 paymentMethod: .card,
                 exchangeAdjustment: 0,
                 category: .transport,
-                subcategory: .taxi
+                subcategory: .taxi,
+                latitude: 35.6810,
+                longitude: 139.7670,
+                horizontalAccuracy: 25.0
             ),
             makeExpense(
                 to: location,
@@ -431,7 +503,10 @@ private extension PreviewGenerator {
                 timeZoneId: previewLocation.timeZoneId,
                 baseAmount: 1003.6,
                 category: .miscellaneous,
-                subcategory: .digitalService
+                subcategory: .digitalService,
+                latitude: 35.6606,
+                longitude: 139.6991,
+                horizontalAccuracy: 22.0
             ),
             makeExpense(
                 to: location,
@@ -441,7 +516,10 @@ private extension PreviewGenerator {
                 paymentMethod: .card,
                 exchangeAdjustment: 4.5,
                 category: .leisure,
-                subcategory: .tour
+                subcategory: .tour,
+                latitude: 35.7149,
+                longitude: 139.7969,
+                horizontalAccuracy: 35.0
             ),
             makeExpense(
                 to: location,
@@ -450,7 +528,10 @@ private extension PreviewGenerator {
                 baseAmount: 2600,
                 category: .miscellaneous,
                 subcategory: .otherMiscellaneous,
-                comment: PreviewExpenseComment.miscellaneous.rawValue
+                comment: PreviewExpenseComment.miscellaneous.rawValue,
+                latitude: 35.6601,
+                longitude: 139.6999,
+                horizontalAccuracy: 16.0
             ),
             makeExpense(
                 to: location,
@@ -459,7 +540,10 @@ private extension PreviewGenerator {
                 baseAmount: 202,
                 category: .transport,
                 subcategory: .publicTransport,
-                comment: PreviewExpenseComment.subway.rawValue
+                comment: PreviewExpenseComment.subway.rawValue,
+                latitude: 35.6817,
+                longitude: 139.7661,
+                horizontalAccuracy: 10.0
             ),
             makeExpense(
                 to: location,
@@ -469,7 +553,10 @@ private extension PreviewGenerator {
                 paymentMethod: .card,
                 exchangeAdjustment: 0,
                 category: .food,
-                subcategory: .dinner
+                subcategory: .dinner,
+                latitude: 35.6594,
+                longitude: 139.7006,
+                horizontalAccuracy: 14.0
             ),
         ]
     }
@@ -485,7 +572,10 @@ private extension PreviewGenerator {
                 baseAmount: 6250,
                 category: .transport,
                 subcategory: .train,
-                comment: PreviewExpenseComment.train.rawValue
+                comment: PreviewExpenseComment.train.rawValue,
+                latitude: 34.9853,
+                longitude: 135.7593,
+                horizontalAccuracy: 20.0
             ),
             makeExpense(
                 to: location,
@@ -496,7 +586,10 @@ private extension PreviewGenerator {
                 exchangeAdjustment: 0,
                 category: .food,
                 subcategory: .breakfast,
-                comment: PreviewExpenseComment.snacks.rawValue
+                comment: PreviewExpenseComment.snacks.rawValue,
+                latitude: 35.0116,
+                longitude: 135.7681,
+                horizontalAccuracy: 15.0
             ),
             makeExpense(
                 to: location,
@@ -506,7 +599,10 @@ private extension PreviewGenerator {
                 paymentMethod: .card,
                 category: .leisure,
                 subcategory: .entertainment,
-                comment: PreviewExpenseComment.taxi.rawValue
+                comment: PreviewExpenseComment.taxi.rawValue,
+                latitude: 35.0394,
+                longitude: 135.7287,
+                horizontalAccuracy: 25.0
             ),
             makeExpense(
                 to: location,
@@ -514,7 +610,10 @@ private extension PreviewGenerator {
                 timeZoneId: previewLocation.timeZoneId,
                 baseAmount: 2500.05,
                 category: .food,
-                subcategory: .lunch
+                subcategory: .lunch,
+                latitude: 35.0114,
+                longitude: 135.7684,
+                horizontalAccuracy: 12.0
             ),
             makeExpense(
                 to: location,
@@ -522,7 +621,10 @@ private extension PreviewGenerator {
                 timeZoneId: previewLocation.timeZoneId,
                 baseAmount: 5209.6,
                 category: .leisure,
-                subcategory: .tour
+                subcategory: .tour,
+                latitude: 34.9948,
+                longitude: 135.7585,
+                horizontalAccuracy: 30.0
             ),
             makeExpense(
                 to: location,
@@ -530,7 +632,10 @@ private extension PreviewGenerator {
                 timeZoneId: previewLocation.timeZoneId,
                 baseAmount: 120,
                 category: .medicine,
-                subcategory: .medication
+                subcategory: .medication,
+                latitude: 35.0118,
+                longitude: 135.7678,
+                horizontalAccuracy: 18.0
             ),
             makeExpense(
                 to: location,
@@ -539,7 +644,10 @@ private extension PreviewGenerator {
                 baseAmount: 2691,
                 category: .food,
                 subcategory: .lunch,
-                comment: PreviewExpenseComment.lunch.rawValue
+                comment: PreviewExpenseComment.lunch.rawValue,
+                latitude: 35.0115,
+                longitude: 135.7683,
+                horizontalAccuracy: 14.0
             ),
             makeExpense(
                 to: location,
@@ -548,7 +656,10 @@ private extension PreviewGenerator {
                 baseAmount: 890,
                 category: .leisure,
                 subcategory: .park,
-                comment: PreviewExpenseComment.temple.rawValue
+                comment: PreviewExpenseComment.temple.rawValue,
+                latitude: 34.9977,
+                longitude: 135.7852,
+                horizontalAccuracy: 20.0
             ),
             makeExpense(
                 to: location,
@@ -557,7 +668,10 @@ private extension PreviewGenerator {
                 baseAmount: 212,
                 category: .transport,
                 subcategory: .publicTransport,
-                comment: PreviewExpenseComment.subway.rawValue
+                comment: PreviewExpenseComment.subway.rawValue,
+                latitude: 35.0111,
+                longitude: 135.7686,
+                horizontalAccuracy: 10.0
             ),
             makeExpense(
                 to: location,
@@ -566,7 +680,10 @@ private extension PreviewGenerator {
                 baseAmount: 1620.18,
                 category: .shopping,
                 subcategory: .souvenirs,
-                comment: PreviewExpenseComment.souvenirs.rawValue
+                comment: PreviewExpenseComment.souvenirs.rawValue,
+                latitude: 35.0117,
+                longitude: 135.7680,
+                horizontalAccuracy: 16.0
             ),
             makeExpense(
                 to: location,
@@ -575,7 +692,10 @@ private extension PreviewGenerator {
                 baseAmount: 2906.7,
                 category: .food,
                 subcategory: .breakfast,
-                comment: PreviewExpenseComment.breakfast.rawValue
+                comment: PreviewExpenseComment.breakfast.rawValue,
+                latitude: 35.0113,
+                longitude: 135.7685,
+                horizontalAccuracy: 14.0
             ),
             makeExpense(
                 to: location,
@@ -584,7 +704,10 @@ private extension PreviewGenerator {
                 baseAmount: 1105,
                 category: .transport,
                 subcategory: .publicTransport,
-                comment: PreviewExpenseComment.bus.rawValue
+                comment: PreviewExpenseComment.bus.rawValue,
+                latitude: 34.9856,
+                longitude: 135.7590,
+                horizontalAccuracy: 12.0
             ),
             makeExpense(
                 to: location,
@@ -593,7 +716,10 @@ private extension PreviewGenerator {
                 baseAmount: 2000.05,
                 paymentMethod: .card,
                 category: .leisure,
-                subcategory: .landmark
+                subcategory: .landmark,
+                latitude: 34.9945,
+                longitude: 135.7588,
+                horizontalAccuracy: 22.0
             ),
             makeExpense(
                 to: location,
@@ -601,7 +727,10 @@ private extension PreviewGenerator {
                 timeZoneId: previewLocation.timeZoneId,
                 baseAmount: 2012,
                 category: .miscellaneous,
-                subcategory: .otherMiscellaneous
+                subcategory: .otherMiscellaneous,
+                latitude: 35.0119,
+                longitude: 135.7677,
+                horizontalAccuracy: 20.0
             ),
             makeExpense(
                 to: location,
@@ -610,7 +739,10 @@ private extension PreviewGenerator {
                 baseAmount: 29020,
                 paymentMethod: .card,
                 category: .shopping,
-                subcategory: .electronics
+                subcategory: .electronics,
+                latitude: 35.0110,
+                longitude: 135.7687,
+                horizontalAccuracy: 15.0
             ),
             makeExpense(
                 to: location,
@@ -618,7 +750,10 @@ private extension PreviewGenerator {
                 timeZoneId: previewLocation.timeZoneId,
                 baseAmount: 3040.84,
                 category: .food,
-                subcategory: .dinner
+                subcategory: .dinner,
+                latitude: 35.0116,
+                longitude: 135.7682,
+                horizontalAccuracy: 18.0
             ),
             makeExpense(
                 to: location,
@@ -627,7 +762,10 @@ private extension PreviewGenerator {
                 baseAmount: 706,
                 category: .food,
                 subcategory: .breakfast,
-                comment: PreviewExpenseComment.breakfast.rawValue
+                comment: PreviewExpenseComment.breakfast.rawValue,
+                latitude: 35.0114,
+                longitude: 135.7684,
+                horizontalAccuracy: 13.0
             ),
             makeExpense(
                 to: location,
@@ -636,7 +774,10 @@ private extension PreviewGenerator {
                 baseAmount: 706,
                 category: .transport,
                 subcategory: .train,
-                comment: PreviewExpenseComment.train.rawValue
+                comment: PreviewExpenseComment.train.rawValue,
+                latitude: 34.9855,
+                longitude: 135.7591,
+                horizontalAccuracy: 20.0
             )
         ]
     }
@@ -651,7 +792,10 @@ private extension PreviewGenerator {
                 timeZoneId: previewLocation.timeZoneId,
                 baseAmount: 2099,
                 category: .leisure,
-                subcategory: .landmark
+                subcategory: .landmark,
+                latitude: 34.6849,
+                longitude: 135.5023,
+                horizontalAccuracy: 20.0
             ),
             makeExpense(
                 to: location,
@@ -659,7 +803,10 @@ private extension PreviewGenerator {
                 timeZoneId: previewLocation.timeZoneId,
                 baseAmount: 201,
                 category: .transport,
-                subcategory: .publicTransport
+                subcategory: .publicTransport,
+                latitude: 34.6855,
+                longitude: 135.5018,
+                horizontalAccuracy: 12.0
             ),
             makeExpense(
                 to: location,
@@ -669,7 +816,10 @@ private extension PreviewGenerator {
                 paymentMethod: .card,
                 exchangeAdjustment: 0,
                 category: .food,
-                subcategory: .lunch
+                subcategory: .lunch,
+                latitude: 34.6682,
+                longitude: 135.5023,
+                horizontalAccuracy: 15.0
             ),
             makeExpense(
                 to: location,
@@ -678,7 +828,10 @@ private extension PreviewGenerator {
                 baseAmount: 290,
                 category: .miscellaneous,
                 subcategory: .donation,
-                comment: PreviewExpenseComment.miscellaneous.rawValue
+                comment: PreviewExpenseComment.miscellaneous.rawValue,
+                latitude: 34.6846,
+                longitude: 135.5026,
+                horizontalAccuracy: 18.0
             ),
             makeExpense(
                 to: location,
@@ -688,7 +841,10 @@ private extension PreviewGenerator {
                 paymentMethod: .card,
                 exchangeAdjustment: 0,
                 category: .food,
-                subcategory: .snack
+                subcategory: .snack,
+                latitude: 34.6685,
+                longitude: 135.5020,
+                horizontalAccuracy: 14.0
             ),
             makeExpense(
                 to: location,
@@ -697,7 +853,10 @@ private extension PreviewGenerator {
                 baseAmount: 1556,
                 category: .food,
                 subcategory: .breakfast,
-                comment: PreviewExpenseComment.breakfast.rawValue
+                comment: PreviewExpenseComment.breakfast.rawValue,
+                latitude: 34.6688,
+                longitude: 135.5028,
+                horizontalAccuracy: 16.0
             ),
             makeExpense(
                 to: location,
@@ -706,7 +865,10 @@ private extension PreviewGenerator {
                 baseAmount: 4010,
                 paymentMethod: .card,
                 category: .miscellaneous,
-                subcategory: .otherMiscellaneous
+                subcategory: .otherMiscellaneous,
+                latitude: 34.6680,
+                longitude: 135.5025,
+                horizontalAccuracy: 20.0
             ),
             makeExpense(
                 to: location,
@@ -714,7 +876,10 @@ private extension PreviewGenerator {
                 timeZoneId: previewLocation.timeZoneId,
                 baseAmount: 1900.04,
                 category: .leisure,
-                subcategory: .landmark
+                subcategory: .landmark,
+                latitude: 34.6842,
+                longitude: 135.5030,
+                horizontalAccuracy: 22.0
             ),
             makeExpense(
                 to: location,
@@ -725,7 +890,10 @@ private extension PreviewGenerator {
                 exchangeAdjustment: 0,
                 category: .food,
                 subcategory: .snack,
-                comment: PreviewExpenseComment.streetFood.rawValue
+                comment: PreviewExpenseComment.streetFood.rawValue,
+                latitude: 34.6683,
+                longitude: 135.5026,
+                horizontalAccuracy: 10.0
             ),
             makeExpense(
                 to: location,
@@ -733,7 +901,10 @@ private extension PreviewGenerator {
                 timeZoneId: previewLocation.timeZoneId,
                 baseAmount: 2068,
                 category: .food,
-                subcategory: .breakfast
+                subcategory: .breakfast,
+                latitude: 34.6687,
+                longitude: 135.5022,
+                horizontalAccuracy: 14.0
             ),
             makeExpense(
                 to: location,
@@ -744,7 +915,10 @@ private extension PreviewGenerator {
                 exchangeAdjustment: 2,
                 category: .leisure,
                 subcategory: .landmark,
-                comment: PreviewExpenseComment.museum.rawValue
+                comment: PreviewExpenseComment.museum.rawValue,
+                latitude: 34.6840,
+                longitude: 135.5032,
+                horizontalAccuracy: 25.0
             ),
             makeExpense(
                 to: location,
@@ -752,7 +926,10 @@ private extension PreviewGenerator {
                 timeZoneId: previewLocation.timeZoneId,
                 baseAmount: 309.06,
                 category: .transport,
-                subcategory: .publicTransport
+                subcategory: .publicTransport,
+                latitude: 34.6853,
+                longitude: 135.5020,
+                horizontalAccuracy: 10.0
             ),
             makeExpense(
                 to: location,
@@ -763,7 +940,10 @@ private extension PreviewGenerator {
                 exchangeAdjustment: 2,
                 category: .shopping,
                 subcategory: .clothing,
-                comment: PreviewExpenseComment.clothes.rawValue
+                comment: PreviewExpenseComment.clothes.rawValue,
+                latitude: 34.6681,
+                longitude: 135.5029,
+                horizontalAccuracy: 18.0
             ),
             makeExpense(
                 to: location,
@@ -771,7 +951,10 @@ private extension PreviewGenerator {
                 timeZoneId: previewLocation.timeZoneId,
                 baseAmount: 2095,
                 category: .food,
-                subcategory: .dinner
+                subcategory: .dinner,
+                latitude: 34.6684,
+                longitude: 135.5024,
+                horizontalAccuracy: 15.0
             ),
             makeExpense(
                 to: location,
@@ -781,7 +964,10 @@ private extension PreviewGenerator {
                 paymentMethod: .card,
                 category: .transport,
                 subcategory: .taxi,
-                comment: PreviewExpenseComment.taxi.rawValue
+                comment: PreviewExpenseComment.taxi.rawValue,
+                latitude: 34.6850,
+                longitude: 135.5015,
+                horizontalAccuracy: 30.0
             ),
             makeExpense(
                 to: location,
@@ -789,7 +975,10 @@ private extension PreviewGenerator {
                 timeZoneId: previewLocation.timeZoneId,
                 baseAmount: 4520,
                 category: .food,
-                subcategory: .breakfast
+                subcategory: .breakfast,
+                latitude: 34.6686,
+                longitude: 135.5021,
+                horizontalAccuracy: 16.0
             ),
             makeExpense(
                 to: location,
@@ -799,11 +988,14 @@ private extension PreviewGenerator {
                 paymentMethod: .card,
                 exchangeAdjustment: 5.5,
                 category: .miscellaneous,
-                subcategory: .otherMiscellaneous
+                subcategory: .otherMiscellaneous,
+                latitude: 34.6844,
+                longitude: 135.5028,
+                horizontalAccuracy: 22.0
             )
         ]
     }
-
+    
     private static func makeSaintpExpenses(_ location: Location, with previewLocation: PreviewLocation) -> [Expense] {
         let startDate = location.startPlainDate.startOfDay
         
@@ -815,7 +1007,10 @@ private extension PreviewGenerator {
                 baseAmount: 2990,
                 paymentMethod: .card,
                 category: .food,
-                subcategory: .breakfast
+                subcategory: .breakfast,
+                latitude: 59.9386,
+                longitude: 30.3141,
+                horizontalAccuracy: 15.0
             ),
             makeExpense(
                 to: location,
@@ -825,7 +1020,10 @@ private extension PreviewGenerator {
                 paymentMethod: .card,
                 category: .transport,
                 subcategory: .taxi,
-                comment: PreviewExpenseComment.taxi.rawValue
+                comment: PreviewExpenseComment.taxi.rawValue,
+                latitude: 59.9398,
+                longitude: 30.3146,
+                horizontalAccuracy: 25.0
             ),
             makeExpense(
                 to: location,
@@ -835,7 +1033,10 @@ private extension PreviewGenerator {
                 paymentMethod: .card,
                 category: .leisure,
                 subcategory: .landmark,
-                comment: PreviewExpenseComment.museum.rawValue
+                comment: PreviewExpenseComment.museum.rawValue,
+                latitude: 59.9398,
+                longitude: 30.3159,
+                horizontalAccuracy: 20.0
             ),
             makeExpense(
                 to: location,
@@ -844,7 +1045,10 @@ private extension PreviewGenerator {
                 baseAmount: 1800,
                 paymentMethod: .card,
                 category: .food,
-                subcategory: .dinner
+                subcategory: .dinner,
+                latitude: 59.9389,
+                longitude: 30.3138,
+                horizontalAccuracy: 14.0
             )
         ]
     }
@@ -860,7 +1064,10 @@ private extension PreviewGenerator {
                 baseAmount: 3205.92,
                 category: .food,
                 subcategory: .breakfast,
-                comment: PreviewExpenseComment.breakfast.rawValue
+                comment: PreviewExpenseComment.breakfast.rawValue,
+                latitude: 37.5665,
+                longitude: 126.9780,
+                horizontalAccuracy: 15.0
             ),
             makeExpense(
                 to: location,
@@ -869,7 +1076,10 @@ private extension PreviewGenerator {
                 baseAmount: 312,
                 category: .transport,
                 subcategory: .publicTransport,
-                comment: PreviewExpenseComment.subway.rawValue
+                comment: PreviewExpenseComment.subway.rawValue,
+                latitude: 37.5700,
+                longitude: 126.9824,
+                horizontalAccuracy: 10.0
             ),
             makeExpense(
                 to: location,
@@ -880,7 +1090,10 @@ private extension PreviewGenerator {
                 exchangeAdjustment: 0,
                 category: .food,
                 subcategory: .lunch,
-                comment: PreviewExpenseComment.lunch.rawValue
+                comment: PreviewExpenseComment.lunch.rawValue,
+                latitude: 37.5668,
+                longitude: 126.9783,
+                horizontalAccuracy: 14.0
             ),
             makeExpense(
                 to: location,
@@ -888,7 +1101,10 @@ private extension PreviewGenerator {
                 timeZoneId: previewLocation.timeZoneId,
                 baseAmount: 150,
                 category: .miscellaneous,
-                subcategory: .bankFees
+                subcategory: .bankFees,
+                latitude: 37.5660,
+                longitude: 126.9775,
+                horizontalAccuracy: 20.0
             ),
             makeExpense(
                 to: location,
@@ -898,7 +1114,10 @@ private extension PreviewGenerator {
                 paymentMethod: .card,
                 exchangeAdjustment: 1,
                 category: .medicine,
-                subcategory: .medication
+                subcategory: .medication,
+                latitude: 37.5672,
+                longitude: 126.9788,
+                horizontalAccuracy: 18.0
             ),
             makeExpense(
                 to: location,
@@ -907,7 +1126,10 @@ private extension PreviewGenerator {
                 baseAmount: 9200.2,
                 paymentMethod: .card,
                 category: .shopping,
-                subcategory: .jewelry
+                subcategory: .jewelry,
+                latitude: 37.5663,
+                longitude: 126.9778,
+                horizontalAccuracy: 12.0
             ),
             makeExpense(
                 to: location,
@@ -917,7 +1139,10 @@ private extension PreviewGenerator {
                 paymentMethod: .card,
                 exchangeAdjustment: 0,
                 category: .food,
-                subcategory: .dinner
+                subcategory: .dinner,
+                latitude: 37.5666,
+                longitude: 126.9782,
+                horizontalAccuracy: 16.0
             ),
             makeExpense(
                 to: location,
@@ -925,7 +1150,10 @@ private extension PreviewGenerator {
                 timeZoneId: previewLocation.timeZoneId,
                 baseAmount: 2450,
                 category: .food,
-                subcategory: .breakfast
+                subcategory: .breakfast,
+                latitude: 37.5664,
+                longitude: 126.9785,
+                horizontalAccuracy: 14.0
             ),
             makeExpense(
                 to: location,
@@ -934,7 +1162,10 @@ private extension PreviewGenerator {
                 baseAmount: 292.4,
                 category: .transport,
                 subcategory: .publicTransport,
-                comment: PreviewExpenseComment.subway.rawValue
+                comment: PreviewExpenseComment.subway.rawValue,
+                latitude: 37.5698,
+                longitude: 126.9822,
+                horizontalAccuracy: 10.0
             ),
             makeExpense(
                 to: location,
@@ -944,7 +1175,10 @@ private extension PreviewGenerator {
                 paymentMethod: .card,
                 category: .leisure,
                 subcategory: .landmark,
-                comment: PreviewExpenseComment.museum.rawValue
+                comment: PreviewExpenseComment.museum.rawValue,
+                latitude: 37.5795,
+                longitude: 126.9770,
+                horizontalAccuracy: 25.0
             ),
             makeExpense(
                 to: location,
@@ -953,7 +1187,10 @@ private extension PreviewGenerator {
                 baseAmount: 1687,
                 category: .food,
                 subcategory: .lunch,
-                comment: PreviewExpenseComment.lunch.rawValue
+                comment: PreviewExpenseComment.lunch.rawValue,
+                latitude: 37.5667,
+                longitude: 126.9781,
+                horizontalAccuracy: 14.0
             ),
             makeExpense(
                 to: location,
@@ -961,7 +1198,10 @@ private extension PreviewGenerator {
                 timeZoneId: previewLocation.timeZoneId,
                 baseAmount: 300,
                 category: .transport,
-                subcategory: .publicTransport
+                subcategory: .publicTransport,
+                latitude: 37.5702,
+                longitude: 126.9826,
+                horizontalAccuracy: 10.0
             ),
             makeExpense(
                 to: location,
@@ -969,7 +1209,10 @@ private extension PreviewGenerator {
                 timeZoneId: previewLocation.timeZoneId,
                 baseAmount: 2540.14,
                 category: .food,
-                subcategory: .dinner
+                subcategory: .dinner,
+                latitude: 37.5669,
+                longitude: 126.9779,
+                horizontalAccuracy: 16.0
             ),
             makeExpense(
                 to: location,
@@ -978,23 +1221,34 @@ private extension PreviewGenerator {
                 baseAmount: 2051.51,
                 category: .food,
                 subcategory: .snack,
-                comment: PreviewExpenseComment.streetFood.rawValue
+                comment: PreviewExpenseComment.streetFood.rawValue,
+                latitude: 37.5662,
+                longitude: 126.9786,
+                horizontalAccuracy: 12.0
             ),
-            makeExpense(to: location,
+            makeExpense(
+                to: location,
                 date: startDate.adding(days: 2, hours: 12, minutes: 7),
                 timeZoneId: previewLocation.timeZoneId,
                 baseAmount: 199.3,
                 paymentMethod: .card,
                 category: .transport,
-                subcategory: .publicTransport
+                subcategory: .publicTransport,
+                latitude: 37.5701,
+                longitude: 126.9825,
+                horizontalAccuracy: 10.0
             ),
-            makeExpense(to: location,
+            makeExpense(
+                to: location,
                 date: startDate.adding(days: 2, hours: 14, minutes: 41),
                 timeZoneId: previewLocation.timeZoneId,
                 baseAmount: 42900,
                 paymentMethod: .card,
                 category: .shopping,
-                subcategory: .electronics
+                subcategory: .electronics,
+                latitude: 37.5658,
+                longitude: 126.9772,
+                horizontalAccuracy: 18.0
             ),
             makeExpense(
                 to: location,
@@ -1003,7 +1257,10 @@ private extension PreviewGenerator {
                 baseAmount: 14200,
                 paymentMethod: .card,
                 category: .leisure,
-                subcategory: .activity
+                subcategory: .activity,
+                latitude: 37.5660,
+                longitude: 126.9775,
+                horizontalAccuracy: 22.0
             ),
             makeExpense(
                 to: location,
@@ -1013,7 +1270,10 @@ private extension PreviewGenerator {
                 paymentMethod: .card,
                 exchangeAdjustment: 6,
                 category: .miscellaneous,
-                subcategory: .laundry
+                subcategory: .laundry,
+                latitude: 37.5670,
+                longitude: 126.9787,
+                horizontalAccuracy: 20.0
             ),
             makeExpense(
                 to: location,
@@ -1021,7 +1281,10 @@ private extension PreviewGenerator {
                 timeZoneId: previewLocation.timeZoneId,
                 baseAmount: 1940.2,
                 category: .food,
-                subcategory: .dinner
+                subcategory: .dinner,
+                latitude: 37.5665,
+                longitude: 126.9784,
+                horizontalAccuracy: 16.0
             ),
             makeExpense(
                 to: location,
@@ -1031,7 +1294,10 @@ private extension PreviewGenerator {
                 paymentMethod: .card,
                 exchangeAdjustment: 1,
                 category: .medicine,
-                subcategory: .medication
+                subcategory: .medication,
+                latitude: 37.5673,
+                longitude: 126.9789,
+                horizontalAccuracy: 18.0
             ),
             makeExpense(
                 to: location,
@@ -1039,7 +1305,10 @@ private extension PreviewGenerator {
                 timeZoneId: previewLocation.timeZoneId,
                 baseAmount: 2046,
                 category: .food,
-                subcategory: .breakfast
+                subcategory: .breakfast,
+                latitude: 37.5663,
+                longitude: 126.9783,
+                horizontalAccuracy: 14.0
             ),
             makeExpense(
                 to: location,
@@ -1047,7 +1316,10 @@ private extension PreviewGenerator {
                 timeZoneId: previewLocation.timeZoneId,
                 baseAmount: 199,
                 category: .transport,
-                subcategory: .publicTransport
+                subcategory: .publicTransport,
+                latitude: 37.5703,
+                longitude: 126.9827,
+                horizontalAccuracy: 10.0
             ),
             makeExpense(
                 to: location,
@@ -1057,7 +1329,10 @@ private extension PreviewGenerator {
                 paymentMethod: .card,
                 category: .miscellaneous,
                 subcategory: .bankFees,
-                comment: PreviewExpenseComment.miscellaneous.rawValue
+                comment: PreviewExpenseComment.miscellaneous.rawValue,
+                latitude: 37.5664,
+                longitude: 126.9776,
+                horizontalAccuracy: 20.0
             )
         ]
     }

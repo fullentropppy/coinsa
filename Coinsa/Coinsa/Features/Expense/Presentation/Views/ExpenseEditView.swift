@@ -21,8 +21,10 @@ struct ExpenseEditView: View {
     
     @State private var viewModel: ExpenseEditViewModel
     @State private var deletionHandler = DeletionHandler<Expense>()
+    @State private var currentLocationProvider = CurrentLocationProvider()
     @State private var currencySide: CurrencySide
     @State private var isShowingDiscardAlert = false
+    @State private var isShowingLocationMap = false
     
     @FocusState private var focusedField: NumericEditField?
     
@@ -111,6 +113,10 @@ struct ExpenseEditView: View {
                 )
                 .task {
                     viewModel.loadInitialRateIfNeeded()
+                    await resolveCurrentLocationIfNeeded()
+                }
+                .fullScreenCover(isPresented: $isShowingLocationMap) {
+                    locationMapEditor
                 }
         }
     }
@@ -124,6 +130,7 @@ struct ExpenseEditView: View {
             currencySection
             dateSection
             commentSection
+            locationSection
             actionsSection
         }
     }
@@ -261,6 +268,42 @@ struct ExpenseEditView: View {
                     gmtOffsetDisplay: viewModel.timeZone.gmtOffsetDisplay,
                     timeZoneId: viewModel.timeZone.identifier
                 )
+            )
+        }
+    }
+    
+    @ViewBuilder
+    private var locationSection: some View {
+        if let coordinate = viewModel.coordinate {
+            Section {
+                Button {
+                    isShowingLocationMap = true
+                } label: {
+                    ExpenseLocationMapView(
+                        coordinate: Binding(
+                            get: { viewModel.coordinate ?? coordinate },
+                            set: { viewModel.updateCoordinate($0) }
+                        ),
+                        isEditable: true
+                    )
+                }
+                .buttonStyle(.plain)
+            }
+            .listRowInsets(EdgeInsets())
+            .listRowBackground(Color.clear)
+        }
+    }
+
+    @ViewBuilder
+    private var locationMapEditor: some View {
+        if let coordinate = viewModel.coordinate {
+            CoordinateMapFullScreenView(
+                coordinate: Binding(
+                    get: { viewModel.coordinate ?? coordinate },
+                    set: { viewModel.updateCoordinate($0) }
+                ),
+                title: "expense.location",
+                accentColor: Expense.accentColor
             )
         }
     }
@@ -425,6 +468,17 @@ struct ExpenseEditView: View {
 
     private func cancelDelete() {
         deletionHandler.cancel()
+    }
+
+    private func resolveCurrentLocationIfNeeded() async {
+        guard !viewModel.isEdit, viewModel.coordinate == nil else { return }
+
+        do {
+            let location = try await currentLocationProvider.requestCurrentLocation()
+            viewModel.applyResolvedCurrentLocation(location)
+        } catch {
+            // Если геолокация недоступна или запрещена, трата остается без координат.
+        }
     }
 }
 

@@ -2298,6 +2298,40 @@
         }
       }
     },
+    "expense.location" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Location"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Локация"
+          }
+        }
+      }
+    },
+    "map.location" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Location"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Локация"
+          }
+        }
+      }
+    },
     "expense.navigationTitle.create" : {
       "extractionState" : "manual",
       "localizations" : {

@@ -5,6 +5,7 @@
 //  Created by Daniil Gritsenko on 24.03.2026.
 //
 
+import CoreLocation
 import Foundation
 import Observation
 
@@ -94,6 +95,7 @@ final class ExpenseEditViewModel {
     var timeZone: TimeZone
     var category: ExpenseCategory
     var subcategory: ExpenseSubcategory
+    var coordinate: GeoCoordinate?
     var comment: String
     
     // MARK: - Состояние UI. Сумма
@@ -196,6 +198,7 @@ final class ExpenseEditViewModel {
             exchangeAdjustment: location.exchangeAdjustment,
             category: preselectedCategory ?? .defaultValue,
             subcategory: .defaultValue(with: category),
+            coordinate: nil,
             comment: ""
         )
     }
@@ -217,6 +220,7 @@ final class ExpenseEditViewModel {
             exchangeAdjustment: expense.exchangeAdjustment,
             category: expense.category,
             subcategory: expense.subcategory,
+            coordinate: expense.coordinate,
             comment: expense.comment ?? ""
         )
     }
@@ -235,6 +239,7 @@ final class ExpenseEditViewModel {
         exchangeAdjustment: Double,
         category: ExpenseCategory,
         subcategory: ExpenseSubcategory,
+        coordinate: GeoCoordinate?,
         comment: String
     ) {
         self.location = location
@@ -245,6 +250,7 @@ final class ExpenseEditViewModel {
         self.exchangeAdjustment = exchangeAdjustment
         self.category = category
         self.subcategory = subcategory
+        self.coordinate = coordinate
         self.comment = comment
         
         let baseExchangeRateProvider = ExchangeRateProvider(service: HexarateService())
@@ -284,6 +290,7 @@ final class ExpenseEditViewModel {
             exchangeAdjustment: exchangeAdjustment,
             category: category,
             subcategory: subcategory,
+            coordinate: coordinate,
             comment: comment
         )
     }
@@ -379,6 +386,10 @@ final class ExpenseEditViewModel {
     }
     
     private func syncInitialSnapshotWithCurrentRates() {
+        syncInitialSnapshotWithCurrentValues()
+    }
+
+    private func syncInitialSnapshotWithCurrentValues() {
         initialSnapshot = Snapshot(
             date: initialSnapshot.date,
             baseAmount: initialSnapshot.baseAmount,
@@ -389,6 +400,7 @@ final class ExpenseEditViewModel {
             exchangeAdjustment: initialSnapshot.exchangeAdjustment,
             category: initialSnapshot.category,
             subcategory: initialSnapshot.subcategory,
+            coordinate: coordinate,
             comment: initialSnapshot.comment
         )
     }
@@ -417,6 +429,19 @@ final class ExpenseEditViewModel {
         amountManager.updateFromRateChange(for: currencySide, useExchangeAdjustment: useExchangeAdjustment)
     }
     
+    // MARK: - Операции с координатами
+
+    func updateCoordinate(_ newCoordinate: GeoCoordinate) {
+        coordinate = newCoordinate
+    }
+
+    func applyResolvedCurrentLocation(_ location: CLLocation) {
+        guard !isEdit && coordinate == nil else { return }
+
+        coordinate = GeoCoordinate(location)
+        syncInitialSnapshotWithCurrentValues()
+    }
+    
     // MARK: - Операции с хранилищем
     
     private var storedRateExpenseToBase: Double {
@@ -440,9 +465,9 @@ final class ExpenseEditViewModel {
                 exchangeAdjustment: exchangeAdjustment,
                 category: category,
                 subcategory: subcategory,
-                latitude: nil,
-                longitude: nil,
-                horizontalAccuracy: nil,
+                latitude: coordinate?.latitude,
+                longitude: coordinate?.longitude,
+                horizontalAccuracy: coordinate?.horizontalAccuracy,
                 comment: comment
             )
         } else {
@@ -457,9 +482,9 @@ final class ExpenseEditViewModel {
                 category: category,
                 subcategory: subcategory,
                 location: location,
-                latitude: nil,
-                longitude: nil,
-                horizontalAccuracy: nil,
+                latitude: coordinate?.latitude,
+                longitude: coordinate?.longitude,
+                horizontalAccuracy: coordinate?.horizontalAccuracy,
                 comment: comment
             )
         }
@@ -481,6 +506,7 @@ private extension ExpenseEditViewModel {
         let exchangeAdjustment: Double
         let category: ExpenseCategory
         let subcategory: ExpenseSubcategory
+        let coordinate: GeoCoordinate?
         let comment: String?
         
         // MARK: - Инициализация
@@ -496,6 +522,7 @@ private extension ExpenseEditViewModel {
                 exchangeAdjustment: viewModel.exchangeAdjustment,
                 category: viewModel.category,
                 subcategory: viewModel.subcategory,
+                coordinate: viewModel.coordinate,
                 comment: viewModel.comment
             )
         }
@@ -510,6 +537,7 @@ private extension ExpenseEditViewModel {
             exchangeAdjustment: Double,
             category: ExpenseCategory,
             subcategory: ExpenseSubcategory,
+            coordinate: GeoCoordinate?,
             comment: String?
         ) {
             self.date = date
@@ -521,6 +549,7 @@ private extension ExpenseEditViewModel {
             self.exchangeAdjustment = exchangeAdjustment
             self.category = category
             self.subcategory = subcategory
+            self.coordinate = coordinate
             self.comment = comment
         }
     }
