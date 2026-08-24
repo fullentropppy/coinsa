@@ -1,5 +1,5 @@
 //
-//  CoordinateMapView.swift
+//  GeoCoordinateMapView.swift
 //  Coinsa
 //
 //  Created by Daniil Gritsenko on 23.08.2026.
@@ -9,7 +9,7 @@ import MapKit
 import SwiftUI
 
 /// Карта с отображением и редактированием географической координаты.
-struct CoordinateMapView: View {
+struct GeoCoordinateMapView: View {
     // MARK: - Состояние
 
     @Binding private var coordinate: GeoCoordinate
@@ -83,7 +83,7 @@ struct CoordinateMapView: View {
 
     private var readOnlyMap: some View {
         Map(position: $cameraPosition, interactionModes: []) {
-            Marker(String(localized: title), coordinate: coordinate.locationCoordinate)
+            Marker(String(localized: title), coordinate: coordinate.coreLocationCoordinate)
         }
     }
 
@@ -118,7 +118,7 @@ struct CoordinateMapView: View {
     private static func cameraPosition(for coordinate: GeoCoordinate) -> MapCameraPosition {
         .region(
             MKCoordinateRegion(
-                center: coordinate.locationCoordinate,
+                center: coordinate.coreLocationCoordinate,
                 span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
             )
         )
@@ -127,7 +127,7 @@ struct CoordinateMapView: View {
 
 // MARK: - Превью
 
-private extension CoordinateMapView {
+private extension GeoCoordinateMapView {
     static let previewCoordinate = GeoCoordinate(
         latitude: 41.89021,
         longitude: 12.49223,
@@ -139,7 +139,7 @@ private extension CoordinateMapView {
 
         return List {
             Section("map.location") {
-                CoordinateMapView(
+                GeoCoordinateMapView(
                     coordinate: $coordinate,
                     title: "map.location",
                     isEditable: isEditable
@@ -152,9 +152,9 @@ private extension CoordinateMapView {
 }
 
 #Preview("Read. Light - RU") {
-    CoordinateMapView.makePreview(locale: PreviewLocale.ru, colorScheme: .light, isEditable: false)
+    GeoCoordinateMapView.makePreview(locale: PreviewLocale.ru, colorScheme: .light, isEditable: false)
 }
 
 #Preview("Edit. Dark - EN") {
-    CoordinateMapView.makePreview(locale: PreviewLocale.en, colorScheme: .dark, isEditable: true)
+    GeoCoordinateMapView.makePreview(locale: PreviewLocale.en, colorScheme: .dark, isEditable: true)
 }

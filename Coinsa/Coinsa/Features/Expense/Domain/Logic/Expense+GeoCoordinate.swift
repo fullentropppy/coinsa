@@ -1,12 +1,12 @@
 //
-//  Expense+Coordinate.swift
+//  Expense+GeoCoordinate.swift
 //  Coinsa
 //
 //  Created by Daniil Gritsenko on 23.08.2026.
 //
 
 extension Expense {
-    /// Координаты места совершения траты.
+    /// Географические координаты места совершения траты.
     var coordinate: GeoCoordinate? {
         guard let latitude, let longitude else { return nil }
 

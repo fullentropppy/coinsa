@@ -48,7 +48,7 @@ struct ExpenseDetailView: View {
             }
             .fullScreenCover(isPresented: $isShowingLocationMap) {
                 if let coordinate = expense.coordinate {
-                    CoordinateMapFullScreenView(
+                    GeoCoordinateMapFullScreenView(
                         coordinate: coordinate,
                         title: "expense.location",
                         accentColor: Expense.accentColor

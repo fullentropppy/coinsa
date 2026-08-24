@@ -140,6 +140,9 @@ private extension PreviewGenerator {
     ///   - category: Категория расхода.
     ///   - subcategory: Подкатегория расхода.
     ///   - comment: Комментарий (опционально).
+    ///   - latitude: Географическая широта места траты.
+    ///   - longitude: Географическая долгота места траты.
+    ///   - horizontalAccuracy: Точность определения координат в метрах.
     /// - Returns: Сгенерированный расход.
     private static func makeExpense(
         to location: Location,

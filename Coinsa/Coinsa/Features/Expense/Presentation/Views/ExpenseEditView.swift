@@ -297,7 +297,7 @@ struct ExpenseEditView: View {
     @ViewBuilder
     private var locationMapEditor: some View {
         if let coordinate = viewModel.coordinate {
-            CoordinateMapFullScreenView(
+            GeoCoordinateMapFullScreenView(
                 coordinate: Binding(
                     get: { viewModel.coordinate ?? coordinate },
                     set: { viewModel.updateCoordinate($0) }

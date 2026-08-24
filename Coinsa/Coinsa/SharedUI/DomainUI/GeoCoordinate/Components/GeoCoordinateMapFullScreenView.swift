@@ -1,5 +1,5 @@
 //
-//  CoordinateMapFullScreenView.swift
+//  GeoCoordinateMapFullScreenView.swift
 //  Coinsa
 //
 //  Created by Daniil Gritsenko on 23.08.2026.
@@ -9,7 +9,7 @@ import MapKit
 import SwiftUI
 
 /// Полноэкранная карта для просмотра или выбора географической координаты.
-struct CoordinateMapFullScreenView: View {
+struct GeoCoordinateMapFullScreenView: View {
     // MARK: - Окружение
 
     @Environment(\.dismiss) private var dismiss
@@ -84,7 +84,7 @@ struct CoordinateMapFullScreenView: View {
     private var mapContent: some View {
         Map(position: $cameraPosition, interactionModes: .all) {
             if !isEditable {
-                Marker(String(localized: title), coordinate: draftCoordinate.locationCoordinate)
+                Marker(String(localized: title), coordinate: draftCoordinate.coreLocationCoordinate)
             }
         }
         .onMapCameraChange(frequency: .continuous) { context in
@@ -150,7 +150,7 @@ struct CoordinateMapFullScreenView: View {
     private static func cameraPosition(for coordinate: GeoCoordinate) -> MapCameraPosition {
         .region(
             MKCoordinateRegion(
-                center: coordinate.locationCoordinate,
+                center: coordinate.coreLocationCoordinate,
                 span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
             )
         )
@@ -159,7 +159,7 @@ struct CoordinateMapFullScreenView: View {
 
 // MARK: - Превью
 
-private extension CoordinateMapFullScreenView {
+private extension GeoCoordinateMapFullScreenView {
     static let previewCoordinate = GeoCoordinate(
         latitude: 41.89021,
         longitude: 12.49223,
@@ -171,9 +171,9 @@ private extension CoordinateMapFullScreenView {
 
         return Group {
             if isEditable {
-                CoordinateMapFullScreenView(coordinate: $coordinate, title: "map.location")
+                GeoCoordinateMapFullScreenView(coordinate: $coordinate, title: "map.location")
             } else {
-                CoordinateMapFullScreenView(coordinate: coordinate, title: "map.location")
+                GeoCoordinateMapFullScreenView(coordinate: coordinate, title: "map.location")
             }
         }
         .environment(\.locale, locale)
@@ -182,9 +182,9 @@ private extension CoordinateMapFullScreenView {
 }
 
 #Preview("Read. Light - RU") {
-    CoordinateMapFullScreenView.makePreview(locale: PreviewLocale.ru, colorScheme: .light, isEditable: false)
+    GeoCoordinateMapFullScreenView.makePreview(locale: PreviewLocale.ru, colorScheme: .light, isEditable: false)
 }
 
 #Preview("Edit. Dark - EN") {
-    CoordinateMapFullScreenView.makePreview(locale: PreviewLocale.en, colorScheme: .dark, isEditable: true)
+    GeoCoordinateMapFullScreenView.makePreview(locale: PreviewLocale.en, colorScheme: .dark, isEditable: true)
 }

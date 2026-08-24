@@ -28,7 +28,7 @@ struct ExpenseLocationMapView: View {
     // MARK: - Тело View
 
     var body: some View {
-        CoordinateMapView(
+        GeoCoordinateMapView(
             coordinate: $coordinate,
             title: "expense.location",
             isEditable: isEditable,
