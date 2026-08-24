@@ -2315,23 +2315,6 @@
         }
       }
     },
-    "map.location" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Location"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Локация"
-          }
-        }
-      }
-    },
     "expense.navigationTitle.create" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2379,6 +2362,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Способ оплаты"
+          }
+        }
+      }
+    },
+    "expense.placeOfExpense" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Place of the Expense"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Место траты"
           }
         }
       }

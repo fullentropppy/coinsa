@@ -48,10 +48,9 @@ struct ExpenseDetailView: View {
             }
             .fullScreenCover(isPresented: $isShowingLocationMap) {
                 if let coordinate = expense.coordinate {
-                    GeoCoordinateMapFullScreenView(
+                    CoordinateMapFullScreenView(
                         coordinate: coordinate,
-                        title: "expense.location",
-                        accentColor: Expense.accentColor
+                        title: .expensePlaceOfExpense
                     )
                 }
             }
@@ -66,7 +65,7 @@ struct ExpenseDetailView: View {
         Form {
             mainSection
             commentSection
-            locationSection
+            placeOfExpenseSection
         }
     }
     
@@ -83,13 +82,13 @@ struct ExpenseDetailView: View {
     }
     
     @ViewBuilder
-    private var locationSection: some View {
+    private var placeOfExpenseSection: some View {
         if let coordinate = expense.coordinate {
             Section {
                 Button {
                     isShowingLocationMap = true
                 } label: {
-                    ExpenseLocationMapView(coordinate: coordinate)
+                    CoordinateMapView(coordinate, title: .expensePlaceOfExpense)
                 }
                 .buttonStyle(.plain)
             }

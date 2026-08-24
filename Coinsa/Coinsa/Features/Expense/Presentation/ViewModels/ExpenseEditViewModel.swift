@@ -95,7 +95,7 @@ final class ExpenseEditViewModel {
     var timeZone: TimeZone
     var category: ExpenseCategory
     var subcategory: ExpenseSubcategory
-    var coordinate: GeoCoordinate?
+    var coordinate: Coordinate?
     var comment: String
     
     // MARK: - Состояние UI. Сумма
@@ -239,7 +239,7 @@ final class ExpenseEditViewModel {
         exchangeAdjustment: Double,
         category: ExpenseCategory,
         subcategory: ExpenseSubcategory,
-        coordinate: GeoCoordinate?,
+        coordinate: Coordinate?,
         comment: String
     ) {
         self.location = location
@@ -431,14 +431,14 @@ final class ExpenseEditViewModel {
     
     // MARK: - Операции с координатами
 
-    func updateCoordinate(_ newCoordinate: GeoCoordinate) {
+    func updateCoordinate(_ newCoordinate: Coordinate) {
         coordinate = newCoordinate
     }
 
     func applyResolvedCurrentLocation(_ location: CLLocation) {
         guard !isEdit && coordinate == nil else { return }
 
-        coordinate = GeoCoordinate(location)
+        coordinate = Coordinate(location)
         syncInitialSnapshotWithCurrentValues()
     }
     
@@ -506,7 +506,7 @@ private extension ExpenseEditViewModel {
         let exchangeAdjustment: Double
         let category: ExpenseCategory
         let subcategory: ExpenseSubcategory
-        let coordinate: GeoCoordinate?
+        let coordinate: Coordinate?
         let comment: String?
         
         // MARK: - Инициализация
@@ -537,7 +537,7 @@ private extension ExpenseEditViewModel {
             exchangeAdjustment: Double,
             category: ExpenseCategory,
             subcategory: ExpenseSubcategory,
-            coordinate: GeoCoordinate?,
+            coordinate: Coordinate?,
             comment: String?
         ) {
             self.date = date

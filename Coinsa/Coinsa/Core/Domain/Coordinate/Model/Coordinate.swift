@@ -1,5 +1,5 @@
 //
-//  GeoCoordinate.swift
+//  Coordinate.swift
 //  Coinsa
 //
 //  Created by Daniil Gritsenko on 23.08.2026.
@@ -9,7 +9,7 @@ import CoreLocation
 import Foundation
 
 /// Географические координаты с опциональной точностью определения.
-struct GeoCoordinate: Equatable {
+struct Coordinate: Equatable {
     // MARK: - Свойства
 
     let latitude: Double

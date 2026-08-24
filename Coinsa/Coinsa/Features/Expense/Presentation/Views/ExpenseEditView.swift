@@ -116,7 +116,7 @@ struct ExpenseEditView: View {
                     await resolveCurrentLocationIfNeeded()
                 }
                 .fullScreenCover(isPresented: $isShowingLocationMap) {
-                    locationMapEditor
+                    placeOfExpenseEditor
                 }
         }
     }
@@ -130,7 +130,7 @@ struct ExpenseEditView: View {
             currencySection
             dateSection
             commentSection
-            locationSection
+            placeOfExpenseSection
             actionsSection
         }
     }
@@ -273,37 +273,37 @@ struct ExpenseEditView: View {
     }
     
     @ViewBuilder
-    private var locationSection: some View {
+    private var placeOfExpenseSection: some View {
         if let coordinate = viewModel.coordinate {
             Section {
                 Button {
                     isShowingLocationMap = true
                 } label: {
-                    ExpenseLocationMapView(
-                        coordinate: Binding(
+                    CoordinateMapView(
+                        Binding(
                             get: { viewModel.coordinate ?? coordinate },
                             set: { viewModel.updateCoordinate($0) }
                         ),
+                        title: .expensePlaceOfExpense,
                         isEditable: true
                     )
                 }
                 .buttonStyle(.plain)
             }
-            .listRowInsets(EdgeInsets())
-            .listRowBackground(Color.clear)
+            //.listRowInsets(EdgeInsets())
+            //.listRowBackground(Color.clear)
         }
     }
 
     @ViewBuilder
-    private var locationMapEditor: some View {
+    private var placeOfExpenseEditor: some View {
         if let coordinate = viewModel.coordinate {
-            GeoCoordinateMapFullScreenView(
+            CoordinateMapFullScreenView(
                 coordinate: Binding(
                     get: { viewModel.coordinate ?? coordinate },
                     set: { viewModel.updateCoordinate($0) }
                 ),
-                title: "expense.location",
-                accentColor: Expense.accentColor
+                title: .expensePlaceOfExpense
             )
         }
     }
