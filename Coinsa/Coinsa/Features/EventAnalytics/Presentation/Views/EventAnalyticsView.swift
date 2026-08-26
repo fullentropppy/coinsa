@@ -84,7 +84,9 @@ struct EventAnalyticsView: View {
         Section {
             Picker("", selection: $selectedMetric) {
                 ForEach(EventAnalyticsMetric.allCases) { metric in
-                    Text(metric.localizedResource).tag(metric)
+                    if metric != .days || metric == .days && viewModel.totalDays > 1 {
+                        Text(metric.localizedResource).tag(metric)
+                    }
                 }
             }
             .pickerStyle(.segmented)

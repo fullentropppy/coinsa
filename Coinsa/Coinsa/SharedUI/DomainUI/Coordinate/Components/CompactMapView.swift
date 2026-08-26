@@ -1,5 +1,5 @@
 //
-//  CoordinateMapView.swift
+//  CompactMapView.swift
 //  Coinsa
 //
 //  Created by Daniil Gritsenko on 23.08.2026.
@@ -9,7 +9,7 @@ import MapKit
 import SwiftUI
 
 /// Карта с отображением и редактированием географической координаты.
-struct CoordinateMapView: View {
+struct CompactMapView: View {
     // MARK: - Состояние
 
     @Binding private var coordinate: Coordinate
@@ -96,7 +96,7 @@ struct CoordinateMapView: View {
 
 // MARK: - Превью
 
-private extension CoordinateMapView {
+private extension CompactMapView {
     static let previewCoordinate = Coordinate(
         latitude: 35.65949,
         longitude: 139.70057,
@@ -107,7 +107,7 @@ private extension CoordinateMapView {
         @Previewable @State var coordinate = previewCoordinate
 
         return List {
-            CoordinateMapView($coordinate, title: .expensePlaceOfExpense, isEditable: isEditable)
+            CompactMapView($coordinate, title: .expensePlaceOfExpense, isEditable: isEditable)
         }
         .environment(\.locale, locale)
         .preferredColorScheme(colorScheme)
@@ -115,9 +115,9 @@ private extension CoordinateMapView {
 }
 
 #Preview("Read. Light - RU") {
-    CoordinateMapView.makePreview(locale: PreviewLocale.ru, colorScheme: .light, isEditable: false)
+    CompactMapView.makePreview(locale: PreviewLocale.ru, colorScheme: .light, isEditable: false)
 }
 
 #Preview("Edit. Dark - EN") {
-    CoordinateMapView.makePreview(locale: PreviewLocale.en, colorScheme: .dark, isEditable: true)
+    CompactMapView.makePreview(locale: PreviewLocale.en, colorScheme: .dark, isEditable: true)
 }

@@ -145,7 +145,7 @@ struct EventAnalyticsDaysView: View {
     private func dailyExpenseRow(_ point: EventDailyExpenseAnalyticsData) -> some View {
         HStack {
             DateLabel(point.date.startOfDay, withTime: false, using: .utc)
-                .frame(alignment: .top)
+                .frame(maxHeight: .infinity, alignment: .topLeading)
             Spacer()
             AmountStack(
                 baseAmount: point.baseAmount,

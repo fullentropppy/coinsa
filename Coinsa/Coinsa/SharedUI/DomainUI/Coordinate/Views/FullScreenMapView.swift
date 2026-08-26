@@ -1,5 +1,5 @@
 //
-//  CoordinateMapFullScreenView.swift
+//  FullScreenMapView.swift
 //  Coinsa
 //
 //  Created by Daniil Gritsenko on 23.08.2026.
@@ -9,7 +9,7 @@ import MapKit
 import SwiftUI
 
 /// Полноэкранная карта для просмотра или выбора географической координаты.
-struct CoordinateMapFullScreenView: View {
+struct FullScreenMapView: View {
     // MARK: - Окружение
 
     @Environment(\.dismiss) private var dismiss
@@ -65,7 +65,7 @@ struct CoordinateMapFullScreenView: View {
                 }
                 .ignoresSafeArea()
                 .safeAreaInset(edge: .bottom) {
-                    CoordinateBadge(coordinate)
+                    CoordinateBadge(draftCoordinate)
                 }
         }
     }
@@ -117,7 +117,7 @@ struct CoordinateMapFullScreenView: View {
 
 // MARK: - Превью
 
-private extension CoordinateMapFullScreenView {
+private extension FullScreenMapView {
     static let previewCoordinate = Coordinate(
         latitude: 35.65949,
         longitude: 139.70057,
@@ -129,9 +129,9 @@ private extension CoordinateMapFullScreenView {
 
         return Group {
             if isEditable {
-                CoordinateMapFullScreenView(coordinate: $coordinate, title: .expensePlaceOfExpense)
+                FullScreenMapView(coordinate: $coordinate, title: .expensePlaceOfExpense)
             } else {
-                CoordinateMapFullScreenView(coordinate: coordinate, title: .expensePlaceOfExpense)
+                FullScreenMapView(coordinate: coordinate, title: .expensePlaceOfExpense)
             }
         }
         .environment(\.locale, locale)
@@ -140,9 +140,9 @@ private extension CoordinateMapFullScreenView {
 }
 
 #Preview("Read. Light - RU") {
-    CoordinateMapFullScreenView.makePreview(locale: PreviewLocale.ru, colorScheme: .light, isEditable: false)
+    FullScreenMapView.makePreview(locale: PreviewLocale.ru, colorScheme: .light, isEditable: false)
 }
 
 #Preview("Edit. Dark - EN") {
-    CoordinateMapFullScreenView.makePreview(locale: PreviewLocale.en, colorScheme: .dark, isEditable: true)
+    FullScreenMapView.makePreview(locale: PreviewLocale.en, colorScheme: .dark, isEditable: true)
 }

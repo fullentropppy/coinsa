@@ -279,7 +279,7 @@ struct ExpenseEditView: View {
                 Button {
                     isShowingLocationMap = true
                 } label: {
-                    CoordinateMapView(
+                    CompactMapView(
                         Binding(
                             get: { viewModel.coordinate ?? coordinate },
                             set: { viewModel.updateCoordinate($0) }
@@ -298,7 +298,7 @@ struct ExpenseEditView: View {
     @ViewBuilder
     private var placeOfExpenseEditor: some View {
         if let coordinate = viewModel.coordinate {
-            CoordinateMapFullScreenView(
+            FullScreenMapView(
                 coordinate: Binding(
                     get: { viewModel.coordinate ?? coordinate },
                     set: { viewModel.updateCoordinate($0) }

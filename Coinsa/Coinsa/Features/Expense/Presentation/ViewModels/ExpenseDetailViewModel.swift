@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MapKit
 
 /// ViewModel для детального экрана траты.
 struct ExpenseDetailViewModel {
@@ -57,6 +58,32 @@ struct ExpenseDetailViewModel {
         isExpenseBaseCurrency ? nil : baseCurrency
     }
 
+    // MARK: - Вычисляемые свойства. Карта
+    
+    var coordinate: CLLocationCoordinate2D? {
+        expense.coordinate?.coreLocationCoordinate
+    }
+    
+    var cameraCoreCoordinate: CLLocationCoordinate2D? {
+        guard let coordinate else { return nil }
+        
+        var shift: Double
+        
+        if !isExpenseBaseCurrency && expense.comment != nil {
+            shift = 0.013
+        } else if isExpenseBaseCurrency && expense.comment != nil
+                    || !isExpenseBaseCurrency && expense.comment == nil {
+            shift = 0.010
+        } else {
+            shift = 0.008
+        }
+        
+        return CLLocationCoordinate2D(
+            latitude: coordinate.latitude + shift,
+            longitude: coordinate.longitude
+        )
+    }
+    
     // MARK: - Вычисляемые свойства. Курс обмена
     
     var adjustedRateDescription: LocalizedStringResource? {

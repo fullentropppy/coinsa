@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import MapKit
 
 /// Детальный экран траты.
 struct ExpenseDetailView: View {
@@ -15,20 +16,61 @@ struct ExpenseDetailView: View {
     @Environment(\.dismiss) private var dismiss
     
     @State private var isShowingExpenseEdit = false
-    @State private var isShowingLocationMap = false
-
-    private let expense: Expense
+    @State private var isShowingMap = false
+    @State private var mapMarkerPosition: MapCameraPosition
     
+    private let expense: Expense
+        
     // MARK: - Вычисляемые свойства
 
     private var viewModel: ExpenseDetailViewModel {
         ExpenseDetailViewModel(expense: expense)
     }
 
+    private var formBackgroundVisibility: Visibility {
+        viewModel.coordinate == nil ? .visible : .hidden
+    }
+    
+    private var formBackgroundGradient: LinearGradient {
+        var lastStopLocation = 0.65
+        
+        if viewModel.isExpenseBaseCurrency {
+            lastStopLocation -= 0.1
+        }
+        
+        if expense.comment == nil {
+            lastStopLocation -= 0.1
+        }
+
+        return LinearGradient(
+            stops:
+                [
+                    .init(color: .black, location: 0),
+                    .init(color: .black, location: lastStopLocation - 0.15),
+                    .init(color: .clear, location: lastStopLocation)
+                ],
+            startPoint: .top,
+            endPoint: .bottom
+        )
+    }
+    
+    private var sectionBackgroundMaterial: Material {
+        viewModel.coordinate == nil ? .bar : .regularMaterial
+    }
+        
+    private var mapCameraPosition: MapCameraPosition? {
+        if let cameraCoordinate = viewModel.cameraCoreCoordinate {
+            .camera(MapCamera(centerCoordinate: cameraCoordinate, distance: 10000))
+        } else {
+            nil
+        }
+    }
+    
     // MARK: - Инициализация
 
     init(_ expense: Expense) {
         self.expense = expense
+        self.mapMarkerPosition = .automatic
     }
     
     // MARK: - Тело View
@@ -46,9 +88,9 @@ struct ExpenseDetailView: View {
                     dismiss()
                 }
             }
-            .fullScreenCover(isPresented: $isShowingLocationMap) {
+            .fullScreenCover(isPresented: $isShowingMap) {
                 if let coordinate = expense.coordinate {
-                    CoordinateMapFullScreenView(
+                    FullScreenMapView(
                         coordinate: coordinate,
                         title: .expensePlaceOfExpense
                     )
@@ -62,10 +104,17 @@ struct ExpenseDetailView: View {
     // MARK: - Основной контент
     
     private var expenseDetailForm: some View {
-        Form {
-            mainSection
-            commentSection
-            placeOfExpenseSection
+        ZStack {
+            backgroundContent
+            
+            Form {
+                mainSection
+                commentSection
+            }
+            .scrollContentBackground(formBackgroundVisibility)
+        }
+        .onTapGesture {
+            isShowingMap = true
         }
     }
     
@@ -79,22 +128,9 @@ struct ExpenseDetailView: View {
                 additionalInfoContent
             }
         }
-    }
-    
-    @ViewBuilder
-    private var placeOfExpenseSection: some View {
-        if let coordinate = expense.coordinate {
-            Section {
-                Button {
-                    isShowingLocationMap = true
-                } label: {
-                    CoordinateMapView(coordinate, title: .expensePlaceOfExpense)
-                }
-                .buttonStyle(.plain)
-            }
-            .listRowInsets(EdgeInsets())
-            .listRowBackground(Color.clear)
-        }
+        .listRowBackground(
+            RoundedRectangle(cornerRadius: 0).fill(sectionBackgroundMaterial)
+        )
     }
     
     @ViewBuilder
@@ -108,10 +144,50 @@ struct ExpenseDetailView: View {
                     Text(comment)
                 }
             }
+            .listRowBackground(
+                RoundedRectangle(cornerRadius: 0).fill(sectionBackgroundMaterial)
+            )
+        }
+    }
+    
+    @ViewBuilder
+    private var mapSection: some View {
+        if let coordinate = expense.coordinate {
+            Section {
+                Button {
+                    isShowingMap = true
+                } label: {
+                    CompactMapView(coordinate, title: .expensePlaceOfExpense)
+                }
+                .buttonStyle(.plain)
+            }
+            .listRowInsets(EdgeInsets())
+            .listRowBackground(Color.clear)
         }
     }
     
     // MARK: - Компоненты
+    
+    @ViewBuilder
+
+    private var backgroundContent: some View {
+        if let coordinate = viewModel.coordinate, let mapCameraPosition {
+            Map(position: $mapMarkerPosition) {
+                Marker("", coordinate: coordinate)
+            }
+            .onAppear {
+                mapMarkerPosition = mapCameraPosition
+            }
+            .ignoresSafeArea()
+
+            Rectangle()
+                .fill(.ultraThinMaterial)
+                .mask {
+                    formBackgroundGradient
+                }
+                .ignoresSafeArea()
+        }
+    }
     
     private var headerContent: some View {
         HStack {
