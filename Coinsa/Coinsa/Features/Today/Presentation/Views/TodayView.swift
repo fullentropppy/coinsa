@@ -32,6 +32,12 @@ struct TodayView: View {
         ExpenseRepository(context: context)
     }
 
+    // MARK: - Визуальный стиль
+    
+    private var daySegmentColors: [Color] {
+        DaySegment.from(date: .now).colors
+    }
+    
     // MARK: - Инициализация
     
     init() {
@@ -60,45 +66,51 @@ struct TodayView: View {
                 .navigationTitle(viewModel.navigtaionTitle)
                 .navigationSubtitle(viewModel.navigationSubtitle)
                 .navigationBarTitleDisplayMode(.large)
+                .onAppear {
+                    syncViewModelContext()
+                    updateSelectedLocationIfNeeded()
+                }
+                .onChange(of: selectedLocationID) { _, _ in
+                    updateSelectedLocationIfNeeded()
+                }
+                .task(id: viewModel.rateRefreshKey) {
+                    viewModel.loadInitialRateIfNeeded()
+                }
         }
     }
 
     // MARK: - Основной контент
 
     private var todayForm: some View {
-        Group {
-            if let selectedLocation = viewModel.selectedLocation {
-                locationContent(location: selectedLocation)
-                    .sheet(item: $selectedQuickCategory) { selectedCategory in
-                        ExpenseEditView(
-                            forCreateWith: selectedLocation,
-                            preselectedCategory: selectedCategory,
-                            preselectedPaymentMethod: settingsStore.selectedPaymentMethod
+        ZStack {
+            LinearGradient(colors: daySegmentColors, startPoint: .top, endPoint: .bottom)
+                .ignoresSafeArea()
+            
+            Group {
+                if let selectedLocation = viewModel.selectedLocation {
+                    locationContent(location: selectedLocation)
+                        .sheet(item: $selectedQuickCategory) { selectedCategory in
+                            ExpenseEditView(
+                                forCreateWith: selectedLocation,
+                                preselectedCategory: selectedCategory,
+                                preselectedPaymentMethod: settingsStore.selectedPaymentMethod
+                            )
+                        }
+                        .sheet(item: $expenseToEdit) { expense in
+                            ExpenseEditView(forEdit: expense)
+                        }
+                        .deleteConfirmationAlert(
+                            isPresented: $deletionHandler.isShowingDeleteConfirmation,
+                            title: .expenseDeleteTitle,
+                            message: .expenseDeleteMessage,
+                            onConfirm: { confirmDelete() },
+                            onCancel: { cancelDelete() }
                         )
-                    }
-                    .sheet(item: $expenseToEdit) { expense in
-                        ExpenseEditView(forEdit: expense)
-                    }
-                    .deleteConfirmationAlert(
-                        isPresented: $deletionHandler.isShowingDeleteConfirmation,
-                        title: .expenseDeleteTitle,
-                        message: .expenseDeleteMessage,
-                        onConfirm: { confirmDelete() },
-                        onCancel: { cancelDelete() }
-                    )
-            } else {
-                emptyCurrentLocationContent
+                } else {
+                    emptyCurrentLocationContent
+                }
             }
-        }
-        .onAppear {
-            syncViewModelContext()
-            updateSelectedLocationIfNeeded()
-        }
-        .onChange(of: selectedLocationID) { _, _ in
-            updateSelectedLocationIfNeeded()
-        }
-        .task(id: viewModel.rateRefreshKey) {
-            viewModel.loadInitialRateIfNeeded()
+            .scrollContentBackground(.hidden)
         }
     }
     
@@ -128,6 +140,9 @@ struct TodayView: View {
             }
             contextContent(location: location)
         }
+        .listRowBackground(
+            RoundedRectangle(cornerRadius: 0).fill(.regularMaterial)
+        )
     }
     
     private var quickExpenseSection: some View {
@@ -137,19 +152,33 @@ struct TodayView: View {
                     quickExpenseButton(category: category)
                 }
             }
+            .padding(4)
         }
         .listRowBackground(Color.clear)
+        .listRowInsets(EdgeInsets())
     }
     
     @ViewBuilder
     private var todayExpensesSection: some View {
-        Group {
-            if viewModel.todayExpenses.isEmpty {
-                GroupHeader(icon: Expense.primaryIcon, title: .todayNoExpenses)
-                    .listRowBackground(Color.clear)
-            } else {
-                todayExpenseListContent
+        if viewModel.hasTodayExpenses {
+            Section(.todayExpenses) {
+                ForEach(viewModel.todayExpenses) { expense in
+                    NavigationLink {
+                        ExpenseDetailView(expense)
+                    } label: {
+                        ExpenseRowView(expense)
+                    }
+                    .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                        SwipeActions(
+                            onDelete: { requestDelete(for: [expense]) },
+                            onEdit: { expenseToEdit = expense }
+                        )
+                    }
+                }
             }
+            .listRowBackground(
+                RoundedRectangle(cornerRadius: 0).fill(.regularMaterial)
+            )
         }
     }
 
@@ -237,7 +266,7 @@ struct TodayView: View {
                 Image(systemName: category.primaryIcon)
                     .frame(width: 20, height: 20)
                     .foregroundStyle(category.accentColor)
-                    .shadow(color: category.accentColor.opacity(0.2), radius: 2)
+                    .shadow(color: category.accentColor, radius: 12)
                 Text(category.localizedResource)
             }
             .font(.subheadline.weight(.medium))
@@ -245,25 +274,10 @@ struct TodayView: View {
             .padding(.vertical, 4)
             .frame(maxWidth: .infinity, alignment: .leading)
         }
+        .clipShape(RoundedRectangle(cornerRadius: 14))
         .buttonStyle(.glass)
-    }
-    
-    private var todayExpenseListContent: some View {
-        Section(.todayExpenses) {
-            ForEach(viewModel.todayExpenses) { expense in
-                NavigationLink {
-                    ExpenseDetailView(expense)
-                } label: {
-                    ExpenseRowView(expense)
-                }
-                .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                    SwipeActions(
-                        onDelete: { requestDelete(for: [expense]) },
-                        onEdit: { expenseToEdit = expense }
-                    )
-                }
-            }
-        }
+        .buttonBorderShape(.roundedRectangle(radius: 14))
+        .foregroundStyle(Color.primary)
     }
     
     // MARK: - Биндинги

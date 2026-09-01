@@ -12,6 +12,7 @@ struct EventSubcategoryAnalyticsView: View {
     // MARK: - Хранимые свойства
     
     private let category: ExpenseCategory
+    private let amountMode: CategoryAmountMode
     private let viewModel: EventAnalyticsViewModel
     private let screenContextSubtitle: String
     
@@ -21,15 +22,24 @@ struct EventSubcategoryAnalyticsView: View {
         viewModel.displayedSubcategorySlicesSortedByAmount(for: category)
     }
     
+    private var subcategoryAmountDivisor: Double {
+        switch amountMode {
+        case .total: 1
+        case .daily: max(Double(viewModel.totalDays), 1)
+        }
+    }
+    
     // MARK: - Инициализация
     
     /// Создает экран аналитики подкатегорий.
     /// - Parameters:
     ///   - category: Категория расходов.
+    ///   - amountMode: Режим отображения сумм.
     ///   - data: Аналитические данные события.
     ///   - screenContextSubtitle: Подзаголовок экрана.
-    init(category: ExpenseCategory, data: EventCategoryAnalyticsData, screenContextSubtitle: String) {
+    init(category: ExpenseCategory, amountMode: CategoryAmountMode, data: EventCategoryAnalyticsData, screenContextSubtitle: String) {
         self.category = category
+        self.amountMode = amountMode
         self.viewModel = EventAnalyticsViewModel(data: data)
         self.screenContextSubtitle = screenContextSubtitle
     }
@@ -73,9 +83,9 @@ struct EventSubcategoryAnalyticsView: View {
             }
             Spacer()
             AmountStack(
-                baseAmount: slice.baseAmount,
+                baseAmount: slice.baseAmount / subcategoryAmountDivisor,
                 baseCurrency: viewModel.baseCurrency,
-                expenseAmount: slice.locationAmount,
+                expenseAmount: slice.locationAmount.map { $0 / subcategoryAmountDivisor },
                 expenseCurrency: viewModel.locationCurrency
             )
         }
@@ -101,6 +111,7 @@ private extension EventSubcategoryAnalyticsView {
         return NavigationStack {
             EventSubcategoryAnalyticsView(
                 category: category,
+                amountMode: .total,
                 data: viewModel.eventAnalyticsData,
                 screenContextSubtitle: trip.screenContextSubtitle
             )

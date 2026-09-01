@@ -128,6 +128,7 @@ struct EventAnalyticsCategoriesView: View {
                 NavigationLink {
                     EventSubcategoryAnalyticsView(
                         category: slice.category,
+                        amountMode: categoryAmountMode,
                         data: viewModel.data,
                         screenContextSubtitle: screenContextSubtitle
                     )
