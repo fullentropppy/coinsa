@@ -1,15 +1,15 @@
 //
-//  EventAnalyticsCategoriesView.swift
+//  EventAnalyticsCategoriesBody.swift
 //  Coinsa
 //
-//  Created by OpenAI on 23.08.2026.
+//  Created by Daniil Gritsenko on 23.08.2026.
 //
 
 import Charts
 import SwiftUI
 
-/// Вкладка аналитики расходов по категориям.
-struct EventAnalyticsCategoriesView: View {
+/// Тело вкладки аналитики расходов по категориям.
+struct EventAnalyticsCategoriesBody: View {
     // MARK: - Окружение
 
     @Environment(\.haptics) private var haptics
@@ -42,7 +42,7 @@ struct EventAnalyticsCategoriesView: View {
 
     // MARK: - Инициализация
 
-    /// Создает вкладку аналитики категорий.
+    /// Создает тело вкладки аналитики категорий.
     /// - Parameters:
     ///   - viewModel: ViewModel аналитики события.
     ///   - screenContextSubtitle: Подзаголовок экрана для вложенной аналитики.
@@ -61,36 +61,12 @@ struct EventAnalyticsCategoriesView: View {
 
     private var categoriesContent: some View {
         Group {
-            categoriesHeaderSection
             categoriesChartSection
             categoriesLegendSection
         }
     }
 
     // MARK: - Секции
-
-    private var categoriesHeaderSection: some View {
-        Section {
-            HStack {
-                EventAmountCardView(
-                    title: .amountExpenses,
-                    baseAmount: viewModel.expensesTotalBaseAmount,
-                    baseCurrency: viewModel.baseCurrency,
-                    locationAmount: viewModel.expensesTotalLocationAmount,
-                    locationCurrency: viewModel.locationCurrency
-                )
-                if viewModel.totalDays > 1 {
-                    EventAmountCardView(
-                        title: .amountExpensesDaily,
-                        baseAmount: viewModel.dailyBaseExpensesAmount,
-                        baseCurrency: viewModel.baseCurrency,
-                        locationAmount: viewModel.dailyLocationExpensesAmount,
-                        locationCurrency: viewModel.locationCurrency
-                    )
-                }
-            }
-        }
-    }
 
     private var categoriesChartSection: some View {
         Section {
@@ -104,7 +80,6 @@ struct EventAnalyticsCategoriesView: View {
                 .foregroundStyle(slice.category.accentColor.gradient)
             }
             .frame(height: 220)
-            .animation(.spring(response: 0.2, dampingFraction: 0.6), value: categoryAmountMode)
         }
         .listRowBackground(Color.clear)
     }
@@ -125,15 +100,17 @@ struct EventAnalyticsCategoriesView: View {
             }
 
             ForEach(displayedSlicesSortedByAmount) { slice in
-                NavigationLink {
-                    EventSubcategoryAnalyticsView(
-                        category: slice.category,
-                        amountMode: categoryAmountMode,
-                        data: viewModel.data,
-                        screenContextSubtitle: screenContextSubtitle
-                    )
-                } label: {
-                    categoriesChartLegendRow(for: slice)
+                if slice.baseAmount > 0 {
+                    NavigationLink {
+                        EventSubcategoryAnalyticsView(
+                            category: slice.category,
+                            amountMode: categoryAmountMode,
+                            data: viewModel.data,
+                            screenContextSubtitle: screenContextSubtitle
+                        )
+                    } label: {
+                        categoriesChartLegendRow(for: slice)
+                    }
                 }
             }
         }
@@ -171,7 +148,7 @@ struct EventAnalyticsCategoriesView: View {
 
 // MARK: - Превью
 
-private extension EventAnalyticsCategoriesView {
+private extension EventAnalyticsCategoriesBody {
     static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
         let builder = PreviewBuilder.builder().withScenario(.southKorea).withExpenses(true)
         let data = builder.buildData()
@@ -180,7 +157,7 @@ private extension EventAnalyticsCategoriesView {
 
         return NavigationStack {
             List {
-                EventAnalyticsCategoriesView(
+                EventAnalyticsCategoriesBody(
                     viewModel: EventAnalyticsViewModel(data: viewModel.eventAnalyticsData),
                     screenContextSubtitle: trip.screenContextSubtitle
                 )
@@ -192,9 +169,9 @@ private extension EventAnalyticsCategoriesView {
 }
 
 #Preview("Light - RU") {
-    EventAnalyticsCategoriesView.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
+    EventAnalyticsCategoriesBody.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
 }
 
 #Preview("Dark - EN") {
-    EventAnalyticsCategoriesView.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
+    EventAnalyticsCategoriesBody.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
 }

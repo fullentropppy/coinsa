@@ -1,21 +1,21 @@
 //
-//  EventAnalyticsSummaryView.swift
+//  EventAnalyticsSummaryBody.swift
 //  Coinsa
 //
-//  Created by OpenAI on 23.08.2026.
+//  Created by Daniil Gritsenko on 23.08.2026.
 //
 
 import SwiftUI
 
-/// Вкладка сводной аналитики события.
-struct EventAnalyticsSummaryView: View {
+/// Тело вкладки сводной аналитики события.
+struct EventAnalyticsSummaryBody: View {
     // MARK: - Хранимые свойства
 
     private let viewModel: EventAnalyticsViewModel
 
     // MARK: - Инициализация
 
-    /// Создает вкладку сводной аналитики.
+    /// Создает тело вкладки сводной аналитики.
     /// - Parameter viewModel: ViewModel аналитики события.
     init(viewModel: EventAnalyticsViewModel) {
         self.viewModel = viewModel
@@ -31,58 +31,11 @@ struct EventAnalyticsSummaryView: View {
 
     private var summaryContent: some View {
         Group {
-            summaryHeaderSection
             summaryExpensesSection
         }
     }
 
     // MARK: - Секции
-
-    private var summaryHeaderSection: some View {
-        Section {
-            VStack(spacing: 14) {
-                HStack {
-                    EventAmountCardView(
-                        title: .amountBudget,
-                        baseAmount: viewModel.eventSummaryData.budgetBaseAmount,
-                        baseCurrency: viewModel.baseCurrency,
-                        locationAmount: viewModel.eventSummaryData.budgetLocationAmount,
-                        locationCurrency: viewModel.locationCurrency
-                    )
-                    EventAmountCardView(
-                        title: .amountBudgetDaily,
-                        baseAmount: viewModel.dailyBaseBudgetAmount,
-                        baseCurrency: viewModel.baseCurrency,
-                        locationAmount: viewModel.dailyLocationBudgetAmount,
-                        locationCurrency: viewModel.locationCurrency
-                    )
-                }
-                HStack {
-                    EventAmountCardView(
-                        title: .amountExpenses,
-                        baseAmount: viewModel.eventSummaryData.expensesBaseAmount,
-                        baseCurrency: viewModel.baseCurrency,
-                        locationAmount: viewModel.eventSummaryData.expensesLocationAmount,
-                        locationCurrency: viewModel.locationCurrency
-                    )
-                    EventAmountCardView(
-                        title: .amountExpensesDaily,
-                        baseAmount: viewModel.dailyBaseExpensesAmount,
-                        baseCurrency: viewModel.baseCurrency,
-                        locationAmount: viewModel.dailyLocationExpensesAmount,
-                        locationCurrency: viewModel.locationCurrency
-                    )
-                }
-                EventAmountBalanceView(
-                    budgetBaseAmount: viewModel.eventSummaryData.budgetBaseAmount,
-                    baseAmountBalance: viewModel.baseAmountBalance,
-                    baseCurrency: viewModel.baseCurrency,
-                    locationAmountBalance: viewModel.locationAmountBalance,
-                    locationCurrency: viewModel.locationCurrency
-                )
-            }
-        }
-    }
 
     private var summaryExpensesSection: some View {
         Section(.analyticsSummaryExpenses) {
@@ -168,7 +121,7 @@ struct EventAnalyticsSummaryView: View {
 
 // MARK: - Превью
 
-private extension EventAnalyticsSummaryView {
+private extension EventAnalyticsSummaryBody {
     static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
         let builder = PreviewBuilder.builder().withScenario(.southKorea).withExpenses(true)
         let data = builder.buildData()
@@ -177,7 +130,7 @@ private extension EventAnalyticsSummaryView {
 
         return NavigationStack {
             List {
-                EventAnalyticsSummaryView(viewModel: EventAnalyticsViewModel(data: viewModel.eventAnalyticsData))
+                EventAnalyticsSummaryBody(viewModel: EventAnalyticsViewModel(data: viewModel.eventAnalyticsData))
             }
         }
         .environment(\.locale, locale)
@@ -186,9 +139,9 @@ private extension EventAnalyticsSummaryView {
 }
 
 #Preview("Light - RU") {
-    EventAnalyticsSummaryView.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
+    EventAnalyticsSummaryBody.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
 }
 
 #Preview("Dark - EN") {
-    EventAnalyticsSummaryView.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
+    EventAnalyticsSummaryBody.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
 }

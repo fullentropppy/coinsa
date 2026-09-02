@@ -1,22 +1,22 @@
 //
-//  EventAnalyticsDaysView.swift
+//  EventAnalyticsDaysBody.swift
 //  Coinsa
 //
-//  Created by OpenAI on 23.08.2026.
+//  Created by Daniil Gritsenko on 23.08.2026.
 //
 
 import Charts
 import SwiftUI
 
-/// Вкладка дневной аналитики расходов события.
-struct EventAnalyticsDaysView: View {
+/// Тело вкладки дневной аналитики расходов события.
+struct EventAnalyticsDaysBody: View {
     // MARK: - Хранимые свойства
 
     private let viewModel: EventAnalyticsViewModel
 
     // MARK: - Инициализация
 
-    /// Создает вкладку дневной аналитики.
+    /// Создает тело вкладки дневной аналитики.
     /// - Parameter viewModel: ViewModel аналитики события.
     init(viewModel: EventAnalyticsViewModel) {
         self.viewModel = viewModel
@@ -32,36 +32,12 @@ struct EventAnalyticsDaysView: View {
 
     private var daysContent: some View {
         Group {
-            daysHeaderSection
             dailyExpenseChartSection
             dailyExpensesSection
         }
     }
 
     // MARK: - Секции
-
-    private var daysHeaderSection: some View {
-        Section {
-            VStack(spacing: 14) {
-                HStack {
-                    EventAmountCardView(
-                        title: .amountExpensesDailyMax,
-                        baseAmount: viewModel.maxDailyBaseExpenseAmount,
-                        baseCurrency: viewModel.baseCurrency,
-                        locationAmount: viewModel.maxDailyLocationExpenseAmount,
-                        locationCurrency: viewModel.locationCurrency
-                    )
-                    EventAmountCardView(
-                        title: .amountExpensesDailyAverage,
-                        baseAmount: viewModel.averageDailyBaseExpenseAmount,
-                        baseCurrency: viewModel.baseCurrency,
-                        locationAmount: viewModel.averageDailyLocationExpenseAmount,
-                        locationCurrency: viewModel.locationCurrency
-                    )
-                }
-            }
-        }
-    }
 
     private var dailyExpenseChartSection: some View {
         Section {
@@ -74,7 +50,9 @@ struct EventAnalyticsDaysView: View {
     private var dailyExpensesSection: some View {
         Section {
             ForEach(viewModel.summaryExpenseChartPoints) { point in
-                dailyExpenseRow(point)
+                if point.baseAmount > 0 {
+                    dailyExpenseRow(point)
+                }
             }
         }
     }
@@ -178,7 +156,7 @@ struct EventAnalyticsDaysView: View {
 
 // MARK: - Превью
 
-private extension EventAnalyticsDaysView {
+private extension EventAnalyticsDaysBody {
     static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
         let builder = PreviewBuilder.builder().withScenario(.southKorea).withExpenses(true)
         let data = builder.buildData()
@@ -187,7 +165,7 @@ private extension EventAnalyticsDaysView {
 
         return NavigationStack {
             List {
-                EventAnalyticsDaysView(viewModel: EventAnalyticsViewModel(data: viewModel.eventAnalyticsData))
+                EventAnalyticsDaysBody(viewModel: EventAnalyticsViewModel(data: viewModel.eventAnalyticsData))
             }
         }
         .environment(\.locale, locale)
@@ -196,9 +174,9 @@ private extension EventAnalyticsDaysView {
 }
 
 #Preview("Light - RU") {
-    EventAnalyticsDaysView.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
+    EventAnalyticsDaysBody.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
 }
 
 #Preview("Dark - EN") {
-    EventAnalyticsDaysView.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
+    EventAnalyticsDaysBody.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
 }

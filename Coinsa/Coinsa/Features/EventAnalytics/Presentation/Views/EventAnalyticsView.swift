@@ -48,7 +48,7 @@ struct EventAnalyticsView: View {
         List {
             metricPickerSection
             if viewModel.hasAnalytics(for: selectedMetric) {
-                selectedMetricContent
+                selectedMetricBody
             } else {
                 emptyAnalyticsContent
             }
@@ -56,14 +56,26 @@ struct EventAnalyticsView: View {
     }
 
     @ViewBuilder
-    private var selectedMetricContent: some View {
+    private var selectedMetricHeader: some View {
         switch selectedMetric {
         case .summary:
-            EventAnalyticsSummaryView(viewModel: viewModel)
+            EventAnalyticsSummaryHeader(viewModel: viewModel)
         case .days:
-            EventAnalyticsDaysView(viewModel: viewModel)
+            EventAnalyticsDaysHeader(viewModel: viewModel)
         case .categories:
-            EventAnalyticsCategoriesView(
+            EventAnalyticsCategoriesHeader(viewModel: viewModel)
+        }
+    }
+    
+    @ViewBuilder
+    private var selectedMetricBody: some View {
+        switch selectedMetric {
+        case .summary:
+            EventAnalyticsSummaryBody(viewModel: viewModel)
+        case .days:
+            EventAnalyticsDaysBody(viewModel: viewModel)
+        case .categories:
+            EventAnalyticsCategoriesBody(
                 viewModel: viewModel,
                 screenContextSubtitle: screenContextSubtitle
             )
@@ -94,6 +106,10 @@ struct EventAnalyticsView: View {
                 haptics.trigger(.tap)
             }
             .listRowSeparator(.hidden)
+            
+            if viewModel.hasAnalytics(for: selectedMetric) {
+                selectedMetricHeader
+            }
         }
     }
 }

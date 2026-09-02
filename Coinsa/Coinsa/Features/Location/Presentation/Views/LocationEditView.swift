@@ -276,8 +276,11 @@ struct LocationEditView: View {
         
         ToolbarItemGroup(placement: .topBarTrailing) {
             ToolbarButton.ok {
-                viewModel.save(using: repository)
-                dismiss()
+                focusedField = nil
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    viewModel.save(using: repository)
+                    dismiss()
+                }
             }
             .disabled(!viewModel.canSave)
         }
