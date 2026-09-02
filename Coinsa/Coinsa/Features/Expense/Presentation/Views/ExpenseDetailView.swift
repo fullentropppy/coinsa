@@ -14,6 +14,7 @@ struct ExpenseDetailView: View {
     // MARK: - Хранимые свойства
 
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.colorScheme) private var colorScheme
     
     @State private var isShowingExpenseEdit = false
     @State private var isShowingMap = false
@@ -54,8 +55,12 @@ struct ExpenseDetailView: View {
         )
     }
     
-    private var sectionBackgroundMaterial: Material {
-        viewModel.coordinate == nil ? .bar : .regularMaterial
+    private var listRowBackgroundMaterial: Material {
+        if viewModel.coordinate == nil {
+            .bar
+        } else {
+            colorScheme == .light ? .regularMaterial : .thinMaterial
+        }
     }
         
     private var mapCameraPosition: MapCameraPosition? {
@@ -129,7 +134,7 @@ struct ExpenseDetailView: View {
             }
         }
         .listRowBackground(
-            RoundedRectangle(cornerRadius: 0).fill(sectionBackgroundMaterial)
+            RoundedRectangle(cornerRadius: 0).fill(listRowBackgroundMaterial)
         )
     }
     
@@ -145,7 +150,7 @@ struct ExpenseDetailView: View {
                 }
             }
             .listRowBackground(
-                RoundedRectangle(cornerRadius: 0).fill(sectionBackgroundMaterial)
+                RoundedRectangle(cornerRadius: 0).fill(listRowBackgroundMaterial)
             )
         }
     }
@@ -239,7 +244,7 @@ struct ExpenseDetailView: View {
     
     @ViewBuilder
     private var additionalInfoContent: some View {
-        if let adjustedRateDescription = viewModel.adjustedRateDescription {
+        if let adjustedRateDescription = viewModel.exchangeRateDescription {
             Text(adjustedRateDescription)
                 .font(.footnote)
                 .foregroundStyle(.secondary)

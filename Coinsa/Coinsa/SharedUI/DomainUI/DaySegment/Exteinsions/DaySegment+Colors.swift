@@ -10,29 +10,35 @@ import SwiftUI
 extension DaySegment {
     // Набор цветов для предсталвения части суток.
     var colors: [Color] {
-        var colors: [Color] = []
+        var relatedColor: Color
+        var topColor: Color
+        var bottomColor: Color
         
         switch self {
         case .night:
-            colors.append(.indigo.mix(with: Color.daySegmentNight2, by: 0.9))
-            colors.append(Color.daySegmentNight2)
-            colors.append(Color.daySegmentNight1)
+            relatedColor = .indigo
+            topColor = .daySegmentNight2
+            bottomColor = .daySegmentNight1
         case .morning:
-            colors.append(.yellow.mix(with: Color.daySegmentMorning2, by: 0.9))
-            colors.append(Color.daySegmentMorning2)
-            colors.append(Color.daySegmentMorning1)
+            relatedColor = .orange
+            topColor = .daySegmentMorning2
+            bottomColor = .daySegmentMorning1
         case .afternoon:
-            colors.append(.blue.mix(with: Color.daySegmentAfternoon2, by: 0.9))
-            colors.append(Color.daySegmentAfternoon2)
-            colors.append(Color.daySegmentAfternoon1)
+            relatedColor = .blue
+            topColor = .daySegmentAfternoon2
+            bottomColor = .daySegmentAfternoon1
         case .evening:
-            colors.append(.red.mix(with: Color.daySegmentEvening2, by: 0.9))
-            colors.append(Color.daySegmentEvening2)
-            colors.append(Color.daySegmentEvening1)
+            relatedColor = .red
+            topColor = .daySegmentEvening2
+            bottomColor = .daySegmentEvening1
         }
         
-        colors.append(.black.opacity(0.1))
-        
-        return colors
+        return [
+            relatedColor.mix(with: topColor, by: 0.8),
+            relatedColor.mix(with: topColor, by: 0.9),
+            topColor,
+            bottomColor,
+            .black.opacity(0.15)
+        ]
     }
 }

@@ -290,8 +290,6 @@ struct ExpenseEditView: View {
                 }
                 .buttonStyle(.plain)
             }
-            //.listRowInsets(EdgeInsets())
-            //.listRowBackground(Color.clear)
         }
     }
 

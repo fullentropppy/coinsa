@@ -1822,6 +1822,40 @@
         }
       }
     },
+    "expense.actualExchangeRate" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 %1$(expenseCurrencyCode)@ = %2$(actualRateExpenseToBase)@ %3$(baseCurrencyCode)@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 %1$(expenseCurrencyCode)@ = %2$(actualRateExpenseToBase)@ %3$(baseCurrencyCode)@"
+          }
+        }
+      }
+    },
+    "expense.actualExchangeRate.double" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 %1$(expenseCurrencyCode)@ = %2$(actualRateExpenseToBase)@ %3$(baseCurrencyCode)@  • %4$(actualRateExpenseToLocation)@ %5$(locationCurrencyCode)@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 %1$(expenseCurrencyCode)@ = %2$(actualRateExpenseToBase)@ %3$(baseCurrencyCode)@  • %4$(actualRateExpenseToLocation)@ %5$(locationCurrencyCode)@"
+          }
+        }
+      }
+    },
     "expense.add" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2277,23 +2311,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Курс обмена %(locationCurrencyCode)@"
-          }
-        }
-      }
-    },
-    "expense.exchangeRateSourceToTarget" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "1 %1$(sourceCurrencyCode)@ = %2$(exchangeRateSourceToTarget)@ %3$(targetCurrencyCode)@"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "1 %1$(sourceCurrencyCode)@ = %2$(exchangeRateSourceToTarget)@ %3$(targetCurrencyCode)@"
           }
         }
       }

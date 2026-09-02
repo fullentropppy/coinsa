@@ -42,7 +42,7 @@ struct TripDetailViewModel {
             baseCurrency: trip.baseCurrency,
             locationCurrency: nil,
             baseBudget: baseBudget,
-            localBudget: nil,
+            locationBudget: nil,
             expensesAmountByCategory: slices(from: expensesAmountByCategory, localValues: nil),
             expenses: expenses
         )

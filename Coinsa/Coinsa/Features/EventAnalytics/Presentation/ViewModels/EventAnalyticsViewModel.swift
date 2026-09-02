@@ -62,8 +62,8 @@ struct EventAnalyticsViewModel {
     }
     
     var dailyLocationBudgetAmount: Double? {
-        if let localBudget = data.localBudget {
-            localBudget / totalDayDivisor
+        if let locationBudget = data.locationBudget {
+            locationBudget / totalDayDivisor
         } else {
             nil
         }
@@ -78,8 +78,8 @@ struct EventAnalyticsViewModel {
     }
     
     var locationAmountBalance: Double? {
-        if let localBudget = data.localBudget, let expensesTotalLocationAmount {
-            localBudget - expensesTotalLocationAmount
+        if let locationBudget = data.locationBudget, let expensesTotalLocationAmount {
+            locationBudget - expensesTotalLocationAmount
         } else {
             nil
         }
@@ -92,7 +92,7 @@ struct EventAnalyticsViewModel {
             budgetBaseAmount: data.baseBudget,
             expensesBaseAmount: expensesTotalBaseAmount,
             baseCurrency: baseCurrency,
-            budgetLocationAmount: data.localBudget,
+            budgetLocationAmount: data.locationBudget,
             expensesLocationAmount: expensesTotalLocationAmount,
             locationCurrency: locationCurrency
         )

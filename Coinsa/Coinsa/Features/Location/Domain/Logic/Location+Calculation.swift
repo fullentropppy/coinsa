@@ -20,12 +20,12 @@ extension Location {
     /// Рассчитывает плановую сумму на сегодня (с учетом уже потраченного)
     /// - Parameters:
     ///   - currency: Валютный контекст результата. Поддерживаются `.base` и `.location`.
-    ///   - rateMode: Режим расчета курса
+    ///   - rateMode: Режим расчета курса. По умолчанию `.actual`
     ///   - calendar: Календарь для вычислений. По умолчанию `.current`
     /// - Returns: Рекомендуемая сумма на сегодня
     func calculateBudgetAmountForToday(
         in currency: CurrencyContext = .base,
-        using rateMode: RateMode = .effective,
+        using rateMode: RateMode = .actual,
         calendar: Calendar = .utc
     ) -> Double {
         let budgetAmount = calculateBudgetAmount(
@@ -60,13 +60,13 @@ extension Location {
     /// - Parameters:
     ///   - currency: Валютный контекст результата. Поддерживаются `.base` и `.location`.
     ///   - asDailyAverage: Если `true`, возвращает среднюю сумму в день
-    ///   - rateMode: Режим расчета курса
+    ///   - rateMode: Режим расчета курса. По умолчанию `.actual`
     ///   - calendar: Календарь для вычислений. По умолчанию `.current`
     /// - Returns: Плановая сумма
     func calculateBudgetAmount(
         in currency: CurrencyContext = .base,
         asDailyAverage: Bool = false,
-        using rateMode: RateMode = .effective,
+        using rateMode: RateMode = .actual,
         calendar: Calendar = .utc
     ) -> Double {
         let exchangeRate = exchangeRateBaseToCurrency(currency, using: rateMode)

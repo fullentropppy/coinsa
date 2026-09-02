@@ -15,7 +15,8 @@ struct TodayView: View {
     @Environment(\.modelContext) private var context
     @Environment(AppSettingsStore.self) private var settingsStore
     @Environment(\.haptics) private var haptics
-
+    @Environment(\.colorScheme) private var colorScheme
+    
     // MARK: - Состояние
 
     @State private var viewModel: TodayViewModel
@@ -36,6 +37,10 @@ struct TodayView: View {
     
     private var daySegmentColors: [Color] {
         DaySegment.from(date: .now).colors
+    }
+    
+    private var listRowBackgroundMaterial: Material {
+        colorScheme == .light ? .regularMaterial : .thinMaterial
     }
     
     // MARK: - Инициализация
@@ -141,7 +146,7 @@ struct TodayView: View {
             contextContent(location: location)
         }
         .listRowBackground(
-            RoundedRectangle(cornerRadius: 0).fill(.regularMaterial)
+            RoundedRectangle(cornerRadius: 0).fill(listRowBackgroundMaterial)
         )
     }
     
@@ -177,7 +182,7 @@ struct TodayView: View {
                 }
             }
             .listRowBackground(
-                RoundedRectangle(cornerRadius: 0).fill(.regularMaterial)
+                RoundedRectangle(cornerRadius: 0).fill(listRowBackgroundMaterial)
             )
         }
     }

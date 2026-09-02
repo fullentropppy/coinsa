@@ -66,17 +66,18 @@ struct LocationDetailViewModel {
             withinDateRange: location.range
         )
 
-        let expensesLocationAmountByCategory = isHomeLocation
-            ? nil
-            : location.calculateExpensesAmountByCategory(in: CurrencyContext.location, withinDateRange: location.range)
-        let localBudget = isHomeLocation ? nil : location.calculateBudgetAmount(in: CurrencyContext.location)
+        let expensesLocationAmountByCategory = isHomeLocation ? nil : location.calculateExpensesAmountByCategory(
+            in: CurrencyContext.location,
+            withinDateRange: location.range
+        )
+        let locationBudget = isHomeLocation ? nil : location.calculateBudgetAmount(in: CurrencyContext.location)
 
         return EventCategoryAnalyticsData(
             dateRangeProvider: location,
             baseCurrency: baseCurrency,
             locationCurrency: isHomeLocation ? nil : locationCurrency,
             baseBudget: location.budget,
-            localBudget: localBudget,
+            locationBudget: locationBudget,
             expensesAmountByCategory: slices(from: expensesAmountByCategoryBase, localValues: expensesLocationAmountByCategory),
             expenses: location.expenses ?? []
         )
