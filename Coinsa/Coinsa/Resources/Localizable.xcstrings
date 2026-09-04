@@ -3375,13 +3375,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Exchange rate for calculating the amount of the Budget and Expenses for analytics."
+            "value" : "Exchange rate for calculating the Budget amount and for new Expenses (if the exchange rate that was current at the time of the Expense could not be loaded)."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Курс обмена для расчета суммы бюджета и трат для аналитики."
+            "value" : "Курс обмена для расчета суммы бюджета и автоматической подстановки в новых тратах (если не удалось загрузить актуальный на момент траты курс обмена)."
           }
         }
       }

@@ -131,7 +131,7 @@ struct EventAnalyticsViewModel {
             PlainDate(expense.civilDateTime.storedDate, using: .utc)
         }
 
-        return eventPlainDates.map { date in
+        return summaryChartPlainDates.map { date in
             let expenses = expensesByDate[date] ?? []
 
             return EventDailyExpenseAnalyticsData(
@@ -154,21 +154,25 @@ struct EventAnalyticsViewModel {
         summaryChartPeakPoint?.locationAmount
     }
 
-    var averageDailyBaseExpenseAmount: Double {
-        dailyBaseExpensesAmount
+    var middleDailyBaseExpenseAmount: Double {
+        maxDailyBaseExpenseAmount / 2
     }
 
-    var averageDailyLocationExpenseAmount: Double? {
-        dailyLocationExpensesAmount
+    var middleDailyLocationExpenseAmount: Double? {
+        if let maxDailyLocationExpenseAmount {
+            maxDailyLocationExpenseAmount / 2
+        } else {
+            nil
+        }
     }
 
     var summaryChartUpperBaseAmount: Double {
-        max(maxDailyBaseExpenseAmount, averageDailyBaseExpenseAmount, 1)
+        max(maxDailyBaseExpenseAmount, 1)
     }
 
     var summaryChartXDomain: ClosedRange<Date> {
-        let startDate = data.dateRangeProvider.startPlainDate.startOfDay
-        let endDate = data.dateRangeProvider.endPlainDate.startOfDay
+        let startDate = summaryChartPlainDates.first?.startOfDay ?? data.dateRangeProvider.startPlainDate.startOfDay
+        let endDate = summaryChartPlainDates.last?.startOfDay ?? data.dateRangeProvider.endPlainDate.startOfDay
 
         if startDate < endDate {
             return startDate...endDate
@@ -177,41 +181,30 @@ struct EventAnalyticsViewModel {
         }
     }
 
-    var summaryChartXAxisValues: [Date] {
-        let dates = eventPlainDates
-        guard let lastIndex = dates.indices.last else { return [] }
-
-        let maxVisibleLabels = 10
-        guard dates.count > maxVisibleLabels else {
-            return dates.map { $0.startOfDay }
-        }
-
-        let step = max(Int(ceil(Double(lastIndex) / Double(maxVisibleLabels - 1))), 1)
-        var indices = Array(stride(from: dates.startIndex, through: lastIndex, by: step))
-
-        if indices.last != lastIndex {
-            indices.append(lastIndex)
-        }
-
-        return indices.map { dates[$0].startOfDay }
+    var totalSummaryChartDays: Int {
+        summaryChartPlainDates.count
     }
 
-    var summaryChartXAxisInteriorValues: [Date] {
-        guard let startDate = summaryChartStartDate,
-              let endDate = summaryChartEndDate,
-              startDate != endDate else { return [] }
-
-        return summaryChartXAxisValues.filter { $0 != startDate && $0 != endDate }
+    var summaryChartXVisibleDomainLength: TimeInterval {
+        let totalVisibleDays = max(totalSummaryChartDays - 2, 1)
+        let preferredVisibleDays = min(totalVisibleDays, 7)
+        return TimeInterval(preferredVisibleDays) * Self.secondsPerDay
     }
 
-    var summaryChartXAxisEdgeValues: [Date] {
-        guard let startDate = summaryChartStartDate else { return [] }
-        guard let endDate = summaryChartEndDate, startDate != endDate else { return [startDate] }
-
-        return [startDate, endDate]
+    var summaryChartInitialScrollPosition: Date {
+        summaryChartScrollPosition(for: .today)
     }
     
     // MARK: - Публичные методы
+    
+    func summaryChartScrollPosition(for date: PlainDate) -> Date {
+        let domain = summaryChartXDomain
+        let visibleLength = summaryChartXVisibleDomainLength
+        let centeredPosition = date.startOfDay.addingTimeInterval(-visibleLength / 2)
+        let latestPosition = max(domain.lowerBound, domain.upperBound.addingTimeInterval(-visibleLength))
+        
+        return min(max(centeredPosition, domain.lowerBound), latestPosition)
+    }
 
     func displayedSlicesSortedByID(for metric: EventAnalyticsMetric) -> [ExpenseAnalyticsSlice] {
         slices(for: metric).sorted { $0.category.id > $1.category.id }
@@ -250,7 +243,7 @@ struct EventAnalyticsViewModel {
     func hasAnalytics(for metric: EventAnalyticsMetric) -> Bool {
         switch metric {
         case .summary: true
-        case .days: totalDays > 1
+        case .days: totalDays > 1 && expensesTotalBaseAmount > 0
         case .categories: !displayedSlicesSortedByID(for: metric).isEmpty
         }
     }
@@ -267,17 +260,28 @@ struct EventAnalyticsViewModel {
 
     // MARK: - Приватные свойства
 
+    private static let secondsPerDay: TimeInterval = 24 * 60 * 60
+
     private var eventPlainDates: [PlainDate] {
         let daysCount = max(totalDays, 0)
         return (0..<daysCount).map { data.dateRangeProvider.startPlainDate.adding(days: $0) }
     }
 
-    private var summaryChartStartDate: Date? {
-        eventPlainDates.first?.startOfDay
+    private var summaryChartPlainDates: [PlainDate] {
+        guard let firstExpenseDate = expensePlainDates.min(),
+              let lastExpenseDate = expensePlainDates.max() else {
+            return eventPlainDates
+        }
+
+        let startDate = firstExpenseDate.adding(days: -2)
+        let endDate = lastExpenseDate.adding(days: 2)
+        let daysCount = max(endDate.days(from: startDate) + 2, 0)
+
+        return (0..<daysCount).map { startDate.adding(days: $0) }
     }
 
-    private var summaryChartEndDate: Date? {
-        eventPlainDates.last?.startOfDay
+    private var expensePlainDates: [PlainDate] {
+        data.expenses.map { PlainDate($0.civilDateTime.storedDate, using: .utc) }
     }
 
     // MARK: - Приватные методы

@@ -13,6 +13,12 @@ struct EventAnalyticsSummaryHeader: View {
 
     private let viewModel: EventAnalyticsViewModel
     
+    // MARK: - Вычисляемые свойства
+    
+    private var hasBudget: Bool {
+        viewModel.eventSummaryData.budgetBaseAmount > 0
+    }
+    
     // MARK: - Инициализация
 
     /// Создает шапку вкладки сводной аналитики.
@@ -26,22 +32,27 @@ struct EventAnalyticsSummaryHeader: View {
     var body: some View {
         Section {
             VStack(spacing: 14) {
-                HStack {
-                    EventAmountCardView(
-                        title: .amountBudget,
-                        baseAmount: viewModel.eventSummaryData.budgetBaseAmount,
-                        baseCurrency: viewModel.baseCurrency,
-                        locationAmount: viewModel.eventSummaryData.budgetLocationAmount,
-                        locationCurrency: viewModel.locationCurrency
-                    )
-                    EventAmountCardView(
-                        title: .amountBudgetDaily,
-                        baseAmount: viewModel.dailyBaseBudgetAmount,
-                        baseCurrency: viewModel.baseCurrency,
-                        locationAmount: viewModel.dailyLocationBudgetAmount,
-                        locationCurrency: viewModel.locationCurrency
-                    )
+                if hasBudget {
+                    HStack {
+                        EventAmountCardView(
+                            title: .amountBudget,
+                            baseAmount: viewModel.eventSummaryData.budgetBaseAmount,
+                            baseCurrency: viewModel.baseCurrency,
+                            locationAmount: viewModel.eventSummaryData.budgetLocationAmount,
+                            locationCurrency: viewModel.locationCurrency
+                        )
+                        if viewModel.totalDays > 1 {
+                            EventAmountCardView(
+                                title: .amountBudgetDaily,
+                                baseAmount: viewModel.dailyBaseBudgetAmount,
+                                baseCurrency: viewModel.baseCurrency,
+                                locationAmount: viewModel.dailyLocationBudgetAmount,
+                                locationCurrency: viewModel.locationCurrency
+                            )
+                        }
+                    }
                 }
+                
                 HStack {
                     EventAmountCardView(
                         title: .amountExpenses,
@@ -50,21 +61,26 @@ struct EventAnalyticsSummaryHeader: View {
                         locationAmount: viewModel.eventSummaryData.expensesLocationAmount,
                         locationCurrency: viewModel.locationCurrency
                     )
-                    EventAmountCardView(
-                        title: .amountExpensesDaily,
-                        baseAmount: viewModel.dailyBaseExpensesAmount,
+                    if viewModel.totalDays > 1 {
+                        EventAmountCardView(
+                            title: .amountExpensesDaily,
+                            baseAmount: viewModel.dailyBaseExpensesAmount,
+                            baseCurrency: viewModel.baseCurrency,
+                            locationAmount: viewModel.dailyLocationExpensesAmount,
+                            locationCurrency: viewModel.locationCurrency
+                        )
+                    }
+                }
+                
+                if hasBudget {
+                    EventAmountBalanceView(
+                        budgetBaseAmount: viewModel.eventSummaryData.budgetBaseAmount,
+                        baseAmountBalance: viewModel.baseAmountBalance,
                         baseCurrency: viewModel.baseCurrency,
-                        locationAmount: viewModel.dailyLocationExpensesAmount,
+                        locationAmountBalance: viewModel.locationAmountBalance,
                         locationCurrency: viewModel.locationCurrency
                     )
                 }
-                EventAmountBalanceView(
-                    budgetBaseAmount: viewModel.eventSummaryData.budgetBaseAmount,
-                    baseAmountBalance: viewModel.baseAmountBalance,
-                    baseCurrency: viewModel.baseCurrency,
-                    locationAmountBalance: viewModel.locationAmountBalance,
-                    locationCurrency: viewModel.locationCurrency
-                )
             }
         }
     }

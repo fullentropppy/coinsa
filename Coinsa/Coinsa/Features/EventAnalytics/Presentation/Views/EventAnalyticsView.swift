@@ -96,7 +96,7 @@ struct EventAnalyticsView: View {
         Section {
             Picker("", selection: $selectedMetric) {
                 ForEach(EventAnalyticsMetric.allCases) { metric in
-                    if metric != .days || metric == .days && viewModel.totalDays > 1 {
+                    if viewModel.hasAnalytics(for: metric) {
                         Text(metric.localizedResource).tag(metric)
                     }
                 }

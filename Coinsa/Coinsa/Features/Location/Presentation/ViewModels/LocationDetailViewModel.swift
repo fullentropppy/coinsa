@@ -62,13 +62,11 @@ struct LocationDetailViewModel {
         let isHomeLocation = locationCurrency == baseCurrency
         
         let expensesAmountByCategoryBase = location.calculateExpensesAmountByCategory(
-            in: CurrencyContext.base,
-            withinDateRange: location.range
+            in: CurrencyContext.base
         )
 
         let expensesLocationAmountByCategory = isHomeLocation ? nil : location.calculateExpensesAmountByCategory(
-            in: CurrencyContext.location,
-            withinDateRange: location.range
+            in: CurrencyContext.location
         )
         let locationBudget = isHomeLocation ? nil : location.calculateBudgetAmount(in: CurrencyContext.location)
 

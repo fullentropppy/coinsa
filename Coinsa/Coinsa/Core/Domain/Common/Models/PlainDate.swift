@@ -41,6 +41,22 @@ struct PlainDate: Comparable, Hashable {
         self.storedDate = date.storedPlainDate(using: calendar)
     }
     
+    // MARK: - Границы
+    
+    /// Возвращает начало календарного дня в заданном календаре.
+    /// - Parameter calendar: Календарь для вычислений. По умолчанию `.utc`.
+    /// - Returns: Начало дня в указанном календаре  (00:00:00).
+    func startOfDay(using calendar: Calendar = .utc) -> Date {
+        storedDate.startOfDay(using: calendar)
+    }
+    
+    /// Возвращает конец календарного дня в заданном календаре.
+    /// - Parameter calendar: Календарь для вычислений. По умолчанию `.utc`.
+    /// - Returns: Конец дня в указанном календаре (23:59:59).
+    func endOfDay(using calendar: Calendar = .utc) -> Date {
+        storedDate.endOfDay(using: calendar)
+    }
+    
     // MARK: - Операции
     
     /// Возвращает календарную дату, смещенную на указанное количество дней.
