@@ -16,10 +16,12 @@ struct CivilDateTime: Comparable, Hashable {
         CivilDateTime(.now, using: .current)
     }
     
-    // MARK: - Свойства объекта
+    // MARK: - Хранимые свойства
     
     /// Дата и время в формате хранения UTC с пользовательскими `year/month/day/hour/minute/second`.
     let storedDate: Date
+    
+    // MARK: - Вычисляемые свойсва
     
     /// Начало календарного дня в UTC-календаре.
     var startOfDay: Date {
@@ -39,6 +41,22 @@ struct CivilDateTime: Comparable, Hashable {
     ///   - calendar: Календарь, из которого считываются компоненты. По умолчанию `.utc`.
     init(_ date: Date, using calendar: Calendar = .utc) {
         self.storedDate = date.storedCivilDateTime(using: calendar)
+    }
+    
+    // MARK: - Границы
+    
+    /// Возвращает начало календарного дня в заданном календаре.
+    /// - Parameter calendar: Календарь для вычислений. По умолчанию `.utc`.
+    /// - Returns: Начало дня в указанном календаре  (00:00:00).
+    func startOfDay(using calendar: Calendar = .utc) -> Date {
+        storedDate.startOfDay(using: calendar)
+    }
+    
+    /// Возвращает конец календарного дня в заданном календаре.
+    /// - Parameter calendar: Календарь для вычислений. По умолчанию `.utc`.
+    /// - Returns: Конец дня в указанном календаре (23:59:59).
+    func endOfDay(using calendar: Calendar = .utc) -> Date {
+        storedDate.endOfDay(using: calendar)
     }
     
     // MARK: - Операции

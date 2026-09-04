@@ -9,21 +9,15 @@ import SwiftUI
 
 /// ViewModel для отображения аналитики события.
 struct EventAnalyticsViewModel {
+    // MARK: - Статические свойства
+    
+    private static let secondsPerDay: TimeInterval = 24 * 60 * 60
+    
     // MARK: - Зависимости
 
     let data: EventCategoryAnalyticsData
 
-    // MARK: - Хранимые свойства. Валюта
-
-    var baseCurrency: Currency {
-        data.baseCurrency
-    }
-
-    var locationCurrency: Currency? {
-        data.locationCurrency
-    }
-
-    // MARK: - Хранимые свойства. Дни
+    // MARK: - Вычисляемые свойства. Дни
     
     var totalDays: Int {
         data.dateRangeProvider.totalDays
@@ -33,7 +27,17 @@ struct EventAnalyticsViewModel {
         max(Double(totalDays), 1)
     }
     
-    // MARK: - Хранимые свойства. Сумма в основной валюте
+    // MARK: - Вычисляемые свойства. Валюта
+
+    var baseCurrency: Currency {
+        data.baseCurrency
+    }
+
+    var locationCurrency: Currency? {
+        data.locationCurrency
+    }
+    
+    // MARK: - Вычисляемые свойства. Сумма в основной валюте
 
     var expensesTotalBaseAmount: Double {
         data.expensesAmountByCategory.reduce(0) { $0 + $1.baseAmount }
@@ -51,7 +55,7 @@ struct EventAnalyticsViewModel {
         data.baseBudget - expensesTotalBaseAmount
     }
     
-    // MARK: - Хранимые свойства. Сумма в локальной валюте
+    // MARK: - Вычисляемые свойства. Сумма в валюте локации
     
     var expensesTotalLocationAmount: Double? {
         if locationCurrency != nil {
@@ -85,7 +89,7 @@ struct EventAnalyticsViewModel {
         }
     }
     
-    // MARK: - Хранимые свойства. Общие данные
+    // MARK: - Вычисляемые свойства. Сводная аналитика
     
     var eventSummaryData: EventSummaryData {
         EventSummaryData(
@@ -124,8 +128,23 @@ struct EventAnalyticsViewModel {
         data.expenses.max { $0.baseAmount < $1.baseAmount }
     }
 
-    // MARK: - Хранимые свойства. Дневная аналитика
+    // MARK: - Вычисляемые свойства. Дневная аналитика
 
+    private var summaryChartPlainDates: [PlainDate] {
+        let expensePlainDates = data.expenses.map { PlainDate($0.civilDateTime.storedDate, using: .utc) }
+        
+        guard let firstExpenseDate = expensePlainDates.min(), let lastExpenseDate = expensePlainDates.max() else {
+            let daysCount = max(totalDays, 0)
+            return (0..<daysCount).map { data.dateRangeProvider.startPlainDate.adding(days: $0) }
+        }
+
+        let startDate = firstExpenseDate.adding(days: -2)
+        let endDate = lastExpenseDate.adding(days: 2)
+        let daysCount = max(endDate.days(from: startDate) + 2, 0)
+
+        return (0..<daysCount).map { startDate.adding(days: $0) }
+    }
+    
     var summaryExpenseChartPoints: [EventDailyExpenseAnalyticsData] {
         let expensesByDate = Dictionary(grouping: data.expenses) { expense in
             PlainDate(expense.civilDateTime.storedDate, using: .utc)
@@ -181,18 +200,10 @@ struct EventAnalyticsViewModel {
         }
     }
 
-    var totalSummaryChartDays: Int {
-        summaryChartPlainDates.count
-    }
-
     var summaryChartXVisibleDomainLength: TimeInterval {
-        let totalVisibleDays = max(totalSummaryChartDays - 2, 1)
+        let totalVisibleDays = max(summaryChartPlainDates.count - 2, 1)
         let preferredVisibleDays = min(totalVisibleDays, 7)
         return TimeInterval(preferredVisibleDays) * Self.secondsPerDay
-    }
-
-    var summaryChartInitialScrollPosition: Date {
-        summaryChartScrollPosition(for: .today)
     }
     
     // MARK: - Публичные методы
@@ -256,32 +267,6 @@ struct EventAnalyticsViewModel {
     func shareValue(for slice: ExpenseSubcategoryAnalyticsSlice, category: ExpenseCategory) -> Double {
         let totalBaseAmount = displayedSubcategorySlicesSortedByAmount(for: category).reduce(0) { $0 + $1.baseAmount }
         return totalBaseAmount > 0 ? slice.baseAmount / totalBaseAmount : 0
-    }
-
-    // MARK: - Приватные свойства
-
-    private static let secondsPerDay: TimeInterval = 24 * 60 * 60
-
-    private var eventPlainDates: [PlainDate] {
-        let daysCount = max(totalDays, 0)
-        return (0..<daysCount).map { data.dateRangeProvider.startPlainDate.adding(days: $0) }
-    }
-
-    private var summaryChartPlainDates: [PlainDate] {
-        guard let firstExpenseDate = expensePlainDates.min(),
-              let lastExpenseDate = expensePlainDates.max() else {
-            return eventPlainDates
-        }
-
-        let startDate = firstExpenseDate.adding(days: -2)
-        let endDate = lastExpenseDate.adding(days: 2)
-        let daysCount = max(endDate.days(from: startDate) + 2, 0)
-
-        return (0..<daysCount).map { startDate.adding(days: $0) }
-    }
-
-    private var expensePlainDates: [PlainDate] {
-        data.expenses.map { PlainDate($0.civilDateTime.storedDate, using: .utc) }
     }
 
     // MARK: - Приватные методы

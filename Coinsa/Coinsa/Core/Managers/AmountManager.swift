@@ -11,9 +11,11 @@ import Observation
 @MainActor
 @Observable
 final class AmountManager {
-    // MARK: - Свойства
+    // MARK: - Хранимые свойства
     
     private let converter: CurrencyConverter
+    
+    // MARK: - Вычисляемые свойства
     
     private(set) var baseAmount: Double
     private(set) var quoteAmount: Double

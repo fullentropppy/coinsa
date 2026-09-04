@@ -58,7 +58,7 @@ extension DateRangeProviding {
         remainingDays()
     }
     
-    /// Закрытый интервал дат от начала дня `startDate` до конца дня `endDate`.
+    /// Закрытый интервал дат от начала дня `startPlainDate` до конца дня `endPlainDate`.
     var range: ClosedRange<Date> {
         range(using: .utc)
     }
@@ -66,7 +66,7 @@ extension DateRangeProviding {
     // MARK: - Методы. Расчет с поддержкой календаря
     
     /// Определяет статус события относительно текущей даты.
-    /// - Parameter calendar: Календарь для вычислений. По умолчанию `.current`.
+    /// - Parameter calendar: Календарь для вычислений. По умолчанию `.utc`.
     /// - Returns: Статус события.
     func status(using calendar: Calendar = .utc) -> EventStatus {
         let today = PlainDate.today.startOfDay
@@ -84,7 +84,7 @@ extension DateRangeProviding {
     }
     
     /// Возвращает общее количество дней в диапазоне (включительно).
-    /// - Parameter calendar: Календарь для вычислений. По умолчанию `.current`.
+    /// - Parameter calendar: Календарь для вычислений. По умолчанию `.utc`.
     /// - Returns: Количество дней.
     func totalDays(using calendar: Calendar = .utc) -> Int {
         endPlainDate.days(from: startPlainDate) + 1
@@ -92,8 +92,8 @@ extension DateRangeProviding {
     
     /// Возвращает количество прошедших дней от начала диапазона до указанной даты.
     /// - Parameters:
-    ///   - date: Дата, для которой вычисляется количество прошедших дней. По умолчанию `.now`.
-    ///   - calendar: Календарь для вычислений. По умолчанию `.current`.
+    ///   - date: Дата, для которой вычисляется количество прошедших дней. По умолчанию `.today`.
+    ///   - calendar: Календарь для вычислений. По умолчанию `.utc`.
     /// - Returns: Количество прошедших дней (ограничено общим количеством дней).
     func elapsedDays(on date: PlainDate = .today, using calendar: Calendar = .utc) -> Int {
         max(0, min(totalDays(using: calendar), date.days(from: startPlainDate) + 1))
@@ -101,8 +101,8 @@ extension DateRangeProviding {
     
     /// Возвращает количество оставшихся дней от указанной даты до конца диапазона.
     /// - Parameters:
-    ///   - date: Дата, для которой вычисляется количество оставшихся дней. По умолчанию `.now`.
-    ///   - calendar: Календарь для вычислений. По умолчанию `.current`.
+    ///   - date: Дата, для которой вычисляется количество оставшихся дней. По умолчанию `.today`.
+    ///   - calendar: Календарь для вычислений. По умолчанию `.utc`.
     /// - Returns: Количество оставшихся дней (неотрицательное, ограниченное общим количеством дней).
     func remainingDays(on date: PlainDate = .today, using calendar: Calendar = .utc) -> Int {
         min(
@@ -111,8 +111,8 @@ extension DateRangeProviding {
         )
     }
     
-    /// Возвращает закрытый интервал дат от начала дня `startDate` до конца дня `endDate`.
-    /// - Parameter calendar: Календарь для вычислений. По умолчанию `.current`.
+    /// Возвращает закрытый интервал дат от начала дня `startPlainDate` до конца дня `endPlainDate`.
+    /// - Parameter calendar: Календарь для вычислений. По умолчанию `.utc`.
     /// - Returns: Закрытый интервал дат.
     func range(using calendar: Calendar = .utc) -> ClosedRange<Date> {
         startPlainDate.startOfDay...endPlainDate.endOfDay

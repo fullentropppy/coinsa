@@ -28,7 +28,7 @@ struct EventDailyExpenseChart: View {
     /// - Parameter viewModel: ViewModel аналитики события.
     init(viewModel: EventAnalyticsViewModel) {
         self.viewModel = viewModel
-        self._scrollPosition = State(initialValue: viewModel.summaryChartInitialScrollPosition)
+        self._scrollPosition = State(initialValue: viewModel.summaryChartScrollPosition(for: .today))
     }
 
     // MARK: - Тело View

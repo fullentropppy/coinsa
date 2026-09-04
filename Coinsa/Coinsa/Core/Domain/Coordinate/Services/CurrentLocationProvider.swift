@@ -35,8 +35,10 @@ final class CurrentLocationProvider: NSObject {
     }
 
     private func requestAuthorizationOrLocation() {
-        guard continuation != nil else { return }
-
+        if continuation == nil {
+            return
+        }
+        
         switch manager.authorizationStatus {
         case .notDetermined:
             manager.requestWhenInUseAuthorization()
@@ -73,10 +75,10 @@ extension CurrentLocationProvider: CLLocationManagerDelegate {
         _ manager: CLLocationManager,
         didUpdateLocations locations: [CLLocation]
     ) {
-        guard let location = locations.last else { return }
-
-        Task { @MainActor in
-            resume(returning: location)
+        if let location = locations.last {
+            Task { @MainActor in
+                resume(returning: location)
+            }
         }
     }
 

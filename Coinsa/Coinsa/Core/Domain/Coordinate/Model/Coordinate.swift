@@ -10,12 +10,14 @@ import Foundation
 
 /// Географические координаты с опциональной точностью определения.
 struct Coordinate: Equatable {
-    // MARK: - Свойства
+    // MARK: - Хранимые свойства
 
     let latitude: Double
     let longitude: Double
     let horizontalAccuracy: Double?
 
+    // MARK: - Вычисляемые свойства
+    
     var coreLocationCoordinate: CLLocationCoordinate2D {
         CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
     }
@@ -47,7 +49,7 @@ struct Coordinate: Equatable {
 
     /// Создает географические координаты из объекта Core Location.
     /// - Parameter coreLocation: Объект местоположения Core Location.
-    ///                         Отрицательные значения `horizontalAccuracy` интерпретируются как `nil`.
+    /// Отрицательные значения `horizontalAccuracy` интерпретируются как `nil`.
     init(_ coreLocation: CLLocation) {
         let horizontalAccuracy = coreLocation.horizontalAccuracy >= 0 ? coreLocation.horizontalAccuracy : nil
         self.init(coreLocation.coordinate, horizontalAccuracy: horizontalAccuracy)

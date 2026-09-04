@@ -11,15 +11,17 @@ import Foundation
 struct PlainDate: Comparable, Hashable {
     // MARK: - Статичные свойства
     
-    /// Сегодняшняя календарная дата.
+    /// Текущая календарная дата.
     static var today: PlainDate {
         PlainDate(.now, using: .current)
     }
     
-    // MARK: - Свойства объекта
+    // MARK: - Хранимые свойства
     
     /// Дата в формате хранения UTC 00:00 с пользовательскими `year/month/day`.
     let storedDate: Date
+    
+    // MARK: - Вычисляемые свойства
     
     /// Начало календарного дня в UTC-календаре.
     var startOfDay: Date {
@@ -57,6 +59,13 @@ struct PlainDate: Comparable, Hashable {
         storedDate.endOfDay(using: calendar)
     }
     
+    /// Возвращает количество дней между календарными датами.
+    /// - Parameter date: Календарная дата, от которой считается разница.
+    /// - Returns: Количество дней от переданной даты до текущей.
+    func days(from date: PlainDate) -> Int {
+        storedDate.days(from: date.storedDate, using: .utc)
+    }
+    
     // MARK: - Операции
     
     /// Возвращает календарную дату, смещенную на указанное количество дней.
@@ -64,13 +73,6 @@ struct PlainDate: Comparable, Hashable {
     /// - Returns: Календарная дата после смещения.
     func adding(days: Int) -> PlainDate {
         PlainDate(storedDate.adding(days: days, using: .utc), using: .utc)
-    }
-    
-    /// Возвращает количество дней между календарными датами.
-    /// - Parameter date: Календарная дата, от которой считается разница.
-    /// - Returns: Количество дней от переданной даты до текущей.
-    func days(from date: PlainDate) -> Int {
-        storedDate.days(from: date.storedDate, using: .utc)
     }
     
     // MARK: - Сравнение
