@@ -1,4 +1,4 @@
-# Coinsa - Travel Expense Tracker
+# Coinsa - travel expense tracker
 
 [🇷🇺 Русский](README.md) | [🇺🇸 English](README.en.md)
 
@@ -65,6 +65,6 @@ Commercial use, sale, redistribution, publication of modified versions, and publ
 
 The name **Coinsa** may not be used in derivative projects without written permission from the copyright holder.
 
-Full terms: [LICENSE](LICENSE.en.md) | [Русская версия](LICENSE.md)
+Full terms: [LICENSE](LICENSE.en.md) | [ЛИЦЕНЗИЯ](LICENSE.md)
 
 Copyright © 2026 Gritsenko Daniil. All rights reserved.
