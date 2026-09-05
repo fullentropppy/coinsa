@@ -101,7 +101,7 @@ struct LocationDetailView: View {
             AnalyticsNavigationLink {
                 EventAnalyticsView(
                     data: viewModel.eventAnalyticsData,
-                    screenContextSubtitle: location.name
+                    screenContextSubtitle: location.screenContextSubtitle
                 )
             }
         }

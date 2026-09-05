@@ -32,56 +32,72 @@ struct EventAnalyticsSummaryHeader: View {
     var body: some View {
         Section {
             VStack(spacing: 14) {
-                if hasBudget {
-                    HStack {
-                        EventAmountCardView(
-                            title: .amountBudget,
-                            baseAmount: viewModel.eventSummaryData.budgetBaseAmount,
-                            baseCurrency: viewModel.baseCurrency,
-                            locationAmount: viewModel.eventSummaryData.budgetLocationAmount,
-                            locationCurrency: viewModel.locationCurrency
-                        )
-                        if viewModel.totalDays > 1 {
-                            EventAmountCardView(
-                                title: .amountBudgetDaily,
-                                baseAmount: viewModel.dailyBaseBudgetAmount,
-                                baseCurrency: viewModel.baseCurrency,
-                                locationAmount: viewModel.dailyLocationBudgetAmount,
-                                locationCurrency: viewModel.locationCurrency
-                            )
-                        }
-                    }
+                VStack(spacing: 8) {
+                    budgetContent
+                    expensesContent
                 }
-                
-                HStack {
+                balanceContent
+            }
+        }
+    }
+    
+    // MARK: - Компоненты
+    
+    @ViewBuilder
+    private var budgetContent: some View {
+        if hasBudget {
+            HStack {
+                EventAmountCardView(
+                    title: .amountBudget,
+                    baseAmount: viewModel.eventSummaryData.budgetBaseAmount,
+                    baseCurrency: viewModel.baseCurrency,
+                    locationAmount: viewModel.eventSummaryData.budgetLocationAmount,
+                    locationCurrency: viewModel.locationCurrency
+                )
+                if viewModel.totalDays > 1 {
                     EventAmountCardView(
-                        title: .amountExpenses,
-                        baseAmount: viewModel.eventSummaryData.expensesBaseAmount,
+                        title: .amountBudgetDaily,
+                        baseAmount: viewModel.dailyBaseBudgetAmount,
                         baseCurrency: viewModel.baseCurrency,
-                        locationAmount: viewModel.eventSummaryData.expensesLocationAmount,
-                        locationCurrency: viewModel.locationCurrency
-                    )
-                    if viewModel.totalDays > 1 {
-                        EventAmountCardView(
-                            title: .amountExpensesDaily,
-                            baseAmount: viewModel.dailyBaseExpensesAmount,
-                            baseCurrency: viewModel.baseCurrency,
-                            locationAmount: viewModel.dailyLocationExpensesAmount,
-                            locationCurrency: viewModel.locationCurrency
-                        )
-                    }
-                }
-                
-                if hasBudget {
-                    EventAmountBalanceView(
-                        budgetBaseAmount: viewModel.eventSummaryData.budgetBaseAmount,
-                        baseAmountBalance: viewModel.baseAmountBalance,
-                        baseCurrency: viewModel.baseCurrency,
-                        locationAmountBalance: viewModel.locationAmountBalance,
+                        locationAmount: viewModel.dailyLocationBudgetAmount,
                         locationCurrency: viewModel.locationCurrency
                     )
                 }
             }
+        }
+    }
+    
+    private var expensesContent: some View {
+        HStack {
+            EventAmountCardView(
+                title: .amountExpenses,
+                baseAmount: viewModel.eventSummaryData.expensesBaseAmount,
+                baseCurrency: viewModel.baseCurrency,
+                locationAmount: viewModel.eventSummaryData.expensesLocationAmount,
+                locationCurrency: viewModel.locationCurrency
+            )
+            if viewModel.totalDays > 1 {
+                EventAmountCardView(
+                    title: .amountExpensesDaily,
+                    baseAmount: viewModel.dailyBaseExpensesAmount,
+                    baseCurrency: viewModel.baseCurrency,
+                    locationAmount: viewModel.dailyLocationExpensesAmount,
+                    locationCurrency: viewModel.locationCurrency
+                )
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private var balanceContent: some View {
+        if hasBudget {
+            EventAmountBalanceView(
+                budgetBaseAmount: viewModel.eventSummaryData.budgetBaseAmount,
+                baseAmountBalance: viewModel.baseAmountBalance,
+                baseCurrency: viewModel.baseCurrency,
+                locationAmountBalance: viewModel.locationAmountBalance,
+                locationCurrency: viewModel.locationCurrency
+            )
         }
     }
 }
