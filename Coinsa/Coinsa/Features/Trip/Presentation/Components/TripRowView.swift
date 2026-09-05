@@ -41,7 +41,7 @@ struct TripRowView: View {
     
     private var lowerStack: some View {
         HStack(spacing: 10) {
-            DateLabel.secondarySmall(from: trip.startDate, to: trip.endDate)
+            DateLabel.secondarySmall(from: trip.startPlainDate, to: trip.endPlainDate)
             Spacer()
             CountLabel.secondarySmall(trip.locationsCount, icon: Location.primaryIcon)
             CountLabel.daysSecondarySmall(trip.totalDays)
@@ -53,7 +53,7 @@ struct TripRowView: View {
 
 private extension TripRowView {
     static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
-        let builder = PreviewBuilder.builder().withBudgets(false).withExpenses(false)
+        let builder = PreviewBuilder.builder().withExpenses(false)
         let data = builder.buildData()
         let trip = builder.getTrip(from: data)
 

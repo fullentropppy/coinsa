@@ -22,42 +22,39 @@ struct LocationRepository {
     ///   - name: Название локации.
     ///   - startDate: Дата начала пребывания.
     ///   - endDate: Дата окончания пребывания.
-    ///   - majorTimeZone: Часовой пояс.
-    ///   - localCurrency: Локальная валюта.
-    ///   - rateLocalToBase: Курс к основной валюте.
+    ///   - locationCurrency: Локальная валюта.
+    ///   - rateLocationToBase: Курс к основной валюте.
     ///   - exchangeAdjustment: Процентная корректировка курса.
+    ///   - budget: Сумма бюджета в основной валюте.
     ///   - trip: Родительская поездка.
-    ///   - budgetsByCategory: Бюджеты по категориям.
     func add(
         name: String,
         startDate: Date,
         endDate: Date,
-        majorTimeZone: MajorTimeZone,
-        localCurrency: Currency,
-        rateLocalToBase: Double,
+        locationCurrency: Currency,
+        rateLocationToBase: Double,
         exchangeAdjustment: Double,
-        trip: Trip,
-        budgetsByCategory: [ExpenseCategory: Double]
+        budget: Double,
+        trip: Trip
     ) {
         let now = Date()
         
         let location = Location(
             id: UUID(),
             name: name.trimmed,
-            startDate: normalizedStartDate(startDate),
-            endDate: normalizedEndDate(endDate),
-            timeZoneID: majorTimeZone.id,
-            localCurrencyCode: localCurrency.code,
-            rateLocalToBase: normalizedRateLocalToBase(rateLocalToBase),
-            exchangeAdjustment: normalizedRateLocalToBase(exchangeAdjustment),
+            startDate: startDate,
+            endDate: endDate,
+            locationCurrencyCode: locationCurrency.code,
+            rateLocationToBase: rateLocationToBase,
+            exchangeAdjustment: exchangeAdjustment,
+            budget: budget,
             trip: trip,
-            budgets: [],
             expenses: [],
             createdAt: now,
             updatedAt: now
         )
-        location.applyBudgets(budgetsByCategory)
         
+        normalizedLocationData(location)
         context.insert(location)
         try? context.save()
     }
@@ -68,32 +65,30 @@ struct LocationRepository {
     ///   - name: Новое название.
     ///   - startDate: Новая дата начала.
     ///   - endDate: Новая дата окончания.
-    ///   - majorTimeZone: Новый часовой пояс.
-    ///   - localCurrency: Новая локальная валюта.
-    ///   - rateLocalToBase: Новый курс.
+    ///   - locationCurrency: Новая локальная валюта.
+    ///   - rateLocationToBase: Новый курс.
+    ///   - budget: Новый бюджет.
     ///   - exchangeAdjustment: Новая корректировка.
-    ///   - budgetsByCategory: Новые бюджеты по категориям.
     func update(
         _ location: Location,
         name: String,
         startDate: Date,
         endDate: Date,
-        majorTimeZone: MajorTimeZone,
-        localCurrency: Currency,
-        rateLocalToBase: Double,
+        locationCurrency: Currency,
+        rateLocationToBase: Double,
         exchangeAdjustment: Double,
-        budgetsByCategory: [ExpenseCategory: Double]
+        budget: Double
     ) {
-        location.name = name.trimmed
-        location.startDate = normalizedStartDate(startDate)
-        location.endDate = normalizedEndDate(endDate)
-        location.timeZoneID = majorTimeZone.id
-        location.localCurrencyCode = localCurrency.code
-        location.rateLocalToBase = normalizedRateLocalToBase(rateLocalToBase)
-        location.exchangeAdjustment = normalizedRateLocalToBase(exchangeAdjustment)
+        location.name = name
+        location.storedStartDate = startDate
+        location.storedEndDate = endDate
+        location.locationCurrencyCode = locationCurrency.code
+        location.rateLocationToBase = rateLocationToBase
+        location.exchangeAdjustment = exchangeAdjustment
+        location.budget = budget
         location.updatedAt = Date()
-        location.applyBudgets(budgetsByCategory)
         
+        normalizedLocationData(location)
         try? context.save()
     }
     
@@ -106,33 +101,14 @@ struct LocationRepository {
     
     // MARK: - Номализация
     
-    /// Очищает название от лишних пробелов.
-    private func normalizedName(_ name: String) -> String {
-        name.trimmed
-    }
-    
-    /// Нормализует дату начала к полудню UTC.
-    private func normalizedStartDate(_ startDate: Date) -> Date {
-        startDate.utcNoon
-    }
-    
-    /// Нормализует дату окончания к полудню UTC.
-    private func normalizedEndDate(_ endDate: Date) -> Date {
-        endDate.utcNoon
-    }
-    
-    /// Приводит сумму к неотрицательному значению.
-    private func normalizedAmount(_ amount: Double) -> Double {
-        amount.nonNegative
-    }
-    
-    /// Приводит курс к неотрицательному значению.
-    private func normalizedRateLocalToBase(_ rate: Double) -> Double {
-        rate.nonNegative
-    }
-    
-    /// Приводит корректировку курса к неотрицательному значению.
-    private func normalizedExchangeAdjustment(_ adjustment: Double) -> Double {
-        adjustment.nonNegative
+    /// Нормализует значения локации.
+    /// - Parameter location: Локация для нормализации значений.
+    private func normalizedLocationData(_ location: Location) {
+        location.name = location.name.trimmed
+        location.storedStartDate = location.storedStartDate.storedPlainDate(using: .utc)
+        location.storedEndDate = location.storedEndDate.storedPlainDate(using: .utc)
+        location.rateLocationToBase = location.rateLocationToBase.nonNegative
+        location.exchangeAdjustment = location.exchangeAdjustment
+        location.budget = location.budget.nonNegative
     }
 }

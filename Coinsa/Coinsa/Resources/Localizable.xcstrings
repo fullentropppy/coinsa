@@ -20,40 +20,6 @@
         }
       }
     },
-    "amount.actual" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Actual"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Факт"
-          }
-        }
-      }
-    },
-    "amount.actual.daily" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Daily actual"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Дневной факт"
-          }
-        }
-      }
-    },
     "amount.balance" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -88,19 +54,121 @@
         }
       }
     },
+    "amount.budget" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Budget"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Бюджет"
+          }
+        }
+      }
+    },
+    "amount.budget.daily" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Daily budget"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Бюджет на день"
+          }
+        }
+      }
+    },
     "amount.duo" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$(localAmountBalance)@ %2$(localCurrencyCode)@ • %3$(baseAmountBalance)@ %4$(baseCurrencyCode)@"
+            "value" : "%1$(locationAmountBalance)@ %2$(locationCurrencyCode)@ • %3$(baseAmountBalance)@ %4$(baseCurrencyCode)@"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$(localAmountBalance)@ %2$(localCurrencyCode)@ • %3$(baseAmountBalance)@ %4$(baseCurrencyCode)@"
+            "value" : "%1$(locationAmountBalance)@ %2$(locationCurrencyCode)@ • %3$(baseAmountBalance)@ %4$(baseCurrencyCode)@"
+          }
+        }
+      }
+    },
+    "amount.expenses" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Expenses"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Траты"
+          }
+        }
+      }
+    },
+    "amount.expenses.daily" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Daily expenses"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Траты в день"
+          }
+        }
+      }
+    },
+    "amount.expenses.dailyAverage" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Daily average"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Среднее"
+          }
+        }
+      }
+    },
+    "amount.expenses.dailyMax" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Daily max"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Максимум"
           }
         }
       }
@@ -122,40 +190,6 @@
         }
       }
     },
-    "amount.plan" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Plan"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "План"
-          }
-        }
-      }
-    },
-    "amount.plan.daily" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Daily plan"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Дневной план"
-          }
-        }
-      }
-    },
     "analytics" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -173,19 +207,70 @@
         }
       }
     },
-    "analytics.actual" : {
+    "analytics.categories" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Actual"
+            "value" : "Categories"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Факт"
+            "value" : "Категории"
+          }
+        }
+      }
+    },
+    "analytics.category.amount.daily" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Per day"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "В день"
+          }
+        }
+      }
+    },
+    "analytics.category.amount.total" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Total"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Всего"
+          }
+        }
+      }
+    },
+    "analytics.days" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Days"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Дни"
           }
         }
       }
@@ -207,23 +292,6 @@
         }
       }
     },
-    "analytics.plan" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Plan"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "План"
-          }
-        }
-      }
-    },
     "analytics.summary" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -241,36 +309,87 @@
         }
       }
     },
-    "analytics.summary.fromTotal" : {
+    "analytics.summary.expenseChart" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "From total"
+            "value" : "Expense chart"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "От общего"
+            "value" : "График трат"
           }
         }
       }
     },
-    "analytics.summary.perCategory" : {
+    "analytics.summary.expenses" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Per category"
+            "value" : "Expenses"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "По категории"
+            "value" : "Траты"
+          }
+        }
+      }
+    },
+    "analytics.summary.largestExpense" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Largest expense"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Самая крупная"
+          }
+        }
+      }
+    },
+    "analytics.summary.peakTime" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Peak time"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Пик"
+          }
+        }
+      }
+    },
+    "analytics.summary.totalExpenses" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Total"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Всего"
           }
         }
       }
@@ -836,6 +955,23 @@
         }
       }
     },
+    "currency.name.lak" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lao Kip"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Лаосский кип"
+          }
+        }
+      }
+    },
     "currency.name.mad" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1074,6 +1210,23 @@
         }
       }
     },
+    "currency.name.twd" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New Taiwan Dollar"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нов. тайваньский доллар"
+          }
+        }
+      }
+    },
     "currency.name.usd" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1138,6 +1291,74 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Южноафриканский рэнд"
+          }
+        }
+      }
+    },
+    "daySegment.afternoon" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afternoon"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "День"
+          }
+        }
+      }
+    },
+    "daySegment.evening" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Evening"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вечер"
+          }
+        }
+      }
+    },
+    "daySegment.morning" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Morning"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Утро"
+          }
+        }
+      }
+    },
+    "daySegment.night" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Night"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ночь"
           }
         }
       }
@@ -1601,6 +1822,40 @@
         }
       }
     },
+    "expense.actualExchangeRate" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 %1$(expenseCurrencyCode)@ = %2$(actualRateExpenseToBase)@ %3$(baseCurrencyCode)@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 %1$(expenseCurrencyCode)@ = %2$(actualRateExpenseToBase)@ %3$(baseCurrencyCode)@"
+          }
+        }
+      }
+    },
+    "expense.actualExchangeRate.double" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 %1$(expenseCurrencyCode)@ = %2$(actualRateExpenseToBase)@ %3$(baseCurrencyCode)@  • %4$(actualRateExpenseToLocation)@ %5$(locationCurrencyCode)@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 %1$(expenseCurrencyCode)@ = %2$(actualRateExpenseToBase)@ %3$(baseCurrencyCode)@  • %4$(actualRateExpenseToLocation)@ %5$(locationCurrencyCode)@"
+          }
+        }
+      }
+    },
     "expense.add" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1624,13 +1879,30 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "1 %1$(localCurrencyCode)@ = %2$(effectiveRateLocalToBase)@ %3$(baseCurrencyCode)@ (with adjustment %4$(adjustmentRateLocalToBase)@)"
+            "value" : "1 %1$(expenseCurrencyCode)@ = %2$(effectiveRateExpenseToBase)@ %3$(baseCurrencyCode)@ (with adjustment %4$(exchangeAdjustment)@)"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "1 %1$(localCurrencyCode)@ = %2$(effectiveRateLocalToBase)@ %3$(baseCurrencyCode)@ (с корректировкой %4$(adjustmentRateLocalToBase)@)"
+            "value" : "1 %1$(expenseCurrencyCode)@ = %2$(effectiveRateExpenseToBase)@ %3$(baseCurrencyCode)@ (с корректировкой %4$(exchangeAdjustment)@)"
+          }
+        }
+      }
+    },
+    "expense.adjustedExchangeRate.longDouble" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 %1$(expenseCurrencyCode)@ = %2$(effectiveRateExpenseToBase)@ %3$(baseCurrencyCode)@  • %4$(effectiveRateExpenseToLocation)@ %5$(locationCurrencyCode)@\n(with adjustment %6$(exchangeAdjustment)@)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 %1$(expenseCurrencyCode)@ = %2$(effectiveRateExpenseToBase)@ %3$(baseCurrencyCode)@  • %4$(effectiveRateExpenseToLocation)@ %5$(locationCurrencyCode)@\n(с корректировкой %6$(exchangeAdjustment)@)"
           }
         }
       }
@@ -1641,13 +1913,30 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Adjusted exchange rate of %1$(localCurrencyCode)@: %2$(effectiveRateLocalToBase)@ %3$(baseCurrencyCode)@"
+            "value" : "Adjusted exchange rate of %1$(expenseCurrencyCode)@: %2$(effectiveRateExpenseToBase)@ %3$(baseCurrencyCode)@"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Скорректированный курс %1$(localCurrencyCode)@: %2$(effectiveRateLocalToBase)@ %3$(baseCurrencyCode)@"
+            "value" : "Скорректированный курс %1$(expenseCurrencyCode)@: %2$(effectiveRateExpenseToBase)@ %3$(baseCurrencyCode)@"
+          }
+        }
+      }
+    },
+    "expense.adjustedExchangeRate.shortDouble" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adjusted exchange rate of %1$(expenseCurrencyCode)@:\n%2$(effectiveRateExpenseToBase)@ %3$(baseCurrencyCode)@ • %4$(effectiveRateExpenseToLocation)@ %5$(locationCurrencyCode)@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Скорректированный курс %1$(expenseCurrencyCode)@:\n%2$(effectiveRateExpenseToBase)@ %3$(baseCurrencyCode)@ • %4$(effectiveRateExpenseToLocation)@ %5$(locationCurrencyCode)@"
           }
         }
       }
@@ -1703,23 +1992,6 @@
         }
       }
     },
-    "expense.baseExchangeRate" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "1 %1$(localCurrencyCode)@ = %2$(rateLocalToBase)@ %3$(baseCurrencyCode)@"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "1 %1$(localCurrencyCode)@ = %2$(rateLocalToBase)@ %3$(baseCurrencyCode)@"
-          }
-        }
-      }
-    },
     "expense.category" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1737,19 +2009,19 @@
         }
       }
     },
-    "expense.category.activity" : {
+    "expense.category.accomodation" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Activity"
+            "value" : "Accomodation"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Активность"
+            "value" : "Проживание"
           }
         }
       }
@@ -1788,6 +2060,23 @@
         }
       }
     },
+    "expense.category.leisure" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leisure"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Досуг"
+          }
+        }
+      }
+    },
     "expense.category.medicine" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1805,19 +2094,19 @@
         }
       }
     },
-    "expense.category.other" : {
+    "expense.category.miscellaneous" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Other"
+            "value" : "Miscellaneous"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Другое"
+            "value" : "Прочее"
           }
         }
       }
@@ -2015,13 +2304,30 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Exchange rate of %1$(localCurrencyCode)@"
+            "value" : "Exchange rate of %1$(locationCurrencyCode)@"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Курс обмена %(localCurrencyCode)@"
+            "value" : "Курс обмена %(locationCurrencyCode)@"
+          }
+        }
+      }
+    },
+    "expense.location" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Location"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Локация"
           }
         }
       }
@@ -2077,6 +2383,737 @@
         }
       }
     },
+    "expense.placeOfExpense" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Place of the Expense"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Место траты"
+          }
+        }
+      }
+    },
+    "expense.subcategory" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Subcategory"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Подкатегория"
+          }
+        }
+      }
+    },
+    "expense.subcategory.accomodationRental" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rental"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Аренда"
+          }
+        }
+      }
+    },
+    "expense.subcategory.activity" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Activity"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Активность"
+          }
+        }
+      }
+    },
+    "expense.subcategory.bankFees" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bank Fees"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Банк. комиссии"
+          }
+        }
+      }
+    },
+    "expense.subcategory.breakfast" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Breakfast"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Завтрак"
+          }
+        }
+      }
+    },
+    "expense.subcategory.clothing" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clothing"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Одежда"
+          }
+        }
+      }
+    },
+    "expense.subcategory.connectivity" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Connectivity"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Связь"
+          }
+        }
+      }
+    },
+    "expense.subcategory.cosmetics" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cosmetics"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Косметика"
+          }
+        }
+      }
+    },
+    "expense.subcategory.digitalService" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Digital Service"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Цифр. сервисы"
+          }
+        }
+      }
+    },
+    "expense.subcategory.dinner" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dinner"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ужин"
+          }
+        }
+      }
+    },
+    "expense.subcategory.documents" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Documents"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Документы"
+          }
+        }
+      }
+    },
+    "expense.subcategory.donation" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Donation"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Пожертвования"
+          }
+        }
+      }
+    },
+    "expense.subcategory.electronics" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Electronics"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Электроника"
+          }
+        }
+      }
+    },
+    "expense.subcategory.entertainment" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entertainment"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Развлечения"
+          }
+        }
+      }
+    },
+    "expense.subcategory.ferry" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ferry"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Паром"
+          }
+        }
+      }
+    },
+    "expense.subcategory.fuel" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fuel"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Топливо"
+          }
+        }
+      }
+    },
+    "expense.subcategory.groceries" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Groceries"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Продукты"
+          }
+        }
+      }
+    },
+    "expense.subcategory.healthInsurance" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Health Insurance"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Страховка"
+          }
+        }
+      }
+    },
+    "expense.subcategory.homeGoods" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Home Goods"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Товары для дома"
+          }
+        }
+      }
+    },
+    "expense.subcategory.hotel" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hotel"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отель"
+          }
+        }
+      }
+    },
+    "expense.subcategory.jewelry" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jewelry"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Украшения"
+          }
+        }
+      }
+    },
+    "expense.subcategory.landmark" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Landmark"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Объект"
+          }
+        }
+      }
+    },
+    "expense.subcategory.laundry" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laundry"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Прачечная"
+          }
+        }
+      }
+    },
+    "expense.subcategory.luggageStorrage" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Luggage Storrage"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Камера хранения"
+          }
+        }
+      }
+    },
+    "expense.subcategory.lunch" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lunch"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Обед"
+          }
+        }
+      }
+    },
+    "expense.subcategory.medicalCare" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Medical Care"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Мед. услуги"
+          }
+        }
+      }
+    },
+    "expense.subcategory.medication" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Medication"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Лекарства"
+          }
+        }
+      }
+    },
+    "expense.subcategory.other" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Other"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Другое"
+          }
+        }
+      }
+    },
+    "expense.subcategory.park" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Park"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Парк"
+          }
+        }
+      }
+    },
+    "expense.subcategory.plane" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plane"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Самолет"
+          }
+        }
+      }
+    },
+    "expense.subcategory.postalService" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Postal Service"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Почта"
+          }
+        }
+      }
+    },
+    "expense.subcategory.publicTransport" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Public Transport"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Общ. транспорт"
+          }
+        }
+      }
+    },
+    "expense.subcategory.snack" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Snack"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Перекус"
+          }
+        }
+      }
+    },
+    "expense.subcategory.souvenirs" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Souvenirs"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сувениры"
+          }
+        }
+      }
+    },
+    "expense.subcategory.Taxi" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Taxi"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Такси"
+          }
+        }
+      }
+    },
+    "expense.subcategory.tour" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tour"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Тур"
+          }
+        }
+      }
+    },
+    "expense.subcategory.touristTax" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tourist Tax"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Тур. налог"
+          }
+        }
+      }
+    },
+    "expense.subcategory.train" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Train"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Поезд"
+          }
+        }
+      }
+    },
+    "expense.subcategory.Transfer" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Transfer"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Трансфер"
+          }
+        }
+      }
+    },
+    "expense.subcategory.travelPass" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Travel Pass"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Проездной"
+          }
+        }
+      }
+    },
+    "expense.subcategory.vehicleRental" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rental"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Аренда"
+          }
+        }
+      }
+    },
+    "expense.timeZone.hint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Time zone: %1$(gmtOffsetDisplay)@  (%2$(timeZoneId)@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Часовой пояс: %1$(gmtOffsetDisplay)@ (%2$(timeZoneId)@)"
+          }
+        }
+      }
+    },
     "location.add" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2100,13 +3137,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Adjusted exchange rate of %1$(localCurrencyCode)@: %2$(effectiveRateLocalToBase)@ %3$(baseCurrencyCode)@"
+            "value" : "Adjusted exchange rate of %1$(locationCurrencyCode)@: %2$(effectiveRateLocationToBase)@ %3$(baseCurrencyCode)@"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Скорректированный курс %1$(localCurrencyCode)@: %2$(effectiveRateLocalToBase)@ %3$(baseCurrencyCode)@"
+            "value" : "Скорректированный курс %1$(locationCurrencyCode)@: %2$(effectiveRateLocationToBase)@ %3$(baseCurrencyCode)@"
           }
         }
       }
@@ -2128,19 +3165,19 @@
         }
       }
     },
-    "location.budget.total" : {
+    "location.budget.hint" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Total"
+            "value" : "Location budget for calculating recommended daily expenses and other analytics. There is no exchange rate adjustment applied to the budget."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Итого"
+            "value" : "Бюджет на локацию для расчета рекомендованных ежедневных трат и другой аналитики. К бюджету не применяется корректировка курса обмена."
           }
         }
       }
@@ -2304,13 +3341,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Exchange rate adjustment for card payments."
+            "value" : "Exchange rate adjustment for new Expenses. Can be changed inside an Expense."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Корректировка курса обмена для трат с оплатой по карте."
+            "value" : "Корректировка курса обмена для автоматической постановки в новых тратах. Может быть изменена внутри траты."
           }
         }
       }
@@ -2321,13 +3358,30 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Exchange rate of %1$(localCurrencyCode)@"
+            "value" : "Exchange rate of %1$(locationCurrencyCode)@"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Курс обмена %(localCurrencyCode)@"
+            "value" : "Курс обмена %(locationCurrencyCode)@"
+          }
+        }
+      }
+    },
+    "location.exchangeRate.hint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exchange rate for calculating the Budget amount and for new Expenses (if the exchange rate that was current at the time of the Expense could not be loaded)."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Курс обмена для расчета суммы бюджета и автоматической подстановки в новых тратах (если не удалось загрузить актуальный на момент траты курс обмена)."
           }
         }
       }
@@ -2413,516 +3467,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Начинается"
-          }
-        }
-      }
-    },
-    "location.timeZone" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Time zone"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Часовой пояс"
-          }
-        }
-      }
-    },
-    "location.timeZone.hint" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "The dates of the Location and the dates of all Expenses of the current Location are entered in the selected time zone."
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Даты локации и даты всех трат текущей локации вводятся в выбранном часовом поясе."
-          }
-        }
-      }
-    },
-    "majorTimeZone.name.adelaide" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Central Australia"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Центральная Австралия"
-          }
-        }
-      }
-    },
-    "majorTimeZone.name.anchorage" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "North Pacific"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Северный Тихий океан"
-          }
-        }
-      }
-    },
-    "majorTimeZone.name.athens" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Eastern Europe"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Восточная Европа"
-          }
-        }
-      }
-    },
-    "majorTimeZone.name.auckland" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "New Zealand"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Новая Зеландия"
-          }
-        }
-      }
-    },
-    "majorTimeZone.name.azores" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Azores"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Азорские острова"
-          }
-        }
-      }
-    },
-    "majorTimeZone.name.bangkok" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Indochina"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Индокитай"
-          }
-        }
-      }
-    },
-    "majorTimeZone.name.chicago" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Central US"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Центральная часть США"
-          }
-        }
-      }
-    },
-    "majorTimeZone.name.denver" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mountain US"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Горный регион США"
-          }
-        }
-      }
-    },
-    "majorTimeZone.name.dhaka" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "East South & Central Asia"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Восток Южной и Центральной Азии"
-          }
-        }
-      }
-    },
-    "majorTimeZone.name.dubai" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Gulf"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Персидский залив"
-          }
-        }
-      }
-    },
-    "majorTimeZone.name.halifax" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Atlantic Canada"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Атлантическая часть Канады"
-          }
-        }
-      }
-    },
-    "majorTimeZone.name.honolulu" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Hawaii"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Гавайи"
-          }
-        }
-      }
-    },
-    "majorTimeZone.name.karachi" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "West South Asia"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Запад Южной Азии"
-          }
-        }
-      }
-    },
-    "majorTimeZone.name.kathmandu" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nepal"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Непал"
-          }
-        }
-      }
-    },
-    "majorTimeZone.name.kolkata" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "India"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Индия"
-          }
-        }
-      }
-    },
-    "majorTimeZone.name.london" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Western Europe"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Западная Европа"
-          }
-        }
-      }
-    },
-    "majorTimeZone.name.losAngeles" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pacific US"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Тихоокеанское побережье США"
-          }
-        }
-      }
-    },
-    "majorTimeZone.name.moscow" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "West Russia"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Западная Россия"
-          }
-        }
-      }
-    },
-    "majorTimeZone.name.newYork" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Eastern US"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Восточное побережье США"
-          }
-        }
-      }
-    },
-    "majorTimeZone.name.paris" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Central Europe"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Центральная Европа"
-          }
-        }
-      }
-    },
-    "majorTimeZone.name.perth" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Western Australia"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Западная Австралия"
-          }
-        }
-      }
-    },
-    "majorTimeZone.name.saoPaulo" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Eastern South America"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Восток Южной Америки"
-          }
-        }
-      }
-    },
-    "majorTimeZone.name.shanghai" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "East Asia"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Восточная Азия"
-          }
-        }
-      }
-    },
-    "majorTimeZone.name.stJohns" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Newfoundland"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ньюфаундленд"
-          }
-        }
-      }
-    },
-    "majorTimeZone.name.sydney" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Eastern Australia"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Восточная Австралия"
-          }
-        }
-      }
-    },
-    "majorTimeZone.name.tehran" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Iran"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Иран"
-          }
-        }
-      }
-    },
-    "majorTimeZone.name.tokyo" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Northeast Asia"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Северо-Восточная Азия"
-          }
-        }
-      }
-    },
-    "majorTimeZone.name.tongatapu" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "South Pacific"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Южный Тихий океан"
           }
         }
       }
@@ -3454,6 +3998,23 @@
         }
       }
     },
+    "totalDays" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Total days: %1$(totalDays)lld"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Дней всего: %(totalDays)lld"
+          }
+        }
+      }
+    },
     "totalNumber" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -3511,7 +4072,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Base (home) currency for entering, storing, and showing Budgets and Expenses. Can be changed only if the Trip has no Locations."
+            "value" : "Base (home) currency for entering, storing, and showing budgets and Expenses. Can be changed only if the Trip has no Locations."
           }
         },
         "ru" : {

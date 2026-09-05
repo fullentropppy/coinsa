@@ -27,7 +27,7 @@ struct PreviewBuilder {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
 
         let container = try! ModelContainer(
-            for: Trip.self, Location.self, Budget.self, Expense.self,
+            for: Trip.self, Location.self, Expense.self,
             configurations: config
         )
 
@@ -91,12 +91,6 @@ extension PreviewBuilder {
             return self
         }
 
-        /// Включает/выключает генерацию бюджетов.
-        func withBudgets(_ value: Bool) -> Builder {
-            options.includeBudgets = value
-            return self
-        }
-
         /// Включает/выключает генерацию расходов.
         func withExpenses(_ value: Bool) -> Builder {
             options.includeExpenses = value
@@ -121,7 +115,7 @@ extension PreviewBuilder {
             fetchItem(
                 from: container,
                 at: index,
-                sortBy: [SortDescriptor(\Trip.startDate, order: .forward)]
+                sortBy: [SortDescriptor(\Trip.storedStartDate, order: .forward)]
             )
         }
 
@@ -130,7 +124,7 @@ extension PreviewBuilder {
             fetchItem(
                 from: container,
                 at: index,
-                sortBy: [SortDescriptor(\Location.startDate, order: .forward)]
+                sortBy: [SortDescriptor(\Location.storedStartDate, order: .forward)]
             )
         }
 
@@ -139,7 +133,7 @@ extension PreviewBuilder {
             fetchItem(
                 from: container,
                 at: index,
-                sortBy: [SortDescriptor(\Expense.date, order: .forward)]
+                sortBy: [SortDescriptor(\Expense.storedDate, order: .forward)]
             )
         }
 

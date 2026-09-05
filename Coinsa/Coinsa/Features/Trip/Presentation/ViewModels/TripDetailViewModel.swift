@@ -20,28 +20,31 @@ struct TripDetailViewModel {
     }
     
     var eventHeaderData: EventSummaryData {
-        let plannedAmount = trip.calculatePlannedAmount(asBaseCurrency: true)
-        let actualAmount = trip.calculateActualAmount(asBaseCurrency: true)
+        let budgetAmount = trip.calculateBudgetAmount(asBaseCurrency: true)
+        let expensesAmount = trip.calculateExpensesAmount(asBaseCurrency: true)
         
         return EventSummaryData(
             badgeProvider: Trip.self,
             dateRangeProvider: trip,
-            plannedBaseAmount: plannedAmount,
-            actualBaseAmount: actualAmount,
+            budgetBaseAmount: budgetAmount,
+            expensesBaseAmount: expensesAmount,
             baseCurrency: trip.baseCurrency
         )
     }
 
     var eventAnalyticsData: EventCategoryAnalyticsData {
-        let plannedAmountByCategory = trip.calculatePlannedAmountByCategory(asBaseCurrency: true)
-        let actualAmountByCategory = trip.calculateActualAmountByCategory(asBaseCurrency: true)
+        let baseBudget = trip.calculateBudgetAmount(asBaseCurrency: true)
+        let expensesAmountByCategory = trip.calculateExpensesAmountByCategory(asBaseCurrency: true)
+        let expenses = trip.locations?.flatMap { $0.expenses ?? [] } ?? []
 
         return EventCategoryAnalyticsData(
-            dateRange: trip.range,
+            dateRangeProvider: trip,
             baseCurrency: trip.baseCurrency,
-            localCurrency: nil,
-            plannedAmountByCategory: slices(from: plannedAmountByCategory, localValues: nil),
-            actualAmountByCategory: slices(from: actualAmountByCategory, localValues: nil)
+            locationCurrency: nil,
+            baseBudget: baseBudget,
+            locationBudget: nil,
+            expensesAmountByCategory: slices(from: expensesAmountByCategory, localValues: nil),
+            expenses: expenses
         )
     }
     
@@ -57,35 +60,35 @@ struct TripDetailViewModel {
             switch status {
             case .ongoing:
                 locationsForStatus.sort {
-                    if $0.startDate != $1.startDate {
-                        return $0.startDate > $1.startDate
+                    if $0.startPlainDate != $1.startPlainDate {
+                        return $0.startPlainDate > $1.startPlainDate
                     }
                     if $0.totalDays != $1.totalDays {
                         return $0.totalDays < $1.totalDays
                     }
-                    return $0.endDate < $1.endDate
+                    return $0.endPlainDate < $1.endPlainDate
                 }
                 
             case .upcoming:
                 locationsForStatus.sort {
-                    if $0.startDate != $1.startDate {
-                        return $0.startDate < $1.startDate
+                    if $0.startPlainDate != $1.startPlainDate {
+                        return $0.startPlainDate < $1.startPlainDate
                     }
                     if $0.totalDays != $1.totalDays {
                         return $0.totalDays < $1.totalDays
                     }
-                    return $0.endDate < $1.endDate
+                    return $0.endPlainDate < $1.endPlainDate
                 }
                 
             case .completed:
                 locationsForStatus.sort {
-                    if $0.startDate != $1.startDate {
-                        return $0.startDate < $1.startDate
+                    if $0.startPlainDate != $1.startPlainDate {
+                        return $0.startPlainDate < $1.startPlainDate
                     }
                     if $0.totalDays != $1.totalDays {
                         return $0.totalDays < $1.totalDays
                     }
-                    return $0.endDate < $1.endDate
+                    return $0.endPlainDate < $1.endPlainDate
                 }
             }
             
@@ -98,12 +101,12 @@ struct TripDetailViewModel {
     private func slices(
         from baseValues: [ExpenseCategory: Double],
         localValues: [ExpenseCategory: Double]?
-    ) -> [CategoryAnalyticsSlice] {
+    ) -> [ExpenseAnalyticsSlice] {
         ExpenseCategory.allCases.map { category in
-            CategoryAnalyticsSlice(
+            ExpenseAnalyticsSlice(
                 category: category,
                 baseAmount: baseValues[category] ?? 0,
-                localAmount: localValues?[category]
+                locationAmount: localValues?[category]
             )
         }
     }

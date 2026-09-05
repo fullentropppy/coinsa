@@ -21,8 +21,10 @@ struct ExpenseEditView: View {
     
     @State private var viewModel: ExpenseEditViewModel
     @State private var deletionHandler = DeletionHandler<Expense>()
-    @State private var inputCurrency: InputCurrency
+    @State private var currentLocationProvider = CurrentLocationProvider()
+    @State private var currencySide: CurrencySide
     @State private var isShowingDiscardAlert = false
+    @State private var isShowingLocationMap = false
     
     @FocusState private var focusedField: NumericEditField?
     
@@ -67,8 +69,8 @@ struct ExpenseEditView: View {
     
     private init(initialViewModel: ExpenseEditViewModel, onDelete: (() -> Void)? = nil) {
         _viewModel = State(initialValue: initialViewModel)
-        _inputCurrency = State(
-            initialValue: initialViewModel.baseCurrency == initialViewModel.localCurrency ? .base : .local
+        _currencySide = State(
+            initialValue: initialViewModel.baseCurrency == initialViewModel.expenseCurrency ? .base : .quote
         )
         self.onDelete = onDelete
     }
@@ -111,6 +113,10 @@ struct ExpenseEditView: View {
                 )
                 .task {
                     viewModel.loadInitialRateIfNeeded()
+                    await resolveCurrentLocationIfNeeded()
+                }
+                .fullScreenCover(isPresented: $isShowingLocationMap) {
+                    placeOfExpenseEditor
                 }
         }
     }
@@ -119,94 +125,195 @@ struct ExpenseEditView: View {
     
     private var expenseEditForm: some View {
         Form {
-            dateSection
-            specificationsSection
             amountSection
+            specificationsSection
+            currencySection
+            dateSection
             commentSection
+            placeOfExpenseSection
             actionsSection
         }
     }
     
     // MARK: - Секции
     
-    private var dateSection: some View {
-        Section {
-            DatePicker(
-                .expenseDate,
-                selection: $viewModel.date,
-                in: viewModel.location.range
-            )
-        }
-    }
-    
-    private var specificationsSection: some View {
-        Section {
-            LabeledPicker(
-                title: .expenseCategory,
-                selection: categoryBinding,
-                options: ExpenseCategory.allCases
-            ) { category in
-                category.makeLabel()
-            }
-            LabeledPicker(
-                title: .expensePaymentMethod,
-                selection: paymentMethodBinding,
-                options: PaymentMethod.allCases
-            ) { method in
-                method.makeLabel()
-            }
-        }
-    }
-    
     private var amountSection: some View {
         Section {
-            LabeledContent(.expenseAmount) {
+            VStack {
+                NumericInputField(
+                    amountInputBinding,
+                    focusedField: $focusedField,
+                    focusId: .amount,
+                    fractionDigits: 2,
+                    font: .largeTitle,
+                    textAlignment: .center
+                )
                 HStack {
-                    NumericInputField.standard(
-                        amountInputBinding,
-                        focusedField: $focusedField,
-                        focusId: .amount,
-                        fractionDigits: 2
-                    )
-                    CurrencyCodeText.standard(viewModel.currency(for: inputCurrency))
-                    if !viewModel.isHomeLocation {
+                    CurrencyCodeText.standard(viewModel.currency(for: currencySide))
+                    if !viewModel.isExpenseBaseCurrency {
                         InputCurrencySwitchButton(action: switchInputCurrency)
                     }
                 }
             }
+        }
+        .listRowBackground(Color.clear)
+    }
+    
+    private var specificationsSection: some View {
+        Section {
+            Picker(selection: categoryBinding) {
+                ForEach(ExpenseCategory.allCases, id: \.self) { category in
+                    Image(systemName: category.primaryIcon)
+                        .tag(category.id)
+                }
+            } label: {
+                EmptyView()
+            }
+            .onChange(of: categoryBinding.id) {
+                haptics.trigger(.tap)
+            }
+            .pickerStyle(.segmented)
+            .navigationLinkIndicatorVisibility(.hidden)
+            .listRowSeparator(.hidden)
             
-            if !viewModel.isHomeLocation {
-                LabeledContent(.expenseExchangeRate(localCurrencyCode: viewModel.localCurrency.code)) {
+            LabeledPicker(
+                title: viewModel.category.localizedResource,
+                selection: subcategoryBinding,
+                options: viewModel.category.subcategories
+            ) { subcategory in
+                subcategory.makeLabel()
+            }
+        }
+    }
+    
+    private var currencySection: some View {
+        Section {
+            Picker(.expensePaymentMethod, selection: paymentMethodBinding) {
+                ForEach(PaymentMethod.allCases, id: \.self) { paymentMethod in
+                    Image(systemName: paymentMethod.primaryIcon)
+                       .tag(paymentMethod.id)
+                }
+            }
+            .onChange(of: paymentMethodBinding.id) {
+                haptics.trigger(.tap)
+            }
+            .pickerStyle(.segmented)
+            .listRowSeparator(.hidden)
+            
+            LabeledPicker(
+                title: .expenseCurrency,
+                selection: expenseCurrencyBinding,
+                options: Currency.allCasesSortedByName
+            ) { currency in
+                currency.makeLabel()
+            }
+            
+            if viewModel.showsRateExpenseToBase {
+                LabeledContent(.expenseExchangeRate(locationCurrencyCode: viewModel.expenseCurrency.code)) {
                     ExchangeRateInputField.standard(
-                        rateInputBinding,
+                        rateExpenseToBaseInputBinding,
                         currency: viewModel.baseCurrency,
-                        isLoading: viewModel.isRateLoading,
+                        isLoading: viewModel.isRateExpenseToBaseLoading,
                         focusedField: $focusedField,
                         focusId: .exchangeRate,
-                        onRefresh: { viewModel.requestRateRefresh(for: inputCurrency) }
+                        onRefresh: { viewModel.requestRateExpenseToBaseRefresh(for: currencySide) }
                     )
                 }
-                
-                if viewModel.useExchangeAdjustment {
-                    LabeledContent(.locationExchangeAdjustment) {
-                        PercentInputField.standard(
-                            exchangeAdjustmentInputBinding,
-                            focusedField: $focusedField,
-                            focusId: .exchangeAdjustment
-                        )
-                    }
+            }
+            
+            if viewModel.showsRateExpenseToLocation {
+                LabeledContent(.expenseExchangeRate(locationCurrencyCode: viewModel.expenseCurrency.code)) {
+                    ExchangeRateInputField.standard(
+                        rateExpenseToLocationInputBinding,
+                        currency: viewModel.locationCurrency,
+                        isLoading: viewModel.isRateExpenseToLocationLoading,
+                        focusedField: $focusedField,
+                        focusId: .locationExchangeRate,
+                        onRefresh: { viewModel.requestRateExpenseToLocationRefresh() }
+                    )
+                }
+            }
+            
+            if viewModel.useExchangeAdjustment {
+                LabeledContent(.locationExchangeAdjustment) {
+                    PercentInputField.standard(
+                        exchangeAdjustmentInputBinding,
+                        focusedField: $focusedField,
+                        focusId: .exchangeAdjustment
+                    )
                 }
             }
         } footer: {
-            if let adjustedExchangeRateDescription = viewModel.adjustedRateDescription {
-                Text(adjustedExchangeRateDescription)
+            if let adjustedRateDescription = viewModel.adjustedRateDescription {
+                Text(adjustedRateDescription)
             }
+        }
+    }
+    
+    private var dateSection: some View {
+        Section {
+            DatePicker(
+                selection: $viewModel.date
+            ) {
+                HStack {
+                    Image(systemName: "calendar")
+                        .foregroundStyle(.secondary)
+                    Text(.expenseDate)
+                }
+            }
+            .environment(\.timeZone, .utc)
+        } footer: {
+            Text(
+                .expenseTimeZoneHint(
+                    gmtOffsetDisplay: viewModel.timeZone.gmtOffsetDisplay,
+                    timeZoneId: viewModel.timeZone.identifier
+                )
+            )
+        }
+    }
+    
+    @ViewBuilder
+    private var placeOfExpenseSection: some View {
+        if let coordinate = viewModel.coordinate {
+            Section {
+                Button {
+                    isShowingLocationMap = true
+                } label: {
+                    CompactMapView(
+                        Binding(
+                            get: { viewModel.coordinate ?? coordinate },
+                            set: { viewModel.updateCoordinate($0) }
+                        ),
+                        title: .expensePlaceOfExpense,
+                        isEditable: true
+                    )
+                }
+                .buttonStyle(.plain)
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var placeOfExpenseEditor: some View {
+        if let coordinate = viewModel.coordinate {
+            FullScreenMapView(
+                coordinate: Binding(
+                    get: { viewModel.coordinate ?? coordinate },
+                    set: { viewModel.updateCoordinate($0) }
+                ),
+                title: .expensePlaceOfExpense
+            )
         }
     }
     
     private var commentSection: some View {
         Section {
-            TextField(.expenseComment, text: $viewModel.comment)
+            HStack {
+                Image(systemName: "ellipsis.bubble")
+                    .foregroundStyle(.secondary)
+                
+                TextField(.expenseComment, text: $viewModel.comment)
+            }
         }
     }
 
@@ -214,8 +321,13 @@ struct ExpenseEditView: View {
     private var actionsSection: some View {
         if viewModel.isEdit {
             Section {
-                Button(.expenseDelete, role: .destructive) {
+                Button(role: .destructive) {
                     requestDelete()
+                } label: {
+                    HStack {
+                        Image(systemName: "trash")
+                        Text(.expenseDelete)
+                    }
                 }
             }
         }
@@ -233,8 +345,11 @@ struct ExpenseEditView: View {
 
         ToolbarItemGroup(placement: .topBarTrailing) {
             ToolbarButton.ok {
-                viewModel.save(using: repository)
-                dismiss()
+                focusedField = nil
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    viewModel.save(using: repository)
+                    dismiss()
+                }
             }
             .disabled(!viewModel.canSave)
         }
@@ -245,7 +360,14 @@ struct ExpenseEditView: View {
     private var categoryBinding: Binding<ExpenseCategory> {
         Binding(
             get: { viewModel.category },
-            set: { viewModel.category = $0 }
+            set: { viewModel.updateCategory($0) }
+        )
+    }
+    
+    private var subcategoryBinding: Binding<ExpenseSubcategory> {
+        Binding(
+            get: { viewModel.subcategory },
+            set: { viewModel.subcategory = $0 }
         )
     }
 
@@ -253,26 +375,44 @@ struct ExpenseEditView: View {
         Binding(
             get: { viewModel.paymentMethod },
             set: { newMethod in
-                viewModel.updatePaymentMethod(newMethod, currentInput: inputCurrency)
+                viewModel.updatePaymentMethod(newMethod, currencySide: currencySide)
                 settingsStore.selectedPaymentMethod = newMethod
+            }
+        )
+    }
+    
+    private var expenseCurrencyBinding: Binding<Currency> {
+        Binding(
+            get: { viewModel.expenseCurrency },
+            set: { newCurrency in
+                viewModel.updateExpenseCurrency(newCurrency, currencySide: currencySide)
             }
         )
     }
     
     private var amountInputBinding: Binding<Double> {
         Binding(
-            get: { viewModel.amount(for: inputCurrency) },
+            get: { viewModel.amount(for: currencySide) },
             set: { newValue in
-                viewModel.updateAmount(newValue, for: inputCurrency)
+                viewModel.updateAmount(newValue, for: currencySide)
             }
         )
     }
     
-    private var rateInputBinding: Binding<Double> {
+    private var rateExpenseToBaseInputBinding: Binding<Double> {
         Binding(
-            get: { viewModel.rateLocalToBase },
+            get: { viewModel.rateExpenseToBase },
             set: { newValue in
-                viewModel.updateRate(newValue, currentInput: inputCurrency)
+                viewModel.updateRateExpenseToBase(newValue, currencySide: currencySide)
+            }
+        )
+    }
+    
+    private var rateExpenseToLocationInputBinding: Binding<Double> {
+        Binding(
+            get: { viewModel.rateExpenseToLocation },
+            set: { newValue in
+                viewModel.updateRateExpenseToLocation(newValue)
             }
         )
     }
@@ -280,8 +420,8 @@ struct ExpenseEditView: View {
     private var rateErrorBinding: Binding<Bool> {
         Binding(
             get: { viewModel.rateLoadingError != nil },
-            set: { shouldShow in
-                if !shouldShow {
+            set: { shows in
+                if !shows {
                     viewModel.rateLoadingError = nil
                 }
             }
@@ -292,7 +432,7 @@ struct ExpenseEditView: View {
         Binding(
             get: { viewModel.exchangeAdjustment },
             set: { newValue in
-                viewModel.updateExchangeAdjustment(newValue, currentInput: inputCurrency)
+                viewModel.updateExchangeAdjustment(newValue, currencySide: currencySide)
             }
         )
     }
@@ -300,9 +440,11 @@ struct ExpenseEditView: View {
     // MARK: - Действия
     
     private func switchInputCurrency() {
-        switch inputCurrency {
-        case .base: inputCurrency = .local
-        case .local: inputCurrency = .base
+        switch currencySide {
+        case .base:
+            currencySide = .quote
+        case .quote:
+            currencySide = .base
         }
     }
     
@@ -328,6 +470,17 @@ struct ExpenseEditView: View {
     private func cancelDelete() {
         deletionHandler.cancel()
     }
+
+    private func resolveCurrentLocationIfNeeded() async {
+        guard !viewModel.isEdit, viewModel.coordinate == nil else { return }
+
+        do {
+            let location = try await currentLocationProvider.requestCurrentLocation()
+            viewModel.applyResolvedCurrentLocation(location)
+        } catch {
+            // Если геолокация недоступна или запрещена, трата остается без координат.
+        }
+    }
 }
 
 // MARK: - Превью
@@ -338,7 +491,7 @@ private extension ExpenseEditView {
         colorScheme: ColorScheme,
         withNewExpense: Bool = false
     ) -> some View {
-        let builder = PreviewBuilder.builder().withBudgets(false)
+        let builder = PreviewBuilder.builder()
         let container = builder.buildContainer()
         let settingsStore = AppSettingsStore()
         let location = builder.fetchLocation(from: container)

@@ -72,8 +72,8 @@ struct SettingsDebugSectionView: View {
     private var isShowingConfirmation: Binding<Bool> {
         Binding(
             get: { pendingAction != nil },
-            set: { shouldShow in
-                if !shouldShow {
+            set: { shows in
+                if !shows {
                     pendingAction = nil
                 }
             }

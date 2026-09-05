@@ -6,37 +6,59 @@
 //
 
 extension Expense {
-    // MARK: - Публичные свойства
+    // MARK: - Вычисляемые свойства.
     
-    /// Сумма траты в локальной валюте.
-    var localAmount: Double {
-        baseAmount * effectiveRateBaseToLocal
+    private var calculationContext: ExpenseCalculationContext {
+        ExpenseCalculationContext(
+            baseAmount: baseAmount,
+            baseCurrency: baseCurrency,
+            expenseCurrency: expenseCurrency,
+            rateExpenseToBase: rateExpenseToBase,
+            rateExpenseToLocation: rateExpenseToLocation,
+            paymentMethod: paymentMethod,
+            exchangeAdjustment: exchangeAdjustment
+        )
     }
     
-    /// Эффективный курс локальной валюты к основной (с учетом корректировки).
-    var effectiveRateLocalToBase: Double {
-        adjustedRateLocalToBase
+    // MARK: - Публичные методы
+    
+    /// Возвращает сумму в указанной валюте.
+    /// - Parameters:
+    ///   - currency: Валюта, в которой нужно получить сумму.
+    ///   - rateMode: Режим расчета курса.
+    /// - Returns: Сумма в указанной валюте.
+    func amount(
+        in currency: CurrencyContext,
+        using rateMode: RateMode = .effective
+    ) -> Double {
+        calculationContext.amount(in: currency, using: rateMode)
     }
     
-    /// Обратный курс (основная валюта к локальной).
-    var rateBaseToLocal: Double {
-        rateLocalToBase > 0 ? (1 / rateLocalToBase) : 0
+    /// Возвращает курс обмена между контекстными валютами траты.
+    /// - Parameters:
+    ///   - sourceCurrency: Исходная валюта.
+    ///   - targetCurrency: Целевая валюта.
+    ///   - rateMode: Режим расчета курса.
+    /// - Returns: Курс обмена исходной валюты к целевой.
+    func exchangeRate(
+        from sourceCurrency: CurrencyContext,
+        to targetCurrency: CurrencyContext,
+        using rateMode: RateMode = .effective
+    ) -> Double {
+        calculationContext.exchangeRate(from: sourceCurrency, to: targetCurrency, using: rateMode)
     }
     
-    /// Эффективный курс основной валюты к локальной (с учетом корректировки).
-    var effectiveRateBaseToLocal: Double {
-        adjustedRateLocalToBase > 0 ? (1 / adjustedRateLocalToBase) : 0
-    }
-    
-    // MARK: - Приватные свойства
-    
-    /// Скорректированный курс локальной валюты к основной (с учетом корректировки).
-    /// Корректировка применяется только если валюты разные и способ оплаты - карта.
-    private var adjustedRateLocalToBase: Double {
-        if baseCurrency != localCurrency && paymentMethod == .card {
-            rateLocalToBase * (1 + (exchangeAdjustment / 100))
-        } else {
-            rateLocalToBase
-        }
+    /// Возвращает обратный курс обмена между контекстными валютами траты.
+    /// - Parameters:
+    ///   - sourceCurrency: Исходная валюта.
+    ///   - targetCurrency: Целевая валюта.
+    ///   - rateMode: Режим расчета курса.
+    /// - Returns: Курс обмена исходной валюты к целевой.
+    func inverseExchangeRate(
+        from sourceCurrency: CurrencyContext,
+        to targetCurrency: CurrencyContext,
+        using rateMode: RateMode = .effective
+    ) -> Double {
+        calculationContext.inverseExchangeRate(from: sourceCurrency, to: targetCurrency, using: rateMode)
     }
 }

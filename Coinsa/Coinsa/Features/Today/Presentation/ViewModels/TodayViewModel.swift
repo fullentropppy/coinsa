@@ -21,11 +21,11 @@ final class TodayViewModel {
     // MARK: - Состояние UI. Общее поведение и оформление
     
     var today: Date {
-        .now
+        CivilDateTime.now.storedDate
     }
     
     var todayRange: ClosedRange<Date> {
-        today.startOfDay...today.endOfDay
+        today.startOfDay(using: .utc)...today.endOfDay(using: .utc)
     }
     
     var hasMultipleLocations: Bool {
@@ -43,7 +43,7 @@ final class TodayViewModel {
     
     var isHomeLocation: Bool {
         if let selectedLocation {
-            selectedLocation.baseCurrency == selectedLocation.localCurrency
+            selectedLocation.baseCurrency == selectedLocation.locationCurrency
         } else {
             false
         }
@@ -63,20 +63,20 @@ final class TodayViewModel {
     
     // MARK: - Состояние UI. Курс обмена
     
-    private var loadedRateLocalToBase: Double?
+    private var loadedRateLocationToBase: Double?
     
-    var rateLocalToBase: Double {
-        if let loadedRateLocalToBase {
-            return loadedRateLocalToBase
+    var rateLocationToBase: Double {
+        if let loadedRateLocationToBase {
+            return loadedRateLocationToBase
         } else if let selectedLocation {
-            return selectedLocation.rateLocalToBase
+            return selectedLocation.rateLocationToBase
         } else {
             return 1
         }
     }
     
     var rateBaseToLocal: Double {
-        rateLocalToBase > 0 ? (1 / rateLocalToBase) : 0
+        rateLocationToBase > 0 ? (1 / rateLocationToBase) : 0
     }
     
     var rateRefreshKey: Date {
@@ -93,8 +93,8 @@ final class TodayViewModel {
         guard let selectedLocation else { return [] }
         
         return selectedLocation.expenses?
-            .filter { $0.date.isToday }
-            .sorted { $0.date > $1.date }
+            .filter { todayRange.contains($0.civilDateTime.storedDate) }
+            .sorted { $0.civilDateTime > $1.civilDateTime }
         ?? []
     }
     
@@ -111,7 +111,7 @@ final class TodayViewModel {
         self.exchangeRateManager = exchangeRateManager
         self.currentLocations = currentLocations
         self.selectedLocationID = selectedLocationID
-        self.loadedRateLocalToBase = nil
+        self.loadedRateLocationToBase = nil
     }
     
     // MARK: - Курс обмена
@@ -119,15 +119,15 @@ final class TodayViewModel {
     func loadInitialRateIfNeeded() {
         guard let selectedLocation else { return }
         
-        loadedRateLocalToBase = nil
+        loadedRateLocationToBase = nil
         
         guard !isHomeLocation else { return }
         
         exchangeRateManager.requestRefresh(
-            from: selectedLocation.localCurrency,
+            from: selectedLocation.locationCurrency,
             to: selectedLocation.baseCurrency
         ) { [weak self] rate in
-            self?.loadedRateLocalToBase = rate
+            self?.loadedRateLocationToBase = rate
         }
     }
     
@@ -150,21 +150,31 @@ final class TodayViewModel {
     }
     
     func eventSummaryData(for location: Location) -> EventSummaryData {
-        let plannedBaseAmount = location.calculatePlannedAmountForToday()
-        let plannedLocalAmount = isHomeLocation ? nil : location.calculatePlannedAmountForToday(asBaseCurrency: false)
-        let actualAmountBase = location.calculateActualAmount(asBaseCurrency: true, withinDateRange: todayRange)
-        let actualAmountLocal = isHomeLocation ? nil : location.calculateActualAmount(asBaseCurrency: false, withinDateRange: todayRange)
-        let localCurrency = isHomeLocation ? nil : location.localCurrency
+        var budgetBaseAmount = location.calculateBudgetAmountForToday()
+        var expensesAmountBase = location.calculateExpensesAmount(withinDateRange: todayRange)
+        
+        var budgetLocationAmount: Double?
+        var expensesLocationAmount: Double?
+        
+        if expensesAmountBase > budgetBaseAmount && expensesAmountBase > budgetBaseAmount + budgetBaseAmount * 0.2 {
+            budgetBaseAmount = location.budget
+            budgetLocationAmount = isHomeLocation ? nil : location.calculateBudgetAmount(in: .location)
+            expensesAmountBase = location.calculateExpensesAmount(in: .base)
+            expensesLocationAmount = isHomeLocation ? nil : location.calculateExpensesAmount(in: .location)
+        } else {
+            budgetLocationAmount = isHomeLocation ? nil : location.calculateBudgetAmountForToday(in: .location)
+            expensesLocationAmount = isHomeLocation ? nil : location.calculateExpensesAmount(in: .location, withinDateRange: todayRange)
+        }
         
         return EventSummaryData(
             badgeProvider: Location.self,
             dateRangeProvider: location,
-            plannedBaseAmount: plannedBaseAmount,
-            actualBaseAmount: actualAmountBase,
+            budgetBaseAmount: budgetBaseAmount,
+            expensesBaseAmount: expensesAmountBase,
             baseCurrency: location.baseCurrency,
-            plannedLocalAmount: plannedLocalAmount,
-            actualLocalAmount: actualAmountLocal,
-            localCurrency: localCurrency
+            budgetLocationAmount: budgetLocationAmount,
+            expensesLocationAmount: expensesLocationAmount,
+            locationCurrency: location.locationCurrency
         )
     }
 }

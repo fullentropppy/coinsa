@@ -19,31 +19,26 @@ class Location: DateRangeProviding {
     /// Название локации.
     var name: String = ""
     
-    /// Дата начала пребывания в локации.
-    var startDate: Date = Date()
+    /// Дата начала пребывания в локации в формате хранения.
+    var storedStartDate: Date = Date()
     
-    /// Дата окончания пребывания в локации.
-    var endDate: Date = Date()
-    
-    /// Идентификатор IANA часового пояса локации
-    var timeZoneID: String = ""
+    /// Дата окончания пребывания в локации в формате хранения.
+    var storedEndDate: Date = Date()
     
     /// Трехбуквенный код ISO 4217 локальной валюты.
-    var localCurrencyCode: String = ""
+    var locationCurrencyCode: String = ""
     
     /// Курс локальной валюты к основной валюте поездки.
-    var rateLocalToBase: Double = 0
+    var rateLocationToBase: Double = 0
     
     /// Корректировка к курсу обмена.
     var exchangeAdjustment: Double = 0
     
+    /// Общий бюджет локации в основной валюте поездки.
+    var budget: Double = 0
+    
     /// Поездка, к которой относится локация.
     var trip: Trip? = nil
-
-    /// Список бюджетов по категориям для данной локации.
-    /// При удалении локации все связанные бюджеты удаляются.
-    @Relationship(deleteRule: .cascade, inverse: \Budget.location)
-    var budgets: [Budget]?
     
     /// Список трат в данной локации.
     /// При удалении локации все связанные расходы удаляются.
@@ -64,12 +59,11 @@ class Location: DateRangeProviding {
     ///   - name: Название локации.
     ///   - startDate: Дата начала пребывания.
     ///   - endDate: Дата окончания пребывания.
-    ///   - timeZoneID: Идентификатор часового пояса.
-    ///   - localCurrencyCode: Код локальной валюты.
-    ///   - rateLocalToBase: Курс к основной валюте.
+    ///   - locationCurrencyCode: Код локальной валюты.
+    ///   - rateLocationToBase: Курс к основной валюте.
     ///   - exchangeAdjustment: Корректировка курса.
+    ///   - budget: Сумма бюджета.
     ///   - trip: Поездка-родитель.
-    ///   - budgets: Список бюджетов.
     ///   - expenses: Список расходов.
     ///   - createdAt: Дата создания.
     ///   - updatedAt: Дата обновления.
@@ -78,12 +72,11 @@ class Location: DateRangeProviding {
         name: String,
         startDate: Date,
         endDate: Date,
-        timeZoneID: String,
-        localCurrencyCode: String,
-        rateLocalToBase: Double,
+        locationCurrencyCode: String,
+        rateLocationToBase: Double,
         exchangeAdjustment: Double,
+        budget: Double,
         trip: Trip,
-        budgets: [Budget],
         expenses: [Expense],
         createdAt: Date,
         updatedAt: Date,
@@ -93,14 +86,13 @@ class Location: DateRangeProviding {
         self.updatedAt = updatedAt
         
         self.name = name
-        self.startDate = startDate
-        self.endDate = endDate
-        self.timeZoneID = timeZoneID
-        self.localCurrencyCode = localCurrencyCode
-        self.rateLocalToBase = rateLocalToBase
+        self.storedStartDate = startDate
+        self.storedEndDate = endDate
+        self.locationCurrencyCode = locationCurrencyCode
+        self.rateLocationToBase = rateLocationToBase
         self.exchangeAdjustment = exchangeAdjustment
+        self.budget = budget
         self.trip = trip
-        self.budgets = budgets
         self.expenses = expenses
     }
 }

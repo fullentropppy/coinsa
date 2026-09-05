@@ -15,7 +15,7 @@ final class LocationEditViewModel {
     // MARK: - Зависимости
     
     private let currencyConverter: CurrencyConverter
-    private let budgetManager: BudgetManager
+    private let amountManager: AmountManager
     
     let trip: Trip
     let location: Location?
@@ -32,7 +32,7 @@ final class LocationEditViewModel {
     }
     
     var isHomeLocation: Bool {
-        baseCurrency == localCurrency
+        baseCurrency == locationCurrency
     }
     
     var navigationTitle: LocalizedStringResource {
@@ -44,7 +44,19 @@ final class LocationEditViewModel {
     }
     
     var canSave: Bool {
-        !name.isBlank && startDate <= endDate && rateLocalToBase > 0
+        !name.isBlank && startDate <= endDate && rateLocationToBase > 0
+    }
+    
+    var totalDays: Int {
+        endDate.days(from: startDate) + 1
+    }
+    
+    var availableRangeForStartDate: ClosedRange<Date> {
+        min(trip.startPlainDate.storedDate, startDate)...max(endDate, trip.endPlainDate.storedDate)
+    }
+    
+    var availableRangeForEndDate: ClosedRange<Date> {
+        startDate...availableRangeForStartDate.upperBound
     }
     
     var hasExpenses: Bool {
@@ -66,20 +78,11 @@ final class LocationEditViewModel {
         }
     }
     var endDate: Date
-    var majorTimeZone: MajorTimeZone
-    
-    var availableRangeForStartDate: ClosedRange<Date> {
-        min(trip.startDate, startDate)...max(endDate, trip.endDate)
-    }
-    
-    var availableRangeForEndDate: ClosedRange<Date> {
-        startDate...availableRangeForStartDate.upperBound
-    }
     
     // MARK: - Состояние UI. Курс обмена
     
-    var rateLocalToBase: Double {
-        get { currencyConverter.rateLocalToBase }
+    var rateLocationToBase: Double {
+        get { currencyConverter.rateQuoteToBase }
         set { currencyConverter.updateRate(newValue) }
     }
     
@@ -90,20 +93,8 @@ final class LocationEditViewModel {
         set { currencyConverter.rateLoadingError = newValue }
     }
     
-    var localCurrency: Currency {
-        currencyConverter.localCurrency
-    }
-    
-    var adjustedRateDescription: LocalizedStringResource? {
-        guard !isHomeLocation && exchangeAdjustment > 0 else {
-            return nil
-        }
-        
-        return .locationAdjustedExchangeRate(
-            localCurrencyCode: localCurrency.code,
-            effectiveRateLocalToBase: currencyConverter.effectiveRateLocalToBase.numberFormat(fractionLength: 4),
-            baseCurrencyCode: baseCurrency.code
-        )
+    var locationCurrency: Currency {
+        currencyConverter.quoteCurrency
     }
     
     // MARK: - Состояние UI. Оплата
@@ -112,16 +103,12 @@ final class LocationEditViewModel {
     
     // MARK: - Состояние UI. Бюджет
     
-    var budgetAmounts: [ExpenseCategory: Double] {
-        budgetManager.budgetsBase
+    var budgetBaseAmount: Double {
+        amountManager.baseAmount
     }
     
-    var plannedBaseTotal: Double {
-        budgetManager.totalBaseAmount
-    }
-    
-    var plannedLocalTotal: Double {
-        budgetManager.totalLocalAmount
+    var budgetLocationAmount: Double {
+        amountManager.quoteAmount
     }
     
     // MARK: - Инициализация
@@ -135,13 +122,12 @@ final class LocationEditViewModel {
             trip: trip,
             location: nil,
             name: "",
-            startDate: trip.startDate,
-            endDate: trip.endDate,
-            majorTimeZone: .defaultValue,
-            localCurrency: trip.baseCurrency,
-            rateLocalToBase: 1,
+            startDate: trip.startPlainDate.storedDate,
+            endDate: trip.endPlainDate.storedDate,
+            locationCurrency: trip.baseCurrency,
+            rateLocationToBase: 1,
             exchangeAdjustment: preselectedExchangeAdjustment ?? 0,
-            budgetAmounts: [:]
+            budget: 0
         )
     }
     
@@ -152,13 +138,12 @@ final class LocationEditViewModel {
             trip: location.trip!,
             location: location,
             name: location.name,
-            startDate: location.startDate,
-            endDate: location.endDate,
-            majorTimeZone: location.majorTimeZone,
-            localCurrency: location.localCurrency,
-            rateLocalToBase: location.rateLocalToBase,
+            startDate: location.startPlainDate.storedDate,
+            endDate: location.endPlainDate.storedDate,
+            locationCurrency: location.locationCurrency,
+            rateLocationToBase: location.rateLocationToBase,
             exchangeAdjustment: location.exchangeAdjustment,
-            budgetAmounts: location.budgetsByCategory
+            budget: location.budget
         )
     }
     
@@ -168,67 +153,75 @@ final class LocationEditViewModel {
         name: String,
         startDate: Date,
         endDate: Date,
-        majorTimeZone: MajorTimeZone,
-        localCurrency: Currency,
-        rateLocalToBase: Double,
+        locationCurrency: Currency,
+        rateLocationToBase: Double,
         exchangeAdjustment: Double,
-        budgetAmounts: [ExpenseCategory: Double]
+        budget: Double
     ) {
         self.trip = trip
         self.location = location
         self.name = name
         self.startDate = startDate
         self.endDate = endDate
-        self.majorTimeZone = majorTimeZone
-        self.exchangeAdjustment = exchangeAdjustment
+        self.exchangeAdjustment = exchangeAdjustment.nonNegative
         
         let exchangeRateProvider = ExchangeRateProvider(service: HexarateService())
         
         self.currencyConverter = CurrencyConverter(
             exchangeRateProvider: exchangeRateProvider,
             baseCurrency: trip.baseCurrency,
-            localCurrency: localCurrency,
-            rateLocalToBase: rateLocalToBase,
-            exchangeAdjustment: exchangeAdjustment
+            quoteCurrency: locationCurrency,
+            rateQuoteToBase: rateLocationToBase
         )
         
-        self.budgetManager = BudgetManager(
+        self.amountManager = AmountManager(
             converter: currencyConverter,
-            initialBudgets: budgetAmounts
+            baseAmount: budget,
+            quoteAmount: currencyConverter.convertToQuote(fromBase: budget, useExchangeAdjustment: false)
         )
         
         initialSnapshot = Snapshot(
             name: name,
             startDate: startDate,
             endDate: endDate,
-            majorTimeZone: majorTimeZone,
-            localCurrency: localCurrency,
-            rateLocalToBase: rateLocalToBase,
+            locationCurrency: locationCurrency,
+            rateLocationToBase: rateLocationToBase,
             exchangeAdjustment: exchangeAdjustment,
-            budgetAmounts: budgetAmounts
+            budget: budget
         )
     }
     
     // MARK: - Операции с валютой
     
-    func updateLocalCurrency(_ newCurrency: Currency, currentInput: InputCurrency) {
-        guard newCurrency != localCurrency else { return }
+    func updateLocationCurrency(_ newCurrency: Currency, currentInput: CurrencyContext) {
+        guard newCurrency != locationCurrency else { return }
         
-        currencyConverter.updateLocalCurrency(newCurrency) { [weak self] in
-            self?.budgetManager.updateFromRateChange(inputCurrency: currentInput)
+        currencyConverter.updateQuoteCurrency(newCurrency) { [weak self] in
+            guard let self else { return }
+            amountManager.updateFromRateChange(
+                for: currencySide(for: currentInput),
+                useExchangeAdjustment: false
+            )
         }
     }
     
     // MARK: - Операции с курсом обмена
     
-    func updateRate(_ newRate: Double, currentInput: InputCurrency) {
+    func updateRate(_ newRate: Double, currentInput: CurrencyContext) {
         currencyConverter.updateRate(newRate)
-        budgetManager.updateFromRateChange(inputCurrency: currentInput)
+        amountManager.updateFromRateChange(
+            for: currencySide(for: currentInput),
+            useExchangeAdjustment: false
+        )
     }
     
-    func requestRateRefresh(for inputCurrency: InputCurrency = .base) {
+    func requestRateRefresh(for inputCurrency: CurrencyContext = .base) {
         currencyConverter.requestRateRefresh { [weak self] _ in
-            self?.budgetManager.updateFromRateChange(inputCurrency: inputCurrency)
+            guard let self else { return }
+            amountManager.updateFromRateChange(
+                for: currencySide(for: inputCurrency),
+                useExchangeAdjustment: false
+            )
         }
     }
     
@@ -240,40 +233,36 @@ final class LocationEditViewModel {
         currencyConverter.requestRateRefresh { [weak self] rate in
             guard let self else { return }
             
-            rateLocalToBase = rate
+            rateLocationToBase = rate
             initialSnapshot = Snapshot(
                 name: initialSnapshot.name,
                 startDate: initialSnapshot.startDate,
                 endDate: initialSnapshot.endDate,
-                majorTimeZone: initialSnapshot.majorTimeZone,
-                localCurrency: initialSnapshot.localCurrency,
-                rateLocalToBase: rateLocalToBase,
-                exchangeAdjustment: exchangeAdjustment,
-                budgetAmounts: initialSnapshot.budgetAmounts
+                locationCurrency: initialSnapshot.locationCurrency,
+                rateLocationToBase: rateLocationToBase,
+                exchangeAdjustment: 1,
+                budget: initialSnapshot.budget
             )
         }
     }
     
-    // MARK: - Операции с оплатой
-    
-    func updateExchangeAdjustment(_ newAdjustment: Double, currentInput: InputCurrency) {
-        exchangeAdjustment = newAdjustment
-        budgetManager.updateFromRateChange(inputCurrency: currentInput)
-        currencyConverter.updateExchangeAdjustment(exchangeAdjustment)
-    }
-    
     // MARK: - Операции с бюджетом
     
-    func updateBudget(_ amount: Double, for category: ExpenseCategory, in inputCurrency: InputCurrency) {
-        budgetManager.updateBudget(amount, for: category, in: inputCurrency)
+    func updateBudget(_ amount: Double, in inputCurrency: CurrencyContext) {
+        amountManager.updateAmount(
+            amount,
+            for: currencySide(for: inputCurrency),
+            useExchangeAdjustment: false
+        )
     }
     
-    func budgetBaseAmount(for category: ExpenseCategory) -> Double {
-        budgetManager.budgetBase(for: category)
-    }
-    
-    func budgetLocalAmount(for category: ExpenseCategory) -> Double {
-        budgetManager.budgetLocal(for: category)
+    private func currencySide(for currency: CurrencyContext) -> CurrencySide {
+        switch currency {
+        case .base:
+            return .base
+        case .location, .expense:
+            return .quote
+        }
     }
     
     // MARK: - Операции с хранилищем
@@ -285,23 +274,21 @@ final class LocationEditViewModel {
                 name: name,
                 startDate: startDate,
                 endDate: endDate,
-                majorTimeZone: majorTimeZone,
-                localCurrency: localCurrency,
-                rateLocalToBase: rateLocalToBase,
+                locationCurrency: locationCurrency,
+                rateLocationToBase: rateLocationToBase,
                 exchangeAdjustment: exchangeAdjustment,
-                budgetsByCategory: budgetAmounts
+                budget: budgetBaseAmount
             )
         } else {
             repository.add(
                 name: name,
                 startDate: startDate,
                 endDate: endDate,
-                majorTimeZone: majorTimeZone,
-                localCurrency: localCurrency,
-                rateLocalToBase: rateLocalToBase,
+                locationCurrency: locationCurrency,
+                rateLocationToBase: rateLocationToBase,
                 exchangeAdjustment: exchangeAdjustment,
+                budget: budgetBaseAmount,
                 trip: trip,
-                budgetsByCategory: budgetAmounts
             )
         }
     }
@@ -317,11 +304,10 @@ private extension LocationEditViewModel {
         let name: String
         let startDate: Date
         let endDate: Date
-        let majorTimeZone: MajorTimeZone
-        let localCurrency: Currency
-        let rateLocalToBase: Double
+        let locationCurrency: Currency
+        let rateLocationToBase: Double
         let exchangeAdjustment: Double
-        let budgetAmounts: [ExpenseCategory: Double]
+        let budget: Double
         
         // MARK: - Инициализация
         
@@ -330,11 +316,10 @@ private extension LocationEditViewModel {
                 name: viewModel.name,
                 startDate: viewModel.startDate,
                 endDate: viewModel.endDate,
-                majorTimeZone: viewModel.majorTimeZone,
-                localCurrency: viewModel.localCurrency,
-                rateLocalToBase: viewModel.rateLocalToBase,
+                locationCurrency: viewModel.locationCurrency,
+                rateLocationToBase: viewModel.rateLocationToBase,
                 exchangeAdjustment: viewModel.exchangeAdjustment,
-                budgetAmounts: viewModel.budgetAmounts
+                budget: viewModel.budgetBaseAmount
             )
         }
         
@@ -342,24 +327,18 @@ private extension LocationEditViewModel {
             name: String,
             startDate: Date,
             endDate: Date,
-            majorTimeZone: MajorTimeZone,
-            localCurrency: Currency,
-            rateLocalToBase: Double,
+            locationCurrency: Currency,
+            rateLocationToBase: Double,
             exchangeAdjustment: Double,
-            budgetAmounts: [ExpenseCategory: Double]
+            budget: Double
         ) {
             self.name = name.trimmed
             self.startDate = startDate
             self.endDate = endDate
-            self.majorTimeZone = majorTimeZone
-            self.localCurrency = localCurrency
-            self.rateLocalToBase = rateLocalToBase
+            self.locationCurrency = locationCurrency
+            self.rateLocationToBase = rateLocationToBase
             self.exchangeAdjustment = exchangeAdjustment
-            self.budgetAmounts = Dictionary(
-                uniqueKeysWithValues: ExpenseCategory.allCases.map { category in
-                    (category, (budgetAmounts[category] ?? 0).rounded())
-                }
-            )
+            self.budget = budget.rounded()
         }
     }
 }

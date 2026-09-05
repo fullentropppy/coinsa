@@ -9,7 +9,7 @@ import Foundation
 
 /// Провайдер курсов обмена.
 final class ExchangeRateProvider {
-    // MARK: - Свойства
+    // MARK: - Хранимые свойства
     
     private let service: ExchangeRateService
     
@@ -40,7 +40,7 @@ final class ExchangeRateProvider {
 
 /// Ошибка загрузки курса обмена.
 struct ExchangeRateLoadingError: LocalizedError {
-    // MARK: - Свойства
+    // MARK: - Хранимые свойства
     
     let details: String?
     

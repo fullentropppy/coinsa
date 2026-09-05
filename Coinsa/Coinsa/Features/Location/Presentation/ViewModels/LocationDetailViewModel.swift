@@ -29,83 +29,78 @@ struct LocationDetailViewModel {
         location.baseCurrency
     }
     
-    var localCurrency: Currency {
-        location.localCurrency
+    var locationCurrency: Currency {
+        location.locationCurrency
     }
     
     var isHomeLocation: Bool {
-        baseCurrency == localCurrency
+        baseCurrency == locationCurrency
     }
     
     // MARK: - Вычисляемые свойства. Общие данные
     
     var eventHeaderData: EventSummaryData {
-        let plannedBaseAmount = location.calculatePlannedAmount(asBaseCurrency: true)
-        let plannedLocalAmount = isHomeLocation ? nil : location.calculatePlannedAmount(asBaseCurrency: false)
-        let actualAmountBase = location.calculateActualAmount(asBaseCurrency: true)
-        let actualAmountLocal = isHomeLocation ? nil : location.calculateActualAmount(asBaseCurrency: false)
-        let localCurrency = isHomeLocation ? nil : localCurrency
+        let budgetBaseAmount = location.calculateBudgetAmount(in: CurrencyContext.base)
+        let budgetLocationAmount = isHomeLocation ? nil : location.calculateBudgetAmount(in: CurrencyContext.location)
+        let expensesAmountBase = location.calculateExpensesAmount(in: CurrencyContext.base)
+        let expensesAmountLocal = isHomeLocation ? nil : location.calculateExpensesAmount(in: CurrencyContext.location)
+        let locationCurrency = isHomeLocation ? nil : locationCurrency
 
         return EventSummaryData(
             badgeProvider: Location.self,
             dateRangeProvider: location,
-            plannedBaseAmount: plannedBaseAmount,
-            actualBaseAmount: actualAmountBase,
+            budgetBaseAmount: budgetBaseAmount,
+            expensesBaseAmount: expensesAmountBase,
             baseCurrency: baseCurrency,
-            plannedLocalAmount: plannedLocalAmount,
-            actualLocalAmount: actualAmountLocal,
-            localCurrency: localCurrency
+            budgetLocationAmount: budgetLocationAmount,
+            expensesLocationAmount: expensesAmountLocal,
+            locationCurrency: locationCurrency
         )
     }
 
     var eventAnalyticsData: EventCategoryAnalyticsData {
-        let isHomeLocation = localCurrency == baseCurrency
+        let isHomeLocation = locationCurrency == baseCurrency
         
-        let plannedAmountByCategoryBase = location.calculatePlannedAmountByCategory(
-            asBaseCurrency: true,
-            withinDateRange: location.range
-        )
-        let actualAmountByCategoryBase = location.calculateActualAmountByCategory(
-            asBaseCurrency: true,
-            withinDateRange: location.range
+        let expensesAmountByCategoryBase = location.calculateExpensesAmountByCategory(
+            in: CurrencyContext.base
         )
 
-        let plannedLocalAmountByCategory = isHomeLocation
-            ? nil
-            : location.calculatePlannedAmountByCategory(asBaseCurrency: false, withinDateRange: location.range)
-        let actualLocalAmountByCategory = isHomeLocation
-            ? nil
-            : location.calculateActualAmountByCategory(asBaseCurrency: false, withinDateRange: location.range)
+        let expensesLocationAmountByCategory = isHomeLocation ? nil : location.calculateExpensesAmountByCategory(
+            in: CurrencyContext.location
+        )
+        let locationBudget = isHomeLocation ? nil : location.calculateBudgetAmount(in: CurrencyContext.location)
 
         return EventCategoryAnalyticsData(
-            dateRange: location.range,
+            dateRangeProvider: location,
             baseCurrency: baseCurrency,
-            localCurrency: isHomeLocation ? nil : localCurrency,
-            plannedAmountByCategory: slices(from: plannedAmountByCategoryBase, localValues: plannedLocalAmountByCategory),
-            actualAmountByCategory: slices(from: actualAmountByCategoryBase, localValues: actualLocalAmountByCategory)
+            locationCurrency: isHomeLocation ? nil : locationCurrency,
+            baseBudget: location.budget,
+            locationBudget: locationBudget,
+            expensesAmountByCategory: slices(from: expensesAmountByCategoryBase, localValues: expensesLocationAmountByCategory),
+            expenses: location.expenses ?? []
         )
     }
     
-    var groupedExpenses: [(date: Date, expenses: [Expense])] {
+    var groupedExpenses: [(date: CivilDateTime, expenses: [Expense])] {
         guard let expenses = location.expenses, !expenses.isEmpty else { return [] }
         
-        let today = Date().startOfDay
-        let yesterday = today.adding(days: -1)
+        let today = CivilDateTime.now.startOfDay
+        let yesterday = today.adding(days: -1, using: .utc)
         
-        var grouped: [Date: [Expense]] = [:]
+        var grouped: [CivilDateTime: [Expense]] = [:]
         
         for expense in expenses {
-            grouped[expense.date.startOfDay, default: []].append(expense)
+            grouped[CivilDateTime(expense.civilDateTime.startOfDay, using: .utc), default: []].append(expense)
         }
         
         for day in grouped.keys {
-            grouped[day] = grouped[day]?.sorted { $0.date > $1.date }
+            grouped[day] = grouped[day]?.sorted { $0.civilDateTime > $1.civilDateTime }
         }
         
-        var result: [(date: Date, expenses: [Expense])] = []
+        var result: [(date: CivilDateTime, expenses: [Expense])] = []
         
         let futureDates = grouped.keys
-            .filter { $0 > today }
+            .filter { $0.storedDate > today }
             .sorted(by: >)
         
         for date in futureDates {
@@ -114,16 +109,18 @@ struct LocationDetailViewModel {
             }
         }
         
-        if let todayExpenses = grouped[today] {
-            result.append((date: today, expenses: todayExpenses))
+        let todayDateTime = CivilDateTime(today, using: .utc)
+        if let todayExpenses = grouped[todayDateTime] {
+            result.append((date: todayDateTime, expenses: todayExpenses))
         }
         
-        if let yesterdayExpenses = grouped[yesterday] {
-            result.append((date: yesterday, expenses: yesterdayExpenses))
+        let yesterdayDateTime = CivilDateTime(yesterday, using: .utc)
+        if let yesterdayExpenses = grouped[yesterdayDateTime] {
+            result.append((date: yesterdayDateTime, expenses: yesterdayExpenses))
         }
         
         let pastDates = grouped.keys
-            .filter { $0 < yesterday }
+            .filter { $0.storedDate < yesterday }
             .sorted(by: >)
         
         for date in pastDates {
@@ -140,12 +137,12 @@ struct LocationDetailViewModel {
     private func slices(
     from baseValues: [ExpenseCategory: Double],
         localValues: [ExpenseCategory: Double]?
-    ) -> [CategoryAnalyticsSlice] {
+    ) -> [ExpenseAnalyticsSlice] {
         ExpenseCategory.allCases.map { category in
-            CategoryAnalyticsSlice(
+            ExpenseAnalyticsSlice(
                 category: category,
                 baseAmount: baseValues[category] ?? 0,
-                localAmount: localValues?[category]
+                locationAmount: localValues?[category]
             )
         }
     }

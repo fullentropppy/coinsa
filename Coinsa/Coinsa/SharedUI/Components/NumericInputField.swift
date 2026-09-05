@@ -13,8 +13,9 @@ import SwiftUI
 enum NumericEditField: Hashable {
     case amount
     case exchangeRate
+    case locationExchangeRate
     case exchangeAdjustment
-    case budget(String)
+    case budget
 }
 
 /// Кастомное поле для ввода числовых значений с форматированием и поддержкой фокуса.
@@ -28,6 +29,7 @@ struct NumericInputField: View {
     private let focusId: NumericEditField
     private let fractionDigits: Int
     private let font: Font
+    private let textAlignment: TextAlignment
     
     // MARK: - Вычисляемые свойсва
     
@@ -60,18 +62,21 @@ struct NumericInputField: View {
     ///   - focusId: Уникальный идентификатор этого поля.
     ///   - fractionDigits: Количество знаков после запятой.
     ///   - font: Шрифт текста.
+    ///   - textAlignment: Выравнивание текста.
     init(
         _ value: Binding<Double>,
         focusedField: FocusState<NumericEditField?>.Binding,
         focusId: NumericEditField,
         fractionDigits: Int,
-        font: Font
+        font: Font,
+        textAlignment: TextAlignment
     ) {
         self._value = value
         self.focusedField = focusedField
         self.focusId = focusId
         self.fractionDigits = fractionDigits
         self.font = font
+        self.textAlignment = textAlignment
     }
     
     // MARK: - Тело View
@@ -81,7 +86,7 @@ struct NumericInputField: View {
             .font(font)
             .focused(focusedField, equals: focusId)
             .keyboardType(.decimalPad)
-            .multilineTextAlignment(.trailing)
+            .multilineTextAlignment(textAlignment)
             .onAppear { syncFromValue() }
             .onChange(of: value) {
                 if focusedField.wrappedValue != focusId {
@@ -143,7 +148,8 @@ extension NumericInputField {
             focusedField: focusedField,
             focusId: focusId,
             fractionDigits: fractionDigits,
-            font: .body.monospacedDigit()
+            font: .body.monospacedDigit(),
+            textAlignment: .trailing
         )
     }
 }
@@ -170,7 +176,8 @@ private extension NumericInputField {
                     focusedField: $focusedField,
                     focusId: .amount,
                     fractionDigits: 2,
-                    font: .body
+                    font: .body,
+                    textAlignment: .trailing
                 )
             }
             Section {

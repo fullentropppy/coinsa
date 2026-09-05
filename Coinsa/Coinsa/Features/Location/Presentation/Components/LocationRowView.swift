@@ -41,7 +41,7 @@ struct LocationRowView: View {
     
     private var lowerStack: some View {
         HStack(spacing: 10) {
-            DateLabel.secondarySmall(from: location.startDate, to: location.endDate)
+            DateLabel.secondarySmall(from: location.startPlainDate, to: location.endPlainDate)
             Spacer()
             CountLabel.secondarySmall(location.expensesCount, icon: Expense.primaryIcon)
             CountLabel.daysSecondarySmall(location.totalDays)
@@ -53,7 +53,7 @@ struct LocationRowView: View {
 
 private extension LocationRowView {
     static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
-        let builder = PreviewBuilder.builder().withBudgets(false)
+        let builder = PreviewBuilder.builder()
         let data = builder.buildData()
         let location = builder.getLocation(from: data)
 

@@ -42,6 +42,10 @@ final class TripEditViewModel {
         trip?.hasLocations ?? false
     }
     
+    var totalDays: Int {
+        endDate.days(from: startDate) + 1
+    }
+    
     // MARK: - Состояние UI. Общие данные
     
     var name: String
@@ -63,8 +67,8 @@ final class TripEditViewModel {
         self.init(
             trip: nil,
             name: "",
-            startDate: .now.startOfDay,
-            endDate: .now.endOfDay,
+            startDate: PlainDate.today.storedDate,
+            endDate: PlainDate.today.storedDate,
             baseCurrency: baseCurrency
         )
     }
@@ -75,8 +79,8 @@ final class TripEditViewModel {
         self.init(
             trip: trip,
             name: trip.name,
-            startDate: trip.startDate,
-            endDate: trip.endDate,
+            startDate: trip.startPlainDate.storedDate,
+            endDate: trip.endPlainDate.storedDate,
             baseCurrency: trip.baseCurrency
         )
     }

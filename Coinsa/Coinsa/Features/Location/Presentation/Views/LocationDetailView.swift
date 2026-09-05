@@ -133,7 +133,7 @@ struct LocationDetailView: View {
     
     private var expenseListContent: some View {
         Group {
-            GroupHeaderView(
+            GroupHeader(
                 icon: Expense.primaryIcon,
                 title: .locationExpenses,
                 itemCount: location.expensesCount

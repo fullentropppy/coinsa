@@ -9,9 +9,11 @@ import Foundation
 
 /// Структура для хранения данные события для аналитики.
 struct EventCategoryAnalyticsData {
-    let dateRange: ClosedRange<Date>
+    let dateRangeProvider: DateRangeProviding
     let baseCurrency: Currency
-    let localCurrency: Currency?
-    let plannedAmountByCategory: [CategoryAnalyticsSlice]
-    let actualAmountByCategory: [CategoryAnalyticsSlice]
+    let locationCurrency: Currency?
+    let baseBudget: Double
+    let locationBudget: Double?
+    let expensesAmountByCategory: [ExpenseAnalyticsSlice]
+    let expenses: [Expense]
 }

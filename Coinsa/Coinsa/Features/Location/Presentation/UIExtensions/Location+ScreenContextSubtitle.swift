@@ -12,8 +12,8 @@ extension Location {
         /// Контекстный подзаголовок для экрана локации.
         ScreenContextSubtitleFormatter.format(
             parentTitle: name,
-            startDate: startDate,
-            endDate: endDate
+            startDate: startPlainDate,
+            endDate: endPlainDate
         )
     }
 }

@@ -19,7 +19,7 @@ struct LocationEditView: View {
     
     @State private var viewModel: LocationEditViewModel
     @State private var deletionHandler = DeletionHandler<Location>()
-    @State private var inputCurrency: InputCurrency = .base
+    @State private var inputCurrency: CurrencyContext = .base
     @State private var isShowingDiscardAlert = false
     @FocusState private var focusedField: NumericEditField?
     
@@ -38,14 +38,14 @@ struct LocationEditView: View {
     private var budgetInputCurrencyValue: Currency {
         switch inputCurrency {
         case .base: viewModel.baseCurrency
-        case .local: viewModel.localCurrency
+        case .location, .expense: viewModel.locationCurrency
         }
     }
 
     private var budgetTotalValue: Double {
         switch inputCurrency {
-        case .base: viewModel.plannedBaseTotal
-        case .local: viewModel.plannedLocalTotal
+        case .base: viewModel.budgetBaseAmount
+        case .location, .expense: viewModel.budgetLocationAmount
         }
     }
     
@@ -117,9 +117,11 @@ struct LocationEditView: View {
     
     private var locationEditForm: some View {
         Form {
-            mainDataSection
+            titleSection
+            rangeSection
             currencySection
             exchangeRateSection
+            exchangeAdjustmentSection
             budgetsSection
             actionsSection
         }
@@ -127,44 +129,49 @@ struct LocationEditView: View {
     
     // MARK: - Секции
     
-    private var mainDataSection: some View {
+    private var titleSection: some View {
         Section {
             TextField(.locationName, text: $viewModel.name)
-            // ++ Отключено до реализации поддержки работы с часовыми поясами
-            if false {
-                LabeledPicker(
-                    title: .locationTimeZone,
-                    selection: majorTimeZoneBinding,
-                    options: MajorTimeZone.allCasesSortedByGMT
-                ) { timeZone in
-                    timeZone.makeLabel()
-                }
-            }
-            // --
+                .multilineTextAlignment(.center)
+                .font(.largeTitle)
+        }
+        .listRowBackground(Color.clear)
+    }
+    
+    private var rangeSection: some View {
+        Section {
             DatePicker(
-                .locationStartDate,
                 selection: Binding(
                     get: { viewModel.startDate },
                     set: { viewModel.startDate = $0 }
                 ),
                 in: viewModel.availableRangeForStartDate,
                 displayedComponents: .date
-            )
+            ) {
+                HStack {
+                    Image(systemName: "calendar.badge.plus")
+                        .foregroundStyle(.secondary)
+                    Text(.locationStartDate)
+                }
+            }
+            .environment(\.timeZone, .utc)
             DatePicker(
-                .locationEndDate,
                 selection: Binding(
                     get: { viewModel.endDate },
                     set: { viewModel.endDate = $0 }
                 ),
                 in: viewModel.availableRangeForEndDate,
                 displayedComponents: .date
-            )
-        } footer: {
-            // ++ Отключено до реализации поддержки работы с часовыми поясами
-            if false {
-                Text(.locationTimeZoneHint)
+            ) {
+                HStack {
+                    Image(systemName: "calendar.badge.checkmark")
+                        .foregroundStyle(.secondary)
+                    Text(.locationEndDate)
+                }
             }
-            // --
+            .environment(\.timeZone, .utc)
+        } footer: {
+            Text(.totalDays(totalDays: viewModel.totalDays))
         }
     }
     
@@ -172,7 +179,7 @@ struct LocationEditView: View {
         Section {
             LabeledPicker(
                 title: .locationCurrency,
-                selection: localCurrencyBinding,                
+                selection: locationCurrencyBinding,                
                 options: Currency.allCasesSortedByName,
                 disabled: viewModel.hasExpenses
             ) { currency in
@@ -182,12 +189,12 @@ struct LocationEditView: View {
             Text(.locationCurrencyHint)
         }
     }
-    
+ 
     @ViewBuilder
     private var exchangeRateSection: some View {
         if !viewModel.isHomeLocation {
             Section {
-                LabeledContent(.locationExchangeRate(localCurrencyCode: viewModel.localCurrency.code)) {
+                LabeledContent(.locationExchangeRate(locationCurrencyCode: viewModel.locationCurrency.code)) {
                     ExchangeRateInputField.standard(
                         rateInputBinding,
                         currency: viewModel.baseCurrency,
@@ -197,57 +204,47 @@ struct LocationEditView: View {
                         onRefresh: { viewModel.requestRateRefresh(for: inputCurrency) }
                     )
                 }
-                
+            } footer: {
+                Text(.locationExchangeRateHint)
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private var exchangeAdjustmentSection: some View {
+        if !viewModel.isHomeLocation {
+            Section {
                 LabeledContent(.locationExchangeAdjustment) {
                     PercentInputField.standard(
-                        exchangeAdjustmentInputBinding,
+                        $viewModel.exchangeAdjustment,
                         focusedField: $focusedField,
                         focusId: .exchangeAdjustment
                     )
                 }
-                
             } footer: {
-                VStack(alignment: .leading, spacing: 10) {
-                    if let adjustedExchangeRateDescription = viewModel.adjustedRateDescription {
-                        Text(adjustedExchangeRateDescription)
-                    }
-                    
-                    Text(.locationExchangeAdjustmentHint)
-                }
+                Text(.locationExchangeAdjustmentHint)
             }
         }
     }
     
     private var budgetsSection: some View {
         Section {
-            ForEach(ExpenseCategory.allCases, id: \.id) { (category: ExpenseCategory) in
+            LabeledContent(.locationBudget) {
                 HStack {
-                    category.makeLabel()
-                    Spacer()
                     NumericInputField.standard(
-                        budgetInputBinding(for: category),
+                        budgetInputBinding,
                         focusedField: $focusedField,
-                        focusId: .budget(category.id),
+                        focusId: .budget,
                         fractionDigits: 2
                     )
+                    CurrencyCodeText.standard(budgetInputCurrencyValue)
+                    if !viewModel.isHomeLocation {
+                        InputCurrencySwitchButton(action: switchInputCurrency)
+                    }
                 }
             }
-            
-            HStack {
-                LabelView(style: .withIcon(title: .locationBudgetTotal, icon: "sum", iconWidth: 28))
-                Spacer()
-                AmountText.standard(budgetTotalValue)
-            }
-            .listRowSeparatorTint(.gray)
-        } header: {
-            HStack {
-                Text(.locationBudget)
-                Spacer()
-                CurrencyCodeText.standard(budgetInputCurrencyValue)
-                if !viewModel.isHomeLocation {
-                    InputCurrencySwitchButton(action: switchInputCurrency)
-                }
-            }
+        } footer: {
+            Text(.locationBudgetHint)
         }
     }
 
@@ -255,8 +252,13 @@ struct LocationEditView: View {
     private var actionsSection: some View {
         if viewModel.isEdit {
             Section {
-                Button(.locationDelete, role: .destructive) {
+                Button(role: .destructive) {
                     requestDelete()
+                } label: {
+                    HStack {
+                        Image(systemName: "trash")
+                        Text(.locationDelete)
+                    }
                 }
             }
         }
@@ -274,8 +276,11 @@ struct LocationEditView: View {
         
         ToolbarItemGroup(placement: .topBarTrailing) {
             ToolbarButton.ok {
-                viewModel.save(using: repository)
-                dismiss()
+                focusedField = nil
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    viewModel.save(using: repository)
+                    dismiss()
+                }
             }
             .disabled(!viewModel.canSave)
         }
@@ -283,25 +288,18 @@ struct LocationEditView: View {
 
     // MARK: - Биндинги
     
-    private var majorTimeZoneBinding: Binding<MajorTimeZone> {
+    private var locationCurrencyBinding: Binding<Currency> {
         Binding(
-            get: { viewModel.majorTimeZone },
-            set: { viewModel.majorTimeZone = $0 }
-        )
-    }
-    
-    private var localCurrencyBinding: Binding<Currency> {
-        Binding(
-            get: { viewModel.localCurrency },
+            get: { viewModel.locationCurrency },
             set: { newCurrency in
-                viewModel.updateLocalCurrency(newCurrency, currentInput: inputCurrency)
+                viewModel.updateLocationCurrency(newCurrency, currentInput: inputCurrency)
             }
         )
     }
     
     private var rateInputBinding: Binding<Double> {
         Binding(
-            get: { viewModel.rateLocalToBase },
+            get: { viewModel.rateLocationToBase },
             set: { newValue in
                 viewModel.updateRate(newValue, currentInput: inputCurrency)
             }
@@ -311,33 +309,21 @@ struct LocationEditView: View {
     private var rateErrorBinding: Binding<Bool> {
         Binding(
             get: { viewModel.rateLoadingError != nil },
-            set: { shouldShow in
-                if !shouldShow {
+            set: { shows in
+                if !shows {
                     viewModel.rateLoadingError = nil
                 }
             }
         )
     }
     
-    private var exchangeAdjustmentInputBinding: Binding<Double> {
-        Binding(
-            get: { viewModel.exchangeAdjustment },
-            set: { newValue in
-                viewModel.updateExchangeAdjustment(newValue, currentInput: inputCurrency)
-            }
-        )
-    }
-    
-    private func budgetInputBinding(for category: ExpenseCategory) -> Binding<Double> {
+    private var budgetInputBinding: Binding<Double> {
         Binding(
             get: {
-                switch inputCurrency {
-                case .base: viewModel.budgetBaseAmount(for: category)
-                case .local: viewModel.budgetLocalAmount(for: category)
-                }
+                budgetTotalValue
             },
             set: { newValue in
-                viewModel.updateBudget(newValue, for: category, in: inputCurrency)
+                viewModel.updateBudget(newValue, in: inputCurrency)
             }
         )
     }
@@ -346,8 +332,8 @@ struct LocationEditView: View {
     
     private func switchInputCurrency() {
         switch inputCurrency {
-        case .base: inputCurrency = .local
-        case .local: inputCurrency = .base
+        case .base: inputCurrency = .location
+        case .location, .expense: inputCurrency = .base
         }
     }
     

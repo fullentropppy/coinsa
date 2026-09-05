@@ -13,15 +13,16 @@ struct DateLabel: View {
     
     private let date1: Date
     private let date2: Date?
+    private let showsTime: Bool
     private let calendar: Calendar
     private let font: Font
     private let color: Color
     
     private var labelText: String {
         if let date2 {
-            DateDisplayFormatter.formatRange(startDate: date1, endDate: date2, using: calendar)
+            DateDisplayFormatter.formatRange(startDate: date1, endDate: date2, showsTime: showsTime, using: calendar)
         } else {
-            DateDisplayFormatter.format(date1, using: calendar)
+            DateDisplayFormatter.format(date1, showsTime: showsTime, using: calendar)
         }
     }
     
@@ -30,41 +31,79 @@ struct DateLabel: View {
     /// Создает метку для одной даты.
     /// - Parameters:
     ///   - date: Отображаемая дата.
+    ///   - showsTime: Отображать время. По умолчанию `true`.
     ///   - calendar: Календарь для форматирования. По умолчанию `.current`.
     ///   - font: Шрифт текста. По умолчанию `.body`.
     ///   - color: Цвет текста. По умолчанию `.primary`.
     init(
         _ date: Date,
+        withTime showsTime: Bool = true,
         using calendar: Calendar = .current,
         font: Font = .body,
         color: Color = .primary
     ) {
         self.date1 = date
         self.date2 = nil
+        self.showsTime = showsTime
         self.calendar = calendar
         self.font = font
         self.color = color
+    }
+    
+    /// Создает метку для одной календарерй даты без привязки к часовому поясу.
+    /// - Parameters:
+    ///   - date: Отображаемая дата.
+    ///   - showsTime: Отображать время. По умолчанию `true`.
+    ///   - font: Шрифт текста. По умолчанию `.body`.
+    ///   - color: Цвет текста. По умолчанию `.primary`.
+    init(
+        _ date: CivilDateTime,
+        withTime showsTime: Bool = true,
+        font: Font = .body,
+        color: Color = .primary
+    ) {
+        self.init(date.storedDate, withTime: showsTime, using: .utc, font: font, color: color)
     }
     
     /// Создает метку для диапазона дат.
     /// - Parameters:
     ///   - startDate: Начальная дата диапазона.
     ///   - endDate: Конечная дата диапазона.
+    ///   - showsTime: Отображать время. По умолчанию `false`.
     ///   - calendar: Календарь для форматирования. По умолчанию `.current`.
     ///   - font: Шрифт текста. По умолчанию `.body`.
     ///   - color: Цвет текста. По умолчанию `.primary`.
     init(
         from startDate: Date,
         to endDate: Date,
+        withTime showsTime: Bool = false,
         using calendar: Calendar = .current,
         font: Font = .body,
         color: Color = .primary
     ) {
         self.date1 = startDate
         self.date2 = endDate
+        self.showsTime = showsTime
         self.calendar = calendar
         self.font = font
         self.color = color
+    }
+    
+    /// Создает метку для диапазона календарных дат без привязки к часовому поясу.
+    /// - Parameters:
+    ///   - startDate: Начальная дата диапазона.
+    ///   - endDate: Конечная дата диапазона.
+    ///   - showsTime: Отображать время. По умолчанию `false`.
+    ///   - font: Шрифт текста. По умолчанию `.body`.
+    ///   - color: Цвет текста. По умолчанию `.primary`.
+    init(
+        from startDate: PlainDate,
+        to endDate: PlainDate,
+        withTime showsTime: Bool = false,
+        font: Font = .body,
+        color: Color = .primary
+    ) {
+        self.init(from: startDate.storedDate, to: endDate.storedDate, using: .utc, font: font, color: color)
     }
     
     // MARK: - Тело View
@@ -82,24 +121,59 @@ extension DateLabel {
     /// Вторичная компактная метка для одной даты.
     /// - Parameters:
     ///   - date: Отображаемая дата.
+    ///   - showsTime: Отображать время. По умолчанию `true`.
     ///   - calendar: Календарь для форматирования. По умолчанию `.current`.
     /// - Returns: Метка с мелким шрифтом и вторичным цветом.
-    static func secondarySmall(_ date: Date, using calendar: Calendar = .current) -> some View {
-        DateLabel(date, using: calendar, font: .footnote, color: .secondary)
+    static func secondarySmall(
+        _ date: Date,
+        withTime showsTime: Bool = true,
+        using calendar: Calendar = .current
+    ) -> some View {
+        DateLabel(date, withTime: showsTime, using: calendar, font: .footnote, color: .secondary)
+    }
+    
+    /// Вторичная компактная метка для одной календарной даты без привязки к часовому поясу.
+    /// - Parameters:
+    ///   - date: Отображаемая дата.
+    ///   - showsTime: Отображать время. По умолчанию `true`.
+    /// - Returns: Метка с мелким шрифтом и вторичным цветом.
+    static func secondarySmall(
+        _ date: CivilDateTime,
+        withTime showsTime: Bool = true,
+        using calendar: Calendar = .current
+    ) -> some View {
+        DateLabel(date, withTime: showsTime, font: .footnote, color: .secondary)
     }
     
     /// Вторичная компактная метка для диапазона дат.
     /// - Parameters:
     ///   - startDate: Начальная дата диапазона.
     ///   - endDate: Конечная дата диапазона.
+    ///   - showsTime: Отображать время. По умолчанию `false`.
     ///   - calendar: Календарь для форматирования. По умолчанию `.current`.
     /// - Returns: Метка с мелким шрифтом и вторичным цветом.
     static func secondarySmall(
         from startDate: Date,
         to endDate: Date,
+        withTime showsTime: Bool = false,
         using calendar: Calendar = .current
     ) -> some View {
-        DateLabel(from: startDate, to: endDate, using: calendar, font: .footnote, color: .secondary)
+        DateLabel(from: startDate, to: endDate, withTime: showsTime, using: calendar, font: .footnote, color: .secondary)
+    }
+    
+    /// Вторичная компактная метка для диапазона календарных дат без привязки к часовому поясу.
+    /// - Parameters:
+    ///   - startDate: Начальная дата диапазона.
+    ///   - endDate: Конечная дата диапазона.
+    ///   - showsTime: Отображать время. По умолчанию `false`.
+    /// - Returns: Метка с мелким шрифтом и вторичным цветом.
+    static func secondarySmall(
+        from startDate: PlainDate,
+        to endDate: PlainDate,
+        withTime showsTime: Bool = false,
+        using calendar: Calendar = .current
+    ) -> some View {
+        DateLabel(from: startDate, to: endDate, withTime: showsTime, font: .footnote, color: .secondary)
     }
 }
 
@@ -115,6 +189,10 @@ private extension DateLabel {
             VStack(spacing: 20) {
                 DateLabel(now)
                 DateLabel(now, font: .footnote, color: .accent)
+            }
+            VStack(spacing: 20) {
+                DateLabel(yearAhead)
+                DateLabel(yearAhead, font: .footnote, color: .accent)
             }
             VStack(spacing: 20) {
                 DateLabel(from: now, to: weekAhead)

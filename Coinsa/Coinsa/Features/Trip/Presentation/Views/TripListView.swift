@@ -139,7 +139,6 @@ private extension TripListView {
             .withScenario(.all)
             .withTrips(withTrips)
             .withExpenses(false)
-            .withBudgets(false)
             .buildContainer()
         
         let settingsStore = AppSettingsStore()

@@ -21,20 +21,32 @@ struct ExpenseRepository {
     /// - Parameters:
     ///   - date: Дата совершения траты.
     ///   - baseAmount: Сумма в основной валюте.
-    ///   - rateLocalToBase: Курс локальной валюты к основной.
+    ///   - expenseCurrency: Валюта траты.
+    ///   - rateExpenseToBase: Курс валюты траты к основной.
+    ///   - rateExpenseToLocation: Курс валюты траты к валюте локации.
     ///   - paymentMethod: Способ оплаты.
     ///   - exchangeAdjustment: Процентная корректировка курса.
     ///   - category: Категория траты.
+    ///   - subcategory: Подкатегория траты.
     ///   - location: Локация, в которой совершена трата.
+    ///   - latitude: Географическая широта места траты.
+    ///   - longitude: Географическая долгота места траты.
+    ///   - horizontalAccuracy: Точность определения координат в метрах.
     ///   - comment: Комментарий (опционально).
     func add(
         date: Date,
         baseAmount: Double,
-        rateLocalToBase: Double,
+        expenseCurrency: Currency,
+        rateExpenseToBase: Double,
+        rateExpenseToLocation: Double,
         paymentMethod: PaymentMethod,
         exchangeAdjustment: Double,
         category: ExpenseCategory,
+        subcategory: ExpenseSubcategory,
         location: Location,
+        latitude: Double?,
+        longitude: Double?,
+        horizontalAccuracy: Double?,
         comment: String?
     ) {
         let now = Date()
@@ -42,16 +54,26 @@ struct ExpenseRepository {
         let expense = Expense(
             id: UUID(),
             date: date,
-            baseAmount: normalizedAmount(baseAmount),
-            rateLocalToBase: normalizedRateLocalToBase(rateLocalToBase),
+            actualDate: date,
+            timeZoneId: "",
+            baseAmount: baseAmount,
+            expenseCurrencyCode: expenseCurrency.code,
+            rateExpenseToBase: rateExpenseToBase,
+            rateExpenseToLocation: rateExpenseToLocation,
             paymentMethodRaw: paymentMethod.rawValue,
-            exchangeAdjustment: normalizedExchangeAdjustment(exchangeAdjustment),
+            exchangeAdjustment: exchangeAdjustment,
             categoryRaw: category.rawValue,
+            subcategoryRaw: subcategory.rawValue,
             location: location,
-            comment: normalizedComment(comment),
+            latitude: latitude,
+            longitude: longitude,
+            horizontalAccuracy: horizontalAccuracy,
+            comment: comment,
             createdAt: now,
             updatedAt: now
         )
+        
+        normalizeExpenseData(expense)
         context.insert(expense)
         try? context.save()
     }
@@ -61,29 +83,49 @@ struct ExpenseRepository {
     ///   - expense: Трата для обновления.
     ///   - date: Новая дата.
     ///   - baseAmount: Новая сумма в основной валюте.
-    ///   - rateLocalToBase: Новый курс.
+    ///   - expenseCurrency: Новая валюта траты.
+    ///   - rateExpenseToBase: Новый курс валюты траты к основной.
+    ///   - rateExpenseToLocation: Новый курс валюты траты к валюте локации.
     ///   - paymentMethod: Новый способ оплаты.
     ///   - exchangeAdjustment: Новая корректировка.
     ///   - category: Новая категория.
+    ///   - subcategory: Новая подкатегория.
+    ///   - latitude: Новая географическая широта места траты.
+    ///   - longitude: Новая географическая долгота места траты.
+    ///   - horizontalAccuracy: Новая точность определения координат в метрах.
     ///   - comment: Новый комментарий.
     func update(
         _ expense: Expense,
         date: Date,
         baseAmount: Double,
-        rateLocalToBase: Double,
+        expenseCurrency: Currency,
+        rateExpenseToBase: Double,
+        rateExpenseToLocation: Double,
         paymentMethod: PaymentMethod,
         exchangeAdjustment: Double,
         category: ExpenseCategory,
+        subcategory: ExpenseSubcategory,
+        latitude: Double?,
+        longitude: Double?,
+        horizontalAccuracy: Double?,
         comment: String?
     ) {
-        expense.date = date
-        expense.baseAmount = normalizedAmount(baseAmount)
-        expense.rateLocalToBase = normalizedRateLocalToBase(rateLocalToBase)
+        expense.storedDate = date
+        expense.baseAmount = baseAmount
+        expense.expenseCurrencyCode = expenseCurrency.code
+        expense.rateExpenseToBase = rateExpenseToBase
+        expense.rateExpenseToLocation = rateExpenseToLocation
         expense.paymentMethodRaw = paymentMethod.rawValue
-        expense.exchangeAdjustment = normalizedExchangeAdjustment(exchangeAdjustment)
+        expense.exchangeAdjustment = exchangeAdjustment
         expense.categoryRaw = category.rawValue
-        expense.comment = normalizedComment(comment)
+        expense.subcategoryRaw = subcategory.rawValue
+        expense.latitude = latitude
+        expense.longitude = longitude
+        expense.horizontalAccuracy = horizontalAccuracy
+        expense.comment = comment
         expense.updatedAt = Date()
+        
+        normalizeExpenseData(expense)
         try? context.save()
     }
     
@@ -96,24 +138,33 @@ struct ExpenseRepository {
     
     // MARK: - Нормализация значений
     
-    /// Приводит сумму к неотрицательному значению.
-    private func normalizedAmount(_ amount: Double) -> Double {
-        amount.nonNegative
+    /// Нормализует значения траты.
+    /// - Parameter expense: Трата для нормализации значений.
+    private func normalizeExpenseData(_ expense: Expense) {
+        expense.storedDate = expense.storedDate.storedCivilDateTime(using: .utc)
+        expense.actualDate = expense.civilDateTime.actualDate()
+        expense.timeZoneId = TimeZone.current.identifier
+        expense.baseAmount = expense.baseAmount.nonNegative
+        expense.rateExpenseToBase = expense.rateExpenseToBase.nonNegative
+        expense.rateExpenseToLocation = normalizedRateExpenseToLocation(of: expense)
+        expense.exchangeAdjustment = expense.exchangeAdjustment.nonNegative
+        expense.comment = normalizedComment(of: expense)
     }
     
-    /// Приводит курс к неотрицательному значению.
-    private func normalizedRateLocalToBase(_ rate: Double) -> Double {
-        rate.nonNegative
-    }
-    
-    /// Приводит корректирвоку курса к неотрицательному значению.
-    private func normalizedExchangeAdjustment(_ adjustment: Double) -> Double {
-        adjustment.nonNegative
+    /// Нормализует значение курса обмена валюты траты к валюте локации.
+    /// - Parameter expense: Трата-источник данных.
+    private func normalizedRateExpenseToLocation(of expense: Expense) -> Double {
+        if expense.expenseCurrency == expense.locationCurrency {
+            1
+        } else {
+            expense.rateExpenseToLocation.nonNegative
+        }
     }
     
     /// Очищает комментарий от лишних пробелов.
-    private func normalizedComment(_ comment: String?) -> String? {
-        if let comment, !comment.isBlank {
+    /// - Parameter expense: Трата-источник данных.
+    private func normalizedComment(of expense: Expense) -> String? {
+        if let comment = expense.comment, !comment.isBlank {
             comment.trimmed
         } else {
             nil

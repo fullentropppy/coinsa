@@ -18,14 +18,12 @@ struct ScreenContextSubtitleFormatter {
     /// - Returns: Стркоа подзаголовка.
     static func format(
         parentTitle: String,
-        startDate: Date,
-        endDate: Date,
-        using calendar: Calendar = .current
+        startDate: PlainDate,
+        endDate: PlainDate
     ) -> String {
         let dateRange = DateDisplayFormatter.formatRange(
             startDate: startDate,
-            endDate: endDate,
-            using: calendar
+            endDate: endDate
         )
 
         guard !parentTitle.isEmpty else {

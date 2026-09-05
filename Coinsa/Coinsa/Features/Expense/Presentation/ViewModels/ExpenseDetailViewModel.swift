@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MapKit
 
 /// ViewModel для детального экрана траты.
 struct ExpenseDetailViewModel {
@@ -15,8 +16,8 @@ struct ExpenseDetailViewModel {
 
     // MARK: - Вычисляемые свойства. Общее
 
-    var isHomeLocation: Bool {
-        baseCurrency == localCurrency
+    var isExpenseBaseCurrency: Bool {
+        baseCurrency == expenseCurrency
     }
     
     var navigationTitle: LocalizedStringResource {
@@ -33,45 +34,100 @@ struct ExpenseDetailViewModel {
         expense.baseCurrency
     }
     
-    var localCurrency: Currency {
-        expense.localCurrency
+    var locationCurrency: Currency {
+        expense.locationCurrency
+    }
+    
+    var expenseCurrency: Currency {
+        expense.expenseCurrency
     }
     
     var primaryAmount: Double {
-        isHomeLocation ? expense.baseAmount : expense.localAmount
+        isExpenseBaseCurrency ? expense.baseAmount : expense.amount(in: .expense)
     }
 
     var primaryCurrency: Currency {
-        isHomeLocation ? baseCurrency : localCurrency
+        isExpenseBaseCurrency ? baseCurrency : expenseCurrency
     }
 
     var secondaryAmount: Double? {
-        isHomeLocation ? nil : expense.baseAmount
+        isExpenseBaseCurrency ? nil : expense.baseAmount
     }
 
     var secondaryCurrency: Currency? {
-        isHomeLocation ? nil : baseCurrency
+        isExpenseBaseCurrency ? nil : baseCurrency
     }
 
+    // MARK: - Вычисляемые свойства. Карта
+    
+    var coordinate: CLLocationCoordinate2D? {
+        expense.coordinate?.coreLocationCoordinate
+    }
+    
+    var cameraCoreCoordinate: CLLocationCoordinate2D? {
+        guard let coordinate else { return nil }
+        
+        var shift: Double
+        
+        if !isExpenseBaseCurrency && expense.comment != nil {
+            shift = 0.013
+        } else if isExpenseBaseCurrency && expense.comment != nil
+                    || !isExpenseBaseCurrency && expense.comment == nil {
+            shift = 0.010
+        } else {
+            shift = 0.008
+        }
+        
+        return CLLocationCoordinate2D(
+            latitude: coordinate.latitude + shift,
+            longitude: coordinate.longitude
+        )
+    }
+    
     // MARK: - Вычисляемые свойства. Курс обмена
     
     var exchangeRateDescription: LocalizedStringResource? {
-        guard !isHomeLocation else {
+        guard !isExpenseBaseCurrency else{
             return nil
         }
-
-        if expense.paymentMethod == .card && expense.exchangeAdjustment > 0 {
+        
+        let hasExchangeAdjustment = expense.exchangeAdjustment > 0 && expense.paymentMethod != .cash
+        
+        if isExpenseBaseCurrency && hasExchangeAdjustment {
             return .expenseAdjustedExchangeRateLong(
-                localCurrencyCode: expense.localCurrency.code,
-                effectiveRateLocalToBase: expense.effectiveRateLocalToBase.numberFormat(fractionLength: 4),
-                baseCurrencyCode: expense.baseCurrency.code,
-                adjustmentRateLocalToBase: (expense.exchangeAdjustment / 100).percentFormat()
+                expenseCurrencyCode: expenseCurrency.code,
+                effectiveRateExpenseToBase: expense.rateExpenseToBase
+                    .numberFormat(fractionLength: 4),
+                baseCurrencyCode: baseCurrency.code,
+                exchangeAdjustment: (expense.exchangeAdjustment / 100).percentFormat()
+            )
+        } else if isExpenseBaseCurrency && !hasExchangeAdjustment {
+            return .expenseActualExchangeRate(
+                expenseCurrencyCode: expenseCurrency.code,
+                actualRateExpenseToBase: expense.rateExpenseToBase
+                    .numberFormat(fractionLength: 4),
+                baseCurrencyCode: baseCurrency.code
+            )
+        } else if !isExpenseBaseCurrency && hasExchangeAdjustment {
+            return .expenseAdjustedExchangeRateLongDouble(
+                expenseCurrencyCode: expenseCurrency.code,
+                effectiveRateExpenseToBase: expense.rateExpenseToBase
+                    .numberFormat(fractionLength: 4),
+                baseCurrencyCode: baseCurrency.code,
+                effectiveRateExpenseToLocation: expense.rateExpenseToLocation
+                    .numberFormat(fractionLength: 4),
+                locationCurrencyCode: locationCurrency.code,
+                exchangeAdjustment: (expense.exchangeAdjustment / 100).percentFormat()
             )
         } else {
-            return .expenseBaseExchangeRate(
-                localCurrencyCode: expense.localCurrency.code,
-                rateLocalToBase: expense.rateLocalToBase.numberFormat(fractionLength: 4),
-                baseCurrencyCode: expense.baseCurrency.code
+            return .expenseActualExchangeRateDouble(
+                expenseCurrencyCode: expenseCurrency.code,
+                actualRateExpenseToBase: expense.rateExpenseToBase
+                    .numberFormat(fractionLength: 4),
+                baseCurrencyCode: baseCurrency.code,
+                actualRateExpenseToLocation: expense.rateExpenseToLocation
+                    .numberFormat(fractionLength: 4),
+                locationCurrencyCode: locationCurrency.code
             )
         }
     }

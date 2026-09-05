@@ -18,7 +18,6 @@ struct CoinsaApp: App {
         let schema = Schema([
             Trip.self,
             Location.self,
-            Budget.self,
             Expense.self
         ])
 

@@ -27,14 +27,14 @@ extension Date {
     /// - Parameter calendar: Календарь для вычислений. По умолчанию `.current`.
     /// - Returns: Вчерашняя дата.
     func yesterday(using calendar: Calendar = .current) -> Date {
-        adding(days: -1)
+        adding(days: -1, using: calendar)
     }
     
     /// Возвращает завтрашнюю дату с прежними компонентами (кроме дня).
     /// - Parameter calendar: Календарь для вычислений. По умолчанию `.current`.
     /// - Returns: Завтрашняя дата.
     func tomorrow(using calendar: Calendar = .current) -> Date {
-        adding(days: 1)
+        adding(days: 1, using: calendar)
     }
     
     // MARK: - Методы. Добавление компонентов с поддержкой календаря

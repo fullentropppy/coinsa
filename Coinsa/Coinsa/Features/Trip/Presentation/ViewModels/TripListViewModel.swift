@@ -20,35 +20,35 @@ struct TripListViewModel {
             switch status {
             case .ongoing:
                 tripsForStatus.sort {
-                    if $0.startDate != $1.startDate {
-                        return $0.startDate > $1.startDate
+                    if $0.startPlainDate != $1.startPlainDate {
+                        return $0.startPlainDate > $1.startPlainDate
                     }
                     if $0.totalDays != $1.totalDays {
                         return $0.totalDays < $1.totalDays
                     }
-                    return $0.endDate < $1.endDate
+                    return $0.endPlainDate < $1.endPlainDate
                 }
                 
             case .upcoming:
                 tripsForStatus.sort {
-                    if $0.startDate != $1.startDate {
-                        return $0.startDate < $1.startDate
+                    if $0.startPlainDate != $1.startPlainDate {
+                        return $0.startPlainDate < $1.startPlainDate
                     }
                     if $0.totalDays != $1.totalDays {
                         return $0.totalDays < $1.totalDays
                     }
-                    return $0.endDate < $1.endDate
+                    return $0.endPlainDate < $1.endPlainDate
                 }
                 
             case .completed:
                 tripsForStatus.sort {
-                    if $0.startDate != $1.startDate {
-                        return $0.startDate > $1.startDate
+                    if $0.startPlainDate != $1.startPlainDate {
+                        return $0.startPlainDate > $1.startPlainDate
                     }
                     if $0.totalDays != $1.totalDays {
                         return $0.totalDays < $1.totalDays
                     }
-                    return $0.endDate < $1.endDate
+                    return $0.endPlainDate < $1.endPlainDate
                 }
             }
             

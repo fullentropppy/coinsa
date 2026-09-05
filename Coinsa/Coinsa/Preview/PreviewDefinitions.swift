@@ -95,10 +95,12 @@ enum PreviewLocation: String {
         }
     }
 
-    var majorTimeZone: MajorTimeZone {
+    var timeZoneId: String {
         switch self {
-        case .tokyo, .kyoto, .osaka, .seoul, .busan: MajorTimeZone.tokyo
-        case .saintp, .istanbul: MajorTimeZone.moscow
+        case .tokyo, .kyoto, .osaka: "Asia/Tokyo"
+        case .saintp: "Europe/Moscow"
+        case .seoul, .busan: "Asia/Seoul"
+        case .istanbul: "Europe/Istanbul"
         }
     }
     
@@ -111,7 +113,7 @@ enum PreviewLocation: String {
         }
     }
 
-    var rateLocalToBase: Double {
+    var rateLocationToBase: Double {
         PreviewCurrency.exchangeRate(for: currency)
     }
     
@@ -121,6 +123,18 @@ enum PreviewLocation: String {
         case .saintp: 0
         case .seoul, .busan: 4
         case .istanbul: 3
+        }
+    }
+    
+    var budget: Double {
+        switch self {
+        case .tokyo: 82740
+        case .kyoto: 62500
+        case .osaka: 50500
+        case .saintp: 13500
+        case .seoul: 115200
+        case .busan: 33200
+        case .istanbul: 43800
         }
     }
 }

@@ -23,12 +23,4 @@ extension PaymentMethod: ValueVisualRepresentable {
         case .card: "creditcard.fill"
         }
     }
-    
-    /// Акцентный цвет способа оплаты.
-    var accentColor: Color {
-        switch self {
-        case .cash: .green
-        case .card: .blue
-        }
-    }
 }

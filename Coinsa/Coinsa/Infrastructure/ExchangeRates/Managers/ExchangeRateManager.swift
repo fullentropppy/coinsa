@@ -12,7 +12,7 @@ import Observation
 @MainActor
 @Observable
 final class ExchangeRateManager {
-    // MARK: - Свойства
+    // MARK: - Хранимые свойства
     
     private let provider: ExchangeRateProvider
     private var refreshTask: Task<Void, Never>?

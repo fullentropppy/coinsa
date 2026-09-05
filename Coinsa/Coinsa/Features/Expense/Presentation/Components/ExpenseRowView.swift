@@ -35,9 +35,9 @@ struct ExpenseRowView: View {
     
     private var leftStack: some View {
         VStack(alignment: .leading, spacing: 10) {
-            expense.category.makeBadge()
+            expense.subcategory.makeBadge()
             HStack(alignment: .lastTextBaseline, spacing: 4) {
-                DateLabel.secondarySmall(expense.date)
+                DateLabel.secondarySmall(expense.civilDateTime)
                 commentIcon
             }
             
@@ -56,15 +56,12 @@ struct ExpenseRowView: View {
     }
     
     private var rightStack: some View {
-        VStack(alignment: .trailing, spacing: 10) {
-            if expense.baseCurrency == expense.localCurrency {
-                AmountText.standard(expense.baseAmount, currency: expense.baseCurrency)
-                Spacer()
-            } else {
-                AmountText.standard(expense.localAmount, currency: expense.localCurrency)
-                AmountText.secondarySmall(expense.baseAmount,currency: expense.baseCurrency)
-            }
-        }
+        AmountStack(
+            baseAmount: expense.baseAmount,
+            baseCurrency: expense.baseCurrency,
+            expenseAmount: expense.amount(in: .expense),
+            expenseCurrency: expense.expenseCurrency
+        )
     }
 }
 
@@ -72,7 +69,7 @@ struct ExpenseRowView: View {
 
 private extension ExpenseRowView {
     static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
-        let builder = PreviewBuilder.builder().withBudgets(false)
+        let builder = PreviewBuilder.builder()
         let data = builder.buildData()
         let expense = builder.getExpense(from: data)
         

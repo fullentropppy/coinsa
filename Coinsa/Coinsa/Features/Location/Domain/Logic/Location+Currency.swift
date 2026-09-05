@@ -18,7 +18,7 @@ extension Location {
     }
     
     /// Локальная валюта локации (из кода валюты).
-    var localCurrency: Currency {
-        Currency.from(localCurrencyCode)
+    var locationCurrency: Currency {
+        Currency.from(locationCurrencyCode)
     }
 }
