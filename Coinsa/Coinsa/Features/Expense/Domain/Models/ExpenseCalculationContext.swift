@@ -90,7 +90,7 @@ struct ExpenseCalculationContext {
     ) -> Double {
         switch targetCurrency {
         case .base: 1
-        case .location: rateLocationToBase(using: rateMode)
+        case .location: rateLocationToBase()
         case .expense: rateExpenseToBase(using: rateMode)
         }
     }
@@ -102,7 +102,7 @@ struct ExpenseCalculationContext {
         }
     }
     
-    private func rateLocationToBase(using rateMode: RateMode) -> Double {
-        rateExpenseToLocation > 0 ? rateExpenseToBase(using: rateMode) / rateExpenseToLocation : 0
+    private func rateLocationToBase() -> Double {
+        rateExpenseToLocation > 0 ? rateExpenseToBase / rateExpenseToLocation : 0
     }
 }

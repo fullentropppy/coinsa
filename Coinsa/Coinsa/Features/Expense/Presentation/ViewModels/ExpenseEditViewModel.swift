@@ -52,12 +52,16 @@ final class ExpenseEditViewModel {
         expenseCurrency == locationCurrency
     }
     
+    var isLocationBaseCurrency: Bool {
+        baseCurrency == locationCurrency
+    }
+    
     var showsRateExpenseToBase: Bool {
         !isExpenseBaseCurrency
     }
     
     var showsRateExpenseToLocation: Bool {
-        !isExpenseLocationCurrency
+        !isExpenseLocationCurrency && !isLocationBaseCurrency
     }
     
     var navigationTitle: LocalizedStringResource {
@@ -161,18 +165,24 @@ final class ExpenseEditViewModel {
             return nil
         }
         
-        if expenseCurrency == locationCurrency {
+        if isExpenseLocationCurrency || isLocationBaseCurrency {
             return .expenseAdjustedExchangeRateShort(
                 expenseCurrencyCode: expenseCurrency.code,
-                effectiveRateExpenseToBase: calculationContext.rateExpenseToBase.numberFormat(fractionLength: 4),
+                effectiveRateExpenseToBase: calculationContext
+                    .exchangeRate(from: .expense, to: .base, using: .effective)
+                    .numberFormat(fractionLength: 4),
                 baseCurrencyCode: baseCurrency.code
             )
         } else {
             return .expenseAdjustedExchangeRateShortDouble(
                 expenseCurrencyCode: expenseCurrency.code,
-                effectiveRateExpenseToBase: calculationContext.rateExpenseToBase.numberFormat(fractionLength: 4),
+                effectiveRateExpenseToBase: calculationContext
+                    .exchangeRate(from: .expense, to: .base, using: .effective)
+                    .numberFormat(fractionLength: 4),
                 baseCurrencyCode: baseCurrency.code,
-                effectiveRateExpenseToLocation: calculationContext.rateExpenseToLocation.numberFormat(fractionLength: 4),
+                effectiveRateExpenseToLocation: calculationContext
+                    .exchangeRate(from: .expense, to: .location, using: .effective)
+                    .numberFormat(fractionLength: 4),
                 locationCurrencyCode: locationCurrency.code
             )
         }
