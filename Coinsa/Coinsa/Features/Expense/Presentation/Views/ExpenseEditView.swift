@@ -146,7 +146,8 @@ struct ExpenseEditView: View {
                     focusId: .amount,
                     fractionDigits: 2,
                     font: .largeTitle,
-                    textAlignment: .center
+                    textAlignment: .center,
+                    placeholder: String(localized: .expenseAmountPlaceholder)
                 )
                 HStack {
                     CurrencyCodeText.standard(viewModel.currency(for: currencySide))

@@ -35,6 +35,7 @@ extension Currency: LocalizedResourceProviding {
         case .ils: .currencyNameIls
         case .inr: .currencyNameInr
         case .jpy: .currencyNameJpy
+        case .khr: .currencyNameKhr
         case .krw: .currencyNameKrw
         case .kzt: .currencyNameKzt
         case .lak: .currencyNameLak

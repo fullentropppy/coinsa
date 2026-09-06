@@ -30,28 +30,8 @@ struct NumericInputField: View {
     private let fractionDigits: Int
     private let font: Font
     private let textAlignment: TextAlignment
-    
-    // MARK: - Вычисляемые свойсва
-    
-    private var formatter: NumberFormatter {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.minimumFractionDigits = fractionDigits
-        formatter.maximumFractionDigits = fractionDigits
-        formatter.usesGroupingSeparator = true
-        return formatter
-    }
-
-    private var placeholder: String {
-        guard fractionDigits > 0 else {
-            return "0"
-        }
-        
-        let separator = formatter.decimalSeparator ?? ","
-        let zeros = String(repeating: "0", count: fractionDigits)
-        
-        return "0\(separator)\(zeros)"
-    }
+    private let placeholder: String
+    private let formatter: NumberFormatter
     
     // MARK: - Инициализация
     
@@ -63,13 +43,16 @@ struct NumericInputField: View {
     ///   - fractionDigits: Количество знаков после запятой.
     ///   - font: Шрифт текста.
     ///   - textAlignment: Выравнивание текста.
+    ///   - placeholder: Подсказка ввода (опционально). По умолчанию `nil`.
+    ///   Если не указана, будет отображаться `0 с колличеством нулей дробной части равным значению `fractionDigits`.
     init(
         _ value: Binding<Double>,
         focusedField: FocusState<NumericEditField?>.Binding,
         focusId: NumericEditField,
         fractionDigits: Int,
         font: Font,
-        textAlignment: TextAlignment
+        textAlignment: TextAlignment,
+        placeholder: String? = nil
     ) {
         self._value = value
         self.focusedField = focusedField
@@ -77,6 +60,24 @@ struct NumericInputField: View {
         self.fractionDigits = fractionDigits
         self.font = font
         self.textAlignment = textAlignment
+        
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.minimumFractionDigits = fractionDigits
+        formatter.maximumFractionDigits = fractionDigits
+        formatter.usesGroupingSeparator = true
+        
+        self.formatter = formatter
+        
+        if let placeholder {
+            self.placeholder = placeholder
+        } else if fractionDigits == 0 {
+            self.placeholder = "0"
+        } else {
+            let separator = formatter.decimalSeparator ?? ","
+            let zeros = String(repeating: "0", count: fractionDigits)
+            self.placeholder = "0\(separator)\(zeros)"
+        }
     }
     
     // MARK: - Тело View

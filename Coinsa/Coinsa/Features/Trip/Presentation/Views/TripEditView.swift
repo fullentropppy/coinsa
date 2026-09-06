@@ -91,7 +91,7 @@ struct TripEditView: View {
     
     private var titleSection: some View {
         Section {
-            TextField(.tripName, text: $viewModel.name)
+            TextField(.tripNamePlaceholder, text: $viewModel.name)
                 .multilineTextAlignment(.center)
                 .font(.largeTitle)
         }

@@ -921,6 +921,23 @@
         }
       }
     },
+    "currency.name.khr" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cambodian Riel"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Камбоджийски риель"
+          }
+        }
+      }
+    },
     "currency.name.krw" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1988,6 +2005,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Локальная"
+          }
+        }
+      }
+    },
+    "expense.amount.placeholder" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter the amount"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Введите сумму"
           }
         }
       }
@@ -3420,6 +3454,23 @@
         }
       }
     },
+    "location.name.placeholder" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter the name"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Введите название"
+          }
+        }
+      }
+    },
     "location.navigationTitle.create" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -4215,6 +4266,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Название"
+          }
+        }
+      }
+    },
+    "trip.name.placeholder" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter the name"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Введите название"
           }
         }
       }

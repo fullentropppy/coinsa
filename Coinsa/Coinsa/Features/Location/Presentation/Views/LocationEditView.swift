@@ -131,7 +131,7 @@ struct LocationEditView: View {
     
     private var titleSection: some View {
         Section {
-            TextField(.locationName, text: $viewModel.name)
+            TextField(.locationNamePlaceholder, text: $viewModel.name)
                 .multilineTextAlignment(.center)
                 .font(.largeTitle)
         }
