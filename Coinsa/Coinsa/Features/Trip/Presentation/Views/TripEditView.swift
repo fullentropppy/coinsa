@@ -20,6 +20,7 @@ struct TripEditView: View {
     @State private var viewModel: TripEditViewModel
     @State private var deletionHandler = DeletionHandler<Trip>()
     @State private var isShowingDiscardAlert = false
+    @State private var validationNotice: FormValidationNotice?
     
     // MARK: - Зависимости
     
@@ -61,6 +62,7 @@ struct TripEditView: View {
                 }
                 .interactiveDismissDisabled(true)
                 .scrollDismissesKeyboard(.interactively)
+                .formValidationBanner($validationNotice)
                 .discardConfirmationAlert(
                     isPresented: $isShowingDiscardAlert,
                     onConfirm: { dismiss() }
@@ -177,10 +179,8 @@ struct TripEditView: View {
         
         ToolbarItemGroup(placement: .topBarTrailing) {
             ToolbarButton.ok {
-                viewModel.save(using: repository)
-                dismiss()
+                handleSave()
             }
-            .disabled(!viewModel.canSave)
         }
     }
     
@@ -195,6 +195,16 @@ struct TripEditView: View {
     
     // MARK: - Действия
     
+    private func handleSave() {
+        if let validationMessage = viewModel.validationMessage {
+            validationNotice = FormValidationNotice(message: validationMessage)
+            return
+        }
+
+        viewModel.save(using: repository)
+        dismiss()
+    }
+
     private func handleClose() {
         if viewModel.hasChanges {
             isShowingDiscardAlert = true

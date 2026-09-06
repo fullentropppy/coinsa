@@ -94,6 +94,11 @@ struct NumericInputField: View {
                     syncFromValue()
                 }
             }
+            .onChange(of: text) {
+                if focusedField.wrappedValue == focusId {
+                    syncValueFromText()
+                }
+            }
             .onChange(of: focusedField.wrappedValue) { oldId, newId in
                 if oldId == focusId && newId != focusId {
                     commit()
@@ -109,6 +114,10 @@ struct NumericInputField: View {
     private func syncFromValue() {
         text = value == 0 ? "" : formatter.string(from: NSNumber(value: value)) ?? ""
     }
+    
+    private func syncValueFromText() {
+        value = parsedNumber(from: text)?.doubleValue ?? 0
+    }
 
     private func commit() {
         let trimmed = text.trimmed
@@ -119,12 +128,19 @@ struct NumericInputField: View {
             return
         }
 
-        let groupingSeparator = formatter.groupingSeparator ?? ""
-        let cleaned = trimmed.replacingOccurrences(of: groupingSeparator, with: "")
-        let number = formatter.number(from: cleaned) ?? 0
+        let number = parsedNumber(from: trimmed) ?? 0
         
         value = number.doubleValue
-        text = formatter.string(from: number) ?? cleaned
+        text = formatter.string(from: number) ?? trimmed
+    }
+    
+    private func parsedNumber(from input: String) -> NSNumber? {
+        let groupingSeparator = formatter.groupingSeparator ?? ""
+        let cleaned = input
+            .trimmed
+            .replacingOccurrences(of: groupingSeparator, with: "")
+        
+        return formatter.number(from: cleaned)
     }
 }
 

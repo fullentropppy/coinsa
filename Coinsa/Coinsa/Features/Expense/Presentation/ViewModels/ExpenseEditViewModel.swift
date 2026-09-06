@@ -69,9 +69,18 @@ final class ExpenseEditViewModel {
     }
     
     var canSave: Bool {
-        baseAmount > 0
-        && (!showsRateExpenseToBase || rateExpenseToBase > 0)
-        && (!showsRateExpenseToLocation || rateExpenseToLocation > 0)
+        validationMessage == nil
+    }
+
+    var validationMessage: LocalizedStringResource? {
+        if baseAmount <= 0 {
+            .validationAmountRequired
+        } else if showsRateExpenseToBase && rateExpenseToBase <= 0
+            || showsRateExpenseToLocation && rateExpenseToLocation <= 0 {
+            .validationExchangeRateRequired
+        } else {
+            nil
+        }
     }
     
     var baseCurrency: Currency {
@@ -99,6 +108,15 @@ final class ExpenseEditViewModel {
     var comment: String
     
     // MARK: - Состояние UI. Сумма
+    
+    var amountInputPlaceholder: String? {
+        if showsRateExpenseToBase && rateExpenseToBase <= 0
+            || showsRateExpenseToLocation && rateExpenseToLocation <= 0 {
+            nil
+        } else {
+            String(localized: .expenseAmountPlaceholder)
+        }
+    }
     
     var baseAmount: Double {
         get { amountManager.baseAmount }
@@ -302,6 +320,7 @@ final class ExpenseEditViewModel {
         
         baseCurrencyConverter.updateQuoteCurrency(newCurrency) { [weak self] in
             guard let self else { return }
+            guard rateExpenseToBase > 0 else { return }
             
             amountManager.updateFromRateChange(
                 for: currencySide,
@@ -337,10 +356,12 @@ final class ExpenseEditViewModel {
     
     func updateRateExpenseToBase(_ newRate: Double, currencySide: CurrencySide) {
         baseCurrencyConverter.updateRate(newRate)
-        amountManager.updateFromRateChange(
-            for: currencySide,
-            useExchangeAdjustment: useExchangeAdjustment
-        )
+        if newRate > 0 {
+            amountManager.updateFromRateChange(
+                for: currencySide,
+                useExchangeAdjustment: useExchangeAdjustment
+            )
+        }
     }
     
     func updateRateExpenseToLocation(_ newRate: Double) {
