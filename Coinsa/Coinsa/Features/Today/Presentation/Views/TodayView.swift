@@ -151,13 +151,18 @@ struct TodayView: View {
     }
     
     private var quickExpenseSection: some View {
-        Section(.todayQuickExpense) {
+        Section {
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 140), spacing: 10)], spacing: 10) {
                 ForEach(ExpenseCategory.allCases, id: \.id) { category in
                     quickExpenseButton(category: category)
                 }
             }
             .padding(4)
+        } header: {
+            Text(.todayQuickExpense)
+                .listRowInsets(EdgeInsets())
+                .padding(.horizontal, 16)
+                .padding(.vertical, 8)
         }
         .listRowBackground(Color.clear)
         .listRowInsets(EdgeInsets())
@@ -166,7 +171,7 @@ struct TodayView: View {
     @ViewBuilder
     private var todayExpensesSection: some View {
         if viewModel.hasTodayExpenses {
-            Section(.todayExpenses) {
+            Section {
                 ForEach(viewModel.todayExpenses) { expense in
                     NavigationLink {
                         ExpenseDetailView(expense)
@@ -180,6 +185,11 @@ struct TodayView: View {
                         )
                     }
                 }
+            } header: {
+                Text(.todayExpenses)
+                    .listRowInsets(EdgeInsets())
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 8)
             }
             .listRowBackground(
                 RoundedRectangle(cornerRadius: 0).fill(listRowBackgroundMaterial)
