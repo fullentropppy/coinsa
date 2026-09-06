@@ -44,7 +44,17 @@ final class LocationEditViewModel {
     }
     
     var canSave: Bool {
-        !name.isBlank && startDate <= endDate && rateLocationToBase > 0
+        validationMessage == nil
+    }
+
+    var validationMessage: LocalizedStringResource? {
+        if name.isBlank {
+            .validationLocationNameRequired
+        } else if rateLocationToBase <= 0 {
+            .validationExchangeRateRequired
+        } else {
+            nil
+        }
     }
     
     var totalDays: Int {
@@ -198,6 +208,8 @@ final class LocationEditViewModel {
         
         currencyConverter.updateQuoteCurrency(newCurrency) { [weak self] in
             guard let self else { return }
+            guard rateLocationToBase > 0 else { return }
+            
             amountManager.updateFromRateChange(
                 for: currencySide(for: currentInput),
                 useExchangeAdjustment: false
@@ -209,10 +221,12 @@ final class LocationEditViewModel {
     
     func updateRate(_ newRate: Double, currentInput: CurrencyContext) {
         currencyConverter.updateRate(newRate)
-        amountManager.updateFromRateChange(
-            for: currencySide(for: currentInput),
-            useExchangeAdjustment: false
-        )
+        if newRate > 0 {
+            amountManager.updateFromRateChange(
+                for: currencySide(for: currentInput),
+                useExchangeAdjustment: false
+            )
+        }
     }
     
     func requestRateRefresh(for inputCurrency: CurrencyContext = .base) {

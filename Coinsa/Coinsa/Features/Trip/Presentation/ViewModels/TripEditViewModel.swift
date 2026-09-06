@@ -35,7 +35,15 @@ final class TripEditViewModel {
     }
 
     var canSave: Bool {
-        !name.isBlank && startDate <= endDate
+        validationMessage == nil
+    }
+
+    var validationMessage: LocalizedStringResource? {
+        if name.isBlank {
+            .validationTripNameRequired
+        } else {
+            nil
+        }
     }
 
     var hasLocations: Bool {

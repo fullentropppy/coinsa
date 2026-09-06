@@ -21,6 +21,7 @@ struct LocationEditView: View {
     @State private var deletionHandler = DeletionHandler<Location>()
     @State private var inputCurrency: CurrencyContext = .base
     @State private var isShowingDiscardAlert = false
+    @State private var validationNotice: FormValidationNotice?
     @FocusState private var focusedField: NumericEditField?
     
     // MARK: - Зависимости
@@ -87,6 +88,7 @@ struct LocationEditView: View {
                 }
                 .interactiveDismissDisabled(true)
                 .scrollDismissesKeyboard(.interactively)
+                .formValidationBanner($validationNotice)
                 .notificationAlert(
                     isPresented: rateErrorBinding,
                     title: .exchangeRateLoadingErrorTitle,
@@ -131,7 +133,7 @@ struct LocationEditView: View {
     
     private var titleSection: some View {
         Section {
-            TextField(.locationName, text: $viewModel.name)
+            TextField(.locationNamePlaceholder, text: $viewModel.name)
                 .multilineTextAlignment(.center)
                 .font(.largeTitle)
         }
@@ -276,13 +278,8 @@ struct LocationEditView: View {
         
         ToolbarItemGroup(placement: .topBarTrailing) {
             ToolbarButton.ok {
-                focusedField = nil
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                    viewModel.save(using: repository)
-                    dismiss()
-                }
+                handleSave()
             }
-            .disabled(!viewModel.canSave)
         }
     }
 
@@ -337,6 +334,20 @@ struct LocationEditView: View {
         }
     }
     
+    private func handleSave() {
+        focusedField = nil
+
+        if let validationMessage = viewModel.validationMessage {
+            validationNotice = FormValidationNotice(message: validationMessage)
+            return
+        }
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            viewModel.save(using: repository)
+            dismiss()
+        }
+    }
+
     private func handleClose() {
         if viewModel.hasChanges {
             isShowingDiscardAlert = true

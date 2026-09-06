@@ -921,6 +921,23 @@
         }
       }
     },
+    "currency.name.khr" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cambodian Riel"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Камбоджийски риель"
+          }
+        }
+      }
+    },
     "currency.name.krw" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1988,6 +2005,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Локальная"
+          }
+        }
+      }
+    },
+    "expense.amount.placeholder" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter the amount"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Введите сумму"
           }
         }
       }
@@ -3273,13 +3307,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Create a Location\nto track expenses."
+            "value" : "Create a Location\nto track Expenses.\n\nLocation groups Expenses\nrelated to a city or a specific place.\n\nFor example:\n• Shanghai Airport, PVG\n• Guangzhou\n• Beijing"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Добавьте локацию,\nчтобы отслеживать расходы."
+            "value" : "Создайте локацию,\nчтобы учитывать расходы.\n\nЛокация объединяет расходы,\nотносящиеся к городу\nили конкретному месту.\n\nНапример:\n• Аэропорт Шанхая, PVG\n• Гуанчжоу\n• Пекин"
           }
         }
       }
@@ -3416,6 +3450,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Название"
+          }
+        }
+      }
+    },
+    "location.name.placeholder" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter the name"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Введите название"
           }
         }
       }
@@ -4140,13 +4191,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Create a Trip\nto add locations\nand expenses."
+            "value" : "Create a Trip\nto add Locations and Expenses.\n\nTrip combines all Expenses of one journey.\n\nFor example:\n• Summer vacation\n• Asia %1$(currentYear)@\n• China"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Добавьте поездку,\nчтобы добавлять локации и расходы."
+            "value" : "Добавьте поездку,\nчтобы добавлять локации и расходы.\n\nПоездка объединяет все расходы\nодного путешествия.\n\nНапример:\n• Летний отпуск\n• Азия %(currentYear)@\n• Китай"
           }
         }
       }
@@ -4219,6 +4270,23 @@
         }
       }
     },
+    "trip.name.placeholder" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter the name"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Введите название"
+          }
+        }
+      }
+    },
     "trip.navigationTitle.create" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -4283,6 +4351,74 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Начинается"
+          }
+        }
+      }
+    },
+    "validation.amount.required" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter the amount"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Введите сумму"
+          }
+        }
+      }
+    },
+    "validation.exchangeRate.required" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter the exchange rate"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Введите курс обмена"
+          }
+        }
+      }
+    },
+    "validation.location.name.required" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter the Location name"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Введите название локации"
+          }
+        }
+      }
+    },
+    "validation.trip.name.required" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter the Trip name"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Введите название поездки"
           }
         }
       }

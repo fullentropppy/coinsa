@@ -11,6 +11,22 @@ import Foundation
 struct DateDisplayFormatter {
     // MARK: - Публичные методы
     
+    /// Форматирует год из даты в виде строки.
+    /// - Parameter date: Дата, из которой извлекается год.
+    /// - Returns: Строка с годом (например, "2026").
+    static func formatYear(_ date: Date) -> String {
+        let calendar = Calendar.current
+        let year = calendar.component(.year, from: date)
+        return String(year)
+    }
+    
+    /// Форматирует год из числового значения в виде строки.
+    /// - Parameter year: Числовое значение года.
+    /// - Returns: Строка с годом (например, "2026").
+    static func formatYear(_ year: Int) -> String {
+        String(year)
+    }
+    
     /// Форматирует дату с относительным представлением (вчера, сегодня, завтра или стандартный формат).
     /// - Parameters:
     ///   - date: Форматируемая дата.
@@ -21,7 +37,7 @@ struct DateDisplayFormatter {
         _ date: Date,
         showsTime: Bool = true,
         using calendar: Calendar = .current
-    ) -> String {        
+    ) -> String {
         let referenceDate = referenceDate(using: calendar)
         
         if date.isSameDay(as: referenceDate.tomorrow(using: calendar), using: calendar) {
@@ -35,6 +51,11 @@ struct DateDisplayFormatter {
         }
     }
     
+    /// Форматирует дату и время в относительном представлении.
+    /// - Parameters:
+    ///   - date: Форматируемая дата и время в гражданском формате.
+    ///   - showsTime: Флаг отображения времени. По умолчанию `true`.
+    /// - Returns: Локализованная строка.
     static func formatRelative(
         _ date: CivilDateTime,
         showsTime: Bool = true
@@ -42,6 +63,9 @@ struct DateDisplayFormatter {
         formatRelative(date.storedDate, showsTime: showsTime, using: .utc)
     }
     
+    /// Форматирует дату в относительном представлении без времени.
+    /// - Parameter date: Форматируемая дата в упрощенном формате.
+    /// - Returns: Локализованная строка.
     static func formatRelative(
         _ date: PlainDate
     ) -> String {
@@ -79,6 +103,12 @@ struct DateDisplayFormatter {
         return formatter.string(from: date)
     }
     
+    /// Форматирует дату и время в стандартном представлении.
+    /// - Parameters:
+    ///   - date: Форматируемая дата и время в гражданском формате.
+    ///   - showsTime: Флаг отображения времени. По умолчанию `true`.
+    ///   - showsWeekday: Показывать день недели. По умолчанию `false`.
+    /// - Returns: Локализованная строка.
     static func format(
         _ date: CivilDateTime,
         showsTime: Bool = true,
@@ -87,6 +117,11 @@ struct DateDisplayFormatter {
         format(date.storedDate, showsTime: showsTime, showsWeekday: showsWeekday, using: .utc)
     }
     
+    /// Форматирует дату в стандартном представлении без времени.
+    /// - Parameters:
+    ///   - date: Форматируемая дата в упрощенном формате.
+    ///   - showsWeekday: Показывать день недели. По умолчанию `false`.
+    /// - Returns: Локализованная строка.
     static func format(
         _ date: PlainDate,
         showsWeekday: Bool = false
@@ -119,6 +154,11 @@ struct DateDisplayFormatter {
         return formatter.string(from: startDate, to: endDate)
     }
     
+    /// Форматирует диапазон дат в упрощенном формате без времени.
+    /// - Parameters:
+    ///   - startDate: Начальная дата диапазона.
+    ///   - endDate: Конечная дата диапазона.
+    /// - Returns: Локализованная строка с диапазоном дат.
     static func formatRange(
         startDate: PlainDate,
         endDate: PlainDate
@@ -137,6 +177,9 @@ struct DateDisplayFormatter {
         showsTime ? "\(dateTemplate)jm" : dateTemplate
     }
     
+    /// Возвращает опорную дату для вычислений относительно текущего момента.
+    /// - Parameter calendar: Календарь для определения текущей даты.
+    /// - Returns: Текущая дата в указанном календаре.
     private static func referenceDate(using calendar: Calendar) -> Date {
         calendar.timeZone == .utc ? CivilDateTime.now.storedDate : Date()
     }

@@ -33,6 +33,7 @@ enum Currency: String, Codable, CaseIterable, Identifiable {
     case ils = "ILS"
     case inr = "INR"
     case jpy = "JPY"
+    case khr = "KHR"
     case krw = "KRW"
     case kzt = "KZT"
     case lak = "LAK"

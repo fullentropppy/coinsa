@@ -25,6 +25,7 @@ struct ExpenseEditView: View {
     @State private var currencySide: CurrencySide
     @State private var isShowingDiscardAlert = false
     @State private var isShowingLocationMap = false
+    @State private var validationNotice: FormValidationNotice?
     
     @FocusState private var focusedField: NumericEditField?
     
@@ -88,6 +89,7 @@ struct ExpenseEditView: View {
                 }
                 .interactiveDismissDisabled(true)
                 .scrollDismissesKeyboard(.interactively)
+                .formValidationBanner($validationNotice)
                 .notificationAlert(
                     isPresented: rateErrorBinding,
                     title: .exchangeRateLoadingErrorTitle,
@@ -128,8 +130,8 @@ struct ExpenseEditView: View {
             amountSection
             specificationsSection
             currencySection
-            dateSection
             commentSection
+            dateSection
             placeOfExpenseSection
             actionsSection
         }
@@ -146,7 +148,8 @@ struct ExpenseEditView: View {
                     focusId: .amount,
                     fractionDigits: 2,
                     font: .largeTitle,
-                    textAlignment: .center
+                    textAlignment: .center,
+                    placeholder: viewModel.amountInputPlaceholder
                 )
                 HStack {
                     CurrencyCodeText.standard(viewModel.currency(for: currencySide))
@@ -164,7 +167,7 @@ struct ExpenseEditView: View {
             Picker(selection: categoryBinding) {
                 ForEach(ExpenseCategory.allCases, id: \.self) { category in
                     Image(systemName: category.primaryIcon)
-                        .tag(category.id)
+                        .tag(category)
                 }
             } label: {
                 EmptyView()
@@ -191,7 +194,7 @@ struct ExpenseEditView: View {
             Picker(.expensePaymentMethod, selection: paymentMethodBinding) {
                 ForEach(PaymentMethod.allCases, id: \.self) { paymentMethod in
                     Image(systemName: paymentMethod.primaryIcon)
-                       .tag(paymentMethod.id)
+                       .tag(paymentMethod)
                 }
             }
             .onChange(of: paymentMethodBinding.id) {
@@ -293,6 +296,18 @@ struct ExpenseEditView: View {
         }
     }
 
+    private var commentSection: some View {
+        Section {
+            HStack {
+                Image(systemName: "ellipsis.bubble")
+                    .foregroundStyle(.secondary)
+                
+                TextField(.expenseComment, text: $viewModel.comment)
+            }
+        }
+    }
+
+    
     @ViewBuilder
     private var placeOfExpenseEditor: some View {
         if let coordinate = viewModel.coordinate {
@@ -306,17 +321,6 @@ struct ExpenseEditView: View {
         }
     }
     
-    private var commentSection: some View {
-        Section {
-            HStack {
-                Image(systemName: "ellipsis.bubble")
-                    .foregroundStyle(.secondary)
-                
-                TextField(.expenseComment, text: $viewModel.comment)
-            }
-        }
-    }
-
     @ViewBuilder
     private var actionsSection: some View {
         if viewModel.isEdit {
@@ -345,13 +349,8 @@ struct ExpenseEditView: View {
 
         ToolbarItemGroup(placement: .topBarTrailing) {
             ToolbarButton.ok {
-                focusedField = nil
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                    viewModel.save(using: repository)
-                    dismiss()
-                }
+                handleSave()
             }
-            .disabled(!viewModel.canSave)
         }
     }
 
@@ -448,6 +447,20 @@ struct ExpenseEditView: View {
         }
     }
     
+    private func handleSave() {
+        focusedField = nil
+
+        if let validationMessage = viewModel.validationMessage {
+            validationNotice = FormValidationNotice(message: validationMessage)
+            return
+        }
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            viewModel.save(using: repository)
+            dismiss()
+        }
+    }
+
     private func handleClose() {
         if viewModel.hasChanges {
             isShowingDiscardAlert = true

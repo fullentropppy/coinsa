@@ -90,7 +90,7 @@ private extension EmptyStateView {
         EmptyStateView(
             icon: Trip.primaryIcon,
             title: .tripEmptyStateTitle,
-            description: .tripEmptyStateDescription,
+            description: .tripEmptyStateDescription(currentYear: DateDisplayFormatter.formatYear(.now)),
             buttonLabel: .tripAdd,
             action: {}
         )

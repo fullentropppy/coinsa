@@ -66,7 +66,10 @@ struct TripDetailViewModel {
                     if $0.totalDays != $1.totalDays {
                         return $0.totalDays < $1.totalDays
                     }
-                    return $0.endPlainDate < $1.endPlainDate
+                    if $0.endPlainDate != $1.endPlainDate {
+                        return $0.endPlainDate < $1.endPlainDate
+                    }
+                    return $0.updatedAt > $1.updatedAt
                 }
                 
             case .upcoming:
@@ -77,7 +80,10 @@ struct TripDetailViewModel {
                     if $0.totalDays != $1.totalDays {
                         return $0.totalDays < $1.totalDays
                     }
-                    return $0.endPlainDate < $1.endPlainDate
+                    if $0.endPlainDate != $1.endPlainDate {
+                        return $0.endPlainDate < $1.endPlainDate
+                    }
+                    return $0.updatedAt > $1.updatedAt
                 }
                 
             case .completed:
@@ -88,7 +94,10 @@ struct TripDetailViewModel {
                     if $0.totalDays != $1.totalDays {
                         return $0.totalDays < $1.totalDays
                     }
-                    return $0.endPlainDate < $1.endPlainDate
+                    if $0.endPlainDate != $1.endPlainDate {
+                        return $0.endPlainDate < $1.endPlainDate
+                    }
+                    return $0.updatedAt > $1.updatedAt
                 }
             }
             
