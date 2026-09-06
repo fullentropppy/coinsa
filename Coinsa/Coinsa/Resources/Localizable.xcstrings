@@ -3307,13 +3307,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Create a Location\nto track expenses."
+            "value" : "Create a Location\nto track Expenses.\n\nLocation groups Expenses\nrelated to a city or a specific place.\n\nFor example:\n• Shanghai Airport, PVG\n• Guangzhou\n• Beijing"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Добавьте локацию,\nчтобы отслеживать расходы."
+            "value" : "Создайте локацию,\nчтобы учитывать расходы.\n\nЛокация объединяет расходы,\nотносящиеся к городу\nили конкретному месту.\n\nНапример:\n• Аэропорт Шанхая, PVG\n• Гуанчжоу\n• Пекин"
           }
         }
       }
@@ -4191,13 +4191,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Create a Trip\nto add locations\nand expenses."
+            "value" : "Create a Trip\nto add Locations and Expenses.\n\nTrip combines all Expenses of one journey.\n\nFor example:\n• Summer vacation\n• Asia %1$(currentYear)@\n• China"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Добавьте поездку,\nчтобы добавлять локации и расходы."
+            "value" : "Добавьте поездку,\nчтобы добавлять локации и расходы.\n\nПоездка объединяет все расходы\nодного путешествия.\n\nНапример:\n• Летний отпуск\n• Азия %(currentYear)@\n• Китай"
           }
         }
       }

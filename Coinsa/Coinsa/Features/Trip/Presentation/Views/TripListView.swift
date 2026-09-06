@@ -81,7 +81,7 @@ struct TripListView: View {
         EmptyStateView(
             icon: Trip.primaryIcon,
             title: .tripEmptyStateTitle,
-            description: .tripEmptyStateDescription,
+            description: .tripEmptyStateDescription(currentYear: DateDisplayFormatter.formatYear(.now)),
             buttonLabel: .tripAdd,
         ) {
             isShowingTripCreate = true
@@ -164,5 +164,5 @@ private extension TripListView {
 }
 
 #Preview("Empty. Dark - EN") {
-    TripListView.makePreview(locale: PreviewLocale.ru, colorScheme: .dark, withTrips: false)
+    TripListView.makePreview(locale: PreviewLocale.en, colorScheme: .dark, withTrips: false)
 }

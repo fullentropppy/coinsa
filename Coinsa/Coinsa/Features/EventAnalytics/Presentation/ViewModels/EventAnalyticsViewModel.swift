@@ -139,7 +139,7 @@ struct EventAnalyticsViewModel {
         }
 
         let startDate = firstExpenseDate.adding(days: -2)
-        let endDate = lastExpenseDate.adding(days: 2)
+        let endDate = lastExpenseDate.adding(days: 1)
         let daysCount = max(endDate.days(from: startDate) + 2, 0)
 
         return (0..<daysCount).map { startDate.adding(days: $0) }

@@ -85,9 +85,12 @@ struct EventDailyExpenseChart: View {
         .chartXAxis {
             AxisMarks(values: .stride(by: .day, count: 1)) { value in
                 if let date = value.as(Date.self) {
-                    AxisGridLine()
-                    AxisValueLabel {
-                        Text(date, format: .dateTime.day().month(.abbreviated))
+                    let isLastDate = viewModel.summaryChartXDomain.upperBound.startOfDay == date.startOfDay(using: .current)
+                    if !isLastDate {
+                        AxisGridLine()
+                        AxisValueLabel {
+                            Text(date, format: .dateTime.day().month(.abbreviated))
+                        }
                     }
                 }
             }

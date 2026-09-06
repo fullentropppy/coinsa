@@ -234,5 +234,5 @@ private extension TripDetailView {
 }
 
 #Preview("No Locations. Dark - EN") {
-    TripDetailView.makePreview(locale: PreviewLocale.ru, colorScheme: .dark, withLocations: false)
+    TripDetailView.makePreview(locale: PreviewLocale.en, colorScheme: .dark, withLocations: false)
 }
