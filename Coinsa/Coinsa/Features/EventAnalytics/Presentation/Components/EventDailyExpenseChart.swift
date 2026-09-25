@@ -10,6 +10,10 @@ import SwiftUI
 
 /// График дневных расходов события.
 struct EventDailyExpenseChart: View {
+    // MARK: - Окружение
+    
+    @Environment(\.haptics) private var haptics
+    
     // MARK: - Статические свойства
     
     static let secondsPerDay: TimeInterval = 24 * 60 * 60
@@ -51,7 +55,16 @@ struct EventDailyExpenseChart: View {
                     yEnd: .value("", point.baseAmount)
                 )
                 .interpolationMethod(.monotone)
-                .foregroundStyle(Color.accentColor.opacity(0.2).gradient)
+                .foregroundStyle(
+                    LinearGradient(
+                            colors: [
+                                Color.accentColor.opacity(0.30),
+                                Color.accentColor.opacity(0.01)
+                            ],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                )
 
                 LineMark(
                     x: .value("", point.date.startOfDay(using: .current)),
@@ -126,6 +139,7 @@ struct EventDailyExpenseChart: View {
     
     private func scrollPositionButton(position: PlainDate, icon: String) -> some View {
         Button {
+            haptics.trigger(.tap)
             scrollPosition = viewModel.summaryChartScrollPosition(for: position)
         } label: {
             Image(systemName: icon)

@@ -33,7 +33,8 @@ struct CoordinateBadge: View {
                 .foregroundStyle(.primary)
                 .padding(.horizontal, 12)
                 .padding(.vertical, 8)
-                .background(.regularMaterial, in: Capsule())
+                //.background(.regularMaterial, in: Capsule())
+                .glassEffect(.regular.interactive(), in: Capsule())
                 .padding(.bottom, 8)
         } else {
             coordinateBadgeContent

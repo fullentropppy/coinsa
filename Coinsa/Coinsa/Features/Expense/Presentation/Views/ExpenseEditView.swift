@@ -292,6 +292,8 @@ struct ExpenseEditView: View {
                     )
                 }
                 .buttonStyle(.plain)
+            } footer: {
+                CoordinateBadge(coordinate, withBackground: false)
             }
         }
     }

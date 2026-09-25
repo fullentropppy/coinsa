@@ -66,6 +66,7 @@ struct EmptyStateView: View {
     private var descriptionContent: some View {
         if let description {
             Text(description)
+                .font(.body)
                 .padding()
         }
     }

@@ -74,7 +74,7 @@ struct EventSubcategoryAnalyticsView: View {
                 HStack {
                     Image(systemName: slice.subcategory.secondaryIcon)
                         .imageScale(.small)
-                        .foregroundStyle(slice.subcategory.accentColor)
+                        .foregroundStyle(slice.subcategory.accentColor.gradient)
                         .frame(width: 20)
                     Text(shareValue(for: slice).percentFormat())
                         .font(.footnote.monospacedDigit())

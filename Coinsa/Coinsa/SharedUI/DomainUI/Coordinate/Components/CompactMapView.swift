@@ -78,7 +78,6 @@ struct CompactMapView: View {
             }
             .frame(height: height)
             .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-            CoordinateBadge(coordinate, withBackground: false)
         }
     }
 
