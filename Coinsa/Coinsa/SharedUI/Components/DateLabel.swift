@@ -179,39 +179,27 @@ extension DateLabel {
 
 // MARK: - Превью
 
-private extension DateLabel {
-    static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
-        let now = Date.now
-        let weekAhead = now.adding(weeks: 1)
-        let yearAhead = now.adding(years: 1)
-        
-        return VStack(spacing: 40) {
-            VStack(spacing: 20) {
-                DateLabel(now)
-                DateLabel(now, font: .footnote, color: .accent)
-            }
-            VStack(spacing: 20) {
-                DateLabel(yearAhead)
-                DateLabel(yearAhead, font: .footnote, color: .accent)
-            }
-            VStack(spacing: 20) {
-                DateLabel(from: now, to: weekAhead)
-                DateLabel(from: now, to: yearAhead, font: .footnote, color: .accent)
-            }
-            VStack(spacing: 20) {
-                DateLabel.secondarySmall(now)
-                DateLabel.secondarySmall(from: now, to: yearAhead)
-            }
+#Preview {
+    let now = Date.now
+    let weekAhead = now.adding(weeks: 1)
+    let yearAhead = now.adding(years: 1)
+    
+    VStack(spacing: 40) {
+        VStack(spacing: 20) {
+            DateLabel(now)
+            DateLabel(now, font: .footnote, color: .accent)
         }
-        .environment(\.locale, locale)
-        .preferredColorScheme(colorScheme)
+        VStack(spacing: 20) {
+            DateLabel(yearAhead)
+            DateLabel(yearAhead, font: .footnote, color: .accent)
+        }
+        VStack(spacing: 20) {
+            DateLabel(from: now, to: weekAhead)
+            DateLabel(from: now, to: yearAhead, font: .footnote, color: .accent)
+        }
+        VStack(spacing: 20) {
+            DateLabel.secondarySmall(now)
+            DateLabel.secondarySmall(from: now, to: yearAhead)
+        }
     }
-}
-
-#Preview("Light - RU") {
-    DateLabel.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
-}
-
-#Preview("Dark - EN") {
-    DateLabel.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
 }

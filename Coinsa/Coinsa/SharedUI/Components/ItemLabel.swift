@@ -67,29 +67,17 @@ struct ItemLabel: View {
 
 // MARK: - Превью
 
-private extension ItemLabel {
-    static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
-        VStack(spacing: 40) {
-            VStack(alignment: .leading, spacing: 20) {
-                ForEach(ExpenseCategory.allCases, id: \.self) { category in
-                    category.makeLabel()
-                }
-            }
-            VStack(alignment: .leading, spacing: 20) {
-                ForEach(PaymentMethod.allCases, id: \.self) { method in
-                    method.makeLabel()
-                }
+#Preview {
+    VStack(spacing: 40) {
+        VStack(alignment: .leading, spacing: 20) {
+            ForEach(ExpenseCategory.allCases, id: \.self) { category in
+                category.makeLabel()
             }
         }
-        .environment(\.locale, locale)
-        .preferredColorScheme(colorScheme)
+        VStack(alignment: .leading, spacing: 20) {
+            ForEach(PaymentMethod.allCases, id: \.self) { method in
+                method.makeLabel()
+            }
+        }
     }
-}
-
-#Preview("Light - RU") {
-    ItemLabel.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
-}
-
-#Preview("Dark - EN") {
-    ItemLabel.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
 }

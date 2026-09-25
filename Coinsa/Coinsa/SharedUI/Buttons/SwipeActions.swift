@@ -64,36 +64,24 @@ struct SwipeActions: View {
 
 // MARK: - Превью
 
-private extension SwipeActions {
-    static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
-        let builder = PreviewBuilder.builder().withLocations(false)
-        let data = builder.buildData()
-        let trip = builder.getTrip(from: data)
-        
-        return List {
-            TripRowView(trip)
-                .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                    SwipeActions(onDelete: {}, onEdit: {})
-                }
-            TripRowView(trip)
-                .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                    SwipeActions(onDelete: {})
-                }
-            TripRowView(trip)
-                .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                    SwipeActions(onEdit: {})
-                }
-        }
-        .environment(\.locale, locale)
-        .preferredColorScheme(colorScheme)
+#Preview() {
+    let builder = PreviewBuilder.builder().withLocations(false)
+    let data = builder.buildData()
+    let trip = builder.getTrip(from: data)
+    
+    return List {
+        TripRowView(trip)
+            .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                SwipeActions(onDelete: {}, onEdit: {})
+            }
+        TripRowView(trip)
+            .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                SwipeActions(onDelete: {})
+            }
+        TripRowView(trip)
+            .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                SwipeActions(onEdit: {})
+            }
     }
-}
-
-#Preview("Light - RU") {
-    SwipeActions.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
-}
-
-#Preview("Dark - EN") {
-    SwipeActions.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
 }
 

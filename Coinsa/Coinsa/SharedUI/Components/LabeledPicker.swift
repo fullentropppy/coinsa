@@ -89,7 +89,7 @@ struct LabeledPicker<SelectionValue: Hashable, Content: View>: View {
 
 // MARK: - Превью
 
-#Preview("Light - RU") {
+#Preview {
     @Previewable @State var selectedCategory = ExpenseCategory.food
     
     NavigationStack {
@@ -111,32 +111,4 @@ struct LabeledPicker<SelectionValue: Hashable, Content: View>: View {
             }
         }
     }
-    .environment(\.locale, PreviewLocale.ru)
-    .preferredColorScheme(.light)
-}
-
-#Preview("Dark - EN") {
-    @Previewable @State var selectedCategory = ExpenseCategory.food
-    
-    NavigationStack {
-        List {
-            LabeledPicker(
-                title: .expenseCategory,
-                selection: $selectedCategory,
-                options: ExpenseCategory.allCases
-            ) { category in
-                category.makeLabel()
-            }
-            LabeledPicker(
-                title: .expenseCategory,
-                selection: $selectedCategory,
-                options: ExpenseCategory.allCases,
-                disabled: true
-            ) { category in
-                category.makeLabel()
-            }
-        }
-    }
-    .environment(\.locale, PreviewLocale.en)
-    .preferredColorScheme(.dark)
 }

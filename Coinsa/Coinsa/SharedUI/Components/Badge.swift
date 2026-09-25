@@ -101,34 +101,22 @@ struct Badge: View {
 
 // MARK: - Превью
 
-private extension Badge {
-    static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
-        VStack(spacing: 40) {
-            VStack(spacing: 20) {
-                Trip.makeBadge()
-                Location.makeBadge()
-                Expense.makeBadge()
-            }
-            VStack(spacing: 20) {
-                ForEach(EventStatus.allCases, id: \.self) { status in
-                    status.makeBadge()
-                }
-            }
-            VStack(spacing: 20) {
-                ForEach(ExpenseCategory.allCases, id: \.self) { category in
-                    category.makeBadge()
-                }
+#Preview {
+    VStack(spacing: 40) {
+        VStack(spacing: 20) {
+            Trip.makeBadge()
+            Location.makeBadge()
+            Expense.makeBadge()
+        }
+        VStack(spacing: 20) {
+            ForEach(EventStatus.allCases, id: \.self) { status in
+                status.makeBadge()
             }
         }
-        .environment(\.locale, locale)
-        .preferredColorScheme(colorScheme)
+        VStack(spacing: 20) {
+            ForEach(ExpenseCategory.allCases, id: \.self) { category in
+                category.makeBadge()
+            }
+        }
     }
-}
-
-#Preview("Light - RU") {
-    Badge.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
-}
-
-#Preview("Dark - EN") {
-    Badge.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
 }

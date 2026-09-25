@@ -85,24 +85,12 @@ struct EmptyStateView: View {
 
 // MARK: - Превью
 
-private extension EmptyStateView {
-    static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
-        EmptyStateView(
-            icon: Trip.primaryIcon,
-            title: .tripEmptyStateTitle,
-            description: .tripEmptyStateDescription(currentYear: DateDisplayFormatter.formatYear(.now)),
-            buttonLabel: .tripAdd,
-            action: {}
-        )
-        .environment(\.locale, locale)
-        .preferredColorScheme(colorScheme)
-    }
-}
-
-#Preview("Light - RU") {
-    EmptyStateView.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
-}
-
-#Preview("Dark - EN") {
-    EmptyStateView.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
+#Preview {
+    EmptyStateView(
+        icon: Trip.primaryIcon,
+        title: .tripEmptyStateTitle,
+        description: .tripEmptyStateDescription(currentYear: DateDisplayFormatter.formatYear(.now)),
+        buttonLabel: .tripAdd,
+        action: {}
+    )
 }

@@ -32,6 +32,7 @@ struct PrimaryAddButton: View {
             } label: {
                 Image(systemName: "plus")
                     .font(.title)
+                    .shadow(color: .accent, radius: 12)
             }
             .padding(16)
             .contentShape(Circle())
@@ -48,20 +49,9 @@ struct PrimaryAddButton: View {
 
 // MARK: - Превью
 
-private extension PrimaryAddButton {
-    static func makePreview(colorScheme: ColorScheme) -> some View {
-        HStack {
-            PrimaryAddButton(isOnLeft: true) {}
-            PrimaryAddButton(isOnLeft: false) {}
-        }
-        .preferredColorScheme(colorScheme)
+#Preview() {
+    HStack {
+        PrimaryAddButton(isOnLeft: true) {}
+        PrimaryAddButton(isOnLeft: false) {}
     }
-}
-
-#Preview("Light") {
-    PrimaryAddButton.makePreview(colorScheme: .light)
-}
-
-#Preview("Dark") {
-    PrimaryAddButton.makePreview(colorScheme: .dark)
 }

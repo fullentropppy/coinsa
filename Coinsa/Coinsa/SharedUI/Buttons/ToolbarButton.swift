@@ -77,24 +77,13 @@ extension ToolbarButton {
 
 // MARK: - Превью
 
-private extension ToolbarButton {
-    static func makePreview(colorScheme: ColorScheme) -> some View {
-        VStack(spacing: 20) {
-            ToolbarButton.ok {}
-            ToolbarButton.add {}
-            ToolbarButton.edit {}
-            ToolbarButton.delete {}
-            ToolbarButton.close {}
-            ToolbarButton.settings {}
-        }
-        .preferredColorScheme(colorScheme)
+#Preview() {
+    VStack(spacing: 20) {
+        ToolbarButton.ok {}
+        ToolbarButton.add {}
+        ToolbarButton.edit {}
+        ToolbarButton.delete {}
+        ToolbarButton.close {}
+        ToolbarButton.settings {}
     }
-}
-
-#Preview("Light") {
-    ToolbarButton.makePreview(colorScheme: .light)
-}
-
-#Preview("Dark") {
-    ToolbarButton.makePreview(colorScheme: .dark)
 }

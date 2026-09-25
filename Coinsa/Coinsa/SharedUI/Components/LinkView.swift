@@ -39,24 +39,12 @@ struct LinkView: View {
 
 // MARK: - Превью
 
-private extension LinkView {
-    static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
-        return List {
-            LinkView(
-                name: .thirdPartyHexarate,
-                description: .thirdPartyHexarateDescription,
-                url: URL(string: "example.com")!
-            )
-        }
-        .environment(\.locale, locale)
-        .preferredColorScheme(colorScheme)
+#Preview {
+    List {
+        LinkView(
+            name: .thirdPartyHexarate,
+            description: .thirdPartyHexarateDescription,
+            url: URL(string: "example.com")!
+        )
     }
-}
-
-#Preview("Light - RU") {
-    LinkView.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
-}
-
-#Preview("Dark - EN") {
-    LinkView.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
 }

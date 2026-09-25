@@ -56,22 +56,6 @@ struct GroupHeader: View {
 
 // MARK: - Превью
 
-private extension GroupHeader {
-    static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
-        GroupHeader(
-            icon: Location.primaryIcon,
-            title: .tripLocations,
-            itemCount: 4
-        )
-            .environment(\.locale, locale)
-            .preferredColorScheme(colorScheme)
-    }
-}
-
-#Preview("Light - RU") {
-    GroupHeader.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
-}
-
-#Preview("Dark - EN") {
-    GroupHeader.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
+#Preview {
+    GroupHeader(icon: Location.primaryIcon, title: .tripLocations, itemCount: 4)
 }

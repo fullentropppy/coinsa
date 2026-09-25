@@ -86,9 +86,8 @@ struct ProgressBar: View {
                     .fill(backgroundFill.opacity(0.2))
                 
                 Capsule()
-                    .fill(barFill)
+                    .fill(barFill.gradient)
                     .frame(width: geo.size.width * progress)
-                    .glassEffect(.clear)
             }
         }
         .frame(height: 10)
@@ -99,37 +98,26 @@ struct ProgressBar: View {
 
 // MARK: - Превью
 
-private extension ProgressBar {
-    static func makePreview(colorScheme: ColorScheme) -> some View {
-        let maxValue: Double = 100
-        
-        return Form {
-            Section {
-                ProgressBar(currentValue: 50, maxValue: maxValue)
-            }
-            Section {
-                ProgressBar(currentValue: 5, maxValue: maxValue, style: .positive)
-                ProgressBar(currentValue: 15, maxValue: maxValue, style: .positive)
-                ProgressBar(currentValue: 35, maxValue: maxValue, style: .positive)
-                ProgressBar(currentValue: 65, maxValue: maxValue, style: .positive)
-                ProgressBar(currentValue: 100, maxValue: maxValue, style: .positive)
-            }
-            Section {
-                ProgressBar(currentValue: 5, maxValue: maxValue, style: .negative)
-                ProgressBar(currentValue: 40, maxValue: maxValue, style: .negative)
-                ProgressBar(currentValue: 60, maxValue: maxValue, style: .negative)
-                ProgressBar(currentValue: 80, maxValue: maxValue, style: .negative)
-                ProgressBar(currentValue: 100, maxValue: maxValue, style: .negative)
-            }
+#Preview {
+    let maxValue: Double = 100
+    
+    Form {
+        Section {
+            ProgressBar(currentValue: 50, maxValue: maxValue)
         }
-        .preferredColorScheme(colorScheme)
+        Section {
+            ProgressBar(currentValue: 5, maxValue: maxValue, style: .positive)
+            ProgressBar(currentValue: 15, maxValue: maxValue, style: .positive)
+            ProgressBar(currentValue: 35, maxValue: maxValue, style: .positive)
+            ProgressBar(currentValue: 65, maxValue: maxValue, style: .positive)
+            ProgressBar(currentValue: 100, maxValue: maxValue, style: .positive)
+        }
+        Section {
+            ProgressBar(currentValue: 5, maxValue: maxValue, style: .negative)
+            ProgressBar(currentValue: 40, maxValue: maxValue, style: .negative)
+            ProgressBar(currentValue: 60, maxValue: maxValue, style: .negative)
+            ProgressBar(currentValue: 80, maxValue: maxValue, style: .negative)
+            ProgressBar(currentValue: 100, maxValue: maxValue, style: .negative)
+        }
     }
-}
-
-#Preview("Light") {
-    ProgressBar.makePreview(colorScheme: .light)
-}
-
-#Preview("Dark") {
-    ProgressBar.makePreview(colorScheme: .dark)
 }
