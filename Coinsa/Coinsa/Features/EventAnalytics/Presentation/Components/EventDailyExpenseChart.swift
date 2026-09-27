@@ -152,30 +152,16 @@ struct EventDailyExpenseChart: View {
 
 // MARK: - Превью
 
-private extension EventDailyExpenseChart {
-    static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
-        let builder = PreviewBuilder.builder().withScenario(.southKorea).withExpenses(true)
-        let data = builder.buildData()
-        let trip = builder.getTrip(from: data)
-        let viewModel = TripDetailViewModel(trip: trip)
+#Preview {
+    let builder = PreviewBuilder.builder().withScenario(.southKorea)
+    let data = builder.buildData()
+    let trip = builder.getTrip(from: data)
+    let viewModel = TripDetailViewModel(trip: trip)
 
-        return NavigationStack {
-            List {
-                Section {
-                    EventDailyExpenseChart(viewModel: EventAnalyticsViewModel(data: viewModel.eventAnalyticsData))
-                }
+    NavigationStack {
+        List {
+            EventDailyExpenseChart(viewModel: EventAnalyticsViewModel(data: viewModel.eventAnalyticsData))
                 .listRowBackground(Color.clear)
-            }
         }
-        .environment(\.locale, locale)
-        .preferredColorScheme(colorScheme)
     }
-}
-
-#Preview("Light - RU") {
-    EventDailyExpenseChart.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
-}
-
-#Preview("Dark - EN") {
-    EventDailyExpenseChart.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
 }

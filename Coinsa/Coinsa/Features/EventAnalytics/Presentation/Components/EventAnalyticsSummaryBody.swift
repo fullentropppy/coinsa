@@ -121,27 +121,15 @@ struct EventAnalyticsSummaryBody: View {
 
 // MARK: - Превью
 
-private extension EventAnalyticsSummaryBody {
-    static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
-        let builder = PreviewBuilder.builder().withScenario(.southKorea).withExpenses(true)
-        let data = builder.buildData()
-        let trip = builder.getTrip(from: data)
-        let viewModel = TripDetailViewModel(trip: trip)
+#Preview {
+    let builder = PreviewBuilder.builder().withScenario(.southKorea).withExpenses(true)
+    let data = builder.buildData()
+    let trip = builder.getTrip(from: data)
+    let viewModel = TripDetailViewModel(trip: trip)
 
-        return NavigationStack {
-            List {
-                EventAnalyticsSummaryBody(viewModel: EventAnalyticsViewModel(data: viewModel.eventAnalyticsData))
-            }
+    NavigationStack {
+        List {
+            EventAnalyticsSummaryBody(viewModel: EventAnalyticsViewModel(data: viewModel.eventAnalyticsData))
         }
-        .environment(\.locale, locale)
-        .preferredColorScheme(colorScheme)
     }
-}
-
-#Preview("Light - RU") {
-    EventAnalyticsSummaryBody.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
-}
-
-#Preview("Dark - EN") {
-    EventAnalyticsSummaryBody.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
 }

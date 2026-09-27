@@ -23,24 +23,22 @@ struct EventAnalyticsCategoriesHeader: View {
     // MARK: - Тело View
     
     var body: some View {
-        Section {
-            HStack {
+        HStack {
+            EventAmountCardView(
+                title: .amountExpenses,
+                baseAmount: viewModel.expensesTotalBaseAmount,
+                baseCurrency: viewModel.baseCurrency,
+                locationAmount: viewModel.expensesTotalLocationAmount,
+                locationCurrency: viewModel.locationCurrency
+            )
+            if viewModel.totalDays > 1 {
                 EventAmountCardView(
-                    title: .amountExpenses,
-                    baseAmount: viewModel.expensesTotalBaseAmount,
+                    title: .amountExpensesDaily,
+                    baseAmount: viewModel.dailyBaseExpensesAmount,
                     baseCurrency: viewModel.baseCurrency,
-                    locationAmount: viewModel.expensesTotalLocationAmount,
+                    locationAmount: viewModel.dailyLocationExpensesAmount,
                     locationCurrency: viewModel.locationCurrency
                 )
-                if viewModel.totalDays > 1 {
-                    EventAmountCardView(
-                        title: .amountExpensesDaily,
-                        baseAmount: viewModel.dailyBaseExpensesAmount,
-                        baseCurrency: viewModel.baseCurrency,
-                        locationAmount: viewModel.dailyLocationExpensesAmount,
-                        locationCurrency: viewModel.locationCurrency
-                    )
-                }
             }
         }
     }
@@ -48,28 +46,16 @@ struct EventAnalyticsCategoriesHeader: View {
 
 // MARK: - Превью
 
-private extension EventAnalyticsCategoriesHeader {
-    static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
-        let builder = PreviewBuilder.builder().withScenario(.southKorea).withExpenses(true)
-        let data = builder.buildData()
-        let trip = builder.getTrip(from: data)
-        let viewModel = TripDetailViewModel(trip: trip)
+#Preview {
+    let builder = PreviewBuilder.builder().withScenario(.southKorea).withExpenses(true)
+    let data = builder.buildData()
+    let trip = builder.getTrip(from: data)
+    let viewModel = TripDetailViewModel(trip: trip)
 
-        return NavigationStack {
-            List {
-                EventAnalyticsCategoriesHeader(viewModel: EventAnalyticsViewModel(data: viewModel.eventAnalyticsData))
-            }
+    NavigationStack {
+        List {
+            EventAnalyticsCategoriesHeader(viewModel: EventAnalyticsViewModel(data: viewModel.eventAnalyticsData))
         }
-        .environment(\.locale, locale)
-        .preferredColorScheme(colorScheme)
     }
-}
-
-#Preview("Light - RU") {
-    EventAnalyticsCategoriesHeader.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
-}
-
-#Preview("Dark - EN") {
-    EventAnalyticsCategoriesHeader.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
 }
 

@@ -30,14 +30,12 @@ struct EventAnalyticsSummaryHeader: View {
     // MARK: - Тело View
     
     var body: some View {
-        Section {
-            VStack(spacing: 14) {
-                VStack(spacing: 8) {
-                    budgetContent
-                    expensesContent
-                }
-                balanceContent
+        VStack(spacing: 14) {
+            VStack(spacing: 8) {
+                budgetContent
+                expensesContent
             }
+            balanceContent
         }
     }
     
@@ -104,28 +102,16 @@ struct EventAnalyticsSummaryHeader: View {
 
 // MARK: - Превью
 
-private extension EventAnalyticsSummaryHeader {
-    static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
-        let builder = PreviewBuilder.builder().withScenario(.southKorea).withExpenses(true)
-        let data = builder.buildData()
-        let trip = builder.getTrip(from: data)
-        let viewModel = TripDetailViewModel(trip: trip)
+#Preview {
+    let builder = PreviewBuilder.builder().withScenario(.southKorea).withExpenses(true)
+    let data = builder.buildData()
+    let trip = builder.getTrip(from: data)
+    let viewModel = TripDetailViewModel(trip: trip)
 
-        return NavigationStack {
-            List {
-                EventAnalyticsSummaryHeader(viewModel: EventAnalyticsViewModel(data: viewModel.eventAnalyticsData))
-            }
+    NavigationStack {
+        List {
+            EventAnalyticsSummaryHeader(viewModel: EventAnalyticsViewModel(data: viewModel.eventAnalyticsData))
         }
-        .environment(\.locale, locale)
-        .preferredColorScheme(colorScheme)
     }
-}
-
-#Preview("Light - RU") {
-    EventAnalyticsSummaryHeader.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
-}
-
-#Preview("Dark - EN") {
-    EventAnalyticsSummaryHeader.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
 }
 

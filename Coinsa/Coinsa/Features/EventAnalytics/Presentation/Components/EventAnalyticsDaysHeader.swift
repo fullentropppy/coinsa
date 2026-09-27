@@ -24,24 +24,22 @@ struct EventAnalyticsDaysHeader: View {
     // MARK: - Тело View
     
     var body: some View {
-        Section {
-            VStack(spacing: 14) {
-                HStack {
-                    EventAmountCardView(
-                        title: .amountExpensesDailyMax,
-                        baseAmount: viewModel.maxDailyBaseExpenseAmount,
-                        baseCurrency: viewModel.baseCurrency,
-                        locationAmount: viewModel.maxDailyLocationExpenseAmount,
-                        locationCurrency: viewModel.locationCurrency
-                    )
-                    EventAmountCardView(
-                        title: .amountExpensesDailyAverage,
-                        baseAmount: viewModel.middleDailyBaseExpenseAmount,
-                        baseCurrency: viewModel.baseCurrency,
-                        locationAmount: viewModel.middleDailyLocationExpenseAmount,
-                        locationCurrency: viewModel.locationCurrency
-                    )
-                }
+        VStack(spacing: 14) {
+            HStack {
+                EventAmountCardView(
+                    title: .amountExpensesDailyMax,
+                    baseAmount: viewModel.maxDailyBaseExpenseAmount,
+                    baseCurrency: viewModel.baseCurrency,
+                    locationAmount: viewModel.maxDailyLocationExpenseAmount,
+                    locationCurrency: viewModel.locationCurrency
+                )
+                EventAmountCardView(
+                    title: .amountExpensesDailyAverage,
+                    baseAmount: viewModel.middleDailyBaseExpenseAmount,
+                    baseCurrency: viewModel.baseCurrency,
+                    locationAmount: viewModel.middleDailyLocationExpenseAmount,
+                    locationCurrency: viewModel.locationCurrency
+                )
             }
         }
     }
@@ -49,28 +47,15 @@ struct EventAnalyticsDaysHeader: View {
 
 // MARK: - Превью
 
-private extension EventAnalyticsDaysHeader {
-    static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
-        let builder = PreviewBuilder.builder().withScenario(.southKorea).withExpenses(true)
-        let data = builder.buildData()
-        let trip = builder.getTrip(from: data)
-        let viewModel = TripDetailViewModel(trip: trip)
+#Preview {
+    let builder = PreviewBuilder.builder().withScenario(.southKorea).withExpenses(true)
+    let data = builder.buildData()
+    let trip = builder.getTrip(from: data)
+    let viewModel = TripDetailViewModel(trip: trip)
 
-        return NavigationStack {
-            List {
-                EventAnalyticsDaysHeader(viewModel: EventAnalyticsViewModel(data: viewModel.eventAnalyticsData))
-            }
+    NavigationStack {
+        List {
+            EventAnalyticsDaysHeader(viewModel: EventAnalyticsViewModel(data: viewModel.eventAnalyticsData))
         }
-        .environment(\.locale, locale)
-        .preferredColorScheme(colorScheme)
     }
 }
-
-#Preview("Light - RU") {
-    EventAnalyticsDaysHeader.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
-}
-
-#Preview("Dark - EN") {
-    EventAnalyticsDaysHeader.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
-}
-

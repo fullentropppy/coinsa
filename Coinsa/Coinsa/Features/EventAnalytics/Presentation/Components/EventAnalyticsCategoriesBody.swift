@@ -87,10 +87,12 @@ struct EventAnalyticsCategoriesBody: View {
     private var categoriesLegendSection: some View {
         Section {
             if viewModel.totalDays > 1 {
-                Picker("", selection: $categoryAmountMode) {
+                Picker(selection: $categoryAmountMode) {
                     ForEach(CategoryAmountMode.allCases) { mode in
                         Text(mode.localizedResource).tag(mode)
                     }
+                } label: {
+                    EmptyView()
                 }
                 .pickerStyle(.segmented)
                 .onChange(of: categoryAmountMode) {
@@ -148,30 +150,18 @@ struct EventAnalyticsCategoriesBody: View {
 
 // MARK: - Превью
 
-private extension EventAnalyticsCategoriesBody {
-    static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
-        let builder = PreviewBuilder.builder().withScenario(.southKorea).withExpenses(true)
-        let data = builder.buildData()
-        let trip = builder.getTrip(from: data)
-        let viewModel = TripDetailViewModel(trip: trip)
+#Preview {
+    let builder = PreviewBuilder.builder().withScenario(.southKorea).withExpenses(true)
+    let data = builder.buildData()
+    let trip = builder.getTrip(from: data)
+    let viewModel = TripDetailViewModel(trip: trip)
 
-        return NavigationStack {
-            List {
-                EventAnalyticsCategoriesBody(
-                    viewModel: EventAnalyticsViewModel(data: viewModel.eventAnalyticsData),
-                    screenContextSubtitle: trip.screenContextSubtitle
-                )
-            }
+    NavigationStack {
+        List {
+            EventAnalyticsCategoriesBody(
+                viewModel: EventAnalyticsViewModel(data: viewModel.eventAnalyticsData),
+                screenContextSubtitle: trip.screenContextSubtitle
+            )
         }
-        .environment(\.locale, locale)
-        .preferredColorScheme(colorScheme)
     }
-}
-
-#Preview("Light - RU") {
-    EventAnalyticsCategoriesBody.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
-}
-
-#Preview("Dark - EN") {
-    EventAnalyticsCategoriesBody.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
 }
