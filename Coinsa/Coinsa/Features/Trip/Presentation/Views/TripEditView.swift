@@ -234,38 +234,24 @@ struct TripEditView: View {
 // MARK: - Превью
 
 private extension TripEditView {
-    static func makePreview(
-        locale: Locale,
-        colorScheme: ColorScheme,
-        withNewTrip: Bool = false
-    ) -> some View {
+    static func makePreview(isEditing: Bool) -> some View {
         Group {
-            if withNewTrip {
-                return TripEditView(forCreateWith: .defaultValue)
-            } else {
+            if isEditing {
                 let builder = PreviewBuilder.builder().withLocations(false)
                 let data = builder.buildData()
                 let trip = builder.getTrip(from: data)
                 return TripEditView(forEdit: trip)
+            } else {
+                return TripEditView(forCreateWith: .defaultValue)
             }
         }
-        .environment(\.locale, locale)
-        .preferredColorScheme(colorScheme)
     }
 }
 
-#Preview("Edit. Light - RU") {
-    TripEditView.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
+#Preview("Editing") {
+    TripEditView.makePreview(isEditing: true)
 }
 
-#Preview("Edit. Dark - EN") {
-    TripEditView.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
-}
-
-#Preview("Create. Light - RU") {
-    TripEditView.makePreview(locale: PreviewLocale.ru, colorScheme: .light, withNewTrip: true)
-}
-
-#Preview("Create. Dark - EN") {
-    TripEditView.makePreview(locale: PreviewLocale.en, colorScheme: .dark, withNewTrip: true)
+#Preview("Creating") {
+    TripEditView.makePreview(isEditing: false)
 }

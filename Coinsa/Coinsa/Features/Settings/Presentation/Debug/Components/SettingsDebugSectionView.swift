@@ -154,26 +154,13 @@ private enum DebugAction: String, Identifiable {
 
 // MARK: - Превью
 
-private extension SettingsDebugSectionView {
-    static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
-        let container = PreviewBuilder.builder().withLocations(false).buildContainer()
-        let demoDataService = DemoDataService(context: container.mainContext)
-        
-        return Form {
-            SettingsDebugSectionView(demoDataService: demoDataService)
-        }
-        .modelContainer(container)
-        .environment(\.locale, locale)
-        .preferredColorScheme(colorScheme)
+#Preview {
+    let container = PreviewBuilder.builder().withLocations(false).buildContainer()
+    let demoDataService = DemoDataService(context: container.mainContext)
+    
+    Form {
+        SettingsDebugSectionView(demoDataService: demoDataService)
     }
-}
-
-#Preview("Light - RU") {
-    SettingsDebugSectionView.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
-}
-
-#Preview("Dark - EN") {
-    SettingsDebugSectionView.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
 }
 
 #endif

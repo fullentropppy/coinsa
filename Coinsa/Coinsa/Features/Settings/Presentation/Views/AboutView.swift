@@ -68,18 +68,6 @@ struct AboutView: View {
 
 // MARK: - Превью
 
-private extension AboutView {
-    static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
-        return AboutView()
-            .environment(\.locale, locale)
-            .preferredColorScheme(colorScheme)
-    }
-}
-
-#Preview("Light - RU") {
-    AboutView.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
-}
-
-#Preview("Dark - EN") {
-    AboutView.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
+#Preview {
+    AboutView()
 }

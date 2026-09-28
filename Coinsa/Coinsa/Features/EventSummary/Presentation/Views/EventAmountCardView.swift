@@ -62,33 +62,21 @@ struct EventAmountCardView: View {
 
 // MARK: - Превью
 
-private extension EventAmountCardView {
-    static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
-        Form {
-            VStack(spacing: 20) {
-                EventAmountCardView(
-                    title: .amountExpenses,
-                    baseAmount: 24600,
-                    baseCurrency: .defaultValue,
-                    locationAmount: 41000,
-                    locationCurrency: .jpy
-                )
-                EventAmountCardView(
-                    title: .amountExpenses,
-                    baseAmount: 24600,
-                    baseCurrency: .defaultValue
-                )
-            }
+#Preview {
+    Form {
+        VStack(spacing: 20) {
+            EventAmountCardView(
+                title: .amountExpenses,
+                baseAmount: 24600,
+                baseCurrency: .defaultValue,
+                locationAmount: 41000,
+                locationCurrency: .jpy
+            )
+            EventAmountCardView(
+                title: .amountExpenses,
+                baseAmount: 24600,
+                baseCurrency: .defaultValue
+            )
         }
-        .environment(\.locale, locale)
-        .preferredColorScheme(colorScheme)
     }
-}
-
-#Preview("Light - RU") {
-    EventAmountCardView.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
-}
-
-#Preview("Dark - EN") {
-    EventAmountCardView.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
 }

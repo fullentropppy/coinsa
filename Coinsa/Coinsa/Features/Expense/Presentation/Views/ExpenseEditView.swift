@@ -500,43 +500,29 @@ struct ExpenseEditView: View {
 // MARK: - Превью
 
 private extension ExpenseEditView {
-    static func makePreview(
-        locale: Locale,
-        colorScheme: ColorScheme,
-        withNewExpense: Bool = false
-    ) -> some View {
+    static func makePreview(isEditing: Bool) -> some View {
         let builder = PreviewBuilder.builder()
         let container = builder.buildContainer()
         let settingsStore = AppSettingsStore()
         let location = builder.fetchLocation(from: container)
        
         return Group {
-            if withNewExpense {
-                return ExpenseEditView(forCreateWith: location)
-            } else {
+            if isEditing {
                 let expense = builder.fetchExpense(from: container)
                 return ExpenseEditView(forEdit: expense)
+            } else {
+                return ExpenseEditView(forCreateWith: location)
             }
         }
         .modelContainer(container)
         .environment(settingsStore)
-        .environment(\.locale, locale)
-        .preferredColorScheme(colorScheme)
     }
 }
 
-#Preview("Edit. Light - RU") {
-    ExpenseEditView.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
+#Preview("Editing") {
+    ExpenseEditView.makePreview(isEditing: true)
 }
 
-#Preview("Edit. Dark - EN") {
-    ExpenseEditView.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
-}
-
-#Preview("Create. Light - RU") {
-    ExpenseEditView.makePreview(locale: PreviewLocale.ru, colorScheme: .light, withNewExpense: true)
-}
-
-#Preview("Create. Dark - EN") {
-    ExpenseEditView.makePreview(locale: PreviewLocale.en, colorScheme: .dark, withNewExpense: true)
+#Preview("Creating") {
+    ExpenseEditView.makePreview(isEditing: false)
 }

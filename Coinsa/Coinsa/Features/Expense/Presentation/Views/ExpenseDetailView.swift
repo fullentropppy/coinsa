@@ -275,24 +275,12 @@ struct ExpenseDetailView: View {
 
 // MARK: - Превью
 
-private extension ExpenseDetailView {
-    static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
-        let builder = PreviewBuilder.builder()
-        let data = builder.buildData()
-        let expense = builder.getExpense(from: data)
-        
-        return NavigationStack {
-            ExpenseDetailView(expense)
-        }
-        .environment(\.locale, locale)
-        .preferredColorScheme(colorScheme)
+#Preview {
+    let builder = PreviewBuilder.builder()
+    let data = builder.buildData()
+    let expense = builder.getExpense(from: data)
+    
+    NavigationStack {
+        ExpenseDetailView(expense)
     }
-}
-
-#Preview("Light - RU") {
-    ExpenseDetailView.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
-}
-
-#Preview("Dark - EN") {
-    ExpenseDetailView.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
 }

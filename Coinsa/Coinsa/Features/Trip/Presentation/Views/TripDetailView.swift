@@ -201,11 +201,7 @@ struct TripDetailView: View {
 // MARK: - Превью
 
 private extension TripDetailView {
-    static func makePreview(
-        locale: Locale,
-        colorScheme: ColorScheme,
-        withLocations: Bool = true
-    ) -> some View {
+    static func makePreview(withLocations: Bool) -> some View {
         let builder = PreviewBuilder.builder().withLocations(withLocations)
         let container = builder.buildContainer()
         let settingsStore = AppSettingsStore()
@@ -216,23 +212,13 @@ private extension TripDetailView {
         }
         .modelContainer(container)
         .environment(settingsStore)
-        .environment(\.locale, locale)
-        .preferredColorScheme(colorScheme)
     }
 }
 
-#Preview("Light - RU") {
-    TripDetailView.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
+#Preview("With Locations") {
+    TripDetailView.makePreview(withLocations: true)
 }
 
-#Preview("Dark - EN") {
-    TripDetailView.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
-}
-
-#Preview("No Locations. Light - RU") {
-    TripDetailView.makePreview(locale: PreviewLocale.ru, colorScheme: .light, withLocations: false)
-}
-
-#Preview("No Locations. Dark - EN") {
-    TripDetailView.makePreview(locale: PreviewLocale.en, colorScheme: .dark, withLocations: false)
+#Preview("Without Locations") {
+    TripDetailView.makePreview(withLocations: false)
 }

@@ -121,15 +121,12 @@ struct EventAnalyticsView: View {
 // MARK: - Превью
 
 extension EventAnalyticsView {
-    fileprivate static func makePreview(
-        forTrip: Bool = true,
-        withSignificantData: Bool = true
-    ) -> some View {
+    fileprivate static func makePreview(forTrip: Bool, withExpenses: Bool) -> some View {
         let builder =
             PreviewBuilder
             .builder()
             .withScenario(.southKorea)
-            .withExpenses(withSignificantData)
+            .withExpenses(withExpenses)
 
         let data = builder.buildData()
 
@@ -154,14 +151,14 @@ extension EventAnalyticsView {
     }
 }
 
-#Preview("Trip") {
-    EventAnalyticsView.makePreview()
+#Preview("For Trip") {
+    EventAnalyticsView.makePreview(forTrip: true, withExpenses: true)
 }
 
-#Preview("Location") {
-    EventAnalyticsView.makePreview(forTrip: false)
+#Preview("For Location") {
+    EventAnalyticsView.makePreview(forTrip: false, withExpenses: true)
 }
 
 #Preview("Empty") {
-    EventAnalyticsView.makePreview(withSignificantData: false)
+    EventAnalyticsView.makePreview(forTrip: false, withExpenses: false)
 }

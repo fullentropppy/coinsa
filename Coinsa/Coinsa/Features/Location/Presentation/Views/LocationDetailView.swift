@@ -197,11 +197,7 @@ struct LocationDetailView: View {
 // MARK: - Превью
 
 private extension LocationDetailView {
-    static func makePreview(
-        locale: Locale,
-        colorScheme: ColorScheme,
-        withExpenses: Bool = true
-    ) -> some View {
+    static func makePreview(withExpenses: Bool) -> some View {
         let builder = PreviewBuilder.builder().withExpenses(withExpenses)
         let container = builder.buildContainer()
         let settingsStore = AppSettingsStore()
@@ -212,24 +208,13 @@ private extension LocationDetailView {
         }
         .modelContainer(container)
         .environment(settingsStore)
-        .environment(\.locale, locale)
-        .preferredColorScheme(colorScheme)
     }
 }
 
-#Preview("Light - RU") {
-    LocationDetailView.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
+#Preview("With Expenses") {
+    LocationDetailView.makePreview(withExpenses: true)
 }
 
-#Preview("Dark - EN") {
-    LocationDetailView.makePreview(locale: PreviewLocale.en, colorScheme: .dark
-    )
-}
-
-#Preview("No expenses. Light - RU") {
-    LocationDetailView.makePreview(locale: PreviewLocale.ru, colorScheme: .light, withExpenses: false)
-}
-
-#Preview("No expenses. Dark - EN") {
-    LocationDetailView.makePreview(locale: PreviewLocale.en, colorScheme: .dark, withExpenses: false)
+#Preview("Without Expenses") {
+    LocationDetailView.makePreview(withExpenses: false)
 }

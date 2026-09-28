@@ -136,40 +136,28 @@ struct EventSummaryView: View {
 
 // MARK: - Превью
 
-private extension EventSummaryData {
-    static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
-        let builder = PreviewBuilder.builder()
-        let data = builder.buildData()
-        
-        let trip = builder.getTrip(from: data)
-        let tripViewModel = TripDetailViewModel(trip: trip)
-        
-        let location = builder.getLocation(from: data)
-        let locationViewModel = LocationDetailViewModel(location: location)
-        
-        return Form {
-            Section {
-                EventSummaryView(data: tripViewModel.eventHeaderData, showsAmounts: false, showsAmountBalance: false)
-            }
-            Section {
-                EventSummaryView(data: tripViewModel.eventHeaderData)
-            }
-            Section {
-                EventSummaryView(data: locationViewModel.eventHeaderData)
-            }
-            Section {
-                EventSummaryView(data: locationViewModel.eventHeaderData, showsHeader: false)
-            }
+#Preview {
+    let builder = PreviewBuilder.builder()
+    let data = builder.buildData()
+    
+    let trip = builder.getTrip(from: data)
+    let tripViewModel = TripDetailViewModel(trip: trip)
+    
+    let location = builder.getLocation(from: data)
+    let locationViewModel = LocationDetailViewModel(location: location)
+    
+    Form {
+        Section {
+            EventSummaryView(data: tripViewModel.eventHeaderData, showsAmounts: false, showsAmountBalance: false)
         }
-        .environment(\.locale, locale)
-        .preferredColorScheme(colorScheme)
+        Section {
+            EventSummaryView(data: tripViewModel.eventHeaderData)
+        }
+        Section {
+            EventSummaryView(data: locationViewModel.eventHeaderData)
+        }
+        Section {
+            EventSummaryView(data: locationViewModel.eventHeaderData, showsHeader: false)
+        }
     }
-}
-
-#Preview("Light - RU") {
-    EventSummaryData.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
-}
-
-#Preview("Dark - EN") {
-    EventSummaryData.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
 }

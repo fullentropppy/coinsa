@@ -141,23 +141,11 @@ struct SettingsView: View {
 
 // MARK: - Превью
 
-private extension SettingsView {
-    static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
-        let container = PreviewBuilder.builder().withTrips(false).buildContainer()
-        let store = AppSettingsStore()
-        
-        return SettingsView()
-            .modelContainer(container)
-            .environment(store)
-            .environment(\.locale, locale)
-            .preferredColorScheme(colorScheme)
-    }
-}
-
-#Preview("Light - RU") {
-    SettingsView.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
-}
-
-#Preview("Dark - EN") {
-    SettingsView.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
+#Preview {
+    let container = PreviewBuilder.builder().withTrips(false).buildContainer()
+    let store = AppSettingsStore()
+    
+    SettingsView()
+        .modelContainer(container)
+        .environment(store)
 }

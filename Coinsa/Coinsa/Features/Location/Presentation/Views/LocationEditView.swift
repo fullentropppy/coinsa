@@ -376,40 +376,26 @@ struct LocationEditView: View {
 // MARK: - Превью
 
 private extension LocationEditView {
-    static func makePreview(
-        locale: Locale,
-        colorScheme: ColorScheme,
-        withNewLocation: Bool = false
-    ) -> some View {
+    static func makePreview(isEditing: Bool) -> some View {
         let builder = PreviewBuilder.builder()
         let data = builder.buildData()
         let trip = builder.getTrip(from: data)
        
         return Group {
-            if withNewLocation {
-                return LocationEditView(forCreateWith: trip)
-            } else {
+            if isEditing {
                 let location = builder.getLocation(from: data)
                 return LocationEditView(forEdit: location)
+            } else {
+                return LocationEditView(forCreateWith: trip)
             }
         }
-        .environment(\.locale, locale)
-        .preferredColorScheme(colorScheme)
     }
 }
 
-#Preview("Edit. Light - RU") {
-    LocationEditView.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
+#Preview("Editing") {
+    LocationEditView.makePreview(isEditing: true)
 }
 
-#Preview("Edit. Dark - EN") {
-    LocationEditView.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
-}
-
-#Preview("Create. Light - RU") {
-    LocationEditView.makePreview(locale: PreviewLocale.ru, colorScheme: .light, withNewLocation: true)
-}
-
-#Preview("Create. Dark - EN") {
-    LocationEditView.makePreview(locale: PreviewLocale.en, colorScheme: .dark, withNewLocation: true)
+#Preview("Creating") {
+    LocationEditView.makePreview(isEditing: false)
 }
