@@ -82,43 +82,25 @@ extension PercentInputField {
 
 // MARK: - Превью
 
-private extension PercentInputField {
-    static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
-        List {
-            PercentInputFieldPreview()
+#Preview {
+    @Previewable @State var value: Double = 5.05
+    @Previewable @FocusState var focusedField: NumericEditField?
+
+    List {
+        Section {
+            PercentInputField(
+                $value,
+                focusedField: $focusedField,
+                focusId: .exchangeRate,
+                font: .body
+            )
         }
-        .environment(\.locale, locale)
-        .preferredColorScheme(colorScheme)
-    }
-    
-    struct PercentInputFieldPreview: View {
-        @State private var value: Double = 5.05
-        @FocusState private var focusedField: NumericEditField?
-        
-        var body: some View {
-            Section {
-                PercentInputField(
-                    $value,
-                    focusedField: $focusedField,
-                    focusId: .exchangeRate,
-                    font: .body
-                )
-            }
-            Section {
-                PercentInputField.standard(
-                    $value,
-                    focusedField: $focusedField,
-                    focusId: .exchangeRate
-                )
-            }
+        Section {
+            PercentInputField.standard(
+                $value,
+                focusedField: $focusedField,
+                focusId: .exchangeRate
+            )
         }
     }
-}
-
-#Preview("Light - RU") {
-    PercentInputField.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
-}
-
-#Preview("Dark - EN") {
-    PercentInputField.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
 }

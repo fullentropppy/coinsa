@@ -57,28 +57,17 @@ extension CurrencyCodeText {
 
 // MARK: - Превью
 
-private extension CurrencyCodeText {
-    static func makePreview(colorScheme: ColorScheme) -> some View {
-        let currency = Currency.defaultValue
-        
-        return VStack(spacing: 40) {
-            VStack(spacing: 20) {
-                CurrencyCodeText(currency)
-                CurrencyCodeText(currency, font: .footnote, color: .accent)
-            }
-            VStack(spacing: 20) {
-                CurrencyCodeText.standard(currency)
-                CurrencyCodeText.secondarySmall(currency)
-            }
+#Preview {
+    let currency = Currency.defaultValue
+    
+    VStack(spacing: 40) {
+        VStack(spacing: 20) {
+            CurrencyCodeText(currency)
+            CurrencyCodeText(currency, font: .footnote, color: .accent)
         }
-        .preferredColorScheme(colorScheme)
+        VStack(spacing: 20) {
+            CurrencyCodeText.standard(currency)
+            CurrencyCodeText.secondarySmall(currency)
+        }
     }
-}
-
-#Preview("Light") {
-    CurrencyCodeText.makePreview(colorScheme: .light)
-}
-
-#Preview("Dark") {
-    CurrencyCodeText.makePreview(colorScheme: .dark)
 }

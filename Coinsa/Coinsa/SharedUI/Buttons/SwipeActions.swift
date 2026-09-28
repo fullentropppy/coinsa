@@ -64,7 +64,7 @@ struct SwipeActions: View {
 
 // MARK: - Превью
 
-#Preview() {
+#Preview {
     let builder = PreviewBuilder.builder().withLocations(false)
     let data = builder.buildData()
     let trip = builder.getTrip(from: data)

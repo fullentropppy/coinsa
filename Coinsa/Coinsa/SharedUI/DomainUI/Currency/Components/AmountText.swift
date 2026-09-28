@@ -111,42 +111,30 @@ extension AmountText {
 
 // MARK: - Превью
 
-private extension AmountText {
-    static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
-        let amount = 12345.6789
-        let currency = Currency.defaultValue
-        
-        return VStack(spacing: 40) {
-            VStack(spacing: 20) {
-                AmountText(amount)
-                AmountText(amount, fractionLength: 4, font: .footnote, color: .accent)
-            }
-            VStack(spacing: 20) {
-                AmountText(amount, currency: currency)
-                AmountText(
-                    amount,
-                    fractionLength: 4,
-                    font: .footnote,
-                    color: .accent,
-                    currency: currency,
-                    currencyFont: .footnote,
-                    currencyColor: .accent.opacity(0.5)
-                )
-            }
-            VStack(spacing: 20) {
-                AmountText.standard(amount, currency: currency)
-                AmountText.secondarySmall(amount, currency: currency)
-            }
+#Preview {
+    let amount = 12345.6789
+    let currency = Currency.defaultValue
+    
+    VStack(spacing: 40) {
+        VStack(spacing: 20) {
+            AmountText(amount)
+            AmountText(amount, fractionLength: 4, font: .footnote, color: .accent)
         }
-        .environment(\.locale, locale)
-        .preferredColorScheme(colorScheme)
+        VStack(spacing: 20) {
+            AmountText(amount, currency: currency)
+            AmountText(
+                amount,
+                fractionLength: 4,
+                font: .footnote,
+                color: .accent,
+                currency: currency,
+                currencyFont: .footnote,
+                currencyColor: .accent.opacity(0.5)
+            )
+        }
+        VStack(spacing: 20) {
+            AmountText.standard(amount, currency: currency)
+            AmountText.secondarySmall(amount, currency: currency)
+        }
     }
-}
-
-#Preview("Light - RU") {
-    AmountText.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
-}
-
-#Preview("Dark - EN") {
-    AmountText.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
 }

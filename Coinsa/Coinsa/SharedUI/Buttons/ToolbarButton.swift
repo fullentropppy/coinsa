@@ -77,7 +77,7 @@ extension ToolbarButton {
 
 // MARK: - Превью
 
-#Preview() {
+#Preview {
     VStack(spacing: 20) {
         ToolbarButton.ok {}
         ToolbarButton.add {}

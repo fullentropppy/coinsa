@@ -117,32 +117,22 @@ struct FullScreenMapView: View {
 
 // MARK: - Превью
 
-private extension FullScreenMapView {
-    static let previewCoordinate = Coordinate(
+#Preview("Read") {
+    @Previewable @State var coordinate = Coordinate(
         latitude: 35.65949,
         longitude: 139.70057,
         horizontalAccuracy: 12
     )
 
-    static func makePreview(locale: Locale, colorScheme: ColorScheme, isEditable: Bool) -> some View {
-        @Previewable @State var coordinate = previewCoordinate
-
-        return Group {
-            if isEditable {
-                FullScreenMapView(coordinate: $coordinate, title: .expensePlaceOfExpense)
-            } else {
-                FullScreenMapView(coordinate: coordinate, title: .expensePlaceOfExpense)
-            }
-        }
-        .environment(\.locale, locale)
-        .preferredColorScheme(colorScheme)
-    }
+    FullScreenMapView(coordinate: coordinate, title: .expensePlaceOfExpense)
 }
 
-#Preview("Read. Light - RU") {
-    FullScreenMapView.makePreview(locale: PreviewLocale.ru, colorScheme: .light, isEditable: false)
-}
+#Preview("Edit") {
+    @Previewable @State var coordinate = Coordinate(
+        latitude: 35.65949,
+        longitude: 139.70057,
+        horizontalAccuracy: 12
+    )
 
-#Preview("Edit. Dark - EN") {
-    FullScreenMapView.makePreview(locale: PreviewLocale.en, colorScheme: .dark, isEditable: true)
+    FullScreenMapView(coordinate: $coordinate, title: .expensePlaceOfExpense)
 }

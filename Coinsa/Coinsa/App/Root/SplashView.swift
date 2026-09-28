@@ -74,7 +74,7 @@ struct SplashView: View {
 
 // MARK: - Превью
 
-#Preview() {
+#Preview {
     TimelineView(.periodic(from: .now, by: 2.0)) { timeline in
         SplashView(onFinished: {})
             .id(timeline.date.timeIntervalSince1970)

@@ -287,8 +287,7 @@ struct ExpenseEditView: View {
                             get: { viewModel.coordinate ?? coordinate },
                             set: { viewModel.updateCoordinate($0) }
                         ),
-                        title: .expensePlaceOfExpense,
-                        isEditable: true
+                        title: .expensePlaceOfExpense
                     )
                 }
                 .buttonStyle(.plain)

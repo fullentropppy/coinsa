@@ -10,7 +10,7 @@ import SwiftUI
 // MARK: - Публичные типы
 
 /// Идентификаторы полей для управления фокусом в числовых вводах.
-enum NumericEditField: Hashable {
+nonisolated enum NumericEditField: Hashable {
     case amount
     case exchangeRate
     case locationExchangeRate
@@ -173,46 +173,28 @@ extension NumericInputField {
 
 // MARK: - Превью
 
-private extension NumericInputField {
-    static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
-        List {
-            NumericInputFieldPreview()
-        }
-        .environment(\.locale, locale)
-        .preferredColorScheme(colorScheme)
-    }
+#Preview {
+    @Previewable @State var amount: Double = 1234.56
+    @Previewable @FocusState var focusedField: NumericEditField?
     
-    private struct NumericInputFieldPreview: View {
-        @State private var amount: Double = 1234.56
-        @FocusState private var focusedField: NumericEditField?
-
-        var body: some View {
-            Section {
-                NumericInputField(
-                    $amount,
-                    focusedField: $focusedField,
-                    focusId: .amount,
-                    fractionDigits: 2,
-                    font: .body,
-                    textAlignment: .trailing
-                )
-            }
-            Section {
-                NumericInputField.standard(
-                    $amount,
-                    focusedField: $focusedField,
-                    focusId: .amount,
-                    fractionDigits: 2
-                )
-            }
+    List {
+        Section {
+            NumericInputField(
+                $amount,
+                focusedField: $focusedField,
+                focusId: .amount,
+                fractionDigits: 2,
+                font: .body,
+                textAlignment: .trailing
+            )
+        }
+        Section {
+            NumericInputField.standard(
+                $amount,
+                focusedField: $focusedField,
+                focusId: .amount,
+                fractionDigits: 2
+            )
         }
     }
-}
-
-#Preview("Light - RU") {
-    NumericInputField.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
-}
-
-#Preview("Dark - EN") {
-    NumericInputField.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
 }

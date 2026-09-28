@@ -131,57 +131,54 @@ extension ExchangeRateInputField {
 
 // MARK: - Превью
 
-private extension ExchangeRateInputField {
-    static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
-        List {
-            ExchangeRateInputFieldPreview(isLoading: false)
-            ExchangeRateInputFieldPreview(isLoading: true)
-        }
-        .environment(\.locale, locale)
-        .preferredColorScheme(colorScheme)
-    }
-    
-    struct ExchangeRateInputFieldPreview: View {
-        @State private var rate: Double = 80.1234
-        @FocusState private var focusedField: NumericEditField?
-        
-        private var currency = Currency.defaultValue
-        private var isLoading: Bool
-        
-        init(isLoading: Bool) {
-            self.isLoading = isLoading
-        }
-        
-        var body: some View {
-            Section {
-                ExchangeRateInputField(
-                    $rate,
-                    currency: currency,
-                    isLoading: isLoading,
-                    focusedField: $focusedField,
-                    focusId: .exchangeRate,
-                    font: .body,
-                    onRefresh: {}
-                )
-            }
-            Section {
-                ExchangeRateInputField.standard(
-                    $rate,
-                    currency: currency,
-                    isLoading: isLoading,
-                    focusedField: $focusedField,
-                    focusId: .exchangeRate,
-                    onRefresh: {}
-                )
-            }
-        }
-    }
-}
+#Preview {
+    @Previewable @State var rate: Double = 80.1234
+    @Previewable @FocusState var focusedField: NumericEditField?
 
-#Preview("Light - RU") {
-    ExchangeRateInputField.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
-}
+    let currency = Currency.defaultValue
 
-#Preview("Dark - EN") {
-    ExchangeRateInputField.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
+    List {
+        Section {
+            ExchangeRateInputField(
+                $rate,
+                currency: currency,
+                isLoading: false,
+                focusedField: $focusedField,
+                focusId: .exchangeRate,
+                font: .body,
+                onRefresh: {}
+            )
+        }
+        Section {
+            ExchangeRateInputField.standard(
+                $rate,
+                currency: currency,
+                isLoading: false,
+                focusedField: $focusedField,
+                focusId: .exchangeRate,
+                onRefresh: {}
+            )
+        }
+        Section {
+            ExchangeRateInputField(
+                $rate,
+                currency: currency,
+                isLoading: true,
+                focusedField: $focusedField,
+                focusId: .exchangeRate,
+                font: .body,
+                onRefresh: {}
+            )
+        }
+        Section {
+            ExchangeRateInputField.standard(
+                $rate,
+                currency: currency,
+                isLoading: true,
+                focusedField: $focusedField,
+                focusId: .exchangeRate,
+                onRefresh: {}
+            )
+        }
+    }
 }

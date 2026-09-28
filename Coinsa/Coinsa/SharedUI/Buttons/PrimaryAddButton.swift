@@ -49,7 +49,7 @@ struct PrimaryAddButton: View {
 
 // MARK: - Превью
 
-#Preview() {
+#Preview {
     HStack {
         PrimaryAddButton(isOnLeft: true) {}
         PrimaryAddButton(isOnLeft: false) {}

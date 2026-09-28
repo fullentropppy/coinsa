@@ -36,17 +36,6 @@ struct InputCurrencySwitchButton: View {
 
 // MARK: - Превью
 
-private extension InputCurrencySwitchButton {
-    static func makePreview(colorScheme: ColorScheme) -> some View {
-        InputCurrencySwitchButton(action: {})
-        .preferredColorScheme(colorScheme)
-    }
-}
-
-#Preview("Light") {
-    InputCurrencySwitchButton.makePreview(colorScheme: .light)
-}
-
-#Preview("Dark") {
-    InputCurrencySwitchButton.makePreview(colorScheme: .dark)
+#Preview {
+    InputCurrencySwitchButton(action: {})
 }

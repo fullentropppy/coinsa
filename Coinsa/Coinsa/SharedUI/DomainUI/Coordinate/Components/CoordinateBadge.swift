@@ -57,28 +57,16 @@ struct CoordinateBadge: View {
 
 // MARK: - Превью
 
-private extension CoordinateBadge {
-    static let previewCoordinate = Coordinate(
+#Preview {
+    let previewCoordinate = Coordinate(
         latitude: 35.65949,
         longitude: 139.70057,
         horizontalAccuracy: 12
     )
-
-    static func makePreview(locale: Locale, colorScheme: ColorScheme, isEditable: Bool) -> some View {
-        return VStack(spacing: 20) {
-            CoordinateBadge(previewCoordinate)
-            CoordinateBadge(previewCoordinate, withBackground: false)
-        }
-        .environment(\.locale, locale)
-        .preferredColorScheme(colorScheme)
+    
+    VStack(spacing: 20) {
+        CoordinateBadge(previewCoordinate)
+        CoordinateBadge(previewCoordinate, withBackground: false)
     }
-}
-
-#Preview("Read. Light - RU") {
-    CoordinateBadge.makePreview(locale: PreviewLocale.ru, colorScheme: .light, isEditable: false)
-}
-
-#Preview("Edit. Dark - EN") {
-    CoordinateBadge.makePreview(locale: PreviewLocale.en, colorScheme: .dark, isEditable: true)
 }
 
