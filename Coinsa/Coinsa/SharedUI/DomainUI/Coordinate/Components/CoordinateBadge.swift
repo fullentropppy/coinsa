@@ -58,11 +58,7 @@ struct CoordinateBadge: View {
 // MARK: - Превью
 
 #Preview {
-    let previewCoordinate = Coordinate(
-        latitude: 35.65949,
-        longitude: 139.70057,
-        horizontalAccuracy: 12
-    )
+    let previewCoordinate = PreviewGenerator.makeExampleCoordinate()
     
     VStack(spacing: 20) {
         CoordinateBadge(previewCoordinate)

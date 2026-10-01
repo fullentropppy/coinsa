@@ -61,6 +61,78 @@ enum PreviewGenerator {
         
         return trips
     }
+    
+    /// Создает пример поездки.
+    /// - Parameters:
+    ///   - previewTrip: Предопределенная поездка. По умолчанию `.southKorea`.
+    ///   - includeLocations: Включать ли локации поездки. По умолчанию `false`.
+    ///   - includeExpenses: Включать ли расходы локаций. По умолчанию `false`.
+    ///     Игнорируется, если `includeLocations == false`.
+    /// - Returns: Пример поездки.
+    static func makeExampleTrip(
+        _ previewTrip: PreviewTrip = .southKorea,
+        includeLocations: Bool = false,
+        includeExpenses: Bool = false
+    ) -> Trip {
+        var options = PreviewOptions()
+        options.includeLocations = includeLocations
+        options.includeExpenses = includeExpenses
+        
+        return makeTrip(from: previewTrip, with: options)
+    }
+    
+    /// Создает пример локации.
+    /// - Parameters:
+    ///   - previewLocation: Предопределенная локация. По умолчанию `.seoul`.
+    ///   - includeExpenses: Включать ли расходы локации. По умолчанию `false`.
+    /// - Returns: Пример локации.
+    static func makeExampleLocation(
+        _ previewLocation: PreviewLocation = .seoul,
+        includeExpenses: Bool = false
+    ) -> Location {
+        var options = PreviewOptions()
+        options.includeExpenses = includeExpenses
+        
+        return makeLocation(
+            from: previewLocation,
+            to: makeExampleTrip(previewLocation.tripData, includeLocations: false, includeExpenses: false),
+            with: options
+        )
+    }
+    
+    /// Создает пример траты.
+    /// - Parameter previewLocation: Предопределенная локация, к которой
+    ///   привязывается расход. По умолчанию `.seoul`.
+    /// - Returns: Пример траты.
+    static func makeExampleExpense(of previewLocation: PreviewLocation = .seoul) -> Expense {
+        let exampleLocation = makeExampleLocation(previewLocation, includeExpenses: false)
+        let locationCenter = previewLocation.centerPoint
+        
+        let exampleExpense = makeExpense(
+            to: exampleLocation,
+            date: now.adding(hours: 12, minutes: 30),
+            timeZoneId: previewLocation.timeZoneId,
+            baseAmount: 2600,
+            category: .food,
+            subcategory: .breakfast,
+            comment: PreviewExpenseComment.breakfast.rawValue,
+            latitude: locationCenter.latitude,
+            longitude: locationCenter.longitude,
+            horizontalAccuracy: locationCenter.horizontalAccuracy
+        )
+        
+        exampleLocation.expenses?.append(exampleExpense)
+        
+        return exampleExpense
+    }
+    
+    /// Возвращает координаты центра примера локации.
+    /// - Parameter previewLocation: Предопределенная локация, для которой
+    ///   запрашивается центр. По умолчанию `.seoul`.
+    /// - Returns: Пример координат.
+    static func makeExampleCoordinate(_ previewLocation: PreviewLocation = .seoul) -> Coordinate {
+        previewLocation.centerPoint
+    }
 }
 
 // MARK: - Конструкторы данных

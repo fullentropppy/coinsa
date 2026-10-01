@@ -151,9 +151,7 @@ struct EventAnalyticsCategoriesBody: View {
 // MARK: - Превью
 
 #Preview {
-    let builder = PreviewBuilder.builder().withScenario(.southKorea).withExpenses(true)
-    let data = builder.buildData()
-    let trip = builder.getTrip(from: data)
+    let trip = PreviewGenerator.makeExampleTrip(includeLocations: true, includeExpenses: true)
     let viewModel = TripDetailViewModel(trip: trip)
 
     NavigationStack {

@@ -103,14 +103,15 @@ struct EventAnalyticsSummaryHeader: View {
 // MARK: - Превью
 
 #Preview {
-    let builder = PreviewBuilder.builder().withScenario(.southKorea).withExpenses(true)
-    let data = builder.buildData()
-    let trip = builder.getTrip(from: data)
-    let viewModel = TripDetailViewModel(trip: trip)
+    let viewModel = TripDetailViewModel(
+        trip: PreviewGenerator.makeExampleTrip(includeLocations: true, includeExpenses: true)
+    )
 
     NavigationStack {
         List {
-            EventAnalyticsSummaryHeader(viewModel: EventAnalyticsViewModel(data: viewModel.eventAnalyticsData))
+            EventAnalyticsSummaryHeader(
+                viewModel: EventAnalyticsViewModel(data: viewModel.eventAnalyticsData)
+            )
         }
     }
 }

@@ -52,11 +52,7 @@ struct TripRowView: View {
 // MARK: - Превью
 
 #Preview {
-    let builder = PreviewBuilder.builder().withExpenses(false)
-    let data = builder.buildData()
-    let trip = builder.getTrip(from: data)
-
     List {
-        TripRowView(trip)
+        TripRowView(PreviewGenerator.makeExampleTrip(includeLocations: true))
     }
 }

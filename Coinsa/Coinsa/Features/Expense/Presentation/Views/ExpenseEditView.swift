@@ -499,30 +499,12 @@ struct ExpenseEditView: View {
 
 // MARK: - Превью
 
-private extension ExpenseEditView {
-    static func makePreview(isEditing: Bool) -> some View {
-        let builder = PreviewBuilder.builder()
-        let container = builder.buildContainer()
-        let settingsStore = AppSettingsStore()
-        let location = builder.fetchLocation(from: container)
-       
-        return Group {
-            if isEditing {
-                let expense = builder.fetchExpense(from: container)
-                return ExpenseEditView(forEdit: expense)
-            } else {
-                return ExpenseEditView(forCreateWith: location)
-            }
-        }
-        .modelContainer(container)
-        .environment(settingsStore)
-    }
-}
-
 #Preview("Editing") {
-    ExpenseEditView.makePreview(isEditing: true)
+    ExpenseEditView(forEdit: PreviewGenerator.makeExampleExpense())
+        .environment(AppSettingsStore())
 }
 
 #Preview("Creating") {
-    ExpenseEditView.makePreview(isEditing: false)
+    ExpenseEditView(forCreateWith: PreviewGenerator.makeExampleLocation())
+        .environment(AppSettingsStore())
 }

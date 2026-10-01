@@ -122,14 +122,15 @@ struct EventAnalyticsSummaryBody: View {
 // MARK: - Превью
 
 #Preview {
-    let builder = PreviewBuilder.builder().withScenario(.southKorea).withExpenses(true)
-    let data = builder.buildData()
-    let trip = builder.getTrip(from: data)
-    let viewModel = TripDetailViewModel(trip: trip)
+    let viewModel = TripDetailViewModel(
+        trip: PreviewGenerator.makeExampleTrip(includeLocations: true, includeExpenses: true)
+    )
 
     NavigationStack {
         List {
-            EventAnalyticsSummaryBody(viewModel: EventAnalyticsViewModel(data: viewModel.eventAnalyticsData))
+            EventAnalyticsSummaryBody(
+                viewModel: EventAnalyticsViewModel(data: viewModel.eventAnalyticsData)
+            )
         }
     }
 }

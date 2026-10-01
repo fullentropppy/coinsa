@@ -276,11 +276,7 @@ struct ExpenseDetailView: View {
 // MARK: - Превью
 
 #Preview {
-    let builder = PreviewBuilder.builder()
-    let data = builder.buildData()
-    let expense = builder.getExpense(from: data)
-    
     NavigationStack {
-        ExpenseDetailView(expense)
+        ExpenseDetailView(PreviewGenerator.makeExampleExpense())
     }
 }

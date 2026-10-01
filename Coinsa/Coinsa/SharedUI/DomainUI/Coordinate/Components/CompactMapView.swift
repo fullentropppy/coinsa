@@ -91,12 +91,8 @@ struct CompactMapView: View {
 // MARK: - Превью
 
 #Preview {
-    @Previewable @State var coordinate = Coordinate(
-        latitude: 35.65949,
-        longitude: 139.70057,
-        horizontalAccuracy: 12
-    )
-
+    @Previewable @State var coordinate = PreviewGenerator.makeExampleCoordinate()
+    
     List {
         CompactMapView($coordinate, title: .expensePlaceOfExpense)
     }

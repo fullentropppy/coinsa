@@ -25,12 +25,12 @@ struct PreviewBuilder {
     /// - Returns: Настроенный контейнер с данными в памяти.
     private static func makeContainer(with trips: [Trip]) -> ModelContainer {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
-
+        
         let container = try! ModelContainer(
             for: Trip.self, Location.self, Expense.self,
             configurations: config
         )
-
+        
         let context = container.mainContext
         trips.forEach { context.insert($0) }
         try! context.save()
@@ -137,7 +137,7 @@ extension PreviewBuilder {
             )
         }
 
-        // MARK: - Создание обособленных данных и получение
+        // MARK: - Создание и получение обособленных данных
 
         /// Генерирует массив поездок согласно настройкам.
         func buildData() -> [Trip] {

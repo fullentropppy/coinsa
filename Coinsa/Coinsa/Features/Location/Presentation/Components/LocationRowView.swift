@@ -51,12 +51,8 @@ struct LocationRowView: View {
 
 // MARK: - Превью
 
-#Preview("Light - RU") {
-    let builder = PreviewBuilder.builder()
-    let data = builder.buildData()
-    let location = builder.getLocation(from: data)
-    
+#Preview {
     List {
-        LocationRowView(location)
+        LocationRowView(PreviewGenerator.makeExampleLocation(includeExpenses: true))
     }
 }

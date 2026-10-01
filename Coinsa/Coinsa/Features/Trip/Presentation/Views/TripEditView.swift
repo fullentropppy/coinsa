@@ -233,25 +233,10 @@ struct TripEditView: View {
 
 // MARK: - Превью
 
-private extension TripEditView {
-    static func makePreview(isEditing: Bool) -> some View {
-        Group {
-            if isEditing {
-                let builder = PreviewBuilder.builder().withLocations(false)
-                let data = builder.buildData()
-                let trip = builder.getTrip(from: data)
-                return TripEditView(forEdit: trip)
-            } else {
-                return TripEditView(forCreateWith: .defaultValue)
-            }
-        }
-    }
-}
-
 #Preview("Editing") {
-    TripEditView.makePreview(isEditing: true)
+    TripEditView(forEdit: PreviewGenerator.makeExampleTrip())
 }
 
 #Preview("Creating") {
-    TripEditView.makePreview(isEditing: false)
+    TripEditView(forCreateWith: .defaultValue)
 }

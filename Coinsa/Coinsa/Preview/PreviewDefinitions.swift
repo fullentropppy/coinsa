@@ -137,6 +137,18 @@ enum PreviewLocation: String {
         case .istanbul: 43800
         }
     }
+    
+    var centerPoint: Coordinate {
+        switch self {
+        case .tokyo: Coordinate(latitude: 35.6762, longitude: 139.6503, horizontalAccuracy: 15)
+        case .kyoto: Coordinate(latitude: 35.0116, longitude: 135.7681, horizontalAccuracy: 15)
+        case .osaka: Coordinate(latitude: 34.6937, longitude: 135.5023, horizontalAccuracy: 15)
+        case .saintp: Coordinate(latitude: 59.9311, longitude: 30.3609, horizontalAccuracy: 15)
+        case .seoul: Coordinate(latitude: 37.5665, longitude: 126.9780, horizontalAccuracy: 15)
+        case .busan: Coordinate(latitude: 35.1796, longitude: 129.0756, horizontalAccuracy: 15)
+        case .istanbul: Coordinate(latitude: 41.0082, longitude: 28.9784, horizontalAccuracy: 15)
+        }
+    }
 }
 
 /// Предопределенные комментарии к тратам для превью.

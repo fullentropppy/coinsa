@@ -137,14 +137,12 @@ struct EventSummaryView: View {
 // MARK: - Превью
 
 #Preview {
-    let builder = PreviewBuilder.builder()
-    let data = builder.buildData()
-    
-    let trip = builder.getTrip(from: data)
-    let tripViewModel = TripDetailViewModel(trip: trip)
-    
-    let location = builder.getLocation(from: data)
-    let locationViewModel = LocationDetailViewModel(location: location)
+    let tripViewModel = TripDetailViewModel(
+        trip: PreviewGenerator.makeExampleTrip(includeLocations: true, includeExpenses: true)
+    )
+    let locationViewModel = LocationDetailViewModel(
+        location: PreviewGenerator.makeExampleLocation(includeExpenses: true)
+    )
     
     Form {
         Section {

@@ -117,22 +117,12 @@ struct FullScreenMapView: View {
 
 // MARK: - Превью
 
-#Preview("Read") {
-    @Previewable @State var coordinate = Coordinate(
-        latitude: 35.65949,
-        longitude: 139.70057,
-        horizontalAccuracy: 12
-    )
-
+#Preview("Reading") {
+    @Previewable @State var coordinate = PreviewGenerator.makeExampleCoordinate()
     FullScreenMapView(coordinate: coordinate, title: .expensePlaceOfExpense)
 }
 
-#Preview("Edit") {
-    @Previewable @State var coordinate = Coordinate(
-        latitude: 35.65949,
-        longitude: 139.70057,
-        horizontalAccuracy: 12
-    )
-
+#Preview("Editing") {
+    @Previewable @State var coordinate = PreviewGenerator.makeExampleCoordinate()
     FullScreenMapView(coordinate: $coordinate, title: .expensePlaceOfExpense)
 }

@@ -196,25 +196,16 @@ struct LocationDetailView: View {
 
 // MARK: - Превью
 
-private extension LocationDetailView {
-    static func makePreview(withExpenses: Bool) -> some View {
-        let builder = PreviewBuilder.builder().withExpenses(withExpenses)
-        let container = builder.buildContainer()
-        let settingsStore = AppSettingsStore()
-        let location = builder.fetchLocation(from: container)
-        
-        return NavigationStack {
-            LocationDetailView(location)
-        }
-        .modelContainer(container)
-        .environment(settingsStore)
-    }
-}
-
 #Preview("With Expenses") {
-    LocationDetailView.makePreview(withExpenses: true)
+    NavigationStack {
+        LocationDetailView(PreviewGenerator.makeExampleLocation(includeExpenses: true))
+    }
+    .environment(AppSettingsStore())
 }
 
 #Preview("Without Expenses") {
-    LocationDetailView.makePreview(withExpenses: false)
+    NavigationStack {
+        LocationDetailView(PreviewGenerator.makeExampleLocation())
+    }
+    .environment(AppSettingsStore())
 }

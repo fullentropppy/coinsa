@@ -200,25 +200,16 @@ struct TripDetailView: View {
 
 // MARK: - Превью
 
-private extension TripDetailView {
-    static func makePreview(withLocations: Bool) -> some View {
-        let builder = PreviewBuilder.builder().withLocations(withLocations)
-        let container = builder.buildContainer()
-        let settingsStore = AppSettingsStore()
-        let trip = builder.fetchTrip(from: container)
-        
-        return NavigationStack {
-            TripDetailView(trip)
-        }
-        .modelContainer(container)
-        .environment(settingsStore)
-    }
-}
-
 #Preview("With Locations") {
-    TripDetailView.makePreview(withLocations: true)
+    NavigationStack {
+        TripDetailView(PreviewGenerator.makeExampleTrip(includeLocations: true, includeExpenses: true))
+    }
+    .environment(AppSettingsStore())
 }
 
 #Preview("Without Locations") {
-    TripDetailView.makePreview(withLocations: false)
+    NavigationStack {
+        TripDetailView(PreviewGenerator.makeExampleTrip())
+    }
+    .environment(AppSettingsStore())
 }

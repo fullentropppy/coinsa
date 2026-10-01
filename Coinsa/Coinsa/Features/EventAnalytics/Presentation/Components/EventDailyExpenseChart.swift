@@ -153,15 +153,16 @@ struct EventDailyExpenseChart: View {
 // MARK: - Превью
 
 #Preview {
-    let builder = PreviewBuilder.builder().withScenario(.southKorea)
-    let data = builder.buildData()
-    let trip = builder.getTrip(from: data)
-    let viewModel = TripDetailViewModel(trip: trip)
+    let viewModel = TripDetailViewModel(
+        trip: PreviewGenerator.makeExampleTrip(includeLocations: true, includeExpenses: true)
+    )
 
     NavigationStack {
         List {
-            EventDailyExpenseChart(viewModel: EventAnalyticsViewModel(data: viewModel.eventAnalyticsData))
-                .listRowBackground(Color.clear)
+            EventDailyExpenseChart(
+                viewModel: EventAnalyticsViewModel(data: viewModel.eventAnalyticsData)
+            )
+            .listRowBackground(Color.clear)
         }
     }
 }

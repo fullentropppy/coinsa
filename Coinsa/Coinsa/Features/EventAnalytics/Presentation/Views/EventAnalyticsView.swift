@@ -121,25 +121,17 @@ struct EventAnalyticsView: View {
 // MARK: - Превью
 
 extension EventAnalyticsView {
-    fileprivate static func makePreview(forTrip: Bool, withExpenses: Bool) -> some View {
-        let builder =
-            PreviewBuilder
-            .builder()
-            .withScenario(.southKorea)
-            .withExpenses(withExpenses)
-
-        let data = builder.buildData()
-
+    fileprivate static func makePreview(forTrip: Bool, includeExpenses: Bool) -> some View {
         let screenContextSubtitle: String
         let analyticsData: EventCategoryAnalyticsData
 
         if forTrip {
-            let trip = builder.getTrip(from: data)
+            let trip = PreviewGenerator.makeExampleTrip(includeLocations: true, includeExpenses: includeExpenses)
             let viewModel = TripDetailViewModel(trip: trip)
             screenContextSubtitle = trip.screenContextSubtitle
             analyticsData = viewModel.eventAnalyticsData
         } else {
-            let location = builder.getLocation(from: data)
+            let location = PreviewGenerator.makeExampleLocation(includeExpenses: includeExpenses)
             let viewModel = LocationDetailViewModel(location: location)
             screenContextSubtitle = location.screenContextSubtitle
             analyticsData = viewModel.eventAnalyticsData
@@ -152,13 +144,13 @@ extension EventAnalyticsView {
 }
 
 #Preview("For Trip") {
-    EventAnalyticsView.makePreview(forTrip: true, withExpenses: true)
+    EventAnalyticsView.makePreview(forTrip: true, includeExpenses: true)
 }
 
 #Preview("For Location") {
-    EventAnalyticsView.makePreview(forTrip: false, withExpenses: true)
+    EventAnalyticsView.makePreview(forTrip: false, includeExpenses: true)
 }
 
 #Preview("Empty") {
-    EventAnalyticsView.makePreview(forTrip: false, withExpenses: false)
+    EventAnalyticsView.makePreview(forTrip: false, includeExpenses: false)
 }
