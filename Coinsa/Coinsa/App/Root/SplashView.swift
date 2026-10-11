@@ -20,7 +20,7 @@ struct SplashView: View {
     @State private var iconOpacity = 0.0
     @State private var hasStartedAnimation = false
 
-    // MARK: - Зависисмости
+    // MARK: - Зависимости
     
     let onFinished: () -> Void
     

@@ -35,7 +35,7 @@ extension Location {
             calendar: calendar
         )
         
-        if totalDays(using: calendar) == 1 {
+        if totalDays == 1 {
             return budgetAmount
         }
         
@@ -71,7 +71,7 @@ extension Location {
     ) -> Double {
         let exchangeRate = exchangeRateBaseToCurrency(currency, using: rateMode)
         let budgetAmount = budget * exchangeRate
-        let totalDays = totalDays(using: calendar)
+        let totalDays = totalDays
         
         return asDailyAverage ? budgetAmount / Double(totalDays).rounded() : budgetAmount
     }
@@ -161,9 +161,6 @@ extension Location {
         let overlapEnd = min(range.upperBound, normalizedTargetUppedBound)
         
         guard overlapStart <= overlapEnd else { return 0 }
-        
-        let totalDays = totalDays(using: calendar)
-        
         guard totalDays > 0 else { return 0 }
         
         let overlapDays = overlapEnd

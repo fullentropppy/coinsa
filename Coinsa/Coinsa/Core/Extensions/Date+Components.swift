@@ -98,7 +98,7 @@ extension Date {
         component(.weekday, using: calendar)
     }
     
-    /// Возвращает номер недели месяця дата.
+    /// Возвращает номер недели месяца дата.
     /// - Parameter calendar: Календарь для вычислений. По умолчанию `.current`.
     /// - Returns: Номер недели в месяце (1...5).
     func weekOfMonth(using calendar: Calendar = .current) -> Int {
@@ -112,7 +112,7 @@ extension Date {
         component(.weekOfYear, using: calendar)
     }
     
-    /// Возвращает номер месяц даты.
+    /// Возвращает номер месяца даты.
     /// - Parameter calendar: Календарь для вычислений. По умолчанию `.current`.
     /// - Returns: Номер месяца (1...12).
     func month(using calendar: Calendar = .current) -> Int {

@@ -65,7 +65,7 @@ final class CurrencyConverter {
     
     /// Обновляет основную валюту.
     /// - Parameter newCurrency: Новая основная валюта.
-    func updatebaseCurrency(_ newCurrency: Currency) {
+    func updateBaseCurrency(_ newCurrency: Currency) {
         let oldCurrency = baseCurrency
         baseCurrency = newCurrency
         
@@ -139,7 +139,9 @@ final class CurrencyConverter {
     }
     
     /// Конвертирует сумму из котируемой валюты в основную.
-    /// - Parameter amount: Сумма в котируемой валюте.
+    /// - Parameters:
+    ///   - amount: Сумма в котируемой валюте.
+    ///   - useExchangeAdjustment: Флаг использования корректировки курса обмена.
     /// - Returns: Сумма в основной валюте.
     func convertToBase(fromQuote amount: Double, useExchangeAdjustment: Bool = true) -> Double {
         let effectiveRate = effectiveRateQuoteToBase(useExchangeAdjustment: useExchangeAdjustment)
@@ -147,7 +149,9 @@ final class CurrencyConverter {
     }
     
     /// Конвертирует сумму из основной валюты в котируемую.
-    /// - Parameter amount: Сумма в основной валюте.
+    /// - Parameters:
+    ///   - amount: Сумма в основной валюте.
+    ///   - useExchangeAdjustment: Флаг использования корректировки курса обмена.
     /// - Returns: Сумма в котируемой валюте.
     func convertToQuote(fromBase amount: Double, useExchangeAdjustment: Bool = true) -> Double {
         let effectiveRate = effectiveRateQuoteToBase(useExchangeAdjustment: useExchangeAdjustment)
