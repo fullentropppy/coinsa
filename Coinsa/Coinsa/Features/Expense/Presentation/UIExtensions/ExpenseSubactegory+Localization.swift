@@ -37,9 +37,9 @@ extension ExpenseSubcategory: LocalizedResourceProviding {
         // MARK: - Жилье
             
         case .hotel: .expenseSubcategoryHotel
-        case .accommodationRental: .expenseSubcategoryAccomodationRental
+        case .accommodationRental: .expenseSubcategoryAccommodationRental
         case .touristTax: .expenseSubcategoryTouristTax
-        case .otherAccomodation: .expenseSubcategoryOther
+        case .otherAccommodation: .expenseSubcategoryOther
             
         // MARK: - Досуг
             

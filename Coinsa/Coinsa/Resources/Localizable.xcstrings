@@ -37,7 +37,7 @@
         }
       }
     },
-    "amount.balancePersentage" : {
+    "amount.balancePercentage" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -1664,7 +1664,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ошибка: %1$(errorDescription)@"
+            "value" : "Ошибка: %(errorDescription)@"
           }
         }
       }
@@ -2043,18 +2043,18 @@
         }
       }
     },
-    "expense.category.accomodation" : {
+    "expense.category.accommodation" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Accomodation"
+            "value" : "Accommodation"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Проживание"
           }
         }
@@ -2451,7 +2451,7 @@
         }
       }
     },
-    "expense.subcategory.accomodationRental" : {
+    "expense.subcategory.accommodationRental" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -3137,12 +3137,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Time zone: %1$(gmtOffsetDisplay)@  (%2$(timeZoneId)@"
+            "value" : "Time zone: %1$(gmtOffsetDisplay)@  (%2$(timeZoneId)@)"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Часовой пояс: %1$(gmtOffsetDisplay)@ (%2$(timeZoneId)@)"
           }
         }

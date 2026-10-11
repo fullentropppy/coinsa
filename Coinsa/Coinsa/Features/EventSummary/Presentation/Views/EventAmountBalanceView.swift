@@ -52,7 +52,7 @@ struct EventAmountBalanceView: View {
         VStack(alignment: .leading) {
             ProgressBar(currentValue: baseAmountBalance, maxValue: budgetBaseAmount, style: .positive)
             HStack {
-                Text(.amountBalancePersentage(balancePercent: progress.percentFormat()))
+                Text(.amountBalancePercentage(balancePercent: progress.percentFormat()))
                     .font(.footnote)
                     .foregroundStyle(.secondary)
                 Spacer()

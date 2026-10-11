@@ -11,7 +11,7 @@ extension ExpenseSubcategory {
         switch category {
         case .food: .otherFood
         case .transport: .otherTransport
-        case .accommodation: .otherAccomodation
+        case .accommodation: .otherAccommodation
         case .leisure: .otherLeisure
         case .shopping: .otherShopping
         case .medicine: .otherMedicine

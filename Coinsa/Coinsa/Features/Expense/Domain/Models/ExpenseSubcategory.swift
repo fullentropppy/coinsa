@@ -36,7 +36,7 @@ enum ExpenseSubcategory: String, Codable, CaseIterable, Identifiable {
     case hotel
     case accommodationRental
     case touristTax
-    case otherAccomodation
+    case otherAccommodation
     
     // MARK: - Досуг
     

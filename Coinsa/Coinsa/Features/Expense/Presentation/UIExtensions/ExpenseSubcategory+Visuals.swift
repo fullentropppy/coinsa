@@ -39,7 +39,7 @@ extension ExpenseSubcategory: ValueVisualRepresentable {
         case .hotel: "bed.double"
         case .accommodationRental: "key"
         case .touristTax: "dollarsign.circle"
-        case .otherAccomodation: category.primaryIcon
+        case .otherAccommodation: category.primaryIcon
             
         // MARK: - Досуг
             
@@ -113,7 +113,7 @@ extension ExpenseSubcategory: ValueVisualRepresentable {
         case .hotel: "bed.double.fill"
         case .accommodationRental: "key.fill"
         case .touristTax: "dollarsign.circle.fill"
-        case .otherAccomodation: category.secondaryIcon
+        case .otherAccommodation: category.secondaryIcon
             
         // MARK: - Досуг
             

@@ -14,7 +14,7 @@ extension ExpenseCategory {
         case .transport:
             [.plane, .ferry, .train, .publicTransport, .taxi, .transfer, .travelPass, .vehicleRental, .fuel, .otherTransport]
         case .accommodation:
-            [.hotel, .accommodationRental, .touristTax, .otherAccomodation]
+            [.hotel, .accommodationRental, .touristTax, .otherAccommodation]
         case .leisure:
             [.tour, .landmark, .park, .activity, .entertainment, .otherLeisure]
         case .shopping:
