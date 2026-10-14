@@ -14,7 +14,7 @@ protocol LabelProviding {
     // MARK: - Свойства
     
     /// Стиль метки для отображения.
-    var labelSyle: ItemLabel.Style { get }
+    var labelStyle: ItemLabel.Style { get }
     
     // MARK: - Методы
     
@@ -26,8 +26,8 @@ protocol LabelProviding {
 // MARK: - Стандартная реализация
 
 extension LabelProviding {
-    /// Создает метку на основе свойства `labelSyle`.
+    /// Создает метку на основе свойства `labelStyle`.
     func makeLabel() -> ItemLabel {
-        ItemLabel(style: labelSyle)
+        ItemLabel(style: labelStyle)
     }
 }

@@ -183,7 +183,7 @@ struct LocationEditView: View {
                 title: .locationCurrency,
                 selection: locationCurrencyBinding,                
                 options: Currency.allCasesSortedByName,
-                disabled: viewModel.hasExpenses
+                isDisabled: viewModel.hasExpenses
             ) { currency in
                 currency.makeLabel()
             }

@@ -26,7 +26,7 @@ extension View {
                 isPresented: isPresented,
                 title: title,
                 message: message,
-                hapticTypeOnChange: isError ? .error : .success
+                hapticTypeOnAppear: isError ? .error : .success
             )
         )
     }

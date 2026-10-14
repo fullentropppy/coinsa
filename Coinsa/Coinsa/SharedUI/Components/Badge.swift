@@ -89,14 +89,6 @@ struct Badge: View {
         .frame(height: 22)
         .background(fill.gradient, in: .capsule)
     }
-    
-    private func iconComponent(icon: String) -> some View {
-        Image(systemName: icon)
-    }
-    
-    private func badgeComponent(badge: LocalizedStringResource) -> some View {
-        Text(badge)
-    }
 }
 
 // MARK: - Превью

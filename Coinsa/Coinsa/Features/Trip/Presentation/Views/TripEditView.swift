@@ -142,7 +142,7 @@ struct TripEditView: View {
                 title: .tripCurrency,
                 selection: baseCurrencyBinding,
                 options: Currency.allCasesSortedByName,
-                disabled: viewModel.hasLocations
+                isDisabled: viewModel.hasLocations
             ) { currency in
                 currency.makeLabel()
             }

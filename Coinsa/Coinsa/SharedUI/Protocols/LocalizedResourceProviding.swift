@@ -31,5 +31,6 @@ extension LocalizedResourceProviding {
     /// Безопасное извлечение ресурса во множественном числе.
     /// Возвращает переданный ресурс или ресурс в единственном числе, если ресурс отсутствует.
     var safeLocalizedResourcePlural: LocalizedStringResource {
-        localizedResourcePlural ?? localizedResource }
+        localizedResourcePlural ?? localizedResource
+    }
 }

@@ -44,7 +44,7 @@ struct NumericInputField: View {
     ///   - font: Шрифт текста.
     ///   - textAlignment: Выравнивание текста.
     ///   - placeholder: Подсказка ввода (опционально). По умолчанию `nil`.
-    ///   Если не указана, будет отображаться `0 с колличеством нулей дробной части равным значению `fractionDigits`.
+    ///   Если не указана, будет отображаться `0` с количеством нулей дробной части равным значению `fractionDigits`.
     init(
         _ value: Binding<Double>,
         focusedField: FocusState<NumericEditField?>.Binding,

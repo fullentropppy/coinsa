@@ -35,28 +35,24 @@ struct SwipeActions: View {
     // MARK: - Тело View
     
     var body: some View {
-        if onDelete == nil && onEdit == nil {
-            EmptyView()
-        } else {
-            Group {
-                if let onDelete {
-                    Button {
-                        haptics.trigger(.warning)
-                        onDelete()
-                    } label: {
-                        Label(.delete, systemImage: "trash")
-                    }
-                    .tint(.red)
+        Group {
+            if let onDelete {
+                Button {
+                    haptics.trigger(.warning)
+                    onDelete()
+                } label: {
+                    Label(.delete, systemImage: "trash")
                 }
-                if let onEdit {
-                    Button {
-                        haptics.trigger(.tap)
-                        onEdit()
-                    } label: {
-                        Label(.edit, systemImage: "pencil")
-                    }
-                    .tint(.green)
+                .tint(.red)
+            }
+            if let onEdit {
+                Button {
+                    haptics.trigger(.tap)
+                    onEdit()
+                } label: {
+                    Label(.edit, systemImage: "pencil")
                 }
+                .tint(.green)
             }
         }
     }

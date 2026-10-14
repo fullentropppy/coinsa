@@ -22,7 +22,7 @@ extension View {
                 isPresented: isPresented,
                 title: .discardTitle,
                 message: .discardMessage,
-                destuctiveButtonTitle: .discardConfirm,
+                destructiveButtonTitle: .discardConfirm,
                 onConfirm: onConfirm,
                 hapticTypeOnConfirm: .success,
                 hapticTypeOnAppear: .warning

@@ -15,7 +15,7 @@ struct GroupHeader: View {
     let title: LocalizedStringResource
     let itemCount: Int?
     
-    // MARK: - Тело View
+    // MARK: - Инициализация
     
     /// Создает заголовок секции группы.
     /// - Parameters:
@@ -40,7 +40,7 @@ struct GroupHeader: View {
                         .padding(.horizontal, 4)
                         .frame(minWidth: 18)
                         .frame(height: 18)
-                        .background(.gray.opacity(1), in: .capsule)
+                        .background(.gray, in: .capsule)
                 }
                 
                 Image(systemName: icon)

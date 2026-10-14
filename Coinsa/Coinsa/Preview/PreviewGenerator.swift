@@ -25,13 +25,14 @@ struct PreviewOptions {
     var includeExpenses = true
 }
 
-// MARK: - Генерартор превью-данных
+// MARK: - Генератор превью-данных
 
 /// Генератор тестовых данных для использования в превью SwiftUI.
 enum PreviewGenerator {
     // MARK: - Свойства
     
-    private static let now = PlainDate.today.storedDate
+    private static let plainNow = PlainDate.today.storedDate
+    private static let now = Date()
     
     // MARK: - Публичные методы
     
@@ -110,7 +111,7 @@ enum PreviewGenerator {
         
         let exampleExpense = makeExpense(
             to: exampleLocation,
-            date: now.adding(hours: 12, minutes: 30),
+            date: plainNow.adding(hours: 12, minutes: 30),
             timeZoneId: previewLocation.timeZoneId,
             baseAmount: 2600,
             category: .food,
@@ -144,7 +145,6 @@ private extension PreviewGenerator {
     ///   - options: Настройки включения подчиненных объектов.
     /// - Returns: Сгенерированная поездка.
     private static func makeTrip(from data: PreviewTrip, with options: PreviewOptions) -> Trip {
-        let now = Date()
         let trip = Trip(
             id: UUID(),
             name: data.name,
@@ -175,7 +175,6 @@ private extension PreviewGenerator {
     ///   - options: Настройки включения подчиненных объектов.
     /// - Returns: Сгенерированная локация.
     private static func makeLocation(from data: PreviewLocation, to trip: Trip, with options: PreviewOptions) -> Location {
-        let now = Date()
         let location =  Location(
             id: UUID(),
             name: data.name,
@@ -204,7 +203,7 @@ private extension PreviewGenerator {
     ///   - date: Дата расхода.
     ///   - timeZoneId: Идентификатор часового пояса расхода.
     ///   - baseAmount: Сумма в основной валюте.
-    ///   - expenseCurrencyCode: Код валюты траты (опицонально).
+    ///   - expenseCurrencyCode: Код валюты траты (опционально).
     ///   - rateExpenseToBase: Курс валюты траты к основной (опционально).
     ///   - rateExpenseToLocation: Курс валюты траты к валюте локации (опционально).
     ///   - paymentMethod: Способ оплаты. По умолчанию `.cash`.
@@ -233,8 +232,7 @@ private extension PreviewGenerator {
         longitude: Double? = nil,
         horizontalAccuracy: Double? = nil
     ) -> Expense {
-        let now = Date()
-        return Expense(
+        Expense(
             id: UUID(),
             date: date,
             actualDate: CivilDateTime(date, using: .utc).actualDate(),

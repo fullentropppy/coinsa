@@ -14,8 +14,7 @@ struct ScreenContextSubtitleFormatter {
     ///   - parentTitle: Заголовок родительского объекта.
     ///   - startDate: Начальная дата диапазона.
     ///   - endDate: Конечная дата диапазона.
-    ///   - calendar: Календарь для вычислений. По умолчанию `.current`.
-    /// - Returns: Стркоа подзаголовка.
+    /// - Returns: Строка подзаголовка.
     static func format(
         parentTitle: String,
         startDate: PlainDate,
@@ -26,7 +25,7 @@ struct ScreenContextSubtitleFormatter {
             endDate: endDate
         )
 
-        guard !parentTitle.isEmpty else {
+        guard !parentTitle.isBlank else {
             return dateRange
         }
 
