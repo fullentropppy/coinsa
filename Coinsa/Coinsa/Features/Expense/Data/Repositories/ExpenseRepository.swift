@@ -55,7 +55,7 @@ struct ExpenseRepository {
             id: UUID(),
             date: date,
             actualDate: date,
-            timeZoneId: "",
+            timeZoneID: "",
             baseAmount: baseAmount,
             expenseCurrencyCode: expenseCurrency.code,
             rateExpenseToBase: rateExpenseToBase,
@@ -143,7 +143,7 @@ struct ExpenseRepository {
     private func normalizeExpenseData(_ expense: Expense) {
         expense.storedDate = expense.storedDate.storedCivilDateTime(using: .utc)
         expense.actualDate = expense.civilDateTime.actualDate()
-        expense.timeZoneId = TimeZone.current.identifier
+        expense.timeZoneID = TimeZone.current.identifier
         expense.baseAmount = expense.baseAmount.nonNegative
         expense.rateExpenseToBase = expense.rateExpenseToBase.nonNegative
         expense.rateExpenseToLocation = normalizedRateExpenseToLocation(of: expense)

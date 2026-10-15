@@ -1,5 +1,5 @@
 //
-//  EventAmountDifferenceView.swift
+//  EventAmountBalanceView.swift
 //  Coinsa
 //
 //  Created by Daniil Gritsenko on 05.04.2026.
@@ -30,8 +30,8 @@ struct EventAmountBalanceView: View {
     ///   - budgetBaseAmount: Плановая сумма.
     ///   - baseAmountBalance: Остаток в основной валюте.
     ///   - baseCurrency: Основная валюта.
-    ///   - locationAmountBalance: Остаток в локальной валюте (опционально).
-    ///   - locationCurrency: Локальная валюта (опционально).
+    ///   - locationAmountBalance: Остаток в валюте локации (опционально).
+    ///   - locationCurrency: Валюта локации (опционально).
     init(
         budgetBaseAmount: Double,
         baseAmountBalance: Double,

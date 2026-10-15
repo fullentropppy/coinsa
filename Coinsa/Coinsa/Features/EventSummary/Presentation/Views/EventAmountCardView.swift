@@ -24,7 +24,7 @@ struct EventAmountCardView: View {
     ///   - title: Заголовок.
     ///   - baseAmount: Сумма в основной валюте.
     ///   - baseCurrency: Основная валюта.
-    ///   - locationAmount: Сумма валюте локации (опционально).
+    ///   - locationAmount: Сумма в валюте локации (опционально).
     ///   - locationCurrency: Валюта локации (опционально).
     init(
         title: LocalizedStringResource,

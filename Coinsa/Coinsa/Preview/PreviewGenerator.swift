@@ -112,7 +112,7 @@ enum PreviewGenerator {
         let exampleExpense = makeExpense(
             to: exampleLocation,
             date: plainNow.adding(hours: 12, minutes: 30),
-            timeZoneId: previewLocation.timeZoneId,
+            timeZoneID: previewLocation.timeZoneID,
             baseAmount: 2600,
             category: .food,
             subcategory: .breakfast,
@@ -201,7 +201,7 @@ private extension PreviewGenerator {
     /// - Parameters:
     ///   - location: Локация расхода.
     ///   - date: Дата расхода.
-    ///   - timeZoneId: Идентификатор часового пояса расхода.
+    ///   - timeZoneID: Идентификатор часового пояса расхода.
     ///   - baseAmount: Сумма в основной валюте.
     ///   - expenseCurrencyCode: Код валюты траты (опционально).
     ///   - rateExpenseToBase: Курс валюты траты к основной (опционально).
@@ -218,7 +218,7 @@ private extension PreviewGenerator {
     private static func makeExpense(
         to location: Location,
         date: Date,
-        timeZoneId: String,
+        timeZoneID: String,
         baseAmount: Double,
         expenseCurrencyCode: Currency? = nil,
         rateExpenseToBase: Double? = nil,
@@ -236,7 +236,7 @@ private extension PreviewGenerator {
             id: UUID(),
             date: date,
             actualDate: CivilDateTime(date, using: .utc).actualDate(),
-            timeZoneId: timeZoneId,
+            timeZoneID: timeZoneID,
             baseAmount: baseAmount,
             expenseCurrencyCode: expenseCurrencyCode?.code ?? location.locationCurrency.code,
             rateExpenseToBase: rateExpenseToBase ?? location.rateLocationToBase,
@@ -293,7 +293,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(hours: 8, minutes: 45),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 2300,
                 category: .food,
                 subcategory: .breakfast,
@@ -305,7 +305,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(hours: 13, minutes: 20),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 2116.4,
                 category: .miscellaneous,
                 subcategory: .otherMiscellaneous,
@@ -316,7 +316,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(hours: 13, minutes: 58),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 120,
                 paymentMethod: .card,
                 exchangeAdjustment: 0,
@@ -329,7 +329,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(hours: 17, minutes: 11),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 3200,
                 category: .leisure,
                 subcategory: .entertainment,
@@ -340,7 +340,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(hours: 23, minutes: 31),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 1992,
                 category: .food,
                 subcategory: .dinner,
@@ -351,7 +351,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 1, hours: 10, minutes: 4),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 140,
                 paymentMethod: .card,
                 exchangeAdjustment: 0,
@@ -365,7 +365,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 1, hours: 12, minutes: 12),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 2120,
                 paymentMethod: .card,
                 exchangeAdjustment: 3.8,
@@ -378,7 +378,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 1, hours: 18, minutes: 31),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 8902,
                 paymentMethod: .card,
                 exchangeAdjustment: 3.8,
@@ -391,7 +391,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 1, hours: 20, minutes: 40),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 8150,
                 category: .shopping,
                 subcategory: .clothing,
@@ -403,7 +403,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 1, hours: 23),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 1220,
                 category: .medicine,
                 subcategory: .medication,
@@ -415,7 +415,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 2, hours: 8, minutes: 24),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 240,
                 category: .transport,
                 subcategory: .publicTransport,
@@ -426,7 +426,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 2, hours: 12, minutes: 01),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 3098.4,
                 category: .food,
                 subcategory: .lunch,
@@ -438,7 +438,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 2, hours: 15, minutes: 58),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 3409.72,
                 paymentMethod: .card,
                 category: .leisure,
@@ -451,7 +451,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 2, hours: 17),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 312,
                 paymentMethod: .card,
                 exchangeAdjustment: 0,
@@ -464,7 +464,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 2, hours: 20, minutes: 52),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 12091.07,
                 paymentMethod: .card,
                 category: .shopping,
@@ -477,7 +477,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 3, hours: 11, minutes: 15),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 887.01,
                 paymentMethod: .card,
                 exchangeAdjustment: 1,
@@ -490,7 +490,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 3, hours: 12, minutes: 53),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 2590,
                 category: .food,
                 subcategory: .lunch,
@@ -501,7 +501,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 3, hours: 14, minutes: 11),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 1450,
                 category: .miscellaneous,
                 subcategory: .otherMiscellaneous,
@@ -513,7 +513,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 3, hours: 16, minutes: 40),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 90,
                 paymentMethod: .card,
                 exchangeAdjustment: 0,
@@ -526,7 +526,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 3, hours: 19, minutes: 28),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 2500,
                 category: .shopping,
                 subcategory: .cosmetics,
@@ -537,7 +537,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 3, hours: 23, minutes: 5),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 1841.98,
                 category: .food,
                 subcategory: .snack,
@@ -549,7 +549,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 4, hours: 10, minutes: 15),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 1882,
                 category: .food,
                 subcategory: .breakfast,
@@ -560,7 +560,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 4, hours: 14, minutes: 19),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 500,
                 paymentMethod: .card,
                 exchangeAdjustment: 0,
@@ -573,7 +573,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 4, hours: 14, minutes: 59),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 1003.6,
                 category: .miscellaneous,
                 subcategory: .digitalService,
@@ -584,7 +584,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 4, hours: 17, minutes: 30),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 5902,
                 paymentMethod: .card,
                 exchangeAdjustment: 4.5,
@@ -597,7 +597,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 5, hours: 19, minutes: 30),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 2600,
                 category: .miscellaneous,
                 subcategory: .otherMiscellaneous,
@@ -609,7 +609,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 4, hours: 20, minutes: 50),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 202,
                 category: .transport,
                 subcategory: .publicTransport,
@@ -621,7 +621,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 4, hours: 23, minutes: 42),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 3850,
                 paymentMethod: .card,
                 exchangeAdjustment: 0,
@@ -641,7 +641,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(hours: 8, minutes: 14),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 6250,
                 category: .transport,
                 subcategory: .train,
@@ -653,7 +653,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(hours: 9),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 1200,
                 paymentMethod: .card,
                 exchangeAdjustment: 0,
@@ -667,7 +667,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(hours: 10, minutes: 19),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 3509.9,
                 paymentMethod: .card,
                 category: .leisure,
@@ -680,7 +680,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(hours: 10, minutes: 54),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 2500.05,
                 category: .food,
                 subcategory: .lunch,
@@ -691,7 +691,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 1, hours: 13, minutes: 14),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 5209.6,
                 category: .leisure,
                 subcategory: .tour,
@@ -702,7 +702,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 1, hours: 14, minutes: 20),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 120,
                 category: .medicine,
                 subcategory: .medication,
@@ -713,7 +713,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 1, hours: 14, minutes: 57),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 2691,
                 category: .food,
                 subcategory: .lunch,
@@ -725,7 +725,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 1, hours: 16, minutes: 50),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 890,
                 category: .leisure,
                 subcategory: .park,
@@ -737,7 +737,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 1, hours: 19, minutes: 10),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 212,
                 category: .transport,
                 subcategory: .publicTransport,
@@ -749,7 +749,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 1, hours: 20, minutes: 19),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 1620.18,
                 category: .shopping,
                 subcategory: .souvenirs,
@@ -761,7 +761,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 2, hours: 9, minutes: 36),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 2906.7,
                 category: .food,
                 subcategory: .breakfast,
@@ -773,7 +773,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 2, hours: 10, minutes: 53),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 1105,
                 category: .transport,
                 subcategory: .publicTransport,
@@ -785,7 +785,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 2, hours: 14, minutes: 32),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 2000.05,
                 paymentMethod: .card,
                 category: .leisure,
@@ -797,7 +797,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 2, hours: 16, minutes: 50),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 2012,
                 category: .miscellaneous,
                 subcategory: .otherMiscellaneous,
@@ -808,7 +808,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 2, hours: 20, minutes: 15),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 29020,
                 paymentMethod: .card,
                 category: .shopping,
@@ -820,7 +820,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 2, hours: 22, minutes: 28),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 3040.84,
                 category: .food,
                 subcategory: .dinner,
@@ -831,7 +831,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 2, hours: 9),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 706,
                 category: .food,
                 subcategory: .breakfast,
@@ -843,7 +843,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 2, hours: 10, minutes: 12),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 706,
                 category: .transport,
                 subcategory: .train,
@@ -862,7 +862,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(hours: 11, minutes: 49),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 2099,
                 category: .leisure,
                 subcategory: .landmark,
@@ -873,7 +873,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(hours: 15, minutes: 20),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 201,
                 category: .transport,
                 subcategory: .publicTransport,
@@ -884,7 +884,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(hours: 16, minutes: 16),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 2720,
                 paymentMethod: .card,
                 exchangeAdjustment: 0,
@@ -897,7 +897,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(hours: 17, minutes: 39),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 290,
                 category: .miscellaneous,
                 subcategory: .donation,
@@ -909,7 +909,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(hours: 21, minutes: 15),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 290,
                 paymentMethod: .card,
                 exchangeAdjustment: 0,
@@ -922,7 +922,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 1, hours: 10, minutes: 27),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 1556,
                 category: .food,
                 subcategory: .breakfast,
@@ -934,7 +934,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 1, hours: 14, minutes: 32),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 4010,
                 paymentMethod: .card,
                 category: .miscellaneous,
@@ -946,7 +946,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 1, hours: 18, minutes: 49),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 1900.04,
                 category: .leisure,
                 subcategory: .landmark,
@@ -957,7 +957,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 1, hours: 20, minutes: 59),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 1500,
                 paymentMethod: .card,
                 exchangeAdjustment: 0,
@@ -971,7 +971,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 2, hours: 10, minutes: 15),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 2068,
                 category: .food,
                 subcategory: .breakfast,
@@ -982,7 +982,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 2, hours: 13, minutes: 13),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 2400,
                 paymentMethod: .card,
                 exchangeAdjustment: 2,
@@ -996,7 +996,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 2, hours: 14, minutes: 20),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 309.06,
                 category: .transport,
                 subcategory: .publicTransport,
@@ -1007,7 +1007,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 2, hours: 19),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 5200,
                 paymentMethod: .card,
                 exchangeAdjustment: 2,
@@ -1021,7 +1021,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 2, hours: 22),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 2095,
                 category: .food,
                 subcategory: .dinner,
@@ -1032,7 +1032,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 3, hours: 5, minutes: 1),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 5252.9,
                 paymentMethod: .card,
                 category: .transport,
@@ -1045,7 +1045,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 3, hours: 7, minutes: 26),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 4520,
                 category: .food,
                 subcategory: .breakfast,
@@ -1056,7 +1056,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 3, hours: 8, minutes: 44),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 6270,
                 paymentMethod: .card,
                 exchangeAdjustment: 5.5,
@@ -1076,7 +1076,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(hours: 10, minutes: 19),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 2990,
                 paymentMethod: .card,
                 category: .food,
@@ -1088,7 +1088,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(hours: 13),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 950,
                 paymentMethod: .card,
                 category: .transport,
@@ -1101,7 +1101,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(hours: 16, minutes: 17),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 2400,
                 paymentMethod: .card,
                 category: .leisure,
@@ -1114,7 +1114,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(hours: 21, minutes: 33),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 1800,
                 paymentMethod: .card,
                 category: .food,
@@ -1133,7 +1133,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(hours: 8, minutes: 15),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 3205.92,
                 category: .food,
                 subcategory: .breakfast,
@@ -1145,7 +1145,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(hours: 9, minutes: 14),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 312,
                 category: .transport,
                 subcategory: .publicTransport,
@@ -1157,7 +1157,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(hours: 14, minutes: 12),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 2300,
                 paymentMethod: .card,
                 exchangeAdjustment: 0,
@@ -1171,7 +1171,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(hours: 15, minutes: 53),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 150,
                 category: .miscellaneous,
                 subcategory: .bankFees,
@@ -1182,7 +1182,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(hours: 16, minutes: 14),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 924.13,
                 paymentMethod: .card,
                 exchangeAdjustment: 1,
@@ -1195,7 +1195,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(hours: 19, minutes: 49),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 9200.2,
                 paymentMethod: .card,
                 category: .shopping,
@@ -1207,7 +1207,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(hours: 21, minutes: 10),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 2910,
                 paymentMethod: .card,
                 exchangeAdjustment: 0,
@@ -1220,7 +1220,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 1, hours: 9, minutes: 11),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 2450,
                 category: .food,
                 subcategory: .breakfast,
@@ -1231,7 +1231,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 1, hours: 10, minutes: 15),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 292.4,
                 category: .transport,
                 subcategory: .publicTransport,
@@ -1243,7 +1243,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 1, hours: 13, minutes: 13),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 1043,
                 paymentMethod: .card,
                 category: .leisure,
@@ -1256,7 +1256,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 1, hours: 15, minutes: 16),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 1687,
                 category: .food,
                 subcategory: .lunch,
@@ -1268,7 +1268,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 1, hours: 16, minutes: 37),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 300,
                 category: .transport,
                 subcategory: .publicTransport,
@@ -1279,7 +1279,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 1, hours: 19, minutes: 50),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 2540.14,
                 category: .food,
                 subcategory: .dinner,
@@ -1290,7 +1290,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 2, hours: 11),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 2051.51,
                 category: .food,
                 subcategory: .snack,
@@ -1302,7 +1302,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 2, hours: 12, minutes: 7),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 199.3,
                 paymentMethod: .card,
                 category: .transport,
@@ -1314,7 +1314,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 2, hours: 14, minutes: 41),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 42900,
                 paymentMethod: .card,
                 category: .shopping,
@@ -1326,7 +1326,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 2, hours: 17, minutes: 59),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 14200,
                 paymentMethod: .card,
                 category: .leisure,
@@ -1338,7 +1338,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 2, hours: 19, minutes: 40),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 1250,
                 paymentMethod: .card,
                 exchangeAdjustment: 6,
@@ -1351,7 +1351,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 2, hours: 22, minutes: 1),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 1940.2,
                 category: .food,
                 subcategory: .dinner,
@@ -1362,7 +1362,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 2, hours: 23, minutes: 44),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 1001,
                 paymentMethod: .card,
                 exchangeAdjustment: 1,
@@ -1375,7 +1375,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 3, hours: 10, minutes: 14),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 2046,
                 category: .food,
                 subcategory: .breakfast,
@@ -1386,7 +1386,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 3, hours: 11, minutes: 35),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 199,
                 category: .transport,
                 subcategory: .publicTransport,
@@ -1397,7 +1397,7 @@ private extension PreviewGenerator {
             makeExpense(
                 to: location,
                 date: startDate.adding(days: 3, hours: 15, minutes: 42),
-                timeZoneId: previewLocation.timeZoneId,
+                timeZoneID: previewLocation.timeZoneID,
                 baseAmount: 765,
                 paymentMethod: .card,
                 category: .miscellaneous,

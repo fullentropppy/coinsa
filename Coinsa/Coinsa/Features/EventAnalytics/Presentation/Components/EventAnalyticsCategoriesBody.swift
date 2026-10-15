@@ -74,7 +74,7 @@ struct EventAnalyticsCategoriesBody: View {
                 SectorMark(
                     angle: .value("", slice.baseAmount),
                     innerRadius: 68,
-                    angularInset: 1,
+                    angularInset: 1
                 )
                 .cornerRadius(6)
                 .foregroundStyle(slice.category.accentColor.gradient)

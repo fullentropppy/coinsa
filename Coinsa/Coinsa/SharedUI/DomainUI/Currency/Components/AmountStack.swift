@@ -7,14 +7,14 @@
 
 import SwiftUI
 
-// Компонент с суммами в разных валютах.
+/// Компонент с суммами в разных валютах.
 struct AmountStack: View {
     // MARK: - Свойства
     
-    private var baseAmount: Double
-    private var baseCurrency: Currency
-    private var expenseAmount: Double?
-    private var expenseCurrency: Currency?
+    private let baseAmount: Double
+    private let baseCurrency: Currency
+    private let expenseAmount: Double?
+    private let expenseCurrency: Currency?
     
     // MARK: - Инициализация
     

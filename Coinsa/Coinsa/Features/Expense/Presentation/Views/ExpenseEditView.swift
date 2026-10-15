@@ -145,7 +145,7 @@ struct ExpenseEditView: View {
                 NumericInputField(
                     amountInputBinding,
                     focusedField: $focusedField,
-                    focusId: .amount,
+                    focusID: .amount,
                     fractionDigits: 2,
                     font: .largeTitle,
                     textAlignment: .center,
@@ -218,7 +218,7 @@ struct ExpenseEditView: View {
                         currency: viewModel.baseCurrency,
                         isLoading: viewModel.isRateExpenseToBaseLoading,
                         focusedField: $focusedField,
-                        focusId: .exchangeRate,
+                        focusID: .exchangeRate,
                         onRefresh: { viewModel.requestRateExpenseToBaseRefresh(for: currencySide) }
                     )
                 }
@@ -231,7 +231,7 @@ struct ExpenseEditView: View {
                         currency: viewModel.locationCurrency,
                         isLoading: viewModel.isRateExpenseToLocationLoading,
                         focusedField: $focusedField,
-                        focusId: .locationExchangeRate,
+                        focusID: .locationExchangeRate,
                         onRefresh: { viewModel.requestRateExpenseToLocationRefresh() }
                     )
                 }
@@ -242,7 +242,7 @@ struct ExpenseEditView: View {
                     PercentInputField.standard(
                         exchangeAdjustmentInputBinding,
                         focusedField: $focusedField,
-                        focusId: .exchangeAdjustment
+                        focusID: .exchangeAdjustment
                     )
                 }
             }
@@ -269,7 +269,7 @@ struct ExpenseEditView: View {
             Text(
                 .expenseTimeZoneHint(
                     gmtOffsetDisplay: viewModel.timeZone.gmtOffsetDisplay,
-                    timeZoneId: viewModel.timeZone.identifier
+                    timeZoneID: viewModel.timeZone.identifier
                 )
             )
         }

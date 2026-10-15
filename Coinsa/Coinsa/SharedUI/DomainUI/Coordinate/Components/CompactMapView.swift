@@ -67,13 +67,11 @@ struct CompactMapView: View {
     // MARK: - Компоненты
 
     private var mapContent: some View {
-        VStack(alignment: .center, spacing: 10) {
-            Map(position: $cameraPosition, interactionModes: []) {
-                Marker(String(localized: title), coordinate: coordinate.coreLocationCoordinate)
-            }
-            .frame(height: height)
-            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        Map(position: $cameraPosition, interactionModes: []) {
+            Marker(String(localized: title), coordinate: coordinate.coreLocationCoordinate)
         }
+        .frame(height: height)
+        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
     }
 
     // MARK: - Инфраструктура

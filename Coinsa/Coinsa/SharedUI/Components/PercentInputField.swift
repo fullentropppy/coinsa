@@ -13,7 +13,7 @@ struct PercentInputField: View {
     
     private let value: Binding<Double>
     private let focusedField: FocusState<NumericEditField?>.Binding
-    private let focusId: NumericEditField
+    private let focusID: NumericEditField
     private let font: Font
     
     // MARK: - Инициализация
@@ -22,17 +22,17 @@ struct PercentInputField: View {
     /// - Parameters:
     ///   - value: Привязка к числовому значению.
     ///   - focusedField: Привязка к фокусированному полю.
-    ///   - focusId: Уникальный идентификатор поля.
+    ///   - focusID: Уникальный идентификатор поля.
     ///   - font: Шрифт текста.
     init(
         _ value: Binding<Double>,
         focusedField: FocusState<NumericEditField?>.Binding,
-        focusId: NumericEditField,
+        focusID: NumericEditField,
         font: Font
     ) {
         self.value = value
         self.focusedField = focusedField
-        self.focusId = focusId
+        self.focusID = focusID
         self.font = font
     }
     
@@ -43,7 +43,7 @@ struct PercentInputField: View {
             NumericInputField(
                 value,
                 focusedField: focusedField,
-                focusId: focusId,
+                focusID: focusID,
                 fractionDigits: 2,
                 font: font,
                 textAlignment: .trailing
@@ -64,17 +64,17 @@ extension PercentInputField {
     /// - Parameters:
     ///   - value: Привязка к числовому значению.
     ///   - focusedField: Привязка к фокусированному полю.
-    ///   - focusId: Уникальный идентификатор поля.
+    ///   - focusID: Уникальный идентификатор поля.
     /// - Returns: Настроенное поле ввода.
     static func standard(
         _ value: Binding<Double>,
         focusedField: FocusState<NumericEditField?>.Binding,
-        focusId: NumericEditField
+        focusID: NumericEditField
     ) -> some View {
         PercentInputField(
             value,
             focusedField: focusedField,
-            focusId: focusId,
+            focusID: focusID,
             font: .body.monospacedDigit()
         )
     }
@@ -91,7 +91,7 @@ extension PercentInputField {
             PercentInputField(
                 $value,
                 focusedField: $focusedField,
-                focusId: .exchangeRate,
+                focusID: .exchangeRate,
                 font: .body
             )
         }
@@ -99,7 +99,7 @@ extension PercentInputField {
             PercentInputField.standard(
                 $value,
                 focusedField: $focusedField,
-                focusId: .exchangeRate
+                focusID: .exchangeRate
             )
         }
     }

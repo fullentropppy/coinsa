@@ -60,7 +60,7 @@ struct AboutView: View {
             }
             .font(.footnote)
         }
-        .foregroundStyle(.gray)
+        .foregroundStyle(.secondary)
         .frame(maxWidth: .infinity)
         .padding(.vertical, 32)
     }

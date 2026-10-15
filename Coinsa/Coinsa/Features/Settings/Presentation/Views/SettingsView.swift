@@ -77,7 +77,7 @@ struct SettingsView: View {
                 PercentInputField.standard(
                     exchangeAdjustmentInputBinding,
                     focusedField: $focusedField,
-                    focusId: .exchangeAdjustment
+                    focusID: .exchangeAdjustment
                 )
             }
         } footer: {

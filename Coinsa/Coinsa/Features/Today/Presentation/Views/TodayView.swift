@@ -68,7 +68,7 @@ struct TodayView: View {
     var body: some View {
         NavigationStack {
             todayForm
-                .navigationTitle(viewModel.navigtaionTitle)
+                .navigationTitle(viewModel.navigationTitle)
                 .navigationSubtitle(viewModel.navigationSubtitle)
                 .navigationBarTitleDisplayMode(.large)
                 .onAppear {
@@ -226,25 +226,23 @@ struct TodayView: View {
     }
     
     private func contextContent(location: Location) -> some View {
-        HStack {
-            NavigationLink {
-                LocationDetailView(location)
-            } label: {
-                HStack(alignment: .center) {
-                    if viewModel.isHomeLocation {
-                        Text("\(location.name) • \(location.trip?.name ?? "")")
-                            .font(.subheadline)
-                    } else {
-                        exchangeRatesContent(location: location)
-                    }
-                    Spacer()
-                    Image(systemName: Location.primaryIcon)
-                        .imageScale(.small)
-                        .font(.subheadline.weight(.semibold))
-                    
+        NavigationLink {
+            LocationDetailView(location)
+        } label: {
+            HStack(alignment: .center) {
+                if viewModel.isHomeLocation {
+                    Text("\(location.name) • \(location.trip?.name ?? "")")
+                        .font(.subheadline)
+                } else {
+                    exchangeRatesContent(location: location)
                 }
-                .foregroundStyle(.secondary)
+                Spacer()
+                Image(systemName: Location.primaryIcon)
+                    .imageScale(.small)
+                    .font(.subheadline.weight(.semibold))
+                    
             }
+            .foregroundStyle(.secondary)
         }
     }
     

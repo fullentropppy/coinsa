@@ -49,7 +49,7 @@ struct EventSummaryView: View {
         showsHeader: Bool = true,
         showsAmounts: Bool = true,
         showsAmountBalance: Bool = true,
-        showsBudgetIfZero: Bool = false,
+        showsBudgetIfZero: Bool = false
     ) {
         self.data = data
         self.showsHeader = showsHeader
@@ -121,15 +121,13 @@ struct EventSummaryView: View {
     @ViewBuilder
     private var amountBalanceContent: some View {
         if showsBudgetAmount {
-            VStack {
-                EventAmountBalanceView(
-                    budgetBaseAmount: data.budgetBaseAmount,
-                    baseAmountBalance: baseAmountBalance,
-                    baseCurrency: data.baseCurrency,
-                    locationAmountBalance: locationAmountBalance,
-                    locationCurrency: data.locationCurrency
-                )
-            }
+            EventAmountBalanceView(
+                budgetBaseAmount: data.budgetBaseAmount,
+                baseAmountBalance: baseAmountBalance,
+                baseCurrency: data.baseCurrency,
+                locationAmountBalance: locationAmountBalance,
+                locationCurrency: data.locationCurrency
+            )
         }
     }
 }

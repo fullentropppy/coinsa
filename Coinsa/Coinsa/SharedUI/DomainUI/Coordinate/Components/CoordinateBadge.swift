@@ -1,5 +1,5 @@
 //
-//  CoordinateLabel.swift
+//  CoordinateBadge.swift
 //  Coinsa
 //
 //  Created by Daniil Gritsenko on 24.08.2026.
@@ -33,7 +33,6 @@ struct CoordinateBadge: View {
                 .foregroundStyle(.primary)
                 .padding(.horizontal, 12)
                 .padding(.vertical, 8)
-                //.background(.regularMaterial, in: Capsule())
                 .glassEffect(.regular.interactive(), in: Capsule())
                 .padding(.bottom, 8)
         } else {

@@ -37,7 +37,12 @@ struct EventSubcategoryAnalyticsView: View {
     ///   - amountMode: Режим отображения сумм.
     ///   - data: Аналитические данные события.
     ///   - screenContextSubtitle: Подзаголовок экрана.
-    init(category: ExpenseCategory, amountMode: CategoryAmountMode, data: EventCategoryAnalyticsData, screenContextSubtitle: String) {
+    init(
+        category: ExpenseCategory,
+        amountMode: CategoryAmountMode,
+        data: EventCategoryAnalyticsData,
+        screenContextSubtitle: String
+    ) {
         self.category = category
         self.amountMode = amountMode
         self.viewModel = EventAnalyticsViewModel(data: data)
@@ -97,6 +102,7 @@ struct EventSubcategoryAnalyticsView: View {
         viewModel.shareValue(for: slice, category: category)
     }
 }
+
 // MARK: - Превью
 
 #Preview {

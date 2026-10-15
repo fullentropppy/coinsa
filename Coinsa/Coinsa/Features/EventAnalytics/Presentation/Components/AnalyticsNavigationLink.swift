@@ -13,7 +13,7 @@ struct AnalyticsNavigationLink<Destination: View>: View {
     
     let destination: Destination
     
-    // MARK: - Инициализаци
+    // MARK: - Инициализация
     
     /// Создает ссылку на экран аналитики.
     /// - Parameter destination: Замыкание, создающее целевое представление.
@@ -27,7 +27,7 @@ struct AnalyticsNavigationLink<Destination: View>: View {
         NavigationLink {
             destination
         } label: {
-            HStack(alignment: .center) {
+            HStack {
                 Text(.analytics)
                     .font(.subheadline)
                 Spacer()

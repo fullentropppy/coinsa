@@ -5,7 +5,7 @@
 //  Created by Daniil Gritsenko on 04.08.2026.
 //
 
-// Режимы отображения трат по категориям.
+/// Режимы отображения трат по категориям.
 enum CategoryAmountMode: String, CaseIterable, Identifiable {
     // MARK: - Значения
     

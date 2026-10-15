@@ -95,7 +95,7 @@ enum PreviewLocation: String {
         }
     }
 
-    var timeZoneId: String {
+    var timeZoneID: String {
         switch self {
         case .tokyo, .kyoto, .osaka: "Asia/Tokyo"
         case .saintp: "Europe/Moscow"

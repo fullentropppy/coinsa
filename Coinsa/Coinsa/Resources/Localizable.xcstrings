@@ -3137,13 +3137,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Time zone: %1$(gmtOffsetDisplay)@  (%2$(timeZoneId)@)"
+            "value" : "Time zone: %1$(gmtOffsetDisplay)@  (%2$(timeZoneID)@)"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Часовой пояс: %1$(gmtOffsetDisplay)@ (%2$(timeZoneId)@)"
+            "state" : "translated",
+            "value" : "Часовой пояс: %1$(gmtOffsetDisplay)@ (%2$(timeZoneID)@)"
           }
         }
       }

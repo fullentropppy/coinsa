@@ -5,8 +5,6 @@
 //  Created by Daniil Gritsenko on 03.08.2026.
 //
 
-import Foundation
-
 extension DaySegment: ValueVisualRepresentable {
     /// Основная иконка для части дня (контурная версия).
     var primaryIcon: String {

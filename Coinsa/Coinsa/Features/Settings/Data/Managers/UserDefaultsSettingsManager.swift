@@ -47,11 +47,11 @@ final class UserDefaultsSettingsManager {
     
     var selectedLocationID: UUID? {
         get {
-            guard let idString = defaults.string(forKey: UserDefaultsKey.selectedLocationId) else { return nil }
+            guard let idString = defaults.string(forKey: UserDefaultsKey.selectedLocationID) else { return nil }
             return UUID(uuidString: idString)
         }
         set {
-            defaults.set(newValue?.uuidString, forKey: UserDefaultsKey.selectedLocationId)
+            defaults.set(newValue?.uuidString, forKey: UserDefaultsKey.selectedLocationID)
         }
     }
     
@@ -68,10 +68,10 @@ final class UserDefaultsSettingsManager {
 
 /// Ключи для хранения значений в UserDefaults.
 private enum UserDefaultsKey {
-    static var baseCurrency = "baseCurrency"
-    static var exchangeAdjustment = "exchangeAdjustment"
-    static var appAppearance = "appAppearance"
-    static var isAddButtonOnLeft = "isAddButtonOnLeft"
-    static var selectedLocationId = "selectedLocationId"
-    static var selectedPaymentMethod = "selectedPaymentMethod"
+    static let baseCurrency = "baseCurrency"
+    static let exchangeAdjustment = "exchangeAdjustment"
+    static let appAppearance = "appAppearance"
+    static let isAddButtonOnLeft = "isAddButtonOnLeft"
+    static let selectedLocationID = "selectedLocationID"
+    static let selectedPaymentMethod = "selectedPaymentMethod"
 }

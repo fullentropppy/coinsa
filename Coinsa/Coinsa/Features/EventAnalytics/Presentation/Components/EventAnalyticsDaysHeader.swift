@@ -35,9 +35,9 @@ struct EventAnalyticsDaysHeader: View {
                 )
                 EventAmountCardView(
                     title: .amountExpensesDailyAverage,
-                    baseAmount: viewModel.middleDailyBaseExpenseAmount,
+                    baseAmount: viewModel.halfDailyBaseExpenseAmount,
                     baseCurrency: viewModel.baseCurrency,
-                    locationAmount: viewModel.middleDailyLocationExpenseAmount,
+                    locationAmount: viewModel.halfDailyLocationExpenseAmount,
                     locationCurrency: viewModel.locationCurrency
                 )
             }

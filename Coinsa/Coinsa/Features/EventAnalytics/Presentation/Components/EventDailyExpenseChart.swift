@@ -14,10 +14,6 @@ struct EventDailyExpenseChart: View {
     
     @Environment(\.haptics) private var haptics
     
-    // MARK: - Статические свойства
-    
-    static let secondsPerDay: TimeInterval = 24 * 60 * 60
-    
     // MARK: - Состояние
 
     @State private var scrollPosition: Date
@@ -57,13 +53,13 @@ struct EventDailyExpenseChart: View {
                 .interpolationMethod(.monotone)
                 .foregroundStyle(
                     LinearGradient(
-                            colors: [
-                                Color.accentColor.opacity(0.30),
-                                Color.accentColor.opacity(0.01)
-                            ],
-                            startPoint: .top,
-                            endPoint: .bottom
-                        )
+                        colors: [
+                            Color.accentColor.opacity(0.30),
+                            Color.accentColor.opacity(0.01)
+                        ],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
                 )
 
                 LineMark(
@@ -81,8 +77,8 @@ struct EventDailyExpenseChart: View {
                     .foregroundStyle(.secondary.opacity(0.8))
             }
 
-            if viewModel.middleDailyBaseExpenseAmount > 0 {
-                RuleMark(y: .value("", viewModel.middleDailyBaseExpenseAmount))
+            if viewModel.halfDailyBaseExpenseAmount > 0 {
+                RuleMark(y: .value("", viewModel.halfDailyBaseExpenseAmount))
                     .lineStyle(.init(lineWidth: 1, dash: [4, 4]))
                     .foregroundStyle(.secondary.opacity(0.8))
             }
@@ -112,7 +108,7 @@ struct EventDailyExpenseChart: View {
         .chartScrollableAxes(.horizontal)
         .chartXVisibleDomain(length: viewModel.summaryChartXVisibleDomainLength)
         .chartScrollPosition(x: $scrollPosition)
-        .chartScrollTargetBehavior(.valueAligned(unit: Self.secondsPerDay))
+        .chartScrollTargetBehavior(.valueAligned(unit: viewModel.secondsPerDay))
     }
     
     private var chartControls: some View {

@@ -49,7 +49,7 @@ final class TodayViewModel {
         }
     }
     
-    var navigtaionTitle: String {
+    var navigationTitle: String {
         if let selectedLocation, !hasMultipleLocations {
             selectedLocation.name
         } else {

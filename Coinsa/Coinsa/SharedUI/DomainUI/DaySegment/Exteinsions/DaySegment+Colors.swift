@@ -8,7 +8,7 @@
 import SwiftUI
 
 extension DaySegment {
-    // Набор цветов для предсталвения части суток.
+    /// Набор цветов для представления части суток.
     var colors: [Color] {
         var relatedColor: Color
         var topColor: Color

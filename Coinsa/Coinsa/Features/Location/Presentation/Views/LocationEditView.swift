@@ -202,7 +202,7 @@ struct LocationEditView: View {
                         currency: viewModel.baseCurrency,
                         isLoading: viewModel.isRateLoading,
                         focusedField: $focusedField,
-                        focusId: .exchangeRate,
+                        focusID: .exchangeRate,
                         onRefresh: { viewModel.requestRateRefresh(for: inputCurrency) }
                     )
                 }
@@ -220,7 +220,7 @@ struct LocationEditView: View {
                     PercentInputField.standard(
                         $viewModel.exchangeAdjustment,
                         focusedField: $focusedField,
-                        focusId: .exchangeAdjustment
+                        focusID: .exchangeAdjustment
                     )
                 }
             } footer: {
@@ -236,7 +236,7 @@ struct LocationEditView: View {
                     NumericInputField.standard(
                         budgetInputBinding,
                         focusedField: $focusedField,
-                        focusId: .budget,
+                        focusID: .budget,
                         fractionDigits: 2
                     )
                     CurrencyCodeText.standard(budgetInputCurrencyValue)

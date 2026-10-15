@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// Шапка вкладки аналитики по категориям.
 struct EventAnalyticsCategoriesHeader: View {
     // MARK: - Хранимые свойства
 
@@ -14,7 +15,7 @@ struct EventAnalyticsCategoriesHeader: View {
     
     // MARK: - Инициализация
 
-    /// Создает шапку вкладки дневной аналитики.
+    /// Создает шапку вкладки аналитики по категориям.
     /// - Parameter viewModel: ViewModel аналитики события.
     init(viewModel: EventAnalyticsViewModel) {
         self.viewModel = viewModel
