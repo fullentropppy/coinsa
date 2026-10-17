@@ -37,7 +37,7 @@
         }
       }
     },
-    "amount.balancePersentage" : {
+    "amount.balancePercentage" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -1664,7 +1664,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ошибка: %1$(errorDescription)@"
+            "value" : "Ошибка: %(errorDescription)@"
           }
         }
       }
@@ -2043,36 +2043,19 @@
         }
       }
     },
-    "expense.category.accomodation" : {
+    "expense.category.accommodation" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Accomodation"
+            "value" : "Accommodation"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Проживание"
-          }
-        }
-      }
-    },
-    "expense.category.entertainment" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Entertainment"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Развлечение"
           }
         }
       }
@@ -2451,7 +2434,7 @@
         }
       }
     },
-    "expense.subcategory.accomodationRental" : {
+    "expense.subcategory.accommodationRental" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -2825,13 +2808,13 @@
         }
       }
     },
-    "expense.subcategory.luggageStorrage" : {
+    "expense.subcategory.luggageStorage" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Luggage Storrage"
+            "value" : "Luggage Storage"
           }
         },
         "ru" : {
@@ -3137,13 +3120,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Time zone: %1$(gmtOffsetDisplay)@  (%2$(timeZoneId)@"
+            "value" : "Time zone: %1$(gmtOffsetDisplay)@  (%2$(timeZoneID)@)"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Часовой пояс: %1$(gmtOffsetDisplay)@ (%2$(timeZoneId)@)"
+            "value" : "Часовой пояс: %1$(gmtOffsetDisplay)@ (%2$(timeZoneID)@)"
           }
         }
       }

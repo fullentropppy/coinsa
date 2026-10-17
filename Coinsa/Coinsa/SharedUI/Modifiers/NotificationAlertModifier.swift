@@ -32,12 +32,12 @@ struct NotificationAlertModifier: ViewModifier {
         isPresented: Binding<Bool>,
         title: LocalizedStringResource,
         message: LocalizedStringResource,
-        hapticTypeOnChange: HapticType? = nil
+        hapticTypeOnAppear: HapticType? = nil
     ) {
         self.isPresented = isPresented
         self.title = title
         self.message = message
-        self.hapticTypeOnAppear = hapticTypeOnChange
+        self.hapticTypeOnAppear = hapticTypeOnAppear
     }
     
     // MARK: - Тело View

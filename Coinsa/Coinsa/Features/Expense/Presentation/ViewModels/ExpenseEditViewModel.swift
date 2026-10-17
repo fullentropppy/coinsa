@@ -404,7 +404,7 @@ final class ExpenseEditViewModel {
         guard showsRateExpenseToBase else { return }
         
         baseCurrencyConverter.requestRateRefresh { [weak self] _ in
-            self?.syncInitialSnapshotWithCurrentRates()
+            self?.syncInitialSnapshotWithCurrentValues()
         }
     }
     
@@ -412,12 +412,8 @@ final class ExpenseEditViewModel {
         guard showsRateExpenseToLocation else { return }
         
         locationCurrencyConverter.requestRateRefresh { [weak self] _ in
-            self?.syncInitialSnapshotWithCurrentRates()
+            self?.syncInitialSnapshotWithCurrentValues()
         }
-    }
-    
-    private func syncInitialSnapshotWithCurrentRates() {
-        syncInitialSnapshotWithCurrentValues()
     }
 
     private func syncInitialSnapshotWithCurrentValues() {

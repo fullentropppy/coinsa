@@ -5,7 +5,7 @@
 //  Created by Daniil Gritsenko on 17.04.2026.
 //
 
-import SwiftUI
+import UIKit
 
 /// Клиент для генерации тактильных откликов разных типов.
 struct HapticClient {

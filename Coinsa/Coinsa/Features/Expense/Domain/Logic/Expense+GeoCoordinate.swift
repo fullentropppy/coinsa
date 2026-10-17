@@ -1,5 +1,5 @@
 //
-//  Expense+Coordinate.swift
+//  Expense+GeoCoordinate.swift
 //  Coinsa
 //
 //  Created by Daniil Gritsenko on 23.08.2026.

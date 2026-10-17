@@ -19,9 +19,9 @@ struct ExchangeRateInputField: View {
     private let currency: Currency
     private let isLoading: Bool
     private let focusedField: FocusState<NumericEditField?>.Binding
-    private let focusId: NumericEditField
+    private let focusID: NumericEditField
     private let font: Font
-    private let action: () -> Void
+    private let onRefresh: () -> Void
     
     // MARK: - Инициализация
     
@@ -31,7 +31,7 @@ struct ExchangeRateInputField: View {
     ///   - currency: Валюта.
     ///   - isLoading: Флаг загрузки.
     ///   - focusedField: Привязка к фокусированному полю.
-    ///   - focusId: Уникальный идентификатор поля.
+    ///   - focusID: Уникальный идентификатор поля.
     ///   - font: Шрифт текста.
     ///   - onRefresh: Действие при нажатии кнопки обновления.
     init(
@@ -39,7 +39,7 @@ struct ExchangeRateInputField: View {
         currency: Currency,
         isLoading: Bool,
         focusedField: FocusState<NumericEditField?>.Binding,
-        focusId: NumericEditField,
+        focusID: NumericEditField,
         font: Font,
         onRefresh: @escaping () -> Void
     ) {
@@ -47,9 +47,9 @@ struct ExchangeRateInputField: View {
         self.currency = currency
         self.isLoading = isLoading
         self.focusedField = focusedField
-        self.focusId = focusId
+        self.focusID = focusID
         self.font = font
-        self.action = onRefresh
+        self.onRefresh = onRefresh
     }
     
     // MARK: - Тело View
@@ -66,7 +66,7 @@ struct ExchangeRateInputField: View {
         NumericInputField(
             value,
             focusedField: focusedField,
-            focusId: focusId,
+            focusID: focusID,
             fractionDigits: 4,
             font: font,
             textAlignment: .trailing
@@ -77,7 +77,7 @@ struct ExchangeRateInputField: View {
     private var refreshButton: some View {
         Button {
             haptics.trigger(.tap)
-            action()
+            onRefresh()
         } label: {
             ZStack {
                 if isLoading {
@@ -106,7 +106,7 @@ extension ExchangeRateInputField {
     ///   - currency: Валюта.
     ///   - isLoading: Флаг загрузки.
     ///   - focusedField: Привязка к фокусированному полю.
-    ///   - focusId: Уникальный идентификатор поля.
+    ///   - focusID: Уникальный идентификатор поля.
     ///   - onRefresh: Действие при нажатии кнопки обновления.
     /// - Returns: Настроенное поле ввода.
     static func standard(
@@ -114,7 +114,7 @@ extension ExchangeRateInputField {
         currency: Currency,
         isLoading: Bool,
         focusedField: FocusState<NumericEditField?>.Binding,
-        focusId: NumericEditField,
+        focusID: NumericEditField,
         onRefresh: @escaping () -> Void
     ) -> some View {
         ExchangeRateInputField(
@@ -122,7 +122,7 @@ extension ExchangeRateInputField {
             currency: currency,
             isLoading: isLoading,
             focusedField: focusedField,
-            focusId: focusId,
+            focusID: focusID,
             font: .body.monospacedDigit(),
             onRefresh: onRefresh
         )
@@ -131,57 +131,54 @@ extension ExchangeRateInputField {
 
 // MARK: - Превью
 
-private extension ExchangeRateInputField {
-    static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
-        List {
-            ExchangeRateInputFieldPreview(isLoading: false)
-            ExchangeRateInputFieldPreview(isLoading: true)
-        }
-        .environment(\.locale, locale)
-        .preferredColorScheme(colorScheme)
-    }
-    
-    struct ExchangeRateInputFieldPreview: View {
-        @State private var rate: Double = 80.1234
-        @FocusState private var focusedField: NumericEditField?
-        
-        private var currency = Currency.defaultValue
-        private var isLoading: Bool
-        
-        init(isLoading: Bool) {
-            self.isLoading = isLoading
-        }
-        
-        var body: some View {
-            Section {
-                ExchangeRateInputField(
-                    $rate,
-                    currency: currency,
-                    isLoading: isLoading,
-                    focusedField: $focusedField,
-                    focusId: .exchangeRate,
-                    font: .body,
-                    onRefresh: {}
-                )
-            }
-            Section {
-                ExchangeRateInputField.standard(
-                    $rate,
-                    currency: currency,
-                    isLoading: isLoading,
-                    focusedField: $focusedField,
-                    focusId: .exchangeRate,
-                    onRefresh: {}
-                )
-            }
-        }
-    }
-}
+#Preview {
+    @Previewable @State var rate: Double = 80.1234
+    @Previewable @FocusState var focusedField: NumericEditField?
 
-#Preview("Light - RU") {
-    ExchangeRateInputField.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
-}
+    let currency = Currency.defaultValue
 
-#Preview("Dark - EN") {
-    ExchangeRateInputField.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
+    List {
+        Section {
+            ExchangeRateInputField(
+                $rate,
+                currency: currency,
+                isLoading: false,
+                focusedField: $focusedField,
+                focusID: .exchangeRate,
+                font: .body,
+                onRefresh: {}
+            )
+        }
+        Section {
+            ExchangeRateInputField.standard(
+                $rate,
+                currency: currency,
+                isLoading: false,
+                focusedField: $focusedField,
+                focusID: .exchangeRate,
+                onRefresh: {}
+            )
+        }
+        Section {
+            ExchangeRateInputField(
+                $rate,
+                currency: currency,
+                isLoading: true,
+                focusedField: $focusedField,
+                focusID: .exchangeRate,
+                font: .body,
+                onRefresh: {}
+            )
+        }
+        Section {
+            ExchangeRateInputField.standard(
+                $rate,
+                currency: currency,
+                isLoading: true,
+                focusedField: $focusedField,
+                focusID: .exchangeRate,
+                onRefresh: {}
+            )
+        }
+    }
 }

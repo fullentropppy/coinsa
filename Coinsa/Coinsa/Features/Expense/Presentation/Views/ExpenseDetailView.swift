@@ -155,26 +155,9 @@ struct ExpenseDetailView: View {
         }
     }
     
-    @ViewBuilder
-    private var mapSection: some View {
-        if let coordinate = expense.coordinate {
-            Section {
-                Button {
-                    isShowingMap = true
-                } label: {
-                    CompactMapView(coordinate, title: .expensePlaceOfExpense)
-                }
-                .buttonStyle(.plain)
-            }
-            .listRowInsets(EdgeInsets())
-            .listRowBackground(Color.clear)
-        }
-    }
-    
     // MARK: - Компоненты
     
     @ViewBuilder
-
     private var backgroundContent: some View {
         if let coordinate = viewModel.coordinate, let mapCameraPosition {
             Map(position: $mapMarkerPosition) {
@@ -215,13 +198,11 @@ struct ExpenseDetailView: View {
             .padding(.top, 28)
             .padding(.bottom, 14)
             
-            HStack(spacing: 6) {
-                Image(systemName: expense.paymentMethod.primaryIcon)
-                    .imageScale(.medium)
-                    .fontWeight(.semibold)
-            }
-            .foregroundStyle(.secondary)
-            .padding(.bottom, 28)
+            Image(systemName: expense.paymentMethod.primaryIcon)
+                .imageScale(.medium)
+                .fontWeight(.semibold)
+                .foregroundStyle(.secondary)
+                .padding(.bottom, 28)
             
             if let secondaryAmount = viewModel.secondaryAmount,
                let secondaryCurrency = viewModel.secondaryCurrency {
@@ -275,24 +256,8 @@ struct ExpenseDetailView: View {
 
 // MARK: - Превью
 
-private extension ExpenseDetailView {
-    static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
-        let builder = PreviewBuilder.builder()
-        let data = builder.buildData()
-        let expense = builder.getExpense(from: data)
-        
-        return NavigationStack {
-            ExpenseDetailView(expense)
-        }
-        .environment(\.locale, locale)
-        .preferredColorScheme(colorScheme)
+#Preview {
+    NavigationStack {
+        ExpenseDetailView(PreviewGenerator.makeExampleExpense())
     }
-}
-
-#Preview("Light - RU") {
-    ExpenseDetailView.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
-}
-
-#Preview("Dark - EN") {
-    ExpenseDetailView.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
 }

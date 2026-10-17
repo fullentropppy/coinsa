@@ -144,7 +144,8 @@ struct DateDisplayFormatter {
     ) -> String {
         let referenceDate = referenceDate(using: calendar)
         let dateTemplate = startDate.isSameYear(as: endDate, using: calendar)
-        && referenceDate.isSameYear(as: startDate, using: calendar) ? "dMMMM" : "dMy"
+            && referenceDate.isSameYear(as: startDate, using: calendar)
+            ? "dMMMM" : "dMy"
         
         let formatter = DateIntervalFormatter()
         formatter.calendar = calendar

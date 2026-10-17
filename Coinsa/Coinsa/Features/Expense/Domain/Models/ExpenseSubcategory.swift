@@ -5,8 +5,6 @@
 //  Created by Daniil Gritsenko on 01.06.2026.
 //
 
-import SwiftUI
-
 /// Подкатегории трат (универсальные для всех категорий).
 enum ExpenseSubcategory: String, Codable, CaseIterable, Identifiable {
     // MARK: - Еда
@@ -36,7 +34,7 @@ enum ExpenseSubcategory: String, Codable, CaseIterable, Identifiable {
     case hotel
     case accommodationRental
     case touristTax
-    case otherAccomodation
+    case otherAccommodation
     
     // MARK: - Досуг
     

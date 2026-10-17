@@ -51,24 +51,8 @@ struct TripRowView: View {
 
 // MARK: - Превью
 
-private extension TripRowView {
-    static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
-        let builder = PreviewBuilder.builder().withExpenses(false)
-        let data = builder.buildData()
-        let trip = builder.getTrip(from: data)
-
-        return List {
-            TripRowView(trip)
-        }
-        .environment(\.locale, locale)
-        .preferredColorScheme(colorScheme)
+#Preview {
+    List {
+        TripRowView(PreviewGenerator.makeExampleTrip(includeLocations: true))
     }
-}
-
-#Preview("Light - RU") {
-    TripRowView.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
-}
-
-#Preview("Dark - EN") {
-    TripRowView.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
 }

@@ -1,5 +1,5 @@
 //
-//  EventAmountDifferenceView.swift
+//  EventAmountBalanceView.swift
 //  Coinsa
 //
 //  Created by Daniil Gritsenko on 05.04.2026.
@@ -30,8 +30,8 @@ struct EventAmountBalanceView: View {
     ///   - budgetBaseAmount: Плановая сумма.
     ///   - baseAmountBalance: Остаток в основной валюте.
     ///   - baseCurrency: Основная валюта.
-    ///   - locationAmountBalance: Остаток в локальной валюте (опционально).
-    ///   - locationCurrency: Локальная валюта (опционально).
+    ///   - locationAmountBalance: Остаток в валюте локации (опционально).
+    ///   - locationCurrency: Валюта локации (опционально).
     init(
         budgetBaseAmount: Double,
         baseAmountBalance: Double,
@@ -52,7 +52,7 @@ struct EventAmountBalanceView: View {
         VStack(alignment: .leading) {
             ProgressBar(currentValue: baseAmountBalance, maxValue: budgetBaseAmount, style: .positive)
             HStack {
-                Text(.amountBalancePersentage(balancePercent: progress.percentFormat()))
+                Text(.amountBalancePercentage(balancePercent: progress.percentFormat()))
                     .font(.footnote)
                     .foregroundStyle(.secondary)
                 Spacer()
@@ -90,60 +90,47 @@ struct EventAmountBalanceView: View {
 
 // MARK: - Превью
 
-private extension EventAmountBalanceView {
-    static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
-        Form {
-            Section {
-                EventAmountBalanceView(
-                    budgetBaseAmount: 42000,
-                    baseAmountBalance: -24600,
-                    baseCurrency: .defaultValue,
-                    locationAmountBalance: -41000,
-                    locationCurrency: .jpy
-                )
-                EventAmountBalanceView(
-                    budgetBaseAmount: 42000,
-                    baseAmountBalance: 0,
-                    baseCurrency: .defaultValue,
-                    locationAmountBalance: 0,
-                    locationCurrency: .jpy
-                )
-                EventAmountBalanceView(
-                    budgetBaseAmount: 42000,
-                    baseAmountBalance: 24600,
-                    baseCurrency: .defaultValue,
-                    locationAmountBalance: 41000,
-                    locationCurrency: .jpy
-                )
-            }
-            Section {
-                EventAmountBalanceView(
-                    budgetBaseAmount: 42000,
-                    baseAmountBalance: -24600,
-                    baseCurrency: .defaultValue
-                )
-                EventAmountBalanceView(
-                    budgetBaseAmount: 42000,
-                    baseAmountBalance: 0,
-                    baseCurrency: .defaultValue
-                )
-                EventAmountBalanceView(
-                    budgetBaseAmount: 42000,
-                    baseAmountBalance: 24600,
-                    baseCurrency: .defaultValue
-                )
-            }
+#Preview {
+    Form {
+        Section {
+            EventAmountBalanceView(
+                budgetBaseAmount: 42000,
+                baseAmountBalance: -24600,
+                baseCurrency: .defaultValue,
+                locationAmountBalance: -41000,
+                locationCurrency: .jpy
+            )
+            EventAmountBalanceView(
+                budgetBaseAmount: 42000,
+                baseAmountBalance: 0,
+                baseCurrency: .defaultValue,
+                locationAmountBalance: 0,
+                locationCurrency: .jpy
+            )
+            EventAmountBalanceView(
+                budgetBaseAmount: 42000,
+                baseAmountBalance: 24600,
+                baseCurrency: .defaultValue,
+                locationAmountBalance: 41000,
+                locationCurrency: .jpy
+            )
         }
-        .environment(\.locale, locale)
-        .preferredColorScheme(colorScheme)
+        Section {
+            EventAmountBalanceView(
+                budgetBaseAmount: 42000,
+                baseAmountBalance: -24600,
+                baseCurrency: .defaultValue
+            )
+            EventAmountBalanceView(
+                budgetBaseAmount: 42000,
+                baseAmountBalance: 0,
+                baseCurrency: .defaultValue
+            )
+            EventAmountBalanceView(
+                budgetBaseAmount: 42000,
+                baseAmountBalance: 24600,
+                baseCurrency: .defaultValue
+            )
+        }
     }
 }
-
-#Preview("Light - RU") {
-    EventAmountBalanceView.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
-}
-
-#Preview("Dark - EN") {
-    EventAmountBalanceView.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
-}
-

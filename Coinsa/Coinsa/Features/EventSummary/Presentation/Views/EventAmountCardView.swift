@@ -24,7 +24,7 @@ struct EventAmountCardView: View {
     ///   - title: Заголовок.
     ///   - baseAmount: Сумма в основной валюте.
     ///   - baseCurrency: Основная валюта.
-    ///   - locationAmount: Сумма валюте локации (опционально).
+    ///   - locationAmount: Сумма в валюте локации (опционально).
     ///   - locationCurrency: Валюта локации (опционально).
     init(
         title: LocalizedStringResource,
@@ -62,33 +62,21 @@ struct EventAmountCardView: View {
 
 // MARK: - Превью
 
-private extension EventAmountCardView {
-    static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
-        Form {
-            VStack(spacing: 20) {
-                EventAmountCardView(
-                    title: .amountExpenses,
-                    baseAmount: 24600,
-                    baseCurrency: .defaultValue,
-                    locationAmount: 41000,
-                    locationCurrency: .jpy
-                )
-                EventAmountCardView(
-                    title: .amountExpenses,
-                    baseAmount: 24600,
-                    baseCurrency: .defaultValue
-                )
-            }
+#Preview {
+    Form {
+        VStack(spacing: 20) {
+            EventAmountCardView(
+                title: .amountExpenses,
+                baseAmount: 24600,
+                baseCurrency: .defaultValue,
+                locationAmount: 41000,
+                locationCurrency: .jpy
+            )
+            EventAmountCardView(
+                title: .amountExpenses,
+                baseAmount: 24600,
+                baseCurrency: .defaultValue
+            )
         }
-        .environment(\.locale, locale)
-        .preferredColorScheme(colorScheme)
     }
-}
-
-#Preview("Light - RU") {
-    EventAmountCardView.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
-}
-
-#Preview("Dark - EN") {
-    EventAmountCardView.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
 }

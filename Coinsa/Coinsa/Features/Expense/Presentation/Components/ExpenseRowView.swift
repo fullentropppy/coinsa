@@ -67,24 +67,8 @@ struct ExpenseRowView: View {
 
 // MARK: - Превью
 
-private extension ExpenseRowView {
-    static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
-        let builder = PreviewBuilder.builder()
-        let data = builder.buildData()
-        let expense = builder.getExpense(from: data)
-        
-        return List {
-            ExpenseRowView(expense)
-                .environment(\.locale, locale)
-                .preferredColorScheme(colorScheme)
-        }
+#Preview {
+    List {
+        ExpenseRowView(PreviewGenerator.makeExampleExpense())
     }
-}
-
-#Preview("Light - RU") {
-    ExpenseRowView.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
-}
-
-#Preview("Dark - EN") {
-    ExpenseRowView.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
 }

@@ -10,9 +10,9 @@ import SwiftUI
 
 /// График дневных расходов события.
 struct EventDailyExpenseChart: View {
-    // MARK: - Статические свойства
+    // MARK: - Окружение
     
-    static let secondsPerDay: TimeInterval = 24 * 60 * 60
+    @Environment(\.haptics) private var haptics
     
     // MARK: - Состояние
 
@@ -51,7 +51,16 @@ struct EventDailyExpenseChart: View {
                     yEnd: .value("", point.baseAmount)
                 )
                 .interpolationMethod(.monotone)
-                .foregroundStyle(Color.accentColor.opacity(0.2).gradient)
+                .foregroundStyle(
+                    LinearGradient(
+                        colors: [
+                            Color.accentColor.opacity(0.30),
+                            Color.accentColor.opacity(0.01)
+                        ],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                )
 
                 LineMark(
                     x: .value("", point.date.startOfDay(using: .current)),
@@ -68,8 +77,8 @@ struct EventDailyExpenseChart: View {
                     .foregroundStyle(.secondary.opacity(0.8))
             }
 
-            if viewModel.middleDailyBaseExpenseAmount > 0 {
-                RuleMark(y: .value("", viewModel.middleDailyBaseExpenseAmount))
+            if viewModel.halfDailyBaseExpenseAmount > 0 {
+                RuleMark(y: .value("", viewModel.halfDailyBaseExpenseAmount))
                     .lineStyle(.init(lineWidth: 1, dash: [4, 4]))
                     .foregroundStyle(.secondary.opacity(0.8))
             }
@@ -99,7 +108,7 @@ struct EventDailyExpenseChart: View {
         .chartScrollableAxes(.horizontal)
         .chartXVisibleDomain(length: viewModel.summaryChartXVisibleDomainLength)
         .chartScrollPosition(x: $scrollPosition)
-        .chartScrollTargetBehavior(.valueAligned(unit: Self.secondsPerDay))
+        .chartScrollTargetBehavior(.valueAligned(unit: viewModel.secondsPerDay))
     }
     
     private var chartControls: some View {
@@ -126,6 +135,7 @@ struct EventDailyExpenseChart: View {
     
     private func scrollPositionButton(position: PlainDate, icon: String) -> some View {
         Button {
+            haptics.trigger(.tap)
             scrollPosition = viewModel.summaryChartScrollPosition(for: position)
         } label: {
             Image(systemName: icon)
@@ -138,30 +148,17 @@ struct EventDailyExpenseChart: View {
 
 // MARK: - Превью
 
-private extension EventDailyExpenseChart {
-    static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
-        let builder = PreviewBuilder.builder().withScenario(.southKorea).withExpenses(true)
-        let data = builder.buildData()
-        let trip = builder.getTrip(from: data)
-        let viewModel = TripDetailViewModel(trip: trip)
+#Preview {
+    let viewModel = TripDetailViewModel(
+        trip: PreviewGenerator.makeExampleTrip(includeLocations: true, includeExpenses: true)
+    )
 
-        return NavigationStack {
-            List {
-                Section {
-                    EventDailyExpenseChart(viewModel: EventAnalyticsViewModel(data: viewModel.eventAnalyticsData))
-                }
-                .listRowBackground(Color.clear)
-            }
+    NavigationStack {
+        List {
+            EventDailyExpenseChart(
+                viewModel: EventAnalyticsViewModel(data: viewModel.eventAnalyticsData)
+            )
+            .listRowBackground(Color.clear)
         }
-        .environment(\.locale, locale)
-        .preferredColorScheme(colorScheme)
     }
-}
-
-#Preview("Light - RU") {
-    EventDailyExpenseChart.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
-}
-
-#Preview("Dark - EN") {
-    EventDailyExpenseChart.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
 }

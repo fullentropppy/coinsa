@@ -37,7 +37,12 @@ struct EventSubcategoryAnalyticsView: View {
     ///   - amountMode: Режим отображения сумм.
     ///   - data: Аналитические данные события.
     ///   - screenContextSubtitle: Подзаголовок экрана.
-    init(category: ExpenseCategory, amountMode: CategoryAmountMode, data: EventCategoryAnalyticsData, screenContextSubtitle: String) {
+    init(
+        category: ExpenseCategory,
+        amountMode: CategoryAmountMode,
+        data: EventCategoryAnalyticsData,
+        screenContextSubtitle: String
+    ) {
         self.category = category
         self.amountMode = amountMode
         self.viewModel = EventAnalyticsViewModel(data: data)
@@ -74,7 +79,7 @@ struct EventSubcategoryAnalyticsView: View {
                 HStack {
                     Image(systemName: slice.subcategory.secondaryIcon)
                         .imageScale(.small)
-                        .foregroundStyle(slice.subcategory.accentColor)
+                        .foregroundStyle(slice.subcategory.accentColor.gradient)
                         .frame(width: 20)
                     Text(shareValue(for: slice).percentFormat())
                         .font(.footnote.monospacedDigit())
@@ -97,35 +102,21 @@ struct EventSubcategoryAnalyticsView: View {
         viewModel.shareValue(for: slice, category: category)
     }
 }
+
 // MARK: - Превью
 
-private extension EventSubcategoryAnalyticsView {
-    static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
-        let builder = PreviewBuilder.builder().withScenario(.southKorea).withExpenses(true)
-        let data = builder.buildData()
-        let trip = builder.getTrip(from: data)
-        let viewModel = TripDetailViewModel(trip: trip)
-        let analyticsViewModel = EventAnalyticsViewModel(data: viewModel.eventAnalyticsData)
-        let category = analyticsViewModel.displayedSlicesSortedByAmount(for: .categories).first?.category ?? .defaultValue
+#Preview {
+    let trip = PreviewGenerator.makeExampleTrip(includeLocations: true, includeExpenses: true)
+    let viewModel = TripDetailViewModel(trip: trip)
+    let analyticsViewModel = EventAnalyticsViewModel(data: viewModel.eventAnalyticsData)
+    let category = analyticsViewModel.displayedSlicesSortedByAmount(for: .categories).first?.category ?? .defaultValue
 
-        return NavigationStack {
-            EventSubcategoryAnalyticsView(
-                category: category,
-                amountMode: .total,
-                data: viewModel.eventAnalyticsData,
-                screenContextSubtitle: trip.screenContextSubtitle
-            )
-        }
-        .environment(\.locale, locale)
-        .preferredColorScheme(colorScheme)
+    NavigationStack {
+        EventSubcategoryAnalyticsView(
+            category: category,
+            amountMode: .total,
+            data: viewModel.eventAnalyticsData,
+            screenContextSubtitle: trip.screenContextSubtitle
+        )
     }
 }
-
-#Preview("Light - RU") {
-    EventSubcategoryAnalyticsView.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
-}
-
-#Preview("Dark - EN") {
-    EventSubcategoryAnalyticsView.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
-}
-

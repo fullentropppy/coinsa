@@ -39,18 +39,6 @@ struct FormValidationBanner: View {
 
 // MARK: - Превью
 
-private extension FormValidationBanner {
-    static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
-        FormValidationBanner(message: .validationAmountRequired)
-            .environment(\.locale, locale)
-            .preferredColorScheme(colorScheme)
-    }
-}
-
-#Preview("Light - RU") {
-    FormValidationBanner.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
-}
-
-#Preview("Dark - EN") {
-    FormValidationBanner.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
+#Preview {
+    FormValidationBanner(message: .validationAmountRequired)
 }

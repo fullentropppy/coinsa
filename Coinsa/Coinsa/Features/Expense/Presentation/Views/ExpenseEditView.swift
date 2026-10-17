@@ -145,7 +145,7 @@ struct ExpenseEditView: View {
                 NumericInputField(
                     amountInputBinding,
                     focusedField: $focusedField,
-                    focusId: .amount,
+                    focusID: .amount,
                     fractionDigits: 2,
                     font: .largeTitle,
                     textAlignment: .center,
@@ -218,7 +218,7 @@ struct ExpenseEditView: View {
                         currency: viewModel.baseCurrency,
                         isLoading: viewModel.isRateExpenseToBaseLoading,
                         focusedField: $focusedField,
-                        focusId: .exchangeRate,
+                        focusID: .exchangeRate,
                         onRefresh: { viewModel.requestRateExpenseToBaseRefresh(for: currencySide) }
                     )
                 }
@@ -231,7 +231,7 @@ struct ExpenseEditView: View {
                         currency: viewModel.locationCurrency,
                         isLoading: viewModel.isRateExpenseToLocationLoading,
                         focusedField: $focusedField,
-                        focusId: .locationExchangeRate,
+                        focusID: .locationExchangeRate,
                         onRefresh: { viewModel.requestRateExpenseToLocationRefresh() }
                     )
                 }
@@ -242,7 +242,7 @@ struct ExpenseEditView: View {
                     PercentInputField.standard(
                         exchangeAdjustmentInputBinding,
                         focusedField: $focusedField,
-                        focusId: .exchangeAdjustment
+                        focusID: .exchangeAdjustment
                     )
                 }
             }
@@ -269,7 +269,7 @@ struct ExpenseEditView: View {
             Text(
                 .expenseTimeZoneHint(
                     gmtOffsetDisplay: viewModel.timeZone.gmtOffsetDisplay,
-                    timeZoneId: viewModel.timeZone.identifier
+                    timeZoneID: viewModel.timeZone.identifier
                 )
             )
         }
@@ -287,11 +287,12 @@ struct ExpenseEditView: View {
                             get: { viewModel.coordinate ?? coordinate },
                             set: { viewModel.updateCoordinate($0) }
                         ),
-                        title: .expensePlaceOfExpense,
-                        isEditable: true
+                        title: .expensePlaceOfExpense
                     )
                 }
                 .buttonStyle(.plain)
+            } footer: {
+                CoordinateBadge(coordinate, withBackground: false)
             }
         }
     }
@@ -498,44 +499,12 @@ struct ExpenseEditView: View {
 
 // MARK: - Превью
 
-private extension ExpenseEditView {
-    static func makePreview(
-        locale: Locale,
-        colorScheme: ColorScheme,
-        withNewExpense: Bool = false
-    ) -> some View {
-        let builder = PreviewBuilder.builder()
-        let container = builder.buildContainer()
-        let settingsStore = AppSettingsStore()
-        let location = builder.fetchLocation(from: container)
-       
-        return Group {
-            if withNewExpense {
-                return ExpenseEditView(forCreateWith: location)
-            } else {
-                let expense = builder.fetchExpense(from: container)
-                return ExpenseEditView(forEdit: expense)
-            }
-        }
-        .modelContainer(container)
-        .environment(settingsStore)
-        .environment(\.locale, locale)
-        .preferredColorScheme(colorScheme)
-    }
+#Preview("Editing") {
+    ExpenseEditView(forEdit: PreviewGenerator.makeExampleExpense())
+        .environment(AppSettingsStore())
 }
 
-#Preview("Edit. Light - RU") {
-    ExpenseEditView.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
-}
-
-#Preview("Edit. Dark - EN") {
-    ExpenseEditView.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
-}
-
-#Preview("Create. Light - RU") {
-    ExpenseEditView.makePreview(locale: PreviewLocale.ru, colorScheme: .light, withNewExpense: true)
-}
-
-#Preview("Create. Dark - EN") {
-    ExpenseEditView.makePreview(locale: PreviewLocale.en, colorScheme: .dark, withNewExpense: true)
+#Preview("Creating") {
+    ExpenseEditView(forCreateWith: PreviewGenerator.makeExampleLocation())
+        .environment(AppSettingsStore())
 }

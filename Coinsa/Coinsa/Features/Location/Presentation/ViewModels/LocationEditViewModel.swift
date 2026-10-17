@@ -302,7 +302,7 @@ final class LocationEditViewModel {
                 rateLocationToBase: rateLocationToBase,
                 exchangeAdjustment: exchangeAdjustment,
                 budget: budgetBaseAmount,
-                trip: trip,
+                trip: trip
             )
         }
     }

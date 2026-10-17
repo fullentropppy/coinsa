@@ -32,21 +32,10 @@ struct DotView: View {
 
 // MARK: - Превью
 
-private extension DotView {
-    static func makePreview(colorScheme: ColorScheme) -> some View {
-        VStack(spacing: 20) {
-            DotView(.red)
-            DotView(.yellow)
-            DotView(.green)
-        }
+#Preview {
+    VStack(spacing: 20) {
+        DotView(.red)
+        DotView(.yellow)
+        DotView(.green)
     }
 }
-
-#Preview("Light") {
-    DotView.makePreview(colorScheme: .light)
-}
-
-#Preview("Dark") {
-    DotView.makePreview(colorScheme: .dark)
-}
-

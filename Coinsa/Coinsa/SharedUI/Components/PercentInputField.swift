@@ -13,7 +13,7 @@ struct PercentInputField: View {
     
     private let value: Binding<Double>
     private let focusedField: FocusState<NumericEditField?>.Binding
-    private let focusId: NumericEditField
+    private let focusID: NumericEditField
     private let font: Font
     
     // MARK: - Инициализация
@@ -22,17 +22,17 @@ struct PercentInputField: View {
     /// - Parameters:
     ///   - value: Привязка к числовому значению.
     ///   - focusedField: Привязка к фокусированному полю.
-    ///   - focusId: Уникальный идентификатор поля.
+    ///   - focusID: Уникальный идентификатор поля.
     ///   - font: Шрифт текста.
     init(
         _ value: Binding<Double>,
         focusedField: FocusState<NumericEditField?>.Binding,
-        focusId: NumericEditField,
+        focusID: NumericEditField,
         font: Font
     ) {
         self.value = value
         self.focusedField = focusedField
-        self.focusId = focusId
+        self.focusID = focusID
         self.font = font
     }
     
@@ -43,7 +43,7 @@ struct PercentInputField: View {
             NumericInputField(
                 value,
                 focusedField: focusedField,
-                focusId: focusId,
+                focusID: focusID,
                 fractionDigits: 2,
                 font: font,
                 textAlignment: .trailing
@@ -64,17 +64,17 @@ extension PercentInputField {
     /// - Parameters:
     ///   - value: Привязка к числовому значению.
     ///   - focusedField: Привязка к фокусированному полю.
-    ///   - focusId: Уникальный идентификатор поля.
+    ///   - focusID: Уникальный идентификатор поля.
     /// - Returns: Настроенное поле ввода.
     static func standard(
         _ value: Binding<Double>,
         focusedField: FocusState<NumericEditField?>.Binding,
-        focusId: NumericEditField
+        focusID: NumericEditField
     ) -> some View {
         PercentInputField(
             value,
             focusedField: focusedField,
-            focusId: focusId,
+            focusID: focusID,
             font: .body.monospacedDigit()
         )
     }
@@ -82,43 +82,25 @@ extension PercentInputField {
 
 // MARK: - Превью
 
-private extension PercentInputField {
-    static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
-        List {
-            PercentInputFieldPreview()
+#Preview {
+    @Previewable @State var value: Double = 5.05
+    @Previewable @FocusState var focusedField: NumericEditField?
+
+    List {
+        Section {
+            PercentInputField(
+                $value,
+                focusedField: $focusedField,
+                focusID: .exchangeRate,
+                font: .body
+            )
         }
-        .environment(\.locale, locale)
-        .preferredColorScheme(colorScheme)
-    }
-    
-    struct PercentInputFieldPreview: View {
-        @State private var value: Double = 5.05
-        @FocusState private var focusedField: NumericEditField?
-        
-        var body: some View {
-            Section {
-                PercentInputField(
-                    $value,
-                    focusedField: $focusedField,
-                    focusId: .exchangeRate,
-                    font: .body
-                )
-            }
-            Section {
-                PercentInputField.standard(
-                    $value,
-                    focusedField: $focusedField,
-                    focusId: .exchangeRate
-                )
-            }
+        Section {
+            PercentInputField.standard(
+                $value,
+                focusedField: $focusedField,
+                focusID: .exchangeRate
+            )
         }
     }
-}
-
-#Preview("Light - RU") {
-    PercentInputField.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
-}
-
-#Preview("Dark - EN") {
-    PercentInputField.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
 }

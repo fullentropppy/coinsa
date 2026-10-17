@@ -9,7 +9,7 @@ import Foundation
 
 /// Календарная дата и время без привязки к часовому поясу.
 struct CivilDateTime: Comparable, Hashable {
-    // MARK: - Статичные свойства
+    // MARK: - Статические свойства
     
     /// Текущая календарная дата и время.
     static var now: CivilDateTime {
@@ -47,7 +47,7 @@ struct CivilDateTime: Comparable, Hashable {
     
     /// Возвращает начало календарного дня в заданном календаре.
     /// - Parameter calendar: Календарь для вычислений. По умолчанию `.utc`.
-    /// - Returns: Начало дня в указанном календаре  (00:00:00).
+    /// - Returns: Начало дня в указанном календаре (00:00:00).
     func startOfDay(using calendar: Calendar = .utc) -> Date {
         storedDate.startOfDay(using: calendar)
     }

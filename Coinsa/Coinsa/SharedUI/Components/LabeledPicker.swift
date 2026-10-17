@@ -14,7 +14,7 @@ struct LabeledPicker<SelectionValue: Hashable, Content: View>: View {
     private let title: LocalizedStringResource?
     private let selection: Binding<SelectionValue>
     private let options: [SelectionValue]
-    private let disabled: Bool
+    private let isDisabled: Bool
     @ViewBuilder private let content: (SelectionValue) -> Content
 
     // MARK: - Инициализация
@@ -24,26 +24,26 @@ struct LabeledPicker<SelectionValue: Hashable, Content: View>: View {
     ///   - title: Заголовок пикера (по умолчанию `nil`).
     ///   - selection: Привязка к выбранному значению.
     ///   - options: Массив доступных опций.
-    ///   - disabled: Флаг блокировки (по умолчанию `false`).
+    ///   - isDisabled: Флаг блокировки (по умолчанию `false`).
     ///   - content: Замыкание для построения представления каждой опции.
     init(
         title: LocalizedStringResource? = nil,
         selection: Binding<SelectionValue>,
         options: [SelectionValue],
-        disabled: Bool = false,
+        isDisabled: Bool = false,
         @ViewBuilder content: @escaping (SelectionValue) -> Content
     ) {
         self.title = title
         self.selection = selection
         self.options = options
-        self.disabled = disabled
+        self.isDisabled = isDisabled
         self.content = content
     }
     
     // MARK: - Тело View
     
     var body: some View {
-        if disabled {
+        if isDisabled {
             disabledContent
         } else {
             enabledContent
@@ -76,7 +76,6 @@ struct LabeledPicker<SelectionValue: Hashable, Content: View>: View {
             }
             .pickerStyle(.navigationLink)
             .navigationLinkIndicatorVisibility(.hidden)
-            .disabled(disabled)
             
             Image(systemName: "chevron.right")
                 .imageScale(.small)
@@ -89,7 +88,7 @@ struct LabeledPicker<SelectionValue: Hashable, Content: View>: View {
 
 // MARK: - Превью
 
-#Preview("Light - RU") {
+#Preview {
     @Previewable @State var selectedCategory = ExpenseCategory.food
     
     NavigationStack {
@@ -105,38 +104,10 @@ struct LabeledPicker<SelectionValue: Hashable, Content: View>: View {
                 title: .expenseCategory,
                 selection: $selectedCategory,
                 options: ExpenseCategory.allCases,
-                disabled: true
+                isDisabled: true
             ) { category in
                 category.makeLabel()
             }
         }
     }
-    .environment(\.locale, PreviewLocale.ru)
-    .preferredColorScheme(.light)
-}
-
-#Preview("Dark - EN") {
-    @Previewable @State var selectedCategory = ExpenseCategory.food
-    
-    NavigationStack {
-        List {
-            LabeledPicker(
-                title: .expenseCategory,
-                selection: $selectedCategory,
-                options: ExpenseCategory.allCases
-            ) { category in
-                category.makeLabel()
-            }
-            LabeledPicker(
-                title: .expenseCategory,
-                selection: $selectedCategory,
-                options: ExpenseCategory.allCases,
-                disabled: true
-            ) { category in
-                category.makeLabel()
-            }
-        }
-    }
-    .environment(\.locale, PreviewLocale.en)
-    .preferredColorScheme(.dark)
 }

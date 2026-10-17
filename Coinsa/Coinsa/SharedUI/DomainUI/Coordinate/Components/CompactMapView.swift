@@ -18,7 +18,6 @@ struct CompactMapView: View {
     // MARK: - Свойства
 
     private let title: LocalizedStringResource
-    private let isEditable: Bool
     private let height: CGFloat
 
     // MARK: - Инициализация
@@ -27,18 +26,15 @@ struct CompactMapView: View {
     /// - Parameters:
     ///   - coordinate: Привязка к объекту координат.
     ///   - title: Заголовок маркера на карте.
-    ///   - isEditable: Доступно ли редактирование координаты.
     ///   - height: Высота карты. По умолчанию `200`.
     init(
         _ coordinate: Binding<Coordinate>,
         title: LocalizedStringResource,
-        isEditable: Bool,
         height: CGFloat = 200
     ) {
         _coordinate = coordinate
         _cameraPosition = State(initialValue: Self.cameraPosition(for: coordinate.wrappedValue))
         self.title = title
-        self.isEditable = isEditable
         self.height = height
     }
 
@@ -55,7 +51,6 @@ struct CompactMapView: View {
         self.init(
             .constant(coordinate),
             title: title,
-            isEditable: false,
             height: height
         )
     }
@@ -72,14 +67,11 @@ struct CompactMapView: View {
     // MARK: - Компоненты
 
     private var mapContent: some View {
-        VStack(alignment: .center, spacing: 10) {
-            Map(position: $cameraPosition, interactionModes: []) {
-                Marker(String(localized: title), coordinate: coordinate.coreLocationCoordinate)
-            }
-            .frame(height: height)
-            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-            CoordinateBadge(coordinate, withBackground: false)
+        Map(position: $cameraPosition, interactionModes: []) {
+            Marker(String(localized: title), coordinate: coordinate.coreLocationCoordinate)
         }
+        .frame(height: height)
+        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
     }
 
     // MARK: - Инфраструктура
@@ -96,28 +88,10 @@ struct CompactMapView: View {
 
 // MARK: - Превью
 
-private extension CompactMapView {
-    static let previewCoordinate = Coordinate(
-        latitude: 35.65949,
-        longitude: 139.70057,
-        horizontalAccuracy: 12
-    )
-
-    static func makePreview(locale: Locale, colorScheme: ColorScheme, isEditable: Bool) -> some View {
-        @Previewable @State var coordinate = previewCoordinate
-
-        return List {
-            CompactMapView($coordinate, title: .expensePlaceOfExpense, isEditable: isEditable)
-        }
-        .environment(\.locale, locale)
-        .preferredColorScheme(colorScheme)
+#Preview {
+    @Previewable @State var coordinate = PreviewGenerator.makeExampleCoordinate()
+    
+    List {
+        CompactMapView($coordinate, title: .expensePlaceOfExpense)
     }
-}
-
-#Preview("Read. Light - RU") {
-    CompactMapView.makePreview(locale: PreviewLocale.ru, colorScheme: .light, isEditable: false)
-}
-
-#Preview("Edit. Dark - EN") {
-    CompactMapView.makePreview(locale: PreviewLocale.en, colorScheme: .dark, isEditable: true)
 }

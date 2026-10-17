@@ -7,14 +7,14 @@
 
 import Foundation
 
-// Данные по смещениям часового пояса.
+/// Данные по смещениям часового пояса.
 extension TimeZone {
     /// Смещение от GMT в часах.
     var gmtOffsetHours: Double {
         Double(secondsFromGMT()).rounded() / 3600
     }
     
-    // Текстовое представление смещения от GMT в часах.
+    /// Текстовое представление смещения от GMT в часах.
     var gmtOffsetDisplay: String {
         let seconds = self.secondsFromGMT()
         let hours = gmtOffsetHours

@@ -23,7 +23,7 @@ class Expense {
     var actualDate: Date?
     
     /// Идентификатор часового пояса фактического момента траты.
-    var timeZoneId: String?
+    var timeZoneID: String?
     
     /// Сумма траты в основной валюте поездки.
     var baseAmount: Double = 0
@@ -77,7 +77,7 @@ class Expense {
     ///   - id: Уникальный идентификатор.
     ///   - date: Дата траты.
     ///   - actualDate: Фактический момент траты.
-    ///   - timeZoneId: Идентификатор часового пояса фактического момента траты.
+    ///   - timeZoneID: Идентификатор часового пояса фактического момента траты.
     ///   - baseAmount: Сумма в основной валюте.
     ///   - expenseCurrencyCode: Код валюты траты.
     ///   - rateExpenseToBase: Курс валюты траты к основной.
@@ -85,7 +85,7 @@ class Expense {
     ///   - paymentMethodRaw: Сырое значение способа оплаты.
     ///   - exchangeAdjustment: Корректировка курса.
     ///   - categoryRaw: Сырое значение категории.
-    ///   - categoryRaw: Сырое значение подкатегории.
+    ///   - subcategoryRaw: Сырое значение подкатегории.
     ///   - location: Локация траты.
     ///   - latitude: Географическая широта места траты.
     ///   - longitude: Географическая долгота места траты.
@@ -97,7 +97,7 @@ class Expense {
         id: UUID,
         date: Date,
         actualDate: Date,
-        timeZoneId: String,
+        timeZoneID: String,
         baseAmount: Double,
         expenseCurrencyCode: String,
         rateExpenseToBase: Double,
@@ -120,7 +120,7 @@ class Expense {
         
         self.storedDate = date
         self.actualDate = actualDate
-        self.timeZoneId = timeZoneId
+        self.timeZoneID = timeZoneID
         self.baseAmount = baseAmount
         self.expenseCurrencyCode = expenseCurrencyCode
         self.rateExpenseToBase = rateExpenseToBase

@@ -10,7 +10,7 @@ import SwiftUI
 // MARK: - Публичные типы
 
 /// Идентификаторы полей для управления фокусом в числовых вводах.
-enum NumericEditField: Hashable {
+nonisolated enum NumericEditField: Hashable {
     case amount
     case exchangeRate
     case locationExchangeRate
@@ -26,7 +26,7 @@ struct NumericInputField: View {
     @Binding var value: Double
     
     private let focusedField: FocusState<NumericEditField?>.Binding
-    private let focusId: NumericEditField
+    private let focusID: NumericEditField
     private let fractionDigits: Int
     private let font: Font
     private let textAlignment: TextAlignment
@@ -39,16 +39,16 @@ struct NumericInputField: View {
     /// - Parameters:
     ///   - value: Привязка к числовому значению.
     ///   - focusedField: Привязка к фокусированному полю.
-    ///   - focusId: Уникальный идентификатор этого поля.
+    ///   - focusID: Уникальный идентификатор этого поля.
     ///   - fractionDigits: Количество знаков после запятой.
     ///   - font: Шрифт текста.
     ///   - textAlignment: Выравнивание текста.
     ///   - placeholder: Подсказка ввода (опционально). По умолчанию `nil`.
-    ///   Если не указана, будет отображаться `0 с колличеством нулей дробной части равным значению `fractionDigits`.
+    ///   Если не указана, будет отображаться `0` с количеством нулей дробной части равным значению `fractionDigits`.
     init(
         _ value: Binding<Double>,
         focusedField: FocusState<NumericEditField?>.Binding,
-        focusId: NumericEditField,
+        focusID: NumericEditField,
         fractionDigits: Int,
         font: Font,
         textAlignment: TextAlignment,
@@ -56,7 +56,7 @@ struct NumericInputField: View {
     ) {
         self._value = value
         self.focusedField = focusedField
-        self.focusId = focusId
+        self.focusID = focusID
         self.fractionDigits = fractionDigits
         self.font = font
         self.textAlignment = textAlignment
@@ -85,22 +85,22 @@ struct NumericInputField: View {
     var body: some View {
         TextField(placeholder, text: $text)
             .font(font)
-            .focused(focusedField, equals: focusId)
+            .focused(focusedField, equals: focusID)
             .keyboardType(.decimalPad)
             .multilineTextAlignment(textAlignment)
             .onAppear { syncFromValue() }
             .onChange(of: value) {
-                if focusedField.wrappedValue != focusId {
+                if focusedField.wrappedValue != focusID {
                     syncFromValue()
                 }
             }
             .onChange(of: text) {
-                if focusedField.wrappedValue == focusId {
+                if focusedField.wrappedValue == focusID {
                     syncValueFromText()
                 }
             }
-            .onChange(of: focusedField.wrappedValue) { oldId, newId in
-                if oldId == focusId && newId != focusId {
+            .onChange(of: focusedField.wrappedValue) { oldID, newID in
+                if oldID == focusID && newID != focusID {
                     commit()
                 }
             }
@@ -151,19 +151,19 @@ extension NumericInputField {
     /// - Parameters:
     ///   - value: Привязка к числовому значению.
     ///   - focusedField: Привязка к фокусированному полю.
-    ///   - focusId: Уникальный идентификатор поля.
+    ///   - focusID: Уникальный идентификатор поля.
     ///   - fractionDigits: Количество знаков после запятой.
     /// - Returns: Настроенное поле ввода.
     static func standard(
         _ value: Binding<Double>,
         focusedField: FocusState<NumericEditField?>.Binding,
-        focusId: NumericEditField,
+        focusID: NumericEditField,
         fractionDigits: Int
     ) -> some View {
         NumericInputField(
             value,
             focusedField: focusedField,
-            focusId: focusId,
+            focusID: focusID,
             fractionDigits: fractionDigits,
             font: .body.monospacedDigit(),
             textAlignment: .trailing
@@ -173,46 +173,28 @@ extension NumericInputField {
 
 // MARK: - Превью
 
-private extension NumericInputField {
-    static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
-        List {
-            NumericInputFieldPreview()
-        }
-        .environment(\.locale, locale)
-        .preferredColorScheme(colorScheme)
-    }
+#Preview {
+    @Previewable @State var amount: Double = 1234.56
+    @Previewable @FocusState var focusedField: NumericEditField?
     
-    private struct NumericInputFieldPreview: View {
-        @State private var amount: Double = 1234.56
-        @FocusState private var focusedField: NumericEditField?
-
-        var body: some View {
-            Section {
-                NumericInputField(
-                    $amount,
-                    focusedField: $focusedField,
-                    focusId: .amount,
-                    fractionDigits: 2,
-                    font: .body,
-                    textAlignment: .trailing
-                )
-            }
-            Section {
-                NumericInputField.standard(
-                    $amount,
-                    focusedField: $focusedField,
-                    focusId: .amount,
-                    fractionDigits: 2
-                )
-            }
+    List {
+        Section {
+            NumericInputField(
+                $amount,
+                focusedField: $focusedField,
+                focusID: .amount,
+                fractionDigits: 2,
+                font: .body,
+                textAlignment: .trailing
+            )
+        }
+        Section {
+            NumericInputField.standard(
+                $amount,
+                focusedField: $focusedField,
+                focusID: .amount,
+                fractionDigits: 2
+            )
         }
     }
-}
-
-#Preview("Light - RU") {
-    NumericInputField.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
-}
-
-#Preview("Dark - EN") {
-    NumericInputField.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
 }

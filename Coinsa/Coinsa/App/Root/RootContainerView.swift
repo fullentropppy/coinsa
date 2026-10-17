@@ -37,8 +37,10 @@ struct RootContainerView: View {
                     }
             }
             if showsLaunchContinuation {
-                SplashView { showsLaunchContinuation = false }
-                    .transition(.opacity)
+                SplashView {
+                    showsLaunchContinuation = false
+                }
+                .transition(.opacity)
             }
         }
     }

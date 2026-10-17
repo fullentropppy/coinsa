@@ -35,7 +35,7 @@ extension Location {
             calendar: calendar
         )
         
-        if totalDays(using: calendar) == 1 {
+        if totalDays == 1 {
             return budgetAmount
         }
         
@@ -71,7 +71,7 @@ extension Location {
     ) -> Double {
         let exchangeRate = exchangeRateBaseToCurrency(currency, using: rateMode)
         let budgetAmount = budget * exchangeRate
-        let totalDays = totalDays(using: calendar)
+        let totalDays = totalDays
         
         return asDailyAverage ? budgetAmount / Double(totalDays).rounded() : budgetAmount
     }
@@ -141,35 +141,5 @@ extension Location {
     
     private func canAggregateAmounts(in currency: CurrencyContext) -> Bool {
         currency != .expense
-    }
-    
-    /// Вычисляет долю периода в общей длительности локации.
-    /// - Parameters:
-    ///   - targetRange: Целевой диапазон дат.
-    ///   - calendar: Календарь для вычислений. По умолчанию `.current`.
-    /// - Returns: Коэффициент пропорции (0...1).
-    private func budgetAmountRatio(
-        withinDateRange targetRange: ClosedRange<Date>?,
-        using calendar: Calendar = .utc
-    ) -> Double {
-        guard let targetRange else { return 1 }
-        
-        let normalizedTargetLowerBound = targetRange.lowerBound.startOfDay(using: calendar)
-        let normalizedTargetUppedBound = targetRange.upperBound.endOfDay(using: calendar)
-        let range = range(using: calendar)
-        let overlapStart = max(range.lowerBound, normalizedTargetLowerBound)
-        let overlapEnd = min(range.upperBound, normalizedTargetUppedBound)
-        
-        guard overlapStart <= overlapEnd else { return 0 }
-        
-        let totalDays = totalDays(using: calendar)
-        
-        guard totalDays > 0 else { return 0 }
-        
-        let overlapDays = overlapEnd
-            .startOfDay(using: calendar)
-            .days(from: overlapStart.startOfDay(using: calendar), using: calendar) + 1
-        
-        return min(1, max(0, Double(overlapDays) / Double(totalDays)))
     }
 }

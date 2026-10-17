@@ -1,5 +1,5 @@
 //
-//  ExpenseSubactegory+Localization.swift
+//  ExpenseSubcategory+Localization.swift
 //  Coinsa
 //
 //  Created by Daniil Gritsenko on 04.06.2026.
@@ -37,17 +37,17 @@ extension ExpenseSubcategory: LocalizedResourceProviding {
         // MARK: - Жилье
             
         case .hotel: .expenseSubcategoryHotel
-        case .accommodationRental: .expenseSubcategoryAccomodationRental
+        case .accommodationRental: .expenseSubcategoryAccommodationRental
         case .touristTax: .expenseSubcategoryTouristTax
-        case .otherAccomodation: .expenseSubcategoryOther
+        case .otherAccommodation: .expenseSubcategoryOther
             
         // MARK: - Досуг
             
         case .tour: .expenseSubcategoryTour
         case .landmark: .expenseSubcategoryLandmark
         case .park: .expenseSubcategoryPark
-        case .activity: .expenseSubcategoryActivity // ПОМЕНЯТЬ
-        case .entertainment: .expenseCategoryEntertainment
+        case .activity: .expenseSubcategoryActivity
+        case .entertainment: .expenseSubcategoryEntertainment
         case .otherLeisure: .expenseSubcategoryOther
             
         // MARK: - Шоппинг
@@ -74,7 +74,7 @@ extension ExpenseSubcategory: LocalizedResourceProviding {
         case .documents: .expenseSubcategoryDocuments
         case .laundry: .expenseSubcategoryLaundry
         case .donation: .expenseSubcategoryDonation
-        case .luggageStorage: .expenseSubcategoryLuggageStorrage
+        case .luggageStorage: .expenseSubcategoryLuggageStorage
         case .postalService: .expenseSubcategoryPostalService
         case .digitalService: .expenseSubcategoryDigitalService
         case .otherMiscellaneous: .expenseSubcategoryOther

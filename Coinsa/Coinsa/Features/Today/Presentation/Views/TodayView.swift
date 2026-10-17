@@ -68,7 +68,7 @@ struct TodayView: View {
     var body: some View {
         NavigationStack {
             todayForm
-                .navigationTitle(viewModel.navigtaionTitle)
+                .navigationTitle(viewModel.navigationTitle)
                 .navigationSubtitle(viewModel.navigationSubtitle)
                 .navigationBarTitleDisplayMode(.large)
                 .onAppear {
@@ -226,25 +226,23 @@ struct TodayView: View {
     }
     
     private func contextContent(location: Location) -> some View {
-        HStack {
-            NavigationLink {
-                LocationDetailView(location)
-            } label: {
-                HStack(alignment: .center) {
-                    if viewModel.isHomeLocation {
-                        Text("\(location.name) • \(location.trip?.name ?? "")")
-                            .font(.subheadline)
-                    } else {
-                        exchangeRatesContent(location: location)
-                    }
-                    Spacer()
-                    Image(systemName: Location.primaryIcon)
-                        .imageScale(.small)
-                        .font(.subheadline.weight(.semibold))
-                    
+        NavigationLink {
+            LocationDetailView(location)
+        } label: {
+            HStack(alignment: .center) {
+                if viewModel.isHomeLocation {
+                    Text("\(location.name) • \(location.trip?.name ?? "")")
+                        .font(.subheadline)
+                } else {
+                    exchangeRatesContent(location: location)
                 }
-                .foregroundStyle(.secondary)
+                Spacer()
+                Image(systemName: Location.primaryIcon)
+                    .imageScale(.small)
+                    .font(.subheadline.weight(.semibold))
+                    
             }
+            .foregroundStyle(.secondary)
         }
     }
     
@@ -343,12 +341,7 @@ struct TodayView: View {
 // MARK: - Превью
 
 private extension TodayView {
-    static func makePreview(
-        locale: Locale,
-        colorScheme: ColorScheme,
-        withLocation: Bool = true,
-        withExpenses: Bool = true
-    ) -> some View {
+    static func makePreview(withLocation: Bool, withExpenses: Bool) -> some View {
         var builder = PreviewBuilder.builder()
         if withLocation {
             builder = builder.withScenario(.southKorea).withExpenses(withExpenses)
@@ -361,31 +354,17 @@ private extension TodayView {
         return TodayView()
             .modelContainer(container)
             .environment(settingsStore)
-            .environment(\.locale, locale)
-            .preferredColorScheme(colorScheme)
     }
 }
 
-#Preview("Light - RU") {
-    TodayView.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
+#Preview("With Locations") {
+    TodayView.makePreview(withLocation: true, withExpenses: true)
 }
 
-#Preview("Dark - EN") {
-    TodayView.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
+#Preview("Without Expenses") {
+    TodayView.makePreview(withLocation: true, withExpenses: false)
 }
 
-#Preview("No Expenses. Light - RU") {
-    TodayView.makePreview(locale: PreviewLocale.ru, colorScheme: .light, withExpenses: false)
-}
-
-#Preview("No Expenses. Dark - EN") {
-    TodayView.makePreview(locale: PreviewLocale.en, colorScheme: .dark, withExpenses: false)
-}
-
-#Preview("Empty. Light - RU") {
-    TodayView.makePreview(locale: PreviewLocale.ru, colorScheme: .light, withLocation: false, withExpenses: false)
-}
-
-#Preview("Empty. Dark - EN") {
-    TodayView.makePreview(locale: PreviewLocale.en, colorScheme: .dark, withLocation: false, withExpenses: false)
+#Preview("Empty") {
+    TodayView.makePreview(withLocation: false, withExpenses: false)
 }

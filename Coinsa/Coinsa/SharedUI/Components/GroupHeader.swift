@@ -15,7 +15,7 @@ struct GroupHeader: View {
     let title: LocalizedStringResource
     let itemCount: Int?
     
-    // MARK: - Тело View
+    // MARK: - Инициализация
     
     /// Создает заголовок секции группы.
     /// - Parameters:
@@ -34,14 +34,15 @@ struct GroupHeader: View {
         VStack(alignment: .center) {
             HStack(alignment: .center, spacing: 4) {
                 if let itemCount {
-                    HStack(alignment: .center, spacing: 0) {
-                        Image(systemName: "sum")
-                            .imageScale(.small)
-                            .fontWeight(.light)
-                        Text(String(itemCount))
-                            .fontWeight(.light)
-                    }
+                    Text(String(itemCount))
+                        .font(.caption.weight(.medium))
+                        .foregroundStyle(.windowBackground)
+                        .padding(.horizontal, 4)
+                        .frame(minWidth: 18)
+                        .frame(height: 18)
+                        .background(.gray, in: .capsule)
                 }
+                
                 Image(systemName: icon)
                     .imageScale(.small)
                     .fontWeight(.semibold)
@@ -56,22 +57,6 @@ struct GroupHeader: View {
 
 // MARK: - Превью
 
-private extension GroupHeader {
-    static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
-        GroupHeader(
-            icon: Location.primaryIcon,
-            title: .tripLocations,
-            itemCount: 4
-        )
-            .environment(\.locale, locale)
-            .preferredColorScheme(colorScheme)
-    }
-}
-
-#Preview("Light - RU") {
-    GroupHeader.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
-}
-
-#Preview("Dark - EN") {
-    GroupHeader.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
+#Preview {
+    GroupHeader(icon: Location.primaryIcon, title: .tripLocations, itemCount: 4)
 }

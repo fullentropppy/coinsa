@@ -115,7 +115,7 @@ struct LocationEditView: View {
         }
     }
 
-    // MARK: Основной контекнт
+    // MARK: Основной контент
     
     private var locationEditForm: some View {
         Form {
@@ -183,7 +183,7 @@ struct LocationEditView: View {
                 title: .locationCurrency,
                 selection: locationCurrencyBinding,                
                 options: Currency.allCasesSortedByName,
-                disabled: viewModel.hasExpenses
+                isDisabled: viewModel.hasExpenses
             ) { currency in
                 currency.makeLabel()
             }
@@ -202,7 +202,7 @@ struct LocationEditView: View {
                         currency: viewModel.baseCurrency,
                         isLoading: viewModel.isRateLoading,
                         focusedField: $focusedField,
-                        focusId: .exchangeRate,
+                        focusID: .exchangeRate,
                         onRefresh: { viewModel.requestRateRefresh(for: inputCurrency) }
                     )
                 }
@@ -220,7 +220,7 @@ struct LocationEditView: View {
                     PercentInputField.standard(
                         $viewModel.exchangeAdjustment,
                         focusedField: $focusedField,
-                        focusId: .exchangeAdjustment
+                        focusID: .exchangeAdjustment
                     )
                 }
             } footer: {
@@ -236,7 +236,7 @@ struct LocationEditView: View {
                     NumericInputField.standard(
                         budgetInputBinding,
                         focusedField: $focusedField,
-                        focusId: .budget,
+                        focusID: .budget,
                         fractionDigits: 2
                     )
                     CurrencyCodeText.standard(budgetInputCurrencyValue)
@@ -375,41 +375,10 @@ struct LocationEditView: View {
 
 // MARK: - Превью
 
-private extension LocationEditView {
-    static func makePreview(
-        locale: Locale,
-        colorScheme: ColorScheme,
-        withNewLocation: Bool = false
-    ) -> some View {
-        let builder = PreviewBuilder.builder()
-        let data = builder.buildData()
-        let trip = builder.getTrip(from: data)
-       
-        return Group {
-            if withNewLocation {
-                return LocationEditView(forCreateWith: trip)
-            } else {
-                let location = builder.getLocation(from: data)
-                return LocationEditView(forEdit: location)
-            }
-        }
-        .environment(\.locale, locale)
-        .preferredColorScheme(colorScheme)
-    }
+#Preview("Editing") {
+    LocationEditView(forEdit: PreviewGenerator.makeExampleLocation())
 }
 
-#Preview("Edit. Light - RU") {
-    LocationEditView.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
-}
-
-#Preview("Edit. Dark - EN") {
-    LocationEditView.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
-}
-
-#Preview("Create. Light - RU") {
-    LocationEditView.makePreview(locale: PreviewLocale.ru, colorScheme: .light, withNewLocation: true)
-}
-
-#Preview("Create. Dark - EN") {
-    LocationEditView.makePreview(locale: PreviewLocale.en, colorScheme: .dark, withNewLocation: true)
+#Preview("Creating") {
+    LocationEditView(forCreateWith: PreviewGenerator.makeExampleTrip())
 }

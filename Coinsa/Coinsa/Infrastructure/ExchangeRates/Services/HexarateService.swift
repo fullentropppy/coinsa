@@ -25,7 +25,7 @@ final class HexarateService: ExchangeRateService {
     }
 }
 
-// MARK: - Внутренние типы составляющие ответ Hexarate
+// MARK: - Внутренние типы, составляющие ответ Hexarate
 
 /// Корневой ответ API Hexarate.
 private struct Response: Decodable {

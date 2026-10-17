@@ -2,7 +2,7 @@
 
 [🇷🇺 Русский](README.md) | [🇺🇸 English](README.en.md)
 
-![iOS](https://img.shields.io/badge/iOS-26-178DF6)
+![iOS](https://img.shields.io/badge/iOS-27-178DF6)
 ![SwiftUI](https://img.shields.io/badge/SwiftUI-000000?logo=swift&logoColor=white)
 ![SwiftData](https://img.shields.io/badge/SwiftData-6A4C9C?style=flat&logo=swift&logoColor=white)
 ![CloudKit](https://img.shields.io/badge/CloudKit-3C61AB?logo=icloud&logoColor=white)
@@ -54,6 +54,9 @@
 
 ### Синхронизация
 - **Автоматическая синхронизация данных через iCloud** — все данные приложения доступны на ваших устройствах Apple.
+
+## Системные требования
+Требуется **IOS 26** и выше.
 
 ## Лицензия
 **Coinsa не является open-source проектом.** Исходный код доступен для ознакомления, изучения и личного некоммерческого использования.

@@ -49,7 +49,7 @@ struct EventSummaryView: View {
         showsHeader: Bool = true,
         showsAmounts: Bool = true,
         showsAmountBalance: Bool = true,
-        showsBudgetIfZero: Bool = false,
+        showsBudgetIfZero: Bool = false
     ) {
         self.data = data
         self.showsHeader = showsHeader
@@ -121,55 +121,39 @@ struct EventSummaryView: View {
     @ViewBuilder
     private var amountBalanceContent: some View {
         if showsBudgetAmount {
-            VStack {
-                EventAmountBalanceView(
-                    budgetBaseAmount: data.budgetBaseAmount,
-                    baseAmountBalance: baseAmountBalance,
-                    baseCurrency: data.baseCurrency,
-                    locationAmountBalance: locationAmountBalance,
-                    locationCurrency: data.locationCurrency
-                )
-            }
+            EventAmountBalanceView(
+                budgetBaseAmount: data.budgetBaseAmount,
+                baseAmountBalance: baseAmountBalance,
+                baseCurrency: data.baseCurrency,
+                locationAmountBalance: locationAmountBalance,
+                locationCurrency: data.locationCurrency
+            )
         }
     }
 }
 
 // MARK: - Превью
 
-private extension EventSummaryData {
-    static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
-        let builder = PreviewBuilder.builder()
-        let data = builder.buildData()
-        
-        let trip = builder.getTrip(from: data)
-        let tripViewModel = TripDetailViewModel(trip: trip)
-        
-        let location = builder.getLocation(from: data)
-        let locationViewModel = LocationDetailViewModel(location: location)
-        
-        return Form {
-            Section {
-                EventSummaryView(data: tripViewModel.eventHeaderData, showsAmounts: false, showsAmountBalance: false)
-            }
-            Section {
-                EventSummaryView(data: tripViewModel.eventHeaderData)
-            }
-            Section {
-                EventSummaryView(data: locationViewModel.eventHeaderData)
-            }
-            Section {
-                EventSummaryView(data: locationViewModel.eventHeaderData, showsHeader: false)
-            }
+#Preview {
+    let tripViewModel = TripDetailViewModel(
+        trip: PreviewGenerator.makeExampleTrip(includeLocations: true, includeExpenses: true)
+    )
+    let locationViewModel = LocationDetailViewModel(
+        location: PreviewGenerator.makeExampleLocation(includeExpenses: true)
+    )
+    
+    Form {
+        Section {
+            EventSummaryView(data: tripViewModel.eventHeaderData, showsAmounts: false, showsAmountBalance: false)
         }
-        .environment(\.locale, locale)
-        .preferredColorScheme(colorScheme)
+        Section {
+            EventSummaryView(data: tripViewModel.eventHeaderData)
+        }
+        Section {
+            EventSummaryView(data: locationViewModel.eventHeaderData)
+        }
+        Section {
+            EventSummaryView(data: locationViewModel.eventHeaderData, showsHeader: false)
+        }
     }
-}
-
-#Preview("Light - RU") {
-    EventSummaryData.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
-}
-
-#Preview("Dark - EN") {
-    EventSummaryData.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
 }

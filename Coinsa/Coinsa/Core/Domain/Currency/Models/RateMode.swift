@@ -7,7 +7,7 @@
 
 import Foundation
 
-// Режим курса обмена.
+/// Режим курса обмена.
 enum RateMode: String, Identifiable {
     // MARK: - Значения
     

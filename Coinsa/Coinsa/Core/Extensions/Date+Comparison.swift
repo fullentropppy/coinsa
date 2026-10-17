@@ -89,9 +89,8 @@ extension Date {
     /// - Parameters:
     ///   - start: Начальная граница интервала.
     ///   - end: Конечная граница интервала.
-    ///   - calendar: Календарь для вычислений. По умолчанию `.current`.
     /// - Returns: `true`, если дата лежит в интервале `[start, end]`, иначе `false`.
-    func isBetween(_ start: Date, and end: Date, using calendar: Calendar = .current) -> Bool {
+    func isBetween(_ start: Date, and end: Date) -> Bool {
         self >= start && self <= end
     }
     

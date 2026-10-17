@@ -7,14 +7,14 @@
 
 import SwiftUI
 
-// Компонент с суммами в разных валютах.
+/// Компонент с суммами в разных валютах.
 struct AmountStack: View {
     // MARK: - Свойства
     
-    private var baseAmount: Double
-    private var baseCurrency: Currency
-    private var expenseAmount: Double?
-    private var expenseCurrency: Currency?
+    private let baseAmount: Double
+    private let baseCurrency: Currency
+    private let expenseAmount: Double?
+    private let expenseCurrency: Currency?
     
     // MARK: - Инициализация
     
@@ -54,22 +54,9 @@ struct AmountStack: View {
 
 // MARK: - Превью
 
-private extension AmountStack {
-    static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
-        return List {
-            AmountStack(baseAmount: 2500, baseCurrency: .rub)
-            AmountStack(baseAmount: 2500, baseCurrency: .rub, expenseAmount: 5000, expenseCurrency: .jpy)
-        }
-        .environment(\.locale, locale)
-        .preferredColorScheme(colorScheme)
+#Preview {
+    List {
+        AmountStack(baseAmount: 2500, baseCurrency: .rub)
+        AmountStack(baseAmount: 2500, baseCurrency: .rub, expenseAmount: 5000, expenseCurrency: .jpy)
     }
 }
-
-#Preview("Light - RU") {
-    AmountStack.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
-}
-
-#Preview("Dark - EN") {
-    AmountStack.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
-}
-

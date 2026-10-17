@@ -59,7 +59,7 @@ class Trip: DateRangeProviding {
         baseCurrencyCode: String,
         locations: [Location],
         createdAt: Date,
-        updatedAt: Date,
+        updatedAt: Date
     ) {
         self.id = id
         self.createdAt = createdAt

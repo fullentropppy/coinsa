@@ -20,7 +20,7 @@ struct SplashView: View {
     @State private var iconOpacity = 0.0
     @State private var hasStartedAnimation = false
 
-    // MARK: - Зависисмости
+    // MARK: - Зависимости
     
     let onFinished: () -> Void
     
@@ -74,19 +74,9 @@ struct SplashView: View {
 
 // MARK: - Превью
 
-#Preview("Light") {
+#Preview {
     TimelineView(.periodic(from: .now, by: 2.0)) { timeline in
         SplashView(onFinished: {})
             .id(timeline.date.timeIntervalSince1970)
-            .preferredColorScheme(.light)
     }
 }
-
-#Preview("Dark") {
-    TimelineView(.periodic(from: .now, by: 2.0)) { timeline in
-        SplashView(onFinished: {})
-            .id(timeline.date.timeIntervalSince1970)
-            .preferredColorScheme(.dark)
-    }
-}
-

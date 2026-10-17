@@ -72,8 +72,7 @@ struct TripEditView: View {
                     title: .tripDeleteTitle,
                     message: .tripDeleteMessage,
                     onConfirm: { confirmDelete() },
-                    onCancel: { cancelDelete()
-                    }
+                    onCancel: { cancelDelete() }
                 )
         }
     }
@@ -142,7 +141,7 @@ struct TripEditView: View {
                 title: .tripCurrency,
                 selection: baseCurrencyBinding,
                 options: Currency.allCasesSortedByName,
-                disabled: viewModel.hasLocations
+                isDisabled: viewModel.hasLocations
             ) { currency in
                 currency.makeLabel()
             }
@@ -233,39 +232,10 @@ struct TripEditView: View {
 
 // MARK: - Превью
 
-private extension TripEditView {
-    static func makePreview(
-        locale: Locale,
-        colorScheme: ColorScheme,
-        withNewTrip: Bool = false
-    ) -> some View {
-        Group {
-            if withNewTrip {
-                return TripEditView(forCreateWith: .defaultValue)
-            } else {
-                let builder = PreviewBuilder.builder().withLocations(false)
-                let data = builder.buildData()
-                let trip = builder.getTrip(from: data)
-                return TripEditView(forEdit: trip)
-            }
-        }
-        .environment(\.locale, locale)
-        .preferredColorScheme(colorScheme)
-    }
+#Preview("Editing") {
+    TripEditView(forEdit: PreviewGenerator.makeExampleTrip())
 }
 
-#Preview("Edit. Light - RU") {
-    TripEditView.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
-}
-
-#Preview("Edit. Dark - EN") {
-    TripEditView.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
-}
-
-#Preview("Create. Light - RU") {
-    TripEditView.makePreview(locale: PreviewLocale.ru, colorScheme: .light, withNewTrip: true)
-}
-
-#Preview("Create. Dark - EN") {
-    TripEditView.makePreview(locale: PreviewLocale.en, colorScheme: .dark, withNewTrip: true)
+#Preview("Creating") {
+    TripEditView(forCreateWith: .defaultValue)
 }

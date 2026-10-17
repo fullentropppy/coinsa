@@ -46,7 +46,7 @@ struct EventAnalyticsView: View {
 
     private var eventAnalyticsList: some View {
         List {
-            metricPickerSection
+            metricHeader
             if viewModel.hasAnalytics(for: selectedMetric) {
                 selectedMetricBody
             } else {
@@ -55,18 +55,6 @@ struct EventAnalyticsView: View {
         }
     }
 
-    @ViewBuilder
-    private var selectedMetricHeader: some View {
-        switch selectedMetric {
-        case .summary:
-            EventAnalyticsSummaryHeader(viewModel: viewModel)
-        case .days:
-            EventAnalyticsDaysHeader(viewModel: viewModel)
-        case .categories:
-            EventAnalyticsCategoriesHeader(viewModel: viewModel)
-        }
-    }
-    
     @ViewBuilder
     private var selectedMetricBody: some View {
         switch selectedMetric {
@@ -92,24 +80,40 @@ struct EventAnalyticsView: View {
 
     // MARK: - Секции
 
-    private var metricPickerSection: some View {
+    private var metricHeader: some View {
         Section {
-            Picker("", selection: $selectedMetric) {
-                ForEach(EventAnalyticsMetric.allCases) { metric in
-                    if viewModel.hasAnalytics(for: metric) {
-                        Text(metric.localizedResource).tag(metric)
+            VStack(spacing: 14) {
+                Picker(selection: $selectedMetric) {
+                    ForEach(EventAnalyticsMetric.allCases) { metric in
+                        if viewModel.hasAnalytics(for: metric) {
+                            Text(metric.localizedResource).tag(metric)
+                        }
                     }
+                } label: {
+                    EmptyView()
+                }
+                .pickerStyle(.segmented)
+                .onChange(of: selectedMetric) {
+                    haptics.trigger(.tap)
+                }
+                .listRowSeparator(.hidden)
+                
+                if viewModel.hasAnalytics(for: selectedMetric) {
+                    selectedMetricHeader
                 }
             }
-            .pickerStyle(.segmented)
-            .onChange(of: selectedMetric) {
-                haptics.trigger(.tap)
-            }
-            .listRowSeparator(.hidden)
-            
-            if viewModel.hasAnalytics(for: selectedMetric) {
-                selectedMetricHeader
-            }
+        }
+    }
+    
+    @ViewBuilder
+    private var selectedMetricHeader: some View {
+        switch selectedMetric {
+        case .summary:
+            EventAnalyticsSummaryHeader(viewModel: viewModel)
+        case .days:
+            EventAnalyticsDaysHeader(viewModel: viewModel)
+        case .categories:
+            EventAnalyticsCategoriesHeader(viewModel: viewModel)
         }
     }
 }
@@ -117,30 +121,17 @@ struct EventAnalyticsView: View {
 // MARK: - Превью
 
 extension EventAnalyticsView {
-    fileprivate static func makePreview(
-        locale: Locale,
-        colorScheme: ColorScheme,
-        forTrip: Bool = true,
-        withSignificantData: Bool = true
-    ) -> some View {
-        let builder =
-            PreviewBuilder
-            .builder()
-            .withScenario(.southKorea)
-            .withExpenses(withSignificantData)
-
-        let data = builder.buildData()
-
+    fileprivate static func makePreview(forTrip: Bool, includeExpenses: Bool) -> some View {
         let screenContextSubtitle: String
         let analyticsData: EventCategoryAnalyticsData
 
         if forTrip {
-            let trip = builder.getTrip(from: data)
+            let trip = PreviewGenerator.makeExampleTrip(includeLocations: true, includeExpenses: includeExpenses)
             let viewModel = TripDetailViewModel(trip: trip)
             screenContextSubtitle = trip.screenContextSubtitle
             analyticsData = viewModel.eventAnalyticsData
         } else {
-            let location = builder.getLocation(from: data)
+            let location = PreviewGenerator.makeExampleLocation(includeExpenses: includeExpenses)
             let viewModel = LocationDetailViewModel(location: location)
             screenContextSubtitle = location.screenContextSubtitle
             analyticsData = viewModel.eventAnalyticsData
@@ -149,39 +140,17 @@ extension EventAnalyticsView {
         return NavigationStack {
             EventAnalyticsView(data: analyticsData, screenContextSubtitle: screenContextSubtitle)
         }
-        .environment(\.locale, locale)
-        .preferredColorScheme(colorScheme)
     }
 }
 
-#Preview("Trip. Light - RU") {
-    EventAnalyticsView.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
+#Preview("For Trip") {
+    EventAnalyticsView.makePreview(forTrip: true, includeExpenses: true)
 }
 
-#Preview("Trip. Dark - EN") {
-    EventAnalyticsView.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
+#Preview("For Location") {
+    EventAnalyticsView.makePreview(forTrip: false, includeExpenses: true)
 }
 
-#Preview("Location. Light - RU") {
-    EventAnalyticsView.makePreview(locale: PreviewLocale.ru, colorScheme: .light, forTrip: false)
-}
-
-#Preview("Location. Dark - EN") {
-    EventAnalyticsView.makePreview(locale: PreviewLocale.en, colorScheme: .dark, forTrip: false)
-}
-
-#Preview("Empty. Light - RU") {
-    EventAnalyticsView.makePreview(
-        locale: PreviewLocale.ru,
-        colorScheme: .light,
-        withSignificantData: false
-    )
-}
-
-#Preview("Empty. Dark - EN") {
-    EventAnalyticsView.makePreview(
-        locale: PreviewLocale.en,
-        colorScheme: .dark,
-        withSignificantData: false
-    )
+#Preview("Empty") {
+    EventAnalyticsView.makePreview(forTrip: false, includeExpenses: false)
 }

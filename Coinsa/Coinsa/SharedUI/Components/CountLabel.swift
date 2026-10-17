@@ -75,28 +75,17 @@ extension CountLabel {
 
 // MARK: - Превью
 
-private extension CountLabel {
-    static func makePreview(colorScheme: ColorScheme) -> some View {
-        let count = 14
-        
-        return VStack(spacing: 40) {
-            VStack(spacing: 20) {
-                CountLabel(count)
-                CountLabel(count, font: .footnote.monospacedDigit(), color: .accent)
-            }
-            VStack(spacing: 20) {
-                CountLabel.days(count)
-                CountLabel.daysSecondarySmall(count)
-            }
+#Preview {
+    let count = 14
+    
+    VStack(spacing: 40) {
+        VStack(spacing: 20) {
+            CountLabel(count)
+            CountLabel(count, font: .footnote.monospacedDigit(), color: .accent)
         }
-        .preferredColorScheme(colorScheme)
+        VStack(spacing: 20) {
+            CountLabel.days(count)
+            CountLabel.daysSecondarySmall(count)
+        }
     }
-}
-
-#Preview("Light") {
-    CountLabel.makePreview(colorScheme: .light)
-}
-
-#Preview("Dark") {
-    CountLabel.makePreview(colorScheme: .dark)
 }

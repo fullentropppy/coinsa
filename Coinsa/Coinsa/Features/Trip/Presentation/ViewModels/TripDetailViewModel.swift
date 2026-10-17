@@ -20,8 +20,8 @@ struct TripDetailViewModel {
     }
     
     var eventHeaderData: EventSummaryData {
-        let budgetAmount = trip.calculateBudgetAmount(asBaseCurrency: true)
-        let expensesAmount = trip.calculateExpensesAmount(asBaseCurrency: true)
+        let budgetAmount = trip.calculateBudgetAmount(inBaseCurrency: true)
+        let expensesAmount = trip.calculateExpensesAmount(inBaseCurrency: true)
         
         return EventSummaryData(
             badgeProvider: Trip.self,
@@ -33,8 +33,8 @@ struct TripDetailViewModel {
     }
 
     var eventAnalyticsData: EventCategoryAnalyticsData {
-        let baseBudget = trip.calculateBudgetAmount(asBaseCurrency: true)
-        let expensesAmountByCategory = trip.calculateExpensesAmountByCategory(asBaseCurrency: true)
+        let baseBudget = trip.calculateBudgetAmount(inBaseCurrency: true)
+        let expensesAmountByCategory = trip.calculateExpensesAmountByCategory(inBaseCurrency: true)
         let expenses = trip.locations?.flatMap { $0.expenses ?? [] } ?? []
 
         return EventCategoryAnalyticsData(

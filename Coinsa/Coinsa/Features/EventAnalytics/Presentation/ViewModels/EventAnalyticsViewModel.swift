@@ -11,7 +11,7 @@ import SwiftUI
 struct EventAnalyticsViewModel {
     // MARK: - Статические свойства
     
-    private static let secondsPerDay: TimeInterval = 24 * 60 * 60
+    let secondsPerDay: TimeInterval = 24 * 60 * 60
     
     // MARK: - Зависимости
 
@@ -173,11 +173,11 @@ struct EventAnalyticsViewModel {
         summaryChartPeakPoint?.locationAmount
     }
 
-    var middleDailyBaseExpenseAmount: Double {
+    var halfDailyBaseExpenseAmount: Double {
         maxDailyBaseExpenseAmount / 2
     }
 
-    var middleDailyLocationExpenseAmount: Double? {
+    var halfDailyLocationExpenseAmount: Double? {
         if let maxDailyLocationExpenseAmount {
             maxDailyLocationExpenseAmount / 2
         } else {
@@ -203,7 +203,7 @@ struct EventAnalyticsViewModel {
     var summaryChartXVisibleDomainLength: TimeInterval {
         let totalVisibleDays = max(summaryChartPlainDates.count - 2, 1)
         let preferredVisibleDays = min(totalVisibleDays, 7)
-        return TimeInterval(preferredVisibleDays) * Self.secondsPerDay
+        return TimeInterval(preferredVisibleDays) * secondsPerDay
     }
     
     // MARK: - Публичные методы

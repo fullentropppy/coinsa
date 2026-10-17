@@ -51,24 +51,8 @@ struct LocationRowView: View {
 
 // MARK: - Превью
 
-private extension LocationRowView {
-    static func makePreview(locale: Locale, colorScheme: ColorScheme) -> some View {
-        let builder = PreviewBuilder.builder()
-        let data = builder.buildData()
-        let location = builder.getLocation(from: data)
-
-        return List {
-            LocationRowView(location)
-                .environment(\.locale, locale)
-                .preferredColorScheme(colorScheme)
-        }
+#Preview {
+    List {
+        LocationRowView(PreviewGenerator.makeExampleLocation(includeExpenses: true))
     }
-}
-
-#Preview("Light - RU") {
-    LocationRowView.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
-}
-
-#Preview("Dark - EN") {
-    LocationRowView.makePreview(locale: PreviewLocale.en, colorScheme: .dark)
 }

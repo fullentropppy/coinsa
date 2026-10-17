@@ -95,7 +95,7 @@ struct ExpenseDetailViewModel {
     // MARK: - Вычисляемые свойства. Курс обмена
     
     var exchangeRateDescription: LocalizedStringResource? {
-        guard !isExpenseBaseCurrency || !isLocationBaseCurrency else{
+        guard !isExpenseBaseCurrency || !isLocationBaseCurrency else {
             return nil
         }
         

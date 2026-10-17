@@ -79,7 +79,7 @@ class Location: DateRangeProviding {
         trip: Trip,
         expenses: [Expense],
         createdAt: Date,
-        updatedAt: Date,
+        updatedAt: Date
     ) {
         self.id = id
         self.createdAt = createdAt

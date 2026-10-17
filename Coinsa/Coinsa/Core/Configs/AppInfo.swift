@@ -12,17 +12,17 @@ struct AppInfo {
     // MARK: - Правовая информация
     
     /// Первый год, поддерживаемый приложением (начало копирайта).
-    private static var firstSupportedYear: Int { 2026 }
+    private static var firstSupportedYear: Int = 2026
     
     /// Последний год, поддерживаемый приложением (окончание копирайта).
-    private static var lastSupportedYear: Int { 2026 }
+    private static var lastSupportedYear: Int = 2026
     
     /// Строка с копирайтом в формате "© Год" или "© Год-Год".
     static var copyrightYears: String {
         if firstSupportedYear == lastSupportedYear {
             "© \(lastSupportedYear)"
         } else {
-            "© \(firstSupportedYear)-\(lastSupportedYear)"
+            "© \(firstSupportedYear)–\(lastSupportedYear)"
         }
     }
     

@@ -18,7 +18,7 @@ struct ConfirmationAlertModifier: ViewModifier {
     let isPresented: Binding<Bool>
     let title: LocalizedStringResource
     let message: LocalizedStringResource
-    let destuctiveButtonTitle: LocalizedStringResource
+    let destructiveButtonTitle: LocalizedStringResource
     let onConfirm: () -> Void
     let hapticTypeOnConfirm: HapticType?
     let onCancel: (() -> Void)?
@@ -32,7 +32,7 @@ struct ConfirmationAlertModifier: ViewModifier {
     ///   - isPresented: Флаг отображения алерта.
     ///   - title: Заголовок.
     ///   - message: Сообщение.
-    ///   - destuctiveButtonTitle: Текст деструктивной кнопки.
+    ///   - destructiveButtonTitle: Текст деструктивной кнопки.
     ///   - onConfirm: Действие при подтверждении.
     ///   - hapticTypeOnConfirm: Тактильный отклик при подтверждении.
     ///   - onCancel: Действие при отмене.
@@ -42,7 +42,7 @@ struct ConfirmationAlertModifier: ViewModifier {
         isPresented: Binding<Bool>,
         title: LocalizedStringResource,
         message: LocalizedStringResource,
-        destuctiveButtonTitle: LocalizedStringResource,
+        destructiveButtonTitle: LocalizedStringResource,
         onConfirm: @escaping () -> Void,
         hapticTypeOnConfirm: HapticType? = nil,
         onCancel: (() -> Void)? = nil,
@@ -52,7 +52,7 @@ struct ConfirmationAlertModifier: ViewModifier {
         self.isPresented = isPresented
         self.title = title
         self.message = message
-        self.destuctiveButtonTitle = destuctiveButtonTitle
+        self.destructiveButtonTitle = destructiveButtonTitle
         self.onConfirm = onConfirm
         self.hapticTypeOnConfirm = hapticTypeOnConfirm
         self.onCancel = onCancel
@@ -65,7 +65,7 @@ struct ConfirmationAlertModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .alert(title, isPresented: isPresented) {
-                Button(destuctiveButtonTitle, role: .destructive) {
+                Button(destructiveButtonTitle, role: .destructive) {
                     if let hapticTypeOnConfirm {
                         haptics.trigger(hapticTypeOnConfirm)
                     }

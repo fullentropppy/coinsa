@@ -34,7 +34,7 @@ struct LocationDetailView: View {
     }
 
     private var viewModel: LocationDetailViewModel {
-        LocationDetailViewModel (location: location)
+        LocationDetailViewModel(location: location)
     }
     
     // MARK: - Инициализация
@@ -196,40 +196,16 @@ struct LocationDetailView: View {
 
 // MARK: - Превью
 
-private extension LocationDetailView {
-    static func makePreview(
-        locale: Locale,
-        colorScheme: ColorScheme,
-        withExpenses: Bool = true
-    ) -> some View {
-        let builder = PreviewBuilder.builder().withExpenses(withExpenses)
-        let container = builder.buildContainer()
-        let settingsStore = AppSettingsStore()
-        let location = builder.fetchLocation(from: container)
-        
-        return NavigationStack {
-            LocationDetailView(location)
-        }
-        .modelContainer(container)
-        .environment(settingsStore)
-        .environment(\.locale, locale)
-        .preferredColorScheme(colorScheme)
+#Preview("With Expenses") {
+    NavigationStack {
+        LocationDetailView(PreviewGenerator.makeExampleLocation(includeExpenses: true))
     }
+    .environment(AppSettingsStore())
 }
 
-#Preview("Light - RU") {
-    LocationDetailView.makePreview(locale: PreviewLocale.ru, colorScheme: .light)
-}
-
-#Preview("Dark - EN") {
-    LocationDetailView.makePreview(locale: PreviewLocale.en, colorScheme: .dark
-    )
-}
-
-#Preview("No expenses. Light - RU") {
-    LocationDetailView.makePreview(locale: PreviewLocale.ru, colorScheme: .light, withExpenses: false)
-}
-
-#Preview("No expenses. Dark - EN") {
-    LocationDetailView.makePreview(locale: PreviewLocale.en, colorScheme: .dark, withExpenses: false)
+#Preview("Without Expenses") {
+    NavigationStack {
+        LocationDetailView(PreviewGenerator.makeExampleLocation())
+    }
+    .environment(AppSettingsStore())
 }
