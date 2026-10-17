@@ -54,7 +54,7 @@ struct LocationRepository {
             updatedAt: now
         )
         
-        normalizedLocationData(location)
+        normalizeLocationData(location)
         context.insert(location)
         try? context.save()
     }
@@ -88,7 +88,7 @@ struct LocationRepository {
         location.budget = budget
         location.updatedAt = Date()
         
-        normalizedLocationData(location)
+        normalizeLocationData(location)
         try? context.save()
     }
     
@@ -99,16 +99,16 @@ struct LocationRepository {
         try? context.save()
     }
     
-    // MARK: - Номализация
+    // MARK: - Нормализация
     
     /// Нормализует значения локации.
     /// - Parameter location: Локация для нормализации значений.
-    private func normalizedLocationData(_ location: Location) {
+    private func normalizeLocationData(_ location: Location) {
         location.name = location.name.trimmed
         location.storedStartDate = location.storedStartDate.storedPlainDate(using: .utc)
         location.storedEndDate = location.storedEndDate.storedPlainDate(using: .utc)
         location.rateLocationToBase = location.rateLocationToBase.nonNegative
-        location.exchangeAdjustment = location.exchangeAdjustment
+        location.exchangeAdjustment = location.exchangeAdjustment.nonNegative
         location.budget = location.budget.nonNegative
     }
 }

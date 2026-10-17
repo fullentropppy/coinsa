@@ -115,7 +115,7 @@ struct LocationEditView: View {
         }
     }
 
-    // MARK: Основной контекнт
+    // MARK: Основной контент
     
     private var locationEditForm: some View {
         Form {

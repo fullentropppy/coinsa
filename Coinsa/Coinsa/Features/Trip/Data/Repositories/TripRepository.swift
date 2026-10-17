@@ -79,7 +79,7 @@ struct TripRepository {
         try? context.save()
     }
     
-    // MARK: - Номализация
+    // MARK: - Нормализация
     
     /// Нормализует значения поездки.
     /// - Parameter trip: Поездка для нормализации значений.

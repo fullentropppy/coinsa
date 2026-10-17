@@ -1,5 +1,5 @@
 //
-//  TypeBadge.swift
+//  Trip+Badge.swift
 //  Coinsa
 //
 //  Created by Daniil Gritsenko on 15.04.2026.

@@ -55,6 +55,9 @@
 ### Synchronization
 - **Automatic data synchronization through iCloud** — all app data is available across your Apple devices.
 
+## System Requirements
+Requires **IOS 26** or later.
+
 ## License
 
 **Coinsa is not an open-source project.** The source code is available for viewing, study, and personal non-commercial use.

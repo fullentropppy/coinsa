@@ -72,8 +72,7 @@ struct TripEditView: View {
                     title: .tripDeleteTitle,
                     message: .tripDeleteMessage,
                     onConfirm: { confirmDelete() },
-                    onCancel: { cancelDelete()
-                    }
+                    onCancel: { cancelDelete() }
                 )
         }
     }

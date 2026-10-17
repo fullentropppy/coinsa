@@ -8,7 +8,7 @@
 import Foundation
 
 extension Expense {
-    // Часовой пояс (из идентификатора).
+    /// Часовой пояс (из идентификатора).
     var timeZone: TimeZone {
         TimeZone(identifier: timeZoneID ?? "") ?? .current
     }

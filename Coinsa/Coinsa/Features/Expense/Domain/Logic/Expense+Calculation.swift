@@ -6,7 +6,7 @@
 //
 
 extension Expense {
-    // MARK: - Вычисляемые свойства.
+    // MARK: - Вычисляемые свойства
     
     private var calculationContext: ExpenseCalculationContext {
         ExpenseCalculationContext(

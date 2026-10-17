@@ -140,7 +140,7 @@ struct TripDetailView: View {
             GroupHeader(
                 icon: Location.primaryIcon,
                 title: .tripLocations,
-                itemCount: trip.locationsCount  
+                itemCount: trip.locationsCount
             )
             .listRowBackground(Color.clear)
             

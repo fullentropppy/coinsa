@@ -2054,25 +2054,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Проживание"
-          }
-        }
-      }
-    },
-    "expense.category.entertainment" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Entertainment"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Развлечение"
           }
         }
       }
@@ -2825,13 +2808,13 @@
         }
       }
     },
-    "expense.subcategory.luggageStorrage" : {
+    "expense.subcategory.luggageStorage" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Luggage Storrage"
+            "value" : "Luggage Storage"
           }
         },
         "ru" : {

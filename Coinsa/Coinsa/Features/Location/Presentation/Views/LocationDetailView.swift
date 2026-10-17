@@ -34,7 +34,7 @@ struct LocationDetailView: View {
     }
 
     private var viewModel: LocationDetailViewModel {
-        LocationDetailViewModel (location: location)
+        LocationDetailViewModel(location: location)
     }
     
     // MARK: - Инициализация
