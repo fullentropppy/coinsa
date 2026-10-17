@@ -56,7 +56,7 @@
 - **Automatic data synchronization through iCloud** — all app data is available across your Apple devices.
 
 ## System Requirements
-Requires **IOS 26** or later.
+Requires **iOS 26** or later.
 
 ## License
 
