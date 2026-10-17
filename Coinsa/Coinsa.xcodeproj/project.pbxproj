@@ -274,7 +274,7 @@
 				CODE_SIGN_ENTITLEMENTS = Coinsa/BuildConfigs/CoinsaDebug.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_TEAM = 6KBZQ94594;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -319,12 +319,12 @@
 				CODE_SIGN_ENTITLEMENTS = Coinsa/BuildConfigs/Coinsa.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_TEAM = 6KBZQ94594;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Coinsa/Resources/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "Coinsa Debug";
+				INFOPLIST_KEY_CFBundleDisplayName = Coinsa;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Приложению нужен доступ к геопозиции для сохранения координат трат.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
