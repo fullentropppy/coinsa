@@ -181,7 +181,6 @@ struct ExpenseDetailView: View {
     
     private var headerContent: some View {
         HStack {
-            Expense.makeBadge()
             expense.subcategory.makeBadge()
             Spacer()
             DateLabel.secondarySmall(expense.civilDateTime)
