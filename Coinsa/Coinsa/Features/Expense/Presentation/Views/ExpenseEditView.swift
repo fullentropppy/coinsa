@@ -302,8 +302,11 @@ struct ExpenseEditView: View {
             HStack {
                 Image(systemName: "ellipsis.bubble")
                     .foregroundStyle(.secondary)
+                    .padding(.vertical, 1)
+                    .frame(maxHeight: .infinity, alignment: .topLeading)
                 
-                TextField(.expenseComment, text: $viewModel.comment)
+                TextField(.expenseComment, text: $viewModel.comment, axis: .vertical)
+                    .lineLimit(1...10)
             }
         }
     }
