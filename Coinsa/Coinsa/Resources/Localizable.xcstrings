@@ -2485,6 +2485,23 @@
         }
       }
     },
+    "expense.subcategory.beach" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beach"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Пляж"
+          }
+        }
+      }
+    },
     "expense.subcategory.breakfast" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2957,6 +2974,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Общ. транспорт"
+          }
+        }
+      }
+    },
+    "expense.subcategory.relaxation" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Relaxation"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Релакс"
           }
         }
       }
