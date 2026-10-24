@@ -46,8 +46,10 @@ extension ExpenseSubcategory: LocalizedResourceProviding {
         case .tour: .expenseSubcategoryTour
         case .landmark: .expenseSubcategoryLandmark
         case .park: .expenseSubcategoryPark
+        case .beach: .expenseSubcategoryBeach
         case .activity: .expenseSubcategoryActivity
         case .entertainment: .expenseSubcategoryEntertainment
+        case .relaxation: .expenseSubcategoryRelaxation
         case .otherLeisure: .expenseSubcategoryOther
             
         // MARK: - Шоппинг

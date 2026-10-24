@@ -41,8 +41,10 @@ enum ExpenseSubcategory: String, Codable, CaseIterable, Identifiable {
     case tour
     case landmark
     case park
+    case beach
     case activity
     case entertainment
+    case relaxation
     case otherLeisure
     
     // MARK: - Шоппинг

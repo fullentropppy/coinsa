@@ -46,8 +46,10 @@ extension ExpenseSubcategory: ValueVisualRepresentable {
         case .tour: "map"
         case .landmark: "building.columns"
         case .park: "tree"
+        case .beach: "beach.umbrella"
         case .activity: "figure.run"
         case .entertainment: "theatermasks"
+        case .relaxation: "leaf"
         case .otherLeisure: category.primaryIcon
         
         // MARK: - Шоппинг
@@ -120,8 +122,10 @@ extension ExpenseSubcategory: ValueVisualRepresentable {
         case .tour: "map.fill"
         case .landmark: "building.columns.fill"
         case .park: "tree.fill"
+        case .beach: "beach.umbrella.fill"
         case .activity: "figure.run"
         case .entertainment: "theatermasks.fill"
+        case .relaxation: "leaf.fill"
         case .otherLeisure: category.secondaryIcon
             
         // MARK: - Шоппинг

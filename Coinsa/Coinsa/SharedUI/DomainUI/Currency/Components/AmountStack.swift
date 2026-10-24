@@ -47,6 +47,7 @@ struct AmountStack: View {
                 AmountText.secondarySmall(baseAmount, currency: baseCurrency)
             } else {
                 AmountText.standard(baseAmount, currency: baseCurrency)
+                    .frame(maxHeight: .infinity, alignment: .top)
             }
         }
     }

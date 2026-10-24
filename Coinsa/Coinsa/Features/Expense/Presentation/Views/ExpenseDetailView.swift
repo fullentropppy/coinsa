@@ -145,7 +145,9 @@ struct ExpenseDetailView: View {
                 HStack {
                     Image(systemName: "ellipsis.bubble")
                         .foregroundStyle(.secondary)
-                    
+                        .padding(.vertical, 1)
+                        .frame(maxHeight: .infinity, alignment: .topLeading)
+
                     Text(comment)
                 }
             }
@@ -179,7 +181,6 @@ struct ExpenseDetailView: View {
     
     private var headerContent: some View {
         HStack {
-            Expense.makeBadge()
             expense.subcategory.makeBadge()
             Spacer()
             DateLabel.secondarySmall(expense.civilDateTime)

@@ -10,19 +10,74 @@ extension ExpenseCategory {
     var subcategories: [ExpenseSubcategory] {
         switch self {
         case .food:
-            [.breakfast, .lunch, .dinner, .snack, .groceries, .otherFood]
+            [
+                .breakfast,
+                .lunch,
+                .dinner,
+                .snack,
+                .groceries,
+                .otherFood
+            ]
         case .transport:
-            [.plane, .ferry, .train, .publicTransport, .taxi, .transfer, .travelPass, .vehicleRental, .fuel, .otherTransport]
+            [
+                .plane,
+                .ferry,
+                .train,
+                .publicTransport,
+                .taxi,
+                .transfer,
+                .travelPass,
+                .vehicleRental,
+                .fuel,
+                .otherTransport
+            ]
         case .accommodation:
-            [.hotel, .accommodationRental, .touristTax, .otherAccommodation]
+            [
+                .hotel,
+                .accommodationRental,
+                .touristTax,
+                .otherAccommodation
+            ]
         case .leisure:
-            [.tour, .landmark, .park, .activity, .entertainment, .otherLeisure]
+            [
+                .tour,
+                .landmark,
+                .park,
+                .beach,
+                .activity,
+                .entertainment,
+                .relaxation,
+                .otherLeisure
+            ]
         case .shopping:
-            [.clothing, .cosmetics, .souvenirs, .jewelry, .homeGoods, .electronics, .otherShopping]
+            [
+                .clothing,
+                .cosmetics,
+                .souvenirs,
+                .jewelry,
+                .homeGoods,
+                .electronics,
+                .otherShopping
+            ]
         case .medicine:
-            [.healthInsurance, .medicalCare, .medication, .otherMedicine]
+            [
+                .healthInsurance,
+                .medicalCare,
+                .medication,
+                .otherMedicine
+            ]
         case .miscellaneous:
-            [.connectivity, .bankFees, .documents, .laundry, .donation, .luggageStorage, .postalService, .digitalService, .otherMiscellaneous]
+            [
+                .connectivity,
+                .bankFees,
+                .documents,
+                .laundry,
+                .donation,
+                .luggageStorage,
+                .postalService,
+                .digitalService,
+                .otherMiscellaneous
+            ]
         }
     }
 }

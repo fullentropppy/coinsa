@@ -85,8 +85,11 @@ struct EventSummaryView: View {
     private var headerContent: some View {
         if let badgeProvider = data.badgeProvider, let dateRangeProvider = data.dateRangeProvider {
             HStack {
-                badgeProvider.makeBadge()
-                dateRangeProvider.status.makeBadge()
+                Badge(style: .combined(
+                    icon: badgeProvider.secondaryIcon,
+                    badge: dateRangeProvider.status.localizedResource,
+                    fill: dateRangeProvider.status.accentColor)
+                )
                 Spacer()
                 DateLabel.secondarySmall(
                     from: dateRangeProvider.startPlainDate,
