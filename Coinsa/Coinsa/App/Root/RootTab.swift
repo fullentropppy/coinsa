@@ -13,6 +13,7 @@ enum RootTab: Hashable {
     
     case today
     case trips
+    case converter
     case settings
     
     // MARK: - Свойства
@@ -21,6 +22,7 @@ enum RootTab: Hashable {
         switch self {
         case .today: "\(Date().day).calendar"
         case .trips: Trip.primaryIcon
+        case .converter: "arrow.left.arrow.right.circle.fill"
         case .settings: "gearshape.fill"
         }
     }
@@ -29,6 +31,7 @@ enum RootTab: Hashable {
         switch self {
         case .today: .tabToday
         case .trips: .tabTrips
+        case .converter: .tabConverter
         case .settings: .tabSettings
         }
     }

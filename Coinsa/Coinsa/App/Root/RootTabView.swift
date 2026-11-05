@@ -9,6 +9,10 @@ import SwiftUI
 
 /// Главный таб-бар с вкладками.
 struct RootTabView: View {
+    // MARK: - Окружение
+
+    @Environment(AppSettingsStore.self) private var settingsStore
+
     // MARK: - Свойства
     
     @State private var selection: RootTab = .today
@@ -22,6 +26,9 @@ struct RootTabView: View {
             }
             Tab(RootTab.trips.title, systemImage: RootTab.trips.icon, value: .trips) {
                 TripListView()
+            }
+            Tab(RootTab.converter.title, systemImage: RootTab.converter.icon, value: .converter) {
+                CurrencyConverterView(baseCurrency: settingsStore.baseCurrency)
             }
             Tab(RootTab.settings.title, systemImage: RootTab.settings.icon, value: .settings) {
                 SettingsView()
