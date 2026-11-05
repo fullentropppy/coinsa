@@ -182,7 +182,10 @@ struct LocationEditView: View {
             LabeledPicker(
                 title: .locationCurrency,
                 selection: locationCurrencyBinding,                
-                options: Currency.allCasesSortedByName,
+                sections: Currency.pickerSections(
+                    baseCurrency: viewModel.baseCurrency,
+                    locationCurrency: viewModel.locationCurrency
+                ),
                 isDisabled: viewModel.hasExpenses
             ) { currency in
                 currency.makeLabel()

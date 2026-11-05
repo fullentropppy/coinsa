@@ -206,7 +206,10 @@ struct ExpenseEditView: View {
             LabeledPicker(
                 title: .expenseCurrency,
                 selection: expenseCurrencyBinding,
-                options: Currency.allCasesSortedByName
+                sections: Currency.pickerSections(
+                    baseCurrency: viewModel.baseCurrency,
+                    locationCurrency: viewModel.locationCurrency
+                ),
             ) { currency in
                 currency.makeLabel()
             }

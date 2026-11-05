@@ -27,6 +27,12 @@
             "state" : "new",
             "value" : "1 %1$@ = %2$@ %3$@"
           }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 %1$@ = %2$@ %3$@"
+          }
         }
       }
     },

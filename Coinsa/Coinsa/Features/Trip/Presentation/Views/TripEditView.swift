@@ -140,7 +140,7 @@ struct TripEditView: View {
             LabeledPicker(
                 title: .tripCurrency,
                 selection: baseCurrencyBinding,
-                options: Currency.allCasesSortedByName,
+                sections: Currency.pickerSections(baseCurrency: viewModel.baseCurrency),
                 isDisabled: viewModel.hasLocations
             ) { currency in
                 currency.makeLabel()
