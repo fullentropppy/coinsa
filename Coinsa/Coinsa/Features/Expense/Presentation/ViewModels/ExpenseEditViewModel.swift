@@ -458,7 +458,7 @@ final class ExpenseEditViewModel {
     
     // MARK: - Операции с координатами
 
-    func updateCoordinate(_ newCoordinate: Coordinate) {
+    func updateCoordinate(_ newCoordinate: Coordinate?) {
         coordinate = newCoordinate
     }
 

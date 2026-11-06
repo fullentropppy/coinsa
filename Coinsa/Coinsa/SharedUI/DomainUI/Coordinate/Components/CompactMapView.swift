@@ -17,7 +17,7 @@ struct CompactMapView: View {
 
     // MARK: - Свойства
 
-    private let title: LocalizedStringResource
+    private let markerTitle: LocalizedStringResource
     private let height: CGFloat
 
     // MARK: - Инициализация
@@ -25,32 +25,32 @@ struct CompactMapView: View {
     /// Создает редактируемую карту с привязкой к координате.
     /// - Parameters:
     ///   - coordinate: Привязка к объекту координат.
-    ///   - title: Заголовок маркера на карте.
+    ///   - markerTitle: Заголовок маркера на карте.
     ///   - height: Высота карты. По умолчанию `200`.
     init(
         _ coordinate: Binding<Coordinate>,
-        title: LocalizedStringResource,
+        markerTitle: LocalizedStringResource,
         height: CGFloat = 200
     ) {
         _coordinate = coordinate
         _cameraPosition = State(initialValue: Self.cameraPosition(for: coordinate.wrappedValue))
-        self.title = title
+        self.markerTitle = markerTitle
         self.height = height
     }
 
     /// Создает карту только для чтения с фиксированной координатой.
     /// - Parameters:
     ///   - coordinate: Объект координат для отображения.
-    ///   - title: Заголовок маркера на карте.
+    ///   - markerTitle: Заголовок маркера на карте.
     ///   - height: Высота карты. По умолчанию `200`.
     init(
         _ coordinate: Coordinate,
-        title: LocalizedStringResource,
+        markerTitle: LocalizedStringResource,
         height: CGFloat = 200
     ) {
         self.init(
             .constant(coordinate),
-            title: title,
+            markerTitle: markerTitle,
             height: height
         )
     }
@@ -68,7 +68,7 @@ struct CompactMapView: View {
 
     private var mapContent: some View {
         Map(position: $cameraPosition, interactionModes: []) {
-            Marker(String(localized: title), coordinate: coordinate.coreLocationCoordinate)
+            Marker(String(localized: markerTitle), coordinate: coordinate.coreLocationCoordinate)
         }
         .frame(height: height)
         .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
@@ -92,6 +92,6 @@ struct CompactMapView: View {
     @Previewable @State var coordinate = PreviewGenerator.makeExampleCoordinate()
     
     List {
-        CompactMapView($coordinate, title: .expensePlaceOfExpense)
+        CompactMapView($coordinate, markerTitle: .expensePlaceOfExpense)
     }
 }

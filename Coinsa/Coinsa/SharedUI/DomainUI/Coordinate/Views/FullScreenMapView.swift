@@ -13,17 +13,24 @@ struct FullScreenMapView: View {
     // MARK: - Окружение
 
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.haptics) private var haptics
 
     // MARK: - Состояние
 
-    @Binding private var coordinate: Coordinate
-    @State private var draftCoordinate: Coordinate
+    @Binding private var coordinate: Coordinate?
+    @State private var draftCoordinate: Coordinate?
     @State private var cameraPosition: MapCameraPosition
+    @State private var currentLocationProvider = CurrentLocationProvider()
+    @State private var isGeolocating = false
+    @State private var isShowingGeolocationError = false
 
     // MARK: - Свойства
 
     private let title: LocalizedStringResource
+    private let markerTitle: LocalizedStringResource
     private let isEditable: Bool
+    private let errorTitle: LocalizedStringResource?
+    private let errorMessage: LocalizedStringResource?
 
     // MARK: - Инициализация
 
@@ -31,13 +38,25 @@ struct FullScreenMapView: View {
     /// - Parameters:
     ///   - coordinate: Привязка к объекту координат.
     ///   - title: Заголовок навигационной панели.
-    init(coordinate: Binding<Coordinate>, title: LocalizedStringResource) {
+    ///   - errorTitle: Заголовок предупреждения об ошибке геолокации.
+    ///   - errorMessage: Сообщение предупреждения об ошибке геолокации.
+    ///   - markerTitle: Заголовок маркера на карте.
+    init(
+        coordinate: Binding<Coordinate?>,
+        title: LocalizedStringResource,
+        markerTitle: LocalizedStringResource,
+        errorTitle: LocalizedStringResource,
+        errorMessage: LocalizedStringResource
+    ) {
         let initialCoordinate = coordinate.wrappedValue
 
         _coordinate = coordinate
         _draftCoordinate = State(initialValue: initialCoordinate)
         _cameraPosition = State(initialValue: Self.cameraPosition(for: initialCoordinate))
         self.title = title
+        self.markerTitle = markerTitle
+        self.errorTitle = errorTitle
+        self.errorMessage = errorMessage
         self.isEditable = true
     }
 
@@ -45,11 +64,19 @@ struct FullScreenMapView: View {
     /// - Parameters:
     ///   - coordinate: Объект координат для отображения.
     ///   - title: Заголовок навигационной панели.
-    init(coordinate: Coordinate, title: LocalizedStringResource) {
+    ///   - markerTitle: Заголовок маркера на карте.
+    init(
+        coordinate: Coordinate,
+        title: LocalizedStringResource,
+        markerTitle: LocalizedStringResource
+    ) {
         _coordinate = .constant(coordinate)
         _draftCoordinate = State(initialValue: coordinate)
         _cameraPosition = State(initialValue: Self.cameraPosition(for: coordinate))
         self.title = title
+        self.markerTitle = markerTitle
+        self.errorTitle = nil
+        self.errorMessage = nil
         self.isEditable = false
     }
 
@@ -59,13 +86,20 @@ struct FullScreenMapView: View {
         NavigationStack {
             mapContent
                 .navigationTitle(title)
+                .navigationSubtitle(draftCoordinate?.formattedDescription ?? "")
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     toolbarContent
                 }
+                .notificationAlert(
+                    isPresented: $isShowingGeolocationError,
+                    title: errorTitle ?? .errorUnknown,
+                    message: errorMessage ?? .errorUnknown,
+                    isError: true
+                )
                 .ignoresSafeArea()
                 .safeAreaInset(edge: .bottom) {
-                    CoordinateBadge(draftCoordinate)
+                    mapBottomBar
                 }
         }
     }
@@ -74,7 +108,9 @@ struct FullScreenMapView: View {
 
     private var mapContent: some View {
         Map(position: $cameraPosition, interactionModes: .all) {
-                Marker(String(localized: title), coordinate: draftCoordinate.coreLocationCoordinate)
+            if let draftCoordinate {
+                Marker(String(localized: markerTitle), coordinate: draftCoordinate.coreLocationCoordinate)
+            }
         }
         .onMapCameraChange(frequency: .continuous) { context in
             if isEditable {
@@ -83,6 +119,43 @@ struct FullScreenMapView: View {
         }
     }
 
+    private var mapBottomBar: some View {
+        HStack {
+            Spacer()
+
+            if isEditable {
+                Button {
+                    haptics.trigger(.tap)
+                    Task {
+                        await determineCurrentLocation()
+                    }
+                } label: {
+                    if isGeolocating {
+                        ProgressView()
+                    } else {
+                        Image(systemName: "location.fill")
+                    }
+                }
+                .disabled(isGeolocating)
+                .padding(16)
+                .contentShape(Circle())
+                .glassEffect(.regular.interactive(), in: .circle)
+            } else {
+                Button {
+                    centerOnSelectedLocation()
+                } label: {
+                    Image(systemName: "scope")
+                }
+                .disabled(draftCoordinate == nil)
+                .padding(16)
+                .contentShape(Circle())
+                .glassEffect(.regular.interactive(), in: .circle)
+            }
+        }
+        .padding(.horizontal, 16)
+        .padding(.bottom, 16)
+    }
+    
     // MARK: - Тулбар
     
     @ToolbarContentBuilder
@@ -96,6 +169,9 @@ struct FullScreenMapView: View {
         if isEditable {
             ToolbarItemGroup(placement: .topBarTrailing) {
                 ToolbarButton.ok {
+                    if isEditable {
+                        haptics.trigger(.tap)
+                    }
                     coordinate = draftCoordinate
                     dismiss()
                 }
@@ -103,10 +179,39 @@ struct FullScreenMapView: View {
         }
     }
 
+    // MARK: - Действия
+
+    private func determineCurrentLocation() async {
+        isGeolocating = true
+        defer { isGeolocating = false }
+
+        do {
+            let location = try await currentLocationProvider.requestCurrentLocation()
+            let currentCoordinate = Coordinate(location)
+            draftCoordinate = currentCoordinate
+            cameraPosition = Self.cameraPosition(for: currentCoordinate)
+        } catch {
+            isShowingGeolocationError = true
+        }
+    }
+
+    private func centerOnSelectedLocation() {
+        cameraPosition = Self.cameraPosition(for: draftCoordinate)
+    }
+
     // MARK: - Инфраструктура
 
-    private static func cameraPosition(for coordinate: Coordinate) -> MapCameraPosition {
-        .region(
+    private static func cameraPosition(for coordinate: Coordinate?) -> MapCameraPosition {
+        guard let coordinate else {
+            return .region(
+                MKCoordinateRegion(
+                    center: CLLocationCoordinate2D(latitude: 0, longitude: 0),
+                    span: MKCoordinateSpan(latitudeDelta: 120, longitudeDelta: 120)
+                )
+            )
+        }
+
+        return .region(
             MKCoordinateRegion(
                 center: coordinate.coreLocationCoordinate,
                 span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
@@ -118,11 +223,21 @@ struct FullScreenMapView: View {
 // MARK: - Превью
 
 #Preview("Reading") {
-    @Previewable @State var coordinate = PreviewGenerator.makeExampleCoordinate()
-    FullScreenMapView(coordinate: coordinate, title: .expensePlaceOfExpense)
+    let coordinate = PreviewGenerator.makeExampleCoordinate()
+    FullScreenMapView(
+        coordinate: coordinate,
+        title: .expenseSubcategoryBreakfast,
+        markerTitle: .expensePlaceOfExpense
+    )
 }
 
 #Preview("Editing") {
-    @Previewable @State var coordinate = PreviewGenerator.makeExampleCoordinate()
-    FullScreenMapView(coordinate: $coordinate, title: .expensePlaceOfExpense)
+    @Previewable @State var coordinate: Coordinate? = PreviewGenerator.makeExampleCoordinate()
+    FullScreenMapView(
+        coordinate: $coordinate,
+        title: .expenseSubcategoryBreakfast,
+        markerTitle: .expensePlaceOfExpense,
+        errorTitle: .expenseCoordinateErrorTitle,
+        errorMessage: .expenseCoordinateErrorMessage
+    )
 }

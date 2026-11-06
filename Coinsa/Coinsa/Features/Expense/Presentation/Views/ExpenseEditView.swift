@@ -23,6 +23,7 @@ struct ExpenseEditView: View {
     @State private var deletionHandler = DeletionHandler<Expense>()
     @State private var currentLocationProvider = CurrentLocationProvider()
     @State private var currencySide: CurrencySide
+    @State private var isShowingGeolocationError = false
     @State private var isShowingDiscardAlert = false
     @State private var isShowingLocationMap = false
     @State private var validationNotice: FormValidationNotice?
@@ -97,6 +98,12 @@ struct ExpenseEditView: View {
                         errorDescription: viewModel.rateLoadingError?.errorDescription
                         ?? String(localized: .errorUnknown)
                     ),
+                    isError: true
+                )
+                .notificationAlert(
+                    isPresented: $isShowingGeolocationError,
+                    title: .expenseCoordinateErrorTitle,
+                    message: .expenseCoordinateErrorMessage,
                     isError: true
                 )
                 .discardConfirmationAlert(
@@ -278,10 +285,9 @@ struct ExpenseEditView: View {
         }
     }
     
-    @ViewBuilder
     private var placeOfExpenseSection: some View {
-        if let coordinate = viewModel.coordinate {
-            Section {
+        Section {
+            if let coordinate = viewModel.coordinate {
                 Button {
                     isShowingLocationMap = true
                 } label: {
@@ -290,12 +296,57 @@ struct ExpenseEditView: View {
                             get: { viewModel.coordinate ?? coordinate },
                             set: { viewModel.updateCoordinate($0) }
                         ),
-                        title: .expensePlaceOfExpense
+                        markerTitle: .expensePlaceOfExpense
                     )
                 }
                 .buttonStyle(.plain)
-            } footer: {
-                CoordinateBadge(coordinate, withBackground: false)
+            } else {
+                Button {
+                    haptics.trigger(.tap)
+                    Task {
+                        await resolveCurrentLocation()
+                    }
+                } label: {
+                    HStack {
+                        Image(systemName: "location")
+                        Text(.expenseCoordinateLocate)
+                    }
+                }
+                
+                Button {
+                    haptics.trigger(.tap)
+                    isShowingLocationMap = true
+                } label: {
+                    HStack {
+                        Image(systemName: "map")
+                        Text(.expenseCoordinateChoose)
+                    }
+                }
+            }
+        } footer: {
+            if let coordinate = viewModel.coordinate {
+                HStack {
+                    HStack {
+                        Image(systemName: "location.fill")
+                            .imageScale(.small)
+                        Text(coordinate.formattedDescription)
+                    }
+                    .font(.footnote.monospacedDigit())
+                    Spacer()
+                    Button(role: .destructive) {
+                        haptics.trigger(.tap)
+                        viewModel.updateCoordinate(nil)
+                    } label: {
+                        HStack(spacing: 2) {
+                            Image(systemName: "xmark.circle.fill")
+                                .imageScale(.small)
+                            Text(.expenseCoordinateClear)
+                                .font(.footnote)
+                        }
+                    }
+                }
+            } else {
+                Text(.expenseCoordinateHint)
             }
         }
     }
@@ -315,17 +366,17 @@ struct ExpenseEditView: View {
     }
 
     
-    @ViewBuilder
     private var placeOfExpenseEditor: some View {
-        if let coordinate = viewModel.coordinate {
-            FullScreenMapView(
-                coordinate: Binding(
-                    get: { viewModel.coordinate ?? coordinate },
-                    set: { viewModel.updateCoordinate($0) }
-                ),
-                title: .expensePlaceOfExpense
-            )
-        }
+        FullScreenMapView(
+            coordinate: Binding(
+                get: { viewModel.coordinate },
+                set: { viewModel.updateCoordinate($0) }
+            ),
+            title: viewModel.subcategory.localizedResource,
+            markerTitle: .expensePlaceOfExpense,
+            errorTitle: .expenseCoordinateErrorTitle,
+            errorMessage: .expenseCoordinateErrorMessage
+        )
     }
     
     @ViewBuilder
@@ -498,7 +549,16 @@ struct ExpenseEditView: View {
             let location = try await currentLocationProvider.requestCurrentLocation()
             viewModel.applyResolvedCurrentLocation(location)
         } catch {
-            // Если геолокация недоступна или запрещена, трата остается без координат.
+            isShowingGeolocationError = true
+        }
+    }
+    
+    private func resolveCurrentLocation() async {
+        do {
+            let location = try await currentLocationProvider.requestCurrentLocation()
+            viewModel.updateCoordinate(Coordinate(location))
+        } catch {
+            isShowingGeolocationError = true
         }
     }
 }

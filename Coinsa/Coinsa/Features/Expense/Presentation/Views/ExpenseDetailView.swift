@@ -97,7 +97,8 @@ struct ExpenseDetailView: View {
                 if let coordinate = expense.coordinate {
                     FullScreenMapView(
                         coordinate: coordinate,
-                        title: .expensePlaceOfExpense
+                        title: viewModel.expense.subcategory.localizedResource,
+                        markerTitle: .expensePlaceOfExpense
                     )
                 }
             }
