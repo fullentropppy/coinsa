@@ -38,9 +38,9 @@ final class UserDefaultsSettingsManager {
         set { defaults.set(newValue.rawValue, forKey: UserDefaultsKey.appAppearance) }
     }
     
-    var isAddButtonOnLeft: Bool {
-        get { defaults.bool(forKey: UserDefaultsKey.isAddButtonOnLeft) }
-        set { defaults.set(newValue, forKey: UserDefaultsKey.isAddButtonOnLeft) }
+    var isFloatingButtonOnLeft: Bool {
+        get { defaults.bool(forKey: UserDefaultsKey.isFloatingButtonOnLeft) }
+        set { defaults.set(newValue, forKey: UserDefaultsKey.isFloatingButtonOnLeft) }
     }
     
     // MARK: - Сохраненный выбор
@@ -71,7 +71,7 @@ private enum UserDefaultsKey {
     static let baseCurrency = "baseCurrency"
     static let exchangeAdjustment = "exchangeAdjustment"
     static let appAppearance = "appAppearance"
-    static let isAddButtonOnLeft = "isAddButtonOnLeft"
+    static let isFloatingButtonOnLeft = "isFloatingButtonOnLeft"
     static let selectedLocationID = "selectedLocationID"
     static let selectedPaymentMethod = "selectedPaymentMethod"
 }

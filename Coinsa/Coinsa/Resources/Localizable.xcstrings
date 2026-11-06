@@ -3963,19 +3963,19 @@
         }
       }
     },
-    "settings.isAddButtonOnLeft" : {
+    "settings.isFloatingButtonOnLeft" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "\"Add\" button on the left"
+            "value" : "Floating buttons on the left"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Кнопка \"Добавить\" слева"
+            "value" : "Плавающие кнопки слева"
           }
         }
       }

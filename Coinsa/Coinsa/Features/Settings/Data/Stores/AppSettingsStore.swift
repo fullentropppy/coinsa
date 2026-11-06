@@ -32,8 +32,8 @@ final class AppSettingsStore {
         didSet { userDefaultsManager.appAppearance = appAppearance }
     }
     
-    var isAddButtonOnLeft: Bool {
-        didSet { userDefaultsManager.isAddButtonOnLeft = isAddButtonOnLeft }
+    var isFloatingButtonOnLeft: Bool {
+        didSet { userDefaultsManager.isFloatingButtonOnLeft = isFloatingButtonOnLeft }
     }
     
     // MARK: - Сохраненный выбор
@@ -55,7 +55,7 @@ final class AppSettingsStore {
         self.baseCurrency = userDefaultsManager.baseCurrency
         self.exchangeAdjustment = userDefaultsManager.exchangeAdjustment
         self.appAppearance = userDefaultsManager.appAppearance
-        self.isAddButtonOnLeft = userDefaultsManager.isAddButtonOnLeft
+        self.isFloatingButtonOnLeft = userDefaultsManager.isFloatingButtonOnLeft
         self.selectedLocationID = userDefaultsManager.selectedLocationID
         self.selectedPaymentMethod = userDefaultsManager.selectedPaymentMethod
     }

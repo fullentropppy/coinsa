@@ -48,7 +48,7 @@ struct TripListView: View {
                 }
                 .safeAreaInset(edge: .bottom) {
                     if !trips.isEmpty {
-                        PrimaryAddButton(isOnLeft: settingsStore.isAddButtonOnLeft) {
+                        PrimaryAddButton(isOnLeft: settingsStore.isFloatingButtonOnLeft) {
                             isShowingTripCreate = true
                         }
                     }

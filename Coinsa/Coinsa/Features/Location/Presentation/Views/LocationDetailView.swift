@@ -67,7 +67,7 @@ struct LocationDetailView: View {
             }
             .safeAreaInset(edge: .bottom) {
                 if location.hasExpenses {
-                    PrimaryAddButton(isOnLeft: settingsStore.isAddButtonOnLeft) {
+                    PrimaryAddButton(isOnLeft: settingsStore.isFloatingButtonOnLeft) {
                         isShowingExpenseCreate = true
                     }
                 }

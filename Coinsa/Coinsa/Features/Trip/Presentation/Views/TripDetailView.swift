@@ -66,7 +66,7 @@ struct TripDetailView: View {
             }
             .safeAreaInset(edge: .bottom) {
                 if trip.hasLocations {
-                    PrimaryAddButton(isOnLeft: settingsStore.isAddButtonOnLeft) {
+                    PrimaryAddButton(isOnLeft: settingsStore.isFloatingButtonOnLeft) {
                         isShowingLocationCreate = true
                     }
                 }

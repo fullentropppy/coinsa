@@ -95,7 +95,7 @@ struct SettingsView: View {
             }
             .pickerStyle(.navigationLink)
             
-            Toggle(.settingsIsAddButtonOnLeft, isOn: isAddButtonOnLeftBinding)
+            Toggle(.settingsIsFloatingButtonOnLeft, isOn: isFloatingButtonOnLeftBinding)
                 .tint(.accent)
         }
     }
@@ -131,10 +131,10 @@ struct SettingsView: View {
         )
     }
     
-    private var isAddButtonOnLeftBinding: Binding<Bool> {
+    private var isFloatingButtonOnLeftBinding: Binding<Bool> {
         Binding(
-            get: { settingsStore.isAddButtonOnLeft },
-            set: { settingsStore.isAddButtonOnLeft = $0 }
+            get: { settingsStore.isFloatingButtonOnLeft },
+            set: { settingsStore.isFloatingButtonOnLeft = $0 }
         )
     }
 }

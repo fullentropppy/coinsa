@@ -12,6 +12,7 @@ import SwiftUI
 struct FullScreenMapView: View {
     // MARK: - Окружение
 
+    @Environment(AppSettingsStore.self) private var settingsStore
     @Environment(\.dismiss) private var dismiss
     @Environment(\.haptics) private var haptics
 
@@ -121,7 +122,9 @@ struct FullScreenMapView: View {
 
     private var mapBottomBar: some View {
         HStack {
-            Spacer()
+            if !settingsStore.isFloatingButtonOnLeft {
+                Spacer()
+            }
 
             if isEditable {
                 Button {
@@ -150,6 +153,10 @@ struct FullScreenMapView: View {
                 .padding(16)
                 .contentShape(Circle())
                 .glassEffect(.regular.interactive(), in: .circle)
+            }
+            
+            if settingsStore.isFloatingButtonOnLeft {
+                Spacer()
             }
         }
         .padding(.horizontal, 16)
@@ -229,6 +236,7 @@ struct FullScreenMapView: View {
         title: .expenseSubcategoryBreakfast,
         markerTitle: .expensePlaceOfExpense
     )
+    .environment(AppSettingsStore())
 }
 
 #Preview("Editing") {
@@ -240,4 +248,5 @@ struct FullScreenMapView: View {
         errorTitle: .expenseCoordinateErrorTitle,
         errorMessage: .expenseCoordinateErrorMessage
     )
+    .environment(AppSettingsStore())
 }
