@@ -16,6 +16,8 @@ nonisolated enum NumericEditField: Hashable {
     case locationExchangeRate
     case exchangeAdjustment
     case budget
+    case converterFromAmount
+    case converterToAmount
 }
 
 /// Кастомное поле для ввода числовых значений с форматированием и поддержкой фокуса.
@@ -32,6 +34,7 @@ struct NumericInputField: View {
     private let textAlignment: TextAlignment
     private let placeholder: String
     private let formatter: NumberFormatter
+    private let onCommit: (() -> Void)?
     
     // MARK: - Инициализация
     
@@ -45,6 +48,7 @@ struct NumericInputField: View {
     ///   - textAlignment: Выравнивание текста.
     ///   - placeholder: Подсказка ввода (опционально). По умолчанию `nil`.
     ///   Если не указана, будет отображаться `0` с количеством нулей дробной части равным значению `fractionDigits`.
+    ///   - onCommit: Действие при подтверждении ввода.
     init(
         _ value: Binding<Double>,
         focusedField: FocusState<NumericEditField?>.Binding,
@@ -52,7 +56,8 @@ struct NumericInputField: View {
         fractionDigits: Int,
         font: Font,
         textAlignment: TextAlignment,
-        placeholder: String? = nil
+        placeholder: String? = nil,
+        onCommit: (() -> Void)? = nil
     ) {
         self._value = value
         self.focusedField = focusedField
@@ -60,6 +65,7 @@ struct NumericInputField: View {
         self.fractionDigits = fractionDigits
         self.font = font
         self.textAlignment = textAlignment
+        self.onCommit = onCommit
         
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
@@ -125,6 +131,7 @@ struct NumericInputField: View {
         guard !trimmed.isEmpty else {
             value = 0
             text = ""
+            onCommit?()
             return
         }
 
@@ -132,6 +139,8 @@ struct NumericInputField: View {
         
         value = number.doubleValue
         text = formatter.string(from: number) ?? trimmed
+        
+        onCommit?() 
     }
     
     private func parsedNumber(from input: String) -> NSNumber? {

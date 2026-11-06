@@ -2,36 +2,31 @@
 //  CurrencyConverterViewModel.swift
 //  Coinsa
 //
-//  Created by Daniil Gritsenko on 05.11.2026.
+//  Created by Daniil Gritsenko on 06.11.2026.
 //
 
 import Foundation
 import Observation
 
-struct CurrencyConversionRecord: Codable, Identifiable, Equatable {
-    let id: UUID
-    let date: Date
-    let sourceCurrency: Currency
-    let destinationCurrency: Currency
-    let sourceAmount: Double
-    let destinationAmount: Double
-    let rate: Double
-}
-
+/// ViewModel для экрана конвертера валют.
 @MainActor
 @Observable
-final class CurrencyConverterViewModel {
-    private(set) var sourceCurrency: Currency
-    private(set) var destinationCurrency: Currency
-    private(set) var sourceAmount: Double
-    private(set) var destinationAmount: Double
-    private(set) var history: [CurrencyConversionRecord]
+final class CurrencyCurrencyConverterViewModel {
+    // MARK: - Зависимости
 
-    private var converter: CurrencyConverter
-    private var amountManager: AmountManager
-    private var needsInitialRateRefresh: Bool
-    private let storage = CurrencyConverterStorage()
+    private let converter: CurrencyConverter
 
+    // MARK: - Состояние UI
+
+    private var hasLoadedInitialRate = false
+    private(set) var inputText: String = ""
+
+    var activeSide: CurrencySide = .base
+    
+    // MARK: - Вычисляемые свойства
+
+    var fromCurrency: Currency { converter.baseCurrency }
+    var toCurrency: Currency { converter.quoteCurrency }
     var rate: Double { converter.rateQuoteToBase }
     var isRateLoading: Bool { converter.isRateLoading }
 
@@ -40,214 +35,168 @@ final class CurrencyConverterViewModel {
         set { converter.rateLoadingError = newValue }
     }
 
-    var rateDescription: LocalizedStringResource? {
-        // TODO: Изменить ключ
-        .todayExchangeRate(
-            currencyCode1: sourceCurrency.code,
-            rate1To2: rate.numberFormat(fractionLength: 4),
-            currencyCode2: destinationCurrency.code
+    /// Описание курса в виде «1 FROM = X TO».
+    var unitRateDescription: String {
+        guard rate > 0 else { return "—" }
+        let value = converter.convertToQuote(fromBase: 1)
+        return displayFormatter.string(from: NSNumber(value: value)) ?? "—"
+    }
+
+    // MARK: - Инициализация
+
+    /// Создает ViewModel для конвертера валют.
+    /// - Parameters:
+    ///   - from: Исходная валюта. По умолчанию — доллар США.
+    ///   - to: Целевая валюта. По умолчанию — российский рубль.
+    init(from: Currency = .usd, to: Currency = .rub) {
+        let provider = ExchangeRateProvider(service: HexarateService())
+        let initialRate: Double = from == to ? 1 : 0
+
+        self.converter = CurrencyConverter(
+            exchangeRateProvider: provider,
+            baseCurrency: from,
+            quoteCurrency: to,
+            rateQuoteToBase: initialRate
         )
     }
 
-    init(baseCurrency: Currency) {
-        let storage = CurrencyConverterStorage()
-        let snapshot = storage.snapshot
-        let sourceCurrency = snapshot?.sourceCurrency ?? baseCurrency
-        let destinationCurrency = snapshot?.destinationCurrency
-            ?? (baseCurrency == .usd ? .eur : .usd)
-        let rate = snapshot?.rate ?? 1
-        let sourceAmount = snapshot?.sourceAmount ?? 0
+    // MARK: - Суммы
 
-        let converter = CurrencyConverter(
-            exchangeRateProvider: ExchangeRateProvider(service: HexarateService()),
-            baseCurrency: destinationCurrency,
-            quoteCurrency: sourceCurrency,
-            rateQuoteToBase: rate,
-            exchangeAdjustment: 0
-        )
-        let amountManager = AmountManager(
-            converter: converter,
-            quoteAmount: sourceAmount
-        )
-        amountManager.updateQuoteAmount(sourceAmount, useExchangeAdjustment: false)
+    /// Числовое значение для указанной стороны с учетом введенного текста и курса.
+    /// - Parameter side: Сторона валютной пары.
+    /// - Returns: Сумма в валюте этой стороны.
+    func amount(for side: CurrencySide) -> Double {
+        let parsed = parsedNumber(from: inputText)
 
-        self.sourceCurrency = sourceCurrency
-        self.destinationCurrency = destinationCurrency
-        self.sourceAmount = sourceAmount
-        self.destinationAmount = snapshot?.destinationAmount ?? amountManager.baseAmount
-        self.history = storage.history
-        self.converter = converter
-        self.amountManager = amountManager
-        self.needsInitialRateRefresh = snapshot == nil
-    }
-
-    func loadInitialRateIfNeeded() {
-        guard needsInitialRateRefresh else { return }
-        needsInitialRateRefresh = false
-        refreshRate()
-    }
-
-    func updateSourceAmount(_ amount: Double) {
-        sourceAmount = amount
-        amountManager.updateQuoteAmount(amount, useExchangeAdjustment: false)
-        destinationAmount = amountManager.baseAmount
-        saveSnapshot()
-    }
-
-    func updateSourceCurrency(_ currency: Currency) {
-        guard currency != sourceCurrency else { return }
-        if currency == destinationCurrency {
-            swapCurrencies()
-            return
+        switch side {
+        case .base:
+            return activeSide == .base
+                ? parsed
+                : converter.convertToBase(fromQuote: parsed)
+        case .quote:
+            return activeSide == .quote
+                ? parsed
+                : converter.convertToQuote(fromBase: parsed)
         }
-
-        sourceCurrency = currency
-        rebuildConverter(rate: 1)
-        refreshRate(addToHistory: true)
     }
 
-    func updateDestinationCurrency(_ currency: Currency) {
-        guard currency != destinationCurrency else { return }
-        if currency == sourceCurrency {
-            swapCurrencies()
-            return
+    /// Текст для отображения в поле указанной стороны.
+    /// Возвращает пустую строку, если нужно показать плейсхолдер «0».
+    /// - Parameter side: Сторона валютной пары.
+    func displayText(for side: CurrencySide) -> String {
+        if side == activeSide {
+            return inputText
         }
+        let amount = amount(for: side)
+        guard amount > 0 else { return "" }
+        return displayFormatter.string(from: NSNumber(value: amount)) ?? ""
+    }
 
-        destinationCurrency = currency
-        rebuildConverter(rate: 1)
-        refreshRate(addToHistory: true)
+    func isActive(_ side: CurrencySide) -> Bool {
+        activeSide == side
+    }
+
+    // MARK: - Ввод
+
+    func setActiveSide(_ side: CurrencySide) {
+        guard side != activeSide else { return }
+        let currentAmount = amount(for: side)
+        activeSide = side
+        inputText = currentAmount > 0 ? rawString(from: currentAmount) : ""
+    }
+
+    func append(_ character: String) {
+        let separator = inputFormatter.decimalSeparator ?? ","
+        guard character.allSatisfy({ $0.isNumber || String($0) == separator }) else { return }
+        if character == separator && inputText.contains(separator) { return }
+        inputText += character
+    }
+
+    func deleteLast() {
+        guard !inputText.isEmpty else { return }
+        inputText.removeLast()
+    }
+
+    // MARK: - Валюты
+
+    func updateFromCurrency(_ currency: Currency) {
+        converter.updateBaseCurrency(currency)
+    }
+
+    func updateToCurrency(_ currency: Currency) {
+        converter.updateQuoteCurrency(currency)
     }
 
     func swapCurrencies() {
-        let oldSource = sourceCurrency
-        sourceCurrency = destinationCurrency
-        destinationCurrency = oldSource
+        let oldBase = fromCurrency
+        let oldQuote = toCurrency
+        let oldRate = rate
+        let oldBaseAmount = amount(for: .base)
+        let oldQuoteAmount = amount(for: .quote)
 
-        let invertedRate = rate > 0 ? 1 / rate : 0
-        rebuildConverter(rate: invertedRate)
-        addCurrentConversionToHistory()
-    }
+        // Мгновенно меняем валюты местами и инвертируем курс.
+        converter.updateBaseCurrency(oldQuote)
+        converter.updateQuoteCurrency(oldBase)
+        if oldRate > 0 {
+            converter.updateRate(1 / oldRate)
+        }
 
-    func refreshRate() {
-        refreshRate(addToHistory: true, onlyIfRateChanged: true)
-    }
-
-    func addCurrentConversionToHistory() {
-        guard sourceAmount > 0, rate > 0 else { return }
-
-        let record = CurrencyConversionRecord(
-            id: UUID(),
-            date: Date(),
-            sourceCurrency: sourceCurrency,
-            destinationCurrency: destinationCurrency,
-            sourceAmount: sourceAmount,
-            destinationAmount: destinationAmount,
-            rate: rate
-        )
-        history.insert(record, at: 0)
-        history = Array(history.prefix(20))
-        storage.history = history
-    }
-
-    func deleteHistoryRecord(_ record: CurrencyConversionRecord) {
-        history.removeAll { $0.id == record.id }
-        storage.history = history
-    }
-
-    func clearHistory() {
-        history.removeAll()
-        storage.history = history
-    }
-
-    private func refreshRate(
-        addToHistory: Bool = false,
-        onlyIfRateChanged: Bool = false
-    ) {
-        let requestedConverter = converter
-        let previousRate = rate
-
-        requestedConverter.requestRateRefresh { [weak self, weak requestedConverter] newRate in
-            guard let self, let requestedConverter, converter === requestedConverter else { return }
-
-            recalculate()
-            saveSnapshot()
-
-            let rateChanged = abs(newRate - previousRate) > Double.ulpOfOne
-            if addToHistory && (!onlyIfRateChanged || rateChanged) {
-                addCurrentConversionToHistory()
-            }
+        // Сохраняем визуальную позицию фокуса: сумма «переезжает» в другую позицию.
+        if activeSide == .base {
+            inputText = oldQuoteAmount > 0 ? rawString(from: oldQuoteAmount) : ""
+        } else {
+            inputText = oldBaseAmount > 0 ? rawString(from: oldBaseAmount) : ""
         }
     }
 
-    private func rebuildConverter(rate: Double) {
-        let converter = CurrencyConverter(
-            exchangeRateProvider: ExchangeRateProvider(service: HexarateService()),
-            baseCurrency: destinationCurrency,
-            quoteCurrency: sourceCurrency,
-            rateQuoteToBase: rate,
-            exchangeAdjustment: 0
-        )
-        self.converter = converter
-        self.amountManager = AmountManager(
-            converter: converter,
-            quoteAmount: sourceAmount
-        )
-        recalculate()
-        saveSnapshot()
+    // MARK: - Курс обмена
+
+    func loadInitialRateIfNeeded() {
+        guard !hasLoadedInitialRate else { return }
+        hasLoadedInitialRate = true
+        guard fromCurrency != toCurrency else { return }
+        requestRateRefresh()
     }
 
-    private func recalculate() {
-        amountManager.updateQuoteAmount(sourceAmount, useExchangeAdjustment: false)
-        destinationAmount = amountManager.baseAmount
+    func requestRateRefresh() {
+        converter.requestRateRefresh()
     }
 
-    private func saveSnapshot() {
-        storage.snapshot = CurrencyConverterSnapshot(
-            sourceCurrency: sourceCurrency,
-            destinationCurrency: destinationCurrency,
-            sourceAmount: sourceAmount,
-            destinationAmount: destinationAmount,
-            rate: rate
-        )
-    }
-}
+    // MARK: - Форматтеры
 
-private struct CurrencyConverterSnapshot: Codable {
-    let sourceCurrency: Currency
-    let destinationCurrency: Currency
-    let sourceAmount: Double
-    let destinationAmount: Double
-    let rate: Double
-}
+    /// Форматтер для ввода (без группировки, для парсинга и построения raw-строки).
+    private let inputFormatter: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.minimumFractionDigits = 0
+        formatter.maximumFractionDigits = 2
+        formatter.usesGroupingSeparator = false
+        return formatter
+    }()
 
-private final class CurrencyConverterStorage {
-    private let defaults = UserDefaults.standard
+    /// Форматтер для отображения суммы (с группировкой, фиксированные 2 знака).
+    private let displayFormatter: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.minimumFractionDigits = 2
+        formatter.maximumFractionDigits = 2
+        formatter.usesGroupingSeparator = true
+        return formatter
+    }()
 
-    var snapshot: CurrencyConverterSnapshot? {
-        get { decode(CurrencyConverterSnapshot.self, forKey: Key.snapshot) }
-        set { encode(newValue, forKey: Key.snapshot) }
-    }
+    // MARK: - Приватные методы
 
-    var history: [CurrencyConversionRecord] {
-        get { decode([CurrencyConversionRecord].self, forKey: Key.history) ?? [] }
-        set { encode(newValue, forKey: Key.history) }
-    }
-
-    private func decode<Value: Decodable>(_ type: Value.Type, forKey key: String) -> Value? {
-        guard let data = defaults.data(forKey: key) else { return nil }
-        return try? JSONDecoder().decode(type, from: data)
-    }
-
-    private func encode<Value: Encodable>(_ value: Value?, forKey key: String) {
-        guard let value, let data = try? JSONEncoder().encode(value) else {
-            defaults.removeObject(forKey: key)
-            return
+    private func parsedNumber(from text: String) -> Double {
+        guard !text.isEmpty else { return 0 }
+        let separator = inputFormatter.decimalSeparator ?? ","
+        var normalized = text.replacingOccurrences(of: separator, with: ".")
+        if normalized.hasSuffix(".") {
+            normalized = String(normalized.dropLast())
         }
-        defaults.set(data, forKey: key)
+        return Double(normalized) ?? 0
     }
 
-    private enum Key {
-        static let snapshot = "currencyConverter.snapshot"
-        static let history = "currencyConverter.history"
+    private func rawString(from value: Double) -> String {
+        inputFormatter.string(from: NSNumber(value: value)) ?? ""
     }
 }

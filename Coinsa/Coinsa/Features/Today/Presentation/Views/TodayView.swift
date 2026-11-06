@@ -287,9 +287,7 @@ struct TodayView: View {
             .padding(.vertical, 4)
             .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .clipShape(RoundedRectangle(cornerRadius: 14))
         .buttonStyle(.glass)
-        .buttonBorderShape(.roundedRectangle(radius: 14))
         .foregroundStyle(Color.primary)
     }
     

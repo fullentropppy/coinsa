@@ -28,7 +28,7 @@ struct RootTabView: View {
                 TripListView()
             }
             Tab(RootTab.converter.title, systemImage: RootTab.converter.icon, value: .converter) {
-                CurrencyConverterView(baseCurrency: settingsStore.baseCurrency)
+                CurrencyConverterView()
             }
             Tab(RootTab.settings.title, systemImage: RootTab.settings.icon, value: .settings) {
                 SettingsView()

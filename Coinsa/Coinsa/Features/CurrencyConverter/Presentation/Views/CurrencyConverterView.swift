@@ -2,267 +2,198 @@
 //  CurrencyConverterView.swift
 //  Coinsa
 //
-//  Created by Daniil Gritsenko on 05.11.2026.
+//  Created by Daniil Gritsenko on 06.11.2026.
 //
 
 import SwiftUI
 
+/// Экран конвертера валют.
 struct CurrencyConverterView: View {
+    // MARK: - Окружение
+
     @Environment(\.haptics) private var haptics
 
-    @State private var viewModel: CurrencyConverterViewModel
-    @FocusState private var focusedField: NumericEditField?
+    // MARK: - Состояние
 
-    init(baseCurrency: Currency) {
-        _viewModel = State(
-            initialValue: CurrencyConverterViewModel(baseCurrency: baseCurrency)
-        )
-    }
+    @State private var viewModel = CurrencyCurrencyConverterViewModel()
+
+    // MARK: - Тело View
 
     var body: some View {
         NavigationStack {
-            Form {
-                CurrencyConversionSection(
-                    sourceAmount: sourceAmountBinding,
-                    destinationAmount: viewModel.destinationAmount,
-                    sourceCurrency: viewModel.sourceCurrency,
-                    destinationCurrency: viewModel.destinationCurrency,
-                    sourceCurrencySelection: sourceCurrencyBinding,
-                    destinationCurrencySelection: destinationCurrencyBinding,
-                    focusedField: $focusedField,
-                    onSwap: swapCurrencies
-                )
-
-                ExchangeRateSection(
-                    description: viewModel.rateDescription,
-                    isLoading: viewModel.isRateLoading,
-                    onRefresh: refreshRate
-                )
-
-                ConversionHistorySection(
-                    records: viewModel.history,
-                    onDelete: viewModel.deleteHistoryRecord,
-                    onClear: { viewModel.clearHistory() }
-                )
-            }
-            .navigationTitle(.converterNavigationTitle)
-            .navigationBarTitleDisplayMode(.large)
-            .scrollDismissesKeyboard(.interactively)
-            .task { viewModel.loadInitialRateIfNeeded() }
-            .onChange(of: focusedField) { oldValue, newValue in
-                if oldValue == .amount && newValue == nil {
-                    viewModel.addCurrentConversionToHistory()
+            converterForm
+                .navigationTitle(.converterNavigationTitle)
+                .scrollDisabled(true)
+                .safeAreaInset(edge: .bottom, spacing: 0) {
+                    numericKeypad
                 }
-            }
-            .notificationAlert(
-                isPresented: rateErrorBinding,
-                title: .exchangeRateLoadingErrorTitle,
-                message: .exchangeRateLoadingErrorMessage(
-                    errorDescription: viewModel.rateLoadingError?.errorDescription
+                .task {
+                    viewModel.loadInitialRateIfNeeded()
+                }
+                .notificationAlert(
+                    isPresented: rateErrorBinding,
+                    title: .exchangeRateLoadingErrorTitle,
+                    message: .exchangeRateLoadingErrorMessage(
+                        errorDescription: viewModel.rateLoadingError?.errorDescription
                         ?? String(localized: .errorUnknown)
-                ),
-                isError: true
-            )
+                    ),
+                    isError: true
+                )
         }
     }
 
-    private var sourceAmountBinding: Binding<Double> {
-        Binding(
-            get: { viewModel.sourceAmount },
-            set: { viewModel.updateSourceAmount($0) }
+    // MARK: - Основной контент
+
+    private var converterForm: some View {
+        Form {
+            LabeledPicker(
+                title: "From",
+                selection: fromCurrencyBinding,
+                options: Currency.allCasesSortedByName
+            ) { currency in
+                currency.makeLabel()
+            }
+            .listRowSeparator(.hidden)
+            
+            amountButton(for: .base)
+                .listRowSeparator(.visible)
+                
+            LabeledPicker(
+                title: "To",
+                selection: toCurrencyBinding,
+                options: Currency.allCasesSortedByName
+            ) { currency in
+                currency.makeLabel()
+            }
+            .listRowSeparator(.hidden)
+            
+            amountButton(for: .quote)
+                .listRowSeparator(.visible)
+            
+            HStack(alignment: .center) {
+                Button {
+                    haptics.trigger(.tap)
+                    viewModel.swapCurrencies()
+                } label: {
+                    Image(systemName: "arrow.up.arrow.down")
+                        .imageScale(.medium)
+                        .fontWeight(.semibold)
+                }
+                .buttonStyle(.glassProminent)
+                
+                Spacer()
+                
+                if viewModel.isRateLoading {
+                    ProgressView()
+                        .controlSize(.small)
+                }
+                    
+                Text(
+                    "1 \(viewModel.fromCurrency.code) = \(viewModel.unitRateDescription) \(viewModel.toCurrency.code)"
+                )
+                .font(.body.monospacedDigit())
+                .foregroundStyle(.secondary)
+                    
+                Button {
+                    haptics.trigger(.tap)
+                    viewModel.requestRateRefresh()
+                } label: {
+                    Image(systemName: "arrow.clockwise")
+                        .imageScale(.small)
+                }
+                .buttonStyle(.plain)
+                .disabled(viewModel.isRateLoading)
+            }
+        }
+    }
+
+    // MARK: - Секции
+
+//    private var fromSection: some View {
+//
+//    }
+//
+//    private var swapSection: some View {
+//
+//    }
+//
+//    private var toSection: some View {
+//
+//    }
+//
+//    private var rateSection: some View {
+//
+//    }
+
+    // MARK: - Компоненты
+
+    private func amountButton(for side: CurrencySide) -> some View {
+        let currency = side == .base ? viewModel.fromCurrency : viewModel.toCurrency
+        let displayText = viewModel.displayText(for: side)
+        let isActive = viewModel.isActive(side)
+
+        return Button {
+            viewModel.setActiveSide(side)
+        } label: {
+            HStack(alignment: .center) {
+                Text(displayText.isEmpty ? "0" : displayText)
+                    .font(.title.monospacedDigit())
+                    .foregroundStyle(
+                        isActive ? Color.primary : Color.secondary
+                    )
+                    .lineLimit(1)
+
+                Spacer()
+
+                CurrencyCodeText(currency, font: .title3, color: isActive ? Color.primary : Color.secondary)
+            }
+            .padding(.vertical, 8)
+            .padding(.horizontal, 8)
+        }
+        .buttonStyle(.glass)
+    }
+
+    private var numericKeypad: some View {
+        NumericKeypad(
+            onDigit: { digit in
+                viewModel.append(digit)
+            },
+            onDelete: {
+                viewModel.deleteLast()
+            }
         )
     }
 
-    private var sourceCurrencyBinding: Binding<Currency> {
+    // MARK: - Биндинги
+
+    private var fromCurrencyBinding: Binding<Currency> {
         Binding(
-            get: { viewModel.sourceCurrency },
-            set: { viewModel.updateSourceCurrency($0) }
+            get: { viewModel.fromCurrency },
+            set: { viewModel.updateFromCurrency($0) }
         )
     }
 
-    private var destinationCurrencyBinding: Binding<Currency> {
+    private var toCurrencyBinding: Binding<Currency> {
         Binding(
-            get: { viewModel.destinationCurrency },
-            set: { viewModel.updateDestinationCurrency($0) }
+            get: { viewModel.toCurrency },
+            set: { viewModel.updateToCurrency($0) }
         )
     }
 
     private var rateErrorBinding: Binding<Bool> {
         Binding(
             get: { viewModel.rateLoadingError != nil },
-            set: { isPresented in
-                if !isPresented {
+            set: { shows in
+                if !shows {
                     viewModel.rateLoadingError = nil
                 }
             }
         )
     }
-
-    private func swapCurrencies() {
-        haptics.trigger(.tap)
-        viewModel.swapCurrencies()
-    }
-
-    private func refreshRate() {
-        haptics.trigger(.tap)
-        viewModel.refreshRate()
-    }
 }
 
-private struct CurrencyConversionSection: View {
-    @Binding var sourceAmount: Double
+// MARK: - Превью
 
-    let destinationAmount: Double
-    let sourceCurrency: Currency
-    let destinationCurrency: Currency
-    let sourceCurrencySelection: Binding<Currency>
-    let destinationCurrencySelection: Binding<Currency>
-    let focusedField: FocusState<NumericEditField?>.Binding
-    let onSwap: () -> Void
-
-    var body: some View {
-        Section {
-            VStack(spacing: 12) {
-                NumericInputField(
-                    $sourceAmount,
-                    focusedField: focusedField,
-                    focusID: .amount,
-                    fractionDigits: 2,
-                    font: .largeTitle.monospacedDigit(),
-                    textAlignment: .center
-                )
-                CurrencyCodeText.standard(sourceCurrency)
-            }
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 8)
-
-            LabeledPicker(
-                title: .converterSourceCurrenency,
-                selection: sourceCurrencySelection,
-                options: Currency.allCasesSortedByName
-            ) { currency in
-                currency.makeLabel()
-            }
-
-            Button(action: onSwap) {
-                Image(systemName: "arrow.up.arrow.down")
-                    .frame(maxWidth: .infinity)
-            }
-
-            LabeledPicker(
-                title: .converterTargetCurrency,
-                selection: destinationCurrencySelection,
-                options: Currency.allCasesSortedByName
-            ) { currency in
-                currency.makeLabel()
-            }
-
-//            LabeledContent(.amou) {
-                Text(
-                    destinationAmount,
-                    format: .currency(code: destinationCurrency.code)
-                        .precision(.fractionLength(0...2))
-                )
-                .font(.title3.monospacedDigit())
-                .textSelection(.enabled)
-//            }
-        }
-    }
+#Preview {
+    CurrencyConverterView()
 }
-
-private struct ExchangeRateSection: View {
-    let description: LocalizedStringResource?
-    let isLoading: Bool
-    let onRefresh: () -> Void
-
-    var body: some View {
-        Section(.converterExchangeRate) {
-            HStack {
-                if let description = description {
-                    Text(description)
-                        .monospacedDigit()
-                }
-                Spacer()
-                Button(action: onRefresh) {
-                    if isLoading {
-                        ProgressView()
-                            .controlSize(.small)
-                    } else {
-                        Image(systemName: "arrow.clockwise")
-                    }
-                }
-                .buttonStyle(.borderless)
-                .disabled(isLoading)
-            }
-        }
-    }
-}
-
-private struct ConversionHistorySection: View {
-    let records: [CurrencyConversionRecord]
-    let onDelete: (CurrencyConversionRecord) -> Void
-    let onClear: () -> Void
-
-    var body: some View {
-        Section {
-            if !records.isEmpty {
-                ForEach(records) { record in
-                    ConversionHistoryRow(record: record)
-                        .swipeActions {
-                            Button(.delete, role: .destructive) {
-                                onDelete(record)
-                            }
-                        }
-                }
-            }
-        } header: {
-            ZStack {
-                Text(.converterRecent)
-                if !records.isEmpty {
-                    HStack {
-                        Spacer()
-                        Button("", role: .destructive, action: onClear)
-                            .textCase(nil)
-                    }
-                }
-            }
-        }
-    }
-}
-
-private struct ConversionHistoryRow: View {
-    let record: CurrencyConversionRecord
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            HStack {
-                Text(
-                    record.sourceAmount,
-                    format: .currency(code: record.sourceCurrency.code)
-                        .precision(.fractionLength(0...2))
-                )
-                Image(systemName: "arrow.right")
-                    .foregroundStyle(.secondary)
-                Text(
-                    record.destinationAmount,
-                    format: .currency(code: record.destinationCurrency.code)
-                        .precision(.fractionLength(0...2))
-                )
-                .fontWeight(.semibold)
-            }
-            .monospacedDigit()
-
-            HStack {
-                Text(
-                    "1 \(record.sourceCurrency.code) = \(record.rate.formatted(.number.precision(.fractionLength(0...4)))) \(record.destinationCurrency.code)"
-                )
-                Spacer()
-                Text(record.date, format: .dateTime.day().month().hour().minute())
-            }
-            .font(.caption)
-            .foregroundStyle(.secondary)
-        }
-        .padding(.vertical, 2)
-    }
-}
-
