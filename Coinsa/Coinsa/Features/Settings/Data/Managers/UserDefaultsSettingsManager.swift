@@ -28,6 +28,18 @@ final class UserDefaultsSettingsManager {
         set { defaults.set(newValue, forKey: UserDefaultsKey.exchangeAdjustment) }
     }
     
+    // MARK: - Автозагрузка/определение данных
+    
+    var fetchExpenseExchangeRateOnline: Bool {
+        get { defaults.bool(forKey: UserDefaultsKey.fetchExpenseExchangeRateOnline) }
+        set { defaults.set(newValue, forKey: UserDefaultsKey.fetchExpenseExchangeRateOnline) }
+    }
+    
+    var detectPlaceOfExpense: Bool {
+        get { defaults.bool(forKey: UserDefaultsKey.detectPlaceOfExpense) }
+        set { defaults.set(newValue, forKey: UserDefaultsKey.detectPlaceOfExpense) }
+    }
+    
     // MARK: - Оформление
     
     var appAppearance: AppAppearance {
@@ -62,6 +74,16 @@ final class UserDefaultsSettingsManager {
         }
         set { defaults.set(newValue.rawValue, forKey: UserDefaultsKey.selectedPaymentMethod) }
     }
+    
+    // MARK: - Инициализация
+    
+    /// Инициализирует хранилище настроек и заполняет значения по умолчанию.
+    init() {
+        defaults.register(defaults: [
+            UserDefaultsKey.fetchExpenseExchangeRateOnline: true,
+            UserDefaultsKey.detectPlaceOfExpense: true
+        ])
+    }
 }
 
 // MARK: - Приватные типы
@@ -70,6 +92,8 @@ final class UserDefaultsSettingsManager {
 private enum UserDefaultsKey {
     static let baseCurrency = "baseCurrency"
     static let exchangeAdjustment = "exchangeAdjustment"
+    static let fetchExpenseExchangeRateOnline = "fetchExpenseExchangeRateOnline"
+    static let detectPlaceOfExpense = "detectPlaceOfExpense"
     static let appAppearance = "appAppearance"
     static let isFloatingButtonOnLeft = "isFloatingButtonOnLeft"
     static let selectedLocationID = "selectedLocationID"

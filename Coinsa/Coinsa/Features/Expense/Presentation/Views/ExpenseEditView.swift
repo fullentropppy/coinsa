@@ -121,8 +121,12 @@ struct ExpenseEditView: View {
                     onCancel: { cancelDelete() }
                 )
                 .task {
-                    viewModel.loadInitialRateIfNeeded()
-                    await resolveCurrentLocationIfNeeded()
+                    if settingsStore.fetchExpenseExchangeRateOnline {
+                        viewModel.loadInitialRateIfNeeded()
+                    }
+                    if settingsStore.detectPlaceOfExpense {
+                        await resolveCurrentLocationIfNeeded()
+                    }
                 }
                 .fullScreenCover(isPresented: $isShowingLocationMap) {
                     placeOfExpenseEditor

@@ -47,6 +47,7 @@ struct SettingsView: View {
         Form {
             baseCurrencySection
             exchangeAdjustmentSection
+            dataLoadingSection
             appearanceSection
             aboutSection
 #if DEBUG
@@ -82,6 +83,17 @@ struct SettingsView: View {
             }
         } footer: {
             Text(.settingsExchangeAdjustmentHint)
+        }
+    }
+    
+    private var dataLoadingSection: some View {
+        Section {
+            Toggle(.settingsFetchExpenseExchangeRateOnline, isOn: fetchExpenseExchangeRateOnline)
+                .tint(.accent)
+            Toggle(.settingsDetectPlaceOfExpense, isOn: detectPlaceOfExpense)
+                .tint(.accent)
+        } footer: {
+            Text(.settingsExpenseAautofillHint)
         }
     }
     
@@ -121,6 +133,20 @@ struct SettingsView: View {
         Binding(
             get: { settingsStore.exchangeAdjustment },
             set: { settingsStore.exchangeAdjustment = $0 }
+        )
+    }
+    
+    private var fetchExpenseExchangeRateOnline: Binding<Bool> {
+        Binding(
+            get: { settingsStore.fetchExpenseExchangeRateOnline },
+            set: { settingsStore.fetchExpenseExchangeRateOnline = $0 }
+        )
+    }
+    
+    private var detectPlaceOfExpense: Binding<Bool> {
+        Binding(
+            get: { settingsStore.detectPlaceOfExpense },
+            set: { settingsStore.detectPlaceOfExpense = $0 }
         )
     }
     

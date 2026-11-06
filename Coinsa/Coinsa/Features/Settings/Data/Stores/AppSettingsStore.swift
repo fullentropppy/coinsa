@@ -26,6 +26,16 @@ final class AppSettingsStore {
         didSet { userDefaultsManager.exchangeAdjustment = exchangeAdjustment }
     }
     
+    // MARK: - Автозагрузка/определение данных
+    
+    var fetchExpenseExchangeRateOnline: Bool {
+        didSet { userDefaultsManager.fetchExpenseExchangeRateOnline = fetchExpenseExchangeRateOnline }
+    }
+    
+    var detectPlaceOfExpense: Bool {
+        didSet { userDefaultsManager.detectPlaceOfExpense = detectPlaceOfExpense }
+    }
+    
     // MARK: - Оформление
     
     var appAppearance: AppAppearance {
@@ -51,9 +61,10 @@ final class AppSettingsStore {
     /// Создает хранилище настроек, загружая значения из UserDefaults.
     init() {
         self.userDefaultsManager = UserDefaultsSettingsManager()
-        
         self.baseCurrency = userDefaultsManager.baseCurrency
         self.exchangeAdjustment = userDefaultsManager.exchangeAdjustment
+        self.fetchExpenseExchangeRateOnline = userDefaultsManager.fetchExpenseExchangeRateOnline
+        self.detectPlaceOfExpense = userDefaultsManager.detectPlaceOfExpense
         self.appAppearance = userDefaultsManager.appAppearance
         self.isFloatingButtonOnLeft = userDefaultsManager.isFloatingButtonOnLeft
         self.selectedLocationID = userDefaultsManager.selectedLocationID

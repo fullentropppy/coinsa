@@ -3901,13 +3901,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Default (home) currency for new Trips. Can be changed inside a Trip."
+            "value" : "Default (home) currency for convenience and new Trips. Can be changed inside a Trip."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Основная (домашняя) валюта для автоматической подстановки в новых поездках. Может быть изменена внутри поездки."
+            "value" : "Основная (домашняя) валюта для удобства и автоматической подстановки в новых поездках. Может быть изменена внутри поездки."
           }
         }
       }
@@ -3925,6 +3925,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Отладка"
+          }
+        }
+      }
+    },
+    "settings.detectPlaceOfExpense" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Detect place"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Определять место"
           }
         }
       }
@@ -3959,6 +3976,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Корректировка курса обмена для автоматической подстановки в новых локациях. Может быть изменена внутри локации."
+          }
+        }
+      }
+    },
+    "settings.expenseAautofill.hint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Automatic loading/detection and auto‑filling of data for new Expenses. Data can be changed inside an Expense."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Автоматическая загрузка/определение и подстановка данных новых тратах. Данные могут быть изменены внутри траты."
+          }
+        }
+      }
+    },
+    "settings.fetchExpenseExchangeRateOnline" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fetch exchange rate online"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Загружать курс обмена из сети"
           }
         }
       }
