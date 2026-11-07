@@ -6,17 +6,28 @@
 //
 
 import SwiftUI
+import SwiftData
 
 /// Экран конвертера валют.
 struct CurrencyConverterView: View {
     // MARK: - Окружение
 
+    @Environment(AppSettingsStore.self) private var settingsStore
     @Environment(\.haptics) private var haptics
 
     // MARK: - Состояние
 
     @State private var viewModel = CurrencyCurrencyConverterViewModel()
 
+    @Query private var locations: [Location]
+    
+    // MARK: - Свойства
+    
+    private var currentLocationCurrency: Currency? {
+        guard let selectedID = settingsStore.selectedLocationID else { return nil }
+        return locations.first(where: { $0.id == selectedID })?.locationCurrency
+    }
+    
     // MARK: - Тело View
 
     var body: some View {
@@ -46,111 +57,101 @@ struct CurrencyConverterView: View {
 
     private var converterForm: some View {
         Form {
-            LabeledPicker(
-                title: "From",
-                selection: fromCurrencyBinding,
-                options: Currency.allCasesSortedByName
-            ) { currency in
-                currency.makeLabel()
-            }
-            .listRowSeparator(.hidden)
-            
-            amountButton(for: .base)
-                .listRowSeparator(.visible)
-                
-            LabeledPicker(
-                title: "To",
-                selection: toCurrencyBinding,
-                options: Currency.allCasesSortedByName
-            ) { currency in
-                currency.makeLabel()
-            }
-            .listRowSeparator(.hidden)
-            
-            amountButton(for: .quote)
-                .listRowSeparator(.visible)
-            
-            HStack(alignment: .center) {
-                Button {
-                    haptics.trigger(.tap)
-                    viewModel.swapCurrencies()
-                } label: {
-                    Image(systemName: "arrow.up.arrow.down")
-                        .imageScale(.medium)
-                        .fontWeight(.semibold)
+            VStack(spacing: 8) {
+                LabeledPicker(
+                    title: .converterFromCurrenency,
+                    selection: fromCurrencyBinding,
+                    sections: Currency.pickerSections(
+                        baseCurrency: settingsStore.baseCurrency,
+                        locationCurrency: currentLocationCurrency
+                    )
+                ) { currency in
+                    currency.makeLabel()
                 }
-                .buttonStyle(.glassProminent)
+                .listRowSeparator(.hidden)
                 
-                Spacer()
+                amountRow(for: .base)
+                    .listRowSeparator(.visible)
                 
-                if viewModel.isRateLoading {
-                    ProgressView()
-                        .controlSize(.small)
-                }
-                    
-                Text(
-                    "1 \(viewModel.fromCurrency.code) = \(viewModel.unitRateDescription) \(viewModel.toCurrency.code)"
-                )
-                .font(.body.monospacedDigit())
-                .foregroundStyle(.secondary)
-                    
-                Button {
-                    haptics.trigger(.tap)
-                    viewModel.requestRateRefresh()
-                } label: {
-                    Image(systemName: "arrow.clockwise")
-                        .imageScale(.small)
-                }
-                .buttonStyle(.plain)
-                .disabled(viewModel.isRateLoading)
             }
+            
+            VStack(spacing: 8) {
+                LabeledPicker(
+                    title: .converterToCurrency,
+                    selection: toCurrencyBinding,
+                    sections: Currency.pickerSections(
+                        baseCurrency: settingsStore.baseCurrency,
+                        locationCurrency: currentLocationCurrency
+                    )
+                ) { currency in
+                    currency.makeLabel()
+                }
+                .listRowSeparator(.hidden)
+                
+                amountRow(for: .quote)
+                    .listRowSeparator(.visible)
+                
+            }
+            
+            rateRow
         }
     }
 
-    // MARK: - Секции
-
-//    private var fromSection: some View {
-//
-//    }
-//
-//    private var swapSection: some View {
-//
-//    }
-//
-//    private var toSection: some View {
-//
-//    }
-//
-//    private var rateSection: some View {
-//
-//    }
-
     // MARK: - Компоненты
 
-    private func amountButton(for side: CurrencySide) -> some View {
+    private func amountRow(for side: CurrencySide) -> some View {
         let currency = side == .base ? viewModel.fromCurrency : viewModel.toCurrency
         let displayText = viewModel.displayText(for: side)
-        let isActive = viewModel.isActive(side)
+        let isBase = side == .base
 
-        return Button {
-            viewModel.setActiveSide(side)
-        } label: {
-            HStack(alignment: .center) {
-                Text(displayText.isEmpty ? "0" : displayText)
-                    .font(.title.monospacedDigit())
-                    .foregroundStyle(
-                        isActive ? Color.primary : Color.secondary
-                    )
-                    .lineLimit(1)
+        return HStack(alignment: .center) {
+            Text(displayText.isEmpty ? "0" : displayText)
+                .font(.title.monospacedDigit())
+                .foregroundStyle(isBase ? Color.primary : Color.secondary)
+                .lineLimit(1)
 
-                Spacer()
+            Spacer()
 
-                CurrencyCodeText(currency, font: .title3, color: isActive ? Color.primary : Color.secondary)
-            }
-            .padding(.vertical, 8)
-            .padding(.horizontal, 8)
+            CurrencyCodeText(
+                currency,
+                font: .title3,
+                color: isBase ? Color.primary : Color.secondary
+            )
         }
-        .buttonStyle(.glass)
+        .padding(.vertical, 8)
+        .padding(.horizontal, 8)
+        .frame(maxWidth: .infinity)
+        .background(.regularMaterial, in: .rect(cornerRadius: 12))
+    }
+
+    private var rateRow: some View {
+        HStack(alignment: .center, spacing: 10) {
+            Button {
+                haptics.trigger(.tap)
+                viewModel.swapCurrencies()
+            } label: {
+                Image(systemName: "arrow.up.arrow.down")
+                    .imageScale(.medium)
+                    .fontWeight(.semibold)
+            }
+            .buttonStyle(.glassProminent)
+
+            Spacer()
+
+            HStack(spacing: 4) {
+                AmountText.standard(1.0, fractionLength: 0, currency: viewModel.fromCurrency)
+                
+                Image(systemName: "equal")
+                    .imageScale(.small)
+                
+                ExchangeRateReadOnlyField(
+                    viewModel.unitRate,
+                    currency: viewModel.toCurrency,
+                    isLoading: viewModel.isRateLoading,
+                    onRefresh: { viewModel.requestRateRefresh() }
+                )
+            }
+        }
     }
 
     private var numericKeypad: some View {
@@ -160,6 +161,10 @@ struct CurrencyConverterView: View {
             },
             onDelete: {
                 viewModel.deleteLast()
+            },
+            onClear: {
+                haptics.trigger(.tap)
+                viewModel.clearInput()
             }
         )
     }
@@ -196,4 +201,5 @@ struct CurrencyConverterView: View {
 
 #Preview {
     CurrencyConverterView()
+        .environment(AppSettingsStore())
 }

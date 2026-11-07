@@ -20,22 +20,6 @@
         }
       }
     },
-    "1 %@ = %@ %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "1 %1$@ = %2$@ %3$@"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "1 %1$@ = %2$@ %3$@"
-          }
-        }
-      }
-    },
     "amount.balance" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -529,19 +513,19 @@
         }
       }
     },
-    "converter.ExchangeRate" : {
+    "converter.fromCurrenency" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ExchangeRate"
+            "value" : "From"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Курс обмена"
+            "value" : "Из"
           }
         }
       }
@@ -580,24 +564,7 @@
         }
       }
     },
-    "converter.sourceCurrenency" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "From"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Из"
-          }
-        }
-      }
-    },
-    "converter.targetCurrency" : {
+    "converter.toCurrency" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -3402,9 +3369,6 @@
         }
       }
     },
-    "From" : {
-
-    },
     "location.add" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -4220,9 +4184,6 @@
           }
         }
       }
-    },
-    "To" : {
-
     },
     "today" : {
       "extractionState" : "manual",

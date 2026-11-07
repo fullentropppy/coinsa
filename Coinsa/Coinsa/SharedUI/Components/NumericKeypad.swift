@@ -11,22 +11,22 @@ import SwiftUI
 struct NumericKeypad: View {
     // MARK: - Свойства
 
-    private var decimalSeparator: String {
-        Locale.current.decimalSeparator ?? ","
-    }
+    private let keyMinHeight: CGFloat = 56
+    private let spacing: CGFloat = 12
     
     let onDigit: (String) -> Void
     let onDelete: () -> Void
+    let onClear: () -> Void
 
     // MARK: - Тело View
 
     var body: some View {
-        VStack(spacing: 12) {
+        VStack(spacing: spacing) {
             row(["1", "2", "3"])
             row(["4", "5", "6"])
             row(["7", "8", "9"])
-            HStack(spacing: 12) {
-                digitKey(decimalSeparator)
+            HStack(spacing: spacing) {
+                digitKey(Locale.current.decimalSeparator ?? ",")
                 digitKey("0")
                 deleteKey
             }
@@ -38,7 +38,7 @@ struct NumericKeypad: View {
     // MARK: - Компоненты
 
     private func row(_ digits: [String]) -> some View {
-        HStack(spacing: 12) {
+        HStack(spacing: spacing) {
             ForEach(digits, id: \.self) { digit in
                 digitKey(digit)
             }
@@ -51,7 +51,7 @@ struct NumericKeypad: View {
         } label: {
             Text(label)
                 .font(.title2)
-                .frame(maxWidth: .infinity, maxHeight: 38)
+                .frame(maxWidth: .infinity, minHeight: keyMinHeight)
         }
         .buttonStyle(.glass)
     }
@@ -62,9 +62,13 @@ struct NumericKeypad: View {
         } label: {
             Image(systemName: "delete.left")
                 .font(.title2)
-                .frame(maxWidth: .infinity, minHeight: 38)
+                .frame(maxWidth: .infinity, minHeight: keyMinHeight)
         }
         .buttonStyle(.glass)
+        .simultaneousGesture(
+            LongPressGesture(minimumDuration: 0.4)
+                .onEnded { _ in onClear() }
+        )
     }
 }
 
@@ -73,6 +77,7 @@ struct NumericKeypad: View {
 #Preview {
     NumericKeypad(
         onDigit: { _ in },
-        onDelete: {}
+        onDelete: {},
+        onClear: {}
     )
 }

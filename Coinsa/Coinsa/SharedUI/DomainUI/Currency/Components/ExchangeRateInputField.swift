@@ -9,12 +9,8 @@ import SwiftUI
 
 /// Поле для ввода курса обмена валюты с отображением кода валюты и кнопкой обновления.
 struct ExchangeRateInputField: View {
-    // MARK: - Окружение
-    
-    @Environment(\.haptics) private var haptics
-    
     // MARK: - Свойства
-    
+
     private let value: Binding<Double>
     private let currency: Currency
     private let isLoading: Bool
@@ -22,18 +18,18 @@ struct ExchangeRateInputField: View {
     private let focusID: NumericEditField
     private let font: Font
     private let onRefresh: () -> Void
-    
+
     // MARK: - Инициализация
-    
-    /// Создает поле для ввода курса обмена.
+
+    /// Создает поле для ввода курса обмена валюты.
     /// - Parameters:
     ///   - value: Привязка к значению курса.
-    ///   - currency: Валюта.
-    ///   - isLoading: Флаг загрузки.
+    ///   - currency: Валюта, в которой выражен курс.
+    ///   - isLoading: Флаг загрузки курса (показывает спиннер в кнопке обновления).
     ///   - focusedField: Привязка к фокусированному полю.
-    ///   - focusID: Уникальный идентификатор поля.
+    ///   - focusID: Уникальный идентификатор этого поля.
     ///   - font: Шрифт текста.
-    ///   - onRefresh: Действие при нажатии кнопки обновления.
+    ///   - onRefresh: Действие при нажатии кнопки обновления курса.
     init(
         _ value: Binding<Double>,
         currency: Currency,
@@ -51,49 +47,28 @@ struct ExchangeRateInputField: View {
         self.font = font
         self.onRefresh = onRefresh
     }
-    
+
     // MARK: - Тело View
+
     var body: some View {
         HStack {
-            inputField
+            NumericInputField(
+                value,
+                focusedField: focusedField,
+                focusID: focusID,
+                fractionDigits: 4,
+                font: font,
+                textAlignment: .trailing
+            )
+            .loadingState(isLoading)
+
             CurrencyCodeText.standard(currency)
-            refreshButton
+
+            ExchangeRateRefreshButton(
+                isLoading: isLoading,
+                onRefresh: onRefresh
+            )
         }
-    }
-    
-    // MARK: - Компоненты
-    private var inputField: some View {
-        NumericInputField(
-            value,
-            focusedField: focusedField,
-            focusID: focusID,
-            fractionDigits: 4,
-            font: font,
-            textAlignment: .trailing
-        )
-        .loadingState(isLoading)
-    }
-    
-    private var refreshButton: some View {
-        Button {
-            haptics.trigger(.tap)
-            onRefresh()
-        } label: {
-            ZStack {
-                if isLoading {
-                    ProgressView()
-                        .controlSize(.small)
-                } else {
-                    Image(systemName: "arrow.clockwise")
-                        .imageScale(.small)
-                        .fontWeight(.semibold)
-                        .foregroundStyle(.accent)
-                }
-            }
-            .frame(width: 16)
-        }
-        .buttonStyle(.borderless)
-        .disabled(isLoading)
     }
 }
 
@@ -101,14 +76,6 @@ struct ExchangeRateInputField: View {
 
 extension ExchangeRateInputField {
     /// Стандартное поле для ввода курса с моноширинными цифрами.
-    /// - Parameters:
-    ///   - value: Привязка к значению курса.
-    ///   - currency: Валюта.
-    ///   - isLoading: Флаг загрузки.
-    ///   - focusedField: Привязка к фокусированному полю.
-    ///   - focusID: Уникальный идентификатор поля.
-    ///   - onRefresh: Действие при нажатии кнопки обновления.
-    /// - Returns: Настроенное поле ввода.
     static func standard(
         _ value: Binding<Double>,
         currency: Currency,
@@ -135,24 +102,11 @@ extension ExchangeRateInputField {
     @Previewable @State var rate: Double = 80.1234
     @Previewable @FocusState var focusedField: NumericEditField?
 
-    let currency = Currency.defaultValue
-
     List {
         Section {
-            ExchangeRateInputField(
-                $rate,
-                currency: currency,
-                isLoading: false,
-                focusedField: $focusedField,
-                focusID: .exchangeRate,
-                font: .body,
-                onRefresh: {}
-            )
-        }
-        Section {
             ExchangeRateInputField.standard(
                 $rate,
-                currency: currency,
+                currency: Currency.defaultValue,
                 isLoading: false,
                 focusedField: $focusedField,
                 focusID: .exchangeRate,
@@ -160,20 +114,9 @@ extension ExchangeRateInputField {
             )
         }
         Section {
-            ExchangeRateInputField(
-                $rate,
-                currency: currency,
-                isLoading: true,
-                focusedField: $focusedField,
-                focusID: .exchangeRate,
-                font: .body,
-                onRefresh: {}
-            )
-        }
-        Section {
             ExchangeRateInputField.standard(
                 $rate,
-                currency: currency,
+                currency: Currency.defaultValue,
                 isLoading: true,
                 focusedField: $focusedField,
                 focusID: .exchangeRate,

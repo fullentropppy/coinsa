@@ -21,8 +21,6 @@ final class CurrencyCurrencyConverterViewModel {
     private var hasLoadedInitialRate = false
     private(set) var inputText: String = ""
 
-    var activeSide: CurrencySide = .base
-    
     // MARK: - Вычисляемые свойства
 
     var fromCurrency: Currency { converter.baseCurrency }
@@ -35,19 +33,13 @@ final class CurrencyCurrencyConverterViewModel {
         set { converter.rateLoadingError = newValue }
     }
 
-    /// Описание курса в виде «1 FROM = X TO».
-    var unitRateDescription: String {
-        guard rate > 0 else { return "—" }
-        let value = converter.convertToQuote(fromBase: 1)
-        return displayFormatter.string(from: NSNumber(value: value)) ?? "—"
+    var unitRate: Double {
+        guard rate > 0 else { return 0 }
+        return converter.convertToQuote(fromBase: 1)
     }
 
     // MARK: - Инициализация
 
-    /// Создает ViewModel для конвертера валют.
-    /// - Parameters:
-    ///   - from: Исходная валюта. По умолчанию — доллар США.
-    ///   - to: Целевая валюта. По умолчанию — российский рубль.
     init(from: Currency = .usd, to: Currency = .rub) {
         let provider = ExchangeRateProvider(service: HexarateService())
         let initialRate: Double = from == to ? 1 : 0
@@ -62,48 +54,31 @@ final class CurrencyCurrencyConverterViewModel {
 
     // MARK: - Суммы
 
-    /// Числовое значение для указанной стороны с учетом введенного текста и курса.
-    /// - Parameter side: Сторона валютной пары.
-    /// - Returns: Сумма в валюте этой стороны.
+    /// Числовое значение для указанной стороны.
+    /// Ввод всегда идёт в базовую валюту (`From`), вторая сторона вычисляется из курса.
     func amount(for side: CurrencySide) -> Double {
         let parsed = parsedNumber(from: inputText)
-
         switch side {
         case .base:
-            return activeSide == .base
-                ? parsed
-                : converter.convertToBase(fromQuote: parsed)
+            return parsed
         case .quote:
-            return activeSide == .quote
-                ? parsed
-                : converter.convertToQuote(fromBase: parsed)
+            return converter.convertToQuote(fromBase: parsed)
         }
     }
 
     /// Текст для отображения в поле указанной стороны.
-    /// Возвращает пустую строку, если нужно показать плейсхолдер «0».
-    /// - Parameter side: Сторона валютной пары.
     func displayText(for side: CurrencySide) -> String {
-        if side == activeSide {
+        switch side {
+        case .base:
             return inputText
+        case .quote:
+            let amount = amount(for: .quote)
+            guard amount > 0 else { return "" }
+            return displayFormatter.string(from: NSNumber(value: amount)) ?? ""
         }
-        let amount = amount(for: side)
-        guard amount > 0 else { return "" }
-        return displayFormatter.string(from: NSNumber(value: amount)) ?? ""
-    }
-
-    func isActive(_ side: CurrencySide) -> Bool {
-        activeSide == side
     }
 
     // MARK: - Ввод
-
-    func setActiveSide(_ side: CurrencySide) {
-        guard side != activeSide else { return }
-        let currentAmount = amount(for: side)
-        activeSide = side
-        inputText = currentAmount > 0 ? rawString(from: currentAmount) : ""
-    }
 
     func append(_ character: String) {
         let separator = inputFormatter.decimalSeparator ?? ","
@@ -115,6 +90,11 @@ final class CurrencyCurrencyConverterViewModel {
     func deleteLast() {
         guard !inputText.isEmpty else { return }
         inputText.removeLast()
+    }
+
+    /// Полностью очищает введённую сумму.
+    func clearInput() {
+        inputText = ""
     }
 
     // MARK: - Валюты
@@ -131,22 +111,18 @@ final class CurrencyCurrencyConverterViewModel {
         let oldBase = fromCurrency
         let oldQuote = toCurrency
         let oldRate = rate
-        let oldBaseAmount = amount(for: .base)
         let oldQuoteAmount = amount(for: .quote)
 
-        // Мгновенно меняем валюты местами и инвертируем курс.
+        // Меняем валюты местами и инвертируем курс.
         converter.updateBaseCurrency(oldQuote)
         converter.updateQuoteCurrency(oldBase)
         if oldRate > 0 {
             converter.updateRate(1 / oldRate)
         }
 
-        // Сохраняем визуальную позицию фокуса: сумма «переезжает» в другую позицию.
-        if activeSide == .base {
-            inputText = oldQuoteAmount > 0 ? rawString(from: oldQuoteAmount) : ""
-        } else {
-            inputText = oldBaseAmount > 0 ? rawString(from: oldBaseAmount) : ""
-        }
+        // Ввод всегда во `From`, поэтому «перевозим» ранее вычисленную
+        // сумму из `To` в `From`, чтобы пользователь видел те же числа.
+        inputText = oldQuoteAmount > 0 ? rawString(from: oldQuoteAmount) : ""
     }
 
     // MARK: - Курс обмена
@@ -164,7 +140,6 @@ final class CurrencyCurrencyConverterViewModel {
 
     // MARK: - Форматтеры
 
-    /// Форматтер для ввода (без группировки, для парсинга и построения raw-строки).
     private let inputFormatter: NumberFormatter = {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
@@ -174,7 +149,6 @@ final class CurrencyCurrencyConverterViewModel {
         return formatter
     }()
 
-    /// Форматтер для отображения суммы (с группировкой, фиксированные 2 знака).
     private let displayFormatter: NumberFormatter = {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
