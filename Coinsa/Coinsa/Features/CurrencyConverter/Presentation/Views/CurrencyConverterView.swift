@@ -17,7 +17,7 @@ struct CurrencyConverterView: View {
 
     // MARK: - Состояние
 
-    @State private var viewModel = CurrencyCurrencyConverterViewModel()
+    @State private var viewModel = CurrencyConverterViewModel()
 
     @Query private var locations: [Location]
     
@@ -99,7 +99,7 @@ struct CurrencyConverterView: View {
 
     // MARK: - Компоненты
 
-    private func amountRow(for side: CurrencySide) -> some View {
+    private func amountRow(for side: CurrencyPairSide) -> some View {
         let currency = side == .base ? viewModel.fromCurrency : viewModel.toCurrency
         let displayText = viewModel.displayText(for: side)
         let isBase = side == .base

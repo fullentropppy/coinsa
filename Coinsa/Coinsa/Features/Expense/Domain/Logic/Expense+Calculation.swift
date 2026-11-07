@@ -29,7 +29,7 @@ extension Expense {
     /// - Returns: Сумма в указанной валюте.
     func amount(
         in currency: CurrencyContext,
-        using rateMode: RateMode = .effective
+        using rateMode: ExchangeRateMode = .effective
     ) -> Double {
         calculationContext.amount(in: currency, using: rateMode)
     }
@@ -43,7 +43,7 @@ extension Expense {
     func exchangeRate(
         from sourceCurrency: CurrencyContext,
         to targetCurrency: CurrencyContext,
-        using rateMode: RateMode = .effective
+        using rateMode: ExchangeRateMode = .effective
     ) -> Double {
         calculationContext.exchangeRate(from: sourceCurrency, to: targetCurrency, using: rateMode)
     }
@@ -57,7 +57,7 @@ extension Expense {
     func inverseExchangeRate(
         from sourceCurrency: CurrencyContext,
         to targetCurrency: CurrencyContext,
-        using rateMode: RateMode = .effective
+        using rateMode: ExchangeRateMode = .effective
     ) -> Double {
         calculationContext.inverseExchangeRate(from: sourceCurrency, to: targetCurrency, using: rateMode)
     }

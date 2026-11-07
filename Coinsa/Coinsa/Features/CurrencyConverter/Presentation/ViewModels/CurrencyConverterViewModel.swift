@@ -11,7 +11,7 @@ import Observation
 /// ViewModel для экрана конвертера валют.
 @MainActor
 @Observable
-final class CurrencyCurrencyConverterViewModel {
+final class CurrencyConverterViewModel {
     // MARK: - Зависимости
 
     private let converter: CurrencyConverter
@@ -56,7 +56,7 @@ final class CurrencyCurrencyConverterViewModel {
 
     /// Числовое значение для указанной стороны.
     /// Ввод всегда идёт в базовую валюту (`From`), вторая сторона вычисляется из курса.
-    func amount(for side: CurrencySide) -> Double {
+    func amount(for side: CurrencyPairSide) -> Double {
         let parsed = parsedNumber(from: inputText)
         switch side {
         case .base:
@@ -67,7 +67,7 @@ final class CurrencyCurrencyConverterViewModel {
     }
 
     /// Текст для отображения в поле указанной стороны.
-    func displayText(for side: CurrencySide) -> String {
+    func displayText(for side: CurrencyPairSide) -> String {
         switch side {
         case .base:
             return inputText

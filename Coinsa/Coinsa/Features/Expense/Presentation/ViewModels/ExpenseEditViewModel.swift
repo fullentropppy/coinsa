@@ -325,7 +325,7 @@ final class ExpenseEditViewModel {
     
     // MARK: - Операции с валютой
     
-    func updateExpenseCurrency(_ newCurrency: Currency, currencySide: CurrencySide) {
+    func updateExpenseCurrency(_ newCurrency: Currency, currencyPairSide: CurrencyPairSide) {
         guard newCurrency != expenseCurrency else { return }
         
         baseCurrencyConverter.updateQuoteCurrency(newCurrency) { [weak self] in
@@ -333,7 +333,7 @@ final class ExpenseEditViewModel {
             guard rateExpenseToBase > 0 else { return }
             
             amountManager.updateFromRateChange(
-                for: currencySide,
+                for: currencyPairSide,
                 useExchangeAdjustment: useExchangeAdjustment
             )
         }
@@ -341,8 +341,8 @@ final class ExpenseEditViewModel {
         locationCurrencyConverter.updateQuoteCurrency(newCurrency)
     }
     
-    func currency(for currencySide: CurrencySide) -> Currency {
-        switch currencySide {
+    func currency(for currencyPairSide: CurrencyPairSide) -> Currency {
+        switch currencyPairSide {
         case .base: baseCurrency
         case .quote: expenseCurrency
         }
@@ -350,11 +350,11 @@ final class ExpenseEditViewModel {
     
     // MARK: - Операции с суммой
     
-    func amount(for currencySide: CurrencySide) -> Double {
-        amountManager.amount(for: currencySide)
+    func amount(for currencyPairSide: CurrencyPairSide) -> Double {
+        amountManager.amount(for: currencyPairSide)
     }
     
-    func updateAmount(_ newValue: Double, for inputCurrency: CurrencySide) {
+    func updateAmount(_ newValue: Double, for inputCurrency: CurrencyPairSide) {
         amountManager.updateAmount(
             newValue,
             for: inputCurrency,
@@ -364,11 +364,11 @@ final class ExpenseEditViewModel {
     
     // MARK: - Операции с курсом обмена
     
-    func updateRateExpenseToBase(_ newRate: Double, currencySide: CurrencySide) {
+    func updateRateExpenseToBase(_ newRate: Double, currencyPairSide: CurrencyPairSide) {
         baseCurrencyConverter.updateRate(newRate)
         if newRate > 0 {
             amountManager.updateFromRateChange(
-                for: currencySide,
+                for: currencyPairSide,
                 useExchangeAdjustment: useExchangeAdjustment
             )
         }
@@ -386,7 +386,7 @@ final class ExpenseEditViewModel {
         requestInitialRateExpenseToLocationIfNeeded()
     }
     
-    func requestRateExpenseToBaseRefresh(for inputCurrency: CurrencySide = .base) {
+    func requestRateExpenseToBaseRefresh(for inputCurrency: CurrencyPairSide = .base) {
         baseCurrencyConverter.requestRateRefresh { [weak self] _ in
             guard let self else { return }
             amountManager.updateFromRateChange(
@@ -441,19 +441,19 @@ final class ExpenseEditViewModel {
     
     // MARK: - Операции с оплатой
     
-    func updatePaymentMethod(_ method: PaymentMethod, currencySide: CurrencySide) {
+    func updatePaymentMethod(_ method: PaymentMethod, currencyPairSide: CurrencyPairSide) {
         paymentMethod = method
-        syncExchangeAdjustmentAndRecalculate(currencySide: currencySide)
+        syncExchangeAdjustmentAndRecalculate(currencyPairSide: currencyPairSide)
     }
     
-    func updateExchangeAdjustment(_ newAdjustment: Double, currencySide: CurrencySide) {
+    func updateExchangeAdjustment(_ newAdjustment: Double, currencyPairSide: CurrencyPairSide) {
         exchangeAdjustment = newAdjustment
-        syncExchangeAdjustmentAndRecalculate(currencySide: currencySide)
+        syncExchangeAdjustmentAndRecalculate(currencyPairSide: currencyPairSide)
     }
     
-    private func syncExchangeAdjustmentAndRecalculate(currencySide: CurrencySide) {
+    private func syncExchangeAdjustmentAndRecalculate(currencyPairSide: CurrencyPairSide) {
         baseCurrencyConverter.updateExchangeAdjustment(exchangeAdjustment)
-        amountManager.updateFromRateChange(for: currencySide, useExchangeAdjustment: useExchangeAdjustment)
+        amountManager.updateFromRateChange(for: currencyPairSide, useExchangeAdjustment: useExchangeAdjustment)
     }
     
     // MARK: - Операции с координатами

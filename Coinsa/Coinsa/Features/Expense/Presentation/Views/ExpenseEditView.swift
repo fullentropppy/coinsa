@@ -22,7 +22,7 @@ struct ExpenseEditView: View {
     @State private var viewModel: ExpenseEditViewModel
     @State private var deletionHandler = DeletionHandler<Expense>()
     @State private var currentLocationProvider = CurrentLocationProvider()
-    @State private var currencySide: CurrencySide
+    @State private var currencyPairSide: CurrencyPairSide
     @State private var isShowingGeolocationError = false
     @State private var isShowingDiscardAlert = false
     @State private var isShowingLocationMap = false
@@ -71,7 +71,7 @@ struct ExpenseEditView: View {
     
     private init(initialViewModel: ExpenseEditViewModel, onDelete: (() -> Void)? = nil) {
         _viewModel = State(initialValue: initialViewModel)
-        _currencySide = State(
+        _currencyPairSide = State(
             initialValue: initialViewModel.baseCurrency == initialViewModel.expenseCurrency ? .base : .quote
         )
         self.onDelete = onDelete
@@ -163,7 +163,7 @@ struct ExpenseEditView: View {
                     placeholder: viewModel.amountInputPlaceholder
                 )
                 HStack {
-                    CurrencyCodeText.standard(viewModel.currency(for: currencySide))
+                    CurrencyCodeText.standard(viewModel.currency(for: currencyPairSide))
                     if !viewModel.isExpenseBaseCurrency {
                         InputCurrencySwitchButton(action: switchInputCurrency)
                     }
@@ -233,7 +233,7 @@ struct ExpenseEditView: View {
                         isLoading: viewModel.isRateExpenseToBaseLoading,
                         focusedField: $focusedField,
                         focusID: .exchangeRate,
-                        onRefresh: { viewModel.requestRateExpenseToBaseRefresh(for: currencySide) }
+                        onRefresh: { viewModel.requestRateExpenseToBaseRefresh(for: currencyPairSide) }
                     )
                 }
             }
@@ -436,7 +436,7 @@ struct ExpenseEditView: View {
         Binding(
             get: { viewModel.paymentMethod },
             set: { newMethod in
-                viewModel.updatePaymentMethod(newMethod, currencySide: currencySide)
+                viewModel.updatePaymentMethod(newMethod, currencyPairSide: currencyPairSide)
                 settingsStore.selectedPaymentMethod = newMethod
             }
         )
@@ -446,16 +446,16 @@ struct ExpenseEditView: View {
         Binding(
             get: { viewModel.expenseCurrency },
             set: { newCurrency in
-                viewModel.updateExpenseCurrency(newCurrency, currencySide: currencySide)
+                viewModel.updateExpenseCurrency(newCurrency, currencyPairSide: currencyPairSide)
             }
         )
     }
     
     private var amountInputBinding: Binding<Double> {
         Binding(
-            get: { viewModel.amount(for: currencySide) },
+            get: { viewModel.amount(for: currencyPairSide) },
             set: { newValue in
-                viewModel.updateAmount(newValue, for: currencySide)
+                viewModel.updateAmount(newValue, for: currencyPairSide)
             }
         )
     }
@@ -464,7 +464,7 @@ struct ExpenseEditView: View {
         Binding(
             get: { viewModel.rateExpenseToBase },
             set: { newValue in
-                viewModel.updateRateExpenseToBase(newValue, currencySide: currencySide)
+                viewModel.updateRateExpenseToBase(newValue, currencyPairSide: currencyPairSide)
             }
         )
     }
@@ -493,7 +493,7 @@ struct ExpenseEditView: View {
         Binding(
             get: { viewModel.exchangeAdjustment },
             set: { newValue in
-                viewModel.updateExchangeAdjustment(newValue, currencySide: currencySide)
+                viewModel.updateExchangeAdjustment(newValue, currencyPairSide: currencyPairSide)
             }
         )
     }
@@ -501,11 +501,11 @@ struct ExpenseEditView: View {
     // MARK: - Действия
     
     private func switchInputCurrency() {
-        switch currencySide {
+        switch currencyPairSide {
         case .base:
-            currencySide = .quote
+            currencyPairSide = .quote
         case .quote:
-            currencySide = .base
+            currencyPairSide = .base
         }
     }
     

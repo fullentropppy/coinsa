@@ -1,5 +1,5 @@
 //
-//  RateMode.swift
+//  ExchangeRateMode.swift
 //  Coinsa
 //
 //  Created by Daniil Gritsenko on 20.06.2026.
@@ -8,7 +8,7 @@
 import Foundation
 
 /// Режим курса обмена.
-enum RateMode: String, Identifiable {
+enum ExchangeRateMode: String, Identifiable {
     // MARK: - Значения
     
     case actual

@@ -34,10 +34,10 @@ final class AmountManager {
     // MARK: - Публичные методы
     
     /// Возвращает сумму в указанной валюте.
-    /// - Parameter currencySide: Валюта.
+    /// - Parameter currencyPairSide: Валюта.
     /// - Returns: Сумма в запрошенной валюте.
-    func amount(for currencySide: CurrencySide) -> Double {
-        switch currencySide {
+    func amount(for currencyPairSide: CurrencyPairSide) -> Double {
+        switch currencyPairSide {
         case .base: baseAmount
         case .quote: quoteAmount
         }
@@ -46,9 +46,9 @@ final class AmountManager {
     /// Обновляет сумму в указанной валюте, автоматически пересчитывая значение в другой валюте.
     /// - Parameters:
     ///   - newValue: Новое значение суммы.
-    ///   - currencySide: Валюта, в которой задается новое значение.
-    func updateAmount(_ newValue: Double, for currencySide: CurrencySide, useExchangeAdjustment: Bool = true) {
-        switch currencySide {
+    ///   - currencyPairSide: Валюта, в которой задается новое значение.
+    func updateAmount(_ newValue: Double, for currencyPairSide: CurrencyPairSide, useExchangeAdjustment: Bool = true) {
+        switch currencyPairSide {
         case .base:
             baseAmount = newValue
             quoteAmount = converter.convertToQuote(
@@ -79,10 +79,10 @@ final class AmountManager {
     }
     
     /// Обновляет суммы после изменения курса обмена.
-    /// - Parameter currencySide: Валюта, значение которой остается неизменным при пересчете.
-    func updateFromRateChange(for currencySide: CurrencySide, useExchangeAdjustment: Bool = true) {
-        let currentAmount = amount(for: currencySide)
-        updateAmount(currentAmount, for: currencySide, useExchangeAdjustment: useExchangeAdjustment)
+    /// - Parameter currencyPairSide: Валюта, значение которой остается неизменным при пересчете.
+    func updateFromRateChange(for currencyPairSide: CurrencyPairSide, useExchangeAdjustment: Bool = true) {
+        let currentAmount = amount(for: currencyPairSide)
+        updateAmount(currentAmount, for: currencyPairSide, useExchangeAdjustment: useExchangeAdjustment)
     }
     
     /// Сбрасывает обе суммы в ноль.

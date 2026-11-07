@@ -4242,13 +4242,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "1 %1$(currencyCode1)@ = %2$(rate1to2)@ %3$(currencyCode2)@"
+            "value" : "1 %1$(baseCurrencyCode)@ = %2$(rateBaseToQuote)@ %3$(quoteCurrencyCode)@"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "1 %1$(currencyCode1)@ = %2$(rate1to2)@ %3$(currencyCode2)@"
+            "value" : "1 %1$(baseCurrencyCode)@ = %2$(rateBaseToQuote)@ %3$(quoteCurrencyCode)@"
           }
         }
       }

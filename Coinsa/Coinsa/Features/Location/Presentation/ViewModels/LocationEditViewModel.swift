@@ -211,7 +211,7 @@ final class LocationEditViewModel {
             guard rateLocationToBase > 0 else { return }
             
             amountManager.updateFromRateChange(
-                for: currencySide(for: currentInput),
+                for: currencyPairSide(for: currentInput),
                 useExchangeAdjustment: false
             )
         }
@@ -223,7 +223,7 @@ final class LocationEditViewModel {
         currencyConverter.updateRate(newRate)
         if newRate > 0 {
             amountManager.updateFromRateChange(
-                for: currencySide(for: currentInput),
+                for: currencyPairSide(for: currentInput),
                 useExchangeAdjustment: false
             )
         }
@@ -233,7 +233,7 @@ final class LocationEditViewModel {
         currencyConverter.requestRateRefresh { [weak self] _ in
             guard let self else { return }
             amountManager.updateFromRateChange(
-                for: currencySide(for: inputCurrency),
+                for: currencyPairSide(for: inputCurrency),
                 useExchangeAdjustment: false
             )
         }
@@ -265,12 +265,12 @@ final class LocationEditViewModel {
     func updateBudget(_ amount: Double, in inputCurrency: CurrencyContext) {
         amountManager.updateAmount(
             amount,
-            for: currencySide(for: inputCurrency),
+            for: currencyPairSide(for: inputCurrency),
             useExchangeAdjustment: false
         )
     }
     
-    private func currencySide(for currency: CurrencyContext) -> CurrencySide {
+    private func currencyPairSide(for currency: CurrencyContext) -> CurrencyPairSide {
         switch currency {
         case .base:
             return .base

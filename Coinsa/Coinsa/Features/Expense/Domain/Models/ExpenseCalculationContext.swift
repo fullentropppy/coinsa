@@ -36,7 +36,7 @@ struct ExpenseCalculationContext {
     /// - Returns: Сумма в указанной валюте.
     func amount(
         in currency: CurrencyContext,
-        using rateMode: RateMode = .effective
+        using rateMode: ExchangeRateMode = .effective
     ) -> Double {
         switch currency {
         case .base: baseAmount
@@ -54,7 +54,7 @@ struct ExpenseCalculationContext {
     func exchangeRate(
         from sourceCurrency: CurrencyContext,
         to targetCurrency: CurrencyContext,
-        using rateMode: RateMode = .effective
+        using rateMode: ExchangeRateMode = .effective
     ) -> Double {
         guard sourceCurrency != targetCurrency else { return 1 }
         
@@ -73,7 +73,7 @@ struct ExpenseCalculationContext {
     func inverseExchangeRate(
         from sourceCurrency: CurrencyContext,
         to targetCurrency: CurrencyContext,
-        using rateMode: RateMode = .effective
+        using rateMode: ExchangeRateMode = .effective
     ) -> Double {
         let rate = exchangeRate(from: sourceCurrency, to: targetCurrency, using: rateMode)
         return rate > 0 ? 1 / rate : 0
@@ -86,7 +86,7 @@ struct ExpenseCalculationContext {
     ///   - rateMode: Режим расчета курса.
     private func rateToBase(
         for targetCurrency: CurrencyContext,
-        using rateMode: RateMode
+        using rateMode: ExchangeRateMode
     ) -> Double {
         switch targetCurrency {
         case .base: 1
@@ -95,7 +95,7 @@ struct ExpenseCalculationContext {
         }
     }
     
-    private func rateExpenseToBase(using rateMode: RateMode) -> Double {
+    private func rateExpenseToBase(using rateMode: ExchangeRateMode) -> Double {
         switch rateMode {
         case .effective: adjustedRateExpenseToBase
         case .actual: rateExpenseToBase

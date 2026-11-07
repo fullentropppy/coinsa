@@ -25,7 +25,7 @@ extension Location {
     /// - Returns: Рекомендуемая сумма на сегодня
     func calculateBudgetAmountForToday(
         in currency: CurrencyContext = .base,
-        using rateMode: RateMode = .actual,
+        using rateMode: ExchangeRateMode = .actual,
         calendar: Calendar = .utc
     ) -> Double {
         let budgetAmount = calculateBudgetAmount(
@@ -66,7 +66,7 @@ extension Location {
     func calculateBudgetAmount(
         in currency: CurrencyContext = .base,
         asDailyAverage: Bool = false,
-        using rateMode: RateMode = .actual,
+        using rateMode: ExchangeRateMode = .actual,
         calendar: Calendar = .utc
     ) -> Double {
         let exchangeRate = exchangeRateBaseToCurrency(currency, using: rateMode)
@@ -86,7 +86,7 @@ extension Location {
     /// - Returns: Фактическая сумма
     func calculateExpensesAmount(
         in currency: CurrencyContext = .base,
-        using rateMode: RateMode = .effective,
+        using rateMode: ExchangeRateMode = .effective,
         withinDateRange targetRange: ClosedRange<Date>? = nil
     ) -> Double {
         guard canAggregateAmounts(in: currency) else { return 0 }
@@ -107,7 +107,7 @@ extension Location {
     /// - Returns: Словарь из категорий и сумм
     func calculateExpensesAmountByCategory(
         in currency: CurrencyContext = .base,
-        using rateMode: RateMode = .effective,
+        using rateMode: ExchangeRateMode = .effective,
         withinDateRange targetRange: ClosedRange<Date>? = nil
     ) -> [ExpenseCategory: Double] {
         guard canAggregateAmounts(in: currency) else { return [:] }
@@ -123,7 +123,7 @@ extension Location {
     // MARK: - Приватные методы
     
     /// Возвращает курс основной валюты к запрошенному контексту.
-    private func exchangeRateBaseToCurrency(_ currency: CurrencyContext, using rateMode: RateMode) -> Double {
+    private func exchangeRateBaseToCurrency(_ currency: CurrencyContext, using rateMode: ExchangeRateMode) -> Double {
         switch currency {
         case .base: 1
         case .location: exchangeRateBaseToLocation(using: rateMode)
@@ -132,7 +132,7 @@ extension Location {
     }
     
     /// Возвращает курс основной валюты к валюте локации.
-    private func exchangeRateBaseToLocation(using rateMode: RateMode) -> Double {
+    private func exchangeRateBaseToLocation(using rateMode: ExchangeRateMode) -> Double {
         switch rateMode {
         case .effective: effectiveRateLocationToBase > 0 ? 1 / effectiveRateLocationToBase : 0
         case .actual: rateLocationToBase > 0 ? 1 / rateLocationToBase : 0
