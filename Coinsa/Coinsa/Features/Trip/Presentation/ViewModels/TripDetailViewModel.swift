@@ -20,26 +20,26 @@ struct TripDetailViewModel {
     }
     
     var eventHeaderData: EventSummaryData {
-        let budgetAmount = trip.calculateBudgetAmount(inBaseCurrency: true)
-        let expensesAmount = trip.calculateExpensesAmount(inBaseCurrency: true)
+        let budgetAmount = trip.calculateBudgetAmount(inHomeCurrency: true)
+        let expensesAmount = trip.calculateExpensesAmount(inHomeCurrency: true)
         
         return EventSummaryData(
             badgeProvider: Trip.self,
             dateRangeProvider: trip,
-            budgetBaseAmount: budgetAmount,
-            expensesBaseAmount: expensesAmount,
-            baseCurrency: trip.baseCurrency
+            budgetHomeAmount: budgetAmount,
+            expensesHomeAmount: expensesAmount,
+            homeCurrency: trip.homeCurrency
         )
     }
 
     var eventAnalyticsData: EventCategoryAnalyticsData {
-        let baseBudget = trip.calculateBudgetAmount(inBaseCurrency: true)
-        let expensesAmountByCategory = trip.calculateExpensesAmountByCategory(inBaseCurrency: true)
+        let baseBudget = trip.calculateBudgetAmount(inHomeCurrency: true)
+        let expensesAmountByCategory = trip.calculateExpensesAmountByCategory(inHomeCurrency: true)
         let expenses = trip.locations?.flatMap { $0.expenses ?? [] } ?? []
 
         return EventCategoryAnalyticsData(
             dateRangeProvider: trip,
-            baseCurrency: trip.baseCurrency,
+            homeCurrency: trip.homeCurrency,
             locationCurrency: nil,
             baseBudget: baseBudget,
             locationBudget: nil,
@@ -114,7 +114,7 @@ struct TripDetailViewModel {
         ExpenseCategory.allCases.map { category in
             ExpenseAnalyticsSlice(
                 category: category,
-                baseAmount: baseValues[category] ?? 0,
+                homeAmount: baseValues[category] ?? 0,
                 locationAmount: localValues?[category]
             )
         }

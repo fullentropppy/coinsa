@@ -11,7 +11,7 @@ struct EventCategoryAnalyticsSummary {
     let subcategory: ExpenseSubcategory
     let categoryExpenseCount: Int
     let subcategoryExpenseCount: Int
-    let baseAmount: Double
+    let homeAmount: Double
     let locationAmount: Double?
     
     func hasSameTarget(as summary: EventCategoryAnalyticsSummary) -> Bool {

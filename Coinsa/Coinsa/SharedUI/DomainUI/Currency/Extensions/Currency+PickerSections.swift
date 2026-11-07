@@ -10,10 +10,10 @@ import Foundation
 extension Currency {
     /// Формирует секции для пикера: приоритетные сверху, остальные - ниже.
     /// - Parameters:
-    ///   - baseCurrency: Основная валюта.
+    ///   - homeCurrency: Домашняя валюта.
     ///   - locationCurrency: Валюта локации (опционально).
     static func pickerSections(
-        baseCurrency: Currency,
+        homeCurrency: Currency,
         locationCurrency: Currency? = nil
     ) -> [PickerSection<Currency>] {
         var sections: [PickerSection<Currency>] = []
@@ -23,8 +23,8 @@ extension Currency {
             prioritized.append(locationCurrency)
         }
         
-        if !prioritized.contains(baseCurrency) {
-            prioritized.append(baseCurrency)
+        if !prioritized.contains(homeCurrency) {
+            prioritized.append(homeCurrency)
         }
         
         if !prioritized.contains(.usd) {

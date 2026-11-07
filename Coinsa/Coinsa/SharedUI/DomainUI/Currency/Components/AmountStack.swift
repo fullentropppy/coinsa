@@ -11,8 +11,8 @@ import SwiftUI
 struct AmountStack: View {
     // MARK: - Свойства
     
-    private let baseAmount: Double
-    private let baseCurrency: Currency
+    private let homeAmount: Double
+    private let homeCurrency: Currency
     private let expenseAmount: Double?
     private let expenseCurrency: Currency?
     
@@ -20,18 +20,18 @@ struct AmountStack: View {
     
     /// Создает компонент с суммами в разных валютах.
     /// - Parameters:
-    ///   - baseAmount: Сумма в основной валюте.
-    ///   - baseCurrency: Основная валюта.
+    ///   - homeAmount: Сумма в домашней валюте.
+    ///   - homeCurrency: Домашняя валюта.
     ///   - expenseAmount: Сумма в валюте траты (опционально).
     ///   - expenseCurrency: Валюта траты (опционально).
     init(
-        baseAmount: Double,
-        baseCurrency: Currency,
+        homeAmount: Double,
+        homeCurrency: Currency,
         expenseAmount: Double? = nil,
         expenseCurrency: Currency? = nil
     ) {
-        self.baseAmount = baseAmount
-        self.baseCurrency = baseCurrency
+        self.homeAmount = homeAmount
+        self.homeCurrency = homeCurrency
         self.expenseAmount = expenseAmount
         self.expenseCurrency = expenseCurrency
     }
@@ -42,11 +42,11 @@ struct AmountStack: View {
         VStack(alignment: .trailing, spacing: 10) {
             if let mainAmount = expenseAmount,
                let mainCurrency = expenseCurrency,
-               mainCurrency != baseCurrency {
+               mainCurrency != homeCurrency {
                 AmountText.standard(mainAmount, currency: mainCurrency)
-                AmountText.secondarySmall(baseAmount, currency: baseCurrency)
+                AmountText.secondarySmall(homeAmount, currency: homeCurrency)
             } else {
-                AmountText.standard(baseAmount, currency: baseCurrency)
+                AmountText.standard(homeAmount, currency: homeCurrency)
                     .frame(maxHeight: .infinity, alignment: .top)
             }
         }
@@ -57,7 +57,7 @@ struct AmountStack: View {
 
 #Preview {
     List {
-        AmountStack(baseAmount: 2500, baseCurrency: .rub)
-        AmountStack(baseAmount: 2500, baseCurrency: .rub, expenseAmount: 5000, expenseCurrency: .jpy)
+        AmountStack(homeAmount: 2500, homeCurrency: .rub)
+        AmountStack(homeAmount: 2500, homeCurrency: .rub, expenseAmount: 5000, expenseCurrency: .jpy)
     }
 }

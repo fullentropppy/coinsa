@@ -65,19 +65,19 @@ final class TripEditViewModel {
         }
     }
     var endDate: Date
-    var baseCurrency: Currency
+    var homeCurrency: Currency
     
     // MARK: - Инициализация
 
     /// Создает ViewModel для новой поездки.
-    /// - Parameter baseCurrency: Основная валюта по умолчанию.
-    convenience init(forCreateWith baseCurrency: Currency) {
+    /// - Parameter homeCurrency: Домашняя валюта по умолчанию.
+    convenience init(forCreateWith homeCurrency: Currency) {
         self.init(
             trip: nil,
             name: "",
             startDate: PlainDate.today.storedDate,
             endDate: PlainDate.today.storedDate,
-            baseCurrency: baseCurrency
+            homeCurrency: homeCurrency
         )
     }
     
@@ -89,7 +89,7 @@ final class TripEditViewModel {
             name: trip.name,
             startDate: trip.startPlainDate.storedDate,
             endDate: trip.endPlainDate.storedDate,
-            baseCurrency: trip.baseCurrency
+            homeCurrency: trip.homeCurrency
         )
     }
 
@@ -98,19 +98,19 @@ final class TripEditViewModel {
         name: String,
         startDate: Date,
         endDate: Date,
-        baseCurrency: Currency
+        homeCurrency: Currency
     ) {
         self.trip = trip
         self.name = name
         self.startDate = startDate
         self.endDate = endDate
-        self.baseCurrency = baseCurrency
+        self.homeCurrency = homeCurrency
         
         self.initialSnapshot = Snapshot(
             name: name,
             startDate: startDate,
             endDate: endDate,
-            baseCurrency: baseCurrency
+            homeCurrency: homeCurrency
         )
     }
     
@@ -123,14 +123,14 @@ final class TripEditViewModel {
                 name: name,
                 startDate: startDate,
                 endDate: endDate,
-                baseCurrency: baseCurrency
+                homeCurrency: homeCurrency
             )
         } else {
             repository.add(
                 name: name,
                 startDate: startDate,
                 endDate: endDate,
-                baseCurrency: baseCurrency
+                homeCurrency: homeCurrency
             )
         }
     }
@@ -146,7 +146,7 @@ private extension TripEditViewModel {
         let name: String
         let startDate: Date
         let endDate: Date
-        let baseCurrency: Currency
+        let homeCurrency: Currency
 
         // MARK: - Инициализация
 
@@ -155,15 +155,15 @@ private extension TripEditViewModel {
                 name: viewModel.name,
                 startDate: viewModel.startDate,
                 endDate: viewModel.endDate,
-                baseCurrency: viewModel.baseCurrency
+                homeCurrency: viewModel.homeCurrency
             )
         }
         
-        init(name: String, startDate: Date, endDate: Date, baseCurrency: Currency) {
+        init(name: String, startDate: Date, endDate: Date, homeCurrency: Currency) {
             self.name = name.trimmed
             self.startDate = startDate
             self.endDate = endDate
-            self.baseCurrency = baseCurrency
+            self.homeCurrency = homeCurrency
         }
     }
 }

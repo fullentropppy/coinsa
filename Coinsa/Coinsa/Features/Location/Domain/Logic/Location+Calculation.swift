@@ -10,9 +10,9 @@ import Foundation
 extension Location {
     // MARK: - Публичные свойства
     
-    /// Эффективный курс локальной валюты к базовой (с учетом корректировки)
-    var effectiveRateLocationToBase: Double {
-        rateLocationToBase * (1 + (exchangeAdjustment / 100))
+    /// Эффективный курс валюты локации к основной (с учетом корректировки)
+    var effectiveRateLocationToHome: Double {
+        rateLocationToHome * (1 + (exchangeAdjustment / 100))
     }
     
     // MARK: - Публичные методы. Плановая сумма
@@ -20,18 +20,18 @@ extension Location {
     /// Рассчитывает плановую сумму на сегодня (с учетом уже потраченного)
     /// - Parameters:
     ///   - currency: Валютный контекст результата. Поддерживаются `.base` и `.location`.
-    ///   - rateMode: Режим расчета курса. По умолчанию `.actual`
+    ///   - exchangeRateMode: Режим расчета курса. По умолчанию `.actual`
     ///   - calendar: Календарь для вычислений. По умолчанию `.current`
     /// - Returns: Рекомендуемая сумма на сегодня
     func calculateBudgetAmountForToday(
-        in currency: CurrencyContext = .base,
-        using rateMode: ExchangeRateMode = .actual,
+        in currency: CurrencyContext = .home,
+        using exchangeRateMode: ExchangeRateMode = .actual,
         calendar: Calendar = .utc
     ) -> Double {
         let budgetAmount = calculateBudgetAmount(
             in: currency,
             asDailyAverage: false,
-            using: rateMode,
+            using: exchangeRateMode,
             calendar: calendar
         )
         
@@ -46,7 +46,7 @@ extension Location {
         
         let expensesAmount = calculateExpensesAmount(
             in: currency,
-            using: rateMode,
+            using: exchangeRateMode,
             withinDateRange: startRange...endRange
         )
         
@@ -60,16 +60,16 @@ extension Location {
     /// - Parameters:
     ///   - currency: Валютный контекст результата. Поддерживаются `.base` и `.location`.
     ///   - asDailyAverage: Если `true`, возвращает среднюю сумму в день
-    ///   - rateMode: Режим расчета курса. По умолчанию `.actual`
+    ///   - exchangeRateMode: Режим расчета курса. По умолчанию `.actual`
     ///   - calendar: Календарь для вычислений. По умолчанию `.current`
     /// - Returns: Плановая сумма
     func calculateBudgetAmount(
-        in currency: CurrencyContext = .base,
+        in currency: CurrencyContext = .home,
         asDailyAverage: Bool = false,
-        using rateMode: ExchangeRateMode = .actual,
+        using exchangeRateMode: ExchangeRateMode = .actual,
         calendar: Calendar = .utc
     ) -> Double {
-        let exchangeRate = exchangeRateBaseToCurrency(currency, using: rateMode)
+        let exchangeRate = exchangeRateHomeToTarget(currency, using: exchangeRateMode)
         let budgetAmount = budget * exchangeRate
         let totalDays = totalDays
         
@@ -81,12 +81,12 @@ extension Location {
     /// Рассчитывает общую фактическую сумму по расходам
     /// - Parameters:
     ///   - currency: Валютный контекст результата. Поддерживаются `.base` и `.location`.
-    ///   - rateMode: Режим расчета курса
+    ///   - exchangeRateMode: Режим расчета курса
     ///   - targetRange: Опциональный диапазон дат для фильтрации
     /// - Returns: Фактическая сумма
     func calculateExpensesAmount(
-        in currency: CurrencyContext = .base,
-        using rateMode: ExchangeRateMode = .effective,
+        in currency: CurrencyContext = .home,
+        using exchangeRateMode: ExchangeRateMode = .effective,
         withinDateRange targetRange: ClosedRange<Date>? = nil
     ) -> Double {
         guard canAggregateAmounts(in: currency) else { return 0 }
@@ -95,19 +95,19 @@ extension Location {
             if let targetRange, !targetRange.contains(expense.civilDateTime.storedDate) {
                 return result
             }
-            return result + expense.amount(in: currency, using: rateMode)
+            return result + expense.amount(in: currency, using: exchangeRateMode)
         } ?? 0
     }
     
     /// Рассчитывает фактические суммы по категориям
     /// - Parameters:
     ///   - currency: Валютный контекст результата. Поддерживаются `.base` и `.location`.
-    ///   - rateMode: Режим расчета курса
+    ///   - exchangeRateMode: Режим расчета курса
     ///   - targetRange: Опциональный диапазон дат для фильтрации
     /// - Returns: Словарь из категорий и сумм
     func calculateExpensesAmountByCategory(
-        in currency: CurrencyContext = .base,
-        using rateMode: ExchangeRateMode = .effective,
+        in currency: CurrencyContext = .home,
+        using exchangeRateMode: ExchangeRateMode = .effective,
         withinDateRange targetRange: ClosedRange<Date>? = nil
     ) -> [ExpenseCategory: Double] {
         guard canAggregateAmounts(in: currency) else { return [:] }
@@ -116,26 +116,26 @@ extension Location {
             if let targetRange, !targetRange.contains(expense.civilDateTime.storedDate) {
                 return
             }
-            result[expense.category, default: 0] += expense.amount(in: currency, using: rateMode)
+            result[expense.category, default: 0] += expense.amount(in: currency, using: exchangeRateMode)
         } ?? [:]
     }
     
     // MARK: - Приватные методы
     
-    /// Возвращает курс основной валюты к запрошенному контексту.
-    private func exchangeRateBaseToCurrency(_ currency: CurrencyContext, using rateMode: ExchangeRateMode) -> Double {
+    /// Возвращает курс домашней валюты к запрошенному контексту.
+    private func exchangeRateHomeToTarget(_ currency: CurrencyContext, using exchangeRateMode: ExchangeRateMode) -> Double {
         switch currency {
-        case .base: 1
-        case .location: exchangeRateBaseToLocation(using: rateMode)
+        case .home: 1
+        case .location: exchangeRateHomeToLocation(using: exchangeRateMode)
         case .expense: 0
         }
     }
     
-    /// Возвращает курс основной валюты к валюте локации.
-    private func exchangeRateBaseToLocation(using rateMode: ExchangeRateMode) -> Double {
-        switch rateMode {
-        case .effective: effectiveRateLocationToBase > 0 ? 1 / effectiveRateLocationToBase : 0
-        case .actual: rateLocationToBase > 0 ? 1 / rateLocationToBase : 0
+    /// Возвращает курс домашней валюты к валюте локации.
+    private func exchangeRateHomeToLocation(using exchangeRateMode: ExchangeRateMode) -> Double {
+        switch exchangeRateMode {
+        case .effective: effectiveRateLocationToHome > 0 ? 1 / effectiveRateLocationToHome : 0
+        case .actual: rateLocationToHome > 0 ? 1 / rateLocationToHome : 0
         }
     }
     

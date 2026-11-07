@@ -10,7 +10,7 @@ struct ExpenseSubcategoryAnalyticsSlice: Identifiable {
     let category: ExpenseCategory
     let subcategory: ExpenseSubcategory
     let expenseCount: Int
-    let baseAmount: Double
+    let homeAmount: Double
     let locationAmount: Double?
     
     var id: String { "\(category.id).\(subcategory.id)" }

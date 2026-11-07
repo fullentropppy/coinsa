@@ -20,9 +20,9 @@ struct ExpenseRepository {
     /// Создает новую трату.
     /// - Parameters:
     ///   - date: Дата совершения траты.
-    ///   - baseAmount: Сумма в основной валюте.
+    ///   - homeAmount: Сумма в домашней валюте.
     ///   - expenseCurrency: Валюта траты.
-    ///   - rateExpenseToBase: Курс валюты траты к основной.
+    ///   - rateExpenseToHome: Курс валюты траты к домашней.
     ///   - rateExpenseToLocation: Курс валюты траты к валюте локации.
     ///   - paymentMethod: Способ оплаты.
     ///   - exchangeAdjustment: Процентная корректировка курса.
@@ -35,9 +35,9 @@ struct ExpenseRepository {
     ///   - comment: Комментарий (опционально).
     func add(
         date: Date,
-        baseAmount: Double,
+        homeAmount: Double,
         expenseCurrency: Currency,
-        rateExpenseToBase: Double,
+        rateExpenseToHome: Double,
         rateExpenseToLocation: Double,
         paymentMethod: PaymentMethod,
         exchangeAdjustment: Double,
@@ -56,9 +56,9 @@ struct ExpenseRepository {
             date: date,
             actualDate: date,
             timeZoneID: "",
-            baseAmount: baseAmount,
+            homeAmount: homeAmount,
             expenseCurrencyCode: expenseCurrency.code,
-            rateExpenseToBase: rateExpenseToBase,
+            rateExpenseToHome: rateExpenseToHome,
             rateExpenseToLocation: rateExpenseToLocation,
             paymentMethodRaw: paymentMethod.rawValue,
             exchangeAdjustment: exchangeAdjustment,
@@ -82,9 +82,9 @@ struct ExpenseRepository {
     /// - Parameters:
     ///   - expense: Трата для обновления.
     ///   - date: Новая дата.
-    ///   - baseAmount: Новая сумма в основной валюте.
+    ///   - homeAmount: Новая сумма в домашней валюте.
     ///   - expenseCurrency: Новая валюта траты.
-    ///   - rateExpenseToBase: Новый курс валюты траты к основной.
+    ///   - rateExpenseToHome: Новый курс валюты траты к домашней.
     ///   - rateExpenseToLocation: Новый курс валюты траты к валюте локации.
     ///   - paymentMethod: Новый способ оплаты.
     ///   - exchangeAdjustment: Новая корректировка.
@@ -97,9 +97,9 @@ struct ExpenseRepository {
     func update(
         _ expense: Expense,
         date: Date,
-        baseAmount: Double,
+        homeAmount: Double,
         expenseCurrency: Currency,
-        rateExpenseToBase: Double,
+        rateExpenseToHome: Double,
         rateExpenseToLocation: Double,
         paymentMethod: PaymentMethod,
         exchangeAdjustment: Double,
@@ -111,9 +111,9 @@ struct ExpenseRepository {
         comment: String?
     ) {
         expense.storedDate = date
-        expense.baseAmount = baseAmount
+        expense.baseAmount = homeAmount
         expense.expenseCurrencyCode = expenseCurrency.code
-        expense.rateExpenseToBase = rateExpenseToBase
+        expense.rateExpenseToBase = rateExpenseToHome
         expense.rateExpenseToLocation = rateExpenseToLocation
         expense.paymentMethodRaw = paymentMethod.rawValue
         expense.exchangeAdjustment = exchangeAdjustment

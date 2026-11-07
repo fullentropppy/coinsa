@@ -15,12 +15,12 @@ final class UserDefaultsSettingsManager {
     
     // MARK: - Параметры учета
     
-    var baseCurrency: Currency {
+    var homeCurrency: Currency {
         get {
-            defaults.string(forKey: UserDefaultsKey.baseCurrency)
+            defaults.string(forKey: UserDefaultsKey.homeCurrency)
                 .flatMap { Currency(rawValue: $0) } ?? .defaultValue
         }
-        set { defaults.set(newValue.rawValue, forKey: UserDefaultsKey.baseCurrency) }
+        set { defaults.set(newValue.rawValue, forKey: UserDefaultsKey.homeCurrency) }
     }
     
     var exchangeAdjustment: Double {
@@ -90,7 +90,7 @@ final class UserDefaultsSettingsManager {
 
 /// Ключи для хранения значений в UserDefaults.
 private enum UserDefaultsKey {
-    static let baseCurrency = "baseCurrency"
+    static let homeCurrency = "homeCurrency"
     static let exchangeAdjustment = "exchangeAdjustment"
     static let fetchExpenseExchangeRateOnline = "fetchExpenseExchangeRateOnline"
     static let detectPlaceOfExpense = "detectPlaceOfExpense"

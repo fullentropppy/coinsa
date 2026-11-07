@@ -62,7 +62,7 @@ struct CurrencyConverterView: View {
                     title: .converterFromCurrenency,
                     selection: fromCurrencyBinding,
                     sections: Currency.pickerSections(
-                        baseCurrency: settingsStore.baseCurrency,
+                        homeCurrency: settingsStore.homeCurrency,
                         locationCurrency: currentLocationCurrency
                     )
                 ) { currency in
@@ -80,7 +80,7 @@ struct CurrencyConverterView: View {
                     title: .converterToCurrency,
                     selection: toCurrencyBinding,
                     sections: Currency.pickerSections(
-                        baseCurrency: settingsStore.baseCurrency,
+                        homeCurrency: settingsStore.homeCurrency,
                         locationCurrency: currentLocationCurrency
                     )
                 ) { currency in
@@ -100,7 +100,7 @@ struct CurrencyConverterView: View {
     // MARK: - Компоненты
 
     private func amountRow(for side: CurrencyPairSide) -> some View {
-        let currency = side == .base ? viewModel.fromCurrency : viewModel.toCurrency
+        let currency = side == .base ? viewModel.baseCurrency : viewModel.quoteCurrency
         let displayText = viewModel.displayText(for: side)
         let isBase = side == .base
 
@@ -139,14 +139,14 @@ struct CurrencyConverterView: View {
             Spacer()
 
             HStack(spacing: 4) {
-                AmountText.standard(1.0, fractionLength: 0, currency: viewModel.fromCurrency)
+                AmountText.standard(1.0, fractionLength: 0, currency: viewModel.baseCurrency)
                 
                 Image(systemName: "equal")
                     .imageScale(.small)
                 
                 ExchangeRateReadOnlyField(
                     viewModel.unitRate,
-                    currency: viewModel.toCurrency,
+                    currency: viewModel.quoteCurrency,
                     isLoading: viewModel.isRateLoading,
                     onRefresh: { viewModel.requestRateRefresh() }
                 )
@@ -173,15 +173,15 @@ struct CurrencyConverterView: View {
 
     private var fromCurrencyBinding: Binding<Currency> {
         Binding(
-            get: { viewModel.fromCurrency },
-            set: { viewModel.updateFromCurrency($0) }
+            get: { viewModel.baseCurrency },
+            set: { viewModel.updateBaseCurrency($0) }
         )
     }
 
     private var toCurrencyBinding: Binding<Currency> {
         Binding(
-            get: { viewModel.toCurrency },
-            set: { viewModel.updateToCurrency($0) }
+            get: { viewModel.quoteCurrency },
+            set: { viewModel.updateQuoteCurrency($0) }
         )
     }
 

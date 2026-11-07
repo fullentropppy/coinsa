@@ -22,12 +22,12 @@ struct TripRepository {
     ///   - name: Название поездки.
     ///   - startDate: Дата начала.
     ///   - endDate: Дата окончания.
-    ///   - baseCurrency: Основная валюта.
+    ///   - homeCurrency: Домашняя валюта.
     func add(
         name: String,
         startDate: Date,
         endDate: Date,
-        baseCurrency: Currency
+        homeCurrency: Currency
     ) {
         let now = Date()
         
@@ -36,7 +36,7 @@ struct TripRepository {
             name: name,
             startDate: startDate,
             endDate: endDate,
-            baseCurrencyCode: baseCurrency.code,
+            homeCurrencyCode: homeCurrency.code,
             locations: [],
             createdAt: now,
             updatedAt: now
@@ -53,19 +53,19 @@ struct TripRepository {
     ///   - name: Новое название.
     ///   - startDate: Новая дата начала.
     ///   - endDate: Новая дата окончания.
-    ///   - baseCurrency: Новая основная валюта.
+    ///   - homeCurrency: Новая домашняя валюта.
     
     func update(
         _ trip: Trip,
         name: String,
         startDate: Date,
         endDate: Date,
-        baseCurrency: Currency
+        homeCurrency: Currency
     ) {
         trip.name = name
         trip.storedStartDate = startDate
         trip.storedEndDate = endDate
-        trip.baseCurrencyCode = baseCurrency.code
+        trip.baseCurrencyCode = homeCurrency.code
         trip.updatedAt = Date()
 
         normalizeTripData(trip)

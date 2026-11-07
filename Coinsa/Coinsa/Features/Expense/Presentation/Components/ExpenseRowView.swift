@@ -57,8 +57,8 @@ struct ExpenseRowView: View {
     
     private var rightStack: some View {
         AmountStack(
-            baseAmount: expense.baseAmount,
-            baseCurrency: expense.baseCurrency,
+            homeAmount: expense.homeAmount,
+            homeCurrency: expense.homeCurrency,
             expenseAmount: expense.amount(in: .expense),
             expenseCurrency: expense.expenseCurrency
         )

@@ -72,7 +72,7 @@ struct EventAnalyticsCategoriesBody: View {
         Section {
             Chart(displayedSlicesSortedByID, id: \.category.id) { slice in
                 SectorMark(
-                    angle: .value("", slice.baseAmount),
+                    angle: .value("", slice.homeAmount),
                     innerRadius: 68,
                     angularInset: 1
                 )
@@ -102,7 +102,7 @@ struct EventAnalyticsCategoriesBody: View {
             }
 
             ForEach(displayedSlicesSortedByAmount) { slice in
-                if slice.baseAmount > 0 {
+                if slice.homeAmount > 0 {
                     NavigationLink {
                         EventSubcategoryAnalyticsView(
                             category: slice.category,
@@ -133,8 +133,8 @@ struct EventAnalyticsCategoriesBody: View {
             }
             Spacer()
             AmountStack(
-                baseAmount: slice.baseAmount / categoryAmountDivisor,
-                baseCurrency: viewModel.baseCurrency,
+                homeAmount: slice.homeAmount / categoryAmountDivisor,
+                homeCurrency: viewModel.homeCurrency,
                 expenseAmount: slice.locationAmount.map { $0 / categoryAmountDivisor },
                 expenseCurrency: viewModel.locationCurrency
             )

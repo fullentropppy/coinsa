@@ -35,7 +35,7 @@ struct ExpenseDetailView: View {
     private var formBackgroundGradient: LinearGradient {
         var lastStopLocation = 0.65
         
-        if viewModel.isExpenseBaseCurrency {
+        if viewModel.isExpenseHomeCurrency {
             lastStopLocation -= 0.1
         }
         

@@ -88,8 +88,8 @@ struct EventSubcategoryAnalyticsView: View {
             }
             Spacer()
             AmountStack(
-                baseAmount: slice.baseAmount / subcategoryAmountDivisor,
-                baseCurrency: viewModel.baseCurrency,
+                homeAmount: slice.homeAmount / subcategoryAmountDivisor,
+                homeCurrency: viewModel.homeCurrency,
                 expenseAmount: slice.locationAmount.map { $0 / subcategoryAmountDivisor },
                 expenseCurrency: viewModel.locationCurrency
             )

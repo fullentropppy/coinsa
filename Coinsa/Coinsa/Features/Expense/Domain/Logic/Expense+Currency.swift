@@ -6,9 +6,9 @@
 //
 
 extension Expense {
-    /// Основная валюта траты (из родительской поездки).
-    var baseCurrency: Currency {
-        location?.baseCurrency ?? .defaultValue
+    /// Домашняя валюта траты (из родительской поездки).
+    var homeCurrency: Currency {
+        location?.homeCurrency ?? .defaultValue
     }
     
     /// Валюта локации, в которой совершена трата.

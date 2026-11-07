@@ -93,8 +93,8 @@ struct EventAnalyticsSummaryBody: View {
                     Spacer()
 
                     AmountStack(
-                        baseAmount: expense.baseAmount,
-                        baseCurrency: viewModel.baseCurrency,
+                        homeAmount: expense.homeAmount,
+                        homeCurrency: viewModel.homeCurrency,
                         expenseAmount: expense.amount(in: .location),
                         expenseCurrency: expense.expenseCurrency
                     )

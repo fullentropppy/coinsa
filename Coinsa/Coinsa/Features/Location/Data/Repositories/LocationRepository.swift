@@ -22,17 +22,17 @@ struct LocationRepository {
     ///   - name: Название локации.
     ///   - startDate: Дата начала пребывания.
     ///   - endDate: Дата окончания пребывания.
-    ///   - locationCurrency: Локальная валюта.
-    ///   - rateLocationToBase: Курс к основной валюте.
+    ///   - locationCurrency: Валюта локации.
+    ///   - rateLocationToHome: Курс к домашней валюте.
     ///   - exchangeAdjustment: Процентная корректировка курса.
-    ///   - budget: Сумма бюджета в основной валюте.
+    ///   - budget: Сумма бюджета в домашней валюте.
     ///   - trip: Родительская поездка.
     func add(
         name: String,
         startDate: Date,
         endDate: Date,
         locationCurrency: Currency,
-        rateLocationToBase: Double,
+        rateLocationToHome: Double,
         exchangeAdjustment: Double,
         budget: Double,
         trip: Trip
@@ -45,7 +45,7 @@ struct LocationRepository {
             startDate: startDate,
             endDate: endDate,
             locationCurrencyCode: locationCurrency.code,
-            rateLocationToBase: rateLocationToBase,
+            rateLocationToHome: rateLocationToHome,
             exchangeAdjustment: exchangeAdjustment,
             budget: budget,
             trip: trip,
@@ -65,8 +65,8 @@ struct LocationRepository {
     ///   - name: Новое название.
     ///   - startDate: Новая дата начала.
     ///   - endDate: Новая дата окончания.
-    ///   - locationCurrency: Новая локальная валюта.
-    ///   - rateLocationToBase: Новый курс.
+    ///   - locationCurrency: Новая валюта локации.
+    ///   - rateLocationToHome: Новый курс.
     ///   - budget: Новый бюджет.
     ///   - exchangeAdjustment: Новая корректировка.
     func update(
@@ -75,7 +75,7 @@ struct LocationRepository {
         startDate: Date,
         endDate: Date,
         locationCurrency: Currency,
-        rateLocationToBase: Double,
+        rateLocationToHome: Double,
         exchangeAdjustment: Double,
         budget: Double
     ) {
@@ -83,7 +83,7 @@ struct LocationRepository {
         location.storedStartDate = startDate
         location.storedEndDate = endDate
         location.locationCurrencyCode = locationCurrency.code
-        location.rateLocationToBase = rateLocationToBase
+        location.rateLocationToBase = rateLocationToHome
         location.exchangeAdjustment = exchangeAdjustment
         location.budget = budget
         location.updatedAt = Date()

@@ -19,7 +19,7 @@ struct LocationEditView: View {
     
     @State private var viewModel: LocationEditViewModel
     @State private var deletionHandler = DeletionHandler<Location>()
-    @State private var inputCurrency: CurrencyContext = .base
+    @State private var inputCurrency: CurrencyContext = .home
     @State private var isShowingDiscardAlert = false
     @State private var validationNotice: FormValidationNotice?
     @FocusState private var focusedField: NumericEditField?
@@ -38,14 +38,14 @@ struct LocationEditView: View {
     
     private var budgetInputCurrencyValue: Currency {
         switch inputCurrency {
-        case .base: viewModel.baseCurrency
+        case .home: viewModel.homeCurrency
         case .location, .expense: viewModel.locationCurrency
         }
     }
 
     private var budgetTotalValue: Double {
         switch inputCurrency {
-        case .base: viewModel.budgetBaseAmount
+        case .home: viewModel.budgetHomeAmount
         case .location, .expense: viewModel.budgetLocationAmount
         }
     }
@@ -183,7 +183,7 @@ struct LocationEditView: View {
                 title: .locationCurrency,
                 selection: locationCurrencyBinding,                
                 sections: Currency.pickerSections(
-                    baseCurrency: viewModel.baseCurrency,
+                    homeCurrency: viewModel.homeCurrency,
                     locationCurrency: viewModel.locationCurrency
                 ),
                 isDisabled: viewModel.hasExpenses
@@ -202,7 +202,7 @@ struct LocationEditView: View {
                 LabeledContent(.locationExchangeRate(locationCurrencyCode: viewModel.locationCurrency.code)) {
                     ExchangeRateInputField.standard(
                         rateInputBinding,
-                        currency: viewModel.baseCurrency,
+                        currency: viewModel.homeCurrency,
                         isLoading: viewModel.isRateLoading,
                         focusedField: $focusedField,
                         focusID: .exchangeRate,
@@ -299,7 +299,7 @@ struct LocationEditView: View {
     
     private var rateInputBinding: Binding<Double> {
         Binding(
-            get: { viewModel.rateLocationToBase },
+            get: { viewModel.rateLocationToHome },
             set: { newValue in
                 viewModel.updateRate(newValue, currentInput: inputCurrency)
             }
@@ -332,8 +332,8 @@ struct LocationEditView: View {
     
     private func switchInputCurrency() {
         switch inputCurrency {
-        case .base: inputCurrency = .location
-        case .location, .expense: inputCurrency = .base
+        case .home: inputCurrency = .location
+        case .location, .expense: inputCurrency = .home
         }
     }
     

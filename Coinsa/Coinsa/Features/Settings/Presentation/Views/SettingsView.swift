@@ -45,7 +45,7 @@ struct SettingsView: View {
 
     private var settingsForm: some View {
         Form {
-            baseCurrencySection
+            homeCurrencySection
             exchangeAdjustmentSection
             dataLoadingSection
             appearanceSection
@@ -58,17 +58,17 @@ struct SettingsView: View {
     
     // MARK: - Секции
     
-    private var baseCurrencySection: some View {
+    private var homeCurrencySection: some View {
         Section {
             LabeledPicker(
-                title: .settingsBaseCurrency,
-                selection: baseCurrencyBinding,
+                title: .settingsHomeCurrency,
+                selection: homeCurrencyBinding,
                 options: Currency.allCasesSortedByName
             ) { currency in
                 currency.makeLabel()
             }
         } footer: {
-            Text(.settingsBaseCurrencyHint)
+            Text(.settingsHomeCurrencyHint)
         }
     }
 
@@ -122,10 +122,10 @@ struct SettingsView: View {
     
     // MARK: - Биндинги
 
-    private var baseCurrencyBinding: Binding<Currency> {
+    private var homeCurrencyBinding: Binding<Currency> {
         Binding(
-            get: { settingsStore.baseCurrency },
-            set: { settingsStore.baseCurrency = $0 }
+            get: { settingsStore.homeCurrency },
+            set: { settingsStore.homeCurrency = $0 }
         )
     }
     

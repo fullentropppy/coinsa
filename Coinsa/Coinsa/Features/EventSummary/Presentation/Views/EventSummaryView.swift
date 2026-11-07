@@ -20,11 +20,11 @@ struct EventSummaryView: View {
     // MARK: - Вычисляемые свойства
     
     private var showsBudgetAmount: Bool {
-        data.budgetBaseAmount > 0 || showsBudgetIfZero
+        data.budgetHomeAmount > 0 || showsBudgetIfZero
     }
     
-    private var baseAmountBalance: Double {
-        data.budgetBaseAmount - data.expensesBaseAmount
+    private var homeAmountBalance: Double {
+        data.budgetHomeAmount - data.expensesHomeAmount
     }
     
     private var locationAmountBalance: Double? {
@@ -105,16 +105,16 @@ struct EventSummaryView: View {
             if showsBudgetAmount {
                 EventAmountCardView(
                     title: .amountBudget,
-                    baseAmount: data.budgetBaseAmount,
-                    baseCurrency: data.baseCurrency,
+                    homeAmount: data.budgetHomeAmount,
+                    homeCurrency: data.homeCurrency,
                     locationAmount: data.budgetLocationAmount,
                     locationCurrency: data.locationCurrency
                 )
             }
             EventAmountCardView(
                 title: .amountExpenses,
-                baseAmount: data.expensesBaseAmount,
-                baseCurrency: data.baseCurrency,
+                homeAmount: data.expensesHomeAmount,
+                homeCurrency: data.homeCurrency,
                 locationAmount: data.expensesLocationAmount,
                 locationCurrency: data.locationCurrency
             )
@@ -125,9 +125,9 @@ struct EventSummaryView: View {
     private var amountBalanceContent: some View {
         if showsBudgetAmount {
             EventAmountBalanceView(
-                budgetBaseAmount: data.budgetBaseAmount,
-                baseAmountBalance: baseAmountBalance,
-                baseCurrency: data.baseCurrency,
+                budgetHomeAmount: data.budgetHomeAmount,
+                homeAmountBalance: homeAmountBalance,
+                homeCurrency: data.homeCurrency,
                 locationAmountBalance: locationAmountBalance,
                 locationCurrency: data.locationCurrency
             )

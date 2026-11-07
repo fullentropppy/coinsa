@@ -16,16 +16,16 @@ struct ExpenseDetailViewModel {
 
     // MARK: - Вычисляемые свойства. Общее
 
-    var isExpenseBaseCurrency: Bool {
-        baseCurrency == expenseCurrency
+    var isExpenseHomeCurrency: Bool {
+        homeCurrency == expenseCurrency
     }
     
     var isExpenseLocationCurrency: Bool {
         locationCurrency == expenseCurrency
     }
     
-    var isLocationBaseCurrency: Bool {
-        baseCurrency == locationCurrency
+    var isLocationhomeCurrency: Bool {
+        homeCurrency == locationCurrency
     }
     
     var navigationTitle: LocalizedStringResource {
@@ -38,8 +38,8 @@ struct ExpenseDetailViewModel {
     
     // MARK: - Вычисляемые свойства. Валюта и сумма
     
-    var baseCurrency: Currency {
-        expense.baseCurrency
+    var homeCurrency: Currency {
+        expense.homeCurrency
     }
     
     var locationCurrency: Currency {
@@ -51,19 +51,19 @@ struct ExpenseDetailViewModel {
     }
     
     var primaryAmount: Double {
-        isExpenseBaseCurrency ? expense.baseAmount : expense.amount(in: .expense)
+        isExpenseHomeCurrency ? expense.homeAmount : expense.amount(in: .expense)
     }
 
     var primaryCurrency: Currency {
-        isExpenseBaseCurrency ? baseCurrency : expenseCurrency
+        isExpenseHomeCurrency ? homeCurrency : expenseCurrency
     }
 
     var secondaryAmount: Double? {
-        isExpenseBaseCurrency ? nil : expense.baseAmount
+        isExpenseHomeCurrency ? nil : expense.homeAmount
     }
 
     var secondaryCurrency: Currency? {
-        isExpenseBaseCurrency ? nil : baseCurrency
+        isExpenseHomeCurrency ? nil : homeCurrency
     }
 
     // MARK: - Вычисляемые свойства. Карта
@@ -77,10 +77,10 @@ struct ExpenseDetailViewModel {
         
         var shift: Double
         
-        if !isExpenseBaseCurrency && expense.comment != nil {
+        if !isExpenseHomeCurrency && expense.comment != nil {
             shift = 0.013
-        } else if isExpenseBaseCurrency && expense.comment != nil
-                    || !isExpenseBaseCurrency && expense.comment == nil {
+        } else if isExpenseHomeCurrency && expense.comment != nil
+                    || !isExpenseHomeCurrency && expense.comment == nil {
             shift = 0.010
         } else {
             shift = 0.008
@@ -95,35 +95,35 @@ struct ExpenseDetailViewModel {
     // MARK: - Вычисляемые свойства. Курс обмена
     
     var exchangeRateDescription: LocalizedStringResource? {
-        guard !isExpenseBaseCurrency || !isLocationBaseCurrency else {
+        guard !isExpenseHomeCurrency || !isLocationhomeCurrency else {
             return nil
         }
         
-        if isExpenseBaseCurrency {
+        if isExpenseHomeCurrency {
             return .expenseActualExchangeRate(
                 expenseCurrencyCode: expenseCurrency.code,
-                actualRateExpenseToBase: expense
+                actualRateExpenseToHome: expense
                     .rateExpenseToLocation
                     .numberFormat(fractionLength: 4),
-                baseCurrencyCode: locationCurrency.code
+                homeCurrencyCode: locationCurrency.code
             )
         } else if expense.exchangeAdjustment > 0 && expense.paymentMethod != .cash {
-            if isExpenseLocationCurrency || isLocationBaseCurrency {
+            if isExpenseLocationCurrency || isLocationhomeCurrency {
                 return .expenseAdjustedExchangeRateLong(
                     expenseCurrencyCode: expenseCurrency.code,
-                    effectiveRateExpenseToBase: expense
-                        .exchangeRate(from: .expense, to: .base, using: .effective)
+                    effectiveRateExpenseToHome: expense
+                        .exchangeRate(from: .expense, to: .home, using: .effective)
                         .numberFormat(fractionLength: 4),
-                    baseCurrencyCode: baseCurrency.code,
+                    homeCurrencyCode: homeCurrency.code,
                     exchangeAdjustment: (expense.exchangeAdjustment / 100).percentFormat()
                 )
             } else {
                 return .expenseAdjustedExchangeRateLongDouble(
                     expenseCurrencyCode: expenseCurrency.code,
-                    effectiveRateExpenseToBase: expense
-                        .exchangeRate(from: .expense, to: .base, using: .effective)
+                    effectiveRateExpenseToHome: expense
+                        .exchangeRate(from: .expense, to: .home, using: .effective)
                         .numberFormat(fractionLength: 4),
-                    baseCurrencyCode: baseCurrency.code,
+                    homeCurrencyCode: homeCurrency.code,
                     effectiveRateExpenseToLocation: expense
                         .exchangeRate(from: .expense, to: .location, using: .effective)
                         .numberFormat(fractionLength: 4),
@@ -132,21 +132,21 @@ struct ExpenseDetailViewModel {
                 )
             }
         } else {
-            if isExpenseLocationCurrency || isLocationBaseCurrency {
+            if isExpenseLocationCurrency || isLocationhomeCurrency {
                 return .expenseActualExchangeRate(
                     expenseCurrencyCode: expenseCurrency.code,
-                    actualRateExpenseToBase: expense
-                        .rateExpenseToBase
+                    actualRateExpenseToHome: expense
+                        .rateExpenseToHome
                         .numberFormat(fractionLength: 4),
-                    baseCurrencyCode: baseCurrency.code
+                    homeCurrencyCode: homeCurrency.code
                 )
             } else {
                 return .expenseActualExchangeRateDouble(
                     expenseCurrencyCode: expenseCurrency.code,
-                    actualRateExpenseToBase: expense
-                        .rateExpenseToBase
+                    actualRateExpenseToHome: expense
+                        .rateExpenseToHome
                         .numberFormat(fractionLength: 4),
-                    baseCurrencyCode: baseCurrency.code,
+                    homeCurrencyCode: homeCurrency.code,
                     actualRateExpenseToLocation: expense
                         .rateExpenseToLocation
                         .numberFormat(fractionLength: 4),

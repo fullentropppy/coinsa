@@ -23,8 +23,8 @@ final class CurrencyConverterViewModel {
 
     // MARK: - Вычисляемые свойства
 
-    var fromCurrency: Currency { converter.baseCurrency }
-    var toCurrency: Currency { converter.quoteCurrency }
+    var baseCurrency: Currency { converter.baseCurrency }
+    var quoteCurrency: Currency { converter.quoteCurrency }
     var rate: Double { converter.rateQuoteToBase }
     var isRateLoading: Bool { converter.isRateLoading }
 
@@ -54,8 +54,6 @@ final class CurrencyConverterViewModel {
 
     // MARK: - Суммы
 
-    /// Числовое значение для указанной стороны.
-    /// Ввод всегда идёт в базовую валюту (`From`), вторая сторона вычисляется из курса.
     func amount(for side: CurrencyPairSide) -> Double {
         let parsed = parsedNumber(from: inputText)
         switch side {
@@ -66,7 +64,6 @@ final class CurrencyConverterViewModel {
         }
     }
 
-    /// Текст для отображения в поле указанной стороны.
     func displayText(for side: CurrencyPairSide) -> String {
         switch side {
         case .base:
@@ -92,36 +89,32 @@ final class CurrencyConverterViewModel {
         inputText.removeLast()
     }
 
-    /// Полностью очищает введённую сумму.
     func clearInput() {
         inputText = ""
     }
 
     // MARK: - Валюты
 
-    func updateFromCurrency(_ currency: Currency) {
+    func updateBaseCurrency(_ currency: Currency) {
         converter.updateBaseCurrency(currency)
     }
 
-    func updateToCurrency(_ currency: Currency) {
+    func updateQuoteCurrency(_ currency: Currency) {
         converter.updateQuoteCurrency(currency)
     }
 
     func swapCurrencies() {
-        let oldBase = fromCurrency
-        let oldQuote = toCurrency
+        let oldBase = baseCurrency
+        let oldQuote = quoteCurrency
         let oldRate = rate
         let oldQuoteAmount = amount(for: .quote)
 
-        // Меняем валюты местами и инвертируем курс.
         converter.updateBaseCurrency(oldQuote)
         converter.updateQuoteCurrency(oldBase)
         if oldRate > 0 {
             converter.updateRate(1 / oldRate)
         }
 
-        // Ввод всегда во `From`, поэтому «перевозим» ранее вычисленную
-        // сумму из `To` в `From`, чтобы пользователь видел те же числа.
         inputText = oldQuoteAmount > 0 ? rawString(from: oldQuoteAmount) : ""
     }
 
@@ -130,7 +123,7 @@ final class CurrencyConverterViewModel {
     func loadInitialRateIfNeeded() {
         guard !hasLoadedInitialRate else { return }
         hasLoadedInitialRate = true
-        guard fromCurrency != toCurrency else { return }
+        guard baseCurrency != quoteCurrency else { return }
         requestRateRefresh()
     }
 

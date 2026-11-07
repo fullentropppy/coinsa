@@ -25,13 +25,15 @@ class Expense {
     /// Идентификатор часового пояса фактического момента траты.
     var timeZoneID: String?
     
-    /// Сумма траты в основной валюте поездки.
+    /// Сумма траты в домашней валюте поездки.
+    /// TODO: baseAmount - legacy название, поменять на homeAmount.
     var baseAmount: Double = 0
     
     /// Трехбуквенный код ISO 4217 валюты траты.
     var expenseCurrencyCode: String = ""
     
     /// Курс валюты траты к основной в момент траты.
+    /// TODO: rateExpenseToBase - legacy название, поменять на rateExpenseToHome.
     var rateExpenseToBase: Double = 0
     
     /// Курс валюты траты к валюте локации в момент траты.
@@ -78,9 +80,9 @@ class Expense {
     ///   - date: Дата траты.
     ///   - actualDate: Фактический момент траты.
     ///   - timeZoneID: Идентификатор часового пояса фактического момента траты.
-    ///   - baseAmount: Сумма в основной валюте.
+    ///   - homeAmount: Сумма в домашней валюте.
     ///   - expenseCurrencyCode: Код валюты траты.
-    ///   - rateExpenseToBase: Курс валюты траты к основной.
+    ///   - rateExpenseToHome: Курс валюты траты к домашней.
     ///   - rateExpenseToLocation: Курс валюты траты к валюте локации.
     ///   - paymentMethodRaw: Сырое значение способа оплаты.
     ///   - exchangeAdjustment: Корректировка курса.
@@ -98,9 +100,9 @@ class Expense {
         date: Date,
         actualDate: Date,
         timeZoneID: String,
-        baseAmount: Double,
+        homeAmount: Double,
         expenseCurrencyCode: String,
-        rateExpenseToBase: Double,
+        rateExpenseToHome: Double,
         rateExpenseToLocation: Double,
         paymentMethodRaw: String,
         exchangeAdjustment: Double,
@@ -121,9 +123,9 @@ class Expense {
         self.storedDate = date
         self.actualDate = actualDate
         self.timeZoneID = timeZoneID
-        self.baseAmount = baseAmount
+        self.baseAmount = homeAmount
         self.expenseCurrencyCode = expenseCurrencyCode
-        self.rateExpenseToBase = rateExpenseToBase
+        self.rateExpenseToBase = rateExpenseToHome
         self.rateExpenseToLocation = rateExpenseToLocation
         self.paymentMethodRaw = paymentMethodRaw
         self.exchangeAdjustment = exchangeAdjustment

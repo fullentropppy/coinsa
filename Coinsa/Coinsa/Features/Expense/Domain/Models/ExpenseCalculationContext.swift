@@ -9,21 +9,21 @@
 struct ExpenseCalculationContext {
     // MARK: - Хранимые свойства.
     
-    let baseAmount: Double
-    let baseCurrency: Currency
+    let homeAmount: Double
+    let homeCurrency: Currency
     let expenseCurrency: Currency
-    let rateExpenseToBase: Double
+    let rateExpenseToHome: Double
     let rateExpenseToLocation: Double
     let paymentMethod: PaymentMethod
     let exchangeAdjustment: Double
     
     // MARK: - Приватные вычисляемые свойства
     
-    private var adjustedRateExpenseToBase: Double {
-        if baseCurrency != expenseCurrency && paymentMethod == .card {
-            rateExpenseToBase * (1 + (exchangeAdjustment / 100))
+    private var adjustedRateExpenseToHome: Double {
+        if homeCurrency != expenseCurrency && paymentMethod == .card {
+            rateExpenseToHome * (1 + (exchangeAdjustment / 100))
         } else {
-            rateExpenseToBase
+            rateExpenseToHome
         }
     }
     
@@ -32,77 +32,77 @@ struct ExpenseCalculationContext {
     /// Возвращает сумму в указанной валюте.
     /// - Parameters:
     ///   - currency: Валюта, в которой нужно получить сумму.
-    ///   - rateMode: Режим расчета курса.
+    ///   - exchangeRateMode: Режим расчета курса.
     /// - Returns: Сумма в указанной валюте.
     func amount(
         in currency: CurrencyContext,
-        using rateMode: ExchangeRateMode = .effective
+        using exchangeRateMode: ExchangeRateMode = .effective
     ) -> Double {
         switch currency {
-        case .base: baseAmount
-        case .location: baseAmount * exchangeRate(from: .base, to: .location, using: rateMode)
-        case .expense: baseAmount * exchangeRate(from: .base, to: .expense, using: rateMode)
+        case .home: homeAmount
+        case .location: homeAmount * exchangeRate(from: .home, to: .location, using: exchangeRateMode)
+        case .expense: homeAmount * exchangeRate(from: .home, to: .expense, using: exchangeRateMode)
         }
     }
     
     /// Возвращает курс обмена между контекстными валютами траты.
     /// - Parameters:
-    ///   - sourceCurrency: Исходная валюта.
-    ///   - targetCurrency: Целевая валюта.
-    ///   - rateMode: Режим расчета курса.
+    ///   - baseCurrency: Исходная валюта.
+    ///   - quoteCurrency: Целевая валюта.
+    ///   - exchangeRateMode: Режим расчета курса.
     /// - Returns: Курс обмена исходной валюты к целевой.
     func exchangeRate(
-        from sourceCurrency: CurrencyContext,
-        to targetCurrency: CurrencyContext,
-        using rateMode: ExchangeRateMode = .effective
+        from baseCurrency: CurrencyContext,
+        to quoteCurrency: CurrencyContext,
+        using exchangeRateMode: ExchangeRateMode = .effective
     ) -> Double {
-        guard sourceCurrency != targetCurrency else { return 1 }
+        guard baseCurrency != quoteCurrency else { return 1 }
         
-        let sourceRateToBase = rateToBase(for: sourceCurrency, using: rateMode)
-        let targetRateToBase = rateToBase(for: targetCurrency, using: rateMode)
+        let sourceRateToBase = rateToBase(for: baseCurrency, using: exchangeRateMode)
+        let quoteRateToBase = rateToBase(for: quoteCurrency, using: exchangeRateMode)
         
-        return targetRateToBase > 0 ? sourceRateToBase / targetRateToBase : 0
+        return quoteRateToBase > 0 ? sourceRateToBase / quoteRateToBase : 0
     }
     
     /// Возвращает обратный курс обмена между контекстными валютами траты.
     /// - Parameters:
-    ///   - sourceCurrency: Исходная валюта.
-    ///   - targetCurrency: Целевая валюта.
-    ///   - rateMode: Режим расчета курса.
+    ///   - baseCurrency: Исходная валюта.
+    ///   - quoteCurrency: Целевая валюта.
+    ///   - exchangeRateMode: Режим расчета курса.
     /// - Returns: Курс обмена исходной валюты к целевой.
     func inverseExchangeRate(
-        from sourceCurrency: CurrencyContext,
-        to targetCurrency: CurrencyContext,
-        using rateMode: ExchangeRateMode = .effective
+        from baseCurrency: CurrencyContext,
+        to quoteCurrency: CurrencyContext,
+        using exchangeRateMode: ExchangeRateMode = .effective
     ) -> Double {
-        let rate = exchangeRate(from: sourceCurrency, to: targetCurrency, using: rateMode)
+        let rate = exchangeRate(from: baseCurrency, to: quoteCurrency, using: exchangeRateMode)
         return rate > 0 ? 1 / rate : 0
     }
     
     // MARK: - Приватные методы
     
-    /// Возвращает курс указанного валютного контекста к основной валюте.
-    ///   - targetCurrency: Валютный контекст.
-    ///   - rateMode: Режим расчета курса.
+    /// Возвращает курс указанного валютного контекста к домашней валюте.
+    ///   - quoteCurrency: Валютный контекст.
+    ///   - exchangeRateMode: Режим расчета курса.
     private func rateToBase(
-        for targetCurrency: CurrencyContext,
-        using rateMode: ExchangeRateMode
+        for quoteCurrency: CurrencyContext,
+        using exchangeRateMode: ExchangeRateMode
     ) -> Double {
-        switch targetCurrency {
-        case .base: 1
-        case .location: rateLocationToBase()
-        case .expense: rateExpenseToBase(using: rateMode)
+        switch quoteCurrency {
+        case .home: 1
+        case .location: rateLocationToHome()
+        case .expense: rateExpenseToHome(using: exchangeRateMode)
         }
     }
     
-    private func rateExpenseToBase(using rateMode: ExchangeRateMode) -> Double {
-        switch rateMode {
-        case .effective: adjustedRateExpenseToBase
-        case .actual: rateExpenseToBase
+    private func rateExpenseToHome(using exchangeRateMode: ExchangeRateMode) -> Double {
+        switch exchangeRateMode {
+        case .effective: adjustedRateExpenseToHome
+        case .actual: rateExpenseToHome
         }
     }
     
-    private func rateLocationToBase() -> Double {
-        rateExpenseToLocation > 0 ? rateExpenseToBase / rateExpenseToLocation : 0
+    private func rateLocationToHome() -> Double {
+        rateExpenseToLocation > 0 ? rateExpenseToHome / rateExpenseToLocation : 0
     }
 }

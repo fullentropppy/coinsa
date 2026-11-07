@@ -131,7 +131,7 @@ final class CurrencyConverter {
         to quoteCurrency: CurrencyContext,
         useExchangeAdjustment: Bool = true
     ) -> Double {
-        if baseCurrency == .base {
+        if baseCurrency == .home {
             convertToQuote(fromBase: amount, useExchangeAdjustment: useExchangeAdjustment)
         } else {
             convertToBase(fromQuote: amount, useExchangeAdjustment: useExchangeAdjustment)

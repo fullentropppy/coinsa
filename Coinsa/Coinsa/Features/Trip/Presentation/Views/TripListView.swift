@@ -41,7 +41,7 @@ struct TripListView: View {
                 .navigationTitle(.tripNavigationTitleList)
                 .navigationBarTitleDisplayMode(.large)
                 .sheet(isPresented: $isShowingTripCreate) {
-                    TripEditView(forCreateWith: settingsStore.baseCurrency)
+                    TripEditView(forCreateWith: settingsStore.homeCurrency)
                 }
                 .sheet(item: $tripToEdit) { trip in
                     TripEditView(forEdit: trip)

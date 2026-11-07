@@ -43,7 +43,7 @@ final class TodayViewModel {
     
     var isHomeLocation: Bool {
         if let selectedLocation {
-            selectedLocation.baseCurrency == selectedLocation.locationCurrency
+            selectedLocation.homeCurrency == selectedLocation.locationCurrency
         } else {
             false
         }
@@ -63,20 +63,20 @@ final class TodayViewModel {
     
     // MARK: - Состояние UI. Курс обмена
     
-    private var loadedRateLocationToBase: Double?
+    private var loadedRateLocationToHome: Double?
     
-    var rateLocationToBase: Double {
-        if let loadedRateLocationToBase {
-            return loadedRateLocationToBase
+    var rateLocationToHome: Double {
+        if let loadedRateLocationToHome {
+            return loadedRateLocationToHome
         } else if let selectedLocation {
-            return selectedLocation.rateLocationToBase
+            return selectedLocation.rateLocationToHome
         } else {
             return 1
         }
     }
     
-    var rateBaseToLocal: Double {
-        rateLocationToBase > 0 ? (1 / rateLocationToBase) : 0
+    var rateHomeToLocation: Double {
+        rateLocationToHome > 0 ? (1 / rateLocationToHome) : 0
     }
     
     var rateRefreshKey: Date {
@@ -111,7 +111,7 @@ final class TodayViewModel {
         self.exchangeRateManager = exchangeRateManager
         self.currentLocations = currentLocations
         self.selectedLocationID = selectedLocationID
-        self.loadedRateLocationToBase = nil
+        self.loadedRateLocationToHome = nil
     }
     
     // MARK: - Курс обмена
@@ -119,15 +119,15 @@ final class TodayViewModel {
     func loadInitialRateIfNeeded() {
         guard let selectedLocation else { return }
         
-        loadedRateLocationToBase = nil
+        loadedRateLocationToHome = nil
         
         guard !isHomeLocation else { return }
         
         exchangeRateManager.requestRefresh(
             from: selectedLocation.locationCurrency,
-            to: selectedLocation.baseCurrency
+            to: selectedLocation.homeCurrency
         ) { [weak self] rate in
-            self?.loadedRateLocationToBase = rate
+            self?.loadedRateLocationToHome = rate
         }
     }
     
@@ -150,16 +150,16 @@ final class TodayViewModel {
     }
     
     func eventSummaryData(for location: Location) -> EventSummaryData {
-        var budgetBaseAmount = location.calculateBudgetAmountForToday()
-        var expensesAmountBase = location.calculateExpensesAmount(withinDateRange: todayRange)
+        var budgetHomeAmount = location.calculateBudgetAmountForToday()
+        var expensesHomeAmount = location.calculateExpensesAmount(withinDateRange: todayRange)
         
         var budgetLocationAmount: Double?
         var expensesLocationAmount: Double?
         
-        if expensesAmountBase > budgetBaseAmount && expensesAmountBase > budgetBaseAmount + budgetBaseAmount * 0.2 {
-            budgetBaseAmount = location.budget
+        if expensesHomeAmount > budgetHomeAmount && expensesHomeAmount > budgetHomeAmount + budgetHomeAmount * 0.2 {
+            budgetHomeAmount = location.budget
             budgetLocationAmount = isHomeLocation ? nil : location.calculateBudgetAmount(in: .location)
-            expensesAmountBase = location.calculateExpensesAmount(in: .base)
+            expensesHomeAmount = location.calculateExpensesAmount(in: .home)
             expensesLocationAmount = isHomeLocation ? nil : location.calculateExpensesAmount(in: .location)
         } else {
             budgetLocationAmount = isHomeLocation ? nil : location.calculateBudgetAmountForToday(in: .location)
@@ -169,9 +169,9 @@ final class TodayViewModel {
         return EventSummaryData(
             badgeProvider: Location.self,
             dateRangeProvider: location,
-            budgetBaseAmount: budgetBaseAmount,
-            expensesBaseAmount: expensesAmountBase,
-            baseCurrency: location.baseCurrency,
+            budgetHomeAmount: budgetHomeAmount,
+            expensesHomeAmount: expensesHomeAmount,
+            homeCurrency: location.homeCurrency,
             budgetLocationAmount: budgetLocationAmount,
             expensesLocationAmount: expensesLocationAmount,
             locationCurrency: location.locationCurrency

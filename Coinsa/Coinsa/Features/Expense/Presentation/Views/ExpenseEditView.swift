@@ -72,7 +72,7 @@ struct ExpenseEditView: View {
     private init(initialViewModel: ExpenseEditViewModel, onDelete: (() -> Void)? = nil) {
         _viewModel = State(initialValue: initialViewModel)
         _currencyPairSide = State(
-            initialValue: initialViewModel.baseCurrency == initialViewModel.expenseCurrency ? .base : .quote
+            initialValue: initialViewModel.homeCurrency == initialViewModel.expenseCurrency ? .base : .quote
         )
         self.onDelete = onDelete
     }
@@ -164,7 +164,7 @@ struct ExpenseEditView: View {
                 )
                 HStack {
                     CurrencyCodeText.standard(viewModel.currency(for: currencyPairSide))
-                    if !viewModel.isExpenseBaseCurrency {
+                    if !viewModel.isExpensehomeCurrency {
                         InputCurrencySwitchButton(action: switchInputCurrency)
                     }
                 }
@@ -218,7 +218,7 @@ struct ExpenseEditView: View {
                 title: .expenseCurrency,
                 selection: expenseCurrencyBinding,
                 sections: Currency.pickerSections(
-                    baseCurrency: viewModel.baseCurrency,
+                    homeCurrency: viewModel.homeCurrency,
                     locationCurrency: viewModel.locationCurrency
                 ),
             ) { currency in
@@ -228,8 +228,8 @@ struct ExpenseEditView: View {
             if viewModel.showsRateExpenseToBase {
                 LabeledContent(.expenseExchangeRate(locationCurrencyCode: viewModel.expenseCurrency.code)) {
                     ExchangeRateInputField.standard(
-                        rateExpenseToBaseInputBinding,
-                        currency: viewModel.baseCurrency,
+                        rateExpenseToHomeInputBinding,
+                        currency: viewModel.homeCurrency,
                         isLoading: viewModel.isRateExpenseToBaseLoading,
                         focusedField: $focusedField,
                         focusID: .exchangeRate,
@@ -460,9 +460,9 @@ struct ExpenseEditView: View {
         )
     }
     
-    private var rateExpenseToBaseInputBinding: Binding<Double> {
+    private var rateExpenseToHomeInputBinding: Binding<Double> {
         Binding(
-            get: { viewModel.rateExpenseToBase },
+            get: { viewModel.rateExpenseToHome },
             set: { newValue in
                 viewModel.updateRateExpenseToBase(newValue, currencyPairSide: currencyPairSide)
             }

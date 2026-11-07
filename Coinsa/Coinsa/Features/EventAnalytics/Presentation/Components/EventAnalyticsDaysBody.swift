@@ -50,7 +50,7 @@ struct EventAnalyticsDaysBody: View {
     private var dailyExpensesSection: some View {
         Section {
             ForEach(viewModel.summaryExpenseChartPoints) { point in
-                if point.baseAmount > 0 {
+                if point.homeAmount > 0 {
                     dailyExpenseRow(point)
                 }
             }
@@ -65,8 +65,8 @@ struct EventAnalyticsDaysBody: View {
                 .frame(maxHeight: .infinity, alignment: .topLeading)
             Spacer()
             AmountStack(
-                baseAmount: point.baseAmount,
-                baseCurrency: viewModel.baseCurrency,
+                homeAmount: point.homeAmount,
+                homeCurrency: viewModel.homeCurrency,
                 expenseAmount: point.locationAmount,
                 expenseCurrency: viewModel.locationCurrency
             )

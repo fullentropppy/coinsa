@@ -94,13 +94,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$(locationAmountBalance)@ %2$(locationCurrencyCode)@ • %3$(baseAmountBalance)@ %4$(baseCurrencyCode)@"
+            "value" : "%1$(locationAmountBalance)@ %2$(locationCurrencyCode)@ • %3$(homeAmountBalance)@ %4$(homeCurrencyCode)@"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$(locationAmountBalance)@ %2$(locationCurrencyCode)@ • %3$(baseAmountBalance)@ %4$(baseCurrencyCode)@"
+            "value" : "%1$(locationAmountBalance)@ %2$(locationCurrencyCode)@ • %3$(homeAmountBalance)@ %4$(homeCurrencyCode)@"
           }
         }
       }
@@ -179,13 +179,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$(baseAmountBalance)@ %2$(baseCurrencyCode)@"
+            "value" : "%1$(homeAmountBalance)@ %2$(homeCurrencyCode)@"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$(baseAmountBalance)@ %2$(baseCurrencyCode)@"
+            "value" : "%1$(homeAmountBalance)@ %2$(homeCurrencyCode)@"
           }
         }
       }
@@ -1913,13 +1913,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "1 %1$(expenseCurrencyCode)@ = %2$(actualRateExpenseToBase)@ %3$(baseCurrencyCode)@"
+            "value" : "1 %1$(expenseCurrencyCode)@ = %2$(actualRateExpenseToHome)@ %3$(homeCurrencyCode)@"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "1 %1$(expenseCurrencyCode)@ = %2$(actualRateExpenseToBase)@ %3$(baseCurrencyCode)@"
+            "value" : "1 %1$(expenseCurrencyCode)@ = %2$(actualRateExpenseToHome)@ %3$(homeCurrencyCode)@"
           }
         }
       }
@@ -1930,13 +1930,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "1 %1$(expenseCurrencyCode)@ = %2$(actualRateExpenseToBase)@ %3$(baseCurrencyCode)@  • %4$(actualRateExpenseToLocation)@ %5$(locationCurrencyCode)@"
+            "value" : "1 %1$(expenseCurrencyCode)@ = %2$(actualRateExpenseToHome)@ %3$(homeCurrencyCode)@  • %4$(actualRateExpenseToLocation)@ %5$(locationCurrencyCode)@"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "1 %1$(expenseCurrencyCode)@ = %2$(actualRateExpenseToBase)@ %3$(baseCurrencyCode)@  • %4$(actualRateExpenseToLocation)@ %5$(locationCurrencyCode)@"
+            "value" : "1 %1$(expenseCurrencyCode)@ = %2$(actualRateExpenseToHome)@ %3$(homeCurrencyCode)@  • %4$(actualRateExpenseToLocation)@ %5$(locationCurrencyCode)@"
           }
         }
       }
@@ -1964,13 +1964,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "1 %1$(expenseCurrencyCode)@ = %2$(effectiveRateExpenseToBase)@ %3$(baseCurrencyCode)@ (with adjustment %4$(exchangeAdjustment)@)"
+            "value" : "1 %1$(expenseCurrencyCode)@ = %2$(effectiveRateExpenseToHome)@ %3$(HomeCurrencyCode)@ (with adjustment %4$(exchangeAdjustment)@)"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "1 %1$(expenseCurrencyCode)@ = %2$(effectiveRateExpenseToBase)@ %3$(baseCurrencyCode)@ (с корректировкой %4$(exchangeAdjustment)@)"
+            "value" : "1 %1$(expenseCurrencyCode)@ = %2$(effectiveRateExpenseToHome)@ %3$(HomeCurrencyCode)@ (с корректировкой %4$(exchangeAdjustment)@)"
           }
         }
       }
@@ -1981,13 +1981,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "1 %1$(expenseCurrencyCode)@ = %2$(effectiveRateExpenseToBase)@ %3$(baseCurrencyCode)@  • %4$(effectiveRateExpenseToLocation)@ %5$(locationCurrencyCode)@\n(with adjustment %6$(exchangeAdjustment)@)"
+            "value" : "1 %1$(expenseCurrencyCode)@ = %2$(effectiveRateExpenseToHome)@ %3$(homeCurrencyCode)@  • %4$(effectiveRateExpenseToLocation)@ %5$(locationCurrencyCode)@\n(with adjustment %6$(exchangeAdjustment)@)"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "1 %1$(expenseCurrencyCode)@ = %2$(effectiveRateExpenseToBase)@ %3$(baseCurrencyCode)@  • %4$(effectiveRateExpenseToLocation)@ %5$(locationCurrencyCode)@\n(с корректировкой %6$(exchangeAdjustment)@)"
+            "value" : "1 %1$(expenseCurrencyCode)@ = %2$(effectiveRateExpenseToHome)@ %3$(homeCurrencyCode)@  • %4$(effectiveRateExpenseToLocation)@ %5$(locationCurrencyCode)@\n(с корректировкой %6$(exchangeAdjustment)@)"
           }
         }
       }
@@ -1998,13 +1998,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Adjusted exchange rate of %1$(expenseCurrencyCode)@: %2$(effectiveRateExpenseToBase)@ %3$(baseCurrencyCode)@"
+            "value" : "Adjusted exchange rate of %1$(expenseCurrencyCode)@: %2$(effectiveRateExpenseToHome)@ %3$(homeCurrencyCode)@"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Скорректированный курс %1$(expenseCurrencyCode)@: %2$(effectiveRateExpenseToBase)@ %3$(baseCurrencyCode)@"
+            "value" : "Скорректированный курс %1$(expenseCurrencyCode)@: %2$(effectiveRateExpenseToHome)@ %3$(homeCurrencyCode)@"
           }
         }
       }
@@ -2015,13 +2015,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Adjusted exchange rate of %1$(expenseCurrencyCode)@:\n%2$(effectiveRateExpenseToBase)@ %3$(baseCurrencyCode)@ • %4$(effectiveRateExpenseToLocation)@ %5$(locationCurrencyCode)@"
+            "value" : "Adjusted exchange rate of %1$(expenseCurrencyCode)@:\n%2$(effectiveRateExpenseToHome)@ %3$(homeCurrencyCode)@ • %4$(effectiveRateExpenseToLocation)@ %5$(locationCurrencyCode)@"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Скорректированный курс %1$(expenseCurrencyCode)@:\n%2$(effectiveRateExpenseToBase)@ %3$(baseCurrencyCode)@ • %4$(effectiveRateExpenseToLocation)@ %5$(locationCurrencyCode)@"
+            "value" : "Скорректированный курс %1$(expenseCurrencyCode)@:\n%2$(effectiveRateExpenseToHome)@ %3$(homeCurrencyCode)@ • %4$(effectiveRateExpenseToLocation)@ %5$(locationCurrencyCode)@"
           }
         }
       }
@@ -2039,40 +2039,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Сумма"
-          }
-        }
-      }
-    },
-    "expense.amount.base" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Base"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Базовая"
-          }
-        }
-      }
-    },
-    "expense.amount.local" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Local"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Локальная"
           }
         }
       }
@@ -3392,13 +3358,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Adjusted exchange rate of %1$(locationCurrencyCode)@: %2$(effectiveRateLocationToBase)@ %3$(baseCurrencyCode)@"
+            "value" : "Adjusted exchange rate of %1$(locationCurrencyCode)@: %2$(effectiveRateLocationToHome)@ %3$(homeCurrencyCode)@"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Скорректированный курс %1$(locationCurrencyCode)@: %2$(effectiveRateLocationToBase)@ %3$(baseCurrencyCode)@"
+            "value" : "Скорректированный курс %1$(locationCurrencyCode)@: %2$(effectiveRateLocationToHome)@ %3$(homeCurrencyCode)@"
           }
         }
       }
@@ -3845,40 +3811,6 @@
         }
       }
     },
-    "settings.baseCurrency" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Base currency"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Осн. валюта"
-          }
-        }
-      }
-    },
-    "settings.baseCurrency.hint" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Default (home) currency for convenience and new Trips. Can be changed inside a Trip."
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Основная (домашняя) валюта для удобства и автоматической подстановки в новых поездках. Может быть изменена внутри поездки."
-          }
-        }
-      }
-    },
     "settings.debug" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -3977,6 +3909,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Загружать курс обмена из сети"
+          }
+        }
+      }
+    },
+    "settings.homeCurrency" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Home currency"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Дом. валюта"
+          }
+        }
+      }
+    },
+    "settings.homeCurrency.hint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Home currency for convenience and new Trips. Can be changed inside a Trip."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Домашняя валюта для удобства и автоматической подстановки в новых поездках. Может быть изменена внутри поездки."
           }
         }
       }
@@ -4395,13 +4361,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Base currency"
+            "value" : "Home currency"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Осн. валюта"
+            "value" : "Дом. валюта"
           }
         }
       }
@@ -4412,13 +4378,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Base (home) currency for entering, storing, and showing budgets and Expenses. Can be changed only if the Trip has no Locations."
+            "value" : "Home currency for entering, storing, and showing budgets and Expenses. Can be changed only if the Trip has no Locations."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Основная (домашняя) валюта для ввода, хранения и отображения бюджета и трат. Может быть изменена только если в поездке нет локаций."
+            "value" : "Домашняя валюта для ввода, хранения и отображения бюджета и трат. Может быть изменена только если в поездке нет локаций."
           }
         }
       }

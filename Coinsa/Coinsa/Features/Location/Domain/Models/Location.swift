@@ -8,7 +8,7 @@
 import Foundation
 import SwiftData
 
-/// Модель локации в рамках поездки, содержащая локальную валюту, бюджет и траты.
+/// Модель локации в рамках поездки, содержащая валюту локации, бюджет и траты.
 @Model
 class Location: DateRangeProviding {
     // MARK: - Свойства
@@ -25,16 +25,17 @@ class Location: DateRangeProviding {
     /// Дата окончания пребывания в локации в формате хранения.
     var storedEndDate: Date = Date()
     
-    /// Трехбуквенный код ISO 4217 локальной валюты.
+    /// Трехбуквенный код ISO 4217 валюты локации.
     var locationCurrencyCode: String = ""
     
-    /// Курс локальной валюты к основной валюте поездки.
+    /// Курс валюты локации к домашней валюте поездки.
+    /// TODO: rateLocationToBase - legacy название, поменять на rateLocationToHome.
     var rateLocationToBase: Double = 0
     
     /// Корректировка к курсу обмена.
     var exchangeAdjustment: Double = 0
     
-    /// Общий бюджет локации в основной валюте поездки.
+    /// Общий бюджет локации в домашней валюте поездки.
     var budget: Double = 0
     
     /// Поездка, к которой относится локация.
@@ -59,8 +60,8 @@ class Location: DateRangeProviding {
     ///   - name: Название локации.
     ///   - startDate: Дата начала пребывания.
     ///   - endDate: Дата окончания пребывания.
-    ///   - locationCurrencyCode: Код локальной валюты.
-    ///   - rateLocationToBase: Курс к основной валюте.
+    ///   - locationCurrencyCode: Код валюты локации.
+    ///   - rateLocationToBase: Курс к домашней валюте.
     ///   - exchangeAdjustment: Корректировка курса.
     ///   - budget: Сумма бюджета.
     ///   - trip: Поездка-родитель.
@@ -73,7 +74,7 @@ class Location: DateRangeProviding {
         startDate: Date,
         endDate: Date,
         locationCurrencyCode: String,
-        rateLocationToBase: Double,
+        rateLocationToHome: Double,
         exchangeAdjustment: Double,
         budget: Double,
         trip: Trip,
@@ -89,7 +90,7 @@ class Location: DateRangeProviding {
         self.storedStartDate = startDate
         self.storedEndDate = endDate
         self.locationCurrencyCode = locationCurrencyCode
-        self.rateLocationToBase = rateLocationToBase
+        self.rateLocationToBase = rateLocationToHome
         self.exchangeAdjustment = exchangeAdjustment
         self.budget = budget
         self.trip = trip

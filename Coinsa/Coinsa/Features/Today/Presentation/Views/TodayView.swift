@@ -256,13 +256,13 @@ struct TodayView: View {
                 Text(
                     .todayExchangeRate(
                         baseCurrencyCode: location.locationCurrencyCode,
-                        rateBaseToQuote: viewModel.rateLocationToBase.numberFormat(fractionLength: 4),
+                        rateBaseToQuote: viewModel.rateLocationToHome.numberFormat(fractionLength: 4),
                         quoteCurrencyCode: location.trip?.baseCurrencyCode ?? "")
                 )
                 Text(
                     .todayExchangeRate(
                         baseCurrencyCode: location.trip?.baseCurrencyCode ?? "",
-                        rateBaseToQuote: viewModel.rateBaseToLocal.numberFormat(fractionLength: 4),
+                        rateBaseToQuote: viewModel.rateHomeToLocation.numberFormat(fractionLength: 4),
                         quoteCurrencyCode: location.locationCurrencyCode)
                 )
             }

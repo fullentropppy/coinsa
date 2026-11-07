@@ -29,30 +29,30 @@ struct EventAnalyticsViewModel {
     
     // MARK: - Вычисляемые свойства. Валюта
 
-    var baseCurrency: Currency {
-        data.baseCurrency
+    var homeCurrency: Currency {
+        data.homeCurrency
     }
 
     var locationCurrency: Currency? {
         data.locationCurrency
     }
     
-    // MARK: - Вычисляемые свойства. Сумма в основной валюте
+    // MARK: - Вычисляемые свойства. Сумма в домашней валюте
 
-    var expensesTotalBaseAmount: Double {
-        data.expensesAmountByCategory.reduce(0) { $0 + $1.baseAmount }
+    var expensesTotalHomeAmount: Double {
+        data.expensesAmountByCategory.reduce(0) { $0 + $1.homeAmount }
     }
 
-    var dailyBaseBudgetAmount: Double {
+    var dailyHomeBudgetAmount: Double {
         data.baseBudget / totalDayDivisor
     }
     
-    var dailyBaseExpensesAmount: Double {
-        expensesTotalBaseAmount / totalDayDivisor
+    var dailyHomeExpensesAmount: Double {
+        expensesTotalHomeAmount / totalDayDivisor
     }
     
-    var baseAmountBalance: Double {
-        data.baseBudget - expensesTotalBaseAmount
+    var homeAmountBalance: Double {
+        data.baseBudget - expensesTotalHomeAmount
     }
     
     // MARK: - Вычисляемые свойства. Сумма в валюте локации
@@ -93,9 +93,9 @@ struct EventAnalyticsViewModel {
     
     var eventSummaryData: EventSummaryData {
         EventSummaryData(
-            budgetBaseAmount: data.baseBudget,
-            expensesBaseAmount: expensesTotalBaseAmount,
-            baseCurrency: baseCurrency,
+            budgetHomeAmount: data.baseBudget,
+            expensesHomeAmount: expensesTotalHomeAmount,
+            homeCurrency: homeCurrency,
             budgetLocationAmount: data.locationBudget,
             expensesLocationAmount: expensesTotalLocationAmount,
             locationCurrency: locationCurrency
@@ -125,7 +125,7 @@ struct EventAnalyticsViewModel {
     }
     
     var largestExpense: Expense? {
-        data.expenses.max { $0.baseAmount < $1.baseAmount }
+        data.expenses.max { $0.homeAmount < $1.homeAmount }
     }
 
     // MARK: - Вычисляемые свойства. Дневная аналитика
@@ -155,18 +155,18 @@ struct EventAnalyticsViewModel {
 
             return EventDailyExpenseAnalyticsData(
                 date: date,
-                baseAmount: baseAmount(for: expenses),
+                homeAmount: homeAmount(for: expenses),
                 locationAmount: locationAmount(for: expenses)
             )
         }
     }
 
     var summaryChartPeakPoint: EventDailyExpenseAnalyticsData? {
-        summaryExpenseChartPoints.max { $0.baseAmount < $1.baseAmount }
+        summaryExpenseChartPoints.max { $0.homeAmount < $1.homeAmount }
     }
 
     var maxDailyBaseExpenseAmount: Double {
-        summaryChartPeakPoint?.baseAmount ?? 0
+        summaryChartPeakPoint?.homeAmount ?? 0
     }
 
     var maxDailyLocationExpenseAmount: Double? {
@@ -185,7 +185,7 @@ struct EventAnalyticsViewModel {
         }
     }
 
-    var summaryChartUpperBaseAmount: Double {
+    var summaryChartUpperHomeAmount: Double {
         max(maxDailyBaseExpenseAmount, 1)
     }
 
@@ -222,7 +222,7 @@ struct EventAnalyticsViewModel {
     }
 
     func displayedSlicesSortedByAmount(for metric: EventAnalyticsMetric) -> [ExpenseAnalyticsSlice] {
-        slices(for: metric).sorted { $0.baseAmount > $1.baseAmount }
+        slices(for: metric).sorted { $0.homeAmount > $1.homeAmount }
     }
     
     func displayedSubcategorySlicesSortedByAmount(for category: ExpenseCategory) -> [ExpenseSubcategoryAnalyticsSlice] {
@@ -231,21 +231,21 @@ struct EventAnalyticsViewModel {
         
         return category.subcategories.compactMap { subcategory in
             let expenses = grouped[subcategory] ?? []
-            let baseAmount = baseAmount(for: expenses)
+            let homeAmount = homeAmount(for: expenses)
             
-            guard baseAmount > 0 else { return nil }
+            guard homeAmount > 0 else { return nil }
             
             return ExpenseSubcategoryAnalyticsSlice(
                 category: category,
                 subcategory: subcategory,
                 expenseCount: expenses.count,
-                baseAmount: baseAmount,
+                homeAmount: homeAmount,
                 locationAmount: locationAmount(for: expenses)
             )
         }
         .sorted {
-            if $0.baseAmount != $1.baseAmount {
-                return $0.baseAmount > $1.baseAmount
+            if $0.homeAmount != $1.homeAmount {
+                return $0.homeAmount > $1.homeAmount
             }
             return $0.expenseCount > $1.expenseCount
         }
@@ -254,19 +254,19 @@ struct EventAnalyticsViewModel {
     func hasAnalytics(for metric: EventAnalyticsMetric) -> Bool {
         switch metric {
         case .summary: true
-        case .days: totalDays > 1 && expensesTotalBaseAmount > 0
+        case .days: totalDays > 1 && expensesTotalHomeAmount > 0
         case .categories: !displayedSlicesSortedByID(for: metric).isEmpty
         }
     }
 
     func shareValue(for slice: ExpenseAnalyticsSlice, metric: EventAnalyticsMetric) -> Double {
-        let totalBaseAmount = displayedSlicesSortedByID(for: metric).reduce(0) { $0 + $1.baseAmount }
-        return totalBaseAmount > 0 ? slice.baseAmount / totalBaseAmount : 0
+        let totalHomeAmount = displayedSlicesSortedByID(for: metric).reduce(0) { $0 + $1.homeAmount }
+        return totalHomeAmount > 0 ? slice.homeAmount / totalHomeAmount : 0
     }
     
     func shareValue(for slice: ExpenseSubcategoryAnalyticsSlice, category: ExpenseCategory) -> Double {
-        let totalBaseAmount = displayedSubcategorySlicesSortedByAmount(for: category).reduce(0) { $0 + $1.baseAmount }
-        return totalBaseAmount > 0 ? slice.baseAmount / totalBaseAmount : 0
+        let totalHomeAmount = displayedSubcategorySlicesSortedByAmount(for: category).reduce(0) { $0 + $1.homeAmount }
+        return totalHomeAmount > 0 ? slice.homeAmount / totalHomeAmount : 0
     }
 
     // MARK: - Приватные методы
@@ -281,11 +281,11 @@ struct EventAnalyticsViewModel {
             slices = data.expensesAmountByCategory
         }
 
-        return slices.contains { $0.baseAmount > 0 } ? slices : []
+        return slices.contains { $0.homeAmount > 0 } ? slices : []
     }
     
-    private func baseAmount(for expenses: [Expense]) -> Double {
-        expenses.reduce(0) { $0 + $1.baseAmount }
+    private func homeAmount(for expenses: [Expense]) -> Double {
+        expenses.reduce(0) { $0 + $1.homeAmount }
     }
     
     private func locationAmount(for expenses: [Expense]) -> Double? {

@@ -35,9 +35,9 @@ struct TripEditView: View {
     // MARK: - Инициализация
     
     /// Создает экран для новой поездки.
-    /// - Parameter baseCurrency: Основная валюта по умолчанию.
-    init(forCreateWith baseCurrency: Currency) {
-        _viewModel = State(initialValue: TripEditViewModel(forCreateWith: baseCurrency))
+    /// - Parameter homeCurrency: Домашняя валюта по умолчанию.
+    init(forCreateWith homeCurrency: Currency) {
+        _viewModel = State(initialValue: TripEditViewModel(forCreateWith: homeCurrency))
         self.onDelete = nil
     }
     
@@ -139,8 +139,8 @@ struct TripEditView: View {
         Section {
             LabeledPicker(
                 title: .tripCurrency,
-                selection: baseCurrencyBinding,
-                sections: Currency.pickerSections(baseCurrency: viewModel.baseCurrency),
+                selection: homeCurrencyBinding,
+                sections: Currency.pickerSections(homeCurrency: viewModel.homeCurrency),
                 isDisabled: viewModel.hasLocations
             ) { currency in
                 currency.makeLabel()
@@ -185,10 +185,10 @@ struct TripEditView: View {
     
     // MARK: - Биндинги
     
-    private var baseCurrencyBinding: Binding<Currency> {
+    private var homeCurrencyBinding: Binding<Currency> {
         Binding(
-            get: { viewModel.baseCurrency },
-            set: { viewModel.baseCurrency = $0 }
+            get: { viewModel.homeCurrency },
+            set: { viewModel.homeCurrency = $0 }
         )
     }
     

@@ -27,16 +27,16 @@ struct EventAnalyticsCategoriesHeader: View {
         HStack {
             EventAmountCardView(
                 title: .amountExpenses,
-                baseAmount: viewModel.expensesTotalBaseAmount,
-                baseCurrency: viewModel.baseCurrency,
+                homeAmount: viewModel.expensesTotalHomeAmount,
+                homeCurrency: viewModel.homeCurrency,
                 locationAmount: viewModel.expensesTotalLocationAmount,
                 locationCurrency: viewModel.locationCurrency
             )
             if viewModel.totalDays > 1 {
                 EventAmountCardView(
                     title: .amountExpensesDaily,
-                    baseAmount: viewModel.dailyBaseExpensesAmount,
-                    baseCurrency: viewModel.baseCurrency,
+                    homeAmount: viewModel.dailyHomeExpensesAmount,
+                    homeCurrency: viewModel.homeCurrency,
                     locationAmount: viewModel.dailyLocationExpensesAmount,
                     locationCurrency: viewModel.locationCurrency
                 )

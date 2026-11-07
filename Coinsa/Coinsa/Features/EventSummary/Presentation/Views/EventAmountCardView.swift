@@ -12,8 +12,8 @@ struct EventAmountCardView: View {
     // MARK: - Свойства
     
     private let title: LocalizedStringResource
-    private let baseAmount: Double
-    private let baseCurrency: Currency
+    private let homeAmount: Double
+    private let homeCurrency: Currency
     private let locationAmount: Double?
     private let locationCurrency: Currency?
     
@@ -22,20 +22,20 @@ struct EventAmountCardView: View {
     /// Создает карточку с суммой.
     /// - Parameters:
     ///   - title: Заголовок.
-    ///   - baseAmount: Сумма в основной валюте.
-    ///   - baseCurrency: Основная валюта.
+    ///   - homeAmount: Сумма в домашней валюте.
+    ///   - homeCurrency: Домашняя валюта.
     ///   - locationAmount: Сумма в валюте локации (опционально).
     ///   - locationCurrency: Валюта локации (опционально).
     init(
         title: LocalizedStringResource,
-        baseAmount: Double,
-        baseCurrency: Currency,
+        homeAmount: Double,
+        homeCurrency: Currency,
         locationAmount: Double? = nil,
         locationCurrency: Currency? = nil
     ) {
         self.title = title
-        self.baseAmount = baseAmount
-        self.baseCurrency = baseCurrency
+        self.homeAmount = homeAmount
+        self.homeCurrency = homeCurrency
         self.locationAmount = locationAmount
         self.locationCurrency = locationCurrency
     }
@@ -49,9 +49,9 @@ struct EventAmountCardView: View {
                 AmountText.standard(locationAmount, currency: locationCurrency)
                 Spacer()
                 Divider()
-                AmountText.secondarySmall(baseAmount, currency: baseCurrency)
+                AmountText.secondarySmall(homeAmount, currency: homeCurrency)
             } else {
-                AmountText.standard(baseAmount, currency: baseCurrency)
+                AmountText.standard(homeAmount, currency: homeCurrency)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
@@ -67,15 +67,15 @@ struct EventAmountCardView: View {
         VStack(spacing: 20) {
             EventAmountCardView(
                 title: .amountExpenses,
-                baseAmount: 24600,
-                baseCurrency: .defaultValue,
+                homeAmount: 24600,
+                homeCurrency: .defaultValue,
                 locationAmount: 41000,
                 locationCurrency: .jpy
             )
             EventAmountCardView(
                 title: .amountExpenses,
-                baseAmount: 24600,
-                baseCurrency: .defaultValue
+                homeAmount: 24600,
+                homeCurrency: .defaultValue
             )
         }
     }

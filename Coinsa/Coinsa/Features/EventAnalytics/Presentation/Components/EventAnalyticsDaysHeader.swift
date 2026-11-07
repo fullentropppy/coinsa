@@ -28,15 +28,15 @@ struct EventAnalyticsDaysHeader: View {
             HStack {
                 EventAmountCardView(
                     title: .amountExpensesDailyMax,
-                    baseAmount: viewModel.maxDailyBaseExpenseAmount,
-                    baseCurrency: viewModel.baseCurrency,
+                    homeAmount: viewModel.maxDailyBaseExpenseAmount,
+                    homeCurrency: viewModel.homeCurrency,
                     locationAmount: viewModel.maxDailyLocationExpenseAmount,
                     locationCurrency: viewModel.locationCurrency
                 )
                 EventAmountCardView(
                     title: .amountExpensesDailyAverage,
-                    baseAmount: viewModel.halfDailyBaseExpenseAmount,
-                    baseCurrency: viewModel.baseCurrency,
+                    homeAmount: viewModel.halfDailyBaseExpenseAmount,
+                    homeCurrency: viewModel.homeCurrency,
                     locationAmount: viewModel.halfDailyLocationExpenseAmount,
                     locationCurrency: viewModel.locationCurrency
                 )

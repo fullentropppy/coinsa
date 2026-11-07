@@ -8,7 +8,7 @@
 /// Данные дневной суммы трат для графика аналитики события.
 struct EventDailyExpenseAnalyticsData: Identifiable {
     let date: PlainDate
-    let baseAmount: Double
+    let homeAmount: Double
     let locationAmount: Double?
     
     var id: PlainDate { date }

@@ -16,7 +16,7 @@ struct EventAnalyticsSummaryHeader: View {
     // MARK: - Вычисляемые свойства
     
     private var hasBudget: Bool {
-        viewModel.eventSummaryData.budgetBaseAmount > 0
+        viewModel.eventSummaryData.budgetHomeAmount > 0
     }
     
     // MARK: - Инициализация
@@ -47,16 +47,16 @@ struct EventAnalyticsSummaryHeader: View {
             HStack {
                 EventAmountCardView(
                     title: .amountBudget,
-                    baseAmount: viewModel.eventSummaryData.budgetBaseAmount,
-                    baseCurrency: viewModel.baseCurrency,
+                    homeAmount: viewModel.eventSummaryData.budgetHomeAmount,
+                    homeCurrency: viewModel.homeCurrency,
                     locationAmount: viewModel.eventSummaryData.budgetLocationAmount,
                     locationCurrency: viewModel.locationCurrency
                 )
                 if viewModel.totalDays > 1 {
                     EventAmountCardView(
                         title: .amountBudgetDaily,
-                        baseAmount: viewModel.dailyBaseBudgetAmount,
-                        baseCurrency: viewModel.baseCurrency,
+                        homeAmount: viewModel.dailyHomeBudgetAmount,
+                        homeCurrency: viewModel.homeCurrency,
                         locationAmount: viewModel.dailyLocationBudgetAmount,
                         locationCurrency: viewModel.locationCurrency
                     )
@@ -69,16 +69,16 @@ struct EventAnalyticsSummaryHeader: View {
         HStack {
             EventAmountCardView(
                 title: .amountExpenses,
-                baseAmount: viewModel.eventSummaryData.expensesBaseAmount,
-                baseCurrency: viewModel.baseCurrency,
+                homeAmount: viewModel.eventSummaryData.expensesHomeAmount,
+                homeCurrency: viewModel.homeCurrency,
                 locationAmount: viewModel.eventSummaryData.expensesLocationAmount,
                 locationCurrency: viewModel.locationCurrency
             )
             if viewModel.totalDays > 1 {
                 EventAmountCardView(
                     title: .amountExpensesDaily,
-                    baseAmount: viewModel.dailyBaseExpensesAmount,
-                    baseCurrency: viewModel.baseCurrency,
+                    homeAmount: viewModel.dailyHomeExpensesAmount,
+                    homeCurrency: viewModel.homeCurrency,
                     locationAmount: viewModel.dailyLocationExpensesAmount,
                     locationCurrency: viewModel.locationCurrency
                 )
@@ -90,9 +90,9 @@ struct EventAnalyticsSummaryHeader: View {
     private var balanceContent: some View {
         if hasBudget {
             EventAmountBalanceView(
-                budgetBaseAmount: viewModel.eventSummaryData.budgetBaseAmount,
-                baseAmountBalance: viewModel.baseAmountBalance,
-                baseCurrency: viewModel.baseCurrency,
+                budgetHomeAmount: viewModel.eventSummaryData.budgetHomeAmount,
+                homeAmountBalance: viewModel.homeAmountBalance,
+                homeCurrency: viewModel.homeCurrency,
                 locationAmountBalance: viewModel.locationAmountBalance,
                 locationCurrency: viewModel.locationCurrency
             )

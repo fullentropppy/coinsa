@@ -18,8 +18,8 @@ final class AppSettingsStore {
     
     // MARK: - Параметры учета
     
-    var baseCurrency: Currency {
-        didSet { userDefaultsManager.baseCurrency = baseCurrency }
+    var homeCurrency: Currency {
+        didSet { userDefaultsManager.homeCurrency = homeCurrency }
     }
     
     var exchangeAdjustment: Double {
@@ -61,7 +61,7 @@ final class AppSettingsStore {
     /// Создает хранилище настроек, загружая значения из UserDefaults.
     init() {
         self.userDefaultsManager = UserDefaultsSettingsManager()
-        self.baseCurrency = userDefaultsManager.baseCurrency
+        self.homeCurrency = userDefaultsManager.homeCurrency
         self.exchangeAdjustment = userDefaultsManager.exchangeAdjustment
         self.fetchExpenseExchangeRateOnline = userDefaultsManager.fetchExpenseExchangeRateOnline
         self.detectPlaceOfExpense = userDefaultsManager.detectPlaceOfExpense

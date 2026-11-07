@@ -10,10 +10,10 @@ extension Expense {
     
     private var calculationContext: ExpenseCalculationContext {
         ExpenseCalculationContext(
-            baseAmount: baseAmount,
-            baseCurrency: baseCurrency,
+            homeAmount: homeAmount,
+            homeCurrency: homeCurrency,
             expenseCurrency: expenseCurrency,
-            rateExpenseToBase: rateExpenseToBase,
+            rateExpenseToHome: rateExpenseToHome,
             rateExpenseToLocation: rateExpenseToLocation,
             paymentMethod: paymentMethod,
             exchangeAdjustment: exchangeAdjustment
@@ -25,40 +25,40 @@ extension Expense {
     /// Возвращает сумму в указанной валюте.
     /// - Parameters:
     ///   - currency: Валюта, в которой нужно получить сумму.
-    ///   - rateMode: Режим расчета курса.
+    ///   - exchangeRateMode: Режим расчета курса.
     /// - Returns: Сумма в указанной валюте.
     func amount(
         in currency: CurrencyContext,
-        using rateMode: ExchangeRateMode = .effective
+        using exchangeRateMode: ExchangeRateMode = .effective
     ) -> Double {
-        calculationContext.amount(in: currency, using: rateMode)
+        calculationContext.amount(in: currency, using: exchangeRateMode)
     }
     
     /// Возвращает курс обмена между контекстными валютами траты.
     /// - Parameters:
-    ///   - sourceCurrency: Исходная валюта.
-    ///   - targetCurrency: Целевая валюта.
-    ///   - rateMode: Режим расчета курса.
+    ///   - baseCurrency: Исходная валюта.
+    ///   - quoteCurrency: Целевая валюта.
+    ///   - exchangeRateMode: Режим расчета курса.
     /// - Returns: Курс обмена исходной валюты к целевой.
     func exchangeRate(
-        from sourceCurrency: CurrencyContext,
-        to targetCurrency: CurrencyContext,
-        using rateMode: ExchangeRateMode = .effective
+        from baseCurrency: CurrencyContext,
+        to quoteCurrency: CurrencyContext,
+        using exchangeRateMode: ExchangeRateMode = .effective
     ) -> Double {
-        calculationContext.exchangeRate(from: sourceCurrency, to: targetCurrency, using: rateMode)
+        calculationContext.exchangeRate(from: baseCurrency, to: quoteCurrency, using: exchangeRateMode)
     }
     
     /// Возвращает обратный курс обмена между контекстными валютами траты.
     /// - Parameters:
-    ///   - sourceCurrency: Исходная валюта.
-    ///   - targetCurrency: Целевая валюта.
-    ///   - rateMode: Режим расчета курса.
+    ///   - baseCurrency: Исходная валюта.
+    ///   - quoteCurrency: Целевая валюта.
+    ///   - exchangeRateMode: Режим расчета курса.
     /// - Returns: Курс обмена исходной валюты к целевой.
     func inverseExchangeRate(
-        from sourceCurrency: CurrencyContext,
-        to targetCurrency: CurrencyContext,
-        using rateMode: ExchangeRateMode = .effective
+        from baseCurrency: CurrencyContext,
+        to quoteCurrency: CurrencyContext,
+        using exchangeRateMode: ExchangeRateMode = .effective
     ) -> Double {
-        calculationContext.inverseExchangeRate(from: sourceCurrency, to: targetCurrency, using: rateMode)
+        calculationContext.inverseExchangeRate(from: baseCurrency, to: quoteCurrency, using: exchangeRateMode)
     }
 }

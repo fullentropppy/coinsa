@@ -48,7 +48,7 @@ struct EventDailyExpenseChart: View {
                 AreaMark(
                     x: .value("", point.date.startOfDay(using: .current)),
                     yStart: .value("", 0),
-                    yEnd: .value("", point.baseAmount)
+                    yEnd: .value("", point.homeAmount)
                 )
                 .interpolationMethod(.monotone)
                 .foregroundStyle(
@@ -64,7 +64,7 @@ struct EventDailyExpenseChart: View {
 
                 LineMark(
                     x: .value("", point.date.startOfDay(using: .current)),
-                    y: .value("", point.baseAmount)
+                    y: .value("", point.homeAmount)
                 )
                 .interpolationMethod(.monotone)
                 .lineStyle(.init(lineWidth: 4, lineCap: .round, lineJoin: .round))
@@ -88,7 +88,7 @@ struct EventDailyExpenseChart: View {
             range: .plotDimension(startPadding: 0, endPadding: 0)
         )
         .chartYScale(
-            domain: 0...viewModel.summaryChartUpperBaseAmount,
+            domain: 0...viewModel.summaryChartUpperHomeAmount,
             range: .plotDimension(startPadding: 2, endPadding: 2)
         )
         .chartXAxis {

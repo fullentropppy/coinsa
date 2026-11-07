@@ -25,7 +25,8 @@ class Trip: DateRangeProviding {
     /// Дата окончания поездки в формате хранения.
     var storedEndDate: Date = Date()
     
-    /// Трехбуквенный код ISO 4217 основной валюты в которой записываются все суммы.
+    /// Трехбуквенный код ISO 4217 домашней валюты в которой записываются все суммы.
+    /// TODO: baseCurrencyCode - legacy название, поменять на homeCurrencyCode.
     var baseCurrencyCode: String = ""
 
     /// Список локаций поездки.
@@ -47,7 +48,7 @@ class Trip: DateRangeProviding {
     ///   - name: Название поездки.
     ///   - startDate: Дата начала.
     ///   - endDate: Дата окончания.
-    ///   - baseCurrencyCode: Код основной валюты.
+    ///   - homeCurrencyCode: Код домашней валюты.
     ///   - locations: Список локаций.
     ///   - createdAt: Дата создания.
     ///   - updatedAt: Дата обновления.
@@ -56,7 +57,7 @@ class Trip: DateRangeProviding {
         name: String,
         startDate: Date,
         endDate: Date,
-        baseCurrencyCode: String,
+        homeCurrencyCode: String,
         locations: [Location],
         createdAt: Date,
         updatedAt: Date
@@ -68,7 +69,7 @@ class Trip: DateRangeProviding {
         self.name = name
         self.storedStartDate = startDate
         self.storedEndDate = endDate
-        self.baseCurrencyCode = baseCurrencyCode
+        self.baseCurrencyCode = homeCurrencyCode
         self.locations = locations
     }
 }

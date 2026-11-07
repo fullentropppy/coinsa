@@ -11,7 +11,7 @@ import Foundation
 enum CurrencyContext: String, Identifiable {
     // MARK: - Значения
     
-    case base
+    case home
     case location
     case expense
     
