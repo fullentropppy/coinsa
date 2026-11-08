@@ -24,16 +24,15 @@ nonisolated enum NumericEditField: Hashable {
 struct NumericInputField: View {
     // MARK: - Свойства
     
-    @State private var text: String = ""
-    @Binding var value: Double
+    @State private var state: DecimalInputState
+    @State private var textFieldText: String = ""
+    @Binding private var value: Double
     
     private let focusedField: FocusState<NumericEditField?>.Binding
     private let focusID: NumericEditField
-    private let fractionDigits: Int
     private let font: Font
     private let textAlignment: TextAlignment
     private let placeholder: String
-    private let formatter: NumberFormatter
     private let onCommit: (() -> Void)?
     
     // MARK: - Инициализация
@@ -62,25 +61,24 @@ struct NumericInputField: View {
         self._value = value
         self.focusedField = focusedField
         self.focusID = focusID
-        self.fractionDigits = fractionDigits
         self.font = font
         self.textAlignment = textAlignment
         self.onCommit = onCommit
         
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.minimumFractionDigits = fractionDigits
-        formatter.maximumFractionDigits = fractionDigits
-        formatter.usesGroupingSeparator = true
-        
-        self.formatter = formatter
+        let inputState = DecimalInputState(
+            maxFractionDigits: fractionDigits,
+            usesGroupingSeparator: true
+        )
+        inputState.set(value.wrappedValue)
+        self._state = State(initialValue: inputState)
+        self._textFieldText = State(initialValue: inputState.text)
         
         if let placeholder {
             self.placeholder = placeholder
         } else if fractionDigits == 0 {
             self.placeholder = "0"
         } else {
-            let separator = formatter.decimalSeparator ?? ","
+            let separator = inputState.separator
             let zeros = String(repeating: "0", count: fractionDigits)
             self.placeholder = "0\(separator)\(zeros)"
         }
@@ -89,67 +87,46 @@ struct NumericInputField: View {
     // MARK: - Тело View
     
     var body: some View {
-        TextField(placeholder, text: $text)
+        TextField(placeholder, text: $textFieldText)
             .font(font)
             .focused(focusedField, equals: focusID)
             .keyboardType(.decimalPad)
             .multilineTextAlignment(textAlignment)
-            .onAppear { syncFromValue() }
-            .onChange(of: value) {
-                if focusedField.wrappedValue != focusID {
-                    syncFromValue()
+            .onAppear {
+                state.set(value)
+                textFieldText = state.text
+            }
+            .onChange(of: textFieldText) { _, newValue in
+                let sanitized = state.replaceText(newValue)
+                if textFieldText != sanitized {
+                    textFieldText = sanitized
                 }
             }
-            .onChange(of: text) {
-                if focusedField.wrappedValue == focusID {
-                    syncValueFromText()
-                }
+            .onChange(of: value) { _, newValue in
+                guard focusedField.wrappedValue != focusID else { return }
+                state.set(newValue)
+                textFieldText = state.text
+            }
+            .onChange(of: state.value) { _, newValue in
+                guard focusedField.wrappedValue == focusID else { return }
+                value = newValue
             }
             .onChange(of: focusedField.wrappedValue) { oldID, newID in
-                if oldID == focusID && newID != focusID {
-                    commit()
-                }
+                guard oldID == focusID, newID != focusID else { return }
+                commit()
             }
             .onSubmit {
                 commit()
             }
     }
-
+    
     // MARK: - Приватные методы
     
-    private func syncFromValue() {
-        text = value == 0 ? "" : formatter.string(from: NSNumber(value: value)) ?? ""
-    }
-    
-    private func syncValueFromText() {
-        value = parsedNumber(from: text)?.doubleValue ?? 0
-    }
-
     private func commit() {
-        let trimmed = text.trimmed
-        
-        guard !trimmed.isEmpty else {
-            value = 0
-            text = ""
-            onCommit?()
-            return
-        }
-
-        let number = parsedNumber(from: trimmed) ?? 0
-        
-        value = number.doubleValue
-        text = formatter.string(from: number) ?? trimmed
-        
-        onCommit?() 
-    }
-    
-    private func parsedNumber(from input: String) -> NSNumber? {
-        let groupingSeparator = formatter.groupingSeparator ?? ""
-        let cleaned = input
-            .trimmed
-            .replacingOccurrences(of: groupingSeparator, with: "")
-        
-        return formatter.number(from: cleaned)
+        state.commit()
+        textFieldText = state.text
+        value = state.value
+        onCommit?()
     }
 }
 

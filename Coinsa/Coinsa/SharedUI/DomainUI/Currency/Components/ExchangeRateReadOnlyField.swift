@@ -15,7 +15,6 @@ struct ExchangeRateReadOnlyField: View {
     private let currency: Currency
     private let isLoading: Bool
     private let onRefresh: () -> Void
-    private let formatter: NumberFormatter
 
     // MARK: - Инициализация
 
@@ -35,14 +34,6 @@ struct ExchangeRateReadOnlyField: View {
         self.currency = currency
         self.isLoading = isLoading
         self.onRefresh = onRefresh
-
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.minimumFractionDigits = 4
-        formatter.maximumFractionDigits = 4
-        formatter.usesGroupingSeparator = true
-
-        self.formatter = formatter
     }
 
     // MARK: - Тело View
@@ -53,13 +44,8 @@ struct ExchangeRateReadOnlyField: View {
                 .font(.body.monospacedDigit())
                 .foregroundStyle(isLoading ? .secondary : .primary)
                 .lineLimit(1)
-
             CurrencyCodeText.standard(currency)
-
-            ExchangeRateRefreshButton(
-                isLoading: isLoading,
-                onRefresh: onRefresh
-            )
+            ExchangeRateRefreshButton(isLoading: isLoading, onRefresh: onRefresh)
         }
     }
 
@@ -67,7 +53,7 @@ struct ExchangeRateReadOnlyField: View {
 
     private var displayText: String {
         guard value > 0 else { return "0" }
-        return formatter.string(from: NSNumber(value: value)) ?? "0"
+        return value.numberFormat(fractionLength: 4)
     }
 }
 

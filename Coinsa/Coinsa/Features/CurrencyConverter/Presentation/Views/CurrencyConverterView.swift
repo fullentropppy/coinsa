@@ -157,14 +157,14 @@ struct CurrencyConverterView: View {
     private var numericKeypad: some View {
         NumericKeypad(
             onDigit: { digit in
-                viewModel.append(digit)
+                viewModel.input.append(digit)
             },
             onDelete: {
-                viewModel.deleteLast()
+                viewModel.input.deleteLast()
             },
             onClear: {
                 haptics.trigger(.tap)
-                viewModel.clearInput()
+                viewModel.input.clear()
             }
         )
     }

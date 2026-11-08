@@ -19,7 +19,8 @@ final class CurrencyConverterViewModel {
     // MARK: - Состояние UI
 
     private var hasLoadedInitialRate = false
-    private(set) var inputText: String = ""
+    
+    let input = DecimalInputState(maxFractionDigits: 2)
 
     // MARK: - Вычисляемые свойства
 
@@ -55,42 +56,23 @@ final class CurrencyConverterViewModel {
     // MARK: - Суммы
 
     func amount(for side: CurrencyPairSide) -> Double {
-        let parsed = parsedNumber(from: inputText)
         switch side {
         case .base:
-            return parsed
+            input.value
         case .quote:
-            return converter.convertToQuote(fromBase: parsed)
+            converter.convertToQuote(fromBase: input.value)
         }
     }
 
     func displayText(for side: CurrencyPairSide) -> String {
         switch side {
         case .base:
-            return inputText
+            return input.text
         case .quote:
             let amount = amount(for: .quote)
             guard amount > 0 else { return "" }
-            return displayFormatter.string(from: NSNumber(value: amount)) ?? ""
+            return amount.numberFormat(fractionLength: 2)
         }
-    }
-
-    // MARK: - Ввод
-
-    func append(_ character: String) {
-        let separator = inputFormatter.decimalSeparator ?? ","
-        guard character.allSatisfy({ $0.isNumber || String($0) == separator }) else { return }
-        if character == separator && inputText.contains(separator) { return }
-        inputText += character
-    }
-
-    func deleteLast() {
-        guard !inputText.isEmpty else { return }
-        inputText.removeLast()
-    }
-
-    func clearInput() {
-        inputText = ""
     }
 
     // MARK: - Валюты
@@ -115,7 +97,7 @@ final class CurrencyConverterViewModel {
             converter.updateRate(1 / oldRate)
         }
 
-        inputText = oldQuoteAmount > 0 ? rawString(from: oldQuoteAmount) : ""
+        input.set(oldQuoteAmount)
     }
 
     // MARK: - Курс обмена
@@ -129,41 +111,5 @@ final class CurrencyConverterViewModel {
 
     func requestRateRefresh() {
         converter.requestRateRefresh()
-    }
-
-    // MARK: - Форматтеры
-
-    private let inputFormatter: NumberFormatter = {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.minimumFractionDigits = 0
-        formatter.maximumFractionDigits = 2
-        formatter.usesGroupingSeparator = false
-        return formatter
-    }()
-
-    private let displayFormatter: NumberFormatter = {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.minimumFractionDigits = 2
-        formatter.maximumFractionDigits = 2
-        formatter.usesGroupingSeparator = true
-        return formatter
-    }()
-
-    // MARK: - Приватные методы
-
-    private func parsedNumber(from text: String) -> Double {
-        guard !text.isEmpty else { return 0 }
-        let separator = inputFormatter.decimalSeparator ?? ","
-        var normalized = text.replacingOccurrences(of: separator, with: ".")
-        if normalized.hasSuffix(".") {
-            normalized = String(normalized.dropLast())
-        }
-        return Double(normalized) ?? 0
-    }
-
-    private func rawString(from value: Double) -> String {
-        inputFormatter.string(from: NSNumber(value: value)) ?? ""
     }
 }
