@@ -71,42 +71,8 @@ struct CurrencyConverterView: View {
 
     private var converterForm: some View {
         Form {
-            VStack(spacing: 8) {
-                LabeledPicker(
-                    title: .converterFromCurrenency,
-                    selection: fromCurrencyBinding,
-                    sections: Currency.pickerSections(
-                        homeCurrency: settingsStore.homeCurrency,
-                        locationCurrency: currentLocationCurrency
-                    )
-                ) { currency in
-                    currency.makeLabel()
-                }
-                .listRowSeparator(.hidden)
-                
-                amountRow(for: .base)
-                    .listRowSeparator(.visible)
-                
-            }
-            
-            VStack(spacing: 8) {
-                LabeledPicker(
-                    title: .converterToCurrency,
-                    selection: toCurrencyBinding,
-                    sections: Currency.pickerSections(
-                        homeCurrency: settingsStore.homeCurrency,
-                        locationCurrency: currentLocationCurrency
-                    )
-                ) { currency in
-                    currency.makeLabel()
-                }
-                .listRowSeparator(.hidden)
-                
-                amountRow(for: .quote)
-                    .listRowSeparator(.visible)
-                
-            }
-            
+            amountRow(for: .base)
+            amountRow(for: .quote)
             rateRow
         }
     }
@@ -114,28 +80,44 @@ struct CurrencyConverterView: View {
     // MARK: - Компоненты
 
     private func amountRow(for side: CurrencyPairSide) -> some View {
-        let currency = side == .base ? viewModel.baseCurrency : viewModel.quoteCurrency
-        let displayText = viewModel.displayText(for: side)
         let isBase = side == .base
+        let currency = isBase ? viewModel.baseCurrency : viewModel.quoteCurrency
+        let displayText = viewModel.displayText(for: side)
 
-        return HStack(alignment: .center) {
-            Text(displayText.isEmpty ? "0" : displayText)
-                .font(.title.monospacedDigit())
-                .foregroundStyle(isBase ? Color.primary : Color.secondary)
-                .lineLimit(1)
-
-            Spacer()
-
-            CurrencyCodeText(
-                currency,
-                font: .title3,
-                color: isBase ? Color.primary : Color.secondary
-            )
+        return VStack(spacing: 10) {
+            LabeledPicker(
+                title: isBase ? .converterFromCurrenency : .converterToCurrency,
+                selection: isBase ? fromCurrencyBinding : toCurrencyBinding,
+                sections: Currency.pickerSections(
+                    homeCurrency: settingsStore.homeCurrency,
+                    locationCurrency: currentLocationCurrency
+                )
+            ) { currency in
+                currency.makeLabel()
+            } currentValueLabel: { currency in
+                Text(currency.localizedResource)
+            }
+            
+            HStack(alignment: .firstTextBaseline) {
+                Text(displayText.isEmpty ? 0.numberFormat() : displayText)
+                    .font(.largeTitle.monospacedDigit())
+                    .foregroundStyle(isBase ? Color.primary : Color.secondary)
+                    .lineLimit(1)
+                
+                Spacer()
+                
+                CurrencyCodeText(
+                    currency,
+                    font: .title2.monospaced().weight(.medium),
+                    color: isBase ? Color.primary : Color.secondary
+                )
+                .frame(width: 42)
+            }
+            .padding(.vertical, 12)
+            .padding(.horizontal, 12)
+            .frame(maxWidth: .infinity)
+            .background(.regularMaterial, in: .rect(cornerRadius: 12))
         }
-        .padding(.vertical, 8)
-        .padding(.horizontal, 8)
-        .frame(maxWidth: .infinity)
-        .background(.regularMaterial, in: .rect(cornerRadius: 12))
     }
 
     private var rateRow: some View {

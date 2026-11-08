@@ -11,7 +11,7 @@ import SwiftUI
 struct NumericKeypad: View {
     // MARK: - Свойства
 
-    private let keyMinHeight: CGFloat = 56
+    private let keyMinHeight: CGFloat = 47
     private let spacing: CGFloat = 12
     
     let onDigit: (String) -> Void
@@ -31,8 +31,8 @@ struct NumericKeypad: View {
                 deleteKey
             }
         }
-        .padding(.horizontal, 17)
-        .padding(.vertical, 17)
+        .padding(.horizontal, 18)
+        .padding(.vertical, 18)
     }
 
     // MARK: - Компоненты
@@ -66,7 +66,7 @@ struct NumericKeypad: View {
         }
         .buttonStyle(.glass)
         .simultaneousGesture(
-            LongPressGesture(minimumDuration: 0.4)
+            LongPressGesture(minimumDuration: 0.5)
                 .onEnded { _ in onClear() }
         )
     }

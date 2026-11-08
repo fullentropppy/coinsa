@@ -28,24 +28,76 @@ struct PickerSection<Value: Hashable>: Identifiable {
 }
 
 /// Кастомизированный пикер с заголовком, работающий как навигационная ссылка в списке.
-struct LabeledPicker<SelectionValue: Hashable, Content: View>: View {
+struct LabeledPicker<SelectionValue: Hashable, Content: View, CurrentValueLabel: View>: View {
     // MARK: - Свойства
     
     private let title: LocalizedStringResource?
     private let selection: Binding<SelectionValue>
     private let sections: [PickerSection<SelectionValue>]
     private let isDisabled: Bool
+    
     @ViewBuilder private let content: (SelectionValue) -> Content
-
+    @ViewBuilder private let currentValueLabel: (SelectionValue) -> CurrentValueLabel
+    
     // MARK: - Инициализация
     
-    /// Создает пикер с заголовком с опциями в единой секции.
+    /// Создает пикер с заголовком, опциями в единой секции и кастомным видом текущего значения.
     /// - Parameters:
     ///   - title: Заголовок пикера (по умолчанию `nil`).
     ///   - selection: Привязка к выбранному значению.
     ///   - options: Массив доступных опций.
     ///   - isDisabled: Флаг блокировки (по умолчанию `false`).
-    ///   - content: Замыкание для построения представления каждой опции.
+    ///   - content: Замыкание для построения представления каждой опции в списке выбора.
+    ///   - currentValueLabel: Замыкание для построения представления текущего значения в строке списка.
+    init(
+        title: LocalizedStringResource? = nil,
+        selection: Binding<SelectionValue>,
+        options: [SelectionValue],
+        isDisabled: Bool = false,
+        @ViewBuilder content: @escaping (SelectionValue) -> Content,
+        @ViewBuilder currentValueLabel: @escaping (SelectionValue) -> CurrentValueLabel
+    ) {
+        self.init(
+            title: title,
+            selection: selection,
+            sections: [PickerSection(title: nil, options: options)],
+            isDisabled: isDisabled,
+            content: content,
+            currentValueLabel: currentValueLabel
+        )
+    }
+    
+    /// Создает пикер с заголовком, опциями в указанных секциях и кастомным видом текущего значения.
+    /// - Parameters:
+    ///   - title: Заголовок пикера (по умолчанию `nil`).
+    ///   - selection: Привязка к выбранному значению.
+    ///   - sections: Массив секций с опциями.
+    ///   - isDisabled: Флаг блокировки (по умолчанию `false`).
+    ///   - content: Замыкание для построения представления каждой опции в списке выбора.
+    ///   - currentValueLabel: Замыкание для построения представления текущего значения в строке списка.
+    init(
+        title: LocalizedStringResource? = nil,
+        selection: Binding<SelectionValue>,
+        sections: [PickerSection<SelectionValue>],
+        isDisabled: Bool = false,
+        @ViewBuilder content: @escaping (SelectionValue) -> Content,
+        @ViewBuilder currentValueLabel: @escaping (SelectionValue) -> CurrentValueLabel
+    ) {
+        self.title = title
+        self.selection = selection
+        self.sections = sections
+        self.isDisabled = isDisabled
+        self.content = content
+        self.currentValueLabel = currentValueLabel
+    }
+    
+    /// Создает пикер с заголовком и опциями в единой секции. В качестве `currentValueLabel` используется `content`.
+    /// - Parameters:
+    ///   - title: Заголовок пикера (по умолчанию `nil`).
+    ///   - selection: Привязка к выбранному значению.
+    ///   - options: Массив доступных опций.
+    ///   - isDisabled: Флаг блокировки (по умолчанию `false`).
+    ///   - content: Замыкание для построения представления каждой опции в списке выбора.
     init(
         title: LocalizedStringResource? = nil,
         selection: Binding<SelectionValue>,
@@ -56,19 +108,20 @@ struct LabeledPicker<SelectionValue: Hashable, Content: View>: View {
         self.init(
             title: title,
             selection: selection,
-            sections: [PickerSection(title: nil, options: options)],
+            options: options,
             isDisabled: isDisabled,
-            content: content
+            content: content,
+            currentValueLabel: content as! (SelectionValue) -> CurrentValueLabel
         )
     }
     
-    /// Создает пикер с заголовком с опциями в указанных секциях.
+    /// Создает пикер с заголовком и опциями в указанных секциях. В качестве `currentValueLabel` используется `content`.
     /// - Parameters:
     ///   - title: Заголовок пикера (по умолчанию `nil`).
     ///   - selection: Привязка к выбранному значению.
     ///   - sections: Массив секций с опциями.
     ///   - isDisabled: Флаг блокировки (по умолчанию `false`).
-    ///   - content: Замыкание для построения представления каждой опции.
+    ///   - content: Замыкание для построения представления каждой опции в списке выбора.
     init(
         title: LocalizedStringResource? = nil,
         selection: Binding<SelectionValue>,
@@ -76,11 +129,14 @@ struct LabeledPicker<SelectionValue: Hashable, Content: View>: View {
         isDisabled: Bool = false,
         @ViewBuilder content: @escaping (SelectionValue) -> Content
     ) {
-        self.title = title
-        self.selection = selection
-        self.sections = sections
-        self.isDisabled = isDisabled
-        self.content = content
+        self.init(
+            title: title,
+            selection: selection,
+            sections: sections,
+            isDisabled: isDisabled,
+            content: content,
+            currentValueLabel: content as! (SelectionValue) -> CurrentValueLabel
+        )
     }
     
     // MARK: - Тело View
@@ -97,7 +153,7 @@ struct LabeledPicker<SelectionValue: Hashable, Content: View>: View {
     
     private var disabledContent: some View {
         LabeledContent {
-            content(selection.wrappedValue)
+            currentValueLabel(selection.wrappedValue)
         } label: {
             if let title {
                 Text(title)
@@ -123,6 +179,8 @@ struct LabeledPicker<SelectionValue: Hashable, Content: View>: View {
                 if let title {
                     Text(title)
                 }
+            } currentValueLabel: {
+                currentValueLabel(selection.wrappedValue)
             }
             .pickerStyle(.navigationLink)
             .navigationLinkIndicatorVisibility(.hidden)
@@ -133,6 +191,48 @@ struct LabeledPicker<SelectionValue: Hashable, Content: View>: View {
                 .foregroundStyle(.accent)
                 .frame(width: 16)
         }
+    }
+}
+
+// MARK: - Удобные инициализаторы без currentValueLabel
+
+extension LabeledPicker where CurrentValueLabel == Content {
+    /// Создает пикер с заголовком и опциями в единой секции.
+    /// В качестве `currentValueLabel` используется `content`.
+    init(
+        title: LocalizedStringResource? = nil,
+        selection: Binding<SelectionValue>,
+        options: [SelectionValue],
+        isDisabled: Bool = false,
+        @ViewBuilder content: @escaping (SelectionValue) -> Content
+    ) {
+        self.init(
+            title: title,
+            selection: selection,
+            options: options,
+            isDisabled: isDisabled,
+            content: content,
+            currentValueLabel: content
+        )
+    }
+    
+    /// Создает пикер с заголовком и опциями в указанных секциях.
+    /// В качестве `currentValueLabel` используется `content`.
+    init(
+        title: LocalizedStringResource? = nil,
+        selection: Binding<SelectionValue>,
+        sections: [PickerSection<SelectionValue>],
+        isDisabled: Bool = false,
+        @ViewBuilder content: @escaping (SelectionValue) -> Content
+    ) {
+        self.init(
+            title: title,
+            selection: selection,
+            sections: sections,
+            isDisabled: isDisabled,
+            content: content,
+            currentValueLabel: content
+        )
     }
 }
 
@@ -150,6 +250,19 @@ struct LabeledPicker<SelectionValue: Hashable, Content: View>: View {
             ) { category in
                 category.makeLabel()
             }
+            
+            LabeledPicker(
+                title: .expenseCategory,
+                selection: $selectedCategory,
+                options: ExpenseCategory.allCases,
+                content: { category in
+                    category.makeLabel()
+                },
+                currentValueLabel: { category in
+                    Image(systemName: category.primaryIcon)
+                }
+            )
+            
             LabeledPicker(
                 title: .expenseCategory,
                 selection: $selectedCategory,
