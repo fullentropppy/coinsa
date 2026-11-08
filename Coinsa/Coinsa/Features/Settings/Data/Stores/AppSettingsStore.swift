@@ -56,6 +56,18 @@ final class AppSettingsStore {
         didSet { userDefaultsManager.selectedPaymentMethod = selectedPaymentMethod }
     }
     
+    var converterBaseCurrency: Currency {
+        didSet { userDefaultsManager.converterBaseCurrency = converterBaseCurrency }
+    }
+
+    var converterQuoteCurrency: Currency {
+        didSet { userDefaultsManager.converterQuoteCurrency = converterQuoteCurrency }
+    }
+
+    var converterAmount: Double {
+        didSet { userDefaultsManager.converterAmount = converterAmount }
+    }
+    
     // MARK: - Инициализация
     
     /// Создает хранилище настроек, загружая значения из UserDefaults.
@@ -69,5 +81,8 @@ final class AppSettingsStore {
         self.isFloatingButtonOnLeft = userDefaultsManager.isFloatingButtonOnLeft
         self.selectedLocationID = userDefaultsManager.selectedLocationID
         self.selectedPaymentMethod = userDefaultsManager.selectedPaymentMethod
+        self.converterBaseCurrency = userDefaultsManager.converterBaseCurrency
+        self.converterQuoteCurrency = userDefaultsManager.converterQuoteCurrency
+        self.converterAmount = userDefaultsManager.converterAmount
     }
 }

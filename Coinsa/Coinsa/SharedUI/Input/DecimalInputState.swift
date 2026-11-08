@@ -14,13 +14,12 @@ final class DecimalInputState {
     // MARK: - Хранимые свойства
 
     private let locale: Locale
-    private let formatter: NumberFormatter
 
     private(set) var text: String = ""
-    
+
     let maxFractionDigits: Int
     let usesGroupingSeparator: Bool
-    
+
     // MARK: - Вычисляемые свойства
 
     var separator: String {
@@ -35,14 +34,37 @@ final class DecimalInputState {
         guard !text.isEmpty else { return 0 }
 
         var cleaned = text
-        if usesGroupingSeparator {
-            let grouping = formatter.groupingSeparator ?? ""
+        if usesGroupingSeparator, let grouping = locale.groupingSeparator {
             cleaned = cleaned.replacingOccurrences(of: grouping, with: "")
         }
 
         let normalized = cleaned.replacingOccurrences(of: separator, with: ".")
         guard !normalized.isEmpty, normalized != "." else { return 0 }
         return Double(normalized) ?? 0
+    }
+
+    var formattedText: String {
+        guard !text.isEmpty else { return text }
+
+        let parts = text.split(
+            separator: Character(separator),
+            maxSplits: 1,
+            omittingEmptySubsequences: false
+        )
+        guard let intPart = parts.first, let intValue = Int(intPart) else {
+            return text
+        }
+
+        let grouped = intValue.formatted(
+            .number
+                .precision(.fractionLength(0))
+                .locale(locale)
+        )
+
+        if parts.count > 1 {
+            return grouped + separator + String(parts[1])
+        }
+        return grouped + separator + String(repeating: "0", count: maxFractionDigits)
     }
 
     // MARK: - Инициализация
@@ -60,16 +82,8 @@ final class DecimalInputState {
         self.maxFractionDigits = maxFractionDigits
         self.usesGroupingSeparator = usesGroupingSeparator
         self.locale = locale
-
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.minimumFractionDigits = maxFractionDigits
-        formatter.maximumFractionDigits = maxFractionDigits
-        formatter.usesGroupingSeparator = usesGroupingSeparator
-        formatter.locale = locale
-        self.formatter = formatter
     }
-    
+
     // MARK: - Кастомная клавиатура
 
     func append(_ character: String) {
@@ -96,9 +110,10 @@ final class DecimalInputState {
     // MARK: - Программные изменения
 
     func set(_ newValue: Double) {
-        text = newValue > 0 ? format(newValue) : ""
+        text = format(newValue, minFraction: 0)
     }
 
+    @discardableResult
     func replaceText(_ newText: String) -> String {
         let sanitized = sanitize(newText)
         text = sanitized
@@ -106,10 +121,20 @@ final class DecimalInputState {
     }
 
     func commit() {
-        text = value > 0 ? format(value) : ""
+        text = format(value, minFraction: maxFractionDigits)
     }
 
     // MARK: - Приватные методы
+
+    private func format(_ value: Double, minFraction: Int) -> String {
+        guard value > 0 else { return "" }
+        return value.formatted(
+            .number
+                .precision(.fractionLength(minFraction...maxFractionDigits))
+                .grouping(usesGroupingSeparator ? .automatic : .never)
+                .locale(locale)
+        )
+    }
 
     private func appendSeparator() {
         guard !text.contains(separator) else { return }
@@ -126,10 +151,6 @@ final class DecimalInputState {
         }
 
         text.append(digit)
-    }
-
-    private func format(_ value: Double) -> String {
-        formatter.string(from: NSNumber(value: value)) ?? ""
     }
 
     private func sanitize(_ input: String) -> String {

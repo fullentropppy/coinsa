@@ -53,6 +53,15 @@ final class CurrencyConverterViewModel {
         )
     }
 
+    // MARK: - Восстановление состояния
+
+    func restorePersistedState(amount: Double, base: Currency, quote: Currency) {
+        converter.setCurrencies(base: base, quote: quote)
+        if amount > 0 {
+            input.set(amount)
+        }
+    }
+    
     // MARK: - Суммы
 
     func amount(for side: CurrencyPairSide) -> Double {
@@ -67,7 +76,7 @@ final class CurrencyConverterViewModel {
     func displayText(for side: CurrencyPairSide) -> String {
         switch side {
         case .base:
-            return input.text
+            return input.formattedText
         case .quote:
             let amount = amount(for: .quote)
             guard amount > 0 else { return "" }

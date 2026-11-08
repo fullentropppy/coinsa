@@ -75,6 +75,27 @@ final class UserDefaultsSettingsManager {
         set { defaults.set(newValue.rawValue, forKey: UserDefaultsKey.selectedPaymentMethod) }
     }
     
+    var converterBaseCurrency: Currency {
+        get {
+            defaults.string(forKey: UserDefaultsKey.converterBaseCurrency)
+                .flatMap { Currency(rawValue: $0) } ?? .usd
+        }
+        set { defaults.set(newValue.rawValue, forKey: UserDefaultsKey.converterBaseCurrency) }
+    }
+
+    var converterQuoteCurrency: Currency {
+        get {
+            defaults.string(forKey: UserDefaultsKey.converterQuoteCurrency)
+                .flatMap { Currency(rawValue: $0) } ?? .rub
+        }
+        set { defaults.set(newValue.rawValue, forKey: UserDefaultsKey.converterQuoteCurrency) }
+    }
+
+    var converterAmount: Double {
+        get { defaults.double(forKey: UserDefaultsKey.converterAmount) }
+        set { defaults.set(newValue, forKey: UserDefaultsKey.converterAmount) }
+    }
+    
     // MARK: - Инициализация
     
     /// Инициализирует хранилище настроек и заполняет значения по умолчанию.
@@ -98,4 +119,7 @@ private enum UserDefaultsKey {
     static let isFloatingButtonOnLeft = "isFloatingButtonOnLeft"
     static let selectedLocationID = "selectedLocationID"
     static let selectedPaymentMethod = "selectedPaymentMethod"
+    static let converterBaseCurrency = "converterBaseCurrency"
+    static let converterQuoteCurrency = "converterQuoteCurrency"
+    static let converterAmount = "converterAmount"
 }

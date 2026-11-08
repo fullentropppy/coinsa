@@ -63,6 +63,19 @@ final class CurrencyConverter {
     
     // MARK: - Получение и обновление курса валюты
     
+    /// Устанавливает валюты пары без автоматического запроса курса.
+    /// - Parameters:
+    ///   - base: Новая основная валюта.
+    ///   - quote: Новая котируемая валюта.
+    func setCurrencies(base: Currency, quote: Currency) {
+        baseCurrency = base
+        quoteCurrency = quote
+        if isSameCurrency {
+            exchangeRateManager.cancelRefresh()
+            rateQuoteToBase = 1
+        }
+    }
+    
     /// Обновляет основную валюту.
     /// - Parameter newCurrency: Новая основная валюта.
     func updateBaseCurrency(_ newCurrency: Currency) {

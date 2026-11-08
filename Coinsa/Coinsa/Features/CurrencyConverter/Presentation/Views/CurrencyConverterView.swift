@@ -39,6 +39,11 @@ struct CurrencyConverterView: View {
                     numericKeypad
                 }
                 .task {
+                    viewModel.restorePersistedState(
+                        amount: settingsStore.converterAmount,
+                        base: settingsStore.converterBaseCurrency,
+                        quote: settingsStore.converterQuoteCurrency
+                    )
                     viewModel.loadInitialRateIfNeeded()
                 }
                 .notificationAlert(
@@ -50,6 +55,15 @@ struct CurrencyConverterView: View {
                     ),
                     isError: true
                 )
+                .onChange(of: viewModel.input.text) { _, _ in
+                    settingsStore.converterAmount = viewModel.input.value
+                }
+                .onChange(of: viewModel.baseCurrency) { _, _ in
+                    settingsStore.converterBaseCurrency = viewModel.baseCurrency
+                }
+                .onChange(of: viewModel.quoteCurrency) { _, _ in
+                    settingsStore.converterQuoteCurrency = viewModel.quoteCurrency
+                }
         }
     }
 

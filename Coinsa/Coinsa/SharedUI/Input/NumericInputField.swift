@@ -70,6 +70,8 @@ struct NumericInputField: View {
             usesGroupingSeparator: true
         )
         inputState.set(value.wrappedValue)
+        inputState.commit()
+        
         self._state = State(initialValue: inputState)
         self._textFieldText = State(initialValue: inputState.text)
         
@@ -94,9 +96,12 @@ struct NumericInputField: View {
             .multilineTextAlignment(textAlignment)
             .onAppear {
                 state.set(value)
+                state.commit()
                 textFieldText = state.text
             }
             .onChange(of: textFieldText) { _, newValue in
+                guard newValue != state.text else { return }
+                
                 let sanitized = state.replaceText(newValue)
                 if textFieldText != sanitized {
                     textFieldText = sanitized
@@ -105,6 +110,7 @@ struct NumericInputField: View {
             .onChange(of: value) { _, newValue in
                 guard focusedField.wrappedValue != focusID else { return }
                 state.set(newValue)
+                state.commit()
                 textFieldText = state.text
             }
             .onChange(of: state.value) { _, newValue in
