@@ -84,7 +84,7 @@ struct EventSummaryView: View {
     @ViewBuilder
     private var headerContent: some View {
         if let badgeProvider = data.badgeProvider, let dateRangeProvider = data.dateRangeProvider {
-            HStack {
+            HStack(spacing: 4) {
                 Badge(style: .combined(
                     icon: badgeProvider.secondaryIcon,
                     badge: dateRangeProvider.status.localizedResource,
@@ -95,6 +95,7 @@ struct EventSummaryView: View {
                     from: dateRangeProvider.startPlainDate,
                     to: dateRangeProvider.endPlainDate
                 )
+                DotDivider.secondarySmall()
                 CountLabel.daysSecondarySmall(dateRangeProvider.totalDays)
             }
         }

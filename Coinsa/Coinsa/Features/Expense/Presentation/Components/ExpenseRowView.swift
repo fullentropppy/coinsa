@@ -13,6 +13,10 @@ struct ExpenseRowView: View {
 
     private let expense: Expense
     
+    private var hasComment: Bool {
+        expense.comment != nil
+    }
+    
     // MARK: - Инициализация
     
     /// Создает строку для отображения траты.
@@ -38,21 +42,21 @@ struct ExpenseRowView: View {
             expense.subcategory.makeBadge()
             HStack(alignment: .lastTextBaseline, spacing: 4) {
                 DateLabel.secondarySmall(expense.civilDateTime)
-                commentIcon
+                if hasComment {
+                    DotDivider.secondarySmall()
+                    commentIcon
+                }
             }
             
         }
     }
     
-    @ViewBuilder
     private var commentIcon: some View {
-        if expense.comment != nil {
-            Image(systemName: "ellipsis.bubble")
-                .imageScale(.small)
-                .font(.footnote)
-                .fontWeight(.medium)
-                .foregroundStyle(.secondary)
-        }
+        Image(systemName: "ellipsis.bubble")
+            .imageScale(.small)
+            .font(.footnote)
+            .fontWeight(.medium)
+            .foregroundStyle(.secondary)
     }
     
     private var rightStack: some View {

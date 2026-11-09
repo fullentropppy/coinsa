@@ -130,8 +130,7 @@ struct EventAnalyticsCategoriesBody: View {
                         .font(.footnote.monospacedDigit())
                         .foregroundStyle(.secondary)
                     
-                    Text("•")
-                        .foregroundStyle(.secondary)
+                    DotDivider.secondarySmall()
                     
                     CountLabel.secondarySmall(
                         viewModel.expenseCount(for: slice.category),

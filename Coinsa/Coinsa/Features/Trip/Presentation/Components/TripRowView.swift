@@ -40,10 +40,11 @@ struct TripRowView: View {
     }
     
     private var lowerStack: some View {
-        HStack(spacing: 10) {
+        HStack(spacing: 4) {
             DateLabel.secondarySmall(from: trip.startPlainDate, to: trip.endPlainDate)
             Spacer()
             CountLabel.secondarySmall(trip.locationsCount, icon: Location.primaryIcon)
+            DotDivider.secondarySmall()
             CountLabel.daysSecondarySmall(trip.totalDays)
         }
     }

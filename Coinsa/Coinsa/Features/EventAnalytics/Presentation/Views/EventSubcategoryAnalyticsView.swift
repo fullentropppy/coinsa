@@ -94,8 +94,7 @@ struct EventSubcategoryAnalyticsView: View {
                         .font(.footnote.monospacedDigit())
                         .foregroundStyle(.secondary)
                        
-                    Text("•")
-                        .foregroundStyle(.secondary)
+                    DotDivider.secondarySmall()
                     
                     CountLabel.secondarySmall(
                         slice.expenseCount,
