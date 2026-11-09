@@ -64,11 +64,20 @@ struct EventSubcategoryAnalyticsView: View {
         List {
             Section {
                 ForEach(displayedSlicesSortedByAmount) { slice in
-                    legendRow(for: slice)
+                    NavigationLink {
+                        EventSubcategoryExpensesView(
+                            subcategory: slice.subcategory,
+                            data: viewModel.data,
+                            screenContextSubtitle: screenContextSubtitle
+                        )
+                    } label: {
+                        legendRow(for: slice)
+                    }
                 }
             }
         }
     }
+
     
     // MARK: - Компоненты
     
@@ -76,7 +85,7 @@ struct EventSubcategoryAnalyticsView: View {
         HStack {
             VStack(alignment: .leading, spacing: 10) {
                 Text(slice.subcategory.localizedResource)
-                HStack {
+                HStack(spacing: 4) {
                     Image(systemName: slice.subcategory.secondaryIcon)
                         .imageScale(.small)
                         .foregroundStyle(slice.subcategory.accentColor.gradient)
@@ -84,6 +93,14 @@ struct EventSubcategoryAnalyticsView: View {
                     Text(shareValue(for: slice).percentFormat())
                         .font(.footnote.monospacedDigit())
                         .foregroundStyle(.secondary)
+                       
+                    Text("•")
+                        .foregroundStyle(.secondary)
+                    
+                    CountLabel.secondarySmall(
+                        slice.expenseCount,
+                        icon: Expense.primaryIcon
+                    )
                 }
             }
             Spacer()
@@ -109,7 +126,9 @@ struct EventSubcategoryAnalyticsView: View {
     let trip = PreviewGenerator.makeExampleTrip(includeLocations: true, includeExpenses: true)
     let viewModel = TripDetailViewModel(trip: trip)
     let analyticsViewModel = EventAnalyticsViewModel(data: viewModel.eventAnalyticsData)
-    let category = analyticsViewModel.displayedSlicesSortedByAmount(for: .categories).first?.category ?? .defaultValue
+    let category = analyticsViewModel.displayedSlicesSortedByAmount(
+        for: .categories
+    ).first?.category ?? .defaultValue
 
     NavigationStack {
         EventSubcategoryAnalyticsView(

@@ -155,6 +155,7 @@ struct EventAnalyticsViewModel {
 
             return EventDailyExpenseAnalyticsData(
                 date: date,
+                expenseCount: expenses.count,
                 homeAmount: homeAmount(for: expenses),
                 locationAmount: locationAmount(for: expenses)
             )
@@ -257,6 +258,10 @@ struct EventAnalyticsViewModel {
         case .days: totalDays > 1 && expensesTotalHomeAmount > 0
         case .categories: !displayedSlicesSortedByID(for: metric).isEmpty
         }
+    }
+
+    func expenseCount(for category: ExpenseCategory) -> Int {
+        data.expenses.lazy.filter { $0.category == category }.count
     }
 
     func shareValue(for slice: ExpenseAnalyticsSlice, metric: EventAnalyticsMetric) -> Double {

@@ -12,13 +12,17 @@ struct EventAnalyticsDaysBody: View {
     // MARK: - Хранимые свойства
 
     private let viewModel: EventAnalyticsViewModel
+    private let screenContextSubtitle: String
 
     // MARK: - Инициализация
 
     /// Создает тело вкладки дневной аналитики.
-    /// - Parameter viewModel: ViewModel аналитики события.
-    init(viewModel: EventAnalyticsViewModel) {
+    /// - Parameters:
+    ///   - viewModel: ViewModel аналитики события.
+    ///   - screenContextSubtitle: Подзаголовок экрана.
+    init(viewModel: EventAnalyticsViewModel, screenContextSubtitle: String) {
         self.viewModel = viewModel
+        self.screenContextSubtitle = screenContextSubtitle
     }
 
     // MARK: - Тело View
@@ -60,16 +64,30 @@ struct EventAnalyticsDaysBody: View {
     // MARK: - Компоненты
 
     private func dailyExpenseRow(_ point: EventDailyExpenseAnalyticsData) -> some View {
-        HStack {
-            DateLabel(point.date.startOfDay, withTime: false, using: .utc)
-                .frame(maxHeight: .infinity, alignment: .topLeading)
-            Spacer()
-            AmountStack(
-                homeAmount: point.homeAmount,
-                homeCurrency: viewModel.homeCurrency,
-                expenseAmount: point.locationAmount,
-                expenseCurrency: viewModel.locationCurrency
+        NavigationLink {
+            EventDayExpensesView(
+                date: point.date,
+                data: viewModel.data,
+                screenContextSubtitle: screenContextSubtitle
             )
+        } label: {
+            HStack {
+                VStack(alignment: .leading, spacing: 6) {
+                    DateLabel(point.date.startOfDay, withTime: false, using: .utc)
+                    CountLabel.secondarySmall(
+                        point.expenseCount,
+                        icon: Expense.primaryIcon
+                    )
+                }
+                .frame(maxHeight: .infinity, alignment: .topLeading)
+                Spacer()
+                AmountStack(
+                    homeAmount: point.homeAmount,
+                    homeCurrency: viewModel.homeCurrency,
+                    expenseAmount: point.locationAmount,
+                    expenseCurrency: viewModel.locationCurrency
+                )
+            }
         }
     }
 }
@@ -77,14 +95,14 @@ struct EventAnalyticsDaysBody: View {
 // MARK: - Превью
 
 #Preview {
-    let viewModel = TripDetailViewModel(
-        trip: PreviewGenerator.makeExampleTrip(includeLocations: true, includeExpenses: true)
-    )
+    let trip = PreviewGenerator.makeExampleTrip(includeLocations: true, includeExpenses: true)
+    let viewModel = TripDetailViewModel(trip: trip)
 
     NavigationStack {
         List {
             EventAnalyticsDaysBody(
-                viewModel: EventAnalyticsViewModel(data: viewModel.eventAnalyticsData)
+                viewModel: EventAnalyticsViewModel(data: viewModel.eventAnalyticsData),
+                screenContextSubtitle: trip.screenContextSubtitle
             )
         }
     }

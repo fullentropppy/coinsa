@@ -61,7 +61,10 @@ struct EventAnalyticsView: View {
         case .summary:
             EventAnalyticsSummaryBody(viewModel: viewModel)
         case .days:
-            EventAnalyticsDaysBody(viewModel: viewModel)
+            EventAnalyticsDaysBody(
+                viewModel: viewModel,
+                screenContextSubtitle: screenContextSubtitle
+            )
         case .categories:
             EventAnalyticsCategoriesBody(
                 viewModel: viewModel,

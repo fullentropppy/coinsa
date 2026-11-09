@@ -124,11 +124,19 @@ struct EventAnalyticsCategoriesBody: View {
         HStack {
             VStack(alignment: .leading, spacing: 10) {
                 Text(slice.category.localizedResource)
-                HStack {
+                HStack(spacing: 4) {
                     slice.category.makeDot()
                     Text(shareValue(for: slice).percentFormat())
                         .font(.footnote.monospacedDigit())
                         .foregroundStyle(.secondary)
+                    
+                    Text("•")
+                        .foregroundStyle(.secondary)
+                    
+                    CountLabel.secondarySmall(
+                        viewModel.expenseCount(for: slice.category),
+                        icon: Expense.primaryIcon
+                    )
                 }
             }
             Spacer()
