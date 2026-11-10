@@ -9,6 +9,14 @@ import SwiftUI
 
 /// Экран "О приложении" с информацией о версии, сторонних API и копирайте.
 struct AboutView: View {
+    // MARK: - Вычисляемые свойства
+    
+    private var privacyPolicyURL: URL {
+        let languageCode = Locale.current.language.languageCode?.identifier
+        let slug = languageCode == "ru" ? "privacy-ru" : "privacy-en"
+        return URL(string: "https://fullentropppy.github.io/coinsa/\(slug).html")!
+    }
+    
     // MARK: - Тело View
     
     var body: some View {
@@ -31,9 +39,14 @@ struct AboutView: View {
         Section {
             LabeledContent(.appVersion, value: "\(AppInfo.version) (\(AppInfo.build))")
             LinkView(
-                name: .settingsProjectLinkTitle,
-                description: .settingsProjectLinkDescription,
+                name: .settingsProjectTitle,
+                description: .settingsProjectDescription,
                 url: URL(string: "https://github.com/fullentropppy/coinsa")!
+            )
+            LinkView(
+                name: .settingsPrivacyPolicyTitle,
+                description: .settingsPrivacyPolicyDescription,
+                url: privacyPolicyURL
             )
         }
     }

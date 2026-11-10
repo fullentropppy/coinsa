@@ -21,7 +21,14 @@
       }
     },
     "•" : {
-
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "•"
+          }
+        }
+      }
     },
     "amount.balance" : {
       "extractionState" : "manual",
@@ -3984,7 +3991,41 @@
         }
       }
     },
-    "settings.projectLink.description" : {
+    "settings.privacyPolicy.description" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "How Coinsa handles your data"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Как Coinsa обрабатывает ваши данные"
+          }
+        }
+      }
+    },
+    "settings.privacyPolicy.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Privacy Policy"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Политика конфиденциальности"
+          }
+        }
+      }
+    },
+    "settings.project.description" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -4001,7 +4042,7 @@
         }
       }
     },
-    "settings.projectLink.title" : {
+    "settings.project.title" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
