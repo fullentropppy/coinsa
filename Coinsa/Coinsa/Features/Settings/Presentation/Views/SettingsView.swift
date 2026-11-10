@@ -99,13 +99,13 @@ struct SettingsView: View {
     
     private var appearanceSection: some View {
         Section {
-            Picker(.settingsAppAppearance, selection: selectedAppAppearance) {
-                ForEach(AppAppearance.allCases) { theme in
-                    Text(theme.localizedResource)
-                        .tag(theme)
-                }
+            LabeledPicker(
+                title: .settingsAppAppearance,
+                selection: selectedAppAppearance,
+                options: AppAppearance.allCases
+            ) { appAppearance in
+                Text(appAppearance.localizedResource)
             }
-            .pickerStyle(.navigationLink)
             
             Toggle(.settingsIsFloatingButtonOnLeft, isOn: isFloatingButtonOnLeftBinding)
                 .tint(.accent)

@@ -30,6 +30,15 @@
   - Card
 - Store and view the location where an expense was made
 
+### "Today" Screen
+- Information for the current day:
+  - Recommended budget for today
+  - Actual spending for the day
+  - Remaining recommended budget
+  - Current exchange rate for the location's currency
+- Quick access to create a new expense
+- List of today's expenses
+
 ### Currencies and Exchange Rates
 - Automatically load up-to-date exchange rates
 - Choose a currency from the list for each individual expense
@@ -43,14 +52,8 @@
   - Expenses by day as a chart and list
   - Expenses by category and subcategory as a chart and list
 
-### "Today" Screen
-- Information for the current day:
-  - Recommended budget for today
-  - Actual spending for the day
-  - Remaining recommended budget
-  - Current exchange rate for the location's currency
-- Quick access to create a new expense
-- List of today's expenses
+### Currency Converter
+- Convert amounts between currencies using up-to-date exchange rates
 
 ### Synchronization
 - **Automatic data synchronization through iCloud** — all app data is available across your Apple devices.
