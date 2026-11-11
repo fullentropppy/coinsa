@@ -17,7 +17,7 @@
 - Add locations within each trip with a local currency (amounts can be entered and displayed in both the local and primary currencies)
 
 ### Budget and Expenses
-- Plan a budget for each location by subcategory and category:
+- Specifying the budget for each Location, tracking Expenses by subcategories and categories:
   - Food
   - Transport
   - Accommodation
