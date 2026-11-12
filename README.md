@@ -2,7 +2,7 @@
 
 [🇷🇺 Русский](README.md) | [🇺🇸 English](README.en.md)
 
-![iOS](https://img.shields.io/badge/iOS-27-178DF6)
+![iOS 26+](https://img.shields.io/badge/iOS-26%2B-178DF6)
 ![SwiftUI](https://img.shields.io/badge/SwiftUI-000000?logo=swift&logoColor=white)
 ![SwiftData](https://img.shields.io/badge/SwiftData-6A4C9C?style=flat&logo=swift&logoColor=white)
 ![CloudKit](https://img.shields.io/badge/CloudKit-3C61AB?logo=icloud&logoColor=white)
@@ -60,6 +60,10 @@
 
 ## Системные требования
 Требуется **iOS 26** и выше.
+
+## Конфиденциальность
+
+Подробнее об обработке данных — в [Политике конфиденциальности](https://fullentropppy.github.io/coinsa/privacy-ru.html).
 
 ## Лицензия
 **Coinsa не является open-source проектом.** Исходный код доступен для ознакомления, изучения и личного некоммерческого использования.

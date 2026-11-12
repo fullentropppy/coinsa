@@ -73,7 +73,7 @@ struct ExpenseRepository {
             updatedAt: now
         )
         
-        normalizeExpenseData(expense)
+        normalizeExpenseData(expense, updatesDateMetadata: true)
         context.insert(expense)
         try? context.save()
     }
@@ -110,6 +110,8 @@ struct ExpenseRepository {
         horizontalAccuracy: Double?,
         comment: String?
     ) {
+        let hasDateChanged = CivilDateTime(date) != expense.civilDateTime
+
         expense.storedDate = date
         expense.baseAmount = homeAmount
         expense.expenseCurrencyCode = expenseCurrency.code
@@ -125,7 +127,7 @@ struct ExpenseRepository {
         expense.comment = comment
         expense.updatedAt = Date()
         
-        normalizeExpenseData(expense)
+        normalizeExpenseData(expense, updatesDateMetadata: hasDateChanged)
         try? context.save()
     }
     
@@ -139,11 +141,18 @@ struct ExpenseRepository {
     // MARK: - Нормализация значений
     
     /// Нормализует значения траты.
-    /// - Parameter expense: Трата для нормализации значений.
-    private func normalizeExpenseData(_ expense: Expense) {
+    /// - Parameters:
+    ///   - expense: Трата для нормализации значений.
+    ///   - updatesDateMetadata: Обновлять момент и пояс при создании или изменении даты и времени.
+    private func normalizeExpenseData(_ expense: Expense, updatesDateMetadata: Bool) {
         expense.storedDate = expense.storedDate.storedCivilDateTime(using: .utc)
-        expense.actualDate = expense.civilDateTime.actualDate()
-        expense.timeZoneID = TimeZone.current.identifier
+        
+        if updatesDateMetadata {
+            let timeZone = TimeZone.current
+            expense.actualDate = expense.civilDateTime.actualDate(using: timeZone)
+            expense.timeZoneID = timeZone.identifier
+        }
+        
         expense.baseAmount = expense.baseAmount.nonNegative
         expense.rateExpenseToBase = expense.rateExpenseToBase.nonNegative
         expense.rateExpenseToLocation = normalizedRateExpenseToLocation(of: expense)

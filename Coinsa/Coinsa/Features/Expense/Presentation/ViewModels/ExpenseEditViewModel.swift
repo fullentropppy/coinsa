@@ -101,11 +101,16 @@ final class ExpenseEditViewModel {
     
     // MARK: - Состояние UI. Общие данные
     
-    var date: Date {
-        didSet { timeZone = .current }
+    var date: Date
+
+    var timeZone: TimeZone {
+        if let expense, CivilDateTime(date) == CivilDateTime(initialSnapshot.date) {
+            expense.timeZone
+        } else {
+            .current
+        }
     }
     
-    var timeZone: TimeZone
     var category: ExpenseCategory
     var subcategory: ExpenseSubcategory
     var coordinate: Coordinate?
@@ -216,7 +221,6 @@ final class ExpenseEditViewModel {
             location: location,
             expense: nil,
             date: date,
-            timeZone: .current,
             homeAmount: 0,
             expenseAmount: 0,
             expenseCurrency: location.locationCurrency,
@@ -238,7 +242,6 @@ final class ExpenseEditViewModel {
             location: expense.location!,
             expense: expense,
             date: expense.civilDateTime.storedDate,
-            timeZone: expense.timeZone,
             homeAmount: expense.homeAmount,
             expenseAmount: expense.amount(in: .expense),
             expenseCurrency: expense.expenseCurrency,
@@ -257,7 +260,6 @@ final class ExpenseEditViewModel {
         location: Location,
         expense: Expense?,
         date: Date,
-        timeZone: TimeZone,
         homeAmount: Double,
         expenseAmount: Double,
         expenseCurrency: Currency,
@@ -273,7 +275,6 @@ final class ExpenseEditViewModel {
         self.location = location
         self.expense = expense
         self.date = date
-        self.timeZone = timeZone
         self.paymentMethod = paymentMethod
         self.exchangeAdjustment = exchangeAdjustment
         self.category = category

@@ -181,10 +181,14 @@ struct ExpenseDetailView: View {
     }
     
     private var headerContent: some View {
-        HStack {
+        HStack(spacing: 4) {
             expense.subcategory.makeBadge()
             Spacer()
             DateLabel.secondarySmall(expense.civilDateTime)
+            DotDivider.secondarySmall()
+            Text(expense.timeZone.gmtOffsetDisplay)
+                .font(.caption)
+                .foregroundStyle(.secondary)
         }
     }
     
