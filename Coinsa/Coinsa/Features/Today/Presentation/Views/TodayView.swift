@@ -21,7 +21,7 @@ struct TodayView: View {
 
     @State private var viewModel: TodayViewModel
     @State private var deletionHandler = DeletionHandler<Expense>()
-    @State private var selectedQuickCategory: ExpenseCategory?
+    @State private var selectedQuickExpense: QuickExpenseSelection?
     @State private var expenseToEdit: Expense?
     @State private var selectedLocationID: UUID?
 
@@ -94,10 +94,11 @@ struct TodayView: View {
             Group {
                 if let selectedLocation = viewModel.selectedLocation {
                     locationContent(location: selectedLocation)
-                        .sheet(item: $selectedQuickCategory) { selectedCategory in
+                        .sheet(item: $selectedQuickExpense) { selection in
                             ExpenseEditView(
                                 forCreateWith: selectedLocation,
-                                preselectedCategory: selectedCategory,
+                                preselectedCategory: selection.category,
+                                preselectedSubcategory: selection.subcategory,
                                 preselectedPaymentMethod: settingsStore.selectedPaymentMethod
                             )
                         }
@@ -152,9 +153,14 @@ struct TodayView: View {
     
     private var quickExpenseSection: some View {
         Section {
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 140), spacing: 10)], spacing: 10) {
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 140), spacing: 8)], spacing: 8) {
                 ForEach(ExpenseCategory.allCases, id: \.id) { category in
                     quickExpenseButton(category: category)
+                }
+                HStack(spacing: 8) {
+                    ForEach(viewModel.quickExpenseSubcategories) { subcategory in
+                        quickExpenseButton(subcategory: subcategory)
+                    }
                 }
             }
             .padding(4)
@@ -277,7 +283,7 @@ struct TodayView: View {
     private func quickExpenseButton(category: ExpenseCategory) -> some View {
         Button {
             haptics.trigger(.add)
-            selectedQuickCategory = category
+            selectedQuickExpense = QuickExpenseSelection(category: category)
         } label: {
             HStack(alignment: .center) {
                 Image(systemName: category.primaryIcon)
@@ -295,6 +301,26 @@ struct TodayView: View {
         .foregroundStyle(Color.primary)
     }
     
+    private func quickExpenseButton(subcategory: ExpenseSubcategory) -> some View {
+        Button {
+            haptics.trigger(.add)
+            selectedQuickExpense = QuickExpenseSelection(
+                category: subcategory.category,
+                subcategory: subcategory
+            )
+        } label: {
+            Image(systemName: subcategory.primaryIcon)
+                .frame(width: 20, height: 20)
+                .foregroundStyle(subcategory.accentColor)
+                .shadow(color: subcategory.accentColor, radius: 12)
+                .font(.subheadline.weight(.medium))
+                .padding(.vertical, 4)
+                .frame(maxWidth: .infinity)
+        }
+        .buttonStyle(.glass)
+        .foregroundStyle(Color.primary)
+    }
+
     // MARK: - Биндинги
 
     private func selectedLocationBinding(location: Location) -> Binding<UUID> {
@@ -338,6 +364,15 @@ struct TodayView: View {
     private func cancelDelete() {
         deletionHandler.cancel()
     }
+}
+
+// MARK: - Внутренние типы
+
+private struct QuickExpenseSelection: Identifiable {
+    let category: ExpenseCategory
+    var subcategory: ExpenseSubcategory?
+
+    var id: String { subcategory?.rawValue ?? category.rawValue }
 }
 
 // MARK: - Превью

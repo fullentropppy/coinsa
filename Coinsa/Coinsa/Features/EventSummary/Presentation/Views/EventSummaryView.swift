@@ -90,7 +90,7 @@ struct EventSummaryView: View {
     }
     
     private var amountsContent: some View {
-        HStack {
+        HStack(spacing: 8) {
             if showsBudgetAmount {
                 EventAmountCardView(
                     title: data.budgetTitle,

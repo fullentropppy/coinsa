@@ -98,6 +98,12 @@ final class TodayViewModel {
         ?? []
     }
     
+    // MARK: - Состояние UI. Быстрые траты
+
+    var quickExpenseSubcategories: [ExpenseSubcategory] {
+        QuickExpenseSubcategories.select(from: selectedLocation?.expenses?.map(\.subcategory) ?? [])
+    }
+
     // MARK: - Инициализация
     
     /// Создает ViewModel для экрана "Сегодня".

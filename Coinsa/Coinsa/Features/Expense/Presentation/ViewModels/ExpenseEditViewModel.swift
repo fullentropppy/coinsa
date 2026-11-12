@@ -208,14 +208,16 @@ final class ExpenseEditViewModel {
     /// - Parameters:
     ///   - location: Локация траты.
     ///   - preselectedCategory: Предустановленная категория.
+    ///   - preselectedSubcategory: Предустановленная подкатегория (определяет категорию, если задана).
     ///   - preselectedPaymentMethod: Предустановленный способ оплаты.
     convenience init(
         forCreateWith location: Location,
         preselectedCategory: ExpenseCategory? = nil,
+        preselectedSubcategory: ExpenseSubcategory? = nil,
         preselectedPaymentMethod: PaymentMethod? = nil
     ) {
         let date = CivilDateTime.now.storedDate
-        let category = preselectedCategory ?? .defaultValue
+        let category = preselectedSubcategory?.category ?? preselectedCategory ?? .defaultValue
         
         self.init(
             location: location,
@@ -228,8 +230,8 @@ final class ExpenseEditViewModel {
             rateExpenseToLocation: 1,
             paymentMethod: preselectedPaymentMethod ?? .card,
             exchangeAdjustment: location.exchangeAdjustment,
-            category: preselectedCategory ?? .defaultValue,
-            subcategory: .defaultValue(with: category),
+            category: category,
+            subcategory: preselectedSubcategory ?? .defaultValue(with: category),
             coordinate: nil,
             comment: ""
         )

@@ -46,15 +46,18 @@ struct ExpenseEditView: View {
     /// - Parameters:
     ///   - location: Локация траты.
     ///   - preselectedCategory: Предустановленная категория.
+    ///   - preselectedSubcategory: Предустановленная подкатегория (определяет категорию, если задана).
     ///   - preselectedPaymentMethod: Предустановленный способ оплаты.
     init(
         forCreateWith location: Location,
         preselectedCategory: ExpenseCategory? = nil,
+        preselectedSubcategory: ExpenseSubcategory? = nil,
         preselectedPaymentMethod: PaymentMethod? = nil
     ) {
         let viewModel = ExpenseEditViewModel(
             forCreateWith: location,
             preselectedCategory: preselectedCategory,
+            preselectedSubcategory: preselectedSubcategory,
             preselectedPaymentMethod: preselectedPaymentMethod
         )
         self.init(initialViewModel: viewModel)
