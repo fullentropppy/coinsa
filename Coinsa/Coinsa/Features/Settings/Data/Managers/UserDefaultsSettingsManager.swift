@@ -40,6 +40,23 @@ final class UserDefaultsSettingsManager {
         set { defaults.set(newValue, forKey: UserDefaultsKey.detectPlaceOfExpense) }
     }
     
+    // MARK: - Экран «Сегодня»
+
+    var showsLocationBudgetOnOverspend: Bool {
+        get { defaults.bool(forKey: UserDefaultsKey.showsLocationBudgetOnOverspend) }
+        set { defaults.set(newValue, forKey: UserDefaultsKey.showsLocationBudgetOnOverspend) }
+    }
+
+    /// Порог перерасхода в процентах, от 0 до 100 с шагом 5.
+    var todayBudgetOverspendThreshold: Double {
+        get {
+            let value = defaults.double(forKey: UserDefaultsKey.todayBudgetOverspendThreshold)
+            guard value.isFinite else { return 20 }
+            return (min(max(value, 0), 100) / 5).rounded() * 5
+        }
+        set { defaults.set(newValue, forKey: UserDefaultsKey.todayBudgetOverspendThreshold) }
+    }
+
     // MARK: - Оформление
     
     var appAppearance: AppAppearance {
@@ -102,7 +119,9 @@ final class UserDefaultsSettingsManager {
     init() {
         defaults.register(defaults: [
             UserDefaultsKey.fetchExpenseExchangeRateOnline: true,
-            UserDefaultsKey.detectPlaceOfExpense: true
+            UserDefaultsKey.detectPlaceOfExpense: true,
+            UserDefaultsKey.showsLocationBudgetOnOverspend: true,
+            UserDefaultsKey.todayBudgetOverspendThreshold: 20.0
         ])
     }
 }
@@ -115,6 +134,8 @@ private enum UserDefaultsKey {
     static let exchangeAdjustment = "exchangeAdjustment"
     static let fetchExpenseExchangeRateOnline = "fetchExpenseExchangeRateOnline"
     static let detectPlaceOfExpense = "detectPlaceOfExpense"
+    static let showsLocationBudgetOnOverspend = "showsLocationBudgetOnOverspend"
+    static let todayBudgetOverspendThreshold = "todayBudgetOverspendThreshold"
     static let appAppearance = "appAppearance"
     static let isFloatingButtonOnLeft = "isFloatingButtonOnLeft"
     static let selectedLocationID = "selectedLocationID"

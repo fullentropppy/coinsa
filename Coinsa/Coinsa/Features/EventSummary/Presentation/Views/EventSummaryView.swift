@@ -23,18 +23,6 @@ struct EventSummaryView: View {
         data.budgetHomeAmount > 0 || showsBudgetIfZero
     }
     
-    private var homeAmountBalance: Double {
-        data.budgetHomeAmount - data.expensesHomeAmount
-    }
-    
-    private var locationAmountBalance: Double? {
-        if let budget = data.budgetLocationAmount, let expenses = data.expensesLocationAmount {
-            budget - expenses
-        } else {
-            nil
-        }
-    }
-    
     // MARK: - Инициализация
     
     /// Создает представление сводки события.
@@ -105,7 +93,7 @@ struct EventSummaryView: View {
         HStack {
             if showsBudgetAmount {
                 EventAmountCardView(
-                    title: .amountBudget,
+                    title: data.budgetTitle,
                     homeAmount: data.budgetHomeAmount,
                     homeCurrency: data.homeCurrency,
                     locationAmount: data.budgetLocationAmount,
@@ -127,9 +115,9 @@ struct EventSummaryView: View {
         if showsBudgetAmount {
             EventAmountBalanceView(
                 budgetHomeAmount: data.budgetHomeAmount,
-                homeAmountBalance: homeAmountBalance,
+                homeAmountBalance: data.homeAmountBalance,
                 homeCurrency: data.homeCurrency,
-                locationAmountBalance: locationAmountBalance,
+                locationAmountBalance: data.locationAmountBalance,
                 locationCurrency: data.locationCurrency
             )
         }

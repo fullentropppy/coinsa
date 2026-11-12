@@ -98,6 +98,23 @@
         }
       }
     },
+    "amount.budget.location" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Location budget"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Бюджет локации"
+          }
+        }
+      }
+    },
     "amount.duo" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -4072,6 +4089,57 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Сторонние API"
+          }
+        }
+      }
+    },
+    "settings.todayBudget.autoSwitch" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add’l budget on overspend"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Доп. бюджет при перерасходе"
+          }
+        }
+      }
+    },
+    "settings.todayBudget.autoSwitch.hint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Display the entire location budget on the “Today” screen if the daily overspending exceeds the selected threshold."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отображение всего бюджета локации на экране «Сегодня», если перерасход за день больше выбранного порога."
+          }
+        }
+      }
+    },
+    "settings.todayBudget.overspendThreshold" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Overspend threshold"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Порог перерасхода"
           }
         }
       }

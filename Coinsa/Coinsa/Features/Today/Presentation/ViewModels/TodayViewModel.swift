@@ -149,32 +149,62 @@ final class TodayViewModel {
         return currentLocations.first?.id
     }
     
-    func eventSummaryData(for location: Location) -> EventSummaryData {
+    func eventSummaryData(
+        for location: Location,
+        showsLocationBudgetOnOverspend: Bool,
+        overspendThreshold: Double
+    ) -> EventSummaryData {
         var budgetHomeAmount = location.calculateBudgetAmountForToday()
-        var expensesHomeAmount = location.calculateExpensesAmount(withinDateRange: todayRange)
+        let expensesHomeAmount = location.calculateExpensesAmount(withinDateRange: todayRange)
         
         var budgetLocationAmount: Double?
-        var expensesLocationAmount: Double?
-        
-        if expensesHomeAmount > budgetHomeAmount && expensesHomeAmount > budgetHomeAmount + budgetHomeAmount * 0.2 {
+        let expensesLocationAmount = isHomeLocation ? nil : location.calculateExpensesAmount(
+            in: .location,
+            withinDateRange: todayRange
+        )
+        // Карточка расходов всегда относится к сегодняшнему дню; остаток может относиться ко всей локации.
+        var balanceExpensesHomeAmount = expensesHomeAmount
+        var balanceExpensesLocationAmount = expensesLocationAmount
+
+        let switchLimit = max(0, budgetHomeAmount) * (1 + overspendThreshold / 100)
+        let comparisonTolerance = max(expensesHomeAmount.ulp, switchLimit.ulp) * 8
+        let showsLocationBudget = showsLocationBudgetOnOverspend
+            && location.hasBudget
+            && budgetHomeAmount.isFinite
+            && expensesHomeAmount.isFinite
+            && overspendThreshold.isFinite
+            && (0...100).contains(overspendThreshold)
+            && switchLimit.isFinite
+            && expensesHomeAmount - switchLimit > comparisonTolerance
+
+        if showsLocationBudget {
             budgetHomeAmount = location.budget
             budgetLocationAmount = isHomeLocation ? nil : location.calculateBudgetAmount(in: .location)
-            expensesHomeAmount = location.calculateExpensesAmount(in: .home)
-            expensesLocationAmount = isHomeLocation ? nil : location.calculateExpensesAmount(in: .location)
+            balanceExpensesHomeAmount = location.calculateExpensesAmount(in: .home)
+            balanceExpensesLocationAmount = isHomeLocation ? nil : location.calculateExpensesAmount(in: .location)
         } else {
             budgetLocationAmount = isHomeLocation ? nil : location.calculateBudgetAmountForToday(in: .location)
-            expensesLocationAmount = isHomeLocation ? nil : location.calculateExpensesAmount(in: .location, withinDateRange: todayRange)
         }
         
+        let locationAmountBalance: Double?
+        if let budgetLocationAmount, let balanceExpensesLocationAmount {
+            locationAmountBalance = budgetLocationAmount - balanceExpensesLocationAmount
+        } else {
+            locationAmountBalance = nil
+        }
+
         return EventSummaryData(
             badgeProvider: Location.self,
             dateRangeProvider: location,
+            budgetTitle: showsLocationBudget ? .amountBudgetLocation : .amountBudget,
             budgetHomeAmount: budgetHomeAmount,
             expensesHomeAmount: expensesHomeAmount,
             homeCurrency: location.homeCurrency,
             budgetLocationAmount: budgetLocationAmount,
             expensesLocationAmount: expensesLocationAmount,
-            locationCurrency: location.locationCurrency
+            locationCurrency: location.locationCurrency,
+            homeAmountBalance: budgetHomeAmount - balanceExpensesHomeAmount,
+            locationAmountBalance: locationAmountBalance
         )
     }
 }

@@ -48,6 +48,7 @@ struct SettingsView: View {
             homeCurrencySection
             exchangeAdjustmentSection
             dataLoadingSection
+            todayBudgetSection
             appearanceSection
             aboutSection
 #if DEBUG
@@ -97,6 +98,33 @@ struct SettingsView: View {
         }
     }
     
+    private var todayBudgetSection: some View {
+        Section {
+            Toggle(.settingsTodayBudgetAutoSwitch, isOn: showsLocationBudgetOnOverspendBinding)
+                .tint(.accent)
+
+            if settingsStore.showsLocationBudgetOnOverspend {
+                VStack {
+                    LabeledContent(.settingsTodayBudgetOverspendThreshold) {
+                        Text((settingsStore.todayBudgetOverspendThreshold / 100).percentFormat(fractionLength: 0))
+                    }
+                    Slider(value: todayBudgetOverspendThresholdBinding, in: 0...100, step: 5) {
+                        Text(.settingsTodayBudgetOverspendThreshold)
+                    } minimumValueLabel: {
+                        Text(0.0.percentFormat(fractionLength: 0))
+                    } maximumValueLabel: {
+                        Text(1.0.percentFormat(fractionLength: 0))
+                    }
+                    .accessibilityValue(
+                        (settingsStore.todayBudgetOverspendThreshold / 100).percentFormat(fractionLength: 0)
+                    )
+                }
+            }
+        } footer: {
+            Text(.settingsTodayBudgetAutoSwitchHint)
+        }
+    }
+
     private var appearanceSection: some View {
         Section {
             LabeledPicker(
@@ -150,6 +178,20 @@ struct SettingsView: View {
         )
     }
     
+    private var showsLocationBudgetOnOverspendBinding: Binding<Bool> {
+        Binding(
+            get: { settingsStore.showsLocationBudgetOnOverspend },
+            set: { settingsStore.showsLocationBudgetOnOverspend = $0 }
+        )
+    }
+
+    private var todayBudgetOverspendThresholdBinding: Binding<Double> {
+        Binding(
+            get: { settingsStore.todayBudgetOverspendThreshold },
+            set: { settingsStore.todayBudgetOverspendThreshold = $0 }
+        )
+    }
+
     private var selectedAppAppearance: Binding<AppAppearance> {
         Binding(
             get: { settingsStore.appAppearance },

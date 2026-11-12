@@ -36,6 +36,16 @@ final class AppSettingsStore {
         didSet { userDefaultsManager.detectPlaceOfExpense = detectPlaceOfExpense }
     }
     
+    // MARK: - Экран «Сегодня»
+
+    var showsLocationBudgetOnOverspend: Bool {
+        didSet { userDefaultsManager.showsLocationBudgetOnOverspend = showsLocationBudgetOnOverspend }
+    }
+
+    var todayBudgetOverspendThreshold: Double {
+        didSet { userDefaultsManager.todayBudgetOverspendThreshold = todayBudgetOverspendThreshold }
+    }
+
     // MARK: - Оформление
     
     var appAppearance: AppAppearance {
@@ -77,6 +87,8 @@ final class AppSettingsStore {
         self.exchangeAdjustment = userDefaultsManager.exchangeAdjustment
         self.fetchExpenseExchangeRateOnline = userDefaultsManager.fetchExpenseExchangeRateOnline
         self.detectPlaceOfExpense = userDefaultsManager.detectPlaceOfExpense
+        self.showsLocationBudgetOnOverspend = userDefaultsManager.showsLocationBudgetOnOverspend
+        self.todayBudgetOverspendThreshold = userDefaultsManager.todayBudgetOverspendThreshold
         self.appAppearance = userDefaultsManager.appAppearance
         self.isFloatingButtonOnLeft = userDefaultsManager.isFloatingButtonOnLeft
         self.selectedLocationID = userDefaultsManager.selectedLocationID

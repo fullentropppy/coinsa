@@ -219,7 +219,11 @@ struct TodayView: View {
     
     private func locationSummaryContent(location: Location) -> some View {
         EventSummaryView(
-            data: viewModel.eventSummaryData(for: location),
+            data: viewModel.eventSummaryData(
+                for: location,
+                showsLocationBudgetOnOverspend: settingsStore.showsLocationBudgetOnOverspend,
+                overspendThreshold: settingsStore.todayBudgetOverspendThreshold
+            ),
             showsHeader: false,
             showsBudgetIfZero: location.hasBudget
         )
