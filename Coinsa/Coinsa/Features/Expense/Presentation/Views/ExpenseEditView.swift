@@ -94,7 +94,7 @@ struct ExpenseEditView: View {
                 }
                 .interactiveDismissDisabled(true)
                 .scrollDismissesKeyboard(.interactively)
-                .keyboardDismissButton(
+                .keyboardInputBar(
                     isPresented: focusedField != nil || isCommentFocused,
                     onDismiss: dismissKeyboard
                 )
@@ -368,15 +368,7 @@ struct ExpenseEditView: View {
                 TextField(.expenseComment, text: $viewModel.comment, axis: .vertical)
                     .lineLimit(1...10)
                     .focused($isCommentFocused)
-            }
-        } footer: {
-            if !viewModel.comment.isEmpty {
-                HStack {
-                    Spacer()
-                    ClearButton {
-                        viewModel.comment = ""
-                    }
-                }
+                    .keyboardClearAction(text: $viewModel.comment)
             }
         }
     }

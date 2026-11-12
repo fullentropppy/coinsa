@@ -7,19 +7,6 @@
 
 import SwiftUI
 
-// MARK: - Публичные типы
-
-/// Идентификаторы полей для управления фокусом в числовых вводах.
-nonisolated enum NumericEditField: Hashable {
-    case amount
-    case exchangeRate
-    case locationExchangeRate
-    case exchangeAdjustment
-    case budget
-    case converterFromAmount
-    case converterToAmount
-}
-
 /// Кастомное поле для ввода числовых значений с форматированием и поддержкой фокуса.
 struct NumericInputField: View {
     // MARK: - Свойства
@@ -94,6 +81,10 @@ struct NumericInputField: View {
             .focused(focusedField, equals: focusID)
             .keyboardType(.decimalPad)
             .multilineTextAlignment(textAlignment)
+            .focusedValue(
+                \.keyboardClearAction,
+                KeyboardClearAction(isEmpty: state.isEmpty, clear: clear)
+            )
             .onAppear {
                 state.set(value)
                 state.commit()
@@ -115,6 +106,7 @@ struct NumericInputField: View {
             }
             .onChange(of: state.value) { _, newValue in
                 guard focusedField.wrappedValue == focusID else { return }
+                guard newValue != value else { return }
                 value = newValue
             }
             .onChange(of: focusedField.wrappedValue) { oldID, newID in
@@ -128,6 +120,12 @@ struct NumericInputField: View {
     
     // MARK: - Приватные методы
     
+    private func clear() {
+        state.clear()
+        textFieldText = state.text
+        value = state.value
+    }
+
     private func commit() {
         state.commit()
         textFieldText = state.text

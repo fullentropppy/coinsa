@@ -13,7 +13,6 @@ struct LocationEditView: View {
     // MARK: - Окружение
     
     @Environment(\.modelContext) private var context
-    @Environment(\.haptics) private var haptics
     @Environment(\.dismiss) private var dismiss
 
     // MARK: - Состояние
@@ -90,7 +89,7 @@ struct LocationEditView: View {
                 }
                 .interactiveDismissDisabled(true)
                 .scrollDismissesKeyboard(.interactively)
-                .keyboardDismissButton(
+                .keyboardInputBar(
                     isPresented: focusedField != nil || isNameFocused,
                     onDismiss: dismissKeyboard
                 )
@@ -143,6 +142,7 @@ struct LocationEditView: View {
                 .multilineTextAlignment(.center)
                 .font(.largeTitle)
                 .focused($isNameFocused)
+                .keyboardClearAction(text: $viewModel.name)
         }
         .listRowBackground(Color.clear)
     }
@@ -347,7 +347,6 @@ struct LocationEditView: View {
     }
     
     private func dismissKeyboard() {
-        haptics.trigger(.tap)
         focusedField = nil
         isNameFocused = false
     }

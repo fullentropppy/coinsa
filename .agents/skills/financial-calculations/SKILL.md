@@ -23,7 +23,7 @@ description: >-
 - `Core/Domain/ExchangeRates/` — ExchangeRateMode, HexarateService, Provider и Manager; `Core/Domain/Currency/Logic/` — разбор кодов валют и defaults.
 - `Features/{Expense,Location,CurrencyConverter}/Presentation/ViewModels/` — связи ввода, курсов, комиссии и сохранения.
 - `Features/Today/Presentation/ViewModels/TodayViewModel.swift`, `Features/{Trip,Location}/Presentation/ViewModels/` и `Features/EventAnalytics/Presentation/ViewModels/EventAnalyticsViewModel.swift` — бюджет дня, источники аналитики, суммы и группировки.
-- `SharedUI/Input/{DecimalInputState,NumericInputField,PercentInputField}.swift`, `SharedUI/DomainUI/Currency/Components/`, `SharedUI/DomainUI/Double/Double+Formatting.swift`, `Core/Extensions/Double+Manipulation.swift` — ввод, отображение и явное округление.
+- `SharedUI/Input/Models/DecimalInputState.swift`, `SharedUI/Input/Components/{NumericInputField,PercentInputField}.swift`, `SharedUI/DomainUI/Currency/Components/`, `SharedUI/DomainUI/Double/Double+Formatting.swift`, `Core/Extensions/Double+Manipulation.swift` — ввод, отображение и явное округление.
 - `Core/Domain/DateTime/`, `Core/Extensions/Date+*.swift`, `Core/Extensions/Calendar+UTC.swift`, `SharedUI/Formatters/DateDisplayFormatter.swift` — календарная арифметика и форматирование.
 
 ## Подтверждённое поведение: основа анализа, не гарантия правильности

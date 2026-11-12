@@ -13,7 +13,6 @@ struct TripEditView: View {
     // MARK: - Окружение
     
     @Environment(\.modelContext) private var context
-    @Environment(\.haptics) private var haptics
     @Environment(\.dismiss) private var dismiss
     
     // MARK: - Состояние
@@ -65,8 +64,7 @@ struct TripEditView: View {
                 }
                 .interactiveDismissDisabled(true)
                 .scrollDismissesKeyboard(.interactively)
-                .keyboardDismissButton(isPresented: isNameFocused) {
-                    haptics.trigger(.tap)
+                .keyboardInputBar(isPresented: isNameFocused) {
                     isNameFocused = false
                 }
                 .formValidationBanner($validationNotice)
@@ -103,6 +101,7 @@ struct TripEditView: View {
                 .multilineTextAlignment(.center)
                 .font(.largeTitle)
                 .focused($isNameFocused)
+                .keyboardClearAction(text: $viewModel.name)
         }
         .listRowBackground(Color.clear)
     }
