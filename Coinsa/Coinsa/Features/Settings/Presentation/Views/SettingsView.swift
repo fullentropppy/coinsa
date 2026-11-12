@@ -67,6 +67,8 @@ struct SettingsView: View {
                 options: Currency.allCasesSortedByName
             ) { currency in
                 currency.makeLabel()
+            } currentValueLabel: { currency in
+                CurrencyCodeText(currency)
             }
         } footer: {
             Text(.settingsHomeCurrencyHint)

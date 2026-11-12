@@ -144,6 +144,8 @@ struct TripEditView: View {
                 isDisabled: viewModel.hasLocations
             ) { currency in
                 currency.makeLabel()
+            } currentValueLabel: { currency in
+                CurrencyCodeText(currency)
             }
         } footer: {
             Text(.tripCurrencyHint)

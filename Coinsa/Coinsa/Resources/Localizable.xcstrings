@@ -2127,7 +2127,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Accommodation"
+            "value" : "Accomm"
           }
         },
         "ru" : {
@@ -2484,12 +2484,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Exchange rate of %1$(locationCurrencyCode)@"
+            "value" : "EXR of %1$(locationCurrencyCode)@"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Курс обмена %(locationCurrencyCode)@"
           }
         }
@@ -3606,7 +3606,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Exchange rate of %1$(locationCurrencyCode)@"
+            "value" : "EXR of %1$(locationCurrencyCode)@"
           }
         },
         "ru" : {
@@ -3878,7 +3878,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Exchange rate adj."
+            "value" : "EXR adjustment"
           }
         },
         "ru" : {

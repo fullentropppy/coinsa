@@ -226,6 +226,8 @@ struct ExpenseEditView: View {
                 ),
             ) { currency in
                 currency.makeLabel()
+            } currentValueLabel: { currency in
+                CurrencyCodeText(currency)
             }
             
             if viewModel.showsRateExpenseToBase {
@@ -340,16 +342,8 @@ struct ExpenseEditView: View {
                     }
                     .font(.footnote.monospacedDigit())
                     Spacer()
-                    Button(role: .destructive) {
-                        haptics.trigger(.tap)
+                    ClearButton {
                         viewModel.updateCoordinate(nil)
-                    } label: {
-                        HStack(spacing: 2) {
-                            Image(systemName: "xmark.circle.fill")
-                                .imageScale(.small)
-                            Text(.clear)
-                                .font(.footnote)
-                        }
                     }
                 }
             } else {
@@ -368,6 +362,15 @@ struct ExpenseEditView: View {
                 
                 TextField(.expenseComment, text: $viewModel.comment, axis: .vertical)
                     .lineLimit(1...10)
+            }
+        } footer: {
+            if !viewModel.comment.isEmpty {
+                HStack {
+                    Spacer()
+                    ClearButton {
+                        viewModel.comment = ""
+                    }
+                }
             }
         }
     }

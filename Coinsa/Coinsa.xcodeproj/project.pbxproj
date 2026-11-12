@@ -281,7 +281,7 @@
 				INFOPLIST_FILE = Coinsa/Resources/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Coinsa Debug";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Приложению нужен доступ к геопозиции для сохранения координат трат.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Coinsa needs access to your location to save Expense locations.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -326,7 +326,7 @@
 				INFOPLIST_FILE = Coinsa/Resources/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Coinsa;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Приложению нужен доступ к геопозиции для сохранения координат трат.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Coinsa needs access to your location to save Expense locations.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

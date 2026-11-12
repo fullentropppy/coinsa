@@ -189,6 +189,8 @@ struct LocationEditView: View {
                 isDisabled: viewModel.hasExpenses
             ) { currency in
                 currency.makeLabel()
+            } currentValueLabel: { currency in
+                CurrencyCodeText(currency)
             }
         } footer: {
             Text(.locationCurrencyHint)
