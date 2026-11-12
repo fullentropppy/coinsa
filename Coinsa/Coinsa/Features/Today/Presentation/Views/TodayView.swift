@@ -39,6 +39,10 @@ struct TodayView: View {
         colorScheme == .light ? .regularMaterial : .thinMaterial
     }
     
+    private var buttonTint: Color {
+        colorScheme == .light ? .white.opacity(0.1) : .black.opacity(0.2)
+    }
+    
     // MARK: - Инициализация
     
     init() {
@@ -292,7 +296,8 @@ struct TodayView: View {
             .padding(.vertical, 4)
             .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .buttonStyle(.glass)
+        .buttonStyle(.glassProminent)
+        .tint(buttonTint)
         .foregroundStyle(Color.primary)
     }
     
@@ -312,7 +317,8 @@ struct TodayView: View {
                 .padding(.vertical, 4)
                 .frame(maxWidth: .infinity)
         }
-        .buttonStyle(.glass)
+        .buttonStyle(.glassProminent)
+        .tint(buttonTint)
         .foregroundStyle(Color.primary)
     }
 

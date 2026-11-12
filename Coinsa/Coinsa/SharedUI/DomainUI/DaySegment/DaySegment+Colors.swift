@@ -8,37 +8,46 @@
 import SwiftUI
 
 extension DaySegment {
-    /// Набор цветов для представления части суток.
-    var colors: [Color] {
-        var relatedColor: Color
-        var topColor: Color
-        var bottomColor: Color
-        
+    /// Четырёхступенчатый градиент одного оттенка с настройкой насыщенности и яркости.
+    func gradient(for colorScheme: ColorScheme) -> Gradient {
+        let palette: (hue: Double, saturation: Double, brightness: Double)
+        let isDark = colorScheme == .dark
+
         switch self {
         case .night:
-            relatedColor = .indigo
-            topColor = .daySegmentNight2
-            bottomColor = .daySegmentNight1
+            palette = isDark ? (0.64, 0.64, 0.38) : (0.64, 0.44, 0.98)
+        case .dawn:
+            palette = isDark ? (0.85, 0.25, 0.31) : (0.86, 0.17, 0.86)
+        case .earlyMorning:
+            palette = isDark ? (0.09, 0.61, 0.38) : (0.09, 0.42, 0.98)
         case .morning:
-            relatedColor = .orange
-            topColor = .daySegmentMorning2
-            bottomColor = .daySegmentMorning1
+            palette = isDark ? (0.53, 0.49, 0.38) : (0.53, 0.34, 0.98)
         case .afternoon:
-            relatedColor = .blue
-            topColor = .daySegmentAfternoon2
-            bottomColor = .daySegmentAfternoon1
+            palette = isDark ? (0.57, 0.62, 0.38) : (0.57, 0.43, 0.98)
+        case .lateAfternoon:
+            palette = isDark ? (0.11, 0.37, 0.36) : (0.11, 0.25, 0.94)
         case .evening:
-            relatedColor = .red
-            topColor = .daySegmentEvening2
-            bottomColor = .daySegmentEvening1
+            palette = isDark ? (0.94, 0.48, 0.38) : (0.94, 0.33, 0.98)
+        case .lateEvening:
+            palette = isDark ? (0.72, 0.52, 0.36) : (0.72, 0.36, 0.94)
         }
-        
-        return [
-            relatedColor.mix(with: topColor, by: 0.8),
-            relatedColor.mix(with: topColor, by: 0.9),
-            topColor,
-            bottomColor,
-            .black.opacity(0.15)
+
+        let stages: [(location: Double, saturationFactor: Double, brightness: Double)] = [
+            (0.0, 1.0, isDark ? 0.5 : 1),
+            (0.1, isDark ? 0.8 : 0.85, isDark ? 0.48 : 0.99),
+            (0.5, isDark ? 0.3 : 0.44, isDark ? 0.28 : 0.94),
+            (1.0, isDark ? 0.1 : 0.15, isDark ? 0.10 : 0.92)
         ]
+
+        return Gradient(stops: stages.map { stage in
+            .init(
+                color: Color(
+                    hue: palette.hue,
+                    saturation: palette.saturation * stage.saturationFactor,
+                    brightness: stage.brightness
+                ),
+                location: stage.location
+            )
+        })
     }
 }

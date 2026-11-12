@@ -71,7 +71,7 @@ struct SettingsView: View {
             ) { currency in
                 currency.makeLabel()
             } currentValueLabel: { currency in
-                CurrencyCodeText(currency)
+                CurrencyCodeText.standard(currency)
             }
         } footer: {
             Text(.settingsHomeCurrencyHint)

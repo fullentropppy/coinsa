@@ -31,9 +31,13 @@ extension DaySegment {
     /// - Returns: Часть суток.
     static func from(hour: Int) -> DaySegment {
         switch hour {
-        case 6..<12: .morning
-        case 12..<18: .afternoon
-        case 18..<24: .evening
+        case 3..<6: .dawn
+        case 6..<9: .earlyMorning
+        case 9..<12: .morning
+        case 12..<15: .afternoon
+        case 15..<18: .lateAfternoon
+        case 18..<21: .evening
+        case 21..<24: .lateEvening
         default: .night
         }
     }

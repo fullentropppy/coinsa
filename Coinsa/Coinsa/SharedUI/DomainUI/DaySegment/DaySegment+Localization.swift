@@ -12,9 +12,13 @@ extension DaySegment {
     var localizedResource: LocalizedStringResource {
         switch self {
         case .night: .daySegmentNight
+        case .dawn: .daySegmentDawn
+        case .earlyMorning: .daySegmentEarlyMorning
         case .morning: .daySegmentMorning
         case .afternoon: .daySegmentAfternoon
+        case .lateAfternoon: .daySegmentLateAfternoon
         case .evening: .daySegmentEvening
+        case .lateEvening: .daySegmentLateEvening
         }
     }
 }

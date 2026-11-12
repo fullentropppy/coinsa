@@ -1441,6 +1441,40 @@
         }
       }
     },
+    "daySegment.dawn" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dawn"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Рассвет"
+          }
+        }
+      }
+    },
+    "daySegment.earlyMorning" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Early morning"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Раннее утро"
+          }
+        }
+      }
+    },
     "daySegment.evening" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1454,6 +1488,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Вечер"
+          }
+        }
+      }
+    },
+    "daySegment.lateAfternoon" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Late afternoon"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вторая половина дня"
+          }
+        }
+      }
+    },
+    "daySegment.lateEvening" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Late evening"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Поздний вечер"
           }
         }
       }

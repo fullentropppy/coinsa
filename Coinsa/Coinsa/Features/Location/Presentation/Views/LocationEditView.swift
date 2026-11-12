@@ -197,7 +197,7 @@ struct LocationEditView: View {
             ) { currency in
                 currency.makeLabel()
             } currentValueLabel: { currency in
-                CurrencyCodeText(currency)
+                CurrencyCodeText.standard(currency)
             }
         } footer: {
             Text(.locationCurrencyHint)

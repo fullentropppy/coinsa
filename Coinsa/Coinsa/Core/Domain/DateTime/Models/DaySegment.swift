@@ -8,7 +8,11 @@
 /// Часть суток.
 enum DaySegment: CaseIterable {
     case night
+    case dawn
+    case earlyMorning
     case morning
     case afternoon
+    case lateAfternoon
     case evening
+    case lateEvening
 }
