@@ -75,6 +75,6 @@ Commercial use, sale, redistribution, publication of modified versions, and publ
 
 The name **Coinsa** may not be used in derivative projects without written permission from the copyright holder.
 
-Full terms: [LICENSE](LICENSE.en.md) | [ЛИЦЕНЗИЯ](LICENSE.md)
+Full terms: [Licence](LICENSE.en.md)
 
 Copyright © 2026 Gritsenko Daniil. All rights reserved.

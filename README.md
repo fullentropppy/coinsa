@@ -74,6 +74,6 @@
 
 Название **Coinsa** также не может использоваться в производных проектах без письменного разрешения правообладателя.
 
-Полные условия: [ЛИЦЕНЗИЯ](LICENSE.md) | [LICENSE](LICENSE.en.md)
+Полные условия: [Лицензия](LICENSE.md)
 
 Copyright © 2026 Gritsenko Daniil. All rights reserved.
