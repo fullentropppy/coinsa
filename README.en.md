@@ -56,14 +56,16 @@
 - Convert amounts between currencies using up-to-date exchange rates
 
 ### Synchronization
-- **Automatic data synchronization through iCloud** — all app data is available across your Apple devices.
+- Automatic data synchronization through iCloud - all app data is available across your Apple devices.
 
 ## System Requirements
 Requires **iOS 26** or later.
 
 ## Privacy
 
-See the [Privacy Policy](https://fullentropppy.github.io/coinsa/privacy-en.html) for details on how the app handles data.
+Coinsa stores data on the device and syncs it through the user's private iCloud storage. The app does not use advertising or tracking technologies.
+
+More details: [Privacy Policy](https://fullentropppy.github.io/coinsa/privacy-en.html)
 
 ## License
 
