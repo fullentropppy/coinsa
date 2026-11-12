@@ -35,10 +35,6 @@ struct TodayView: View {
 
     // MARK: - Визуальный стиль
     
-    private var daySegmentColors: [Color] {
-        DaySegment.from(date: .now).colors
-    }
-    
     private var listRowBackgroundMaterial: Material {
         colorScheme == .light ? .regularMaterial : .thinMaterial
     }
@@ -88,8 +84,7 @@ struct TodayView: View {
 
     private var todayForm: some View {
         ZStack {
-            LinearGradient(colors: daySegmentColors, startPoint: .top, endPoint: .bottom)
-                .ignoresSafeArea()
+            DaySegmentBackground(daySegment: .from(date: .now))
             
             Group {
                 if let selectedLocation = viewModel.selectedLocation {

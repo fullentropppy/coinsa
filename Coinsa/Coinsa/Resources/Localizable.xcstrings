@@ -2489,7 +2489,7 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Курс обмена %(locationCurrencyCode)@"
           }
         }
@@ -3952,7 +3952,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Дом. валюта"
+            "value" : "Домашняя валюта"
           }
         }
       }
@@ -4479,7 +4479,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Дом. валюта"
+            "value" : "Домашняя валюта"
           }
         }
       }

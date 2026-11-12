@@ -28,10 +28,6 @@ struct ExpenseDetailView: View {
         ExpenseDetailViewModel(expense: expense)
     }
 
-    private var formBackgroundVisibility: Visibility {
-        viewModel.coordinate == nil ? .visible : .hidden
-    }
-    
     private func formBackgroundGradient(in geometry: GeometryProxy) -> LinearGradient {
         let lastStopLocation = min(
             max((contentBottom - geometry.frame(in: .global).minY) / max(geometry.size.height, 1), 0), 1
@@ -50,11 +46,7 @@ struct ExpenseDetailView: View {
     }
     
     private var listRowBackgroundMaterial: Material {
-        if viewModel.coordinate == nil {
-            .bar
-        } else {
-            colorScheme == .light ? .regularMaterial : .thinMaterial
-        }
+        colorScheme == .light ? .regularMaterial : .thinMaterial
     }
         
     private var mapCameraPosition: MapCameraPosition? {
@@ -116,11 +108,13 @@ struct ExpenseDetailView: View {
                     mainSection
                     commentSection
                 }
-                .scrollContentBackground(formBackgroundVisibility)
+                .scrollContentBackground(.hidden)
             }
         }
         .onTapGesture {
-            isShowingMap = true
+            if viewModel.coordinate != nil {
+                isShowingMap = true
+            }
         }
     }
     
@@ -176,6 +170,8 @@ struct ExpenseDetailView: View {
                     }
                 }
                 .ignoresSafeArea()
+        } else {
+            DaySegmentBackground(daySegment: .from(civilDateTime: expense.civilDateTime))
         }
     }
 
@@ -183,7 +179,7 @@ struct ExpenseDetailView: View {
         RoundedRectangle(cornerRadius: 0)
             .fill(listRowBackgroundMaterial)
             .onGeometryChange(for: CGFloat?.self) { geometry in
-                isLast ? geometry.frame(in: .global).maxY : nil
+                isLast && viewModel.coordinate != nil ? geometry.frame(in: .global).maxY : nil
             } action: { bottom in
                 if let bottom {
                     contentBottom = bottom
