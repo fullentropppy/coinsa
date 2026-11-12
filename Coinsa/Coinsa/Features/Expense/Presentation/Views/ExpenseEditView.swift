@@ -29,6 +29,7 @@ struct ExpenseEditView: View {
     @State private var validationNotice: FormValidationNotice?
     
     @FocusState private var focusedField: NumericEditField?
+    @FocusState private var isCommentFocused: Bool
     
     // MARK: - Зависимости
     
@@ -93,6 +94,10 @@ struct ExpenseEditView: View {
                 }
                 .interactiveDismissDisabled(true)
                 .scrollDismissesKeyboard(.interactively)
+                .keyboardDismissButton(
+                    isPresented: focusedField != nil || isCommentFocused,
+                    onDismiss: dismissKeyboard
+                )
                 .formValidationBanner($validationNotice)
                 .notificationAlert(
                     isPresented: rateErrorBinding,
@@ -362,6 +367,7 @@ struct ExpenseEditView: View {
                 
                 TextField(.expenseComment, text: $viewModel.comment, axis: .vertical)
                     .lineLimit(1...10)
+                    .focused($isCommentFocused)
             }
         } footer: {
             if !viewModel.comment.isEmpty {
@@ -515,8 +521,14 @@ struct ExpenseEditView: View {
         }
     }
     
-    private func handleSave() {
+    private func dismissKeyboard() {
+        haptics.trigger(.tap)
         focusedField = nil
+        isCommentFocused = false
+    }
+
+    private func handleSave() {
+        dismissKeyboard()
 
         if let validationMessage = viewModel.validationMessage {
             validationNotice = FormValidationNotice(message: validationMessage)

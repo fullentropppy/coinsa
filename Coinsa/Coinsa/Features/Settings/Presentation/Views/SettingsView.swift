@@ -17,6 +17,7 @@ struct SettingsView: View {
 #endif
     
     @Environment(AppSettingsStore.self) private var settingsStore
+    @Environment(\.haptics) private var haptics
     
     // MARK: - Состояние
     
@@ -38,6 +39,10 @@ struct SettingsView: View {
                 .navigationTitle(.settingsNavigationTitle)
                 .navigationBarTitleDisplayMode(.large)
                 .scrollDismissesKeyboard(.interactively)
+                .keyboardDismissButton(isPresented: focusedField == .exchangeAdjustment) {
+                    haptics.trigger(.tap)
+                    focusedField = nil
+                }
         }
     }
 

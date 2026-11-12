@@ -13,6 +13,7 @@ struct TripEditView: View {
     // MARK: - Окружение
     
     @Environment(\.modelContext) private var context
+    @Environment(\.haptics) private var haptics
     @Environment(\.dismiss) private var dismiss
     
     // MARK: - Состояние
@@ -21,6 +22,8 @@ struct TripEditView: View {
     @State private var deletionHandler = DeletionHandler<Trip>()
     @State private var isShowingDiscardAlert = false
     @State private var validationNotice: FormValidationNotice?
+
+    @FocusState private var isNameFocused: Bool
     
     // MARK: - Зависимости
     
@@ -62,6 +65,10 @@ struct TripEditView: View {
                 }
                 .interactiveDismissDisabled(true)
                 .scrollDismissesKeyboard(.interactively)
+                .keyboardDismissButton(isPresented: isNameFocused) {
+                    haptics.trigger(.tap)
+                    isNameFocused = false
+                }
                 .formValidationBanner($validationNotice)
                 .discardConfirmationAlert(
                     isPresented: $isShowingDiscardAlert,
@@ -95,6 +102,7 @@ struct TripEditView: View {
             TextField(.tripNamePlaceholder, text: $viewModel.name)
                 .multilineTextAlignment(.center)
                 .font(.largeTitle)
+                .focused($isNameFocused)
         }
         .listRowBackground(Color.clear)
     }
@@ -197,6 +205,8 @@ struct TripEditView: View {
     // MARK: - Действия
     
     private func handleSave() {
+        isNameFocused = false
+
         if let validationMessage = viewModel.validationMessage {
             validationNotice = FormValidationNotice(message: validationMessage)
             return
@@ -236,8 +246,10 @@ struct TripEditView: View {
 
 #Preview("Editing") {
     TripEditView(forEdit: PreviewGenerator.makeExampleTrip())
+        .environment(AppSettingsStore())
 }
 
 #Preview("Creating") {
     TripEditView(forCreateWith: .defaultValue)
+        .environment(AppSettingsStore())
 }

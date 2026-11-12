@@ -13,6 +13,7 @@ struct LocationEditView: View {
     // MARK: - Окружение
     
     @Environment(\.modelContext) private var context
+    @Environment(\.haptics) private var haptics
     @Environment(\.dismiss) private var dismiss
 
     // MARK: - Состояние
@@ -23,6 +24,7 @@ struct LocationEditView: View {
     @State private var isShowingDiscardAlert = false
     @State private var validationNotice: FormValidationNotice?
     @FocusState private var focusedField: NumericEditField?
+    @FocusState private var isNameFocused: Bool
     
     // MARK: - Зависимости
     
@@ -88,6 +90,10 @@ struct LocationEditView: View {
                 }
                 .interactiveDismissDisabled(true)
                 .scrollDismissesKeyboard(.interactively)
+                .keyboardDismissButton(
+                    isPresented: focusedField != nil || isNameFocused,
+                    onDismiss: dismissKeyboard
+                )
                 .formValidationBanner($validationNotice)
                 .notificationAlert(
                     isPresented: rateErrorBinding,
@@ -136,6 +142,7 @@ struct LocationEditView: View {
             TextField(.locationNamePlaceholder, text: $viewModel.name)
                 .multilineTextAlignment(.center)
                 .font(.largeTitle)
+                .focused($isNameFocused)
         }
         .listRowBackground(Color.clear)
     }
@@ -339,8 +346,14 @@ struct LocationEditView: View {
         }
     }
     
-    private func handleSave() {
+    private func dismissKeyboard() {
+        haptics.trigger(.tap)
         focusedField = nil
+        isNameFocused = false
+    }
+
+    private func handleSave() {
+        dismissKeyboard()
 
         if let validationMessage = viewModel.validationMessage {
             validationNotice = FormValidationNotice(message: validationMessage)
@@ -382,8 +395,10 @@ struct LocationEditView: View {
 
 #Preview("Editing") {
     LocationEditView(forEdit: PreviewGenerator.makeExampleLocation())
+        .environment(AppSettingsStore())
 }
 
 #Preview("Creating") {
     LocationEditView(forCreateWith: PreviewGenerator.makeExampleTrip())
+        .environment(AppSettingsStore())
 }
