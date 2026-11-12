@@ -72,26 +72,6 @@ struct ExpenseDetailViewModel {
         expense.coordinate?.coreLocationCoordinate
     }
     
-    var cameraCoreCoordinate: CLLocationCoordinate2D? {
-        guard let coordinate else { return nil }
-        
-        var shift: Double
-        
-        if !isExpenseHomeCurrency && expense.comment != nil {
-            shift = 0.013
-        } else if isExpenseHomeCurrency && expense.comment != nil
-                    || !isExpenseHomeCurrency && expense.comment == nil {
-            shift = 0.010
-        } else {
-            shift = 0.008
-        }
-        
-        return CLLocationCoordinate2D(
-            latitude: coordinate.latitude + shift,
-            longitude: coordinate.longitude
-        )
-    }
-    
     // MARK: - Вычисляемые свойства. Курс обмена
     
     var exchangeRateDescription: LocalizedStringResource? {

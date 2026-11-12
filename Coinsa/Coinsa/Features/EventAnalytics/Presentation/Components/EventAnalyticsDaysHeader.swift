@@ -25,7 +25,7 @@ struct EventAnalyticsDaysHeader: View {
     
     var body: some View {
         VStack(spacing: 14) {
-            HStack {
+            HStack(spacing: 8) {
                 EventAmountCardView(
                     title: .amountExpensesDailyMax,
                     homeAmount: viewModel.maxDailyBaseExpenseAmount,

@@ -523,6 +523,23 @@
         }
       }
     },
+    "clear" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clear"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Очистить"
+          }
+        }
+      }
+    },
     "confirmation" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2253,23 +2270,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Выбрать"
-          }
-        }
-      }
-    },
-    "expense.coordinate.clear" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Clear"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Очистить"
           }
         }
       }

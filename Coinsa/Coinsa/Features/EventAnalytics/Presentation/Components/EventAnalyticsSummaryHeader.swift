@@ -44,7 +44,7 @@ struct EventAnalyticsSummaryHeader: View {
     @ViewBuilder
     private var budgetContent: some View {
         if hasBudget {
-            HStack {
+            HStack(spacing: 8) {
                 EventAmountCardView(
                     title: .amountBudget,
                     homeAmount: viewModel.eventSummaryData.budgetHomeAmount,
@@ -66,7 +66,7 @@ struct EventAnalyticsSummaryHeader: View {
     }
     
     private var expensesContent: some View {
-        HStack {
+        HStack(spacing: 8) {
             EventAmountCardView(
                 title: .amountExpenses,
                 homeAmount: viewModel.eventSummaryData.expensesHomeAmount,

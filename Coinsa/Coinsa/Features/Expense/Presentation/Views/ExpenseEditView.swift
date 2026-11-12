@@ -347,7 +347,7 @@ struct ExpenseEditView: View {
                         HStack(spacing: 2) {
                             Image(systemName: "xmark.circle.fill")
                                 .imageScale(.small)
-                            Text(.expenseCoordinateClear)
+                            Text(.clear)
                                 .font(.footnote)
                         }
                     }

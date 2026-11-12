@@ -18,7 +18,7 @@ struct ExpenseDetailView: View {
     
     @State private var isShowingExpenseEdit = false
     @State private var isShowingMap = false
-    @State private var mapMarkerPosition: MapCameraPosition
+    @State private var contentBottom: CGFloat = 0
     
     private let expense: Expense
         
@@ -32,22 +32,16 @@ struct ExpenseDetailView: View {
         viewModel.coordinate == nil ? .visible : .hidden
     }
     
-    private var formBackgroundGradient: LinearGradient {
-        var lastStopLocation = 0.65
-        
-        if viewModel.isExpenseHomeCurrency {
-            lastStopLocation -= 0.1
-        }
-        
-        if expense.comment == nil {
-            lastStopLocation -= 0.1
-        }
+    private func formBackgroundGradient(in geometry: GeometryProxy) -> LinearGradient {
+        let lastStopLocation = min(
+            max((contentBottom - geometry.frame(in: .global).minY) / max(geometry.size.height, 1), 0), 1
+        )
 
         return LinearGradient(
             stops:
                 [
                     .init(color: .black, location: 0),
-                    .init(color: .black, location: lastStopLocation - 0.15),
+                    .init(color: .black, location: max(lastStopLocation - 0.1, 0)),
                     .init(color: .clear, location: lastStopLocation)
                 ],
             startPoint: .top,
@@ -64,7 +58,7 @@ struct ExpenseDetailView: View {
     }
         
     private var mapCameraPosition: MapCameraPosition? {
-        if let cameraCoordinate = viewModel.cameraCoreCoordinate {
+        if let cameraCoordinate = viewModel.coordinate {
             .camera(MapCamera(centerCoordinate: cameraCoordinate, distance: 10000))
         } else {
             nil
@@ -75,7 +69,6 @@ struct ExpenseDetailView: View {
 
     init(_ expense: Expense) {
         self.expense = expense
-        self.mapMarkerPosition = .automatic
     }
     
     // MARK: - Тело View
@@ -110,14 +103,21 @@ struct ExpenseDetailView: View {
     // MARK: - Основной контент
     
     private var expenseDetailForm: some View {
-        ZStack {
-            backgroundContent
-            
-            Form {
-                mainSection
-                commentSection
+        GeometryReader { geometry in
+            ZStack {
+                backgroundContent(
+                    topInset: min(
+                        max(contentBottom - geometry.frame(in: .global).minY, 0),
+                        geometry.size.height
+                    )
+                )
+
+                Form {
+                    mainSection
+                    commentSection
+                }
+                .scrollContentBackground(formBackgroundVisibility)
             }
-            .scrollContentBackground(formBackgroundVisibility)
         }
         .onTapGesture {
             isShowingMap = true
@@ -135,7 +135,7 @@ struct ExpenseDetailView: View {
             }
         }
         .listRowBackground(
-            RoundedRectangle(cornerRadius: 0).fill(listRowBackgroundMaterial)
+            sectionBackground(isLast: expense.comment == nil)
         )
     }
     
@@ -153,7 +153,7 @@ struct ExpenseDetailView: View {
                 }
             }
             .listRowBackground(
-                RoundedRectangle(cornerRadius: 0).fill(listRowBackgroundMaterial)
+                sectionBackground(isLast: true)
             )
         }
     }
@@ -161,23 +161,34 @@ struct ExpenseDetailView: View {
     // MARK: - Компоненты
     
     @ViewBuilder
-    private var backgroundContent: some View {
+    private func backgroundContent(topInset: CGFloat) -> some View {
         if let coordinate = viewModel.coordinate, let mapCameraPosition {
-            Map(position: $mapMarkerPosition) {
+            Map(position: .constant(mapCameraPosition)) {
                 Marker("", coordinate: coordinate)
             }
-            .onAppear {
-                mapMarkerPosition = mapCameraPosition
-            }
-            .ignoresSafeArea()
+            .safeAreaPadding(.top, topInset)
 
             Rectangle()
                 .fill(.ultraThinMaterial)
                 .mask {
-                    formBackgroundGradient
+                    GeometryReader { geometry in
+                        formBackgroundGradient(in: geometry)
+                    }
                 }
                 .ignoresSafeArea()
         }
+    }
+
+    private func sectionBackground(isLast: Bool) -> some View {
+        RoundedRectangle(cornerRadius: 0)
+            .fill(listRowBackgroundMaterial)
+            .onGeometryChange(for: CGFloat?.self) { geometry in
+                isLast ? geometry.frame(in: .global).maxY : nil
+            } action: { bottom in
+                if let bottom {
+                    contentBottom = bottom
+                }
+            }
     }
     
     private var headerContent: some View {
