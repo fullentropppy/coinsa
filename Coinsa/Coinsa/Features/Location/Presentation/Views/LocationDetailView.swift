@@ -182,10 +182,9 @@ struct LocationDetailView: View {
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
         ToolbarItemGroup(placement: .topBarTrailing) {
-            Menu {
-                ToolbarButton.edit(showsTitle: true) {
-                    isShowingLocationEdit = true
-                }
+            DetailActionsMenu(title: .locationActions, onEdit: {
+                isShowingLocationEdit = true
+            }) {
                 Button {
                     haptics.trigger(.tap)
                     transferSuccessMessage = nil
@@ -194,8 +193,6 @@ struct LocationDetailView: View {
                     Label(.locationBudgetTransferAction, systemImage: "arrow.forward.to.line")
                 }
                 .disabled(!LocationBudgetTransferViewModel.canTransfer(from: location))
-            } label: {
-                Label(.locationActions, systemImage: "ellipsis")
             }
         }
     }

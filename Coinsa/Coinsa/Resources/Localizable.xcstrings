@@ -2081,6 +2081,23 @@
         }
       }
     },
+    "expense.actions" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Expense actions"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Действия с тратой"
+          }
+        }
+      }
+    },
     "expense.actualExchangeRate" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -4859,6 +4876,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Всего: %(number)@"
+          }
+        }
+      }
+    },
+    "trip.actions" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trip actions"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Действия с поездкой"
           }
         }
       }

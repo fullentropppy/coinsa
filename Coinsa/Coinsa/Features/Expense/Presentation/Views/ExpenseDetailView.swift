@@ -270,9 +270,9 @@ struct ExpenseDetailView: View {
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
         ToolbarItemGroup(placement: .topBarTrailing) {
-            ToolbarButton.edit {
+            DetailActionsMenu(title: .expenseActions, onEdit: {
                 isShowingExpenseEdit = true
-            }
+            })
         }
     }
     

@@ -170,9 +170,9 @@ struct TripDetailView: View {
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
         ToolbarItemGroup(placement: .topBarTrailing) {
-            ToolbarButton.edit {
+            DetailActionsMenu(title: .tripActions, onEdit: {
                 isShowingTripEdit = true
-            }
+            })
         }
     }
 
