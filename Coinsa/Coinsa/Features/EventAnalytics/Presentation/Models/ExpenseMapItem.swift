@@ -1,6 +1,8 @@
 //
-//  ExpenseMapItem.swift
+//  ExpenseMapItem+Coordinator.swift
 //  Coinsa
+//
+//  Created by Daniil Gritsenko on 13.11.2026.
 //
 
 import MapKit
@@ -28,7 +30,7 @@ struct ExpenseMapItem: Identifiable, Equatable {
             return ExpenseMapItem(
                 id: expense.id,
                 coordinate: coordinate,
-                icon: expense.subcategory.primaryIcon,
+                icon: expense.subcategory.secondaryIcon,
                 color: expense.subcategory.accentColor
             )
         }

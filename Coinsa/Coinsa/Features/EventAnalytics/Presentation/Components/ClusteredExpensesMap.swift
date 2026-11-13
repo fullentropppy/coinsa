@@ -2,7 +2,7 @@
 //  ClusteredExpensesMap.swift
 //  Coinsa
 //
-//  Created by Daniil Gritsenko on 24.04.2026.
+//  Created by Daniil Gritsenko on 13.11.2026.
 //
 
 import MapKit
@@ -11,6 +11,7 @@ import SwiftUI
 /// Карта трат с системной кластеризацией пересекающихся меток.
 struct ClusteredExpensesMap: UIViewRepresentable {
     let items: [ExpenseMapItem]
+    let contentInsets: EdgeInsets
     let fitRequest: Int
     let cameraState: ExpenseMapCameraState
     let onSelectExpense: (UUID) -> Void
@@ -23,9 +24,11 @@ struct ClusteredExpensesMap: UIViewRepresentable {
     func makeUIView(context: Context) -> ExpensesMKMapView {
         let map = ExpensesMKMapView()
         map.delegate = context.coordinator
+        map.showsScale = true
+        map.insetsLayoutMarginsFromSafeArea = false
         map.pointOfInterestFilter = .excludingAll
         map.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: "expense")
-        map.register(ExpenseClusterAnnotationView.self, forAnnotationViewWithReuseIdentifier: "cluster")
+        map.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: "cluster")
         map.onLayout = { [weak coordinator = context.coordinator] map in
             coordinator?.fitIfNeeded(on: map)
         }
@@ -38,6 +41,12 @@ struct ClusteredExpensesMap: UIViewRepresentable {
     }
 
     func updateUIView(_ map: ExpensesMKMapView, context: Context) {
+        map.layoutMargins = UIEdgeInsets(
+            top: contentInsets.top + MapLayout.controlsInset,
+            left: contentInsets.leading + MapLayout.controlsInset,
+            bottom: contentInsets.bottom + MapLayout.controlsInset,
+            right: contentInsets.trailing + MapLayout.controlsInset
+        )
         context.coordinator.update(self, on: map)
     }
 

@@ -2,6 +2,8 @@
 //  EventExpensesMapView.swift
 //  Coinsa
 //
+//  Created by Daniil Gritsenko on 13.11.2026.
+//
 
 import SwiftData
 import SwiftUI
@@ -77,26 +79,29 @@ struct EventExpensesMapView: View {
     // MARK: - Компоненты
 
     private var mapContent: some View {
-        ClusteredExpensesMap(
-            items: items,
-            fitRequest: fitRequest,
-            cameraState: cameraState,
-            onSelectExpense: { id in
-                guard availableExpense(with: id) != nil else { return }
-                selectedExpenseID = id
-            },
-            onSelectGroup: { ids in
-                selectedGroup = ExpenseMapGroup(expenseIDs: ids)
-            }
-        )
-        .ignoresSafeArea()
+        GeometryReader { geometry in
+            ClusteredExpensesMap(
+                items: items,
+                contentInsets: geometry.safeAreaInsets,
+                fitRequest: fitRequest,
+                cameraState: cameraState,
+                onSelectExpense: { id in
+                    guard availableExpense(with: id) != nil else { return }
+                    selectedExpenseID = id
+                },
+                onSelectGroup: { ids in
+                    selectedGroup = ExpenseMapGroup(expenseIDs: ids)
+                }
+            )
+            .ignoresSafeArea()
+        }
         .overlay {
             if items.isEmpty {
                 EmptyStateView(icon: "map", title: .analyticsExpensePlacesEmptyState)
                     .background(.regularMaterial)
             }
         }
-        .safeAreaInset(edge: .bottom) {
+        .safeAreaInset(edge: .bottom, spacing: 0) {
             mapBottomBar
         }
     }
@@ -113,7 +118,7 @@ struct EventExpensesMapView: View {
                 Image(systemName: "scope")
             }
             .disabled(items.isEmpty)
-            .padding(16)
+            .padding(MapLayout.buttonPadding)
             .contentShape(Circle())
             .glassEffect(.regular.interactive(), in: .circle)
 
@@ -121,8 +126,8 @@ struct EventExpensesMapView: View {
                 Spacer()
             }
         }
-        .padding(.horizontal, 16)
-        .padding(.bottom, 16)
+        .padding(.horizontal, MapLayout.bottomBarInset)
+        .padding(.bottom, MapLayout.bottomBarInset)
     }
 
     // MARK: - Вспомогательные методы

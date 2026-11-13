@@ -2,7 +2,7 @@
 //  ClusteredExpensesMap+Coordinator.swift
 //  Coinsa
 //
-//  Created by Daniil Gritsenko on 24.04.2026.
+//  Created by Daniil Gritsenko on 13.11.2026.
 //
 
 import MapKit
@@ -62,8 +62,15 @@ extension ClusteredExpensesMap {
         }
 
         func mapView(_ mapView: MKMapView, viewFor annotation: any MKAnnotation) -> MKAnnotationView? {
-            if annotation is MKClusterAnnotation {
-                return mapView.dequeueReusableAnnotationView(withIdentifier: "cluster", for: annotation)
+            if let cluster = annotation as? MKClusterAnnotation {
+                guard let view = mapView.dequeueReusableAnnotationView(withIdentifier: "cluster", for: annotation) as? MKMarkerAnnotationView else {
+                    return nil
+                }
+
+                view.subtitleVisibility = .hidden
+                view.glyphText = String(cluster.memberAnnotations.count)
+
+                return view
             }
 
             guard let expense = annotation as? ExpenseMapAnnotation,
@@ -73,12 +80,8 @@ extension ClusteredExpensesMap {
 
             view.clusteringIdentifier = "expenses"
             view.markerTintColor = UIColor(expense.item.color)
-            view.glyphTintColor = .white
             view.glyphImage = UIImage(systemName: expense.item.icon)
-            view.titleVisibility = .hidden
-            view.subtitleVisibility = .hidden
-            view.canShowCallout = false
-            view.displayPriority = .defaultHigh
+            view.glyphTintColor = .systemBackground
             
             return view
         }
@@ -103,10 +106,10 @@ extension ClusteredExpensesMap {
 
         private func edgePadding(on map: MKMapView) -> UIEdgeInsets {
             UIEdgeInsets(
-                top: map.safeAreaInsets.top + 60,
-                left: map.safeAreaInsets.left + 44,
-                bottom: map.safeAreaInsets.bottom + 24,
-                right: map.safeAreaInsets.right + 44
+                top: map.layoutMargins.top,
+                left: map.layoutMargins.left,
+                bottom: map.layoutMargins.bottom,
+                right: map.layoutMargins.right
             )
         }
     }

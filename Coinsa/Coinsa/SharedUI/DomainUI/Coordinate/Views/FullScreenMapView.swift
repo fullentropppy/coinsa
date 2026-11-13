@@ -98,8 +98,7 @@ struct FullScreenMapView: View {
                     message: errorMessage ?? .errorUnknown,
                     isError: true
                 )
-                .ignoresSafeArea()
-                .safeAreaInset(edge: .bottom) {
+                .safeAreaInset(edge: .bottom, spacing: 0) {
                     mapBottomBar
                 }
         }
@@ -113,6 +112,7 @@ struct FullScreenMapView: View {
                 Marker(String(localized: markerTitle), coordinate: draftCoordinate.coreLocationCoordinate)
             }
         }
+        .safeAreaPadding(MapLayout.controlsInset)
         .onMapCameraChange(frequency: .continuous) { context in
             if isEditable {
                 draftCoordinate = Coordinate(context.camera.centerCoordinate, horizontalAccuracy: nil)
@@ -140,7 +140,7 @@ struct FullScreenMapView: View {
                     }
                 }
                 .disabled(isGeolocating)
-                .padding(16)
+                .padding(MapLayout.buttonPadding)
                 .contentShape(Circle())
                 .glassEffect(.regular.interactive(), in: .circle)
             } else {
@@ -150,7 +150,7 @@ struct FullScreenMapView: View {
                     Image(systemName: "scope")
                 }
                 .disabled(draftCoordinate == nil)
-                .padding(16)
+                .padding(MapLayout.buttonPadding)
                 .contentShape(Circle())
                 .glassEffect(.regular.interactive(), in: .circle)
             }
@@ -159,8 +159,8 @@ struct FullScreenMapView: View {
                 Spacer()
             }
         }
-        .padding(.horizontal, 16)
-        .padding(.bottom, 16)
+        .padding(.horizontal, MapLayout.bottomBarInset)
+        .padding(.bottom, MapLayout.bottomBarInset)
     }
     
     // MARK: - Тулбар
