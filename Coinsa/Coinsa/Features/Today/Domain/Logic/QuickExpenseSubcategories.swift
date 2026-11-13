@@ -2,7 +2,7 @@
 //  QuickExpenseSubcategories.swift
 //  Coinsa
 //
-//  Created by Daniil Gritsenko on 12.04.2026.
+//  Created by Daniil Gritsenko on 12.11.2026.
 //
 
 /// Подбор быстрых подкатегорий по количеству трат в локации.
