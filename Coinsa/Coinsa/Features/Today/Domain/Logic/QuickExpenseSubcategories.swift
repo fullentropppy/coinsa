@@ -7,11 +7,21 @@
 
 /// Подбор быстрых подкатегорий по количеству трат в локации.
 enum QuickExpenseSubcategories {
+    /// Подбирает быстрые подкатегории по истории трат локации.
+    /// - Parameter subcategories: Подкатегории всех трат; каждое вхождение учитывается в частоте.
+    /// - Returns: Три подкатегории по частоте использования с дополнением стандартными вариантами.
     static func select(from subcategories: [ExpenseSubcategory]) -> [ExpenseSubcategory] {
-        let defaults: [ExpenseSubcategory] = [.snack, .publicTransport, .entertainment]
         let counts = subcategories.reduce(into: [ExpenseSubcategory: Int]()) {
             $0[$1, default: 0] += 1
         }
+        return select(from: counts)
+    }
+
+    /// Подбирает быстрые подкатегории по уже подсчитанным частотам без повторного обхода истории.
+    /// - Parameter counts: Количество трат каждой подкатегории; отсутствующие и неположительные значения не участвуют в рейтинге.
+    /// - Returns: Три подкатегории; равные частоты разрешаются порядком `allCases`, свободные места дополняются стандартными вариантами.
+    static func select(from counts: [ExpenseSubcategory: Int]) -> [ExpenseSubcategory] {
+        let defaults: [ExpenseSubcategory] = [.snack, .publicTransport, .entertainment]
 
         let ranked = ExpenseSubcategory.allCases.enumerated()
             .filter { counts[$0.element, default: 0] > 0 }

@@ -7,210 +7,88 @@
 
 import Foundation
 
-/// ViewModel для экрана "Сегодня".
+/// ViewModel для выбора локации и загрузки справочного курса экрана «Сегодня».
 @MainActor
 @Observable
 final class TodayViewModel {
     // MARK: - Зависимости
-    
-    private let exchangeRateManager: ExchangeRateManager
-    private var selectedLocationID: UUID?
-    
-    var currentLocations: [Location]
-    
-    // MARK: - Состояние UI. Общее поведение и оформление
-    
-    var today: Date {
-        CivilDateTime.now.storedDate
+
+    private let exchangeRateProvider: ExchangeRateProvider
+
+    // MARK: - Состояние
+
+    private var loadedRate: (key: TodayRateRefreshKey, value: Double)?
+    private var activeRequestID: UUID?
+
+    // MARK: - Инициализация
+
+    /// Создает состояние выбора локации и загрузки справочного курса.
+    /// - Parameter exchangeRateProvider: Провайдер курсов; при `nil` создается провайдер с сервисом Hexarate.
+    init(exchangeRateProvider: ExchangeRateProvider? = nil) {
+        self.exchangeRateProvider = exchangeRateProvider ?? ExchangeRateProvider(service: HexarateService())
     }
-    
-    var todayRange: ClosedRange<Date> {
-        today.startOfDay(using: .utc)...today.endOfDay(using: .utc)
+
+    // MARK: - Выбор локации
+
+    func selectedLocation(in locations: [Location], preferredID: UUID?) -> Location? {
+        locations.first(where: { $0.id == preferredID }) ?? locations.first
     }
-    
-    var hasMultipleLocations: Bool {
-        currentLocations.count > 1
-    }
-    
-    var selectedLocation: Location? {
-        if let selectedLocationID,
-           let location = currentLocations.first(where: { $0.id == selectedLocationID }) {
-            location
-        } else {
-            currentLocations.first
-        }
-    }
-    
-    var isHomeLocation: Bool {
-        if let selectedLocation {
-            selectedLocation.homeCurrency == selectedLocation.locationCurrency
-        } else {
-            false
-        }
-    }
-    
-    var navigationTitle: String {
-        if let selectedLocation, !hasMultipleLocations {
-            selectedLocation.name
+
+    func navigationTitle(for location: Location?, locationsCount: Int) -> String {
+        if let location, locationsCount == 1 {
+            location.name
         } else {
             String(localized: .today)
         }
     }
-    
-    var navigationSubtitle: String {
-        DateDisplayFormatter.format(.now, showsTime: false, showsWeekday: true).capitalized
-    }
-    
-    // MARK: - Состояние UI. Курс обмена
-    
-    private var loadedRateLocationToHome: Double?
-    
-    var rateLocationToHome: Double {
-        if let loadedRateLocationToHome {
-            return loadedRateLocationToHome
-        } else if let selectedLocation {
-            return selectedLocation.rateLocationToHome
-        } else {
-            return 1
-        }
-    }
-    
-    var rateHomeToLocation: Double {
-        rateLocationToHome > 0 ? (1 / rateLocationToHome) : 0
-    }
-    
-    var rateRefreshKey: Date {
-        selectedLocation?.updatedAt ?? .now
-    }
-    
-    // MARK: - Состояние UI. Расходы за сегодня
-    
-    var hasTodayExpenses: Bool {
-        !todayExpenses.isEmpty
-    }
-    
-    var todayExpenses: [Expense] {
-        guard let selectedLocation else { return [] }
-        
-        return selectedLocation.expenses?
-            .filter { todayRange.contains($0.civilDateTime.storedDate) }
-            .sorted { $0.civilDateTime > $1.civilDateTime }
-        ?? []
-    }
-    
-    // MARK: - Состояние UI. Быстрые траты
 
-    var quickExpenseSubcategories: [ExpenseSubcategory] {
-        QuickExpenseSubcategories.select(from: selectedLocation?.expenses?.map(\.subcategory) ?? [])
-    }
-
-    // MARK: - Инициализация
-    
-    /// Создает ViewModel для экрана "Сегодня".
-    /// - Parameters:
-    ///   - currentLocations: Доступные на сегодня локации.
-    ///   - selectedLocationID: Идентификатор выбранной локации (из настроек).
-    init(currentLocations: [Location], selectedLocationID: UUID?) {
-        let exchangeRateService = ExchangeRateProvider(service: HexarateService())
-        let exchangeRateManager = ExchangeRateManager(provider: exchangeRateService)
-        
-        self.exchangeRateManager = exchangeRateManager
-        self.currentLocations = currentLocations
-        self.selectedLocationID = selectedLocationID
-        self.loadedRateLocationToHome = nil
-    }
-    
     // MARK: - Курс обмена
-    
-    func loadInitialRateIfNeeded() {
-        guard let selectedLocation else { return }
-        
-        loadedRateLocationToHome = nil
-        
-        guard !isHomeLocation else { return }
-        
-        exchangeRateManager.requestRefresh(
-            from: selectedLocation.locationCurrency,
-            to: selectedLocation.homeCurrency
-        ) { [weak self] rate in
-            self?.loadedRateLocationToHome = rate
-        }
-    }
-    
-    // MARK: - Вспомогательные методы
-    
-    func updateContext(currentLocations: [Location], selectedLocationID: UUID?) {
-        self.currentLocations = currentLocations
-        self.selectedLocationID = selectedLocationID
-    }
-    
-    func validSelectedLocationID(from selectedLocationID: UUID?) -> UUID? {
-        guard !currentLocations.isEmpty else { return nil }
-        
-        if let selectedLocationID,
-           currentLocations.contains(where: { $0.id == selectedLocationID }) {
-            return selectedLocationID
-        }
-        
-        return currentLocations.first?.id
-    }
-    
-    func eventSummaryData(
-        for location: Location,
-        showsLocationBudgetOnOverspend: Bool,
-        overspendThreshold: Double
-    ) -> EventSummaryData {
-        var budgetHomeAmount = location.calculateBudgetAmountForToday()
-        let expensesHomeAmount = location.calculateExpensesAmount(withinDateRange: todayRange)
-        
-        var budgetLocationAmount: Double?
-        let expensesLocationAmount = isHomeLocation ? nil : location.calculateExpensesAmount(
-            in: .location,
-            withinDateRange: todayRange
-        )
-        // Карточка расходов всегда относится к сегодняшнему дню; остаток может относиться ко всей локации.
-        var balanceExpensesHomeAmount = expensesHomeAmount
-        var balanceExpensesLocationAmount = expensesLocationAmount
 
-        let switchLimit = max(0, budgetHomeAmount) * (1 + overspendThreshold / 100)
-        let comparisonTolerance = max(expensesHomeAmount.ulp, switchLimit.ulp) * 8
-        let showsLocationBudget = showsLocationBudgetOnOverspend
-            && location.hasBudget
-            && budgetHomeAmount.isFinite
-            && expensesHomeAmount.isFinite
-            && overspendThreshold.isFinite
-            && (0...100).contains(overspendThreshold)
-            && switchLimit.isFinite
-            && expensesHomeAmount - switchLimit > comparisonTolerance
-
-        if showsLocationBudget {
-            budgetHomeAmount = location.budget
-            budgetLocationAmount = isHomeLocation ? nil : location.calculateBudgetAmount(in: .location)
-            balanceExpensesHomeAmount = location.calculateExpensesAmount(in: .home)
-            balanceExpensesLocationAmount = isHomeLocation ? nil : location.calculateExpensesAmount(in: .location)
+    func rateLocationToHome(for location: Location, key: TodayRateRefreshKey) -> Double {
+        if let loadedRate, loadedRate.key == key {
+            loadedRate.value
         } else {
-            budgetLocationAmount = isHomeLocation ? nil : location.calculateBudgetAmountForToday(in: .location)
+            location.rateLocationToHome
         }
-        
-        let locationAmountBalance: Double?
-        if let budgetLocationAmount, let balanceExpensesLocationAmount {
-            locationAmountBalance = budgetLocationAmount - balanceExpensesLocationAmount
-        } else {
-            locationAmountBalance = nil
-        }
+    }
 
-        return EventSummaryData(
-            badgeProvider: Location.self,
-            dateRangeProvider: location,
-            budgetTitle: showsLocationBudget ? .amountBudgetLocation : .amountBudget,
-            budgetHomeAmount: budgetHomeAmount,
-            expensesHomeAmount: expensesHomeAmount,
-            homeCurrency: location.homeCurrency,
-            budgetLocationAmount: budgetLocationAmount,
-            expensesLocationAmount: expensesLocationAmount,
-            locationCurrency: location.locationCurrency,
-            homeAmountBalance: budgetHomeAmount - balanceExpensesHomeAmount,
-            locationAmountBalance: locationAmountBalance
-        )
+    func refreshRate(for key: TodayRateRefreshKey?) async {
+        guard !Task.isCancelled else { return }
+
+        let requestID = UUID()
+        activeRequestID = requestID
+        loadedRate = nil
+
+        guard let key, key.from != key.to else { return }
+
+        do {
+            let rate = try await exchangeRateProvider.getRate(from: key.from, to: key.to)
+            try Task.checkCancellation()
+            guard activeRequestID == requestID, rate.isFinite, rate > 0 else { return }
+            loadedRate = (key, rate)
+        } catch {
+            return
+        }
+    }
+}
+
+/// Контекст запроса исключает использование курса другой локации или валютной пары.
+struct TodayRateRefreshKey: Hashable {
+    let locationID: UUID
+    let from: Currency
+    let to: Currency
+    let updatedAt: Date
+    let day: PlainDate
+
+    /// Фиксирует локацию, валютную пару и день, к которым относится загружаемый курс.
+    /// - Parameters:
+    ///   - location: Локация, задающая идентификатор, валютную пару и дату обновления.
+    ///   - day: Календарный день экрана, при смене которого курс запрашивается заново.
+    init(location: Location, day: PlainDate) {
+        locationID = location.id
+        from = location.locationCurrency
+        to = location.homeCurrency
+        updatedAt = location.updatedAt
+        self.day = day
     }
 }
