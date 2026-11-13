@@ -15,6 +15,7 @@ struct ToolbarButton: View {
     
     // MARK: - Свойства
     
+    private let title: LocalizedStringResource?
     private let icon: String
     private let action: () -> Void
     private let hapticType: HapticType?
@@ -22,7 +23,13 @@ struct ToolbarButton: View {
     // MARK: - Инициализация
     
     /// Создает кнопку панели инструментов с иконкой, действием и необязательным тактильным откликом.
-    private init(icon: String, action: @escaping () -> Void, hapticType: HapticType? = nil) {
+    private init(
+        title: LocalizedStringResource? = nil,
+        icon: String,
+        action: @escaping () -> Void,
+        hapticType: HapticType? = nil
+    ) {
+        self.title = title
         self.icon = icon
         self.action = action
         self.hapticType = hapticType
@@ -37,7 +44,11 @@ struct ToolbarButton: View {
             }
             action()
         } label: {
-            Image(systemName: icon)
+            if let title {
+                Label(title, systemImage: icon)
+            } else {
+                Image(systemName: icon)
+            }
         }
     }
 }
@@ -46,33 +57,39 @@ struct ToolbarButton: View {
 
 extension ToolbarButton {
     /// Кнопка "ОК" (галочка) с тактильным откликом `.tap`.
-    static func ok(action: @escaping () -> Void) -> some View {
-        ToolbarButton(icon: "checkmark", action: action, hapticType: .tap)
+    static func ok(showsTitle: Bool = false, action: @escaping () -> Void) -> some View {
+        let title: LocalizedStringResource? = showsTitle ? .ok : nil
+        return ToolbarButton(title: title, icon: "checkmark", action: action, hapticType: .tap)
     }
     
     /// Кнопка добавления (плюс) с тактильным откликом `.add`.
-    static func add(action: @escaping () -> Void) -> some View {
-        ToolbarButton(icon: "plus", action: action, hapticType: .add)
+    static func add(showsTitle: Bool = false, action: @escaping () -> Void) -> some View {
+        let title: LocalizedStringResource? = showsTitle ? .add : nil
+        return ToolbarButton(title: title, icon: "plus", action: action, hapticType: .add)
     }
     
     /// Кнопка редактирования (карандаш) с тактильным откликом `.tap`.
-    static func edit(action: @escaping () -> Void) -> some View {
-        ToolbarButton(icon: "pencil", action: action, hapticType: .tap)
+    static func edit(showsTitle: Bool = false, action: @escaping () -> Void) -> some View {
+        let title: LocalizedStringResource? = showsTitle ? .edit : nil
+        return ToolbarButton(title: title, icon: "pencil", action: action, hapticType: .tap)
     }
     
     /// Кнопка удаления (корзина) с тактильным откликом `.warning`.
-    static func delete(action: @escaping () -> Void) -> some View {
-        ToolbarButton(icon: "trash", action: action, hapticType: .warning)
+    static func delete(showsTitle: Bool = false, action: @escaping () -> Void) -> some View {
+        let title: LocalizedStringResource? = showsTitle ? .delete : nil
+        return ToolbarButton(title: title, icon: "trash", action: action, hapticType: .warning)
     }
     
     /// Кнопка закрытия (крестик) без тактильного отклика.
-    static func close(action: @escaping () -> Void) -> some View {
-        ToolbarButton(icon: "xmark", action: action)
+    static func close(showsTitle: Bool = false, action: @escaping () -> Void) -> some View {
+        let title: LocalizedStringResource? = showsTitle ? .close : nil
+        return ToolbarButton(title: title, icon: "xmark", action: action)
     }
         
     /// Кнопка настроек (шестеренка) без тактильного отклика.
-    static func settings(action: @escaping () -> Void) -> some View {
-        ToolbarButton(icon: "gear", action: action)
+    static func settings(showsTitle: Bool = false, action: @escaping () -> Void) -> some View {
+        let title: LocalizedStringResource? = showsTitle ? .settings : nil
+        return ToolbarButton(title: title, icon: "gear", action: action)
     }
 }
 

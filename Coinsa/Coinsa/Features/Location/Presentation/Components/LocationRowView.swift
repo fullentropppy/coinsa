@@ -12,21 +12,36 @@ struct LocationRowView: View {
     // MARK: - Свойства
     
     let location: Location
+    private let showsBudgetBalance: Bool
     
     // MARK: - Инициализация
     
     /// Создает строку для отображения локации.
-    /// - Parameter location: Локация для отображения.
-    init(_ location: Location) {
+    /// - Parameters:
+    ///   - location: Локация для отображения.
+    ///   - showsBudgetBalance: Показывать остаток бюджета вместо счетчиков трат и дней.
+    init(_ location: Location, showsBudgetBalance: Bool = false) {
         self.location = location
+        self.showsBudgetBalance = showsBudgetBalance
     }
     
     // MARK: - Тело View
     
     var body: some View {
-        VStack(alignment: .leading, spacing: ViewLayout.Row.contentSpacing) {
-            upperStack
-            lowerStack
+        HStack {
+            VStack(alignment: .leading, spacing: ViewLayout.Row.contentSpacing) {
+                upperStack
+                lowerStack
+            }
+            if showsBudgetBalance {
+                Spacer()
+                AmountStack(
+                    homeAmount: location.calculateBudgetBalance(in: .home),
+                    homeCurrency: location.homeCurrency,
+                    expenseAmount: location.calculateBudgetBalance(in: .location),
+                    expenseCurrency: location.locationCurrency
+                )
+            }
         }
     }
     
@@ -42,18 +57,29 @@ struct LocationRowView: View {
     private var lowerStack: some View {
         HStack(spacing: ViewLayout.Row.metadataSpacing) {
             DateLabel.secondarySmall(from: location.startPlainDate, to: location.endPlainDate)
-            Spacer()
-            CountLabel.secondarySmall(location.expensesCount, icon: Expense.primaryIcon)
-            DotDivider.secondarySmall()
-            CountLabel.daysSecondarySmall(location.totalDays)
+            if !showsBudgetBalance {
+                Spacer()
+                CountLabel.secondarySmall(location.expensesCount, icon: Expense.primaryIcon)
+                DotDivider.secondarySmall()
+                CountLabel.daysSecondarySmall(location.totalDays)
+            }
         }
     }
 }
 
 // MARK: - Превью
 
-#Preview {
+#Preview("Ordinary") {
     List {
         LocationRowView(PreviewGenerator.makeExampleLocation(includeExpenses: true))
+    }
+}
+
+#Preview("Budget Balance") {
+    List {
+        LocationRowView(
+            PreviewGenerator.makeExampleLocation(includeExpenses: true),
+            showsBudgetBalance: true
+        )
     }
 }

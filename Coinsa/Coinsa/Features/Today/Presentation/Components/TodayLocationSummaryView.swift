@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 /// Сводка выбранной локации, переключатель и справочный курс.
 struct TodayLocationSummaryView: View {
@@ -58,7 +59,7 @@ struct TodayLocationSummaryView: View {
             VStack(spacing: ViewLayout.Summary.sectionSpacing) {
                 if locations.count > 1 {
                     Picker(selection: $selectedLocationID) {
-                        ForEach(locations) { location in
+                        ForEach(locations, id: \.id) { location in
                             Text(location.name)
                                 .tag(location.id)
                         }

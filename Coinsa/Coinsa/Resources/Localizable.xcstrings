@@ -30,6 +30,23 @@
         }
       }
     },
+    "add" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Добавить"
+          }
+        }
+      }
+    },
     "amount.balance" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -570,6 +587,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Очистить"
+          }
+        }
+      }
+    },
+    "close" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Закрыть"
           }
         }
       }
@@ -3498,6 +3526,23 @@
         }
       }
     },
+    "location.actions" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Location actions"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Действия с локацией"
+          }
+        }
+      }
+    },
     "location.add" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -3562,6 +3607,227 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Бюджет на локацию для расчета рекомендованных ежедневных трат и другой аналитики. К бюджету не применяется корректировка курса обмена."
+          }
+        }
+      }
+    },
+    "location.budgetTransfer.action" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Transfer balance"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Перенести остаток"
+          }
+        }
+      }
+    },
+    "location.budgetTransfer.available" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Available"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Доступно"
+          }
+        }
+      }
+    },
+    "location.budgetTransfer.confirm" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Transfer"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Перенести"
+          }
+        }
+      }
+    },
+    "location.budgetTransfer.confirmation.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The balance will be transferred from “%1$(sourceName)@“ to “%2$(destinationName)@“. The total Trip budget will remain unchanged."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Остаток будет перенесен из «%1$(sourceName)@» в «%2$(destinationName)@». Общий бюджет поездки останется неизменным."
+          }
+        }
+      }
+    },
+    "location.budgetTransfer.confirmation.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Transfer budget balance?"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Перенести остаток?"
+          }
+        }
+      }
+    },
+    "location.budgetTransfer.error.amounts" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The budgets contain invalid amounts or the transfer amount cannot be added. Check both locations’ budgets."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "В бюджетах указаны некорректные суммы или сумму переноса невозможно прибавить. Проверьте бюджеты обеих локаций."
+          }
+        }
+      }
+    },
+    "location.budgetTransfer.error.balanceChanged" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The available balance has changed. Review the amount and select a recipient again."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Доступный остаток изменился Проверьте сумму и выберите получателя заново."
+          }
+        }
+      }
+    },
+    "location.budgetTransfer.error.locations" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The Locations are no longer available. Close this list and try again."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Локации больше недоступны. Закройте список и попробуйте снова."
+          }
+        }
+      }
+    },
+    "location.budgetTransfer.error.save" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The transfer could not be saved. Both budgets have been restored. Try again."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось сохранить перенос. Оба бюджета восстановлены. Попробуйте снова."
+          }
+        }
+      }
+    },
+    "location.budgetTransfer.error.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unable to transfer budget"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось перенести бюджет"
+          }
+        }
+      }
+    },
+    "location.budgetTransfer.hint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The displayed remaining budget for the current Location will be transferred to the selected Location."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отображаемый доступный бюджет текущей локации будет перенесен в выбранную локацию."
+          }
+        }
+      }
+    },
+    "location.budgetTransfer.success.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The remaining budget has been transferred to “%1$(destinationName)@”."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Остаток бюджета перенесён в «%(destinationName)@»."
+          }
+        }
+      }
+    },
+    "location.budgetTransfer.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Transfer budget balance"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Перенос остатка бюджета"
           }
         }
       }
@@ -3936,6 +4202,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Сохранить"
+          }
+        }
+      }
+    },
+    "settings" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Настройки"
           }
         }
       }

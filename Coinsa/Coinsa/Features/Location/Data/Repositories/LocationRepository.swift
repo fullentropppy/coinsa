@@ -92,6 +92,58 @@ struct LocationRepository {
         try? context.save()
     }
     
+    /// Переносит подтвержденный остаток, сохраняя оба бюджета вместе и восстанавливая их при ошибке.
+    /// - Parameters:
+    ///   - source: Локация, передающая остаток бюджета.
+    ///   - destination: Локация-получатель в той же поездке и контексте.
+    ///   - expectedHomeAmount: Сумма, подтвержденная пользователем.
+    ///   - expectedHomeCurrencyCode: Код домашней валюты, показанной при подтверждении.
+    /// - Returns: Сохраненная сумма переноса в домашней валюте.
+    func transferBudget(
+        from source: Location,
+        to destination: Location,
+        expectedHomeAmount: Double,
+        expectedHomeCurrencyCode: String
+    ) throws -> Double {
+        guard source.modelContext === context,
+              destination.modelContext === context,
+              !source.isDeleted,
+              !destination.isDeleted,
+              let trip = source.trip,
+              !trip.isDeleted else {
+            throw LocationBudgetTransfer.ValidationError.invalidLocations
+        }
+
+        let transfer = try LocationBudgetTransfer(
+            from: source,
+            to: destination,
+            expectedHomeAmount: expectedHomeAmount,
+            expectedHomeCurrencyCode: expectedHomeCurrencyCode
+        )
+        let previousSourceBudget = source.budget
+        let previousDestinationBudget = destination.budget
+        let previousSourceUpdatedAt = source.updatedAt
+        let previousDestinationUpdatedAt = destination.updatedAt
+        let now = Date()
+
+        source.budget = transfer.sourceBudget
+        destination.budget = transfer.destinationBudget
+        source.updatedAt = now
+        destination.updatedAt = now
+
+        do {
+            try context.save()
+        } catch {
+            source.budget = previousSourceBudget
+            destination.budget = previousDestinationBudget
+            source.updatedAt = previousSourceUpdatedAt
+            destination.updatedAt = previousDestinationUpdatedAt
+            throw error
+        }
+
+        return transfer.homeAmount
+    }
+
     /// Удаляет локацию.
     /// - Parameter location: Локация для удаления.
     func delete(_ location: Location) {

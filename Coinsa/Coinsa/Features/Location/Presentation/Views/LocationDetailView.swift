@@ -15,6 +15,7 @@ struct LocationDetailView: View {
     @Environment(\.modelContext) private var context
     @Environment(AppSettingsStore.self) private var settingsStore
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.haptics) private var haptics
     
     // MARK: - Состояние
     
@@ -22,6 +23,9 @@ struct LocationDetailView: View {
     @State private var isShowingLocationEdit = false
     @State private var isShowingExpenseCreate = false
     @State private var expenseToEdit: Expense?
+    @State private var isShowingBudgetTransfer = false
+    @State private var transferSuccessMessage: LocalizedStringResource?
+    @State private var isShowingTransferSuccess = false
     
     // MARK: - Зависимости
     
@@ -66,6 +70,18 @@ struct LocationDetailView: View {
             .sheet(item: $expenseToEdit) { expense in
                 ExpenseEditView(forEdit: expense)
             }
+            .sheet(isPresented: $isShowingBudgetTransfer, onDismiss: showTransferSuccessIfNeeded) {
+                LocationBudgetTransferView(source: location) { destinationName in
+                    transferSuccessMessage = .locationBudgetTransferSuccessMessage(
+                        destinationName: destinationName
+                    )
+                }
+            }
+            .notificationAlert(
+                isPresented: $isShowingTransferSuccess,
+                title: "",
+                message: transferSuccessMessage ?? .errorUnknown
+            )
             .safeAreaInset(edge: .bottom) {
                 if location.hasExpenses {
                     PrimaryAddButton(isOnLeft: settingsStore.isFloatingButtonOnLeft) {
@@ -166,13 +182,29 @@ struct LocationDetailView: View {
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
         ToolbarItemGroup(placement: .topBarTrailing) {
-            ToolbarButton.edit {
-                isShowingLocationEdit = true
+            Menu {
+                ToolbarButton.edit(showsTitle: true) {
+                    isShowingLocationEdit = true
+                }
+                Button {
+                    haptics.trigger(.tap)
+                    transferSuccessMessage = nil
+                    isShowingBudgetTransfer = true
+                } label: {
+                    Label(.locationBudgetTransferAction, systemImage: "arrow.forward.to.line")
+                }
+                .disabled(!LocationBudgetTransferViewModel.canTransfer(from: location))
+            } label: {
+                Label(.locationActions, systemImage: "ellipsis")
             }
         }
     }
 
     // MARK: - Действия
+
+    private func showTransferSuccessIfNeeded() {
+        isShowingTransferSuccess = transferSuccessMessage != nil
+    }
 
     private func requestDelete(for expenses: [Expense]) {
         deletionHandler.request(for: expenses)

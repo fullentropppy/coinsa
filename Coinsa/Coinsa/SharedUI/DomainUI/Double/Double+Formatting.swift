@@ -10,18 +10,28 @@ import Foundation
 /// Форматирование чисел с плавающей запятой для отображения.
 extension Double {
     /// Форматирует число с указанной точностью дробной части.
+    /// Скрывает отрицательный знак у значений, округляющихся при отображении до нуля.
     /// - Parameter fractionLength: Количество знаков после запятой. По умолчанию `2`.
     /// - Returns: Строковое представление числа с заданным количеством дробных знаков.
     ///            Пример: `1234.5678` → `"1234.57"`.
     func numberFormat(fractionLength: Int = 2) -> String {
-        self.formatted(.number.precision(.fractionLength(fractionLength)))
+        self.formatted(
+            .number
+                .precision(.fractionLength(fractionLength))
+                .sign(strategy: sign == .minus ? .always(includingZero: false) : .automatic)
+        )
     }
     
     /// Форматирует число как процент с указанной точностью дробной части.
+    /// Скрывает отрицательный знак у значений, округляющихся при отображении до нуля процентов.
     /// - Parameter fractionLength: Количество знаков после запятой. По умолчанию `2`.
     /// - Returns: Строковое представление числа в процентах.
     ///            Пример: `0.1234` → `"12.34%"`.
     func percentFormat(fractionLength: Int = 2) -> String {
-        self.formatted(.percent.precision(.fractionLength(fractionLength)))
+        self.formatted(
+            .percent
+                .precision(.fractionLength(fractionLength))
+                .sign(strategy: sign == .minus ? .always(includingZero: false) : .automatic)
+        )
     }
 }

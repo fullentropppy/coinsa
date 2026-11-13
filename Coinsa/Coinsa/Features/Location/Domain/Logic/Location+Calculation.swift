@@ -14,6 +14,13 @@ extension Location {
     var effectiveRateLocationToHome: Double {
         rateLocationToHome * (1 + (exchangeAdjustment / 100))
     }
+
+    /// Возвращает остаток всего бюджета в тех же режимах курса, что и сводка локации.
+    /// - Parameter currency: Валютный контекст результата: `.home` или `.location`.
+    /// - Returns: Бюджет без корректировки курса за вычетом расходов с их сохраненными курсами.
+    func calculateBudgetBalance(in currency: CurrencyContext = .home) -> Double {
+        calculateBudgetAmount(in: currency) - calculateExpensesAmount(in: currency)
+    }
     
     // MARK: - Публичные методы. Плановая сумма
     
