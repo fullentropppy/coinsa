@@ -319,6 +319,40 @@
         }
       }
     },
+    "analytics.expensePlaces" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Expense Places"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Места трат"
+          }
+        }
+      }
+    },
+    "analytics.expensePlaces.emptyState" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No Expenses with Coordinates"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нет трат с координатами"
+          }
+        }
+      }
+    },
     "analytics.summary" : {
       "extractionState" : "manual",
       "localizations" : {

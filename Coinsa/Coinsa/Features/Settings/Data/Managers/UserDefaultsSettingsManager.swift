@@ -11,7 +11,7 @@ import Foundation
 final class UserDefaultsSettingsManager {
     // MARK: - Зависимости
     
-    private let defaults = UserDefaults.standard
+    private let defaults: UserDefaults
     
     // MARK: - Параметры учета
     
@@ -115,8 +115,9 @@ final class UserDefaultsSettingsManager {
     
     // MARK: - Инициализация
     
-    /// Инициализирует хранилище настроек и заполняет значения по умолчанию.
-    init() {
+    /// Инициализирует переданное хранилище настроек и регистрирует значения по умолчанию.
+    init(defaults: UserDefaults = .standard) {
+        self.defaults = defaults
         defaults.register(defaults: [
             UserDefaultsKey.fetchExpenseExchangeRateOnline: true,
             UserDefaultsKey.detectPlaceOfExpense: true,

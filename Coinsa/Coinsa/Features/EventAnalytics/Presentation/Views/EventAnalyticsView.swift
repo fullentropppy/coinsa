@@ -5,6 +5,7 @@
 //  Created by Daniil Gritsenko on 24.04.2026.
 //
 
+import SwiftData
 import SwiftUI
 
 /// Экран аналитики события с сводными данными и графиками.
@@ -16,6 +17,7 @@ struct EventAnalyticsView: View {
     // MARK: - Состояние
 
     @State private var selectedMetric: EventAnalyticsMetric = .summary
+    @State private var isShowingExpensesMap = false
 
     // MARK: - Хранимые свойства
 
@@ -40,6 +42,23 @@ struct EventAnalyticsView: View {
             .navigationTitle(.analytics)
             .navigationSubtitle(screenContextSubtitle)
             .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                if !ExpenseMapItem.items(for: viewModel.data.expenses).isEmpty {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button {
+                            isShowingExpensesMap = true
+                        } label: {
+                            Image(systemName: "map")
+                        }
+                    }
+                }
+            }
+            .fullScreenCover(isPresented: $isShowingExpensesMap) {
+                EventExpensesMapView(
+                    expenses: viewModel.data.expenses,
+                    screenContextSubtitle: screenContextSubtitle
+                )
+            }
     }
 
     // MARK: - Основной контент
@@ -125,24 +144,13 @@ struct EventAnalyticsView: View {
 
 extension EventAnalyticsView {
     fileprivate static func makePreview(forTrip: Bool, includeExpenses: Bool) -> some View {
-        let screenContextSubtitle: String
-        let analyticsData: EventCategoryAnalyticsData
-
-        if forTrip {
-            let trip = PreviewGenerator.makeExampleTrip(includeLocations: true, includeExpenses: includeExpenses)
-            let viewModel = TripDetailViewModel(trip: trip)
-            screenContextSubtitle = trip.screenContextSubtitle
-            analyticsData = viewModel.eventAnalyticsData
-        } else {
-            let location = PreviewGenerator.makeExampleLocation(includeExpenses: includeExpenses)
-            let viewModel = LocationDetailViewModel(location: location)
-            screenContextSubtitle = location.screenContextSubtitle
-            analyticsData = viewModel.eventAnalyticsData
-        }
+        let preview = ExpenseMapPreviewData(forTrip: forTrip, includeExpenses: includeExpenses)
 
         return NavigationStack {
-            EventAnalyticsView(data: analyticsData, screenContextSubtitle: screenContextSubtitle)
+            EventAnalyticsView(data: preview.analyticsData, screenContextSubtitle: preview.screenContextSubtitle)
         }
+        .modelContainer(preview.container)
+        .environment(preview.settingsStore)
     }
 }
 

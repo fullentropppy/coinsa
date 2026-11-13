@@ -80,9 +80,9 @@ final class AppSettingsStore {
     
     // MARK: - Инициализация
     
-    /// Создает хранилище настроек, загружая значения из UserDefaults.
-    init() {
-        self.userDefaultsManager = UserDefaultsSettingsManager()
+    /// Создает хранилище настроек, загружая значения из переданного UserDefaults.
+    init(defaults: UserDefaults = .standard) {
+        self.userDefaultsManager = UserDefaultsSettingsManager(defaults: defaults)
         self.homeCurrency = userDefaultsManager.homeCurrency
         self.exchangeAdjustment = userDefaultsManager.exchangeAdjustment
         self.fetchExpenseExchangeRateOnline = userDefaultsManager.fetchExpenseExchangeRateOnline
