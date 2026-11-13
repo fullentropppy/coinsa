@@ -20,10 +20,10 @@ struct ExpenseMapGroupViewModel {
             CivilDateTime(expense.civilDateTime.startOfDay, using: .utc)
         }
 
-        return grouped.keys.sorted(by: >).map { date in
+        return grouped.sorted { $0.key > $1.key }.map { date, expenses in
             (
                 date: date,
-                expenses: (grouped[date] ?? []).sorted { $0.civilDateTime > $1.civilDateTime }
+                expenses: expenses.sorted { $0.civilDateTime > $1.civilDateTime }
             )
         }
     }

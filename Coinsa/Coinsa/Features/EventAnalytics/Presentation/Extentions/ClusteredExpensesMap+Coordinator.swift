@@ -54,7 +54,7 @@ extension ClusteredExpensesMap {
             }
 
             needsFit = false
-            show(rect, on: map, animated: animatesFit)
+            map.setVisibleMapRect(rect, edgePadding: map.layoutMargins, animated: animatesFit)
         }
 
         func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
@@ -96,21 +96,6 @@ extension ClusteredExpensesMap {
                 let expenseIDs = cluster.memberAnnotations.compactMap { ($0 as? ExpenseMapAnnotation)?.item.id }
                 parent.onSelectGroup(expenseIDs)
             }
-        }
-
-        // MARK: - Вспомогательные методы
-
-        private func show(_ rect: MKMapRect, on map: MKMapView, animated: Bool) {
-            map.setVisibleMapRect(rect, edgePadding: edgePadding(on: map), animated: animated)
-        }
-
-        private func edgePadding(on map: MKMapView) -> UIEdgeInsets {
-            UIEdgeInsets(
-                top: map.layoutMargins.top,
-                left: map.layoutMargins.left,
-                bottom: map.layoutMargins.bottom,
-                right: map.layoutMargins.right
-            )
         }
     }
 }
