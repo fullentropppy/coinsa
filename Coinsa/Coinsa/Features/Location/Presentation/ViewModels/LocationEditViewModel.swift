@@ -157,6 +157,7 @@ final class LocationEditViewModel {
         )
     }
     
+    /// Создает черновик локации, конвертер валют и исходный снимок для определения изменений.
     private init(
         trip: Trip,
         location: Location?,
@@ -325,6 +326,7 @@ private extension LocationEditViewModel {
         
         // MARK: - Инициализация
         
+        /// Фиксирует текущее состояние редактора локации для сравнения изменений.
         init(viewModel: LocationEditViewModel) {
             self.init(
                 name: viewModel.name,
@@ -337,6 +339,7 @@ private extension LocationEditViewModel {
             )
         }
         
+        /// Создает снимок локации, удаляя крайние пробелы из названия.
         init(
             name: String,
             startDate: Date,

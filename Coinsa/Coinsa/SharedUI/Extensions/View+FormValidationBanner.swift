@@ -15,6 +15,15 @@ extension View {
 }
 
 private struct FormValidationBannerModifier: ViewModifier {
+    // MARK: - Константы
+
+    private enum Layout {
+        /// Длительность появления и скрытия сообщения об ошибке формы.
+        static let animationDuration: TimeInterval = 0.25
+        /// Время показа сообщения об ошибке перед автоматическим скрытием в наносекундах.
+        static let displayDurationNanoseconds: UInt64 = 1_000_000_000
+    }
+
     // MARK: - Окружение
 
     @Environment(\.haptics) private var haptics
@@ -39,7 +48,7 @@ private struct FormValidationBannerModifier: ViewModifier {
                         }
                 }
             }
-            .animation(.snappy(duration: 0.25), value: notice?.id)
+            .animation(.snappy(duration: Layout.animationDuration), value: notice?.id)
             .onChange(of: notice?.id) { _, newValue in
                 handleNoticeChange(newValue)
             }
@@ -57,11 +66,11 @@ private struct FormValidationBannerModifier: ViewModifier {
 
         haptics.trigger(.warning)
         dismissTask = Task {
-            try? await Task.sleep(nanoseconds: 1_000_000_000)
+            try? await Task.sleep(nanoseconds: Layout.displayDurationNanoseconds)
             guard !Task.isCancelled else { return }
 
             await MainActor.run {
-                withAnimation(.snappy(duration: 0.25)) {
+                withAnimation(.snappy(duration: Layout.animationDuration)) {
                     notice = nil
                 }
             }

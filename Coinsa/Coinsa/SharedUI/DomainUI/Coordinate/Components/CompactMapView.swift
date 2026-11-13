@@ -10,6 +10,15 @@ import SwiftUI
 
 /// Карта с отображением и редактированием географической координаты.
 struct CompactMapView: View {
+    // MARK: - Константы
+
+    private enum Layout {
+        /// Высота компактной карты, если вызывающий экран не задал другую.
+        static let defaultHeight: CGFloat = 200
+        /// Радиус скругления компактной карты.
+        static let cornerRadius: CGFloat = 12
+    }
+
     // MARK: - Состояние
 
     @Binding private var coordinate: Coordinate
@@ -30,7 +39,7 @@ struct CompactMapView: View {
     init(
         _ coordinate: Binding<Coordinate>,
         markerTitle: LocalizedStringResource,
-        height: CGFloat = 200
+        height: CGFloat = Layout.defaultHeight
     ) {
         _coordinate = coordinate
         _cameraPosition = State(initialValue: Self.cameraPosition(for: coordinate.wrappedValue))
@@ -46,7 +55,7 @@ struct CompactMapView: View {
     init(
         _ coordinate: Coordinate,
         markerTitle: LocalizedStringResource,
-        height: CGFloat = 200
+        height: CGFloat = Layout.defaultHeight
     ) {
         self.init(
             .constant(coordinate),
@@ -71,7 +80,7 @@ struct CompactMapView: View {
             Marker(String(localized: markerTitle), coordinate: coordinate.coreLocationCoordinate)
         }
         .frame(height: height)
-        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .clipShape(RoundedRectangle(cornerRadius: Layout.cornerRadius, style: .continuous))
     }
 
     // MARK: - Инфраструктура
@@ -80,7 +89,7 @@ struct CompactMapView: View {
         .region(
             MKCoordinateRegion(
                 center: coordinate.coreLocationCoordinate,
-                span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+                span: MKCoordinateSpan(latitudeDelta: MapLayout.detailSpanDelta, longitudeDelta: MapLayout.detailSpanDelta)
             )
         )
     }

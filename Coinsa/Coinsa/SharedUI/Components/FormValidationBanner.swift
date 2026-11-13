@@ -15,6 +15,15 @@ struct FormValidationNotice: Identifiable {
 
 /// Верхняя плашка с ошибкой заполнения формы.
 struct FormValidationBanner: View {
+    // MARK: - Константы
+
+    private enum Layout {
+        /// Интервал между предупреждающей иконкой и текстом ошибки.
+        static let contentSpacing: CGFloat = 6
+        /// Внутренние отступы плашки ошибки формы.
+        static let contentInset: CGFloat = 14
+    }
+
     // MARK: - Свойства
 
     let message: LocalizedStringResource
@@ -22,7 +31,7 @@ struct FormValidationBanner: View {
     // MARK: - Тело View
 
     var body: some View {
-        HStack(spacing: 6) {
+        HStack(spacing: Layout.contentSpacing) {
             Image(systemName: "exclamationmark.circle")
                 .foregroundStyle(.red)
                 .imageScale(.small)
@@ -31,8 +40,8 @@ struct FormValidationBanner: View {
                 .font(.footnote)
                 .fixedSize(horizontal: false, vertical: true)
         }
-        .padding(.horizontal, 14)
-        .padding(.vertical, 14)
+        .padding(.horizontal, Layout.contentInset)
+        .padding(.vertical, Layout.contentInset)
         .glassEffect(.regular.interactive(), in: Capsule())
     }
 }

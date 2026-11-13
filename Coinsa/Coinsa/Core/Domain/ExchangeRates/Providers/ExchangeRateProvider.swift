@@ -54,6 +54,7 @@ struct ExchangeRateLoadingError: LocalizedError {
     
     // MARK: - Инициализация
     
+    /// Создает ошибку загрузки курса с необязательным описанием причины.
     init(details: String? = nil) {
         self.details = details
     }

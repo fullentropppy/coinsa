@@ -359,7 +359,7 @@ struct LocationEditView: View {
             return
         }
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + ViewLayout.Editor.saveAfterKeyboardDismissDelay) {
             viewModel.save(using: repository)
             dismiss()
         }

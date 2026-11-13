@@ -33,6 +33,7 @@ struct EventExpensesMapView: View {
 
     // MARK: - Инициализация
 
+    /// Создает карту с наблюдаемой выборкой переданных трат и подзаголовком события.
     init(expenses: [Expense], screenContextSubtitle: String) {
         let expenseIDs = expenses.map(\.id)
         _expenses = Query(filter: #Predicate<Expense> { expense in

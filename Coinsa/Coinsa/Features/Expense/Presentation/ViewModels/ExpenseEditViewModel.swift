@@ -258,6 +258,7 @@ final class ExpenseEditViewModel {
         )
     }
     
+    /// Создает черновик траты, конвертеры валют и исходный снимок для определения изменений.
     private init(
         location: Location,
         expense: Expense?,
@@ -541,6 +542,7 @@ private extension ExpenseEditViewModel {
         
         // MARK: - Инициализация
         
+        /// Фиксирует текущее состояние редактора, включая сохраняемые курсы обмена.
         init(viewModel: ExpenseEditViewModel) {
             self.init(
                 date: viewModel.date,
@@ -557,6 +559,7 @@ private extension ExpenseEditViewModel {
             )
         }
         
+        /// Создает снимок полей траты для сравнения с исходным состоянием редактора.
         init(
             date: Date,
             homeAmount: Double,

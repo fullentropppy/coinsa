@@ -24,7 +24,7 @@ struct TripRowView: View {
     // MARK: - Тело View
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
+        VStack(alignment: .leading, spacing: ViewLayout.Row.contentSpacing) {
             upperStack
             lowerStack
         }
@@ -33,14 +33,14 @@ struct TripRowView: View {
     // MARK: - Компоненты
     
     private var upperStack: some View {
-        HStack(spacing: 4) {
+        HStack(spacing: ViewLayout.Row.metadataSpacing) {
             trip.status.makeDot()
             Text(trip.name).fontWeight(.semibold)
         }
     }
     
     private var lowerStack: some View {
-        HStack(spacing: 4) {
+        HStack(spacing: ViewLayout.Row.metadataSpacing) {
             DateLabel.secondarySmall(from: trip.startPlainDate, to: trip.endPlainDate)
             Spacer()
             CountLabel.secondarySmall(trip.locationsCount, icon: Location.primaryIcon)

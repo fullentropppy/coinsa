@@ -17,6 +17,7 @@ struct EventSubcategoryExpensesView: View {
 
     // MARK: - Инициализация
 
+    /// Создает список трат выбранной подкатегории с контекстом исходного события.
     init(
         subcategory: ExpenseSubcategory,
         data: EventCategoryAnalyticsData,

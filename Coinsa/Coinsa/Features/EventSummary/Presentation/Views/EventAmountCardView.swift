@@ -9,6 +9,15 @@ import SwiftUI
 
 /// Карточка с суммой в одной или двух валютах.
 struct EventAmountCardView: View {
+    // MARK: - Константы
+
+    private enum Layout {
+        /// Интервал между заголовком, суммами и разделителем карточки.
+        static let contentSpacing: CGFloat = 4
+        /// Дополнительный вертикальный отступ сумм и заголовка карточки.
+        static let amountVerticalInset: CGFloat = 2
+    }
+
     // MARK: - Свойства
     
     private let title: LocalizedStringResource
@@ -43,26 +52,26 @@ struct EventAmountCardView: View {
     // MARK: - Тело View
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
+        VStack(alignment: .leading, spacing: Layout.contentSpacing) {
             Text(title)
                 .font(.footnote)
                 .foregroundStyle(.secondary)
-                .padding(.bottom, 2)
+                .padding(.bottom, Layout.amountVerticalInset)
             
             if let locationAmount, let locationCurrency {
                 AmountText.standard(locationAmount, currency: locationCurrency)
-                    .padding(.bottom, 2)
+                    .padding(.bottom, Layout.amountVerticalInset)
                 Divider()
                 AmountText.secondarySmall(homeAmount, currency: homeCurrency)
-                    .padding(.vertical, 2)
+                    .padding(.vertical, Layout.amountVerticalInset)
             } else {
                 AmountText.standard(homeAmount, currency: homeCurrency)
-                    .padding(.bottom, 2)
+                    .padding(.bottom, Layout.amountVerticalInset)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-        .padding(10)
-        .glassEffect(.regular, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .padding(ViewLayout.Card.contentInset)
+        .glassEffect(.regular, in: RoundedRectangle(cornerRadius: ViewLayout.Card.cornerRadius, style: .continuous))
     }
 }
 

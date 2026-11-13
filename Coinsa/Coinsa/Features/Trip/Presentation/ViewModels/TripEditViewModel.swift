@@ -93,6 +93,7 @@ final class TripEditViewModel {
         )
     }
 
+    /// Создает черновик поездки и исходный снимок для определения изменений.
     private init(
         trip: Trip?,
         name: String,
@@ -150,6 +151,7 @@ private extension TripEditViewModel {
 
         // MARK: - Инициализация
 
+        /// Фиксирует текущее состояние редактора поездки для сравнения изменений.
         init(viewModel: TripEditViewModel) {
             self.init(
                 name: viewModel.name,
@@ -159,6 +161,7 @@ private extension TripEditViewModel {
             )
         }
         
+        /// Создает снимок поездки, удаляя крайние пробелы из названия.
         init(name: String, startDate: Date, endDate: Date, homeCurrency: Currency) {
             self.name = name.trimmed
             self.startDate = startDate

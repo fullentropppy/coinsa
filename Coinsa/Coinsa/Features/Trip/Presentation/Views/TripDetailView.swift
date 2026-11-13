@@ -39,6 +39,7 @@ struct TripDetailView: View {
     
     // MARK: - Инициализация
 
+    /// Создает экран подробностей переданной поездки.
     init(_ trip: Trip) {
         self.trip = trip
     }

@@ -51,7 +51,7 @@ struct AmountText: View {
     // MARK: - Тело View
     
     var body: some View {
-        HStack(alignment: .firstTextBaseline, spacing: 4) {
+        HStack(alignment: .firstTextBaseline, spacing: ViewLayout.Label.iconSpacing) {
             Text(amount.numberFormat(fractionLength: fractionLength))
                 .font(font)
                 .foregroundStyle(color)

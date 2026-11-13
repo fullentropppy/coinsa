@@ -36,7 +36,7 @@ struct ExchangeRateRefreshButton: View {
                         .foregroundStyle(.accent)
                 }
             }
-            .frame(width: 16)
+            .frame(width: ViewLayout.Label.inputAccessoryWidth)
         }
         .buttonStyle(.borderless)
         .disabled(isLoading)

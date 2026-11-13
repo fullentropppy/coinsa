@@ -24,7 +24,7 @@ struct ClearButton: View {
             haptics.trigger(.tap)
             action()
         } label: {
-            HStack(spacing: 2) {
+            HStack(spacing: ViewLayout.Label.compactIconSpacing) {
                 Image(systemName: "xmark.circle.fill")
                     .imageScale(.small)
                 Text(.clear)

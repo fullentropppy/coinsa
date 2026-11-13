@@ -39,6 +39,7 @@ struct LocationDetailView: View {
     
     // MARK: - Инициализация
 
+    /// Создает экран подробностей переданной локации.
     init(_ location: Location) {
         self.location = location
     }

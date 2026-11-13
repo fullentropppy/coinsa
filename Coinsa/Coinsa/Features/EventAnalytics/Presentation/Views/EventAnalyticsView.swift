@@ -104,7 +104,7 @@ struct EventAnalyticsView: View {
 
     private var metricHeader: some View {
         Section {
-            VStack(spacing: 14) {
+            VStack(spacing: ViewLayout.Summary.sectionSpacing) {
                 Picker(selection: $selectedMetric) {
                     ForEach(EventAnalyticsMetric.allCases) { metric in
                         if viewModel.hasAnalytics(for: metric) {

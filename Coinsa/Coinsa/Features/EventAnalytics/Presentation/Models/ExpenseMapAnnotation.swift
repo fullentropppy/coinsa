@@ -15,6 +15,7 @@ final class ExpenseMapAnnotation: NSObject, MKAnnotation {
         item.coordinate.coreLocationCoordinate
     }
 
+    /// Создает аннотацию карты для переданного элемента расходов.
     init(item: ExpenseMapItem) {
         self.item = item
         super.init()

@@ -38,9 +38,9 @@ struct ExpenseRowView: View {
     // MARK: - Компоненты
     
     private var leftStack: some View {
-        VStack(alignment: .leading, spacing: 10) {
+        VStack(alignment: .leading, spacing: ViewLayout.Row.contentSpacing) {
             expense.subcategory.makeBadge()
-            HStack(alignment: .lastTextBaseline, spacing: 4) {
+            HStack(alignment: .lastTextBaseline, spacing: ViewLayout.Row.metadataSpacing) {
                 DateLabel.secondarySmall(expense.civilDateTime)
                 if hasComment {
                     DotDivider.secondarySmall()

@@ -21,6 +21,7 @@ struct ToolbarButton: View {
     
     // MARK: - Инициализация
     
+    /// Создает кнопку панели инструментов с иконкой, действием и необязательным тактильным откликом.
     private init(icon: String, action: @escaping () -> Void, hapticType: HapticType? = nil) {
         self.icon = icon
         self.action = action

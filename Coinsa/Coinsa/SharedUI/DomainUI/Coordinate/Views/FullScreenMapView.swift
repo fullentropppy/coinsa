@@ -213,7 +213,7 @@ struct FullScreenMapView: View {
             return .region(
                 MKCoordinateRegion(
                     center: CLLocationCoordinate2D(latitude: 0, longitude: 0),
-                    span: MKCoordinateSpan(latitudeDelta: 120, longitudeDelta: 120)
+                    span: MKCoordinateSpan(latitudeDelta: MapLayout.overviewSpanDelta, longitudeDelta: MapLayout.overviewSpanDelta)
                 )
             )
         }
@@ -221,7 +221,7 @@ struct FullScreenMapView: View {
         return .region(
             MKCoordinateRegion(
                 center: coordinate.coreLocationCoordinate,
-                span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+                span: MKCoordinateSpan(latitudeDelta: MapLayout.detailSpanDelta, longitudeDelta: MapLayout.detailSpanDelta)
             )
         )
     }

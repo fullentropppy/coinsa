@@ -10,6 +10,6 @@ import Foundation
 extension ExpenseCategory: LabelProviding {
     /// Стиль метки для категории траты (иконка с фиксированной шириной).
     var labelStyle: ItemLabel.Style {
-        .withIcon(title: localizedResource, icon: primaryIcon, iconWidth: 28)
+        .withIcon(title: localizedResource, icon: primaryIcon, iconWidth: ViewLayout.Label.formIconWidth)
     }
 }

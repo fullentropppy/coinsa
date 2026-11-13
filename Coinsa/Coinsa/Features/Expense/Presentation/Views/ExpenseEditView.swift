@@ -73,6 +73,7 @@ struct ExpenseEditView: View {
         self.init(initialViewModel: viewModel, onDelete: onDelete)
     }
     
+    /// Создает экран с подготовленным черновиком и выбирает начальную сторону валютной пары.
     private init(initialViewModel: ExpenseEditViewModel, onDelete: (() -> Void)? = nil) {
         _viewModel = State(initialValue: initialViewModel)
         _currencyPairSide = State(
@@ -362,11 +363,11 @@ struct ExpenseEditView: View {
             HStack {
                 Image(systemName: "ellipsis.bubble")
                     .foregroundStyle(.secondary)
-                    .padding(.vertical, 1)
+                    .padding(.vertical, ViewLayout.Comment.iconVerticalInset)
                     .frame(maxHeight: .infinity, alignment: .topLeading)
                 
                 TextField(.expenseComment, text: $viewModel.comment, axis: .vertical)
-                    .lineLimit(1...10)
+                    .lineLimit(ViewLayout.Comment.visibleLines)
                     .focused($isCommentFocused)
                     .keyboardClearAction(text: $viewModel.comment)
             }
@@ -526,7 +527,7 @@ struct ExpenseEditView: View {
             return
         }
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + ViewLayout.Editor.saveAfterKeyboardDismissDelay) {
             viewModel.save(using: repository)
             dismiss()
         }

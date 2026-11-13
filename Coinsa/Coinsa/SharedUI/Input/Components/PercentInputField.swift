@@ -52,7 +52,7 @@ struct PercentInputField: View {
                 .fontWeight(.semibold)
                 .imageScale(.small)
                 .foregroundStyle(.secondary)
-                .frame(width: 16)
+                .frame(width: ViewLayout.Label.inputAccessoryWidth)
         }
     }
 }

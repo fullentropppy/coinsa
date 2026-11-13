@@ -9,6 +9,19 @@ import SwiftUI
 
 /// Представление бейджа с иконкой, текстом или комбинированным содержимым.
 struct Badge: View {
+    // MARK: - Константы
+
+    private enum Layout {
+        /// Боковые отступы содержимого бейджа.
+        static let horizontalInset: CGFloat = 8
+        /// Вертикальные отступы содержимого бейджа.
+        static let verticalInset: CGFloat = 4
+        /// Минимальная ширина бейджа, в том числе только с иконкой.
+        static let minWidth: CGFloat = 36
+        /// Единая высота бейджей в строках и заголовках.
+        static let height: CGFloat = 22
+    }
+
     // MARK: - Вложенные типы
     
     /// Стили бейджа, определяющие его содержимое и цвет.
@@ -73,7 +86,7 @@ struct Badge: View {
     // MARK: - Компоненты
     
     private var badgeContent: some View {
-        HStack(alignment: .center, spacing: 4) {
+        HStack(alignment: .center, spacing: ViewLayout.Label.iconSpacing) {
             if let icon {
                 Image(systemName: icon)
             }
@@ -83,10 +96,10 @@ struct Badge: View {
         }
         .font(.caption.weight(.medium))
         .foregroundStyle(.windowBackground)
-        .padding(.horizontal, 8)
-        .padding(.vertical, 4)
-        .frame(minWidth: 36)
-        .frame(height: 22)
+        .padding(.horizontal, Layout.horizontalInset)
+        .padding(.vertical, Layout.verticalInset)
+        .frame(minWidth: Layout.minWidth)
+        .frame(height: Layout.height)
         .background(fill.gradient, in: .capsule)
     }
 }

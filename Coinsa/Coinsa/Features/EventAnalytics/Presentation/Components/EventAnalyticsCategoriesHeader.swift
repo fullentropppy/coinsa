@@ -24,7 +24,7 @@ struct EventAnalyticsCategoriesHeader: View {
     // MARK: - Тело View
     
     var body: some View {
-        HStack(spacing: 8) {
+        HStack(spacing: ViewLayout.Summary.cardSpacing) {
             EventAmountCardView(
                 title: .amountExpenses,
                 homeAmount: viewModel.expensesTotalHomeAmount,

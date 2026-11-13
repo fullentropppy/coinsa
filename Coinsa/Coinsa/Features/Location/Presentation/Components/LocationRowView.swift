@@ -24,7 +24,7 @@ struct LocationRowView: View {
     // MARK: - Тело View
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
+        VStack(alignment: .leading, spacing: ViewLayout.Row.contentSpacing) {
             upperStack
             lowerStack
         }
@@ -33,14 +33,14 @@ struct LocationRowView: View {
     // MARK: - Компоненты
     
     private var upperStack: some View {
-        HStack(spacing: 4) {
+        HStack(spacing: ViewLayout.Row.metadataSpacing) {
             location.status.makeDot()
             Text(location.name).fontWeight(.semibold)
         }
     }
     
     private var lowerStack: some View {
-        HStack(spacing: 4) {
+        HStack(spacing: ViewLayout.Row.metadataSpacing) {
             DateLabel.secondarySmall(from: location.startPlainDate, to: location.endPlainDate)
             Spacer()
             CountLabel.secondarySmall(location.expensesCount, icon: Expense.primaryIcon)

@@ -10,6 +10,33 @@ import SwiftData
 
 /// Экран "Сегодня" для отображения данных по текущему дню.
 struct TodayView: View {
+    // MARK: - Константы
+
+    private enum Layout {
+        /// Непрозрачность белой подложки быстрых кнопок в светлой теме.
+        static let lightButtonTintOpacity: Double = 0.1
+        /// Непрозрачность черной подложки быстрых кнопок в темной теме.
+        static let darkButtonTintOpacity: Double = 0.2
+        /// Минимальная ширина колонки быстрых трат.
+        static let quickExpenseMinWidth: CGFloat = 140
+        /// Интервал между быстрыми кнопками и их рядами.
+        static let quickExpenseSpacing: CGFloat = 8
+        /// Отступ сетки быстрых трат от границ строки списка.
+        static let quickExpenseGridInset: CGFloat = 4
+        /// Боковые отступы заголовков секций с обнуленными listRowInsets.
+        static let sectionHeaderHorizontalInset: CGFloat = 16
+        /// Вертикальные отступы заголовков секций с обнуленными listRowInsets.
+        static let sectionHeaderVerticalInset: CGFloat = 8
+        /// Размер иконок быстрых категорий и подкатегорий.
+        static let quickExpenseIconSize: CGFloat = 20
+        /// Радиус цветного свечения иконок быстрых трат.
+        static let quickExpenseShadowRadius: CGFloat = 12
+        /// Боковые отступы содержимого быстрой кнопки категории.
+        static let quickExpenseHorizontalInset: CGFloat = 8
+        /// Вертикальные отступы содержимого быстрых кнопок.
+        static let quickExpenseVerticalInset: CGFloat = 4
+    }
+
     // MARK: - Окружение
     
     @Environment(\.modelContext) private var context
@@ -40,11 +67,12 @@ struct TodayView: View {
     }
     
     private var buttonTint: Color {
-        colorScheme == .light ? .white.opacity(0.1) : .black.opacity(0.2)
+        colorScheme == .light ? .white.opacity(Layout.lightButtonTintOpacity) : .black.opacity(Layout.darkButtonTintOpacity)
     }
     
     // MARK: - Инициализация
     
+    /// Создает состояние экрана и выборку локаций, активных в текущую календарную дату.
     init() {
         let viewModel = TodayViewModel(
             currentLocations: [],
@@ -139,7 +167,7 @@ struct TodayView: View {
 
     private func locationSection(location: Location) -> some View {
         Section {
-            VStack(spacing: 14) {
+            VStack(spacing: ViewLayout.Summary.sectionSpacing) {
                 locationPickerContent(location: location)
                 locationSummaryContent(location: location)
             }
@@ -152,22 +180,25 @@ struct TodayView: View {
     
     private var quickExpenseSection: some View {
         Section {
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 140), spacing: 8)], spacing: 8) {
+            LazyVGrid(
+                columns: [GridItem(.adaptive(minimum: Layout.quickExpenseMinWidth), spacing: Layout.quickExpenseSpacing)],
+                spacing: Layout.quickExpenseSpacing
+            ) {
                 ForEach(ExpenseCategory.allCases, id: \.id) { category in
                     quickExpenseButton(category: category)
                 }
-                HStack(spacing: 8) {
+                HStack(spacing: Layout.quickExpenseSpacing) {
                     ForEach(viewModel.quickExpenseSubcategories) { subcategory in
                         quickExpenseButton(subcategory: subcategory)
                     }
                 }
             }
-            .padding(4)
+            .padding(Layout.quickExpenseGridInset)
         } header: {
             Text(.todayQuickExpense)
                 .listRowInsets(EdgeInsets())
-                .padding(.horizontal, 16)
-                .padding(.vertical, 8)
+                .padding(.horizontal, Layout.sectionHeaderHorizontalInset)
+                .padding(.vertical, Layout.sectionHeaderVerticalInset)
         }
         .listRowBackground(Color.clear)
         .listRowInsets(EdgeInsets())
@@ -193,8 +224,8 @@ struct TodayView: View {
             } header: {
                 Text(.todayExpenses)
                     .listRowInsets(EdgeInsets())
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 8)
+                    .padding(.horizontal, Layout.sectionHeaderHorizontalInset)
+                    .padding(.vertical, Layout.sectionHeaderVerticalInset)
             }
             .listRowBackground(
                 RoundedRectangle(cornerRadius: 0).fill(listRowBackgroundMaterial)
@@ -288,14 +319,14 @@ struct TodayView: View {
         } label: {
             HStack(alignment: .center) {
                 Image(systemName: category.primaryIcon)
-                    .frame(width: 20, height: 20)
+                    .frame(width: Layout.quickExpenseIconSize, height: Layout.quickExpenseIconSize)
                     .foregroundStyle(category.accentColor)
-                    .shadow(color: category.accentColor, radius: 12)
+                    .shadow(color: category.accentColor, radius: Layout.quickExpenseShadowRadius)
                 Text(category.localizedResource)
             }
             .font(.subheadline.weight(.medium))
-            .padding(.horizontal, 8)
-            .padding(.vertical, 4)
+            .padding(.horizontal, Layout.quickExpenseHorizontalInset)
+            .padding(.vertical, Layout.quickExpenseVerticalInset)
             .frame(maxWidth: .infinity, alignment: .leading)
         }
         .buttonStyle(.glassProminent)
@@ -312,11 +343,11 @@ struct TodayView: View {
             )
         } label: {
             Image(systemName: subcategory.primaryIcon)
-                .frame(width: 20, height: 20)
+                .frame(width: Layout.quickExpenseIconSize, height: Layout.quickExpenseIconSize)
                 .foregroundStyle(subcategory.accentColor)
-                .shadow(color: subcategory.accentColor, radius: 12)
+                .shadow(color: subcategory.accentColor, radius: Layout.quickExpenseShadowRadius)
                 .font(.subheadline.weight(.medium))
-                .padding(.vertical, 4)
+                .padding(.vertical, Layout.quickExpenseVerticalInset)
                 .frame(maxWidth: .infinity)
         }
         .buttonStyle(.glassProminent)

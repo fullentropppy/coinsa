@@ -33,7 +33,7 @@ struct CountLabel: View {
     
     // MARK: - Тело View
     var body: some View {
-        HStack(spacing: 2) {
+        HStack(spacing: ViewLayout.Label.compactIconSpacing) {
             Image(systemName: icon)
                 .imageScale(.small)
             Text(String(count))

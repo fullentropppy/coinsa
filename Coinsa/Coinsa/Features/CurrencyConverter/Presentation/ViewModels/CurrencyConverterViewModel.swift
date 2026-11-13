@@ -41,6 +41,7 @@ final class CurrencyConverterViewModel {
 
     // MARK: - Инициализация
 
+    /// Создает конвертер валют и начальное состояние ввода; для одинаковых валют курс равен единице.
     init(from: Currency = .usd, to: Currency = .rub) {
         let provider = ExchangeRateProvider(service: HexarateService())
         let initialRate: Double = from == to ? 1 : 0

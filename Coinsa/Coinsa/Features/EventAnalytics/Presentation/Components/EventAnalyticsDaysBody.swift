@@ -9,6 +9,15 @@ import SwiftUI
 
 /// Тело вкладки дневной аналитики расходов события.
 struct EventAnalyticsDaysBody: View {
+    // MARK: - Константы
+
+    private enum Layout {
+        /// Вертикальные отступы секции дневного графика.
+        static let chartVerticalInset: CGFloat = 12
+        /// Интервал между датой и количеством трат в дневной строке.
+        static let dayDetailsSpacing: CGFloat = 6
+    }
+
     // MARK: - Хранимые свойства
 
     private let viewModel: EventAnalyticsViewModel
@@ -46,7 +55,7 @@ struct EventAnalyticsDaysBody: View {
         Section {
             EventDailyExpenseChart(viewModel: viewModel)
         }
-        .padding(.vertical, 12)
+        .padding(.vertical, Layout.chartVerticalInset)
         .listRowInsets(EdgeInsets())
         .listRowBackground(Color.clear)
     }
@@ -72,7 +81,7 @@ struct EventAnalyticsDaysBody: View {
             )
         } label: {
             HStack {
-                VStack(alignment: .leading, spacing: 6) {
+                VStack(alignment: .leading, spacing: Layout.dayDetailsSpacing) {
                     DateLabel(point.date.startOfDay, withTime: false, using: .utc)
                     CountLabel.secondarySmall(
                         point.expenseCount,

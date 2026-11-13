@@ -30,8 +30,8 @@ struct EventAnalyticsSummaryHeader: View {
     // MARK: - Тело View
     
     var body: some View {
-        VStack(spacing: 14) {
-            VStack(spacing: 8) {
+        VStack(spacing: ViewLayout.Summary.sectionSpacing) {
+            VStack(spacing: ViewLayout.Summary.cardSpacing) {
                 budgetContent
                 expensesContent
             }
@@ -44,7 +44,7 @@ struct EventAnalyticsSummaryHeader: View {
     @ViewBuilder
     private var budgetContent: some View {
         if hasBudget {
-            HStack(spacing: 8) {
+            HStack(spacing: ViewLayout.Summary.cardSpacing) {
                 EventAmountCardView(
                     title: .amountBudget,
                     homeAmount: viewModel.eventSummaryData.budgetHomeAmount,
@@ -66,7 +66,7 @@ struct EventAnalyticsSummaryHeader: View {
     }
     
     private var expensesContent: some View {
-        HStack(spacing: 8) {
+        HStack(spacing: ViewLayout.Summary.cardSpacing) {
             EventAmountCardView(
                 title: .amountExpenses,
                 homeAmount: viewModel.eventSummaryData.expensesHomeAmount,

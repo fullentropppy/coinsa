@@ -9,6 +9,29 @@ import SwiftUI
 
 /// Индикатор прогресса в виде капсулы.
 struct ProgressBar: View {
+    // MARK: - Константы
+
+    private enum Layout {
+        /// Высота полосы прогресса.
+        static let height: CGFloat = 10
+        /// Непрозрачность фоновой дорожки прогресса.
+        static let trackOpacity: Double = 0.2
+        /// Длительность анимации изменения заполнения.
+        static let animationDuration: TimeInterval = 0.2
+        /// Граница перехода положительного прогресса от красного к оранжевому.
+        static let positiveOrangeThreshold: Double = 0.1
+        /// Граница перехода положительного прогресса от оранжевого к желтому.
+        static let positiveYellowThreshold: Double = 0.25
+        /// Граница перехода положительного прогресса от желтого к зеленому.
+        static let positiveGreenThreshold: Double = 0.4
+        /// Граница перехода отрицательного прогресса от зеленого к желтому.
+        static let negativeYellowThreshold: Double = 0.6
+        /// Граница перехода отрицательного прогресса от желтого к оранжевому.
+        static let negativeOrangeThreshold: Double = 0.75
+        /// Граница перехода отрицательного прогресса от оранжевого к красному.
+        static let negativeRedThreshold: Double = 0.9
+    }
+
     // MARK: - Вложенные типы
     
     /// Стиль отображения прогресс-бара.
@@ -44,26 +67,21 @@ struct ProgressBar: View {
         }
     }
     
-    /// Создает индикатор прогресса.
-    /// - Parameters:
-    ///   - currentValue: Текущее значение.
-    ///   - maxValue: Максимальное значение (цель).
-    ///   - style: Стиль отображения. По умолчанию `.plain`.
     private var barFill: Color {
         if style == .plain {
             return .green
         } else if style == .positive {
             switch progress {
-            case ..<0.1: return .red
-            case ..<0.25: return .orange
-            case ..<0.4: return .yellow
+            case ..<Layout.positiveOrangeThreshold: return .red
+            case ..<Layout.positiveYellowThreshold: return .orange
+            case ..<Layout.positiveGreenThreshold: return .yellow
             default: return .green
             }
         } else {
             switch progress {
-            case ..<0.6: return .green
-            case ..<0.75: return .yellow
-            case ..<0.9: return .orange
+            case ..<Layout.negativeYellowThreshold: return .green
+            case ..<Layout.negativeOrangeThreshold: return .yellow
+            case ..<Layout.negativeRedThreshold: return .orange
             default: return .red
             }
         }
@@ -71,6 +89,11 @@ struct ProgressBar: View {
     
     // MARK: - Инициализация
     
+    /// Создает индикатор прогресса.
+    /// - Parameters:
+    ///   - currentValue: Текущее значение.
+    ///   - maxValue: Максимальное значение (цель).
+    ///   - style: Стиль отображения. По умолчанию `.plain`.
     init(currentValue: Double, maxValue: Double, style: Style = .plain) {
         self.currentValue = currentValue
         self.maxValue = maxValue
@@ -83,15 +106,15 @@ struct ProgressBar: View {
         GeometryReader { geo in
             ZStack(alignment: .leading) {
                 Capsule()
-                    .fill(backgroundFill.opacity(0.2))
+                    .fill(backgroundFill.opacity(Layout.trackOpacity))
                 
                 Capsule()
                     .fill(barFill.gradient)
                     .frame(width: geo.size.width * progress)
             }
         }
-        .frame(height: 10)
-        .animation(.easeInOut(duration: 0.2), value: progress)
+        .frame(height: Layout.height)
+        .animation(.easeInOut(duration: Layout.animationDuration), value: progress)
     }
 
 }

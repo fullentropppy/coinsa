@@ -24,8 +24,8 @@ struct EventAnalyticsDaysHeader: View {
     // MARK: - Тело View
     
     var body: some View {
-        VStack(spacing: 14) {
-            HStack(spacing: 8) {
+        VStack(spacing: ViewLayout.Summary.sectionSpacing) {
+            HStack(spacing: ViewLayout.Summary.cardSpacing) {
                 EventAmountCardView(
                     title: .amountExpensesDailyMax,
                     homeAmount: viewModel.maxDailyBaseExpenseAmount,

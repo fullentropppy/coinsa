@@ -28,6 +28,7 @@ struct EventDayExpensesView: View {
     
     // MARK: - Инициализация
 
+    /// Создает список трат за календарный день с контекстом исходного события.
     init(
         date: PlainDate,
         data: EventCategoryAnalyticsData,

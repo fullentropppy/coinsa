@@ -10,6 +10,35 @@ import SwiftUI
 
 /// График дневных расходов события.
 struct EventDailyExpenseChart: View {
+    // MARK: - Константы
+
+    private enum Layout {
+        /// Интервал между дневным графиком и кнопками прокрутки.
+        static let controlsSpacing: CGFloat = 12
+        /// Высота области дневного графика.
+        static let chartHeight: CGFloat = 200
+        /// Непрозрачность верхней границы заливки под графиком.
+        static let areaTopOpacity: Double = 0.30
+        /// Непрозрачность нижней границы заливки под графиком.
+        static let areaBottomOpacity: Double = 0.01
+        /// Толщина линии дневных расходов.
+        static let expenseLineWidth: CGFloat = 4
+        /// Толщина опорных линий максимума и среднего уровня.
+        static let referenceLineWidth: CGFloat = 1
+        /// Длины штриха и промежутка опорных линий.
+        static let referenceLineDash: [CGFloat] = [4, 4]
+        /// Непрозрачность опорных линий дневного графика.
+        static let referenceLineOpacity: Double = 0.8
+        /// Запас сверху и снизу области графика для линии расходов.
+        static let plotVerticalInset: CGFloat = 2
+        /// Внутренний отступ ряда кнопок прокрутки графика.
+        static let controlsInset: CGFloat = 2
+        /// Ширина кнопки прокрутки дневного графика.
+        static let controlWidth: CGFloat = 12
+        /// Высота кнопки прокрутки дневного графика.
+        static let controlHeight: CGFloat = 14
+    }
+
     // MARK: - Окружение
     
     @Environment(\.haptics) private var haptics
@@ -34,8 +63,8 @@ struct EventDailyExpenseChart: View {
     // MARK: - Тело View
 
     var body: some View {
-        VStack(spacing: 12) {
-            dailyExpenseChart.frame(height: 200)
+        VStack(spacing: Layout.controlsSpacing) {
+            dailyExpenseChart.frame(height: Layout.chartHeight)
             chartControls
         }
     }
@@ -54,8 +83,8 @@ struct EventDailyExpenseChart: View {
                 .foregroundStyle(
                     LinearGradient(
                         colors: [
-                            Color.accentColor.opacity(0.30),
-                            Color.accentColor.opacity(0.01)
+                            Color.accentColor.opacity(Layout.areaTopOpacity),
+                            Color.accentColor.opacity(Layout.areaBottomOpacity)
                         ],
                         startPoint: .top,
                         endPoint: .bottom
@@ -67,20 +96,20 @@ struct EventDailyExpenseChart: View {
                     y: .value("", point.homeAmount)
                 )
                 .interpolationMethod(.monotone)
-                .lineStyle(.init(lineWidth: 4, lineCap: .round, lineJoin: .round))
+                .lineStyle(.init(lineWidth: Layout.expenseLineWidth, lineCap: .round, lineJoin: .round))
                 .foregroundStyle(Color.accentColor.gradient)
             }
 
             if viewModel.maxDailyBaseExpenseAmount > 0 {
                 RuleMark(y: .value("", viewModel.maxDailyBaseExpenseAmount))
-                    .lineStyle(.init(lineWidth: 1, dash: [4, 4]))
-                    .foregroundStyle(.secondary.opacity(0.8))
+                    .lineStyle(.init(lineWidth: Layout.referenceLineWidth, dash: Layout.referenceLineDash))
+                    .foregroundStyle(.secondary.opacity(Layout.referenceLineOpacity))
             }
 
             if viewModel.halfDailyBaseExpenseAmount > 0 {
                 RuleMark(y: .value("", viewModel.halfDailyBaseExpenseAmount))
-                    .lineStyle(.init(lineWidth: 1, dash: [4, 4]))
-                    .foregroundStyle(.secondary.opacity(0.8))
+                    .lineStyle(.init(lineWidth: Layout.referenceLineWidth, dash: Layout.referenceLineDash))
+                    .foregroundStyle(.secondary.opacity(Layout.referenceLineOpacity))
             }
         }
         .chartXScale(
@@ -89,7 +118,7 @@ struct EventDailyExpenseChart: View {
         )
         .chartYScale(
             domain: 0...viewModel.summaryChartUpperHomeAmount,
-            range: .plotDimension(startPadding: 2, endPadding: 2)
+            range: .plotDimension(startPadding: Layout.plotVerticalInset, endPadding: Layout.plotVerticalInset)
         )
         .chartXAxis {
             AxisMarks(values: .stride(by: .day, count: 1)) { value in
@@ -130,7 +159,7 @@ struct EventDailyExpenseChart: View {
             )
             Spacer()
         }
-        .padding(2)
+        .padding(Layout.controlsInset)
     }
     
     private func scrollPositionButton(position: PlainDate, icon: String) -> some View {
@@ -142,7 +171,7 @@ struct EventDailyExpenseChart: View {
         }
         .buttonStyle(.borderless)
         .tint(.accent)
-        .frame(width: 12, height: 14, alignment: .center)
+        .frame(width: Layout.controlWidth, height: Layout.controlHeight, alignment: .center)
     }
 }
 

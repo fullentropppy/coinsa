@@ -189,7 +189,7 @@ struct LabeledPicker<SelectionValue: Hashable, Content: View, CurrentValueLabel:
                 .imageScale(.small)
                 .fontWeight(.semibold)
                 .foregroundStyle(.accent)
-                .frame(width: 16)
+                .frame(width: ViewLayout.Label.inputAccessoryWidth)
         }
     }
 }

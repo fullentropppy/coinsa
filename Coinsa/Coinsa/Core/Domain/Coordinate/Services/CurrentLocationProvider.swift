@@ -18,6 +18,7 @@ final class CurrentLocationProvider: NSObject {
 
     // MARK: - Инициализация
 
+    /// Создает провайдер геопозиции с точностью до сотни метров и настраивает делегат.
     override init() {
         super.init()
         manager.delegate = self

@@ -9,6 +9,13 @@ import SwiftUI
 
 /// Главная кнопка добавления.
 struct PrimaryAddButton: View {
+    // MARK: - Константы
+
+    private enum Layout {
+        /// Радиус цветного свечения иконки добавления.
+        static let iconShadowRadius: CGFloat = 12
+    }
+
     // MARK: - Окружение
     
     @Environment(\.haptics) private var haptics
@@ -32,9 +39,9 @@ struct PrimaryAddButton: View {
             } label: {
                 Image(systemName: "plus")
                     .font(.title)
-                    .shadow(color: .accent, radius: 12)
+                    .shadow(color: .accent, radius: Layout.iconShadowRadius)
             }
-            .padding(16)
+            .padding(ViewLayout.FloatingControls.buttonInset)
             .contentShape(Circle())
             .glassEffect(.regular.interactive(), in: .circle)
             
@@ -42,8 +49,8 @@ struct PrimaryAddButton: View {
                 Spacer()
             }
         }
-        .padding(.horizontal, 16)
-        .padding(.bottom, 16)
+        .padding(.horizontal, ViewLayout.FloatingControls.edgeInset)
+        .padding(.bottom, ViewLayout.FloatingControls.edgeInset)
     }
 }
 

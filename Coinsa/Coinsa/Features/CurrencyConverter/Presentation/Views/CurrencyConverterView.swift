@@ -10,6 +10,21 @@ import SwiftData
 
 /// Экран конвертера валют.
 struct CurrencyConverterView: View {
+    // MARK: - Константы
+
+    private enum Layout {
+        /// Интервал между подписью валюты и строкой ввода суммы.
+        static let amountRowSpacing: CGFloat = 10
+        /// Интервал между элементами управления валютной парой.
+        static let currencyPairSpacing: CGFloat = 10
+        /// Ширина кнопки очистки суммы в конвертере.
+        static let clearButtonWidth: CGFloat = 42
+        /// Внутренние отступы строки суммы в конвертере.
+        static let amountRowInset: CGFloat = 12
+        /// Радиус скругления строки суммы в конвертере.
+        static let amountRowCornerRadius: CGFloat = 12
+    }
+
     // MARK: - Окружение
 
     @Environment(AppSettingsStore.self) private var settingsStore
@@ -84,7 +99,7 @@ struct CurrencyConverterView: View {
         let currency = isBase ? viewModel.baseCurrency : viewModel.quoteCurrency
         let displayText = viewModel.displayText(for: side)
 
-        return VStack(spacing: 10) {
+        return VStack(spacing: Layout.amountRowSpacing) {
             LabeledPicker(
                 title: isBase ? .converterFromCurrenency : .converterToCurrency,
                 selection: isBase ? fromCurrencyBinding : toCurrencyBinding,
@@ -111,17 +126,17 @@ struct CurrencyConverterView: View {
                     font: .title2.monospaced().weight(.medium),
                     color: isBase ? Color.primary : Color.secondary
                 )
-                .frame(width: 42)
+                .frame(width: Layout.clearButtonWidth)
             }
-            .padding(.vertical, 12)
-            .padding(.horizontal, 12)
+            .padding(.vertical, Layout.amountRowInset)
+            .padding(.horizontal, Layout.amountRowInset)
             .frame(maxWidth: .infinity)
-            .background(.regularMaterial, in: .rect(cornerRadius: 12))
+            .background(.regularMaterial, in: .rect(cornerRadius: Layout.amountRowCornerRadius))
         }
     }
 
     private var rateRow: some View {
-        HStack(alignment: .center, spacing: 10) {
+        HStack(alignment: .center, spacing: Layout.currencyPairSpacing) {
             Button {
                 haptics.trigger(.tap)
                 viewModel.swapCurrencies()
@@ -134,7 +149,7 @@ struct CurrencyConverterView: View {
 
             Spacer()
 
-            HStack(spacing: 4) {
+            HStack(spacing: ViewLayout.Label.iconSpacing) {
                 AmountText.standard(1.0, fractionLength: 0, currency: viewModel.baseCurrency)
                 
                 Image(systemName: "equal")

@@ -9,6 +9,15 @@ import SwiftUI
 
 /// Показывает панель очистки поля и закрытия клавиатуры с учетом настройки положения.
 struct KeyboardInputBarModifier: ViewModifier {
+    // MARK: - Константы
+
+    private enum Layout {
+        /// Высота разделителя между кнопками панели клавиатуры.
+        static let dividerHeight: CGFloat = 20
+        /// Отступ кнопки со стороны центрального разделителя.
+        static let innerButtonInset: CGFloat = 10
+    }
+
     // MARK: - Окружение
 
     @Environment(AppSettingsStore.self) private var settingsStore
@@ -17,8 +26,6 @@ struct KeyboardInputBarModifier: ViewModifier {
     @FocusedValue(\.keyboardClearAction) private var clearAction
 
     // MARK: - Свойства
-    
-    private var buttonSideLength: CGFloat = 48
     
     let isPresented: Bool
     let onDismiss: () -> Void
@@ -35,17 +42,17 @@ struct KeyboardInputBarModifier: ViewModifier {
                     HStack(alignment: .firstTextBaseline, spacing: 0) {
                         if settingsStore.isFloatingButtonOnLeft {
                             dismissButton
-                            Divider().frame(height: 20)
+                            Divider().frame(height: Layout.dividerHeight)
                             clearButton
                         } else {
                             clearButton
-                            Divider().frame(height: 20)
+                            Divider().frame(height: Layout.dividerHeight)
                             dismissButton
                         }
                     }
                     .glassEffect(.regular.interactive(), in: .capsule)
-                    .padding(.horizontal, 16)
-                    .padding(.bottom, 16)
+                    .padding(.horizontal, ViewLayout.FloatingControls.edgeInset)
+                    .padding(.bottom, ViewLayout.FloatingControls.edgeInset)
                 }
             }
     }
@@ -59,9 +66,15 @@ struct KeyboardInputBarModifier: ViewModifier {
         } label: {
             Image(systemName: "xmark.rectangle")
         }
-        .padding(.vertical, 16)
-        .padding(.leading, settingsStore.isFloatingButtonOnLeft ? 10 : 16)
-        .padding(.trailing, settingsStore.isFloatingButtonOnLeft ? 16 : 10)
+        .padding(.vertical, ViewLayout.FloatingControls.buttonInset)
+        .padding(
+            .leading,
+            settingsStore.isFloatingButtonOnLeft ? Layout.innerButtonInset : ViewLayout.FloatingControls.buttonInset
+        )
+        .padding(
+            .trailing,
+            settingsStore.isFloatingButtonOnLeft ? ViewLayout.FloatingControls.buttonInset : Layout.innerButtonInset
+        )
         .disabled(clearAction?.isEmpty ?? true)
     }
 
@@ -72,8 +85,14 @@ struct KeyboardInputBarModifier: ViewModifier {
         } label: {
             Image(systemName: "keyboard.chevron.compact.down")
         }
-        .padding(.vertical, 16)
-        .padding(.leading, settingsStore.isFloatingButtonOnLeft ? 16 : 10)
-        .padding(.trailing, settingsStore.isFloatingButtonOnLeft ? 10 : 16)
+        .padding(.vertical, ViewLayout.FloatingControls.buttonInset)
+        .padding(
+            .leading,
+            settingsStore.isFloatingButtonOnLeft ? ViewLayout.FloatingControls.buttonInset : Layout.innerButtonInset
+        )
+        .padding(
+            .trailing,
+            settingsStore.isFloatingButtonOnLeft ? Layout.innerButtonInset : ViewLayout.FloatingControls.buttonInset
+        )
     }
 }

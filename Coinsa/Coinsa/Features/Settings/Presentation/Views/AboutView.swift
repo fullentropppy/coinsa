@@ -9,6 +9,15 @@ import SwiftUI
 
 /// Экран "О приложении" с информацией о версии, сторонних API и копирайте.
 struct AboutView: View {
+    // MARK: - Константы
+
+    private enum Layout {
+        /// Интервал между строками и элементами шапки сведений о приложении.
+        static let headerSpacing: CGFloat = 4
+        /// Вертикальные отступы шапки сведений о приложении.
+        static let headerVerticalInset: CGFloat = 32
+    }
+
     // MARK: - Вычисляемые свойства
     
     private var privacyPolicyURL: URL {
@@ -64,10 +73,10 @@ struct AboutView: View {
     // MARK: - Компоненты
     
     private var appInfoFooter: some View {
-        VStack(alignment: .center, spacing: 4) {
+        VStack(alignment: .center, spacing: Layout.headerSpacing) {
             Text(AppInfo.appName)
                 .font(.footnote)
-            HStack(spacing: 4) {
+            HStack(spacing: Layout.headerSpacing) {
                 Text(AppInfo.copyrightYears)
                 Text(.appAuthor)
             }
@@ -75,7 +84,7 @@ struct AboutView: View {
         }
         .foregroundStyle(.secondary)
         .frame(maxWidth: .infinity)
-        .padding(.vertical, 32)
+        .padding(.vertical, Layout.headerVerticalInset)
     }
 }
 

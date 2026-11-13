@@ -13,7 +13,7 @@ extension View {
     /// - Returns: Модифицированное представление.
     func loadingState(_ isLoading: Bool) -> some View {
         self
-            .opacity(isLoading ? 0.46 : 1)
+            .opacity(isLoading ? ViewLayout.Loading.contentOpacity : 1)
             .disabled(isLoading)
     }
 }

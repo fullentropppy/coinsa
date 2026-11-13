@@ -16,6 +16,7 @@ extension ClusteredExpensesMap {
         private var needsFit: Bool
         private var animatesFit = false
 
+        /// Создает координатор карты и запрашивает начальный охват, если камера еще не сохранена.
         init(_ parent: ClusteredExpensesMap) {
             self.parent = parent
             lastFitRequest = parent.fitRequest

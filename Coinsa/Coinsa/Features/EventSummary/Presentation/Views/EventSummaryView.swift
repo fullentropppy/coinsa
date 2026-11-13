@@ -52,7 +52,7 @@ struct EventSummaryView: View {
         if !showsHeader && !showsAmounts && !showsAmountBalance {
             EmptyView()
         } else {
-            VStack(spacing: 14) {
+            VStack(spacing: ViewLayout.Summary.sectionSpacing) {
                 if showsHeader {
                     headerContent
                 }
@@ -72,7 +72,7 @@ struct EventSummaryView: View {
     @ViewBuilder
     private var headerContent: some View {
         if let badgeProvider = data.badgeProvider, let dateRangeProvider = data.dateRangeProvider {
-            HStack(spacing: 4) {
+            HStack(spacing: ViewLayout.Row.metadataSpacing) {
                 Badge(style: .combined(
                     icon: badgeProvider.secondaryIcon,
                     badge: dateRangeProvider.status.localizedResource,
@@ -90,7 +90,7 @@ struct EventSummaryView: View {
     }
     
     private var amountsContent: some View {
-        HStack(spacing: 8) {
+        HStack(spacing: ViewLayout.Summary.cardSpacing) {
             if showsBudgetAmount {
                 EventAmountCardView(
                     title: data.budgetTitle,

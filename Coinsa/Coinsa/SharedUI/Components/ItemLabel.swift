@@ -49,7 +49,7 @@ struct ItemLabel: View {
         icon: String,
         iconWidth: CGFloat
     ) -> some View {
-        HStack(alignment: .center, spacing: 4) {
+        HStack(alignment: .center, spacing: ViewLayout.Label.iconSpacing) {
             Image(systemName: icon)
                 .imageScale(.small)
                 .fontWeight(.semibold)

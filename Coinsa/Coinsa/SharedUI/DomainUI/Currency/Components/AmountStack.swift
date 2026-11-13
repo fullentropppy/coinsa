@@ -39,7 +39,7 @@ struct AmountStack: View {
     // MARK: - Тело View
     
     var body: some View {
-        VStack(alignment: .trailing, spacing: 10) {
+        VStack(alignment: .trailing, spacing: ViewLayout.Row.contentSpacing) {
             if let mainAmount = expenseAmount,
                let mainCurrency = expenseCurrency,
                mainCurrency != homeCurrency {

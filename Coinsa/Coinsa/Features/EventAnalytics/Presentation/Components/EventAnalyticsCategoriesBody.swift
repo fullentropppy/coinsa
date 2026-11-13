@@ -10,6 +10,19 @@ import SwiftUI
 
 /// Тело вкладки аналитики расходов по категориям.
 struct EventAnalyticsCategoriesBody: View {
+    // MARK: - Константы
+
+    private enum Layout {
+        /// Радиус внутреннего отверстия кольцевой диаграммы категорий.
+        static let chartInnerRadius: CGFloat = 68
+        /// Зазор между секторами диаграммы категорий.
+        static let chartAngularInset: CGFloat = 1
+        /// Радиус скругления секторов диаграммы категорий.
+        static let chartSectorCornerRadius: CGFloat = 6
+        /// Высота кольцевой диаграммы категорий.
+        static let chartHeight: CGFloat = 220
+    }
+
     // MARK: - Окружение
 
     @Environment(\.haptics) private var haptics
@@ -73,13 +86,13 @@ struct EventAnalyticsCategoriesBody: View {
             Chart(displayedSlicesSortedByID, id: \.category.id) { slice in
                 SectorMark(
                     angle: .value("", slice.homeAmount),
-                    innerRadius: 68,
-                    angularInset: 1
+                    innerRadius: .fixed(Layout.chartInnerRadius),
+                    angularInset: Layout.chartAngularInset
                 )
-                .cornerRadius(6)
+                .cornerRadius(Layout.chartSectorCornerRadius)
                 .foregroundStyle(slice.category.accentColor.gradient)
             }
-            .frame(height: 220)
+            .frame(height: Layout.chartHeight)
         }
         .listRowBackground(Color.clear)
     }
@@ -122,9 +135,9 @@ struct EventAnalyticsCategoriesBody: View {
 
     private func categoriesChartLegendRow(for slice: ExpenseAnalyticsSlice) -> some View {
         HStack {
-            VStack(alignment: .leading, spacing: 10) {
+            VStack(alignment: .leading, spacing: ViewLayout.Row.contentSpacing) {
                 Text(slice.category.localizedResource)
-                HStack(spacing: 4) {
+                HStack(spacing: ViewLayout.Row.metadataSpacing) {
                     slice.category.makeDot()
                     Text(shareValue(for: slice).percentFormat())
                         .font(.footnote.monospacedDigit())

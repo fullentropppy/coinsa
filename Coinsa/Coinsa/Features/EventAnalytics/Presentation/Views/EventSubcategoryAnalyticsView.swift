@@ -83,13 +83,13 @@ struct EventSubcategoryAnalyticsView: View {
     
     private func legendRow(for slice: ExpenseSubcategoryAnalyticsSlice) -> some View {
         HStack {
-            VStack(alignment: .leading, spacing: 10) {
+            VStack(alignment: .leading, spacing: ViewLayout.Row.contentSpacing) {
                 Text(slice.subcategory.localizedResource)
-                HStack(spacing: 4) {
+                HStack(spacing: ViewLayout.Row.metadataSpacing) {
                     Image(systemName: slice.subcategory.secondaryIcon)
                         .imageScale(.small)
                         .foregroundStyle(slice.subcategory.accentColor.gradient)
-                        .frame(width: 20)
+                        .frame(width: ViewLayout.Row.iconWidth)
                     Text(shareValue(for: slice).percentFormat())
                         .font(.footnote.monospacedDigit())
                         .foregroundStyle(.secondary)

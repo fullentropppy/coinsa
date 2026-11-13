@@ -17,6 +17,7 @@ struct ExpenseMapPreviewData {
         analyticsData.expenses
     }
 
+    /// Создает синтетические данные карты во временном in-memory хранилище без CloudKit.
     init(forTrip: Bool = false, includeExpenses: Bool = true) {
         let configuration = ModelConfiguration(isStoredInMemoryOnly: true, cloudKitDatabase: .none)
         let container: ModelContainer

@@ -9,6 +9,17 @@ import SwiftUI
 
 /// Заголовок для секции группы, отображающий иконку, основной текст и опционально подтекст.
 struct GroupHeader: View {
+    // MARK: - Константы
+
+    private enum Layout {
+        /// Боковые отступы счетчика элементов в заголовке группы.
+        static let countHorizontalInset: CGFloat = 4
+        /// Минимальная ширина счетчика группы.
+        static let countMinWidth: CGFloat = 18
+        /// Высота капсулы счетчика группы.
+        static let countHeight: CGFloat = 18
+    }
+
     // MARK: - Свойства
     
     let icon: String
@@ -32,14 +43,14 @@ struct GroupHeader: View {
     
     var body: some View {
         VStack(alignment: .center) {
-            HStack(alignment: .center, spacing: 4) {
+            HStack(alignment: .center, spacing: ViewLayout.Label.iconSpacing) {
                 if let itemCount {
                     Text(String(itemCount))
                         .font(.caption.weight(.medium))
                         .foregroundStyle(.windowBackground)
-                        .padding(.horizontal, 4)
-                        .frame(minWidth: 18)
-                        .frame(height: 18)
+                        .padding(.horizontal, Layout.countHorizontalInset)
+                        .frame(minWidth: Layout.countMinWidth)
+                        .frame(height: Layout.countHeight)
                         .background(.gray, in: .capsule)
                 }
                 

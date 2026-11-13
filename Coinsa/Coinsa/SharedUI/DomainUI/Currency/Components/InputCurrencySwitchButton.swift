@@ -28,7 +28,7 @@ struct InputCurrencySwitchButton: View {
                 .imageScale(.small)
                 .fontWeight(.semibold)
         }
-        .frame(width: 16)
+        .frame(width: ViewLayout.Label.inputAccessoryWidth)
         .buttonStyle(.borderless)
         .foregroundStyle(.accent)
     }

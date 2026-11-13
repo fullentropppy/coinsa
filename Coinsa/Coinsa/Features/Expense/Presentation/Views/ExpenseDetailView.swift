@@ -11,6 +11,19 @@ import MapKit
 
 /// Детальный экран траты.
 struct ExpenseDetailView: View {
+    // MARK: - Константы
+
+    private enum Layout {
+        /// Половина ширины перехода маски фона в долях высоты экрана.
+        static let gradientTransitionHalfWidth: CGFloat = 0.1
+        /// Расстояние камеры фоновой карты до места траты в метрах.
+        static let mapCameraDistance: Double = 10_000
+        /// Отступы блоков сумм внутри карточки подробностей траты.
+        static let amountBlockInset: CGFloat = 10
+        /// Интервал под подписью способа оплаты перед основной суммой.
+        static let paymentLabelBottomInset: CGFloat = 2
+    }
+
     // MARK: - Хранимые свойства
 
     @Environment(\.dismiss) private var dismiss
@@ -37,8 +50,8 @@ struct ExpenseDetailView: View {
             stops:
                 [
                     .init(color: .black, location: 0),
-                    .init(color: .black, location: max(lastStopLocation - 0.1, 0)),
-                    .init(color: .clear, location: lastStopLocation + 0.1)
+                    .init(color: .black, location: max(lastStopLocation - Layout.gradientTransitionHalfWidth, 0)),
+                    .init(color: .clear, location: lastStopLocation + Layout.gradientTransitionHalfWidth)
                 ],
             startPoint: .top,
             endPoint: .bottom
@@ -51,7 +64,7 @@ struct ExpenseDetailView: View {
         
     private var mapCameraPosition: MapCameraPosition? {
         if let cameraCoordinate = viewModel.coordinate {
-            .camera(MapCamera(centerCoordinate: cameraCoordinate, distance: 10000))
+            .camera(MapCamera(centerCoordinate: cameraCoordinate, distance: Layout.mapCameraDistance))
         } else {
             nil
         }
@@ -59,6 +72,7 @@ struct ExpenseDetailView: View {
     
     // MARK: - Инициализация
 
+    /// Создает экран подробностей переданной траты.
     init(_ expense: Expense) {
         self.expense = expense
     }
@@ -122,7 +136,7 @@ struct ExpenseDetailView: View {
 
     private var mainSection: some View {
         Section {
-            VStack(spacing: 14) {
+            VStack(spacing: ViewLayout.Summary.sectionSpacing) {
                 headerContent
                 cardContent
                 additionalInfoContent
@@ -140,7 +154,7 @@ struct ExpenseDetailView: View {
                 HStack {
                     Image(systemName: "ellipsis.bubble")
                         .foregroundStyle(.secondary)
-                        .padding(.vertical, 1)
+                        .padding(.vertical, ViewLayout.Comment.iconVerticalInset)
                         .frame(maxHeight: .infinity, alignment: .topLeading)
 
                     Text(comment)
@@ -188,7 +202,7 @@ struct ExpenseDetailView: View {
     }
     
     private var headerContent: some View {
-        HStack(spacing: 4) {
+        HStack(spacing: ViewLayout.Row.metadataSpacing) {
             expense.subcategory.makeBadge()
             Spacer()
             DateLabel.secondarySmall(expense.civilDateTime)
@@ -201,15 +215,15 @@ struct ExpenseDetailView: View {
     
     private var cardContent: some View {
         VStack(alignment: .leading) {
-            HStack(spacing: 4) {
+            HStack(spacing: ViewLayout.Label.iconSpacing) {
                 Image(systemName: expense.paymentMethod.primaryIcon)
                 Text(expense.paymentMethod == .card ? .expensePaidByCard : .expensePaidInCash)
             }
             .font(.footnote)
             .foregroundStyle(.secondary)
-            .padding(.leading, 10)
-            .padding(.top, 10)
-            .padding(.bottom, 2)
+            .padding(.leading, Layout.amountBlockInset)
+            .padding(.top, Layout.amountBlockInset)
+            .padding(.bottom, Layout.paymentLabelBottomInset)
             
             AmountText(
                 viewModel.primaryAmount,
@@ -218,8 +232,8 @@ struct ExpenseDetailView: View {
                 currencyFont: .title.monospaced(),
                 currencyColor: .secondary
             )
-            .padding(.leading, 10)
-            .padding(.bottom, 10)
+            .padding(.leading, Layout.amountBlockInset)
+            .padding(.bottom, Layout.amountBlockInset)
             
             if let secondaryAmount = viewModel.secondaryAmount,
                let secondaryCurrency = viewModel.secondaryCurrency {
@@ -232,12 +246,12 @@ struct ExpenseDetailView: View {
                     currency: secondaryCurrency,
                     currencyFont: .body.monospaced()
                 )
-                .padding(10)
+                .padding(Layout.amountBlockInset)
             }
         }
-        .padding(10)
+        .padding(ViewLayout.Card.contentInset)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .glassEffect(.regular, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .glassEffect(.regular, in: RoundedRectangle(cornerRadius: ViewLayout.Card.cornerRadius, style: .continuous))
     }
     
     @ViewBuilder
