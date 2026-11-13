@@ -38,7 +38,7 @@ struct ExpenseDetailView: View {
                 [
                     .init(color: .black, location: 0),
                     .init(color: .black, location: max(lastStopLocation - 0.1, 0)),
-                    .init(color: .clear, location: lastStopLocation)
+                    .init(color: .clear, location: lastStopLocation + 0.1)
                 ],
             startPoint: .top,
             endPoint: .bottom
@@ -200,7 +200,17 @@ struct ExpenseDetailView: View {
     }
     
     private var cardContent: some View {
-        VStack(alignment: .center) {
+        VStack(alignment: .leading) {
+            HStack(spacing: 4) {
+                Image(systemName: expense.paymentMethod.primaryIcon)
+                Text(expense.paymentMethod == .card ? .expensePaidByCard : .expensePaidInCash)
+            }
+            .font(.footnote)
+            .foregroundStyle(.secondary)
+            .padding(.leading, 10)
+            .padding(.top, 10)
+            .padding(.bottom, 2)
+            
             AmountText(
                 viewModel.primaryAmount,
                 font: .title,
@@ -208,14 +218,8 @@ struct ExpenseDetailView: View {
                 currencyFont: .title.monospaced(),
                 currencyColor: .secondary
             )
-            .padding(.top, 28)
-            .padding(.bottom, 14)
-            
-            Image(systemName: expense.paymentMethod.primaryIcon)
-                .imageScale(.medium)
-                .fontWeight(.semibold)
-                .foregroundStyle(.secondary)
-                .padding(.bottom, 28)
+            .padding(.leading, 10)
+            .padding(.bottom, 10)
             
             if let secondaryAmount = viewModel.secondaryAmount,
                let secondaryCurrency = viewModel.secondaryCurrency {
@@ -228,11 +232,11 @@ struct ExpenseDetailView: View {
                     currency: secondaryCurrency,
                     currencyFont: .body.monospaced()
                 )
-                .padding(14)
+                .padding(10)
             }
         }
         .padding(10)
-        .frame(maxWidth: .infinity)
+        .frame(maxWidth: .infinity, alignment: .leading)
         .glassEffect(.regular, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
     }
     

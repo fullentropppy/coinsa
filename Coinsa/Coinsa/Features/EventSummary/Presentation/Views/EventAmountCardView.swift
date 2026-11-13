@@ -44,14 +44,20 @@ struct EventAmountCardView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text(title).font(.footnote).foregroundStyle(.secondary)
+            Text(title)
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+                .padding(.bottom, 2)
+            
             if let locationAmount, let locationCurrency {
                 AmountText.standard(locationAmount, currency: locationCurrency)
-                Spacer()
+                    .padding(.bottom, 2)
                 Divider()
                 AmountText.secondarySmall(homeAmount, currency: homeCurrency)
+                    .padding(.vertical, 2)
             } else {
                 AmountText.standard(homeAmount, currency: homeCurrency)
+                    .padding(.bottom, 2)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)

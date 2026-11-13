@@ -2580,7 +2580,7 @@
         }
       }
     },
-    "expense.exchangeRate" : {
+    "expense.exchangeRateOf" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -2678,6 +2678,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Изменение траты"
+          }
+        }
+      }
+    },
+    "expense.paid.byCard" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paid by card"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Оплачено по карте"
+          }
+        }
+      }
+    },
+    "expense.paid.inCash" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paid in cash"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Оплачено наличными"
           }
         }
       }
@@ -4416,7 +4450,7 @@
         }
       }
     },
-    "today.exchangeRate" : {
+    "today.exchangeRateOf" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
