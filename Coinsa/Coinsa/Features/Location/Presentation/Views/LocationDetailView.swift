@@ -20,6 +20,7 @@ struct LocationDetailView: View {
     // MARK: - Состояние
     
     @State private var deletionHandler = DeletionHandler<Expense>()
+    @State private var isShowingDeletionError = false
     @State private var isShowingLocationEdit = false
     @State private var isShowingExpenseCreate = false
     @State private var expenseToEdit: Expense?
@@ -81,6 +82,12 @@ struct LocationDetailView: View {
                 isPresented: $isShowingTransferSuccess,
                 title: "",
                 message: transferSuccessMessage ?? .errorUnknown
+            )
+            .notificationAlert(
+                isPresented: $isShowingDeletionError,
+                title: .expenseStorageErrorTitle,
+                message: .expenseStorageDeleteErrorMessage,
+                isError: true
             )
             .safeAreaInset(edge: .bottom) {
                 if location.hasExpenses {
@@ -208,8 +215,13 @@ struct LocationDetailView: View {
     }
 
     private func confirmDelete() {
-        withAnimation {
-            deletionHandler.confirm { repository.delete($0) }
+        do {
+            try withAnimation {
+                try repository.delete(deletionHandler.itemsPendingDeletion)
+            }
+            deletionHandler.cancel()
+        } catch {
+            isShowingDeletionError = true
         }
     }
 

@@ -8,6 +8,7 @@
 import CoreLocation
 import Foundation
 import Observation
+import SwiftData
 
 /// ViewModel для экрана создания/редактирования траты.
 @MainActor
@@ -26,6 +27,7 @@ final class ExpenseEditViewModel {
     
     private var initialSnapshot: Snapshot
     private var hasLoadedInitialRates = false
+    private var amountInputSide: CurrencyPairSide = .quote
     private var calculationContext: ExpenseCalculationContext {
         ExpenseCalculationContext(
             homeAmount: homeAmount,
@@ -237,11 +239,13 @@ final class ExpenseEditViewModel {
         )
     }
     
-    /// Создает ViewModel для редактирования существующей траты.
+    /// Создает черновик существующей траты; возвращает nil, если родительская локация недоступна.
     /// - Parameter expense: Редактируемая трата.
-    convenience init(forEdit expense: Expense) {
+    convenience init?(forEdit expense: Expense) {
+        guard !expense.isDeleted, let location = expense.location, !location.isDeleted else { return nil }
+
         self.init(
-            location: expense.location!,
+            location: location,
             expense: expense,
             date: expense.civilDateTime.storedDate,
             homeAmount: expense.homeAmount,
@@ -359,6 +363,7 @@ final class ExpenseEditViewModel {
     }
     
     func updateAmount(_ newValue: Double, for inputCurrency: CurrencyPairSide) {
+        amountInputSide = inputCurrency
         amountManager.updateAmount(
             newValue,
             for: inputCurrency,
@@ -408,7 +413,12 @@ final class ExpenseEditViewModel {
         guard showsRateExpenseToBase else { return }
         
         homeCurrencyConverter.requestRateRefresh { [weak self] _ in
-            self?.syncInitialSnapshotWithCurrentValues()
+            guard let self else { return }
+            amountManager.updateFromRateChange(
+                for: amountInputSide,
+                useExchangeAdjustment: useExchangeAdjustment
+            )
+            syncInitialSnapshotWithCurrentValues()
         }
     }
     
@@ -483,9 +493,9 @@ final class ExpenseEditViewModel {
         isExpenseLocationCurrency ? 1 : rateExpenseToLocation
     }
     
-    func save(using repository: ExpenseRepository) {
+    func save(using repository: ExpenseRepository) throws {
         if let expense {
-            repository.update(
+            try repository.update(
                 expense,
                 date: date,
                 homeAmount: homeAmount,
@@ -502,7 +512,7 @@ final class ExpenseEditViewModel {
                 comment: comment
             )
         } else {
-            repository.add(
+            try repository.add(
                 date: date,
                 homeAmount: homeAmount,
                 expenseCurrency: expenseCurrency,

@@ -23,6 +23,7 @@ struct FullScreenMapView: View {
     @State private var cameraPosition: MapCameraPosition
     @State private var currentLocationProvider = CurrentLocationProvider()
     @State private var isGeolocating = false
+    @State private var locationTask: Task<Void, Never>?
     @State private var isShowingGeolocationError = false
 
     // MARK: - Свойства
@@ -98,6 +99,9 @@ struct FullScreenMapView: View {
                     message: errorMessage ?? .errorUnknown,
                     isError: true
                 )
+                .onDisappear {
+                    locationTask?.cancel()
+                }
                 .safeAreaInset(edge: .bottom, spacing: 0) {
                     mapBottomBar
                 }
@@ -128,9 +132,11 @@ struct FullScreenMapView: View {
 
             if isEditable {
                 Button {
+                    guard locationTask == nil else { return }
                     haptics.trigger(.tap)
-                    Task {
+                    locationTask = Task {
                         await determineCurrentLocation()
+                        locationTask = nil
                     }
                 } label: {
                     if isGeolocating {
@@ -189,14 +195,18 @@ struct FullScreenMapView: View {
     // MARK: - Действия
 
     private func determineCurrentLocation() async {
+        guard !isGeolocating else { return }
         isGeolocating = true
         defer { isGeolocating = false }
 
         do {
             let location = try await currentLocationProvider.requestCurrentLocation()
+            try Task.checkCancellation()
             let currentCoordinate = Coordinate(location)
             draftCoordinate = currentCoordinate
             cameraPosition = Self.cameraPosition(for: currentCoordinate)
+        } catch is CancellationError {
+            return
         } catch {
             isShowingGeolocationError = true
         }

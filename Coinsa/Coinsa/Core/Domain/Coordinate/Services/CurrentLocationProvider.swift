@@ -14,7 +14,7 @@ final class CurrentLocationProvider: NSObject {
     // MARK: - Состояние
 
     private let manager = CLLocationManager()
-    private var continuation: CheckedContinuation<CLLocation, Error>?
+    private var continuations: [UUID: CheckedContinuation<CLLocation, Error>] = [:]
 
     // MARK: - Инициализация
 
@@ -29,14 +29,31 @@ final class CurrentLocationProvider: NSObject {
     // MARK: - Операции
 
     func requestCurrentLocation() async throws -> CLLocation {
-        try await withCheckedThrowingContinuation { continuation in
-            self.continuation = continuation
-            requestAuthorizationOrLocation()
+        let requestID = UUID()
+
+        return try await withTaskCancellationHandler {
+            try Task.checkCancellation()
+            return try await withCheckedThrowingContinuation { continuation in
+                guard !Task.isCancelled else {
+                    continuation.resume(throwing: CancellationError())
+                    return
+                }
+
+                let shouldStartRequest = continuations.isEmpty
+                continuations[requestID] = continuation
+                if shouldStartRequest {
+                    requestAuthorizationOrLocation()
+                }
+            }
+        } onCancel: {
+            Task { @MainActor in
+                self.continuations.removeValue(forKey: requestID)?.resume(throwing: CancellationError())
+            }
         }
     }
 
     private func requestAuthorizationOrLocation() {
-        if continuation == nil {
+        if continuations.isEmpty {
             return
         }
         
@@ -53,13 +70,19 @@ final class CurrentLocationProvider: NSObject {
     }
 
     private func resume(returning location: CLLocation) {
-        continuation?.resume(returning: location)
-        continuation = nil
+        let pending = continuations.values
+        continuations.removeAll()
+        for continuation in pending {
+            continuation.resume(returning: location)
+        }
     }
 
     private func resume(throwing error: Error) {
-        continuation?.resume(throwing: error)
-        continuation = nil
+        let pending = continuations.values
+        continuations.removeAll()
+        for continuation in pending {
+            continuation.resume(throwing: error)
+        }
     }
 }
 

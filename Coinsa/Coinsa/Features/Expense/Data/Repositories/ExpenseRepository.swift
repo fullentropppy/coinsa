@@ -48,34 +48,39 @@ struct ExpenseRepository {
         longitude: Double?,
         horizontalAccuracy: Double?,
         comment: String?
-    ) {
-        let now = Date()
+    ) throws {
+        guard location.modelContext === context, !location.isDeleted else {
+            throw ExpenseRepositoryError.locationUnavailable
+        }
+
+        try saveChanges {
+            let now = Date()
         
-        let expense = Expense(
-            id: UUID(),
-            date: date,
-            actualDate: date,
-            timeZoneID: "",
-            homeAmount: homeAmount,
-            expenseCurrencyCode: expenseCurrency.code,
-            rateExpenseToHome: rateExpenseToHome,
-            rateExpenseToLocation: rateExpenseToLocation,
-            paymentMethodRaw: paymentMethod.rawValue,
-            exchangeAdjustment: exchangeAdjustment,
-            categoryRaw: category.rawValue,
-            subcategoryRaw: subcategory.rawValue,
-            location: location,
-            latitude: latitude,
-            longitude: longitude,
-            horizontalAccuracy: horizontalAccuracy,
-            comment: comment,
-            createdAt: now,
-            updatedAt: now
-        )
+            let expense = Expense(
+                id: UUID(),
+                date: date,
+                actualDate: date,
+                timeZoneID: "",
+                homeAmount: homeAmount,
+                expenseCurrencyCode: expenseCurrency.code,
+                rateExpenseToHome: rateExpenseToHome,
+                rateExpenseToLocation: rateExpenseToLocation,
+                paymentMethodRaw: paymentMethod.rawValue,
+                exchangeAdjustment: exchangeAdjustment,
+                categoryRaw: category.rawValue,
+                subcategoryRaw: subcategory.rawValue,
+                location: location,
+                latitude: latitude,
+                longitude: longitude,
+                horizontalAccuracy: horizontalAccuracy,
+                comment: comment,
+                createdAt: now,
+                updatedAt: now
+            )
         
-        normalizeExpenseData(expense, updatesDateMetadata: true)
-        context.insert(expense)
-        try? context.save()
+            normalizeExpenseData(expense, updatesDateMetadata: true)
+            context.insert(expense)
+        }
     }
     
     /// Обновляет существующую трату.
@@ -109,33 +114,70 @@ struct ExpenseRepository {
         longitude: Double?,
         horizontalAccuracy: Double?,
         comment: String?
-    ) {
-        let hasDateChanged = CivilDateTime(date) != expense.civilDateTime
+    ) throws {
+        guard expense.modelContext === context, !expense.isDeleted,
+              let location = expense.location, !location.isDeleted else {
+            throw ExpenseRepositoryError.locationUnavailable
+        }
 
-        expense.storedDate = date
-        expense.baseAmount = homeAmount
-        expense.expenseCurrencyCode = expenseCurrency.code
-        expense.rateExpenseToBase = rateExpenseToHome
-        expense.rateExpenseToLocation = rateExpenseToLocation
-        expense.paymentMethodRaw = paymentMethod.rawValue
-        expense.exchangeAdjustment = exchangeAdjustment
-        expense.categoryRaw = category.rawValue
-        expense.subcategoryRaw = subcategory.rawValue
-        expense.latitude = latitude
-        expense.longitude = longitude
-        expense.horizontalAccuracy = horizontalAccuracy
-        expense.comment = comment
-        expense.updatedAt = Date()
+        try saveChanges {
+            let hasDateChanged = CivilDateTime(date) != expense.civilDateTime
+
+            expense.storedDate = date
+            expense.baseAmount = homeAmount
+            expense.expenseCurrencyCode = expenseCurrency.code
+            expense.rateExpenseToBase = rateExpenseToHome
+            expense.rateExpenseToLocation = rateExpenseToLocation
+            expense.paymentMethodRaw = paymentMethod.rawValue
+            expense.exchangeAdjustment = exchangeAdjustment
+            expense.categoryRaw = category.rawValue
+            expense.subcategoryRaw = subcategory.rawValue
+            expense.latitude = latitude
+            expense.longitude = longitude
+            expense.horizontalAccuracy = horizontalAccuracy
+            expense.comment = comment
+            expense.updatedAt = Date()
         
-        normalizeExpenseData(expense, updatesDateMetadata: hasDateChanged)
-        try? context.save()
+            normalizeExpenseData(expense, updatesDateMetadata: hasDateChanged)
+        }
     }
     
     /// Удаляет трату.
     /// - Parameter expense: Трата для удаления.
-    func delete(_ expense: Expense) {
-        context.delete(expense)
-        try? context.save()
+    func delete(_ expense: Expense) throws {
+        try delete([expense])
+    }
+
+    /// Удаляет выбранные траты одной операцией и восстанавливает их при ошибке записи.
+    /// - Parameter expenses: Траты из текущего контекста.
+    func delete(_ expenses: [Expense]) throws {
+        guard expenses.allSatisfy({ $0.modelContext === context && !$0.isDeleted }) else {
+            throw ExpenseRepositoryError.expenseUnavailable
+        }
+
+        try saveChanges {
+            for expense in expenses {
+                context.delete(expense)
+            }
+        }
+    }
+
+    // MARK: - Сохранение
+
+    /// Фиксирует предыдущие изменения до операции, чтобы откат при ошибке не затронул их.
+    /// - Parameter changes: Синхронные изменения, сохраняемые вместе.
+    private func saveChanges(_ changes: () -> Void) throws {
+        if context.hasChanges {
+            try context.save()
+        }
+
+        do {
+            changes()
+            try context.save()
+        } catch {
+            context.rollback()
+            throw error
+        }
     }
     
     // MARK: - Нормализация значений
@@ -177,6 +219,23 @@ struct ExpenseRepository {
             comment.trimmed
         } else {
             nil
+        }
+    }
+}
+
+// MARK: - Ошибки
+
+/// Причина недоступности данных для операции с тратой.
+enum ExpenseRepositoryError: LocalizedError {
+    case locationUnavailable
+    case expenseUnavailable
+
+    var errorDescription: String? {
+        switch self {
+        case .locationUnavailable:
+            String(localized: .expenseEditorUnavailableMessage)
+        case .expenseUnavailable:
+            String(localized: .expenseStorageUnavailableMessage)
         }
     }
 }

@@ -64,6 +64,7 @@ private struct TodayContentView: View {
 
     @State private var viewModel = TodayViewModel()
     @State private var deletionHandler = DeletionHandler<Expense>()
+    @State private var isShowingDeletionError = false
     @State private var selectedQuickExpense: QuickExpenseSelection?
     @State private var expenseToEdit: Expense?
     @Query private var currentLocations: [Location]
@@ -137,6 +138,12 @@ private struct TodayContentView: View {
             }
             .scrollContentBackground(.hidden)
         }
+        .notificationAlert(
+            isPresented: $isShowingDeletionError,
+            title: .expenseStorageErrorTitle,
+            message: .expenseStorageDeleteErrorMessage,
+            isError: true
+        )
         .navigationTitle(viewModel.navigationTitle(for: selectedLocation, locationsCount: currentLocations.count))
         .navigationSubtitle(DateDisplayFormatter.format(date, showsTime: false, showsWeekday: true).capitalized)
         .navigationBarTitleDisplayMode(.large)
@@ -221,8 +228,13 @@ private struct TodayContentView: View {
     }
 
     private func confirmDelete() {
-        withAnimation {
-            deletionHandler.confirm { repository.delete($0) }
+        do {
+            try withAnimation {
+                try repository.delete(deletionHandler.itemsPendingDeletion)
+            }
+            deletionHandler.cancel()
+        } catch {
+            isShowingDeletionError = true
         }
     }
 }

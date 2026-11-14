@@ -2574,6 +2574,40 @@
         }
       }
     },
+    "expense.editor.unavailable.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The expense’s location is unavailable. Close this screen and try again after syncing."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Локация траты недоступна. Закройте экран и повторите попытку после синхронизации."
+          }
+        }
+      }
+    },
+    "expense.editor.unavailable.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Editing unavailable"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Редактирование недоступно"
+          }
+        }
+      }
+    },
     "expense.emptyState.description" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2791,6 +2825,74 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Место траты"
+          }
+        }
+      }
+    },
+    "expense.storage.deleteError.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The expense could not be deleted. Try again."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось удалить трату. Повторите попытку."
+          }
+        }
+      }
+    },
+    "expense.storage.error.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Operation failed"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось выполнить операцию"
+          }
+        }
+      }
+    },
+    "expense.storage.saveError.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The expense could not be saved. Your changes remain in the editor. Try again."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось сохранить трату. Ваши изменения остались в редакторе. Повторите попытку."
+          }
+        }
+      }
+    },
+    "expense.storage.unavailable.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The expense is no longer available. Close this screen and refresh the list."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Трата больше недоступна. Закройте экран и обновите список."
           }
         }
       }

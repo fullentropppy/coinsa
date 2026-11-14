@@ -13,6 +13,7 @@ struct NumericInputField: View {
     
     @State private var state: DecimalInputState
     @State private var textFieldText: String = ""
+    @State private var hasUserChanges = false
     @Binding private var value: Double
     
     private let focusedField: FocusState<NumericEditField?>.Binding
@@ -76,7 +77,7 @@ struct NumericInputField: View {
     // MARK: - Тело View
     
     var body: some View {
-        TextField(placeholder, text: $textFieldText)
+        TextField(placeholder, text: textBinding)
             .font(font)
             .focused(focusedField, equals: focusID)
             .keyboardType(.decimalPad)
@@ -86,28 +87,17 @@ struct NumericInputField: View {
                 KeyboardClearAction(isEmpty: state.isEmpty, clear: clear)
             )
             .onAppear {
+                hasUserChanges = false
                 state.set(value)
                 state.commit()
                 textFieldText = state.text
             }
-            .onChange(of: textFieldText) { _, newValue in
-                guard newValue != state.text else { return }
-                
-                let sanitized = state.replaceText(newValue)
-                if textFieldText != sanitized {
-                    textFieldText = sanitized
-                }
-            }
             .onChange(of: value) { _, newValue in
                 guard focusedField.wrappedValue != focusID else { return }
+                hasUserChanges = false
                 state.set(newValue)
                 state.commit()
                 textFieldText = state.text
-            }
-            .onChange(of: state.value) { _, newValue in
-                guard focusedField.wrappedValue == focusID else { return }
-                guard newValue != value else { return }
-                value = newValue
             }
             .onChange(of: focusedField.wrappedValue) { oldID, newID in
                 guard oldID == focusID, newID != focusID else { return }
@@ -120,7 +110,26 @@ struct NumericInputField: View {
     
     // MARK: - Приватные методы
     
+    private var textBinding: Binding<String> {
+        Binding(
+            get: { textFieldText },
+            set: { newText in
+                guard newText != textFieldText else { return }
+                let previousInputText = state.replaceText(state.text)
+                textFieldText = state.replaceText(newText)
+                guard state.text != previousInputText else { return }
+
+                hasUserChanges = true
+                let newValue = state.value
+                if value != newValue {
+                    value = newValue
+                }
+            }
+        )
+    }
+
     private func clear() {
+        hasUserChanges = false
         state.clear()
         textFieldText = state.text
         value = state.value
@@ -129,7 +138,12 @@ struct NumericInputField: View {
     private func commit() {
         state.commit()
         textFieldText = state.text
-        value = state.value
+        if hasUserChanges {
+            hasUserChanges = false
+            if value != state.value {
+                value = state.value
+            }
+        }
         onCommit?()
     }
 }
