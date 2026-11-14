@@ -63,13 +63,13 @@ struct LocationDetailView: View {
                 LocationEditView(forEdit: location) { dismiss() }
             }
             .sheet(isPresented: $isShowingExpenseCreate) {
-                ExpenseEditView(
+                ExpenseEditorView(
                     forCreateWith: location,
                     preselectedPaymentMethod: settingsStore.selectedPaymentMethod
                 )
             }
             .sheet(item: $expenseToEdit) { expense in
-                ExpenseEditView(forEdit: expense)
+                ExpenseEditorView(forEdit: expense)
             }
             .sheet(isPresented: $isShowingBudgetTransfer, onDismiss: showTransferSuccessIfNeeded) {
                 LocationBudgetTransferView(source: location) { destinationName in

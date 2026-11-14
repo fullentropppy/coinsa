@@ -77,7 +77,7 @@ struct NumericInputField: View {
     // MARK: - Тело View
     
     var body: some View {
-        TextField(placeholder, text: textBinding)
+        TextField(placeholder, text: $textFieldText)
             .font(font)
             .focused(focusedField, equals: focusID)
             .keyboardType(.decimalPad)
@@ -91,6 +91,9 @@ struct NumericInputField: View {
                 state.set(value)
                 state.commit()
                 textFieldText = state.text
+            }
+            .onChange(of: textFieldText) {
+                updateInputFromText()
             }
             .onChange(of: value) { _, newValue in
                 guard focusedField.wrappedValue != focusID else { return }
@@ -110,22 +113,17 @@ struct NumericInputField: View {
     
     // MARK: - Приватные методы
     
-    private var textBinding: Binding<String> {
-        Binding(
-            get: { textFieldText },
-            set: { newText in
-                guard newText != textFieldText else { return }
-                let previousInputText = state.replaceText(state.text)
-                textFieldText = state.replaceText(newText)
-                guard state.text != previousInputText else { return }
+    private func updateInputFromText() {
+        guard textFieldText != state.text else { return }
+        let previousInputText = state.replaceText(state.text)
+        textFieldText = state.replaceText(textFieldText)
+        guard state.text != previousInputText else { return }
 
-                hasUserChanges = true
-                let newValue = state.value
-                if value != newValue {
-                    value = newValue
-                }
-            }
-        )
+        hasUserChanges = true
+        let newValue = state.value
+        if value != newValue {
+            value = newValue
+        }
     }
 
     private func clear() {
@@ -136,6 +134,7 @@ struct NumericInputField: View {
     }
 
     private func commit() {
+        updateInputFromText()
         state.commit()
         textFieldText = state.text
         if hasUserChanges {

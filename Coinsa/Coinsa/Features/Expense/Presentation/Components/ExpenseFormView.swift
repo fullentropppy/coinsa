@@ -1,5 +1,5 @@
 //
-//  ExpenseFormFields.swift
+//  ExpenseFormView.swift
 //  Coinsa
 //
 //  Created by Daniil Gritsenko on 14.11.2026.
@@ -8,8 +8,8 @@
 import SwiftUI
 import SwiftData
 
-/// Секции формы траты с привязками к общему черновику и фокусу экрана.
-struct ExpenseFormFields: View {
+/// Форма траты с секциями и привязками к общему черновику и фокусу редактора.
+struct ExpenseFormView: View {
     // MARK: - Окружение
 
     @Environment(AppSettingsStore.self) private var settingsStore
@@ -382,17 +382,17 @@ struct ExpenseFormFields: View {
 
 // MARK: - Превью
 
-private extension ExpenseFormFields {
+private extension ExpenseFormView {
     static func makePreview(isEditing: Bool) -> some View {
         let preview = ExpenseFormPreviewData(isEditing: isEditing)
 
-        return ExpenseFormFieldsPreview(preview: preview)
+        return ExpenseFormPreview(preview: preview)
             .modelContainer(preview.container)
             .environment(preview.settingsStore)
     }
 }
 
-private struct ExpenseFormFieldsPreview: View {
+private struct ExpenseFormPreview: View {
     let preview: ExpenseFormPreviewData
 
     @State private var currencyPairSide: CurrencyPairSide = .quote
@@ -402,7 +402,7 @@ private struct ExpenseFormFieldsPreview: View {
     var body: some View {
         NavigationStack {
             if let viewModel = preview.viewModel {
-                ExpenseFormFields(
+                ExpenseFormView(
                     viewModel: viewModel,
                     currencyPairSide: currencyPairSide,
                     focusedField: $focusedField,
@@ -426,9 +426,9 @@ private struct ExpenseFormFieldsPreview: View {
 }
 
 #Preview("Editing") {
-    ExpenseFormFields.makePreview(isEditing: true)
+    ExpenseFormView.makePreview(isEditing: true)
 }
 
 #Preview("Creating") {
-    ExpenseFormFields.makePreview(isEditing: false)
+    ExpenseFormView.makePreview(isEditing: false)
 }

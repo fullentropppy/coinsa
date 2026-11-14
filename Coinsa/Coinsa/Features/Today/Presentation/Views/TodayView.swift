@@ -111,7 +111,7 @@ private struct TodayContentView: View {
                 if let selectedLocation {
                     locationContent(location: selectedLocation)
                         .sheet(item: $selectedQuickExpense) { selection in
-                            ExpenseEditView(
+                            ExpenseEditorView(
                                 forCreateWith: selectedLocation,
                                 preselectedCategory: selection.category,
                                 preselectedSubcategory: selection.subcategory,
@@ -119,7 +119,7 @@ private struct TodayContentView: View {
                             )
                         }
                         .sheet(item: $expenseToEdit) { expense in
-                            ExpenseEditView(forEdit: expense)
+                            ExpenseEditorView(forEdit: expense)
                         }
                         .deleteConfirmationAlert(
                             isPresented: $deletionHandler.isShowingDeleteConfirmation,

@@ -1,5 +1,5 @@
 //
-//  ExpenseFormView.swift
+//  ExpenseEditorContainerView.swift
 //  Coinsa
 //
 //  Created by Daniil Gritsenko on 14.11.2026.
@@ -8,8 +8,8 @@
 import SwiftUI
 import SwiftData
 
-/// Форма редактирования траты с доступной локацией и отдельным черновиком.
-struct ExpenseFormView: View {
+/// Контейнер редактора траты, управляющий состоянием интерфейса и действиями формы.
+struct ExpenseEditorContainerView: View {
     // MARK: - Окружение
 
     @Environment(\.modelContext) private var context
@@ -130,7 +130,7 @@ struct ExpenseFormView: View {
     // MARK: - Основной контент
 
     private var expenseEditForm: some View {
-        ExpenseFormFields(
+        ExpenseFormView(
             viewModel: viewModel,
             currencyPairSide: currencyPairSide,
             focusedField: $focusedField,
@@ -314,7 +314,7 @@ struct ExpenseFormView: View {
     @Previewable @State var preview = ExpenseFormPreviewData(isEditing: true)
 
     if let viewModel = preview.viewModel {
-        ExpenseFormView(initialViewModel: viewModel)
+        ExpenseEditorContainerView(initialViewModel: viewModel)
             .modelContainer(preview.container)
             .environment(preview.settingsStore)
     }
@@ -324,7 +324,7 @@ struct ExpenseFormView: View {
     @Previewable @State var preview = ExpenseFormPreviewData(isEditing: false)
 
     if let viewModel = preview.viewModel {
-        ExpenseFormView(initialViewModel: viewModel)
+        ExpenseEditorContainerView(initialViewModel: viewModel)
             .modelContainer(preview.container)
             .environment(preview.settingsStore)
     }

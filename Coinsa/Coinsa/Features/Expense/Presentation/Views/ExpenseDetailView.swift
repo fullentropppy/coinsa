@@ -88,7 +88,7 @@ struct ExpenseDetailView: View {
                 toolbarContent
             }
             .sheet(isPresented: $isShowingExpenseEdit) {
-                ExpenseEditView(forEdit: expense) {
+                ExpenseEditorView(forEdit: expense) {
                     dismiss()
                 }
             }

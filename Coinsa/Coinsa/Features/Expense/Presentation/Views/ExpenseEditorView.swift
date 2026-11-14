@@ -1,5 +1,5 @@
 //
-//  ExpenseEditView.swift
+//  ExpenseEditorView.swift
 //  Coinsa
 //
 //  Created by Daniil Gritsenko on 24.03.2026.
@@ -8,7 +8,7 @@
 import SwiftUI
 
 /// Экран создания/редактирования траты.
-struct ExpenseEditView: View {
+struct ExpenseEditorView: View {
     @Environment(\.dismiss) private var dismiss
 
     @State private var viewModel: ExpenseEditViewModel?
@@ -46,7 +46,7 @@ struct ExpenseEditView: View {
 
     var body: some View {
         if let viewModel {
-            ExpenseFormView(initialViewModel: viewModel, onDelete: onDelete)
+            ExpenseEditorContainerView(initialViewModel: viewModel, onDelete: onDelete)
         } else {
             NavigationStack {
                 ContentUnavailableView {
@@ -71,11 +71,11 @@ struct ExpenseEditView: View {
 // MARK: - Превью
 
 #Preview("Editing") {
-    ExpenseEditView(forEdit: PreviewGenerator.makeExampleExpense())
+    ExpenseEditorView(forEdit: PreviewGenerator.makeExampleExpense())
         .environment(AppSettingsStore())
 }
 
 #Preview("Creating") {
-    ExpenseEditView(forCreateWith: PreviewGenerator.makeExampleLocation())
+    ExpenseEditorView(forCreateWith: PreviewGenerator.makeExampleLocation())
         .environment(AppSettingsStore())
 }
