@@ -12,7 +12,6 @@ import SwiftData
 struct TodayLocationSummaryView: View {
     // MARK: - Окружение
 
-    @Environment(\.colorScheme) private var colorScheme
     @Environment(\.haptics) private var haptics
 
     // MARK: - Свойства
@@ -82,7 +81,7 @@ struct TodayLocationSummaryView: View {
         }
         .listRowBackground(
             RoundedRectangle(cornerRadius: 0)
-                .fill(colorScheme == .light ? Material.regular : .thin)
+                .fill(.regularMaterial)
         )
     }
 

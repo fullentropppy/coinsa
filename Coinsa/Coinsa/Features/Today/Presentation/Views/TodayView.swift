@@ -68,7 +68,6 @@ private struct TodayContentView: View {
 
     @Environment(\.modelContext) private var context
     @Environment(AppSettingsStore.self) private var settingsStore
-    @Environment(\.colorScheme) private var colorScheme
 
     // MARK: - Состояние
 
@@ -221,7 +220,7 @@ private struct TodayContentView: View {
             }
             .listRowBackground(
                 RoundedRectangle(cornerRadius: 0)
-                    .fill(colorScheme == .light ? Material.regular : .thin)
+                    .fill(.regularMaterial)
             )
         }
     }

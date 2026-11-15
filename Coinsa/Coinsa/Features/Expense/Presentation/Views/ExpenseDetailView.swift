@@ -27,7 +27,6 @@ struct ExpenseDetailView: View {
     // MARK: - Хранимые свойства
 
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.colorScheme) private var colorScheme
     
     @State private var isShowingExpenseEdit = false
     @State private var isShowingMap = false
@@ -58,10 +57,6 @@ struct ExpenseDetailView: View {
         )
     }
     
-    private var listRowBackgroundMaterial: Material {
-        colorScheme == .light ? .regularMaterial : .thinMaterial
-    }
-        
     private var mapCameraPosition: MapCameraPosition? {
         if let cameraCoordinate = viewModel.coordinate {
             .camera(MapCamera(centerCoordinate: cameraCoordinate, distance: Layout.mapCameraDistance))
@@ -191,7 +186,7 @@ struct ExpenseDetailView: View {
 
     private func sectionBackground(isLast: Bool) -> some View {
         RoundedRectangle(cornerRadius: 0)
-            .fill(listRowBackgroundMaterial)
+            .fill(.regularMaterial)
             .onGeometryChange(for: CGFloat?.self) { geometry in
                 isLast && viewModel.coordinate != nil ? geometry.frame(in: .global).maxY : nil
             } action: { bottom in

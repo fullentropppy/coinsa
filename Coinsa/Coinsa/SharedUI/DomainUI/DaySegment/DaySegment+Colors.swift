@@ -33,11 +33,11 @@ extension DaySegment {
         }
 
         let stages: [(location: Double, saturationFactor: Double, brightness: Double)] = [
-            (0.0, 0.98, isDark ? 0.38 : 1),
-            (0.1, isDark ? 0.85 : 0.85, isDark ? 0.34 : 1.0),
-            (0.3, isDark ? 0.52 : 0.44, isDark ? 0.20 : 0.93),
-            (0.6, isDark ? 0.22 : 0.15, isDark ? 0.08 : 0.92),
-            (1.0, 0.0, isDark ? 0.02 : 0.91)
+            (0.0, 0.98, isDark ? 0.34 : 1),
+            (0.1, isDark ? 0.85 : 0.85, isDark ? 0.30 : 1.0),
+            (0.3, isDark ? 0.52 : 0.44, isDark ? 0.17 : 0.93),
+            (0.6, isDark ? 0.22 : 0.15, isDark ? 0.05 : 0.92),
+            (1.0, 0.0, isDark ? 0.01 : 0.91)
         ]
 
         return Gradient(stops: stages.map { stage in

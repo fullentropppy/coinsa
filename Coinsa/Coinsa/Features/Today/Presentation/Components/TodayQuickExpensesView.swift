@@ -16,7 +16,7 @@ struct TodayQuickExpensesView: View {
         /// Непрозрачность белой подложки быстрых кнопок в светлой теме.
         static let lightButtonTintOpacity: Double = 0.1
         /// Непрозрачность черной подложки быстрых кнопок в темной теме.
-        static let darkButtonTintOpacity: Double = 0.2
+        static let darkButtonTintOpacity: Double = 0.1
         /// Минимальная ширина колонки быстрых трат.
         static let quickExpenseMinWidth: CGFloat = 140
         /// Интервал между быстрыми кнопками и их рядами.
@@ -50,7 +50,9 @@ struct TodayQuickExpensesView: View {
     // MARK: - Визуальный стиль
 
     private var buttonTint: Color {
-        colorScheme == .light ? .white.opacity(Layout.lightButtonTintOpacity) : .black.opacity(Layout.darkButtonTintOpacity)
+        colorScheme == .light ?
+            .white.opacity(Layout.lightButtonTintOpacity) :
+            .black.opacity(Layout.darkButtonTintOpacity)
     }
 
     // MARK: - Инициализация
