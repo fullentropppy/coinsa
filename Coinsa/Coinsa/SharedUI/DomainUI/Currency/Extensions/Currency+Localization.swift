@@ -16,10 +16,10 @@ extension Currency: LocalizedResourceProviding {
         case .ars: .currencyNameArs
         case .aud: .currencyNameAud
         case .azn: .currencyNameAzn
-        case .bgn: .currencyNameBgn
         case .brl: .currencyNameBrl
         case .byn: .currencyNameByn
         case .cad: .currencyNameCad
+        case .chf: .currencyNameChf
         case .cny: .currencyNameCny
         case .cop: .currencyNameCop
         case .czk: .currencyNameCzk
@@ -29,31 +29,46 @@ extension Currency: LocalizedResourceProviding {
         case .gbp: .currencyNameGbp
         case .gel: .currencyNameGel
         case .hkd: .currencyNameHkd
-        case .hrk: .currencyNameHrk
         case .huf: .currencyNameHuf
         case .idr: .currencyNameIdr
         case .ils: .currencyNameIls
         case .inr: .currencyNameInr
+        case .isk: .currencyNameIsk
+        case .jod: .currencyNameJod
         case .jpy: .currencyNameJpy
+        case .kes: .currencyNameKes
+        case .kgs: .currencyNameKgs
         case .khr: .currencyNameKhr
         case .krw: .currencyNameKrw
         case .kzt: .currencyNameKzt
         case .lak: .currencyNameLak
+        case .lkr: .currencyNameLkr
         case .mad: .currencyNameMad
         case .mop: .currencyNameMop
+        case .mur: .currencyNameMur
+        case .mvr: .currencyNameMvr
         case .mxn: .currencyNameMxn
         case .myr: .currencyNameMyr
         case .nok: .currencyNameNok
+        case .nzd: .currencyNameNzd
+        case .omr: .currencyNameOmr
         case .php: .currencyNamePhp
         case .pln: .currencyNamePln
         case .qar: .currencyNameQar
+        case .ron: .currencyNameRon
+        case .rsd: .currencyNameRsd
         case .rub: .currencyNameRub
         case .sar: .currencyNameSar
+        case .scr: .currencyNameScr
         case .sek: .currencyNameSek
         case .sgd: .currencyNameSgd
         case .thb: .currencyNameThb
+        case .tjs: .currencyNameTjs
+        case .tnd: .currencyNameTnd
         case .try: .currencyNameTry
         case .twd: .currencyNameTwd
+        case .tzs: .currencyNameTzs
+        case .uah: .currencyNameUah
         case .usd: .currencyNameUsd
         case .uzs: .currencyNameUzs
         case .vnd: .currencyNameVnd

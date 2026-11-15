@@ -120,7 +120,7 @@ struct LocationFormView: View {
 
     private var currencySection: some View {
         Section {
-            LabeledPicker(
+            CurrencyPicker(
                 title: .locationCurrency,
                 selection: locationCurrencyBinding,
                 sections: Currency.pickerSections(
@@ -129,8 +129,6 @@ struct LocationFormView: View {
                 ),
                 isDisabled: viewModel.hasExpenses
             ) { currency in
-                currency.makeLabel()
-            } currentValueLabel: { currency in
                 CurrencyCodeText.standard(currency)
             }
         } footer: {

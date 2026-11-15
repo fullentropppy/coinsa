@@ -95,14 +95,12 @@ struct TripFormView: View {
     
     private var currencySection: some View {
         Section {
-            LabeledPicker(
+            CurrencyPicker(
                 title: .tripCurrency,
                 selection: homeCurrencyBinding,
                 sections: Currency.pickerSections(homeCurrency: viewModel.homeCurrency),
                 isDisabled: viewModel.hasLocations
             ) { currency in
-                currency.makeLabel()
-            } currentValueLabel: { currency in
                 CurrencyCodeText.standard(currency)
             }
         } footer: {

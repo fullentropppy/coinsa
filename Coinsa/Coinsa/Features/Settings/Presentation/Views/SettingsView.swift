@@ -64,13 +64,10 @@ struct SettingsView: View {
     
     private var homeCurrencySection: some View {
         Section {
-            LabeledPicker(
+            CurrencyPicker(
                 title: .settingsHomeCurrency,
-                selection: homeCurrencyBinding,
-                options: Currency.allCasesSortedByName
+                selection: homeCurrencyBinding
             ) { currency in
-                currency.makeLabel()
-            } currentValueLabel: { currency in
                 CurrencyCodeText.standard(currency)
             }
         } footer: {

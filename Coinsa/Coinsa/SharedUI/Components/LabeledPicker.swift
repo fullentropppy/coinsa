@@ -162,35 +162,34 @@ struct LabeledPicker<SelectionValue: Hashable, Content: View, CurrentValueLabel:
     }
     
     private var enabledContent: some View {
-        HStack {
-            Picker(selection: selection) {
-                ForEach(sections) { section in
-                    Section {
-                        ForEach(section.options, id: \.self) { option in
-                            content(option).tag(option)
-                        }
-                    } header: {
-                        if let sectionTitle = section.title {
-                            Text(sectionTitle)
-                        }
+        Picker(selection: selection) {
+            ForEach(sections) { section in
+                Section {
+                    ForEach(section.options, id: \.self) { option in
+                        content(option).tag(option)
+                    }
+                } header: {
+                    if let sectionTitle = section.title {
+                        Text(sectionTitle)
                     }
                 }
-            } label: {
-                if let title {
-                    Text(title)
-                }
-            } currentValueLabel: {
-                currentValueLabel(selection.wrappedValue)
             }
-            .pickerStyle(.navigationLink)
-            .navigationLinkIndicatorVisibility(.hidden)
-            
-            Image(systemName: "chevron.right")
-                .imageScale(.small)
-                .fontWeight(.semibold)
-                .foregroundStyle(.accent)
-                .frame(width: ViewLayout.Label.inputAccessoryWidth)
+        } label: {
+            if let title {
+                Text(title)
+            }
+        } currentValueLabel: {
+            HStack(spacing: ViewLayout.Label.pickerIndicatorSpacing) {
+                currentValueLabel(selection.wrappedValue)
+                Image(systemName: "chevron.right")
+                    .imageScale(.small)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(.accent)
+                    .frame(width: ViewLayout.Label.inputAccessoryWidth)
+            }
         }
+        .pickerStyle(.navigationLink)
+        .navigationLinkIndicatorVisibility(.hidden)
     }
 }
 
@@ -199,6 +198,12 @@ struct LabeledPicker<SelectionValue: Hashable, Content: View, CurrentValueLabel:
 extension LabeledPicker where CurrentValueLabel == Content {
     /// Создает пикер с заголовком и опциями в единой секции.
     /// В качестве `currentValueLabel` используется `content`.
+    /// - Parameters:
+    ///   - title: Заголовок пикера (по умолчанию `nil`).
+    ///   - selection: Привязка к выбранному значению.
+    ///   - options: Массив доступных опций.
+    ///   - isDisabled: Флаг блокировки (по умолчанию `false`).
+    ///   - content: Представление опции и текущего значения.
     init(
         title: LocalizedStringResource? = nil,
         selection: Binding<SelectionValue>,
@@ -218,6 +223,12 @@ extension LabeledPicker where CurrentValueLabel == Content {
     
     /// Создает пикер с заголовком и опциями в указанных секциях.
     /// В качестве `currentValueLabel` используется `content`.
+    /// - Parameters:
+    ///   - title: Заголовок пикера (по умолчанию `nil`).
+    ///   - selection: Привязка к выбранному значению.
+    ///   - sections: Массив секций с опциями.
+    ///   - isDisabled: Флаг блокировки (по умолчанию `false`).
+    ///   - content: Представление опции и текущего значения.
     init(
         title: LocalizedStringResource? = nil,
         selection: Binding<SelectionValue>,

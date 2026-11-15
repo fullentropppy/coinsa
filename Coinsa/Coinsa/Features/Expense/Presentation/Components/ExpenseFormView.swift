@@ -143,7 +143,7 @@ struct ExpenseFormView: View {
             .pickerStyle(.segmented)
             .listRowSeparator(.hidden)
 
-            LabeledPicker(
+            CurrencyPicker(
                 title: .expenseCurrency,
                 selection: expenseCurrencyBinding,
                 sections: Currency.pickerSections(
@@ -151,8 +151,6 @@ struct ExpenseFormView: View {
                     locationCurrency: viewModel.locationCurrency
                 ),
             ) { currency in
-                currency.makeLabel()
-            } currentValueLabel: { currency in
                 CurrencyCodeText.standard(currency)
             }
 

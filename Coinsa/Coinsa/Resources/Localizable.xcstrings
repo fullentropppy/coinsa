@@ -789,23 +789,6 @@
         }
       }
     },
-    "currency.name.bgn" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bulgarian Lev"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Болгарский лев"
-          }
-        }
-      }
-    },
     "currency.name.brl" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -853,6 +836,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Канадский доллар"
+          }
+        }
+      }
+    },
+    "currency.name.chf" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Swiss Franc"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Швейцарский франк"
           }
         }
       }
@@ -1010,23 +1010,6 @@
         }
       }
     },
-    "currency.name.hrk" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Croatian Kuna"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Хорватская куна"
-          }
-        }
-      }
-    },
     "currency.name.huf" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1095,6 +1078,40 @@
         }
       }
     },
+    "currency.name.isk" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Icelandic Krona"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Исландская крона"
+          }
+        }
+      }
+    },
+    "currency.name.jod" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jordanian Dinar"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Иорданский динар"
+          }
+        }
+      }
+    },
     "currency.name.jpy" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1108,6 +1125,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Японская иена"
+          }
+        }
+      }
+    },
+    "currency.name.kes" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kenyan Shilling"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Кенийский шиллинг"
+          }
+        }
+      }
+    },
+    "currency.name.kgs" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kyrgyzstani Som"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Киргизский сом"
           }
         }
       }
@@ -1180,6 +1231,23 @@
         }
       }
     },
+    "currency.name.lkr" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sri Lankan Rupee"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Шри-ланкийская рупия"
+          }
+        }
+      }
+    },
     "currency.name.mad" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1210,6 +1278,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Патака Макао"
+          }
+        }
+      }
+    },
+    "currency.name.mur" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mauritian Rupee"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Маврикийская рупия"
+          }
+        }
+      }
+    },
+    "currency.name.mvr" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maldivian Rufiyaa"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Мальдивская руфия"
           }
         }
       }
@@ -1265,6 +1367,40 @@
         }
       }
     },
+    "currency.name.nzd" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New Zealand Dollar"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Новозеландский доллар"
+          }
+        }
+      }
+    },
+    "currency.name.omr" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Omani Rial"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Оманский риал"
+          }
+        }
+      }
+    },
     "currency.name.php" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1316,6 +1452,40 @@
         }
       }
     },
+    "currency.name.ron" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Romanian Leu"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Румынский лей"
+          }
+        }
+      }
+    },
+    "currency.name.rsd" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Serbian Dinar"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сербский динар"
+          }
+        }
+      }
+    },
     "currency.name.rub" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1346,6 +1516,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Саудовский риял"
+          }
+        }
+      }
+    },
+    "currency.name.scr" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seychellois Rupee"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сейшельская рупия"
           }
         }
       }
@@ -1401,6 +1588,40 @@
         }
       }
     },
+    "currency.name.tjs" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tajikistani Somoni"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Таджикский сомони"
+          }
+        }
+      }
+    },
+    "currency.name.tnd" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tunisian Dinar"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Тунисский динар"
+          }
+        }
+      }
+    },
     "currency.name.try" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1431,6 +1652,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Нов. тайваньский доллар"
+          }
+        }
+      }
+    },
+    "currency.name.tzs" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tanzanian Shilling"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Танзанийский шиллинг"
+          }
+        }
+      }
+    },
+    "currency.name.uah" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ukrainian Hryvnia"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Украинская гривна"
           }
         }
       }

@@ -34,6 +34,8 @@ enum ViewLayout {
         static let formIconWidth: CGFloat = 28
         /// Ширина служебных элементов рядом с полем ввода: процента, переключателя и обновления.
         static let inputAccessoryWidth: CGFloat = 16
+        /// Интервал между текущим значением пикера и стрелкой перехода.
+        static let pickerIndicatorSpacing: CGFloat = 8
     }
 
     enum Card {

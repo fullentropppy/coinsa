@@ -100,7 +100,7 @@ struct CurrencyConverterView: View {
         let displayText = viewModel.displayText(for: side)
 
         return VStack(spacing: Layout.amountRowSpacing) {
-            LabeledPicker(
+            CurrencyPicker(
                 title: isBase ? .converterFromCurrenency : .converterToCurrency,
                 selection: isBase ? fromCurrencyBinding : toCurrencyBinding,
                 sections: Currency.pickerSections(
@@ -108,8 +108,6 @@ struct CurrencyConverterView: View {
                     locationCurrency: currentLocationCurrency
                 )
             ) { currency in
-                currency.makeLabel()
-            } currentValueLabel: { currency in
                 Text(currency.localizedResource)
             }
             
