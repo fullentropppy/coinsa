@@ -122,9 +122,9 @@ struct LocationDetailView: View {
     private var headerSection: some View {
         Section {
             EventSummaryView(data: viewModel.eventHeaderData)
-            AnalyticsNavigationLink {
+            AnalyticsNavigationLink { [location] in
                 EventAnalyticsView(
-                    data: viewModel.eventAnalyticsData,
+                    data: LocationDetailViewModel(location: location).eventAnalyticsData,
                     screenContextSubtitle: location.screenContextSubtitle
                 )
             }

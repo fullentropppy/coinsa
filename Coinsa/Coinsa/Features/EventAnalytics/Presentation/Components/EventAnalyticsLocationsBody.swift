@@ -15,7 +15,10 @@ struct EventAnalyticsLocationsBody: View {
 
     private enum Layout {
         /// Палитра локаций в порядке их дат, независимая от режима сумм и сортировки списка.
-        static let locationColors: [Color] = []
+        static let locationColors: [Color] = [
+            .blue, .orange, .purple, .green, .pink, .cyan,
+            .yellow, .indigo, .mint, .brown, .red, .teal
+        ]
         /// Насыщенность дополнительных оттенков после исчерпания системной палитры.
         static let generatedColorSaturation: Double = 0.65
         /// Яркость дополнительных оттенков после исчерпания системной палитры.
@@ -100,11 +103,11 @@ struct EventAnalyticsLocationsBody: View {
             }
 
             ForEach(slices) { slice in
-                NavigationLink {
-                    AnalyticsDestinationView {
+                NavigationLink { [location = slice.location] in
+                    AnalyticsDestinationView { [location] in
                         EventAnalyticsView(
-                            data: LocationDetailViewModel(location: slice.location).eventAnalyticsData,
-                            screenContextSubtitle: slice.location.screenContextSubtitle
+                            data: LocationDetailViewModel(location: location).eventAnalyticsData,
+                            screenContextSubtitle: location.screenContextSubtitle
                         )
                     }
                 } label: {

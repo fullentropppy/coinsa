@@ -16,16 +16,13 @@ struct ExpenseMapItem: Identifiable, Equatable {
     let icon: String
     let color: Color
 
+    static func hasItems(for expenses: [Expense]) -> Bool {
+        expenses.contains { validCoordinate(for: $0) != nil }
+    }
+
     static func items(for expenses: [Expense]) -> [ExpenseMapItem] {
         expenses.compactMap { expense in
-            guard !expense.isDeleted,
-                  expense.modelContext != nil,
-                  let coordinate = expense.coordinate,
-                  coordinate.latitude.isFinite,
-                  coordinate.longitude.isFinite,
-                  CLLocationCoordinate2DIsValid(coordinate.coreLocationCoordinate) else {
-                return nil
-            }
+            guard let coordinate = validCoordinate(for: expense) else { return nil }
 
             return ExpenseMapItem(
                 id: expense.id,
@@ -34,5 +31,18 @@ struct ExpenseMapItem: Identifiable, Equatable {
                 color: expense.subcategory.accentColor
             )
         }
+    }
+
+    private static func validCoordinate(for expense: Expense) -> Coordinate? {
+        guard !expense.isDeleted,
+              expense.modelContext != nil,
+              let coordinate = expense.coordinate,
+              coordinate.latitude.isFinite,
+              coordinate.longitude.isFinite,
+              CLLocationCoordinate2DIsValid(coordinate.coreLocationCoordinate) else {
+            return nil
+        }
+
+        return coordinate
     }
 }

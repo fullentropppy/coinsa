@@ -13,7 +13,4 @@ extension Location: TypeVisualRepresentable {
     
     /// Вторичная иконка локации.
     static var secondaryIcon: String { primaryIcon }
-    
-    /// Акцентный цвет для локации.
-    static var accentColor: Color { .pink }
 }

@@ -91,7 +91,10 @@ struct EventAnalyticsCategoriesBody: View {
     }
 
     private var categoriesLegendSection: some View {
-        Section {
+        let categoryViewModels = viewModel.subcategoryViewModels(amountMode: categoryAmountMode)
+        let screenContextSubtitle = screenContextSubtitle
+
+        return Section {
             if viewModel.totalDays > 1 {
                 Picker(selection: $categoryAmountMode) {
                     ForEach(CategoryAmountMode.allCases) { mode in
@@ -108,18 +111,15 @@ struct EventAnalyticsCategoriesBody: View {
             }
 
             ForEach(displayedSlicesSortedByAmount) { slice in
-                if slice.homeAmount > 0 {
-                    NavigationLink {
-                        AnalyticsDestinationView {
-                            EventSubcategoryAnalyticsView(
-                                category: slice.category,
-                                amountMode: categoryAmountMode,
-                                data: viewModel.data,
-                                screenContextSubtitle: screenContextSubtitle
-                            )
-                        }
+                if slice.homeAmount > 0, let categoryViewModel = categoryViewModels[slice.category] {
+                    NavigationLink { [categoryViewModel, screenContextSubtitle] in
+                        EventSubcategoryAnalyticsView(
+                            viewModel: categoryViewModel,
+                            screenContextSubtitle: screenContextSubtitle
+                        )
+                        .equatable()
                     } label: {
-                        categoriesChartLegendRow(for: slice)
+                        categoriesChartLegendRow(for: slice, expenseCount: categoryViewModel.expenses.count)
                     }
                 }
             }
@@ -128,7 +128,7 @@ struct EventAnalyticsCategoriesBody: View {
 
     // MARK: - Компоненты
 
-    private func categoriesChartLegendRow(for slice: ExpenseAnalyticsSlice) -> some View {
+    private func categoriesChartLegendRow(for slice: ExpenseAnalyticsSlice, expenseCount: Int) -> some View {
         HStack {
             VStack(alignment: .leading, spacing: ViewLayout.Row.contentSpacing) {
                 Text(slice.category.localizedResource)
@@ -141,7 +141,7 @@ struct EventAnalyticsCategoriesBody: View {
                     DotDivider.secondarySmall()
                     
                     CountLabel.secondarySmall(
-                        viewModel.expenseCount(for: slice.category),
+                        expenseCount,
                         icon: Expense.primaryIcon
                     )
                 }

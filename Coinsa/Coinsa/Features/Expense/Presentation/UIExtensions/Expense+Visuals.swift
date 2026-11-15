@@ -13,7 +13,4 @@ extension Expense: TypeVisualRepresentable {
     
     /// Вторичная иконка траты.
     static var secondaryIcon: String { "cart.fill" }
-    
-    /// Акцентный цвет траты.
-    static var accentColor: Color { .orange }
 }

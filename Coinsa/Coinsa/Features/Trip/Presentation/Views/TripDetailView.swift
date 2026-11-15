@@ -129,9 +129,9 @@ struct TripDetailView: View {
                 showsAmounts: viewModel.showsFullHeader
             )
             if viewModel.showsFullHeader {
-                AnalyticsNavigationLink {
+                AnalyticsNavigationLink { [trip] in
                     EventAnalyticsView(
-                        data: viewModel.eventAnalyticsData,
+                        data: TripDetailViewModel(trip: trip).eventAnalyticsData,
                         screenContextSubtitle: trip.screenContextSubtitle
                     )
                 }

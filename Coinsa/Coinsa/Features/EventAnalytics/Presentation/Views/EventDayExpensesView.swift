@@ -45,9 +45,12 @@ struct EventDayExpensesView: View {
         LocationGroupedExpensesBody(
             navigationTitle: navigationTitle,
             navigationSubtitle: screenContextSubtitle,
-            sourceExpenses: data.expenses,
-            predicate: { PlainDate($0.civilDateTime.storedDate, using: .utc) == date }
+            viewModel: LocationGroupedExpensesViewModel(
+                sourceExpenses: data.expenses,
+                filter: .day(date)
+            )
         )
+        .equatable()
     }
 }
 

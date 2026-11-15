@@ -8,40 +8,23 @@
 import SwiftUI
 
 /// Экран аналитики подкатегорий выбранной категории расходов.
-struct EventSubcategoryAnalyticsView: View {
+struct EventSubcategoryAnalyticsView: View, Equatable {
     // MARK: - Хранимые свойства
     
-    private let category: ExpenseCategory
-    private let amountMode: CategoryAmountMode
-    private let viewModel: EventAnalyticsViewModel
+    private let viewModel: EventSubcategoryAnalyticsViewModel
     private let screenContextSubtitle: String
-    
-    // MARK: - Вычисляемые свойства
-    
-    private var subcategoryAmountDivisor: Double {
-        switch amountMode {
-        case .total: 1
-        case .daily: max(Double(viewModel.totalDays), 1)
-        }
-    }
     
     // MARK: - Инициализация
     
-    /// Создает экран аналитики подкатегорий.
+    /// Создает экран из данных только выбранной категории.
     /// - Parameters:
-    ///   - category: Категория расходов.
-    ///   - amountMode: Режим отображения сумм.
-    ///   - data: Аналитические данные события.
+    ///   - viewModel: Отобранные траты категории и параметры отображения сумм.
     ///   - screenContextSubtitle: Подзаголовок экрана.
     init(
-        category: ExpenseCategory,
-        amountMode: CategoryAmountMode,
-        data: EventCategoryAnalyticsData,
+        viewModel: EventSubcategoryAnalyticsViewModel,
         screenContextSubtitle: String
     ) {
-        self.category = category
-        self.amountMode = amountMode
-        self.viewModel = EventAnalyticsViewModel(data: data)
+        self.viewModel = viewModel
         self.screenContextSubtitle = screenContextSubtitle
     }
     
@@ -49,7 +32,7 @@ struct EventSubcategoryAnalyticsView: View {
     
     var body: some View {
         subcategoryAnalyticsList
-            .navigationTitle(category.localizedResource)
+            .navigationTitle(viewModel.category.localizedResource)
             .navigationSubtitle(screenContextSubtitle)
             .navigationBarTitleDisplayMode(.inline)
     }
@@ -57,19 +40,23 @@ struct EventSubcategoryAnalyticsView: View {
     // MARK: - Основной контент
     
     private var subcategoryAnalyticsList: some View {
-        let slices = viewModel.displayedSubcategorySlicesSortedByAmount(for: category)
+        let slices = viewModel.displayedSlices
+        let expensesBySubcategory = viewModel.expensesBySubcategory
+        let showsLocationNames = viewModel.showsLocationNames
+        let screenContextSubtitle = screenContextSubtitle
 
         return List {
             Section {
                 ForEach(slices) { slice in
-                    NavigationLink {
-                        AnalyticsDestinationView {
-                            EventSubcategoryExpensesView(
-                                subcategory: slice.subcategory,
-                                data: viewModel.data,
-                                screenContextSubtitle: screenContextSubtitle
-                            )
-                        }
+                    let expenses = expensesBySubcategory[slice.subcategory] ?? []
+
+                    NavigationLink { [subcategory = slice.subcategory, expenses, showsLocationNames, screenContextSubtitle] in
+                        EventSubcategoryExpensesView(
+                            subcategory: subcategory,
+                            expenses: expenses,
+                            showsLocationNames: showsLocationNames,
+                            screenContextSubtitle: screenContextSubtitle
+                        )
                     } label: {
                         legendRow(for: slice, slices: slices)
                     }
@@ -104,9 +91,9 @@ struct EventSubcategoryAnalyticsView: View {
             }
             Spacer()
             AmountStack(
-                homeAmount: slice.homeAmount / subcategoryAmountDivisor,
+                homeAmount: slice.homeAmount / viewModel.amountDivisor,
                 homeCurrency: viewModel.homeCurrency,
-                expenseAmount: slice.locationAmount.map { $0 / subcategoryAmountDivisor },
+                expenseAmount: slice.locationAmount.map { $0 / viewModel.amountDivisor },
                 expenseCurrency: viewModel.locationCurrency
             )
         }
@@ -124,11 +111,11 @@ struct EventSubcategoryAnalyticsView: View {
     ).first?.category ?? .defaultValue
 
     NavigationStack {
-        EventSubcategoryAnalyticsView(
-            category: category,
-            amountMode: .total,
-            data: viewModel.eventAnalyticsData,
-            screenContextSubtitle: trip.screenContextSubtitle
-        )
+        if let categoryViewModel = analyticsViewModel.subcategoryViewModels(amountMode: .total)[category] {
+            EventSubcategoryAnalyticsView(
+                viewModel: categoryViewModel,
+                screenContextSubtitle: trip.screenContextSubtitle
+            )
+        }
     }
 }

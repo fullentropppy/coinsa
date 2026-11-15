@@ -228,30 +228,24 @@ struct EventAnalyticsViewModel {
         slices(for: metric).sorted { $0.homeAmount > $1.homeAmount }
     }
     
-    func displayedSubcategorySlicesSortedByAmount(for category: ExpenseCategory) -> [ExpenseSubcategoryAnalyticsSlice] {
-        let categoryExpenses = data.expenses.filter { $0.category == category }
-        let grouped = Dictionary(grouping: categoryExpenses) { $0.subcategory }
-        
-        return category.subcategories.compactMap { subcategory in
-            let expenses = grouped[subcategory] ?? []
-            let homeAmount = homeAmount(for: expenses)
-            
-            guard homeAmount > 0 else { return nil }
-            
-            return ExpenseSubcategoryAnalyticsSlice(
+    func subcategoryViewModels(amountMode: CategoryAmountMode) -> [ExpenseCategory: EventSubcategoryAnalyticsViewModel] {
+        let expensesByCategory = Dictionary(grouping: data.expenses) { $0.category }
+        let expensesBySubcategory = Dictionary(grouping: data.expenses) { $0.subcategory }
+        let totalDays = totalDays
+
+        return Dictionary(uniqueKeysWithValues: ExpenseCategory.allCases.map { category in
+            let viewModel = EventSubcategoryAnalyticsViewModel(
                 category: category,
-                subcategory: subcategory,
-                expenseCount: expenses.count,
-                homeAmount: homeAmount,
-                locationAmount: locationAmount(for: expenses)
+                amountMode: amountMode,
+                totalDays: totalDays,
+                homeCurrency: homeCurrency,
+                locationCurrency: locationCurrency,
+                expenses: expensesByCategory[category] ?? [],
+                expensesBySubcategory: expensesBySubcategory.filter { category.subcategories.contains($0.key) },
+                showsLocationNames: data.locations != nil
             )
-        }
-        .sorted {
-            if $0.homeAmount != $1.homeAmount {
-                return $0.homeAmount > $1.homeAmount
-            }
-            return $0.expenseCount > $1.expenseCount
-        }
+            return (category, viewModel)
+        })
     }
     
     func hasAnalytics(for metric: EventAnalyticsMetric) -> Bool {
@@ -272,11 +266,6 @@ struct EventAnalyticsViewModel {
         return totalHomeAmount > 0 ? slice.homeAmount / totalHomeAmount : 0
     }
     
-    func shareValue(for slice: ExpenseSubcategoryAnalyticsSlice, among slices: [ExpenseSubcategoryAnalyticsSlice]) -> Double {
-        let totalHomeAmount = slices.reduce(0) { $0 + $1.homeAmount }
-        return totalHomeAmount > 0 ? slice.homeAmount / totalHomeAmount : 0
-    }
-
     // MARK: - Приватные методы
 
     private func slices(for metric: EventAnalyticsMetric) -> [ExpenseAnalyticsSlice] {

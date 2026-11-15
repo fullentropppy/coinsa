@@ -13,7 +13,4 @@ extension Trip: TypeVisualRepresentable {
     
     /// Вторичная иконка поездки (заливная).
     static var secondaryIcon: String { "suitcase.fill" }
-    
-    /// Акцентный цвет для поездки.
-    static var accentColor: Color { .indigo }
 }

@@ -38,24 +38,26 @@ struct EventAnalyticsView: View {
     // MARK: - Тело View
 
     var body: some View {
-        eventAnalyticsList
+        let hasExpensePlaces = ExpenseMapItem.hasItems(for: viewModel.data.expenses)
+
+        return eventAnalyticsList
             .navigationTitle(.analytics)
             .navigationSubtitle(screenContextSubtitle)
             .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                if !ExpenseMapItem.items(for: viewModel.data.expenses).isEmpty {
+            .toolbar { [isShowingExpensesMap = $isShowingExpensesMap] in
+                if hasExpensePlaces {
                     ToolbarItem(placement: .topBarTrailing) {
                         Button {
-                            isShowingExpensesMap = true
+                            isShowingExpensesMap.wrappedValue = true
                         } label: {
                             Image(systemName: "map")
                         }
                     }
                 }
             }
-            .fullScreenCover(isPresented: $isShowingExpensesMap) {
+            .fullScreenCover(isPresented: $isShowingExpensesMap) { [expenses = viewModel.data.expenses, screenContextSubtitle] in
                 EventExpensesMapView(
-                    expenses: viewModel.data.expenses,
+                    expenses: expenses,
                     screenContextSubtitle: screenContextSubtitle
                 )
             }

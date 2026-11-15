@@ -12,7 +12,8 @@ struct EventSubcategoryExpensesView: View {
     // MARK: - Хранимые свойства
 
     private let subcategory: ExpenseSubcategory
-    private let data: EventCategoryAnalyticsData
+    private let expenses: [Expense]
+    private let showsLocationNames: Bool
     private let screenContextSubtitle: String
 
     // MARK: - Инициализация
@@ -20,15 +21,18 @@ struct EventSubcategoryExpensesView: View {
     /// Создает список трат выбранной подкатегории с контекстом исходного события.
     /// - Parameters:
     ///   - subcategory: Подкатегория для отбора трат.
-    ///   - data: Данные поездки или локации, определяющие состав списка и заголовки секций.
+    ///   - expenses: Траты только выбранной подкатегории.
+    ///   - showsLocationNames: Показывать названия локаций в заголовках секций поездки.
     ///   - screenContextSubtitle: Подзаголовок исходной аналитики.
     init(
         subcategory: ExpenseSubcategory,
-        data: EventCategoryAnalyticsData,
+        expenses: [Expense],
+        showsLocationNames: Bool,
         screenContextSubtitle: String
     ) {
         self.subcategory = subcategory
-        self.data = data
+        self.expenses = expenses
+        self.showsLocationNames = showsLocationNames
         self.screenContextSubtitle = screenContextSubtitle
     }
 
@@ -38,10 +42,13 @@ struct EventSubcategoryExpensesView: View {
         LocationGroupedExpensesBody(
             navigationTitle: String(localized: subcategory.localizedResource),
             navigationSubtitle: screenContextSubtitle,
-            sourceExpenses: data.expenses,
-            predicate: { $0.subcategory == subcategory },
-            showsLocationNames: data.locations != nil
+            viewModel: LocationGroupedExpensesViewModel(
+                sourceExpenses: expenses,
+                filter: .subcategory(subcategory)
+            ),
+            showsLocationNames: showsLocationNames
         )
+        .equatable()
     }
 }
 
@@ -56,7 +63,8 @@ struct EventSubcategoryExpensesView: View {
         .first?
         .category ?? .defaultValue
     let subcategory = analyticsViewModel
-        .displayedSubcategorySlicesSortedByAmount(for: category)
+        .subcategoryViewModels(amountMode: .total)[category]?
+        .displayedSlices
         .first?
         .subcategory
 
@@ -64,7 +72,8 @@ struct EventSubcategoryExpensesView: View {
         if let subcategory {
             EventSubcategoryExpensesView(
                 subcategory: subcategory,
-                data: viewModel.eventAnalyticsData,
+                expenses: viewModel.eventAnalyticsData.expenses.filter { $0.subcategory == subcategory },
+                showsLocationNames: true,
                 screenContextSubtitle: trip.screenContextSubtitle
             )
         }
