@@ -1,5 +1,5 @@
 //
-//  EventAnalyticsCategoriesHeader.swift
+//  EventAnalyticsExpensesHeader.swift
 //  Coinsa
 //
 //  Created by Daniil Gritsenko on 02.09.2026.
@@ -7,15 +7,15 @@
 
 import SwiftUI
 
-/// Шапка вкладки аналитики по категориям.
-struct EventAnalyticsCategoriesHeader: View {
+/// Общие суммы трат для вкладок категорий и локаций.
+struct EventAnalyticsExpensesHeader: View {
     // MARK: - Хранимые свойства
 
     private let viewModel: EventAnalyticsViewModel
     
     // MARK: - Инициализация
 
-    /// Создает шапку вкладки аналитики по категориям.
+    /// Создает шапку с общей суммой трат и средним за день события.
     /// - Parameter viewModel: ViewModel аналитики события.
     init(viewModel: EventAnalyticsViewModel) {
         self.viewModel = viewModel
@@ -54,7 +54,7 @@ struct EventAnalyticsCategoriesHeader: View {
 
     NavigationStack {
         List {
-            EventAnalyticsCategoriesHeader(
+            EventAnalyticsExpensesHeader(
                 viewModel: EventAnalyticsViewModel(data: viewModel.eventAnalyticsData)
             )
         }

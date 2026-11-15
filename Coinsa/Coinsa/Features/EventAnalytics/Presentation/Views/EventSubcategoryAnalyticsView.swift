@@ -18,10 +18,6 @@ struct EventSubcategoryAnalyticsView: View {
     
     // MARK: - Вычисляемые свойства
     
-    private var displayedSlicesSortedByAmount: [ExpenseSubcategoryAnalyticsSlice] {
-        viewModel.displayedSubcategorySlicesSortedByAmount(for: category)
-    }
-    
     private var subcategoryAmountDivisor: Double {
         switch amountMode {
         case .total: 1
@@ -61,17 +57,21 @@ struct EventSubcategoryAnalyticsView: View {
     // MARK: - Основной контент
     
     private var subcategoryAnalyticsList: some View {
-        List {
+        let slices = viewModel.displayedSubcategorySlicesSortedByAmount(for: category)
+
+        return List {
             Section {
-                ForEach(displayedSlicesSortedByAmount) { slice in
+                ForEach(slices) { slice in
                     NavigationLink {
-                        EventSubcategoryExpensesView(
-                            subcategory: slice.subcategory,
-                            data: viewModel.data,
-                            screenContextSubtitle: screenContextSubtitle
-                        )
+                        AnalyticsDestinationView {
+                            EventSubcategoryExpensesView(
+                                subcategory: slice.subcategory,
+                                data: viewModel.data,
+                                screenContextSubtitle: screenContextSubtitle
+                            )
+                        }
                     } label: {
-                        legendRow(for: slice)
+                        legendRow(for: slice, slices: slices)
                     }
                 }
             }
@@ -81,7 +81,7 @@ struct EventSubcategoryAnalyticsView: View {
     
     // MARK: - Компоненты
     
-    private func legendRow(for slice: ExpenseSubcategoryAnalyticsSlice) -> some View {
+    private func legendRow(for slice: ExpenseSubcategoryAnalyticsSlice, slices: [ExpenseSubcategoryAnalyticsSlice]) -> some View {
         HStack {
             VStack(alignment: .leading, spacing: ViewLayout.Row.contentSpacing) {
                 Text(slice.subcategory.localizedResource)
@@ -90,7 +90,7 @@ struct EventSubcategoryAnalyticsView: View {
                         .imageScale(.small)
                         .foregroundStyle(slice.subcategory.accentColor.gradient)
                         .frame(width: ViewLayout.Row.iconWidth)
-                    Text(shareValue(for: slice).percentFormat())
+                    Text(viewModel.shareValue(for: slice, among: slices).percentFormat())
                         .font(.footnote.monospacedDigit())
                         .foregroundStyle(.secondary)
                        
@@ -110,12 +110,6 @@ struct EventSubcategoryAnalyticsView: View {
                 expenseCurrency: viewModel.locationCurrency
             )
         }
-    }
-
-    // MARK: - Вспомогательные методы
-    
-    private func shareValue(for slice: ExpenseSubcategoryAnalyticsSlice) -> Double {
-        viewModel.shareValue(for: slice, category: category)
     }
 }
 

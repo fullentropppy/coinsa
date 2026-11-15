@@ -24,12 +24,17 @@ struct ExpenseDetailView: View {
         static let paymentLabelBottomInset: CGFloat = 2
     }
 
+    nonisolated private enum ContentSpace: Hashable {
+        case form
+    }
+
     // MARK: - Хранимые свойства
 
     @Environment(\.dismiss) private var dismiss
     
     @State private var isShowingExpenseEdit = false
     @State private var isShowingMap = false
+    @State private var isVisible = false
     @State private var contentBottom: CGFloat = 0
     
     private let expense: Expense
@@ -42,7 +47,7 @@ struct ExpenseDetailView: View {
 
     private func formBackgroundGradient(in geometry: GeometryProxy) -> LinearGradient {
         let lastStopLocation = min(
-            max((contentBottom - geometry.frame(in: .global).minY) / max(geometry.size.height, 1), 0), 1
+            max((contentBottom - geometry.frame(in: .named(ContentSpace.form)).minY) / max(geometry.size.height, 1), 0), 1
         )
 
         return LinearGradient(
@@ -97,7 +102,11 @@ struct ExpenseDetailView: View {
                 }
             }
             .onAppear {
+                isVisible = true
                 checkIfDeleted()
+            }
+            .onDisappear {
+                isVisible = false
             }
     }
 
@@ -108,7 +117,7 @@ struct ExpenseDetailView: View {
             ZStack {
                 backgroundContent(
                     topInset: min(
-                        max(contentBottom - geometry.frame(in: .global).minY, 0),
+                        max(contentBottom - geometry.frame(in: .named(ContentSpace.form)).minY, 0),
                         geometry.size.height
                     )
                 )
@@ -120,6 +129,7 @@ struct ExpenseDetailView: View {
                 .scrollContentBackground(.hidden)
             }
         }
+        .coordinateSpace(name: ContentSpace.form)
         .onTapGesture {
             if viewModel.coordinate != nil {
                 isShowingMap = true
@@ -165,7 +175,7 @@ struct ExpenseDetailView: View {
     
     @ViewBuilder
     private func backgroundContent(topInset: CGFloat) -> some View {
-        if let coordinate = viewModel.coordinate, let mapCameraPosition {
+        if isVisible, let coordinate = viewModel.coordinate, let mapCameraPosition {
             Map(position: .constant(mapCameraPosition)) {
                 Marker("", coordinate: coordinate)
             }
@@ -188,7 +198,7 @@ struct ExpenseDetailView: View {
         RoundedRectangle(cornerRadius: 0)
             .fill(.regularMaterial)
             .onGeometryChange(for: CGFloat?.self) { geometry in
-                isLast && viewModel.coordinate != nil ? geometry.frame(in: .global).maxY : nil
+                isLast && isVisible && viewModel.coordinate != nil ? geometry.frame(in: .named(ContentSpace.form)).maxY : nil
             } action: { bottom in
                 if let bottom {
                     contentBottom = bottom

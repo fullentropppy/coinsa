@@ -107,17 +107,12 @@ struct EventAnalyticsViewModel {
             DaySegment.from(hour: expense.civilDateTime.storedDate.hour(using: .utc))
         }
         
-        return grouped.values
-            .compactMap { (expenses: [Expense]) -> EventDaySegmentAnalyticsData? in
-                guard let firstExpense = expenses.first else { return nil }
-                
-                return EventDaySegmentAnalyticsData(
-                    timeOfDay: DaySegment.from(hour: firstExpense.civilDateTime.storedDate.hour(using: .utc)),
-                    expenseCount: expenses.count
-                )
-            }
-            .sorted { $0.expenseCount > $1.expenseCount }
-            .first
+        guard let peakCount = grouped.values.map(\.count).max(),
+              let peakSegment = DaySegment.allCases.first(where: { grouped[$0]?.count == peakCount }) else {
+            return nil
+        }
+
+        return EventDaySegmentAnalyticsData(timeOfDay: peakSegment, expenseCount: peakCount)
     }
     
     var largestExpense: Expense? {
@@ -190,7 +185,40 @@ struct EventAnalyticsViewModel {
         EventExpenseChartTimeline(days: summaryExpenseChartPoints)
     }
 
+    // MARK: - Вычисляемые свойства. Аналитика локаций
+
+    var locationSlices: [EventLocationAnalyticsSlice] {
+        (data.locations ?? []).sorted {
+            if $0.startPlainDate != $1.startPlainDate {
+                return $0.startPlainDate < $1.startPlainDate
+            }
+            return $0.id.uuidString < $1.id.uuidString
+        }.map { location in
+            EventLocationAnalyticsSlice(
+                location: location,
+                homeAmount: location.calculateExpensesAmount(in: .home),
+                expenseCount: location.expensesCount
+            )
+        }
+    }
+
     // MARK: - Публичные методы
+
+    func displayedLocationSlices(from slices: [EventLocationAnalyticsSlice], asDailyAverage: Bool) -> [EventLocationAnalyticsSlice] {
+        slices.sorted {
+            let firstAmount = $0.amount(asDailyAverage: asDailyAverage)
+            let secondAmount = $1.amount(asDailyAverage: asDailyAverage)
+            if firstAmount != secondAmount {
+                return firstAmount > secondAmount
+            }
+            return $0.id.uuidString < $1.id.uuidString
+        }
+    }
+
+    func shareValue(for slice: EventLocationAnalyticsSlice, among slices: [EventLocationAnalyticsSlice], asDailyAverage: Bool) -> Double {
+        let totalAmount = slices.reduce(0) { $0 + $1.amount(asDailyAverage: asDailyAverage) }
+        return totalAmount > 0 ? slice.amount(asDailyAverage: asDailyAverage) / totalAmount : 0
+    }
 
     func displayedSlicesSortedByID(for metric: EventAnalyticsMetric) -> [ExpenseAnalyticsSlice] {
         slices(for: metric).sorted { $0.category.id > $1.category.id }
@@ -231,6 +259,7 @@ struct EventAnalyticsViewModel {
         case .summary: true
         case .days: totalDays > 1 && expensesTotalHomeAmount > 0
         case .categories: !displayedSlicesSortedByID(for: metric).isEmpty
+        case .locations: data.locations != nil
         }
     }
 
@@ -243,8 +272,8 @@ struct EventAnalyticsViewModel {
         return totalHomeAmount > 0 ? slice.homeAmount / totalHomeAmount : 0
     }
     
-    func shareValue(for slice: ExpenseSubcategoryAnalyticsSlice, category: ExpenseCategory) -> Double {
-        let totalHomeAmount = displayedSubcategorySlicesSortedByAmount(for: category).reduce(0) { $0 + $1.homeAmount }
+    func shareValue(for slice: ExpenseSubcategoryAnalyticsSlice, among slices: [ExpenseSubcategoryAnalyticsSlice]) -> Double {
+        let totalHomeAmount = slices.reduce(0) { $0 + $1.homeAmount }
         return totalHomeAmount > 0 ? slice.homeAmount / totalHomeAmount : 0
     }
 
@@ -254,7 +283,7 @@ struct EventAnalyticsViewModel {
         let slices: [ExpenseAnalyticsSlice]
 
         switch metric {
-        case .summary, .days:
+        case .summary, .days, .locations:
             slices = []
         case .categories:
             slices = data.expensesAmountByCategory

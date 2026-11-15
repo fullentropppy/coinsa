@@ -25,6 +25,17 @@ enum ViewLayout {
         static let cardSpacing: CGFloat = 8
     }
 
+    enum AnalyticsDonutChart {
+        /// Радиус внутреннего отверстия кольцевых диаграмм аналитики.
+        static let innerRadius: CGFloat = 68
+        /// Зазор между секторами кольцевых диаграмм аналитики.
+        static let angularInset: CGFloat = 1
+        /// Радиус скругления секторов кольцевых диаграмм аналитики.
+        static let sectorCornerRadius: CGFloat = 6
+        /// Высота кольцевых диаграмм аналитики.
+        static let height: CGFloat = 220
+    }
+
     enum Label {
         /// Интервал между иконкой и текстом метки.
         static let iconSpacing: CGFloat = 4

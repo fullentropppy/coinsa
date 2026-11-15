@@ -380,6 +380,57 @@
         }
       }
     },
+    "analytics.locations" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Locations"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Локации"
+          }
+        }
+      }
+    },
+    "analytics.locations.amount.daily" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Per day"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "В день"
+          }
+        }
+      }
+    },
+    "analytics.locations.amount.total" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Total"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Всего"
+          }
+        }
+      }
+    },
     "analytics.summary" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -460,7 +511,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Больше всего трат"
+            "value" : "Пиковое время"
           }
         }
       }
@@ -1854,7 +1905,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Вторая половина дня"
+            "value" : "Вторая половина"
           }
         }
       }

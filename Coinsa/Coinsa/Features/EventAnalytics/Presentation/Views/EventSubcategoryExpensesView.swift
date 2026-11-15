@@ -18,6 +18,10 @@ struct EventSubcategoryExpensesView: View {
     // MARK: - Инициализация
 
     /// Создает список трат выбранной подкатегории с контекстом исходного события.
+    /// - Parameters:
+    ///   - subcategory: Подкатегория для отбора трат.
+    ///   - data: Данные поездки или локации, определяющие состав списка и заголовки секций.
+    ///   - screenContextSubtitle: Подзаголовок исходной аналитики.
     init(
         subcategory: ExpenseSubcategory,
         data: EventCategoryAnalyticsData,
@@ -35,7 +39,8 @@ struct EventSubcategoryExpensesView: View {
             navigationTitle: String(localized: subcategory.localizedResource),
             navigationSubtitle: screenContextSubtitle,
             sourceExpenses: data.expenses,
-            predicate: { $0.subcategory == subcategory }
+            predicate: { $0.subcategory == subcategory },
+            showsLocationNames: data.locations != nil
         )
     }
 }

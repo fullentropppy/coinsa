@@ -14,6 +14,7 @@ extension EventAnalyticsMetric: LocalizedResourceProviding {
         case .summary: .analyticsSummary
         case .days: .analyticsDays
         case .categories: .analyticsCategories
+        case .locations: .analyticsLocations
         }
     }
 }

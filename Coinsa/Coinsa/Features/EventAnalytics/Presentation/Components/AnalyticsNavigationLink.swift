@@ -41,7 +41,7 @@ struct AnalyticsNavigationLink<Destination: View>: View {
 }
 
 /// Откладывает вызов построителя до отображения содержимого целевого экрана навигации.
-private struct AnalyticsDestinationView<Content: View>: View {
+struct AnalyticsDestinationView<Content: View>: View {
     let destination: () -> Content
 
     var body: some View {

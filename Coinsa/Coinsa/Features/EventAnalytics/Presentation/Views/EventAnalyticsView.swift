@@ -89,6 +89,8 @@ struct EventAnalyticsView: View {
                 viewModel: viewModel,
                 screenContextSubtitle: screenContextSubtitle
             )
+        case .locations:
+            EventAnalyticsLocationsBody(viewModel: viewModel)
         }
     }
 
@@ -134,8 +136,8 @@ struct EventAnalyticsView: View {
             EventAnalyticsSummaryHeader(viewModel: viewModel)
         case .days:
             EventAnalyticsDaysHeader(viewModel: viewModel)
-        case .categories:
-            EventAnalyticsCategoriesHeader(viewModel: viewModel)
+        case .categories, .locations:
+            EventAnalyticsExpensesHeader(viewModel: viewModel)
         }
     }
 }

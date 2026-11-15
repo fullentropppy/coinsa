@@ -10,19 +10,6 @@ import SwiftUI
 
 /// Тело вкладки аналитики расходов по категориям.
 struct EventAnalyticsCategoriesBody: View {
-    // MARK: - Константы
-
-    private enum Layout {
-        /// Радиус внутреннего отверстия кольцевой диаграммы категорий.
-        static let chartInnerRadius: CGFloat = 68
-        /// Зазор между секторами диаграммы категорий.
-        static let chartAngularInset: CGFloat = 1
-        /// Радиус скругления секторов диаграммы категорий.
-        static let chartSectorCornerRadius: CGFloat = 6
-        /// Высота кольцевой диаграммы категорий.
-        static let chartHeight: CGFloat = 220
-    }
-
     // MARK: - Окружение
 
     @Environment(\.haptics) private var haptics
@@ -30,6 +17,7 @@ struct EventAnalyticsCategoriesBody: View {
     // MARK: - Состояние
 
     @State private var categoryAmountMode: CategoryAmountMode = .total
+    @State private var isChartVisible = false
 
     // MARK: - Хранимые свойства
 
@@ -86,13 +74,18 @@ struct EventAnalyticsCategoriesBody: View {
             Chart(displayedSlicesSortedByID, id: \.category.id) { slice in
                 SectorMark(
                     angle: .value("", slice.homeAmount),
-                    innerRadius: .fixed(Layout.chartInnerRadius),
-                    angularInset: Layout.chartAngularInset
+                    innerRadius: .fixed(ViewLayout.AnalyticsDonutChart.innerRadius),
+                    angularInset: ViewLayout.AnalyticsDonutChart.angularInset
                 )
-                .cornerRadius(Layout.chartSectorCornerRadius)
+                .cornerRadius(ViewLayout.AnalyticsDonutChart.sectorCornerRadius)
                 .foregroundStyle(slice.category.accentColor.gradient)
             }
-            .frame(height: Layout.chartHeight)
+            .frame(height: ViewLayout.AnalyticsDonutChart.height)
+            .opacity(isChartVisible ? 1 : 0)
+            .animation(.snappy, value: isChartVisible)
+            .onAppear {
+                isChartVisible = true
+            }
         }
         .listRowBackground(Color.clear)
     }
@@ -117,12 +110,14 @@ struct EventAnalyticsCategoriesBody: View {
             ForEach(displayedSlicesSortedByAmount) { slice in
                 if slice.homeAmount > 0 {
                     NavigationLink {
-                        EventSubcategoryAnalyticsView(
-                            category: slice.category,
-                            amountMode: categoryAmountMode,
-                            data: viewModel.data,
-                            screenContextSubtitle: screenContextSubtitle
-                        )
+                        AnalyticsDestinationView {
+                            EventSubcategoryAnalyticsView(
+                                category: slice.category,
+                                amountMode: categoryAmountMode,
+                                data: viewModel.data,
+                                screenContextSubtitle: screenContextSubtitle
+                            )
+                        }
                     } label: {
                         categoriesChartLegendRow(for: slice)
                     }

@@ -44,7 +44,8 @@ struct TripDetailViewModel {
             baseBudget: baseBudget,
             locationBudget: nil,
             expensesAmountByCategory: slices(from: expensesAmountByCategory, localValues: nil),
-            expenses: expenses
+            expenses: expenses,
+            locations: trip.locations ?? []
         )
     }
     

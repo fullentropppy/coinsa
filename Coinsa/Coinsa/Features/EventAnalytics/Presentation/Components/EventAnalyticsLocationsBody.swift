@@ -1,0 +1,184 @@
+//
+//  EventAnalyticsLocationsBody.swift
+//  Coinsa
+//
+//  Created by Daniil Gritsenko on 15.11.2026.
+//
+
+import Charts
+import SwiftData
+import SwiftUI
+
+/// Диаграмма долей трат и список локаций поездки.
+struct EventAnalyticsLocationsBody: View {
+    // MARK: - Константы
+
+    private enum Layout {
+        /// Палитра локаций в порядке их дат, независимая от режима сумм и сортировки списка.
+        static let locationColors: [Color] = []
+        /// Насыщенность дополнительных оттенков после исчерпания системной палитры.
+        static let generatedColorSaturation: Double = 0.65
+        /// Яркость дополнительных оттенков после исчерпания системной палитры.
+        static let generatedColorBrightness: Double = 0.85
+    }
+
+    // MARK: - Окружение
+
+    @Environment(\.haptics) private var haptics
+
+    // MARK: - Состояние
+
+    @State private var showsDailyAmounts = false
+    @State private var isChartVisible = false
+
+    // MARK: - Хранимые свойства
+
+    private let viewModel: EventAnalyticsViewModel
+
+    // MARK: - Инициализация
+
+    /// Создает содержимое вкладки локаций для аналитики поездки.
+    /// - Parameter viewModel: ViewModel с локациями и суммами в домашней валюте поездки.
+    init(viewModel: EventAnalyticsViewModel) {
+        self.viewModel = viewModel
+    }
+
+    // MARK: - Тело View
+
+    var body: some View {
+        let locationSlices = viewModel.locationSlices
+        let slices = viewModel.displayedLocationSlices(from: locationSlices, asDailyAverage: showsDailyAmounts)
+
+        if slices.isEmpty {
+            EmptyStateView(icon: "chart.xyaxis.line", title: .analyticsEmptyStateTitle)
+                .listRowBackground(Color.clear)
+        } else {
+            if slices.count > 1 && slices.contains(where: { $0.homeAmount > 0 }) {
+                locationsChartSection(slices: slices, colorOrder: locationSlices)
+            }
+            locationsListSection(slices: slices, colorOrder: locationSlices)
+        }
+    }
+
+    // MARK: - Секции
+
+    private func locationsChartSection(slices: [EventLocationAnalyticsSlice], colorOrder: [EventLocationAnalyticsSlice]) -> some View {
+        Section {
+            Chart(slices.filter { $0.homeAmount > 0 }) { slice in
+                SectorMark(
+                    angle: .value("", slice.amount(asDailyAverage: showsDailyAmounts)),
+                    innerRadius: .fixed(ViewLayout.AnalyticsDonutChart.innerRadius),
+                    angularInset: ViewLayout.AnalyticsDonutChart.angularInset
+                )
+                .cornerRadius(ViewLayout.AnalyticsDonutChart.sectorCornerRadius)
+                .foregroundStyle(color(for: slice, in: colorOrder).gradient)
+            }
+            .frame(height: ViewLayout.AnalyticsDonutChart.height)
+            .opacity(isChartVisible ? 1 : 0)
+            .animation(.snappy, value: isChartVisible)
+            .onAppear {
+                isChartVisible = true
+            }
+        }
+        .listRowBackground(Color.clear)
+    }
+
+    private func locationsListSection(slices: [EventLocationAnalyticsSlice], colorOrder: [EventLocationAnalyticsSlice]) -> some View {
+        Section {
+            if slices.count > 1 || slices.contains(where: { $0.location.totalDays > 1 }) {
+                Picker(selection: $showsDailyAmounts.animation(.snappy)) {
+                    Text(.analyticsLocationsAmountTotal).tag(false)
+                    Text(.analyticsLocationsAmountDaily).tag(true)
+                } label: {
+                    EmptyView()
+                }
+                .pickerStyle(.segmented)
+                .onChange(of: showsDailyAmounts) {
+                    haptics.trigger(.tap)
+                }
+                .listRowSeparator(.hidden)
+            }
+
+            ForEach(slices) { slice in
+                NavigationLink {
+                    AnalyticsDestinationView {
+                        EventAnalyticsView(
+                            data: LocationDetailViewModel(location: slice.location).eventAnalyticsData,
+                            screenContextSubtitle: slice.location.screenContextSubtitle
+                        )
+                    }
+                } label: {
+                    locationRow(for: slice, slices: slices, colorOrder: colorOrder)
+                }
+            }
+        }
+    }
+
+    // MARK: - Компоненты
+
+    private func locationRow(for slice: EventLocationAnalyticsSlice, slices: [EventLocationAnalyticsSlice], colorOrder: [EventLocationAnalyticsSlice]) -> some View {
+        HStack {
+            VStack(alignment: .leading, spacing: ViewLayout.Row.contentSpacing) {
+                Text(slice.location.name)
+                HStack(spacing: ViewLayout.Row.metadataSpacing) {
+                    if slices.count > 1 {
+                        DotView(color(for: slice, in: colorOrder))
+                        Text(viewModel.shareValue(for: slice, among: slices, asDailyAverage: showsDailyAmounts).percentFormat())
+                            .font(.footnote.monospacedDigit())
+                            .foregroundStyle(.secondary)
+                        DotDivider.secondarySmall()
+                    }
+                    CountLabel.secondarySmall(slice.expenseCount, icon: Expense.primaryIcon)
+                }
+            }
+            Spacer()
+            AmountStack(
+                homeAmount: slice.amount(asDailyAverage: showsDailyAmounts),
+                homeCurrency: viewModel.homeCurrency
+            )
+        }
+    }
+
+    // MARK: - Вспомогательные методы
+
+    private func color(for slice: EventLocationAnalyticsSlice, in slices: [EventLocationAnalyticsSlice]) -> Color {
+        let index = slices.firstIndex { $0.id == slice.id } ?? 0
+        if index < Layout.locationColors.count {
+            return Layout.locationColors[index]
+        }
+
+        let uuid = slice.id.uuid
+        let hueSeed = (UInt16(uuid.0) << UInt8.bitWidth) | UInt16(uuid.1)
+        return Color(
+            hue: Double(hueSeed) / Double(UInt16.max),
+            saturation: Layout.generatedColorSaturation,
+            brightness: Layout.generatedColorBrightness
+        )
+    }
+}
+
+// MARK: - Превью
+
+#Preview("With Expenses") {
+    @Previewable @State var preview = ExpenseMapPreviewData(forTrip: true)
+
+    NavigationStack {
+        List {
+            EventAnalyticsLocationsBody(viewModel: EventAnalyticsViewModel(data: preview.analyticsData))
+        }
+    }
+    .modelContainer(preview.container)
+    .environment(preview.settingsStore)
+}
+
+#Preview("Without Expenses") {
+    @Previewable @State var preview = ExpenseMapPreviewData(forTrip: true, includeExpenses: false)
+
+    NavigationStack {
+        List {
+            EventAnalyticsLocationsBody(viewModel: EventAnalyticsViewModel(data: preview.analyticsData))
+        }
+    }
+    .modelContainer(preview.container)
+    .environment(preview.settingsStore)
+}

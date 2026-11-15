@@ -77,7 +77,8 @@ struct LocationDetailViewModel {
             baseBudget: location.budget,
             locationBudget: locationBudget,
             expensesAmountByCategory: slices(from: expensesAmountByCategoryBase, localValues: expensesLocationAmountByCategory),
-            expenses: location.expenses ?? []
+            expenses: location.expenses ?? [],
+            locations: nil
         )
     }
     
