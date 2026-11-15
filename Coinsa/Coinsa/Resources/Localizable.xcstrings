@@ -2036,13 +2036,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Couldn't load the currency exchange rate: %1$(errorDescription)@ Please try again."
+            "value" : "Couldn't load the currency exchange rate: %1$(errorDescription)@ Try again."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Не удалось загрузить курс валюты: %(errorDescription)@ Пожалуйста, попробуйте снова."
+            "value" : "Не удалось загрузить курс валюты: %(errorDescription)@ Повторите попытку."
           }
         }
       }
@@ -2580,7 +2580,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The expense’s location is unavailable. Close this screen and try again after syncing."
+            "value" : "The Expense’s Location is unavailable. Close this screen and try again after syncing."
           }
         },
         "ru" : {
@@ -2835,7 +2835,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The expense could not be deleted. Try again."
+            "value" : "The Expense could not be deleted. Try again."
           }
         },
         "ru" : {
@@ -2869,13 +2869,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The expense could not be saved. Your changes remain in the editor. Try again."
+            "value" : "The Expense could not be saved. Try again."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Не удалось сохранить трату. Ваши изменения остались в редакторе. Повторите попытку."
+            "value" : "Не удалось сохранить трату. Повторите попытку."
           }
         }
       }
@@ -2886,7 +2886,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The expense is no longer available. Close this screen and refresh the list."
+            "value" : "The Expense is no longer available. Close this screen and refresh the list."
           }
         },
         "ru" : {
@@ -4042,13 +4042,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The location or its trip is unavailable. Close this screen and try again after syncing."
+            "value" : "The Location or its trip is unavailable. Close this screen and try again after syncing."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Локация или её поездка недоступна. Закройте экран и повторите попытку после синхронизации."
+            "value" : "Локация или ее поездка недоступна. Закройте экран и повторите попытку после синхронизации."
           }
         }
       }
@@ -4297,7 +4297,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The location could not be deleted. Try again."
+            "value" : "The Location could not be deleted. Try again."
           }
         },
         "ru" : {
@@ -4331,13 +4331,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The location could not be saved. Your changes remain in the editor. Try again."
+            "value" : "The Location could not be saved. Try again."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Не удалось сохранить локацию. Ваши изменения остались в редакторе. Повторите попытку."
+            "value" : "Не удалось сохранить локацию. Повторите попытку."
           }
         }
       }
@@ -4348,7 +4348,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The location is no longer available. Close this screen and refresh the list."
+            "value" : "The Location is no longer available. Close this screen and refresh the list."
           }
         },
         "ru" : {
@@ -5203,6 +5203,40 @@
         }
       }
     },
+    "trip.editor.unavailable.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The Trip is unavailable. Close this screen and try again after syncing."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Поездка недоступна. Закройте экран и повторите попытку после синхронизации."
+          }
+        }
+      }
+    },
+    "trip.editor.unavailable.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Editing unavailable"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Редактирование недоступно"
+          }
+        }
+      }
+    },
     "trip.emptyState.description" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -5369,6 +5403,74 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Начинается"
+          }
+        }
+      }
+    },
+    "trip.storage.deleteError.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The Trip could not be deleted. Try again."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось удалить поездку. Повторите попытку."
+          }
+        }
+      }
+    },
+    "trip.storage.error.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Operation failed"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось выполнить операцию"
+          }
+        }
+      }
+    },
+    "trip.storage.homeCurrencyLocked.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The home currency cannot be changed while the Trip has Locations. Check the currency and try saving again."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Домашнюю валюту нельзя изменить, пока в поездке есть локации. Проверьте валюту и повторите сохранение."
+          }
+        }
+      }
+    },
+    "trip.storage.saveError.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The Trip could not be saved. Try again."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось сохранить поездку. Повторите попытку."
           }
         }
       }

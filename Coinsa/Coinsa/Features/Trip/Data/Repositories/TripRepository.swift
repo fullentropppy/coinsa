@@ -28,23 +28,24 @@ struct TripRepository {
         startDate: Date,
         endDate: Date,
         homeCurrency: Currency
-    ) {
-        let now = Date()
+    ) throws {
+        try saveChanges {
+            let now = Date()
         
-        let trip = Trip(
-            id: UUID(),
-            name: name,
-            startDate: startDate,
-            endDate: endDate,
-            homeCurrencyCode: homeCurrency.code,
-            locations: [],
-            createdAt: now,
-            updatedAt: now
-        )
+            let trip = Trip(
+                id: UUID(),
+                name: name,
+                startDate: startDate,
+                endDate: endDate,
+                homeCurrencyCode: homeCurrency.code,
+                locations: [],
+                createdAt: now,
+                updatedAt: now
+            )
         
-        normalizeTripData(trip)
-        context.insert(trip)
-        try? context.save()
+            normalizeTripData(trip)
+            context.insert(trip)
+        }
     }
     
     /// Обновляет существующую поездку.
@@ -61,22 +62,63 @@ struct TripRepository {
         startDate: Date,
         endDate: Date,
         homeCurrency: Currency
-    ) {
-        trip.name = name
-        trip.storedStartDate = startDate
-        trip.storedEndDate = endDate
-        trip.baseCurrencyCode = homeCurrency.code
-        trip.updatedAt = Date()
+    ) throws {
+        guard trip.modelContext === context, !trip.isDeleted else {
+            throw TripRepositoryError.tripUnavailable
+        }
+        guard !trip.hasLocations || trip.homeCurrency == homeCurrency else {
+            throw TripRepositoryError.homeCurrencyLocked
+        }
 
-        normalizeTripData(trip)
-        try? context.save()
+        try saveChanges {
+            trip.name = name
+            trip.storedStartDate = startDate
+            trip.storedEndDate = endDate
+            if !trip.hasLocations {
+                trip.baseCurrencyCode = homeCurrency.code
+            }
+            trip.updatedAt = Date()
+
+            normalizeTripData(trip)
+        }
     }
     
     /// Удаляет поездку.
     /// - Parameter trip: Поездка для удаления.
-    func delete(_ trip: Trip) {
-        context.delete(trip)
-        try? context.save()
+    func delete(_ trip: Trip) throws {
+        try delete([trip])
+    }
+
+    /// Удаляет поездки с дочерними локациями и тратами одной операцией с откатом при ошибке записи.
+    /// - Parameter trips: Поездки из текущего контекста.
+    func delete(_ trips: [Trip]) throws {
+        guard trips.allSatisfy({ $0.modelContext === context && !$0.isDeleted }) else {
+            throw TripRepositoryError.tripUnavailable
+        }
+
+        try saveChanges {
+            for trip in trips {
+                context.delete(trip)
+            }
+        }
+    }
+
+    // MARK: - Сохранение
+
+    /// Фиксирует предыдущие изменения до операции, чтобы откат при ошибке не затронул их.
+    /// - Parameter changes: Синхронные изменения, сохраняемые вместе.
+    private func saveChanges(_ changes: () -> Void) throws {
+        if context.hasChanges {
+            try context.save()
+        }
+
+        do {
+            changes()
+            try context.save()
+        } catch {
+            context.rollback()
+            throw error
+        }
     }
     
     // MARK: - Нормализация
@@ -87,5 +129,22 @@ struct TripRepository {
         trip.name = trip.name.trimmed
         trip.storedStartDate = trip.storedStartDate.storedPlainDate(using: .utc)
         trip.storedEndDate = trip.storedEndDate.storedPlainDate(using: .utc)
+    }
+}
+
+// MARK: - Ошибки
+
+/// Причина недоступности поездки или запрета изменения её домашней валюты.
+enum TripRepositoryError: LocalizedError {
+    case tripUnavailable
+    case homeCurrencyLocked
+
+    var errorDescription: String? {
+        switch self {
+        case .tripUnavailable:
+            String(localized: .tripEditorUnavailableMessage)
+        case .homeCurrencyLocked:
+            String(localized: .tripStorageHomeCurrencyLockedMessage)
+        }
     }
 }

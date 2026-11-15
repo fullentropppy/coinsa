@@ -192,14 +192,15 @@ struct LocationDetailView: View {
             DetailActionsMenu(title: .locationActions, onEdit: {
                 isShowingLocationEdit = true
             }) {
-                Button {
-                    haptics.trigger(.tap)
-                    transferSuccessMessage = nil
-                    isShowingBudgetTransfer = true
-                } label: {
-                    Label(.locationBudgetTransferAction, systemImage: "arrow.forward.to.line")
+                if LocationBudgetTransferViewModel.canTransfer(from: location) {
+                    Button {
+                        haptics.trigger(.tap)
+                        transferSuccessMessage = nil
+                        isShowingBudgetTransfer = true
+                    } label: {
+                        Label(.locationBudgetTransferAction, systemImage: "arrow.forward.to.line")
+                    }
                 }
-                .disabled(!LocationBudgetTransferViewModel.canTransfer(from: location))
             }
         }
     }

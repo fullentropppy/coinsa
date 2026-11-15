@@ -24,6 +24,8 @@ struct TripDetailView: View {
     @State private var locationToEdit: Location?
     @State private var isShowingLocationDeletionError = false
 
+    @Query private var availableTrips: [Trip]
+
     // MARK: - Зависимости
     
     private let trip: Trip
@@ -41,13 +43,34 @@ struct TripDetailView: View {
     // MARK: - Инициализация
 
     /// Создает экран подробностей переданной поездки.
+    /// - Parameter trip: Поездка, доступность которой отслеживается в текущем контексте.
     init(_ trip: Trip) {
         self.trip = trip
+        let tripID = trip.id
+        _availableTrips = Query(filter: #Predicate<Trip> { $0.id == tripID })
     }
 
     // MARK: - Тело View
 
     var body: some View {
+        Group {
+            if !availableTrips.isEmpty, !trip.isDeleted, trip.modelContext === context {
+                tripDetailContent
+            } else {
+                Color.clear
+            }
+        }
+        .onChange(of: availableTrips.isEmpty, initial: true) { _, isUnavailable in
+            if isUnavailable {
+                isShowingTripEdit = false
+                isShowingLocationCreate = false
+                locationToEdit = nil
+                dismiss()
+            }
+        }
+    }
+
+    private var tripDetailContent: some View {
         tripDetailForm
             .navigationTitle(trip.name)
             .toolbarTitleDisplayMode(.inline)
@@ -55,7 +78,7 @@ struct TripDetailView: View {
                 toolbarContent
             }
             .sheet(isPresented: $isShowingTripEdit) {
-                TripEditView(forEdit: trip) { dismiss() }
+                TripEditorView(forEdit: trip)
             }
             .sheet(isPresented: $isShowingLocationCreate) {
                 LocationEditorView(
@@ -86,9 +109,6 @@ struct TripDetailView: View {
                 message: .locationStorageDeleteErrorMessage,
                 isError: true
             )
-            .onAppear {
-                checkIfDeleted()
-            }
     }
     
     // MARK: - Основной контент
@@ -203,26 +223,27 @@ struct TripDetailView: View {
     private func cancelDelete() {
         deletionHandler.cancel()
     }
-    
-    private func checkIfDeleted() {
-        if trip.modelContext == nil {
-            dismiss()
-        }
-    }
+
 }
 
 // MARK: - Превью
 
 #Preview("With Locations") {
+    @Previewable @State var preview = TripPreviewData(includeLocations: true, includeExpenses: true)
+
     NavigationStack {
-        TripDetailView(PreviewGenerator.makeExampleTrip(includeLocations: true, includeExpenses: true))
+        TripDetailView(preview.trip)
     }
-    .environment(AppSettingsStore())
+    .modelContainer(preview.container)
+    .environment(preview.settingsStore)
 }
 
 #Preview("Without Locations") {
+    @Previewable @State var preview = TripPreviewData()
+
     NavigationStack {
-        TripDetailView(PreviewGenerator.makeExampleTrip())
+        TripDetailView(preview.trip)
     }
-    .environment(AppSettingsStore())
+    .modelContainer(preview.container)
+    .environment(preview.settingsStore)
 }

@@ -7,6 +7,7 @@
 
 import Foundation
 import Observation
+import SwiftData
 
 /// ViewModel для экрана создания/редактирования поездки.
 @MainActor
@@ -47,11 +48,12 @@ final class TripEditViewModel {
     }
 
     var hasLocations: Bool {
-        trip?.hasLocations ?? false
+        guard let trip, !trip.isDeleted, trip.modelContext != nil else { return false }
+        return trip.hasLocations
     }
     
     var totalDays: Int {
-        endDate.days(from: startDate) + 1
+        PlainDate(endDate).days(from: PlainDate(startDate)) + 1
     }
     
     // MARK: - Состояние UI. Общие данные
@@ -81,9 +83,11 @@ final class TripEditViewModel {
         )
     }
     
-    /// Создает ViewModel для редактирования существующей поездки.
+    /// Создает черновик существующей поездки или возвращает nil, если она недоступна в хранилище.
     /// - Parameter trip: Редактируемая поездка.
-    convenience init(forEdit trip: Trip) {
+    convenience init?(forEdit trip: Trip) {
+        guard !trip.isDeleted, trip.modelContext != nil else { return nil }
+
         self.init(
             trip: trip,
             name: trip.name,
@@ -94,6 +98,12 @@ final class TripEditViewModel {
     }
 
     /// Создает черновик поездки и исходный снимок для определения изменений.
+    /// - Parameters:
+    ///   - trip: Исходная поездка или nil при создании.
+    ///   - name: Начальное название.
+    ///   - startDate: Начальная календарная дата поездки.
+    ///   - endDate: Конечная календарная дата поездки.
+    ///   - homeCurrency: Домашняя валюта черновика.
     private init(
         trip: Trip?,
         name: String,
@@ -117,9 +127,9 @@ final class TripEditViewModel {
     
     // MARK: - Операции с хранилищем
 
-    func save(using repository: TripRepository) {
+    func save(using repository: TripRepository) throws {
         if let trip {
-            repository.update(
+            try repository.update(
                 trip,
                 name: name,
                 startDate: startDate,
@@ -127,7 +137,7 @@ final class TripEditViewModel {
                 homeCurrency: homeCurrency
             )
         } else {
-            repository.add(
+            try repository.add(
                 name: name,
                 startDate: startDate,
                 endDate: endDate,

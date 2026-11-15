@@ -20,6 +20,7 @@ struct TripListView: View {
     @State private var deletionHandler = DeletionHandler<Trip>()
     @State private var isShowingTripCreate = false
     @State private var tripToEdit: Trip?
+    @State private var isShowingTripDeletionError = false
 
     @Query private var trips: [Trip]
     
@@ -41,10 +42,10 @@ struct TripListView: View {
                 .navigationTitle(.tripNavigationTitleList)
                 .navigationBarTitleDisplayMode(.large)
                 .sheet(isPresented: $isShowingTripCreate) {
-                    TripEditView(forCreateWith: settingsStore.homeCurrency)
+                    TripEditorView(forCreateWith: settingsStore.homeCurrency)
                 }
                 .sheet(item: $tripToEdit) { trip in
-                    TripEditView(forEdit: trip)
+                    TripEditorView(forEdit: trip)
                 }
                 .safeAreaInset(edge: .bottom) {
                     if !trips.isEmpty {
@@ -59,6 +60,12 @@ struct TripListView: View {
                     message: .tripDeleteMessage,
                     onConfirm: { confirmDelete() },
                     onCancel: { cancelDelete() }
+                )
+                .notificationAlert(
+                    isPresented: $isShowingTripDeletionError,
+                    title: .tripStorageErrorTitle,
+                    message: .tripStorageDeleteErrorMessage,
+                    isError: true
                 )
         }
     }
@@ -117,8 +124,13 @@ struct TripListView: View {
     }
 
     private func confirmDelete() {
-        withAnimation {
-            deletionHandler.confirm { repository.delete($0) }
+        do {
+            try withAnimation {
+                try repository.delete(deletionHandler.itemsPendingDeletion)
+            }
+            deletionHandler.cancel()
+        } catch {
+            isShowingTripDeletionError = true
         }
     }
 
