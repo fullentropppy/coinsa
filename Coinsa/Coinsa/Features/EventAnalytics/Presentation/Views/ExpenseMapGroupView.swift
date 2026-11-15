@@ -64,7 +64,7 @@ struct ExpenseMapGroupView: View {
 // MARK: - Превью
 
 #Preview {
-    let preview = ExpenseMapPreviewData()
+    @Previewable @State var preview = ExpenseMapPreviewData()
     
     ExpenseMapGroupView(
         expenses: preview.expenses,

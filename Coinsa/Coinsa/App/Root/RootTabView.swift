@@ -9,10 +9,6 @@ import SwiftUI
 
 /// Главный таб-бар с вкладками.
 struct RootTabView: View {
-    // MARK: - Окружение
-
-    @Environment(AppSettingsStore.self) private var settingsStore
-
     // MARK: - Свойства
     
     @State private var selection: RootTab = .today

@@ -240,15 +240,25 @@ struct LocationDetailView: View {
 // MARK: - Превью
 
 #Preview("With Expenses") {
-    NavigationStack {
-        LocationDetailView(PreviewGenerator.makeExampleLocation(includeExpenses: true))
+    @Previewable @State var preview = TripPreviewData(includeLocations: true, includeExpenses: true)
+
+    if let location = preview.trip.locations?.first {
+        NavigationStack {
+            LocationDetailView(location)
+        }
+        .modelContainer(preview.container)
+        .environment(preview.settingsStore)
     }
-    .environment(AppSettingsStore())
 }
 
 #Preview("Without Expenses") {
-    NavigationStack {
-        LocationDetailView(PreviewGenerator.makeExampleLocation())
+    @Previewable @State var preview = TripPreviewData(includeLocations: true)
+
+    if let location = preview.trip.locations?.first {
+        NavigationStack {
+            LocationDetailView(location)
+        }
+        .modelContainer(preview.container)
+        .environment(preview.settingsStore)
     }
-    .environment(AppSettingsStore())
 }

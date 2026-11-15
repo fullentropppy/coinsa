@@ -215,10 +215,9 @@ struct SettingsView: View {
 // MARK: - Превью
 
 #Preview {
-    let container = PreviewBuilder.builder().withTrips(false).buildContainer()
-    let store = AppSettingsStore()
+    @Previewable @State var preview = PreviewEnvironment()
     
     SettingsView()
-        .modelContainer(container)
-        .environment(store)
+        .modelContainer(preview.container)
+        .environment(preview.settingsStore)
 }

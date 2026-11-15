@@ -19,11 +19,21 @@ struct TodayView: View {
 
     @State private var currentDate = Date.now
 
+    private let allowsAutomaticRateRequests: Bool
+
+    // MARK: - Инициализация
+
+    /// Создает экран дня с возможностью отключить автоматическую загрузку курсов в превью.
+    /// - Parameter allowsAutomaticRateRequests: Разрешать автоматические запросы справочного курса.
+    init(allowsAutomaticRateRequests: Bool = true) {
+        self.allowsAutomaticRateRequests = allowsAutomaticRateRequests
+    }
+
     // MARK: - Тело View
 
     var body: some View {
         NavigationStack {
-            TodayContentView(date: currentDate)
+            TodayContentView(date: currentDate, allowsAutomaticRateRequests: allowsAutomaticRateRequests)
         }
         .onAppear {
             currentDate = .now
@@ -71,6 +81,7 @@ private struct TodayContentView: View {
 
     private let date: Date
     private let day: PlainDate
+    private let allowsAutomaticRateRequests: Bool
 
     private var selectedLocation: Location? {
         viewModel.selectedLocation(in: currentLocations, preferredID: settingsStore.selectedLocationID)
@@ -87,9 +98,12 @@ private struct TodayContentView: View {
     // MARK: - Инициализация
 
     /// Создает содержимое и выборку локаций для календарного дня устройства.
-    /// - Parameter date: Фактический момент, из которого в текущем часовом поясе определяются день выборки и подзаголовок.
-    init(date: Date) {
+    /// - Parameters:
+    ///   - date: Фактический момент, из которого в текущем часовом поясе определяются день выборки и подзаголовок.
+    ///   - allowsAutomaticRateRequests: Разрешать автоматические запросы справочного курса.
+    init(date: Date, allowsAutomaticRateRequests: Bool) {
         self.date = date
+        self.allowsAutomaticRateRequests = allowsAutomaticRateRequests
         let day = PlainDate(date, using: .current)
         self.day = day
         let storedDay = day.storedDate
@@ -151,6 +165,7 @@ private struct TodayContentView: View {
             updateSelectedLocationIfNeeded()
         }
         .task(id: rateRefreshKey) {
+            guard allowsAutomaticRateRequests else { return }
             await viewModel.refreshRate(for: rateRefreshKey)
         }
     }
@@ -250,31 +265,30 @@ private struct QuickExpenseSelection: Identifiable {
 
 // MARK: - Превью
 
-private extension TodayView {
-    static func makePreview(withLocation: Bool, withExpenses: Bool) -> some View {
-        var builder = PreviewBuilder.builder()
-        if withLocation {
-            builder = builder.withScenario(.southKorea).withExpenses(withExpenses)
-        } else {
-            builder = builder.withTrips(false)
-        }
-        let container = builder.buildContainer()
-        let settingsStore = AppSettingsStore()
-
-        return TodayView()
-            .modelContainer(container)
-            .environment(settingsStore)
-    }
-}
-
 #Preview("With Locations") {
-    TodayView.makePreview(withLocation: true, withExpenses: true)
+    @Previewable @State var preview = PreviewEnvironment(
+        trips: PreviewBuilder.builder().withScenario(.southKorea).buildData()
+    )
+
+    TodayView(allowsAutomaticRateRequests: false)
+        .modelContainer(preview.container)
+        .environment(preview.settingsStore)
 }
 
 #Preview("Without Expenses") {
-    TodayView.makePreview(withLocation: true, withExpenses: false)
+    @Previewable @State var preview = PreviewEnvironment(
+        trips: PreviewBuilder.builder().withScenario(.southKorea).withExpenses(false).buildData()
+    )
+
+    TodayView(allowsAutomaticRateRequests: false)
+        .modelContainer(preview.container)
+        .environment(preview.settingsStore)
 }
 
 #Preview("Empty") {
-    TodayView.makePreview(withLocation: false, withExpenses: false)
+    @Previewable @State var preview = PreviewEnvironment()
+
+    TodayView(allowsAutomaticRateRequests: false)
+        .modelContainer(preview.container)
+        .environment(preview.settingsStore)
 }

@@ -155,7 +155,7 @@ private enum DebugAction: String, Identifiable {
 // MARK: - Превью
 
 #Preview {
-    let container = PreviewBuilder.builder().withLocations(false).buildContainer()
+    @Previewable @State var container = PreviewBuilder.builder().withLocations(false).buildContainer()
     let demoDataService = DemoDataService(context: container.mainContext)
     
     Form {

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 /// Экран создания/редактирования траты.
 struct ExpenseEditorView: View {
@@ -13,6 +14,15 @@ struct ExpenseEditorView: View {
 
     @State private var viewModel: ExpenseEditViewModel?
     private let onDelete: (() -> Void)?
+
+    /// Создает вход редактора с уже подготовленным черновиком без повторной инициализации состояния.
+    /// - Parameters:
+    ///   - initialViewModel: Черновик создания или редактирования траты.
+    ///   - onDelete: Действие после успешного удаления.
+    init(initialViewModel: ExpenseEditViewModel, onDelete: (() -> Void)? = nil) {
+        _viewModel = State(initialValue: initialViewModel)
+        self.onDelete = onDelete
+    }
 
     /// Создает экран новой траты с выбранными параметрами.
     /// - Parameters:
@@ -71,11 +81,21 @@ struct ExpenseEditorView: View {
 // MARK: - Превью
 
 #Preview("Editing") {
-    ExpenseEditorView(forEdit: PreviewGenerator.makeExampleExpense())
-        .environment(AppSettingsStore())
+    @Previewable @State var preview = ExpenseFormPreviewData(isEditing: true)
+
+    if let viewModel = preview.viewModel {
+        ExpenseEditorView(initialViewModel: viewModel)
+            .modelContainer(preview.container)
+            .environment(preview.settingsStore)
+    }
 }
 
 #Preview("Creating") {
-    ExpenseEditorView(forCreateWith: PreviewGenerator.makeExampleLocation())
-        .environment(AppSettingsStore())
+    @Previewable @State var preview = ExpenseFormPreviewData(isEditing: false)
+
+    if let viewModel = preview.viewModel {
+        ExpenseEditorView(initialViewModel: viewModel)
+            .modelContainer(preview.container)
+            .environment(preview.settingsStore)
+    }
 }

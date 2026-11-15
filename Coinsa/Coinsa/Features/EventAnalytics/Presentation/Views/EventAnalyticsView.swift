@@ -142,26 +142,32 @@ struct EventAnalyticsView: View {
 
 // MARK: - Превью
 
-extension EventAnalyticsView {
-    fileprivate static func makePreview(forTrip: Bool, includeExpenses: Bool) -> some View {
-        let preview = ExpenseMapPreviewData(forTrip: forTrip, includeExpenses: includeExpenses)
-
-        return NavigationStack {
-            EventAnalyticsView(data: preview.analyticsData, screenContextSubtitle: preview.screenContextSubtitle)
-        }
-        .modelContainer(preview.container)
-        .environment(preview.settingsStore)
-    }
-}
-
 #Preview("For Trip") {
-    EventAnalyticsView.makePreview(forTrip: true, includeExpenses: true)
+    @Previewable @State var preview = ExpenseMapPreviewData(forTrip: true)
+
+    NavigationStack {
+        EventAnalyticsView(data: preview.analyticsData, screenContextSubtitle: preview.screenContextSubtitle)
+    }
+    .modelContainer(preview.container)
+    .environment(preview.settingsStore)
 }
 
 #Preview("For Location") {
-    EventAnalyticsView.makePreview(forTrip: false, includeExpenses: true)
+    @Previewable @State var preview = ExpenseMapPreviewData()
+
+    NavigationStack {
+        EventAnalyticsView(data: preview.analyticsData, screenContextSubtitle: preview.screenContextSubtitle)
+    }
+    .modelContainer(preview.container)
+    .environment(preview.settingsStore)
 }
 
 #Preview("Empty") {
-    EventAnalyticsView.makePreview(forTrip: false, includeExpenses: false)
+    @Previewable @State var preview = ExpenseMapPreviewData(includeExpenses: false)
+
+    NavigationStack {
+        EventAnalyticsView(data: preview.analyticsData, screenContextSubtitle: preview.screenContextSubtitle)
+    }
+    .modelContainer(preview.container)
+    .environment(preview.settingsStore)
 }

@@ -20,24 +20,29 @@ enum PreviewTrip: String {
         rawValue
     }
     
-    var startDate: Date {
+    /// Возвращает первый день поездки относительно общего дня генерации.
+    /// - Parameter referenceDay: Опорный календарный день без часового пояса.
+    func startDate(relativeTo referenceDay: PlainDate) -> PlainDate {
         switch self {
-        case .japan: Date().adding(months: -14)
-        case .russia: Date().adding(months: -2)
-        case .southKorea: Date().adding(days: -3)
-        case .turkey: Date().adding(months: 3)
+        case .japan: PlainDate(referenceDay.storedDate.adding(months: -14, using: .utc))
+        case .russia: PlainDate(referenceDay.storedDate.adding(months: -2, using: .utc))
+        case .southKorea: referenceDay.adding(days: -3)
+        case .turkey: PlainDate(referenceDay.storedDate.adding(months: 3, using: .utc))
         }
     }
-    
-    var endDate: Date {
-        switch self {
+
+    /// Возвращает последний день поездки относительно общего дня генерации.
+    /// - Parameter referenceDay: Опорный календарный день без часового пояса.
+    func endDate(relativeTo referenceDay: PlainDate) -> PlainDate {
+        let startDate = startDate(relativeTo: referenceDay)
+        return switch self {
         case .japan: startDate.adding(days: 14)
         case .russia: startDate
         case .southKorea: startDate.adding(days: 10)
         case .turkey: startDate.adding(days: 7)
         }
     }
-    
+
     var locationsData: [PreviewLocation] {
         switch self {
         case .japan: [.tokyo, .kyoto, .osaka]
@@ -71,27 +76,25 @@ enum PreviewLocation: String {
         }
     }
     
-    var startDate: Date {
+    /// Возвращает первый день локации относительно общего дня генерации.
+    /// - Parameter referenceDay: Опорный календарный день без часового пояса.
+    func startDate(relativeTo referenceDay: PlainDate) -> PlainDate {
         switch self {
-        case .tokyo: tripData.startDate
-        case .kyoto: PreviewLocation.tokyo.endDate
-        case .osaka: PreviewLocation.kyoto.endDate
-        case .saintp: tripData.startDate
-        case .seoul: tripData.startDate
-        case .busan: PreviewLocation.seoul.endDate
-        case .istanbul: tripData.startDate
+        case .tokyo, .saintp, .seoul, .istanbul: tripData.startDate(relativeTo: referenceDay)
+        case .kyoto: PreviewLocation.tokyo.endDate(relativeTo: referenceDay)
+        case .osaka: PreviewLocation.kyoto.endDate(relativeTo: referenceDay)
+        case .busan: PreviewLocation.seoul.endDate(relativeTo: referenceDay)
         }
     }
-    
-    var endDate: Date {
+
+    /// Возвращает последний день локации относительно общего дня генерации.
+    /// - Parameter referenceDay: Опорный календарный день без часового пояса.
+    func endDate(relativeTo referenceDay: PlainDate) -> PlainDate {
         switch self {
-        case .tokyo: startDate.adding(days: 6)
-        case .kyoto: PreviewLocation.tokyo.endDate.adding(days: 4)
-        case .osaka: tripData.endDate
-        case .saintp: tripData.endDate
-        case .seoul: tripData.startDate.adding(days: 6)
-        case .busan: tripData.endDate
-        case .istanbul: tripData.endDate
+        case .tokyo: startDate(relativeTo: referenceDay).adding(days: 6)
+        case .kyoto: PreviewLocation.tokyo.endDate(relativeTo: referenceDay).adding(days: 4)
+        case .seoul: tripData.startDate(relativeTo: referenceDay).adding(days: 6)
+        case .osaka, .saintp, .busan, .istanbul: tripData.endDate(relativeTo: referenceDay)
         }
     }
 

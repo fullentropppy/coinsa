@@ -240,16 +240,20 @@ struct FullScreenMapView: View {
 // MARK: - Превью
 
 #Preview("Reading") {
+    @Previewable @State var settingsStore = PreviewEnvironment.makeSettingsStore()
+
     let coordinate = PreviewGenerator.makeExampleCoordinate()
     FullScreenMapView(
         coordinate: coordinate,
         title: .expenseSubcategoryBreakfast,
         markerTitle: .expensePlaceOfExpense
     )
-    .environment(AppSettingsStore())
+    .environment(settingsStore)
 }
 
 #Preview("Editing") {
+    @Previewable @State var settingsStore = PreviewEnvironment.makeSettingsStore()
+
     @Previewable @State var coordinate: Coordinate? = PreviewGenerator.makeExampleCoordinate()
     FullScreenMapView(
         coordinate: $coordinate,
@@ -258,5 +262,5 @@ struct FullScreenMapView: View {
         errorTitle: .expenseCoordinateErrorTitle,
         errorMessage: .expenseCoordinateErrorMessage
     )
-    .environment(AppSettingsStore())
+    .environment(settingsStore)
 }

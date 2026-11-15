@@ -141,26 +141,20 @@ struct TripListView: View {
 
 // MARK: - Превью
 
-private extension TripListView {
-    static func makePreview(withTrips: Bool = true) -> some View {
-        let container = PreviewBuilder.builder()
-            .withScenario(.all)
-            .withTrips(withTrips)
-            .withExpenses(false)
-            .buildContainer()
-        
-        let settingsStore = AppSettingsStore()
-        
-        return TripListView()
-            .modelContainer(container)
-            .environment(settingsStore)
-    }
-}
-
 #Preview("With Trips") {
-    TripListView.makePreview(withTrips: true)
+    @Previewable @State var preview = PreviewEnvironment(
+        trips: PreviewBuilder.builder().withScenario(.all).withExpenses(false).buildData()
+    )
+
+    TripListView()
+        .modelContainer(preview.container)
+        .environment(preview.settingsStore)
 }
 
 #Preview("Without Trips") {
-    TripListView.makePreview(withTrips: false)
+    @Previewable @State var preview = PreviewEnvironment()
+
+    TripListView()
+        .modelContainer(preview.container)
+        .environment(preview.settingsStore)
 }

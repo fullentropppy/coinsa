@@ -288,7 +288,13 @@ struct ExpenseDetailView: View {
 // MARK: - Превью
 
 #Preview {
-    NavigationStack {
-        ExpenseDetailView(PreviewGenerator.makeExampleExpense())
+    @Previewable @State var preview = ExpenseFormPreviewData(isEditing: true)
+
+    if let expense = preview.viewModel?.expense {
+        NavigationStack {
+            ExpenseDetailView(expense)
+        }
+        .modelContainer(preview.container)
+        .environment(preview.settingsStore)
     }
 }

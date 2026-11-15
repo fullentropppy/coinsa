@@ -5,7 +5,6 @@
 //  Created by Daniil Gritsenko on 15.11.2026.
 //
 
-import Foundation
 import SwiftData
 
 /// Синтетическая поездка и отдельное окружение для превью редактора и деталей.
@@ -18,19 +17,18 @@ struct TripPreviewData {
 
     /// Создает поездку в памяти без CloudKit и общих настроек приложения.
     /// - Parameters:
+    ///   - previewTrip: Предопределенная поездка для редактора или деталей.
     ///   - isEditing: Подготавливать черновик существующей поездки или новой.
     ///   - includeLocations: Добавлять пример локаций поездки.
     ///   - includeExpenses: Добавлять пример трат в созданные локации.
-    init(isEditing: Bool = true, includeLocations: Bool = false, includeExpenses: Bool = false) {
-        let configuration = ModelConfiguration(isStoredInMemoryOnly: true, cloudKitDatabase: .none)
-        container = try! ModelContainer(
-            for: Trip.self, Location.self, Expense.self,
-            configurations: configuration
-        )
+    init(_ previewTrip: PreviewTrip = .southKorea, isEditing: Bool = true, includeLocations: Bool = false, includeExpenses: Bool = false) {
+        let environment = PreviewEnvironment()
+        container = environment.container
+        settingsStore = environment.settingsStore
         let context = container.mainContext
-        context.autosaveEnabled = false
 
         trip = PreviewGenerator.makeExampleTrip(
+            previewTrip,
             includeLocations: includeLocations,
             includeExpenses: includeExpenses
         )
@@ -40,10 +38,5 @@ struct TripPreviewData {
         viewModel = isEditing
             ? TripEditViewModel(forEdit: trip)
             : TripEditViewModel(forCreateWith: .defaultValue)
-
-        let defaults = UserDefaults(suiteName: "Coinsa.TripPreview.\(UUID().uuidString)")!
-        settingsStore = AppSettingsStore(defaults: defaults)
-        settingsStore.fetchExpenseExchangeRateOnline = false
-        settingsStore.detectPlaceOfExpense = false
     }
 }

@@ -141,7 +141,7 @@ struct EventExpensesMapView: View {
 // MARK: - Превью
 
 #Preview("For Trip") {
-    let previewTrip = ExpenseMapPreviewData(forTrip: true)
+    @Previewable @State var previewTrip = ExpenseMapPreviewData(forTrip: true)
     
     EventExpensesMapView(
         expenses: previewTrip.expenses,
@@ -152,7 +152,7 @@ struct EventExpensesMapView: View {
 }
 
 #Preview("For Location") {
-    let previewLocation = ExpenseMapPreviewData()
+    @Previewable @State var previewLocation = ExpenseMapPreviewData()
     
     EventExpensesMapView(
         expenses: previewLocation.expenses,
@@ -163,7 +163,7 @@ struct EventExpensesMapView: View {
 }
 
 #Preview("Empty") {
-    let previewWithoutExpenses = ExpenseMapPreviewData(includeExpenses: false)
+    @Previewable @State var previewWithoutExpenses = ExpenseMapPreviewData(includeExpenses: false)
     
     EventExpensesMapView(
         expenses: previewWithoutExpenses.expenses,

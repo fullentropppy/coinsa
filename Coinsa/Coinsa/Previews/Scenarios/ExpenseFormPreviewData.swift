@@ -5,7 +5,6 @@
 //  Created by Daniil Gritsenko on 14.11.2026.
 //
 
-import Foundation
 import SwiftData
 
 /// Синтетический черновик и отдельное окружение для превью формы траты.
@@ -18,13 +17,10 @@ struct ExpenseFormPreviewData {
     /// Создает данные в памяти без CloudKit и настройки без автоматических запросов.
     /// - Parameter isEditing: Подготавливать существующую трату или черновик новой.
     init(isEditing: Bool) {
-        let configuration = ModelConfiguration(isStoredInMemoryOnly: true, cloudKitDatabase: .none)
-        container = try! ModelContainer(
-            for: Trip.self, Location.self, Expense.self,
-            configurations: configuration
-        )
+        let environment = PreviewEnvironment()
+        container = environment.container
+        settingsStore = environment.settingsStore
         let context = container.mainContext
-        context.autosaveEnabled = false
 
         if isEditing {
             let expense = PreviewGenerator.makeExampleExpense()
@@ -36,10 +32,5 @@ struct ExpenseFormPreviewData {
             viewModel = ExpenseEditViewModel(forCreateWith: location)
         }
         try! context.save()
-
-        let defaults = UserDefaults(suiteName: "Coinsa.ExpenseFormPreview.\(UUID().uuidString)")!
-        settingsStore = AppSettingsStore(defaults: defaults)
-        settingsStore.fetchExpenseExchangeRateOnline = false
-        settingsStore.detectPlaceOfExpense = false
     }
 }

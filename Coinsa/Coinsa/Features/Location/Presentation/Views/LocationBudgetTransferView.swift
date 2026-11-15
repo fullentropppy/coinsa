@@ -134,8 +134,11 @@ struct LocationBudgetTransferView: View {
 // MARK: - Превью
 
 #Preview {
-    let trip = PreviewGenerator.makeExampleTrip(.japan, includeLocations: true)
-    if let source = trip.locations?.first {
+    @Previewable @State var preview = TripPreviewData(.japan, includeLocations: true)
+
+    if let source = preview.trip.locations?.first {
         LocationBudgetTransferView(source: source) { _ in }
+            .modelContainer(preview.container)
+            .environment(preview.settingsStore)
     }
 }

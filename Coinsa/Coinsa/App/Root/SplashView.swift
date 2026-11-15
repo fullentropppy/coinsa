@@ -67,29 +67,38 @@ struct SplashView: View {
 
     @MainActor
     private func runAnimationIfNeeded() async {
-        guard !hasStartedAnimation else { return }
+        guard !hasStartedAnimation, !Task.isCancelled else { return }
         hasStartedAnimation = true
+        backgroundOpacity = 1
+        iconScale = Layout.initialIconScale
+        iconOpacity = 0
         
         withAnimation(.spring(response: Layout.appearanceResponse, dampingFraction: Layout.appearanceDamping)) {
             iconOpacity = 1
             iconScale = 1
         }
         
-        try? await Task.sleep(for: .milliseconds(Layout.hapticIntervalMilliseconds))
-        haptics.trigger(.add)
-        
-        try? await Task.sleep(for: .milliseconds(Layout.hapticIntervalMilliseconds))
-        haptics.trigger(.tap)
-        
-        withAnimation(.spring(response: Layout.disappearanceResponse, dampingFraction: Layout.disappearanceDamping)) {
-            iconOpacity = 0
-            iconScale = 0
-            backgroundOpacity = 0
-        }
+        do {
+            try await Task.sleep(for: .milliseconds(Layout.hapticIntervalMilliseconds))
+            try Task.checkCancellation()
+            haptics.trigger(.add)
 
-        try? await Task.sleep(for: .milliseconds(Layout.completionDelayMilliseconds))
-        
-        onFinished()
+            try await Task.sleep(for: .milliseconds(Layout.hapticIntervalMilliseconds))
+            try Task.checkCancellation()
+            haptics.trigger(.tap)
+
+            withAnimation(.spring(response: Layout.disappearanceResponse, dampingFraction: Layout.disappearanceDamping)) {
+                iconOpacity = 0
+                iconScale = 0
+                backgroundOpacity = 0
+            }
+
+            try await Task.sleep(for: .milliseconds(Layout.completionDelayMilliseconds))
+            try Task.checkCancellation()
+            onFinished()
+        } catch {
+            hasStartedAnimation = false
+        }
     }
 }
 

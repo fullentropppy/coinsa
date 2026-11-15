@@ -22,7 +22,7 @@ description: >-
 - `Features/*/Domain/Logic/` и `Features/Expense/Domain/Models/ExpenseCalculationContext.swift` — интерпретация сохранённых значений.
 - `App/Main/CoinsaApp.swift` — схема и создание `ModelContainer`.
 - `Core/Configs/AppInfo.swift`, `BuildConfigs/*.entitlements` и Xcode build settings — выбор CloudKit-контейнера для Debug/Release.
-- `Previews/PreviewBuilder.swift`, `Infrastructure/Debug/DemoDataService.swift` — примеры данных и операции с переданным контекстом.
+- `Previews/Support/PreviewEnvironment.swift`, `Previews/Support/PreviewBuilder.swift` — изолированные контейнеры превью; `Previews/Data/PreviewGenerator.swift`, `Infrastructure/Debug/DemoDataService.swift` — синтетические данные и операции с переданным контекстом.
 
 ## Порядок работы
 

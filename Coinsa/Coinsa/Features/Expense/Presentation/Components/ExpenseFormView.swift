@@ -382,16 +382,6 @@ struct ExpenseFormView: View {
 
 // MARK: - Превью
 
-private extension ExpenseFormView {
-    static func makePreview(isEditing: Bool) -> some View {
-        let preview = ExpenseFormPreviewData(isEditing: isEditing)
-
-        return ExpenseFormPreview(preview: preview)
-            .modelContainer(preview.container)
-            .environment(preview.settingsStore)
-    }
-}
-
 private struct ExpenseFormPreview: View {
     let preview: ExpenseFormPreviewData
 
@@ -426,9 +416,17 @@ private struct ExpenseFormPreview: View {
 }
 
 #Preview("Editing") {
-    ExpenseFormView.makePreview(isEditing: true)
+    @Previewable @State var preview = ExpenseFormPreviewData(isEditing: true)
+
+    ExpenseFormPreview(preview: preview)
+        .modelContainer(preview.container)
+        .environment(preview.settingsStore)
 }
 
 #Preview("Creating") {
-    ExpenseFormView.makePreview(isEditing: false)
+    @Previewable @State var preview = ExpenseFormPreviewData(isEditing: false)
+
+    ExpenseFormPreview(preview: preview)
+        .modelContainer(preview.container)
+        .environment(preview.settingsStore)
 }

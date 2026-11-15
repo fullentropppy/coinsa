@@ -39,7 +39,7 @@ struct DemoDataService {
     /// - Throws: Ошибки при удалении существующих данных или сохранении новых.
     func loadDemoData() throws {
         try deleteAllData()
-        let trips = PreviewBuilder.builder().withScenario(.all).buildData()
+        let trips = PreviewGenerator.makeTrips(for: .all, options: PreviewOptions())
         trips.forEach { context.insert($0) }
         try context.save()
     }

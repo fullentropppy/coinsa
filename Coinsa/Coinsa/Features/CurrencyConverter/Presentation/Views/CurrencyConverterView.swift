@@ -211,6 +211,9 @@ struct CurrencyConverterView: View {
 // MARK: - Превью
 
 #Preview {
+    @Previewable @State var preview = PreviewEnvironment()
+
     CurrencyConverterView()
-        .environment(AppSettingsStore())
+        .modelContainer(preview.container)
+        .environment(preview.settingsStore)
 }
