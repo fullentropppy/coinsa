@@ -33,6 +33,16 @@ struct EventDailyExpenseChart: View {
         static let plotVerticalInset: CGFloat = 2
         /// Внутренний отступ ряда кнопок прокрутки графика.
         static let controlsInset: CGFloat = 2
+        /// Толщина вертикальной линии пропущенных дней.
+        static let gapLineWidth: CGFloat = 1
+        /// Длины штриха и промежутка вертикальной линии пропущенных дней.
+        static let gapLineDash: [CGFloat] = [3, 3]
+        /// Штрихи нижней линии и промежутки с запасом для скругленных концов.
+        static let gapExpenseLineDash: [CGFloat] = [4, 8]
+        /// Отступ подписи пропущенных дней под верхней границей графика.
+        static let gapLabelInset: CGFloat = 4
+        /// Интервал между иконкой и подписью пропущенных дней.
+        static let gapLabelSpacing: CGFloat = 2
         /// Ширина кнопки прокрутки дневного графика.
         static let controlWidth: CGFloat = 12
         /// Высота кнопки прокрутки дневного графика.
@@ -45,7 +55,7 @@ struct EventDailyExpenseChart: View {
     
     // MARK: - Состояние
 
-    @State private var scrollPosition: Date
+    @State private var scrollPosition: Double
 
     // MARK: - Хранимые свойства
 
@@ -57,27 +67,30 @@ struct EventDailyExpenseChart: View {
     /// - Parameter viewModel: ViewModel аналитики события.
     init(viewModel: EventAnalyticsViewModel) {
         self.viewModel = viewModel
-        self._scrollPosition = State(initialValue: viewModel.summaryChartScrollPosition(for: .today))
+        self._scrollPosition = State(initialValue: viewModel.summaryChartTimeline.scrollPosition(for: .today))
     }
 
     // MARK: - Тело View
 
     var body: some View {
+        let timeline = viewModel.summaryChartTimeline
+
         VStack(spacing: Layout.controlsSpacing) {
-            dailyExpenseChart.frame(height: Layout.chartHeight)
-            chartControls
+            dailyExpenseChart(timeline: timeline).frame(height: Layout.chartHeight)
+            chartControls(timeline: timeline)
         }
     }
 
     // MARK: - Компоненты
 
-    private var dailyExpenseChart: some View {
+    private func dailyExpenseChart(timeline: EventExpenseChartTimeline) -> some View {
         Chart {
-            ForEach(viewModel.summaryExpenseChartPoints) { point in
+            ForEach(timeline.points) { point in
                 AreaMark(
-                    x: .value("", point.date.startOfDay(using: .current)),
+                    x: .value("", point.position),
                     yStart: .value("", 0),
-                    yEnd: .value("", point.homeAmount)
+                    yEnd: .value("", point.day.homeAmount),
+                    series: .value("", point.segment)
                 )
                 .interpolationMethod(.monotone)
                 .foregroundStyle(
@@ -92,11 +105,37 @@ struct EventDailyExpenseChart: View {
                 )
 
                 LineMark(
-                    x: .value("", point.date.startOfDay(using: .current)),
-                    y: .value("", point.homeAmount)
+                    x: .value("", point.position),
+                    y: .value("", point.day.homeAmount),
+                    series: .value("", point.segment)
                 )
                 .interpolationMethod(.monotone)
                 .lineStyle(.init(lineWidth: Layout.expenseLineWidth, lineCap: .round, lineJoin: .round))
+                .foregroundStyle(Color.accentColor.gradient)
+            }
+
+            ForEach(timeline.gaps) { gap in
+                RuleMark(x: .value("", gap.position))
+                .lineStyle(.init(lineWidth: Layout.gapLineWidth, dash: Layout.gapLineDash))
+                .foregroundStyle(.secondary)
+                .annotation(position: .overlay, alignment: .top) {
+                    HStack(spacing: Layout.gapLabelSpacing) {
+                        Image(systemName: "arrow.left.and.right")
+                            .imageScale(.small)
+                        Text(.analyticsDaysChartHiddenDays(count: gap.hiddenDayCount))
+                    }
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+                    .fixedSize()
+                    .padding(.top, Layout.gapLabelInset)
+                }
+
+                RuleMark(
+                    xStart: .value("", gap.position - 1),
+                    xEnd: .value("", gap.position + 1),
+                    y: .value("", 0)
+                )
+                .lineStyle(.init(lineWidth: Layout.expenseLineWidth, lineCap: .round, dash: Layout.gapExpenseLineDash))
                 .foregroundStyle(Color.accentColor.gradient)
             }
 
@@ -113,7 +152,7 @@ struct EventDailyExpenseChart: View {
             }
         }
         .chartXScale(
-            domain: viewModel.summaryChartXDomain,
+            domain: timeline.domain,
             range: .plotDimension(startPadding: 0, endPadding: 0)
         )
         .chartYScale(
@@ -121,40 +160,41 @@ struct EventDailyExpenseChart: View {
             range: .plotDimension(startPadding: Layout.plotVerticalInset, endPadding: Layout.plotVerticalInset)
         )
         .chartXAxis {
-            AxisMarks(values: .stride(by: .day, count: 1)) { value in
-                if let date = value.as(Date.self) {
-                    let isLastDate = viewModel.summaryChartXDomain.upperBound.startOfDay == date.startOfDay(using: .current)
-                    if !isLastDate {
-                        AxisGridLine()
-                        AxisValueLabel {
-                            Text(date, format: .dateTime.day().month(.abbreviated))
-                        }
+            AxisMarks(values: timeline.points.dropLast().map(\.position)) { value in
+                if let position = value.as(Int.self),
+                   let point = timeline.points.first(where: { $0.position == position }) {
+                    AxisGridLine()
+                    AxisValueLabel {
+                        Text(
+                            point.day.date.storedDate,
+                            format: Date.FormatStyle(calendar: .utc, timeZone: .utc).day().month(.abbreviated)
+                        )
                     }
                 }
             }
         }
         .chartYAxis(.hidden)
         .chartScrollableAxes(.horizontal)
-        .chartXVisibleDomain(length: viewModel.summaryChartXVisibleDomainLength)
+        .chartXVisibleDomain(length: timeline.visibleLength)
         .chartScrollPosition(x: $scrollPosition)
-        .chartScrollTargetBehavior(.valueAligned(unit: viewModel.secondsPerDay))
+        .chartScrollTargetBehavior(.valueAligned(unit: 1))
     }
     
-    private var chartControls: some View {
+    private func chartControls(timeline: EventExpenseChartTimeline) -> some View {
         HStack {
             Spacer()
             scrollPositionButton(
-                position: PlainDate(viewModel.summaryChartXDomain.lowerBound.storedPlainDate),
+                position: timeline.domain.lowerBound,
                 icon: "arrow.left.to.line"
             )
             Spacer()
             scrollPositionButton(
-                position: .today,
+                position: timeline.scrollPosition(for: .today),
                 icon: "arrow.down.to.line"
             )
             Spacer()
             scrollPositionButton(
-                position: PlainDate(viewModel.summaryChartXDomain.upperBound.storedPlainDate),
+                position: max(timeline.domain.lowerBound, timeline.domain.upperBound - timeline.visibleLength),
                 icon: "arrow.right.to.line"
             )
             Spacer()
@@ -162,10 +202,10 @@ struct EventDailyExpenseChart: View {
         .padding(Layout.controlsInset)
     }
     
-    private func scrollPositionButton(position: PlainDate, icon: String) -> some View {
+    private func scrollPositionButton(position: Double, icon: String) -> some View {
         Button {
             haptics.trigger(.tap)
-            scrollPosition = viewModel.summaryChartScrollPosition(for: position)
+            scrollPosition = position
         } label: {
             Image(systemName: icon)
         }

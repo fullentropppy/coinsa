@@ -9,10 +9,6 @@ import SwiftUI
 
 /// ViewModel для отображения аналитики события.
 struct EventAnalyticsViewModel {
-    // MARK: - Статические свойства
-    
-    let secondsPerDay: TimeInterval = 24 * 60 * 60
-    
     // MARK: - Зависимости
 
     let data: EventCategoryAnalyticsData
@@ -190,33 +186,11 @@ struct EventAnalyticsViewModel {
         max(maxDailyBaseExpenseAmount, 1)
     }
 
-    var summaryChartXDomain: ClosedRange<Date> {
-        let startDate = summaryChartPlainDates.first?.startOfDay ?? data.dateRangeProvider.startPlainDate.startOfDay
-        let endDate = summaryChartPlainDates.last?.startOfDay ?? data.dateRangeProvider.endPlainDate.startOfDay
-
-        if startDate < endDate {
-            return startDate...endDate
-        } else {
-            return startDate...startDate.adding(days: 1, using: .utc)
-        }
+    var summaryChartTimeline: EventExpenseChartTimeline {
+        EventExpenseChartTimeline(days: summaryExpenseChartPoints)
     }
 
-    var summaryChartXVisibleDomainLength: TimeInterval {
-        let totalVisibleDays = max(summaryChartPlainDates.count - 2, 1)
-        let preferredVisibleDays = min(totalVisibleDays, 7)
-        return TimeInterval(preferredVisibleDays) * secondsPerDay
-    }
-    
     // MARK: - Публичные методы
-    
-    func summaryChartScrollPosition(for date: PlainDate) -> Date {
-        let domain = summaryChartXDomain
-        let visibleLength = summaryChartXVisibleDomainLength
-        let centeredPosition = date.startOfDay.addingTimeInterval(-visibleLength / 2)
-        let latestPosition = max(domain.lowerBound, domain.upperBound.addingTimeInterval(-visibleLength))
-        
-        return min(max(centeredPosition, domain.lowerBound), latestPosition)
-    }
 
     func displayedSlicesSortedByID(for metric: EventAnalyticsMetric) -> [ExpenseAnalyticsSlice] {
         slices(for: metric).sorted { $0.category.id > $1.category.id }

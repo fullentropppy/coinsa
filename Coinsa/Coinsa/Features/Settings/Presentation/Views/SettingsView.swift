@@ -120,9 +120,6 @@ struct SettingsView: View {
                     } maximumValueLabel: {
                         Text(1.0.percentFormat(fractionLength: 0))
                     }
-                    .accessibilityValue(
-                        (settingsStore.todayBudgetOverspendThreshold / 100).percentFormat(fractionLength: 0)
-                    )
                 }
             }
         } footer: {
