@@ -7,6 +7,7 @@
 
 import Foundation
 import Observation
+import SwiftData
 
 /// ViewModel для экрана создания/редактирования локации.
 @MainActor
@@ -16,6 +17,7 @@ final class LocationEditViewModel {
     
     private let currencyConverter: CurrencyConverter
     private let amountManager: AmountManager
+    private let allowsRateRequests: Bool
     
     let trip: Trip
     let location: Location?
@@ -24,6 +26,7 @@ final class LocationEditViewModel {
     
     private var initialSnapshot: Snapshot
     private var hasLoadedInitialRate = false
+    private var budgetInputSide: CurrencyPairSide = .base
     
     // MARK: - Состояние UI. Общее поведение и оформление
     
@@ -127,7 +130,12 @@ final class LocationEditViewModel {
     /// - Parameters:
     ///   - trip: Родительская поездка.
     ///   - preselectedExchangeAdjustment: Предустановленная корректировка курса.
-    convenience init(forCreateWith trip: Trip, preselectedExchangeAdjustment: Double? = nil) {
+    ///   - allowsRateRequests: Разрешать сетевые запросы курсов; отключается для изолированных превью.
+    convenience init(
+        forCreateWith trip: Trip,
+        preselectedExchangeAdjustment: Double? = nil,
+        allowsRateRequests: Bool = true
+    ) {
         self.init(
             trip: trip,
             location: nil,
@@ -137,15 +145,20 @@ final class LocationEditViewModel {
             locationCurrency: trip.homeCurrency,
             rateLocationToHome: 1,
             exchangeAdjustment: preselectedExchangeAdjustment ?? 0,
-            budget: 0
+            budget: 0,
+            allowsRateRequests: allowsRateRequests
         )
     }
     
-    /// Создает ViewModel для редактирования существующей локации.
-    /// - Parameter location: Редактируемая локация.
-    convenience init(forEdit location: Location) {
+    /// Создает черновик локации; возвращает nil, если локация или родительская поездка недоступны.
+    /// - Parameters:
+    ///   - location: Редактируемая локация.
+    ///   - allowsRateRequests: Разрешать сетевые запросы курсов; отключается для изолированных превью.
+    convenience init?(forEdit location: Location, allowsRateRequests: Bool = true) {
+        guard !location.isDeleted, let trip = location.trip, !trip.isDeleted else { return nil }
+
         self.init(
-            trip: location.trip!,
+            trip: trip,
             location: location,
             name: location.name,
             startDate: location.startPlainDate.storedDate,
@@ -153,11 +166,23 @@ final class LocationEditViewModel {
             locationCurrency: location.locationCurrency,
             rateLocationToHome: location.rateLocationToHome,
             exchangeAdjustment: location.exchangeAdjustment,
-            budget: location.budget
+            budget: location.budget,
+            allowsRateRequests: allowsRateRequests
         )
     }
     
     /// Создает черновик локации, конвертер валют и исходный снимок для определения изменений.
+    /// - Parameters:
+    ///   - trip: Родительская поездка.
+    ///   - location: Исходная локация или nil при создании.
+    ///   - name: Начальное название.
+    ///   - startDate: Начальная календарная дата пребывания.
+    ///   - endDate: Конечная календарная дата пребывания.
+    ///   - locationCurrency: Валюта локации.
+    ///   - rateLocationToHome: Начальный курс к домашней валюте.
+    ///   - exchangeAdjustment: Начальная корректировка курса.
+    ///   - budget: Начальный бюджет в домашней валюте.
+    ///   - allowsRateRequests: Разрешать сетевые запросы курсов.
     private init(
         trip: Trip,
         location: Location?,
@@ -167,7 +192,8 @@ final class LocationEditViewModel {
         locationCurrency: Currency,
         rateLocationToHome: Double,
         exchangeAdjustment: Double,
-        budget: Double
+        budget: Double,
+        allowsRateRequests: Bool
     ) {
         self.trip = trip
         self.location = location
@@ -175,6 +201,7 @@ final class LocationEditViewModel {
         self.startDate = startDate
         self.endDate = endDate
         self.exchangeAdjustment = exchangeAdjustment.nonNegative
+        self.allowsRateRequests = allowsRateRequests
         
         let exchangeRateProvider = ExchangeRateProvider(service: HexarateService())
         
@@ -206,13 +233,20 @@ final class LocationEditViewModel {
     
     func updateLocationCurrency(_ newCurrency: Currency, currentInput: CurrencyContext) {
         guard newCurrency != locationCurrency else { return }
+        budgetInputSide = currencyPairSide(for: currentInput)
+
+        guard allowsRateRequests else {
+            currencyConverter.setCurrencies(base: homeCurrency, quote: newCurrency)
+            amountManager.updateFromRateChange(for: budgetInputSide, useExchangeAdjustment: false)
+            return
+        }
         
         currencyConverter.updateQuoteCurrency(newCurrency) { [weak self] in
             guard let self else { return }
             guard rateLocationToHome > 0 else { return }
             
             amountManager.updateFromRateChange(
-                for: currencyPairSide(for: currentInput),
+                for: budgetInputSide,
                 useExchangeAdjustment: false
             )
         }
@@ -231,17 +265,19 @@ final class LocationEditViewModel {
     }
     
     func requestRateRefresh(for inputCurrency: CurrencyContext = .home) {
+        guard allowsRateRequests else { return }
+        budgetInputSide = currencyPairSide(for: inputCurrency)
         currencyConverter.requestRateRefresh { [weak self] _ in
             guard let self else { return }
             amountManager.updateFromRateChange(
-                for: currencyPairSide(for: inputCurrency),
+                for: budgetInputSide,
                 useExchangeAdjustment: false
             )
         }
     }
     
     func loadInitialRateIfNeeded() {
-        guard !hasLoadedInitialRate && !isEdit && !isHomeLocation else { return }
+        guard allowsRateRequests, !hasLoadedInitialRate && !isEdit && !isHomeLocation else { return }
         
         hasLoadedInitialRate = true
         
@@ -249,6 +285,7 @@ final class LocationEditViewModel {
             guard let self else { return }
             
             rateLocationToHome = rate
+            amountManager.updateFromRateChange(for: budgetInputSide, useExchangeAdjustment: false)
             initialSnapshot = Snapshot(
                 name: initialSnapshot.name,
                 startDate: initialSnapshot.startDate,
@@ -264,6 +301,7 @@ final class LocationEditViewModel {
     // MARK: - Операции с бюджетом
     
     func updateBudget(_ amount: Double, in inputCurrency: CurrencyContext) {
+        budgetInputSide = currencyPairSide(for: inputCurrency)
         amountManager.updateAmount(
             amount,
             for: currencyPairSide(for: inputCurrency),
@@ -282,9 +320,9 @@ final class LocationEditViewModel {
     
     // MARK: - Операции с хранилищем
     
-    func save(using repository: LocationRepository) {
+    func save(using repository: LocationRepository) throws {
         if let location {
-            repository.update(
+            try repository.update(
                 location,
                 name: name,
                 startDate: startDate,
@@ -295,7 +333,7 @@ final class LocationEditViewModel {
                 budget: budgetHomeAmount
             )
         } else {
-            repository.add(
+            try repository.add(
                 name: name,
                 startDate: startDate,
                 endDate: endDate,

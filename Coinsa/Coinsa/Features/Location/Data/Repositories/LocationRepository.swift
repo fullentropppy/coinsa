@@ -36,27 +36,32 @@ struct LocationRepository {
         exchangeAdjustment: Double,
         budget: Double,
         trip: Trip
-    ) {
-        let now = Date()
+    ) throws {
+        guard trip.modelContext === context, !trip.isDeleted else {
+            throw LocationRepositoryError.tripUnavailable
+        }
+
+        try saveChanges {
+            let now = Date()
         
-        let location = Location(
-            id: UUID(),
-            name: name.trimmed,
-            startDate: startDate,
-            endDate: endDate,
-            locationCurrencyCode: locationCurrency.code,
-            rateLocationToHome: rateLocationToHome,
-            exchangeAdjustment: exchangeAdjustment,
-            budget: budget,
-            trip: trip,
-            expenses: [],
-            createdAt: now,
-            updatedAt: now
-        )
+            let location = Location(
+                id: UUID(),
+                name: name.trimmed,
+                startDate: startDate,
+                endDate: endDate,
+                locationCurrencyCode: locationCurrency.code,
+                rateLocationToHome: rateLocationToHome,
+                exchangeAdjustment: exchangeAdjustment,
+                budget: budget,
+                trip: trip,
+                expenses: [],
+                createdAt: now,
+                updatedAt: now
+            )
         
-        normalizeLocationData(location)
-        context.insert(location)
-        try? context.save()
+            normalizeLocationData(location)
+            context.insert(location)
+        }
     }
     
     /// Обновляет существующую локацию.
@@ -78,18 +83,24 @@ struct LocationRepository {
         rateLocationToHome: Double,
         exchangeAdjustment: Double,
         budget: Double
-    ) {
-        location.name = name
-        location.storedStartDate = startDate
-        location.storedEndDate = endDate
-        location.locationCurrencyCode = locationCurrency.code
-        location.rateLocationToBase = rateLocationToHome
-        location.exchangeAdjustment = exchangeAdjustment
-        location.budget = budget
-        location.updatedAt = Date()
+    ) throws {
+        guard location.modelContext === context, !location.isDeleted,
+              let trip = location.trip, trip.modelContext === context, !trip.isDeleted else {
+            throw LocationRepositoryError.tripUnavailable
+        }
+
+        try saveChanges {
+            location.name = name
+            location.storedStartDate = startDate
+            location.storedEndDate = endDate
+            location.locationCurrencyCode = locationCurrency.code
+            location.rateLocationToBase = rateLocationToHome
+            location.exchangeAdjustment = exchangeAdjustment
+            location.budget = budget
+            location.updatedAt = Date()
         
-        normalizeLocationData(location)
-        try? context.save()
+            normalizeLocationData(location)
+        }
     }
     
     /// Переносит подтвержденный остаток, сохраняя оба бюджета вместе и восстанавливая их при ошибке.
@@ -144,13 +155,44 @@ struct LocationRepository {
         return transfer.homeAmount
     }
 
-    /// Удаляет локацию.
+    /// Удаляет локацию вместе с дочерними тратами.
     /// - Parameter location: Локация для удаления.
-    func delete(_ location: Location) {
-        context.delete(location)
-        try? context.save()
+    func delete(_ location: Location) throws {
+        try delete([location])
     }
-    
+
+    /// Удаляет выбранные локации одной операцией и восстанавливает их при ошибке записи.
+    /// - Parameter locations: Локации из текущего контекста.
+    func delete(_ locations: [Location]) throws {
+        guard locations.allSatisfy({ $0.modelContext === context && !$0.isDeleted }) else {
+            throw LocationRepositoryError.locationUnavailable
+        }
+
+        try saveChanges {
+            for location in locations {
+                context.delete(location)
+            }
+        }
+    }
+
+    // MARK: - Сохранение
+
+    /// Фиксирует предыдущие изменения до операции, чтобы откат при ошибке не затронул их.
+    /// - Parameter changes: Синхронные изменения, сохраняемые вместе.
+    private func saveChanges(_ changes: () -> Void) throws {
+        if context.hasChanges {
+            try context.save()
+        }
+
+        do {
+            changes()
+            try context.save()
+        } catch {
+            context.rollback()
+            throw error
+        }
+    }
+
     // MARK: - Нормализация
     
     /// Нормализует значения локации.
@@ -162,5 +204,22 @@ struct LocationRepository {
         location.rateLocationToBase = location.rateLocationToBase.nonNegative
         location.exchangeAdjustment = location.exchangeAdjustment.nonNegative
         location.budget = location.budget.nonNegative
+    }
+}
+
+// MARK: - Ошибки
+
+/// Причина недоступности данных для операции с локацией.
+enum LocationRepositoryError: LocalizedError {
+    case tripUnavailable
+    case locationUnavailable
+
+    var errorDescription: String? {
+        switch self {
+        case .tripUnavailable:
+            String(localized: .locationEditorUnavailableMessage)
+        case .locationUnavailable:
+            String(localized: .locationStorageUnavailableMessage)
+        }
     }
 }

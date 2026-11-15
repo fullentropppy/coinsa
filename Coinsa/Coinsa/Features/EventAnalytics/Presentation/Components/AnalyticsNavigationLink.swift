@@ -11,21 +11,21 @@ import SwiftUI
 struct AnalyticsNavigationLink<Destination: View>: View {
     // MARK: - Свойства
     
-    let destination: Destination
+    private let destination: () -> Destination
     
     // MARK: - Инициализация
     
-    /// Создает ссылку на экран аналитики.
-    /// - Parameter destination: Замыкание, создающее целевое представление.
-    init(@ViewBuilder destination: () -> Destination) {
-        self.destination = destination()
+    /// Создает ссылку, откладывая подготовку аналитики до построения содержимого целевого экрана.
+    /// - Parameter destination: Замыкание, создающее целевое представление при переходе.
+    init(@ViewBuilder destination: @escaping () -> Destination) {
+        self.destination = destination
     }
     
     // MARK: - Тело View
     
     var body: some View {
         NavigationLink {
-            destination
+            AnalyticsDestinationView(destination: destination)
         } label: {
             HStack {
                 Text(.analytics)
@@ -37,6 +37,15 @@ struct AnalyticsNavigationLink<Destination: View>: View {
             }
             .foregroundStyle(.secondary)
         }
+    }
+}
+
+/// Откладывает вызов построителя до отображения содержимого целевого экрана навигации.
+private struct AnalyticsDestinationView<Content: View>: View {
+    let destination: () -> Content
+
+    var body: some View {
+        destination()
     }
 }
 

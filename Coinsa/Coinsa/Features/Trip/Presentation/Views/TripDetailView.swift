@@ -22,6 +22,7 @@ struct TripDetailView: View {
     @State private var isShowingTripEdit = false
     @State private var isShowingLocationCreate = false
     @State private var locationToEdit: Location?
+    @State private var isShowingLocationDeletionError = false
 
     // MARK: - Зависимости
     
@@ -57,13 +58,13 @@ struct TripDetailView: View {
                 TripEditView(forEdit: trip) { dismiss() }
             }
             .sheet(isPresented: $isShowingLocationCreate) {
-                LocationEditView(
+                LocationEditorView(
                     forCreateWith: trip,
                     preselectedExchangeAdjustment: settingsStore.exchangeAdjustment
                 )
             }
             .sheet(item: $locationToEdit) { location in
-                LocationEditView(forEdit: location)
+                LocationEditorView(forEdit: location)
             }
             .safeAreaInset(edge: .bottom) {
                 if trip.hasLocations {
@@ -78,6 +79,12 @@ struct TripDetailView: View {
                 message: .locationDeleteMessage,
                 onConfirm: { confirmDelete() },
                 onCancel: { cancelDelete() }
+            )
+            .notificationAlert(
+                isPresented: $isShowingLocationDeletionError,
+                title: .locationStorageErrorTitle,
+                message: .locationStorageDeleteErrorMessage,
+                isError: true
             )
             .onAppear {
                 checkIfDeleted()
@@ -183,8 +190,13 @@ struct TripDetailView: View {
     }
 
     private func confirmDelete() {
-        withAnimation {
-            deletionHandler.confirm { repository.delete($0) }
+        do {
+            try withAnimation {
+                try repository.delete(deletionHandler.itemsPendingDeletion)
+            }
+            deletionHandler.cancel()
+        } catch {
+            isShowingLocationDeletionError = true
         }
     }
 

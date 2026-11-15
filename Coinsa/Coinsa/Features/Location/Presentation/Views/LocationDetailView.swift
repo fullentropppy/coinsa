@@ -60,7 +60,7 @@ struct LocationDetailView: View {
                 toolbarContent
             }
             .sheet(isPresented: $isShowingLocationEdit) {
-                LocationEditView(forEdit: location) { dismiss() }
+                LocationEditorView(forEdit: location) { dismiss() }
             }
             .sheet(isPresented: $isShowingExpenseCreate) {
                 ExpenseEditorView(
