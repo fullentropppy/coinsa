@@ -81,14 +81,14 @@ final class LocationBudgetTransferViewModel {
         } catch let error as LocationBudgetTransfer.ValidationError {
             switch error {
             case .invalidLocations:
-                errorMessage = .locationBudgetTransferErrorLocations
+                errorMessage = .locationBudgetTransferErrorUnavailableLocationsMessage
             case .invalidAmounts:
-                errorMessage = .locationBudgetTransferErrorAmounts
+                errorMessage = .locationBudgetTransferErrorInvalidAmountsMessage
             case .balanceChanged:
-                errorMessage = .locationBudgetTransferErrorBalanceChanged
+                errorMessage = .locationBudgetTransferErrorBalanceChangedMessage
             }
         } catch {
-            errorMessage = .locationBudgetTransferErrorSave
+            errorMessage = .locationBudgetTransferErrorSaveMessage
         }
 
         return nil

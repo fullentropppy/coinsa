@@ -18,7 +18,9 @@ extension Coordinate {
         )
 
         if let horizontalAccuracy {
-            return coordinateText + String(format: " ± %.0f m", horizontalAccuracy)
+            return coordinateText + String(localized: .coordinateAccuracy(
+                accuracy: horizontalAccuracy.numberFormat(fractionLength: 0)
+            ))
         } else {
             return coordinateText
         }

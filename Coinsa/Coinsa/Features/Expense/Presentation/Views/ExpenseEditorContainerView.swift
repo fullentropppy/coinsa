@@ -83,20 +83,20 @@ struct ExpenseEditorContainerView: View {
                     title: .exchangeRateLoadingErrorTitle,
                     message: .exchangeRateLoadingErrorMessage(
                         errorDescription: viewModel.rateLoadingError?.errorDescription
-                        ?? String(localized: .errorUnknown)
+                        ?? String(localized: .errorUnknownMessage)
                     ),
                     isError: true
                 )
                 .notificationAlert(
                     isPresented: $isShowingGeolocationError,
-                    title: .expenseCoordinateErrorTitle,
-                    message: .expenseCoordinateErrorMessage,
+                    title: .expensePlaceErrorTitle,
+                    message: .expensePlaceErrorMessage,
                     isError: true
                 )
                 .notificationAlert(
                     isPresented: storageErrorBinding,
                     title: .expenseStorageErrorTitle,
-                    message: storageErrorMessage ?? .errorUnknown,
+                    message: storageErrorMessage ?? .errorUnknownMessage,
                     isError: true
                 )
                 .onDisappear {
@@ -152,9 +152,9 @@ struct ExpenseEditorContainerView: View {
                 set: { viewModel.updateCoordinate($0) }
             ),
             title: viewModel.subcategory.localizedResource,
-            markerTitle: .expensePlaceOfExpense,
-            errorTitle: .expenseCoordinateErrorTitle,
-            errorMessage: .expenseCoordinateErrorMessage
+            markerTitle: .expensePlace,
+            errorTitle: .expensePlaceErrorTitle,
+            errorMessage: .expensePlaceErrorMessage
         )
     }
 
@@ -236,7 +236,7 @@ struct ExpenseEditorContainerView: View {
                    repositoryError == .locationUnavailable {
                     storageErrorMessage = .expenseEditorUnavailableMessage
                 } else {
-                    storageErrorMessage = .expenseStorageSaveErrorMessage
+                    storageErrorMessage = .expenseStorageErrorSaveMessage
                 }
             }
         }
@@ -263,7 +263,7 @@ struct ExpenseEditorContainerView: View {
             onDelete?()
             dismiss()
         } catch {
-            storageErrorMessage = .expenseStorageDeleteErrorMessage
+            storageErrorMessage = .expenseStorageErrorDeleteMessage
         }
     }
 

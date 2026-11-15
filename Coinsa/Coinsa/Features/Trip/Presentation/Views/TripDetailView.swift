@@ -106,7 +106,7 @@ struct TripDetailView: View {
             .notificationAlert(
                 isPresented: $isShowingLocationDeletionError,
                 title: .locationStorageErrorTitle,
-                message: .locationStorageDeleteErrorMessage,
+                message: .locationStorageErrorDeleteMessage,
                 isError: true
             )
     }

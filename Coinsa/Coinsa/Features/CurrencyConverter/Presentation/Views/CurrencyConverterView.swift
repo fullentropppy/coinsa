@@ -66,7 +66,7 @@ struct CurrencyConverterView: View {
                     title: .exchangeRateLoadingErrorTitle,
                     message: .exchangeRateLoadingErrorMessage(
                         errorDescription: viewModel.rateLoadingError?.errorDescription
-                        ?? String(localized: .errorUnknown)
+                        ?? String(localized: .errorUnknownMessage)
                     ),
                     isError: true
                 )
@@ -101,7 +101,7 @@ struct CurrencyConverterView: View {
 
         return VStack(spacing: Layout.amountRowSpacing) {
             CurrencyPicker(
-                title: isBase ? .converterFromCurrenency : .converterToCurrency,
+                title: isBase ? .converterFromCurrency : .converterToCurrency,
                 selection: isBase ? fromCurrencyBinding : toCurrencyBinding,
                 sections: Currency.pickerSections(
                     homeCurrency: settingsStore.homeCurrency,

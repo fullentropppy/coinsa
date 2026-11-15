@@ -155,7 +155,7 @@ struct ExpenseFormView: View {
             }
 
             if viewModel.showsRateExpenseToBase {
-                LabeledContent(.expenseExchangeRateOf(locationCurrencyCode: viewModel.expenseCurrency.code)) {
+                LabeledContent(.expenseExchangeRate(expenseCurrencyCode: viewModel.expenseCurrency.code)) {
                     ExchangeRateInputField.standard(
                         rateExpenseToHomeInputBinding,
                         currency: viewModel.homeCurrency,
@@ -168,7 +168,7 @@ struct ExpenseFormView: View {
             }
 
             if viewModel.showsRateExpenseToLocation {
-                LabeledContent(.expenseExchangeRateOf(locationCurrencyCode: viewModel.expenseCurrency.code)) {
+                LabeledContent(.expenseExchangeRate(expenseCurrencyCode: viewModel.expenseCurrency.code)) {
                     ExchangeRateInputField.standard(
                         rateExpenseToLocationInputBinding,
                         currency: viewModel.locationCurrency,
@@ -229,7 +229,7 @@ struct ExpenseFormView: View {
                             get: { viewModel.coordinate ?? coordinate },
                             set: { viewModel.updateCoordinate($0) }
                         ),
-                        markerTitle: .expensePlaceOfExpense
+                        markerTitle: .expensePlace
                     )
                 }
                 .buttonStyle(.plain)
@@ -237,7 +237,7 @@ struct ExpenseFormView: View {
                 Button(action: onLocate) {
                     HStack {
                         Image(systemName: "location")
-                        Text(.expenseCoordinateLocate)
+                        Text(.expensePlaceLocate)
                     }
                 }
                 .disabled(isResolvingLocation)
@@ -248,7 +248,7 @@ struct ExpenseFormView: View {
                 } label: {
                     HStack {
                         Image(systemName: "map")
-                        Text(.expenseCoordinateChoose)
+                        Text(.expensePlaceChoose)
                     }
                 }
             }
@@ -267,7 +267,7 @@ struct ExpenseFormView: View {
                     }
                 }
             } else {
-                Text(.expenseCoordinateHint)
+                Text(.expensePlaceHint)
             }
         }
     }

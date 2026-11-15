@@ -48,7 +48,7 @@ struct ExchangeRateLoadingError: LocalizedError {
         if let details, !details.isBlank {
             details
         } else {
-            String(localized: .exchangeRateLoadingException)
+            String(localized: .exchangeRateLoadingErrorProviderMessage)
         }
     }
     

@@ -128,7 +128,7 @@ struct SearchablePickerView<SelectionValue: Hashable, Content: View>: View {
 
     NavigationStack {
         SearchablePickerView(
-            title: .tripCurrency,
+            title: .tripHomeCurrency,
             selection: $selection,
             sections: [PickerSection(options: Currency.allCasesSortedByName)],
             searchText: { "\($0.code) \(String(localized: $0.localizedResource))" }

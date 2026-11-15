@@ -92,7 +92,7 @@ struct ExpenseDetailView: View {
                     FullScreenMapView(
                         coordinate: coordinate,
                         title: viewModel.expense.subcategory.localizedResource,
-                        markerTitle: .expensePlaceOfExpense
+                        markerTitle: .expensePlace
                     )
                 }
             }

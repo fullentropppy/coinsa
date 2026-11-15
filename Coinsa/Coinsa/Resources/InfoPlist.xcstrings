@@ -33,13 +33,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Coinsa needs access to your location to save Expense locations."
+            "value" : "Coinsa needs access to your location to save expense locations."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Приложению нужен доступ к геопозиции для сохранения координат трат."
+            "value" : "Приложению нужен доступ к геопозиции, чтобы сохранять места трат."
           }
         }
       }

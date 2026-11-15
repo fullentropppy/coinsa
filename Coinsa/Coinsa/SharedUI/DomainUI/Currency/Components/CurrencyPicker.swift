@@ -139,28 +139,13 @@ struct CurrencyPicker<CurrentValueLabel: View>: View {
     }
 }
 
-#Preview("Creating") {
+#Preview {
     @Previewable @State var selection = Currency.usd
 
     NavigationStack {
         Form {
-            CurrencyPicker(title: .tripCurrency, selection: $selection) { currency in
+            CurrencyPicker(title: .tripHomeCurrency, selection: $selection) { currency in
                 CurrencyCodeText.standard(currency)
-            }
-        }
-    }
-}
-
-#Preview("Converter") {
-    @Previewable @State var selection = Currency.usd
-
-    NavigationStack {
-        Form {
-            CurrencyPicker(
-                title: .converterFromCurrenency,
-                selection: $selection
-            ) { currency in
-                Text(currency.localizedResource)
             }
         }
     }

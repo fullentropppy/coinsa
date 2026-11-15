@@ -47,7 +47,7 @@ struct LocationGroupedExpensesBody: View {
     private var list: some View {
         List {
             if matchedLocations.isEmpty {
-                EmptyStateView(icon: Expense.primaryIcon, title: .analyticsEmptyState)
+                EmptyStateView(icon: Expense.primaryIcon, title: .analyticsEmptyStateTitle)
                     .listRowBackground(Color.clear)
             } else {
                 ForEach(matchedLocations) { location in

@@ -93,10 +93,10 @@ struct SettingsView: View {
         Section {
             Toggle(.settingsFetchExpenseExchangeRateOnline, isOn: fetchExpenseExchangeRateOnline)
                 .tint(.accent)
-            Toggle(.settingsDetectPlaceOfExpense, isOn: detectPlaceOfExpense)
+            Toggle(.settingsDetectExpensePlace, isOn: detectPlaceOfExpense)
                 .tint(.accent)
         } footer: {
-            Text(.settingsExpenseAautofillHint)
+            Text(.settingsExpenseAutofillHint)
         }
     }
     
@@ -138,7 +138,7 @@ struct SettingsView: View {
                 appAppearance.makeLabel()
             }
             
-            Toggle(.settingsIsFloatingButtonOnLeft, isOn: isFloatingButtonOnLeftBinding)
+            Toggle(.settingsFloatingButtonsOnLeft, isOn: isFloatingButtonOnLeftBinding)
                 .tint(.accent)
         }
     }

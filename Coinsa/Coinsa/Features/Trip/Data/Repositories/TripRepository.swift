@@ -144,7 +144,7 @@ enum TripRepositoryError: LocalizedError {
         case .tripUnavailable:
             String(localized: .tripEditorUnavailableMessage)
         case .homeCurrencyLocked:
-            String(localized: .tripStorageHomeCurrencyLockedMessage)
+            String(localized: .tripStorageErrorHomeCurrencyLockedMessage)
         }
     }
 }

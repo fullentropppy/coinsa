@@ -101,6 +101,6 @@ struct CompactMapView: View {
     @Previewable @State var coordinate = PreviewGenerator.makeExampleCoordinate()
     
     List {
-        CompactMapView($coordinate, markerTitle: .expensePlaceOfExpense)
+        CompactMapView($coordinate, markerTitle: .expensePlace)
     }
 }

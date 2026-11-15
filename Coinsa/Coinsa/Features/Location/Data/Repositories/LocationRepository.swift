@@ -219,7 +219,7 @@ enum LocationRepositoryError: LocalizedError {
         case .tripUnavailable:
             String(localized: .locationEditorUnavailableMessage)
         case .locationUnavailable:
-            String(localized: .locationStorageUnavailableMessage)
+            String(localized: .locationStorageErrorUnavailableMessage)
         }
     }
 }

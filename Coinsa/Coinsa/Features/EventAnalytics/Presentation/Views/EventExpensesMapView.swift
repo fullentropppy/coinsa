@@ -98,7 +98,7 @@ struct EventExpensesMapView: View {
         }
         .overlay {
             if items.isEmpty {
-                EmptyStateView(icon: "map", title: .analyticsExpensePlacesEmptyState)
+                EmptyStateView(icon: "map", title: .analyticsExpensePlacesEmptyStateTitle)
                     .background(.regularMaterial)
             }
         }

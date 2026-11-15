@@ -95,7 +95,7 @@ struct EventAnalyticsView: View {
     private var emptyAnalyticsContent: some View {
         EmptyStateView(
             icon: "chart.xyaxis.line",
-            title: .analyticsEmptyState
+            title: .analyticsEmptyStateTitle
         )
         .listRowBackground(Color.clear)
     }

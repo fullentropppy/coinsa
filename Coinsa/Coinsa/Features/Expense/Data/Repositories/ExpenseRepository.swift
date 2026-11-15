@@ -235,7 +235,7 @@ enum ExpenseRepositoryError: LocalizedError {
         case .locationUnavailable:
             String(localized: .expenseEditorUnavailableMessage)
         case .expenseUnavailable:
-            String(localized: .expenseStorageUnavailableMessage)
+            String(localized: .expenseStorageErrorUnavailableMessage)
         }
     }
 }

@@ -40,6 +40,6 @@ struct AsyncTimeout {
 /// Ошибка, возникающая при превышении времени ожидания операции.
 struct TimeoutError: LocalizedError {
     var errorDescription: String? {
-        String(localized: .timeoutException)
+        String(localized: .operationErrorTimeoutMessage)
     }
 }

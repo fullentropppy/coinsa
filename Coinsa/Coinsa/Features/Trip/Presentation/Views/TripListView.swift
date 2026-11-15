@@ -64,7 +64,7 @@ struct TripListView: View {
                 .notificationAlert(
                     isPresented: $isShowingTripDeletionError,
                     title: .tripStorageErrorTitle,
-                    message: .tripStorageDeleteErrorMessage,
+                    message: .tripStorageErrorDeleteMessage,
                     isError: true
                 )
         }

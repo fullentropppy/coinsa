@@ -96,7 +96,7 @@ struct TripFormView: View {
     private var currencySection: some View {
         Section {
             CurrencyPicker(
-                title: .tripCurrency,
+                title: .tripHomeCurrency,
                 selection: homeCurrencyBinding,
                 sections: Currency.pickerSections(homeCurrency: viewModel.homeCurrency),
                 isDisabled: viewModel.hasLocations
@@ -104,7 +104,7 @@ struct TripFormView: View {
                 CurrencyCodeText.standard(currency)
             }
         } footer: {
-            Text(.tripCurrencyHint)
+            Text(.tripHomeCurrencyHint)
         }
     }
     

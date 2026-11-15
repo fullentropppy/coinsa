@@ -66,7 +66,7 @@ struct LocationBudgetTransferView: View {
             .notificationAlert(
                 isPresented: errorBinding,
                 title: .locationBudgetTransferErrorTitle,
-                message: viewModel.errorMessage ?? .errorUnknown,
+                message: viewModel.errorMessage ?? .errorUnknownMessage,
                 isError: true
             )
         }
@@ -95,7 +95,7 @@ struct LocationBudgetTransferView: View {
     private var destinationSections: some View {
         Group {
             GroupHeader(
-                icon: Expense.primaryIcon,
+                icon: Location.primaryIcon,
                 title: .locationBudgetTransferRecipientLocations,
                 itemCount: viewModel.groupedLocations.count
             )

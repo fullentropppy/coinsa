@@ -103,10 +103,10 @@ struct SettingsDebugSectionView: View {
             switch action {
             case .loadDemoData:
                 try demoDataService.loadDemoData()
-                resultMessage = .debugLoadResult
+                resultMessage = .debugLoadSuccessMessage
             case .deleteAllData:
                 try demoDataService.deleteAllData()
-                resultMessage = .debugDeleteResult
+                resultMessage = .debugDeleteSuccessMessage
             }
         } catch {
             resultMessage = .errorMessage(errorDescription: error.localizedDescription)

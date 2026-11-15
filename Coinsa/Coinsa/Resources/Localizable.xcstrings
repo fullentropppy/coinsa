@@ -8,7 +8,7 @@
       "localizations" : {
         "en" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@ • %2$@"
           }
         },
@@ -21,14 +21,7 @@
       }
     },
     "•" : {
-      "localizations" : {
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "•"
-          }
-        }
-      }
+      "shouldTranslate" : false
     },
     "add" : {
       "extractionState" : "manual",
@@ -336,13 +329,13 @@
         }
       }
     },
-    "analytics.emptyState" : {
+    "analytics.emptyState.title" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No Data"
+            "value" : "No data"
           }
         },
         "ru" : {
@@ -359,7 +352,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Expense Places"
+            "value" : "Expense places"
           }
         },
         "ru" : {
@@ -370,19 +363,19 @@
         }
       }
     },
-    "analytics.expensePlaces.emptyState" : {
+    "analytics.expensePlaces.emptyState.title" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No Expenses with Coordinates"
+            "value" : "No expenses with a specified location"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Нет трат с координатами"
+            "value" : "Нет трат с указанным местом"
           }
         }
       }
@@ -467,7 +460,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Пик"
+            "value" : "Больше всего трат"
           }
         }
       }
@@ -611,6 +604,12 @@
     "close" : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Close"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -636,7 +635,7 @@
         }
       }
     },
-    "converter.fromCurrenency" : {
+    "converter.fromCurrency" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -700,6 +699,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "В"
+          }
+        }
+      }
+    },
+    "coordinate.accuracy" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : " ± %1$(accuracy)@ m"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : " ± %(accuracy)@ м"
           }
         }
       }
@@ -1175,7 +1191,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Камбоджийски риель"
+            "value" : "Камбоджийский риель"
           }
         }
       }
@@ -1928,7 +1944,7 @@
         }
       }
     },
-    "debug.delete.result" : {
+    "debug.delete.success.message" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -1968,7 +1984,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Load demo-data"
+            "value" : "Load demo data"
           }
         },
         "ru" : {
@@ -2013,7 +2029,7 @@
         }
       }
     },
-    "debug.load.result" : {
+    "debug.load.success.message" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -2183,7 +2199,7 @@
         }
       }
     },
-    "error.unknown" : {
+    "error.unknown.message" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -2196,6 +2212,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Неизвестная ошибка"
+          }
+        }
+      }
+    },
+    "error.unknown.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Error"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ошибка"
           }
         }
       }
@@ -2308,13 +2341,30 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Couldn't load the currency exchange rate: %1$(errorDescription)@ Try again."
+            "value" : "Could not load the exchange rate.\nReason: %1$(errorDescription)@\nTry again."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Не удалось загрузить курс валюты: %(errorDescription)@ Повторите попытку."
+            "value" : "Не удалось загрузить курс обмена.\nПричина: %(errorDescription)@\nПовторите попытку."
+          }
+        }
+      }
+    },
+    "exchangeRateLoading.error.provider.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Error fetching exchange rates from provider."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ошибка при получении курсов валют от провайдера."
           }
         }
       }
@@ -2332,23 +2382,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ошибка загрузки"
-          }
-        }
-      }
-    },
-    "exchangeRateLoading.Exception" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Error fetching exchange rates from provider."
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ошибка при получении курсов валют от провайдера."
           }
         }
       }
@@ -2410,7 +2443,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Add Expense"
+            "value" : "Add expense"
           }
         },
         "ru" : {
@@ -2427,13 +2460,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "1 %1$(expenseCurrencyCode)@ = %2$(effectiveRateExpenseToHome)@ %3$(HomeCurrencyCode)@ (with adjustment %4$(exchangeAdjustment)@)"
+            "value" : "1 %1$(expenseCurrencyCode)@ = %2$(effectiveRateExpenseToHome)@ %3$(homeCurrencyCode)@ (with adjustment %4$(exchangeAdjustment)@)"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "1 %1$(expenseCurrencyCode)@ = %2$(effectiveRateExpenseToHome)@ %3$(HomeCurrencyCode)@ (с корректировкой %4$(exchangeAdjustment)@)"
+            "value" : "1 %1$(expenseCurrencyCode)@ = %2$(effectiveRateExpenseToHome)@ %3$(homeCurrencyCode)@ (с корректировкой %4$(exchangeAdjustment)@)"
           }
         }
       }
@@ -2676,91 +2709,6 @@
         }
       }
     },
-    "expense.coordinate.choose" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Choose"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Выбрать"
-          }
-        }
-      }
-    },
-    "expense.coordinate.error.message" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Couldn’t locate the place of expense.\nCheck Airplane Mode is turned off and the app has access to geolocation in the system settings."
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Не удалось определить место траты. Убедитесь, что\nрежим «В самолете» выключен\nи у приложения есть доступ к геолокации в настройках системы."
-          }
-        }
-      }
-    },
-    "expense.coordinate.error.title" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Geolocation error"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ошибка геолокации"
-          }
-        }
-      }
-    },
-    "expense.coordinate.hint" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Place is not specified"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Место траты не указано"
-          }
-        }
-      }
-    },
-    "expense.coordinate.locate" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Locate"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Определить"
-          }
-        }
-      }
-    },
     "expense.currency" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2801,7 +2749,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Delete Expense"
+            "value" : "Delete expense"
           }
         },
         "ru" : {
@@ -2818,7 +2766,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "This Expense will be permanently deleted."
+            "value" : "This expense will be permanently deleted."
           }
         },
         "ru" : {
@@ -2835,7 +2783,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Delete Expense?"
+            "value" : "Delete expense?"
           }
         },
         "ru" : {
@@ -2852,13 +2800,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The Expense’s Location is unavailable. Close this screen and try again after syncing."
+            "value" : "The expense or its location is unavailable. Close this screen and try again."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Локация траты недоступна. Закройте экран и повторите попытку после синхронизации."
+            "value" : "Трата или ее локация недоступна. Закройте экран и повторите попытку."
           }
         }
       }
@@ -2869,13 +2817,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Editing unavailable"
+            "value" : "Data unavailable"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Редактирование недоступно"
+            "value" : "Данные недоступны"
           }
         }
       }
@@ -2886,7 +2834,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Add your first Expense\nto get started."
+            "value" : "Add your first expense\nto get started."
           }
         },
         "ru" : {
@@ -2903,7 +2851,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No Expenses yet"
+            "value" : "No expenses yet"
           }
         },
         "ru" : {
@@ -2931,19 +2879,19 @@
         }
       }
     },
-    "expense.exchangeRateOf" : {
+    "expense.exchangeRate" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "EXR of %1$(locationCurrencyCode)@"
+            "value" : "EXR of %1$(expenseCurrencyCode)@"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Курс обмена %(locationCurrencyCode)@"
+            "value" : "Курс обмена %(expenseCurrencyCode)@"
           }
         }
       }
@@ -2965,47 +2913,13 @@
         }
       }
     },
-    "expense.location.delete" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Remove Location"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Удалить локацию"
-          }
-        }
-      }
-    },
-    "expense.location.detect" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Detect Automatically"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Определить автоматически"
-          }
-        }
-      }
-    },
     "expense.navigationTitle.create" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Expense creation"
+            "value" : "New expense"
           }
         },
         "ru" : {
@@ -3022,7 +2936,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Expense editing"
+            "value" : "Edit expense"
           }
         },
         "ru" : {
@@ -3084,13 +2998,13 @@
         }
       }
     },
-    "expense.placeOfExpense" : {
+    "expense.place" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Place of the Expense"
+            "value" : "Expense location"
           }
         },
         "ru" : {
@@ -3101,19 +3015,155 @@
         }
       }
     },
-    "expense.storage.deleteError.message" : {
+    "expense.place.choose" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The Expense could not be deleted. Try again."
+            "value" : "Choose"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Выбрать"
+          }
+        }
+      }
+    },
+    "expense.place.detectAutomatically" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Detect automatically"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Определить автоматически"
+          }
+        }
+      }
+    },
+    "expense.place.error.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Could not determine the expense location. Check the app’s location permission in system settings and try again."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось определить место траты. Проверьте доступ к геопозиции в настройках системы и повторите попытку."
+          }
+        }
+      }
+    },
+    "expense.place.error.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Expense location unavailable"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Место траты недоступно"
+          }
+        }
+      }
+    },
+    "expense.place.hint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Expense location not specified"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Место траты не указано"
+          }
+        }
+      }
+    },
+    "expense.place.locate" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Locate"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Определить"
+          }
+        }
+      }
+    },
+    "expense.place.remove" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove expense location"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Убрать место траты"
+          }
+        }
+      }
+    },
+    "expense.storage.error.delete.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The expense could not be deleted. Try again."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Не удалось удалить трату. Повторите попытку."
+          }
+        }
+      }
+    },
+    "expense.storage.error.save.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The expense could not be saved. Try again."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось сохранить трату. Повторите попытку."
           }
         }
       }
@@ -3135,36 +3185,19 @@
         }
       }
     },
-    "expense.storage.saveError.message" : {
+    "expense.storage.error.unavailable.message" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The Expense could not be saved. Try again."
+            "value" : "The expense is no longer available. Close this screen and check the expenses list."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Не удалось сохранить трату. Повторите попытку."
-          }
-        }
-      }
-    },
-    "expense.storage.unavailable.message" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "The Expense is no longer available. Close this screen and refresh the list."
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Трата больше недоступна. Закройте экран и обновите список."
+            "value" : "Трата больше недоступна. Закройте экран и проверьте список трат."
           }
         }
       }
@@ -3226,7 +3259,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bank Fees"
+            "value" : "Bank fees"
           }
         },
         "ru" : {
@@ -3328,7 +3361,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Digital Service"
+            "value" : "Digital service"
           }
         },
         "ru" : {
@@ -3481,7 +3514,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Health Insurance"
+            "value" : "Health insurance"
           }
         },
         "ru" : {
@@ -3498,7 +3531,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Home Goods"
+            "value" : "Home goods"
           }
         },
         "ru" : {
@@ -3555,7 +3588,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Объект"
+            "value" : "Культурный объект"
           }
         }
       }
@@ -3583,7 +3616,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Luggage Storage"
+            "value" : "Luggage storage"
           }
         },
         "ru" : {
@@ -3617,7 +3650,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Medical Care"
+            "value" : "Medical care"
           }
         },
         "ru" : {
@@ -3702,7 +3735,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Postal Service"
+            "value" : "Postal service"
           }
         },
         "ru" : {
@@ -3719,13 +3752,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Public Transport"
+            "value" : "Public transport"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Общ. транспорт"
+            "value" : "Обществ. транспорт"
           }
         }
       }
@@ -3781,7 +3814,7 @@
         }
       }
     },
-    "expense.subcategory.Taxi" : {
+    "expense.subcategory.taxi" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -3821,7 +3854,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tourist Tax"
+            "value" : "Tourist tax"
           }
         },
         "ru" : {
@@ -3849,7 +3882,7 @@
         }
       }
     },
-    "expense.subcategory.Transfer" : {
+    "expense.subcategory.transfer" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -3872,7 +3905,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Travel Pass"
+            "value" : "Travel pass"
           }
         },
         "ru" : {
@@ -3906,7 +3939,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Time zone: %1$(gmtOffsetDisplay)@  (%2$(timeZoneID)@)"
+            "value" : "Time zone: %1$(gmtOffsetDisplay)@ (%2$(timeZoneID)@)"
           }
         },
         "ru" : {
@@ -3940,7 +3973,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Add Location"
+            "value" : "Add location"
           }
         },
         "ru" : {
@@ -4059,7 +4092,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The balance will be transferred from “%1$(sourceName)@“ to “%2$(destinationName)@“. The total Trip budget will remain unchanged."
+            "value" : "The balance will be transferred from “%1$(sourceName)@” to “%2$(destinationName)@”. The total trip budget will remain unchanged."
           }
         },
         "ru" : {
@@ -4087,24 +4120,7 @@
         }
       }
     },
-    "location.budgetTransfer.error.amounts" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "The budgets contain invalid amounts or the transfer amount cannot be added. Check both locations’ budgets."
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "В бюджетах указаны некорректные суммы или сумму переноса невозможно прибавить. Проверьте бюджеты обеих локаций."
-          }
-        }
-      }
-    },
-    "location.budgetTransfer.error.balanceChanged" : {
+    "location.budgetTransfer.error.balanceChanged.message" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -4121,24 +4137,24 @@
         }
       }
     },
-    "location.budgetTransfer.error.locations" : {
+    "location.budgetTransfer.error.invalidAmounts.message" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The Locations are no longer available. Close this list and try again."
+            "value" : "Could not calculate the budgets after the transfer. Check both locations’ budget amounts and try again."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Локации больше недоступны. Закройте список и попробуйте снова."
+            "value" : "Не удалось рассчитать бюджеты после переноса. Проверьте суммы бюджетов обеих локаций и повторите попытку."
           }
         }
       }
     },
-    "location.budgetTransfer.error.save" : {
+    "location.budgetTransfer.error.save.message" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -4150,7 +4166,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Не удалось сохранить перенос. Оба бюджета восстановлены. Попробуйте снова."
+            "value" : "Не удалось сохранить перенос. Оба бюджета восстановлены. Повторите попытку."
           }
         }
       }
@@ -4172,19 +4188,36 @@
         }
       }
     },
+    "location.budgetTransfer.error.unavailableLocations.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The locations are no longer available. Close this list and try again."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Локации больше недоступны. Закройте список и повторите попытку."
+          }
+        }
+      }
+    },
     "location.budgetTransfer.hint" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The entire balance of the current Location will be reset and added to the existing budget of the selected Location."
+            "value" : "The entire available balance will be transferred to the selected location’s budget. The current location’s remaining balance will be zero."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Весь доступный остаток будет обнулен в текущей локации и добавлен к имеющемуся бюджету выбранной локации."
+            "value" : "Весь доступный остаток будет перенесен в бюджет выбранной локации. В текущей локации остаток станет равен нулю."
           }
         }
       }
@@ -4195,7 +4228,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Recipient Locations"
+            "value" : "Recipient locations"
           }
         },
         "ru" : {
@@ -4263,13 +4296,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Location currency for entering and showing budgets and Expenses. Can be changed only if the Location has no Expenses."
+            "value" : "Location currency for entering and showing budgets and expenses. You can change it if the location has no expenses."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Валюта локации для ввода и отображения бюджета и трат. Может быть изменена только, если в локации нет трат."
+            "value" : "Валюта локации для ввода и отображения бюджета и трат. Валюту можно изменить, если в локации нет трат."
           }
         }
       }
@@ -4280,7 +4313,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Delete Location"
+            "value" : "Delete location"
           }
         },
         "ru" : {
@@ -4297,13 +4330,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "This Location will be permanently deleted."
+            "value" : "The location and all its expenses will be permanently deleted."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Локация будет безвозвратно удалена."
+            "value" : "Локация и все ее траты будут безвозвратно удалены."
           }
         }
       }
@@ -4314,7 +4347,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Delete Location?"
+            "value" : "Delete location?"
           }
         },
         "ru" : {
@@ -4331,13 +4364,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The Location or its trip is unavailable. Close this screen and try again after syncing."
+            "value" : "The location or its trip is unavailable. Close this screen and try again."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Локация или ее поездка недоступна. Закройте экран и повторите попытку после синхронизации."
+            "value" : "Локация или ее поездка недоступна. Закройте экран и повторите попытку."
           }
         }
       }
@@ -4348,13 +4381,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Editing unavailable"
+            "value" : "Data unavailable"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Редактирование недоступно"
+            "value" : "Данные недоступны"
           }
         }
       }
@@ -4365,13 +4398,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Create a Location\nto track Expenses.\n\nLocation groups Expenses\nrelated to a city or a specific place.\n\nFor example:\n• Shanghai Airport, PVG\n• Guangzhou\n• Beijing"
+            "value" : "Add a location\nto track expenses.\n\nA location groups expenses\nrelated to a city or a specific place.\n\nFor example:\n• Shanghai Airport, PVG\n• Guangzhou\n• Beijing"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Создайте локацию,\nчтобы учитывать расходы.\n\nЛокация объединяет расходы,\nотносящиеся к городу\nили конкретному месту.\n\nНапример:\n• Аэропорт Шанхая, PVG\n• Гуанчжоу\n• Пекин"
+            "value" : "Добавьте локацию,\nчтобы учитывать траты.\n\nЛокация объединяет траты,\nотносящиеся к городу\nили конкретному месту.\n\nНапример:\n• Аэропорт Шанхая, PVG\n• Гуанчжоу\n• Пекин"
           }
         }
       }
@@ -4382,7 +4415,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No Locations yet"
+            "value" : "No locations yet"
           }
         },
         "ru" : {
@@ -4433,13 +4466,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Exchange rate adjustment for new Expenses. Can be changed inside an Expense."
+            "value" : "Default exchange rate adjustment for new expenses. You can change this data in the expense form."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Корректировка курса обмена для автоматической постановки в новых тратах. Может быть изменена внутри траты."
+            "value" : "Корректировка курса обмена для автоматической подстановки в новых тратах. Корректировку можно изменить в форме траты."
           }
         }
       }
@@ -4467,13 +4500,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Exchange rate for calculating the Budget amount and for new Expenses (if the exchange rate that was current at the time of the Expense could not be loaded)."
+            "value" : "Exchange rate for calculating the budget amount and for new expenses (if automatic fetch of the exchange rate is disabled or the exchange rate could not be fetched)."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Курс обмена для расчета суммы бюджета и автоматической подстановки в новых тратах (если не удалось загрузить актуальный на момент траты курс обмена)."
+            "value" : "Курс обмена для расчета суммы бюджета и автоматической подстановки в новых тратах (если отключена автоматическая загрузка курса обмена или курс обмена не удалось загрузить)."
           }
         }
       }
@@ -4535,7 +4568,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Location creation"
+            "value" : "New location"
           }
         },
         "ru" : {
@@ -4552,7 +4585,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Location editing"
+            "value" : "Edit location"
           }
         },
         "ru" : {
@@ -4580,19 +4613,36 @@
         }
       }
     },
-    "location.storage.deleteError.message" : {
+    "location.storage.error.delete.message" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The Location could not be deleted. Try again."
+            "value" : "The location could not be deleted. Try again."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Не удалось удалить локацию. Повторите попытку."
+          }
+        }
+      }
+    },
+    "location.storage.error.save.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The location could not be saved. Try again."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось сохранить локацию. Повторите попытку."
           }
         }
       }
@@ -4614,36 +4664,19 @@
         }
       }
     },
-    "location.storage.saveError.message" : {
+    "location.storage.error.unavailable.message" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The Location could not be saved. Try again."
+            "value" : "The location is no longer available. Close this screen and check the locations list."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Не удалось сохранить локацию. Повторите попытку."
-          }
-        }
-      }
-    },
-    "location.storage.unavailable.message" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "The Location is no longer available. Close this screen and refresh the list."
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Локация больше недоступна. Закройте экран и обновите список."
+            "value" : "Локация больше недоступна. Закройте экран и проверьте список локаций."
           }
         }
       }
@@ -4661,6 +4694,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "OK"
+          }
+        }
+      }
+    },
+    "operation.error.timeout.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Operation interrupted due to timeout."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Операция прервана по истечении времени ожидания."
           }
         }
       }
@@ -4719,6 +4769,12 @@
     "settings" : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Settings"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4778,19 +4834,19 @@
         }
       }
     },
-    "settings.detectPlaceOfExpense" : {
+    "settings.detectExpensePlace" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Detect place"
+            "value" : "Detect expense location"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Определять место"
+            "value" : "Определять место траты"
           }
         }
       }
@@ -4818,30 +4874,30 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Exchange rate adjustment for new Locations. Can be changed inside a Location."
+            "value" : "Default exchange rate adjustment for new locations. You can change this data in the location form."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Корректировка курса обмена для автоматической подстановки в новых локациях. Может быть изменена внутри локации."
+            "value" : "Корректировка курса обмена для автоматической подстановки в новых локациях. Корректировку можно изменить в форме локации."
           }
         }
       }
     },
-    "settings.expenseAautofill.hint" : {
+    "settings.expenseAutofill.hint" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Automatic loading/detection and auto‑filling of data for new Expenses. Data can be changed inside an Expense."
+            "value" : "Automatically load the exchange rate and determine the location for new expenses. You can change this data in the expense form."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Автоматическая загрузка/определение и подстановка данных в новых тратах. Данные могут быть изменены внутри траты."
+            "value" : "Автоматически загружать курс обмена и определять место для новых трат. Эти данные можно изменить в форме траты."
           }
         }
       }
@@ -4859,6 +4915,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Загружать курс обмена из сети"
+          }
+        }
+      }
+    },
+    "settings.floatingButtonsOnLeft" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Floating buttons on the left"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Плавающие кнопки слева"
           }
         }
       }
@@ -4886,30 +4959,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Home currency for convenience and new Trips. Can be changed inside a Trip."
+            "value" : "Default home currency for new trips. You can change it in the trip form."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Домашняя валюта для удобства и автоматической подстановки в новых поездках. Может быть изменена внутри поездки."
-          }
-        }
-      }
-    },
-    "settings.isFloatingButtonOnLeft" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Floating buttons on the left"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Плавающие кнопки слева"
+            "value" : "Домашняя валюта для автоматической подстановки в новых поездках. Валюту можно изменить в форме поездки."
           }
         }
       }
@@ -4937,13 +4993,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "How Coinsa handles your data"
+            "value" : "Features of processing user data"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Как Coinsa обрабатывает ваши данные"
+            "value" : "Особенности обработки пользовательских данных"
           }
         }
       }
@@ -4954,7 +5010,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Privacy Policy"
+            "value" : "Privacy policy"
           }
         },
         "ru" : {
@@ -5005,7 +5061,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Third party API’s"
+            "value" : "Third-party APIs"
           }
         },
         "ru" : {
@@ -5039,13 +5095,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Display the entire location budget on the “Today” screen if the daily overspending exceeds the selected threshold."
+            "value" : "Show the budget and balance for the entire location on the “Today” screen if daily expenses exceed the daily budget by more than the selected percentage."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Отображение всего бюджета локации на экране «Сегодня», если перерасход за день больше выбранного порога."
+            "value" : "Показывать на экране «Сегодня» бюджет и остаток всей локации, если дневные траты превышают бюджет на день больше чем на выбранный процент."
           }
         }
       }
@@ -5169,23 +5225,6 @@
         }
       }
     },
-    "timeoutException" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Operation interrupted due to timeout."
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Операция прервана по истечении времени ожидания."
-          }
-        }
-      }
-    },
     "today" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -5209,7 +5248,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Location will appear automatically\non its start date."
+            "value" : "A location will appear automatically\non its start date."
           }
         },
         "ru" : {
@@ -5226,7 +5265,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No active Location"
+            "value" : "No active location"
           }
         },
         "ru" : {
@@ -5294,7 +5333,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "There are no Expenses today"
+            "value" : "There are no expenses today"
           }
         },
         "ru" : {
@@ -5351,7 +5390,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Дней всего: %(totalDays)lld"
+            "value" : "Всего дней: %(totalDays)lld"
           }
         }
       }
@@ -5396,7 +5435,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Add Trip"
+            "value" : "Add trip"
           }
         },
         "ru" : {
@@ -5407,47 +5446,13 @@
         }
       }
     },
-    "trip.currency" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Home currency"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Домашняя валюта"
-          }
-        }
-      }
-    },
-    "trip.currency.hint" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Home currency for entering, storing, and showing budgets and Expenses. Can be changed only if the Trip has no Locations."
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Домашняя валюта для ввода, хранения и отображения бюджета и трат. Может быть изменена только если в поездке нет локаций."
-          }
-        }
-      }
-    },
     "trip.delete" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Delete Trip"
+            "value" : "Delete trip"
           }
         },
         "ru" : {
@@ -5464,13 +5469,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "This Trip will be permanently deleted."
+            "value" : "The trip, all its locations, and all their expenses will be permanently deleted."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Поездка будет безвозвратно удалена."
+            "value" : "Поездка, все ее локации и траты будут безвозвратно удалены."
           }
         }
       }
@@ -5481,7 +5486,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Delete Trip?"
+            "value" : "Delete trip?"
           }
         },
         "ru" : {
@@ -5498,13 +5503,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The Trip is unavailable. Close this screen and try again after syncing."
+            "value" : "The trip is unavailable. Close this screen and try again."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Поездка недоступна. Закройте экран и повторите попытку после синхронизации."
+            "value" : "Поездка недоступна. Закройте экран и повторите попытку."
           }
         }
       }
@@ -5515,13 +5520,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Editing unavailable"
+            "value" : "Data unavailable"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Редактирование недоступно"
+            "value" : "Данные недоступны"
           }
         }
       }
@@ -5532,13 +5537,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Create a Trip\nto add Locations and Expenses.\n\nTrip combines all Expenses of one journey.\n\nFor example:\n• Summer vacation\n• Asia %1$(currentYear)@\n• China"
+            "value" : "Add a trip\nto add locations and expenses.\n\nA trip groups all expenses from one journey.\n\nFor example:\n• Summer vacation\n• Asia %1$(currentYear)@\n• China"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Добавьте поездку,\nчтобы добавлять локации и расходы.\n\nПоездка объединяет все расходы\nодного путешествия.\n\nНапример:\n• Летний отпуск\n• Азия %(currentYear)@\n• Китай"
+            "value" : "Добавьте поездку,\nчтобы добавлять локации и траты.\n\nПоездка объединяет все траты\nодного путешествия.\n\nНапример:\n• Летний отпуск\n• Азия %(currentYear)@\n• Китай"
           }
         }
       }
@@ -5549,7 +5554,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No Trips yet"
+            "value" : "No trips yet"
           }
         },
         "ru" : {
@@ -5573,6 +5578,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Завершается"
+          }
+        }
+      }
+    },
+    "trip.homeCurrency" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Home currency"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Домашняя валюта"
+          }
+        }
+      }
+    },
+    "trip.homeCurrency.hint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Home currency for entering, storing, and showing budgets and expenses. You can change it if the trip has no locations."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Домашняя валюта для ввода, хранения и отображения бюджета и трат. Валюту можно изменить, если в поездке нет локаций."
           }
         }
       }
@@ -5634,7 +5673,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Trip creation"
+            "value" : "New trip"
           }
         },
         "ru" : {
@@ -5651,7 +5690,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Trip editing"
+            "value" : "Edit trip"
           }
         },
         "ru" : {
@@ -5696,19 +5735,53 @@
         }
       }
     },
-    "trip.storage.deleteError.message" : {
+    "trip.storage.error.delete.message" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The Trip could not be deleted. Try again."
+            "value" : "The trip could not be deleted. Try again."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Не удалось удалить поездку. Повторите попытку."
+          }
+        }
+      }
+    },
+    "trip.storage.error.homeCurrencyLocked.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The home currency cannot be changed while the trip has locations. Check the currency and try saving again."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Домашнюю валюту нельзя изменить, пока в поездке есть локации. Проверьте валюту и повторите сохранение."
+          }
+        }
+      }
+    },
+    "trip.storage.error.save.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The trip could not be saved. Try again."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось сохранить поездку. Повторите попытку."
           }
         }
       }
@@ -5726,40 +5799,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Не удалось выполнить операцию"
-          }
-        }
-      }
-    },
-    "trip.storage.homeCurrencyLocked.message" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "The home currency cannot be changed while the Trip has Locations. Check the currency and try saving again."
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Домашнюю валюту нельзя изменить, пока в поездке есть локации. Проверьте валюту и повторите сохранение."
-          }
-        }
-      }
-    },
-    "trip.storage.saveError.message" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "The Trip could not be saved. Try again."
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Не удалось сохранить поездку. Повторите попытку."
           }
         }
       }
@@ -5804,7 +5843,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Enter the Location name"
+            "value" : "Enter the location name"
           }
         },
         "ru" : {
@@ -5821,7 +5860,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Enter the Trip name"
+            "value" : "Enter the trip name"
           }
         },
         "ru" : {

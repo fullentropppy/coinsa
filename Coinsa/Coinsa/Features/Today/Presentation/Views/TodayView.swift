@@ -154,7 +154,7 @@ private struct TodayContentView: View {
         .notificationAlert(
             isPresented: $isShowingDeletionError,
             title: .expenseStorageErrorTitle,
-            message: .expenseStorageDeleteErrorMessage,
+            message: .expenseStorageErrorDeleteMessage,
             isError: true
         )
         .navigationTitle(viewModel.navigationTitle(for: selectedLocation, locationsCount: currentLocations.count))

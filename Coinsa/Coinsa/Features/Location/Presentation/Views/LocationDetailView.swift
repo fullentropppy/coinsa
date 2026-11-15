@@ -81,12 +81,12 @@ struct LocationDetailView: View {
             .notificationAlert(
                 isPresented: $isShowingTransferSuccess,
                 title: "",
-                message: transferSuccessMessage ?? .errorUnknown
+                message: transferSuccessMessage ?? .errorUnknownMessage
             )
             .notificationAlert(
                 isPresented: $isShowingDeletionError,
                 title: .expenseStorageErrorTitle,
-                message: .expenseStorageDeleteErrorMessage,
+                message: .expenseStorageErrorDeleteMessage,
                 isError: true
             )
             .safeAreaInset(edge: .bottom) {

@@ -72,14 +72,14 @@ struct LocationEditorContainerView: View {
                     title: .exchangeRateLoadingErrorTitle,
                     message: .exchangeRateLoadingErrorMessage(
                         errorDescription: viewModel.rateLoadingError?.errorDescription
-                        ?? String(localized: .errorUnknown)
+                        ?? String(localized: .errorUnknownMessage)
                     ),
                     isError: true
                 )
                 .notificationAlert(
                     isPresented: storageErrorBinding,
                     title: .locationStorageErrorTitle,
-                    message: storageErrorMessage ?? .errorUnknown,
+                    message: storageErrorMessage ?? .errorUnknownMessage,
                     isError: true
                 )
                 .discardConfirmationAlert(
@@ -187,7 +187,7 @@ struct LocationEditorContainerView: View {
                    repositoryError == .tripUnavailable {
                     storageErrorMessage = .locationEditorUnavailableMessage
                 } else {
-                    storageErrorMessage = .locationStorageSaveErrorMessage
+                    storageErrorMessage = .locationStorageErrorSaveMessage
                 }
             }
         }
@@ -214,7 +214,7 @@ struct LocationEditorContainerView: View {
             onDelete?()
             dismiss()
         } catch {
-            storageErrorMessage = .locationStorageDeleteErrorMessage
+            storageErrorMessage = .locationStorageErrorDeleteMessage
         }
     }
 

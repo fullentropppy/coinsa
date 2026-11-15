@@ -67,7 +67,7 @@ struct TripEditorContainerView: View {
                 .notificationAlert(
                     isPresented: storageErrorBinding,
                     title: .tripStorageErrorTitle,
-                    message: storageErrorMessage ?? .errorUnknown,
+                    message: storageErrorMessage ?? .errorUnknownMessage,
                     isError: true
                 )
                 .discardConfirmationAlert(
@@ -149,10 +149,10 @@ struct TripEditorContainerView: View {
                         if let trip = viewModel.trip, !trip.isDeleted, trip.modelContext === context {
                             viewModel.homeCurrency = trip.homeCurrency
                         }
-                        storageErrorMessage = .tripStorageHomeCurrencyLockedMessage
+                        storageErrorMessage = .tripStorageErrorHomeCurrencyLockedMessage
                     }
                 } else {
-                    storageErrorMessage = .tripStorageSaveErrorMessage
+                    storageErrorMessage = .tripStorageErrorSaveMessage
                 }
             }
         }
@@ -182,7 +182,7 @@ struct TripEditorContainerView: View {
         } catch {
             storageErrorMessage = (error as? TripRepositoryError) == .tripUnavailable
                 ? .tripEditorUnavailableMessage
-                : .tripStorageDeleteErrorMessage
+                : .tripStorageErrorDeleteMessage
         }
     }
     

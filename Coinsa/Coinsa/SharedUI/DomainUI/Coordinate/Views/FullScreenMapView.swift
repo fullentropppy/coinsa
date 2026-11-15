@@ -95,8 +95,8 @@ struct FullScreenMapView: View {
                 }
                 .notificationAlert(
                     isPresented: $isShowingGeolocationError,
-                    title: errorTitle ?? .errorUnknown,
-                    message: errorMessage ?? .errorUnknown,
+                    title: errorTitle ?? .errorUnknownTitle,
+                    message: errorMessage ?? .errorUnknownMessage,
                     isError: true
                 )
                 .onDisappear {
@@ -246,7 +246,7 @@ struct FullScreenMapView: View {
     FullScreenMapView(
         coordinate: coordinate,
         title: .expenseSubcategoryBreakfast,
-        markerTitle: .expensePlaceOfExpense
+        markerTitle: .expensePlace
     )
     .environment(settingsStore)
 }
@@ -258,9 +258,9 @@ struct FullScreenMapView: View {
     FullScreenMapView(
         coordinate: $coordinate,
         title: .expenseSubcategoryBreakfast,
-        markerTitle: .expensePlaceOfExpense,
-        errorTitle: .expenseCoordinateErrorTitle,
-        errorMessage: .expenseCoordinateErrorMessage
+        markerTitle: .expensePlace,
+        errorTitle: .expensePlaceErrorTitle,
+        errorMessage: .expensePlaceErrorMessage
     )
     .environment(settingsStore)
 }
