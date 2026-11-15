@@ -13,6 +13,10 @@ struct CurrencyPicker<CurrentValueLabel: View>: View {
 
     @Environment(\.locale) private var locale
 
+    // MARK: - Состояние
+
+    @State private var isSheetPresented = false
+
     // MARK: - Свойства
 
     private let title: LocalizedStringResource?
@@ -76,19 +80,36 @@ struct CurrencyPicker<CurrentValueLabel: View>: View {
     }
 
     private var enabledContent: some View {
-        NavigationLink {
-            SearchablePickerView(
-                title: title,
-                selection: selection,
-                sections: sections,
-                searchText: searchText
-            ) { currency in
-                currency.makeLabel()
-            }
+        Button {
+            isSheetPresented = true
         } label: {
             selectionLabel
+                .contentShape(.rect)
         }
-        .navigationLinkIndicatorVisibility(.hidden)
+        .buttonStyle(.plain)
+        .sheet(isPresented: $isSheetPresented) {
+            NavigationStack {
+                searchableContent
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                            ToolbarButton.close {
+                                isSheetPresented = false
+                            }
+                        }
+                    }
+            }
+        }
+    }
+
+    private var searchableContent: some View {
+        SearchablePickerView(
+            title: title,
+            selection: selection,
+            sections: sections,
+            searchText: searchText
+        ) { currency in
+            currency.makeLabel()
+        }
     }
 
     // MARK: - Поиск
@@ -125,6 +146,21 @@ struct CurrencyPicker<CurrentValueLabel: View>: View {
         Form {
             CurrencyPicker(title: .tripCurrency, selection: $selection) { currency in
                 CurrencyCodeText.standard(currency)
+            }
+        }
+    }
+}
+
+#Preview("Converter") {
+    @Previewable @State var selection = Currency.usd
+
+    NavigationStack {
+        Form {
+            CurrencyPicker(
+                title: .converterFromCurrenency,
+                selection: $selection
+            ) { currency in
+                Text(currency.localizedResource)
             }
         }
     }

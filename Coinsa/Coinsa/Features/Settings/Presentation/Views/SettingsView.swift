@@ -108,14 +108,18 @@ struct SettingsView: View {
             if settingsStore.showsLocationBudgetOnOverspend {
                 VStack {
                     LabeledContent(.settingsTodayBudgetOverspendThreshold) {
-                        Text((settingsStore.todayBudgetOverspendThreshold / 100).percentFormat(fractionLength: 0))
+                        HStack {
+                            Text((settingsStore.todayBudgetOverspendThreshold).numberFormat(fractionLength: 0))
+                                .foregroundStyle(.primary)
+                            Image(systemName: "percent")
+                                .fontWeight(.semibold)
+                                .imageScale(.small)
+                                .foregroundStyle(.secondary)
+                                .frame(width: ViewLayout.Label.inputAccessoryWidth)
+                        }
                     }
                     Slider(value: todayBudgetOverspendThresholdBinding, in: 0...100, step: 5) {
                         Text(.settingsTodayBudgetOverspendThreshold)
-                    } minimumValueLabel: {
-                        Text(0.0.percentFormat(fractionLength: 0))
-                    } maximumValueLabel: {
-                        Text(1.0.percentFormat(fractionLength: 0))
                     }
                 }
             }
@@ -131,7 +135,7 @@ struct SettingsView: View {
                 selection: selectedAppAppearance,
                 options: AppAppearance.allCases
             ) { appAppearance in
-                Text(appAppearance.localizedResource)
+                appAppearance.makeLabel()
             }
             
             Toggle(.settingsIsFloatingButtonOnLeft, isOn: isFloatingButtonOnLeftBinding)

@@ -65,6 +65,8 @@ struct SearchablePickerView<SelectionValue: Hashable, Content: View>: View {
                                     Spacer()
                                     if option == selection {
                                         Image(systemName: "checkmark")
+                                            .imageScale(.small)
+                                            .fontWeight(.semibold)
                                             .foregroundStyle(.tint)
                                     }
                                 }
@@ -89,7 +91,6 @@ struct SearchablePickerView<SelectionValue: Hashable, Content: View>: View {
         .navigationTitle(title ?? "")
         .navigationBarTitleDisplayMode(.inline)
         .searchable(text: $query)
-        .toolbar(.hidden, for: .tabBar)
         .toolbar(.visible, for: .bottomBar)
         .toolbar {
             DefaultToolbarItem(kind: .search, placement: .bottomBar)

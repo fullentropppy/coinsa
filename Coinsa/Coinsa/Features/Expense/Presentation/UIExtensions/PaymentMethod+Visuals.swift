@@ -5,8 +5,6 @@
 //  Created by Daniil Gritsenko on 20.04.2026.
 //
 
-import SwiftUI
-
 extension PaymentMethod: ValueVisualRepresentable {
     /// Основная иконка способа оплаты (контурная версия).
     var primaryIcon: String {

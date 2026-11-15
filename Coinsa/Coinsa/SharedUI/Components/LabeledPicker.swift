@@ -27,8 +27,12 @@ struct PickerSection<Value: Hashable>: Identifiable {
     }
 }
 
-/// Кастомизированный пикер с заголовком, работающий как навигационная ссылка в списке.
+/// Пикер с заголовком и выбором значения в модальном списке.
 struct LabeledPicker<SelectionValue: Hashable, Content: View, CurrentValueLabel: View>: View {
+    // MARK: - Состояние
+
+    @State private var isSheetPresented = false
+
     // MARK: - Свойства
     
     private let title: LocalizedStringResource?
@@ -143,7 +147,7 @@ struct LabeledPicker<SelectionValue: Hashable, Content: View, CurrentValueLabel:
     
     var body: some View {
         if isDisabled {
-            disabledContent
+            selectionLabel
         } else {
             enabledContent
         }
@@ -151,9 +155,18 @@ struct LabeledPicker<SelectionValue: Hashable, Content: View, CurrentValueLabel:
     
     // MARK: - Компоненты
     
-    private var disabledContent: some View {
+    private var selectionLabel: some View {
         LabeledContent {
-            currentValueLabel(selection.wrappedValue)
+            HStack(spacing: ViewLayout.Label.pickerIndicatorSpacing) {
+                currentValueLabel(selection.wrappedValue)
+                if !isDisabled {
+                    Image(systemName: "chevron.right")
+                        .imageScale(.small)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(.accent)
+                        .frame(width: ViewLayout.Label.inputAccessoryWidth)
+                }
+            }
         } label: {
             if let title {
                 Text(title)
@@ -162,11 +175,51 @@ struct LabeledPicker<SelectionValue: Hashable, Content: View, CurrentValueLabel:
     }
     
     private var enabledContent: some View {
-        Picker(selection: selection) {
+        Button {
+            isSheetPresented = true
+        } label: {
+            selectionLabel
+                .contentShape(.rect)
+        }
+        .buttonStyle(.plain)
+        .sheet(isPresented: $isSheetPresented) {
+            NavigationStack {
+                optionsList
+                    .navigationTitle(title ?? "")
+                    .navigationBarTitleDisplayMode(.inline)
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                            ToolbarButton.close {
+                                isSheetPresented = false
+                            }
+                        }
+                    }
+            }
+        }
+    }
+
+    private var optionsList: some View {
+        List {
             ForEach(sections) { section in
                 Section {
                     ForEach(section.options, id: \.self) { option in
-                        content(option).tag(option)
+                        Button {
+                            selection.wrappedValue = option
+                            isSheetPresented = false
+                        } label: {
+                            HStack {
+                                content(option)
+                                Spacer()
+                                if option == selection.wrappedValue {
+                                    Image(systemName: "checkmark")
+                                        .imageScale(.small)
+                                        .fontWeight(.semibold)
+                                        .foregroundStyle(.tint)
+                                }
+                            }
+                            .contentShape(.rect)
+                        }
+                        .buttonStyle(.plain)
                     }
                 } header: {
                     if let sectionTitle = section.title {
@@ -174,22 +227,8 @@ struct LabeledPicker<SelectionValue: Hashable, Content: View, CurrentValueLabel:
                     }
                 }
             }
-        } label: {
-            if let title {
-                Text(title)
-            }
-        } currentValueLabel: {
-            HStack(spacing: ViewLayout.Label.pickerIndicatorSpacing) {
-                currentValueLabel(selection.wrappedValue)
-                Image(systemName: "chevron.right")
-                    .imageScale(.small)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(.accent)
-                    .frame(width: ViewLayout.Label.inputAccessoryWidth)
-            }
         }
-        .pickerStyle(.navigationLink)
-        .navigationLinkIndicatorVisibility(.hidden)
+        .environment(\.isScrollEnabled, true)
     }
 }
 
