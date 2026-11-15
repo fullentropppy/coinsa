@@ -8,7 +8,7 @@
 import SwiftUI
 
 extension DaySegment {
-    /// Четырёхступенчатый градиент одного оттенка с настройкой насыщенности и яркости.
+    /// Градиент одного оттенка с настройкой насыщенности и яркости.
     func gradient(for colorScheme: ColorScheme) -> Gradient {
         let palette: (hue: Double, saturation: Double, brightness: Double)
         let isDark = colorScheme == .dark

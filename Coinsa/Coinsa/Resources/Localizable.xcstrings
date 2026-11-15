@@ -4116,7 +4116,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Доступный остаток изменился Проверьте сумму и выберите получателя заново."
+            "value" : "Доступный остаток изменился. Проверьте сумму и выберите получателя заново."
           }
         }
       }
@@ -4178,13 +4178,30 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The displayed remaining budget for the current Location will be transferred to the selected Location."
+            "value" : "The entire balance of the current Location will be reset and added to the existing budget of the selected Location."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Отображаемый доступный бюджет текущей локации будет перенесен в выбранную локацию."
+            "value" : "Весь доступный остаток будет обнулен в текущей локации и добавлен к имеющемуся бюджету выбранной локации."
+          }
+        }
+      }
+    },
+    "location.budgetTransfer.recipientLocations" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recipient Locations"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Локации-получатели"
           }
         }
       }
@@ -4201,7 +4218,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Остаток бюджета перенесён в «%(destinationName)@»."
+            "value" : "Остаток бюджета перенесен в «%(destinationName)@»."
           }
         }
       }

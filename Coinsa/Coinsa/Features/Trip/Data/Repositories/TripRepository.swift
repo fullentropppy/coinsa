@@ -134,7 +134,7 @@ struct TripRepository {
 
 // MARK: - Ошибки
 
-/// Причина недоступности поездки или запрета изменения её домашней валюты.
+/// Причина недоступности поездки или запрета изменения ее домашней валюты.
 enum TripRepositoryError: LocalizedError {
     case tripUnavailable
     case homeCurrencyLocked
