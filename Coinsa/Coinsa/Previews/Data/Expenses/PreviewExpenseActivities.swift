@@ -36,7 +36,7 @@ extension PreviewExpenseCatalog {
                 PreviewExpenseActivity(.medication, 12.4, 2, "Пластырь и средство от простуды", dayOffset: 1, hour: 18, minute: 0),
                 PreviewExpenseActivity(.postalService, 5, 1, "Отправка открыток домой", dayOffset: 1, hour: 16, minute: 55),
                 PreviewExpenseActivity(.park, 6, 4, "Прогулка у истоков Босны", dayOffset: 2, hour: 10, minute: 45),
-                PreviewExpenseActivity(.clothing, 37.9, 2, "Теплый шарф для вечерних прогулок", dayOffset: 3, hour: 11, minute: 30),
+                PreviewExpenseActivity(.clothing, 37.9, 2, "Худи с принтом", dayOffset: 3, hour: 11, minute: 30),
                 PreviewExpenseActivity(.luggageStorage, 8, 1, "Оставил чемодан до вечернего автобуса", dayOffset: 3, hour: 9, minute: 50),
                 PreviewExpenseActivity(.otherShopping, 4, 0, "Подарочная упаковка для джезвы", dayOffset: 0, hour: 15, minute: 25),
             ]
@@ -64,7 +64,7 @@ extension PreviewExpenseCatalog {
                 PreviewExpenseActivity(.ferry, 5, 0, "Паром Star Ferry до Сентрала", coordinate: Coordinate(latitude: 22.2935, longitude: 114.169, horizontalAccuracy: 25), dayOffset: 0, hour: 10, minute: 0),
                 PreviewExpenseActivity(.landmark, 90, 2, "Смотровая площадка на пике Виктория", coordinate: Coordinate(latitude: 22.271, longitude: 114.149, horizontalAccuracy: 25), dayOffset: 0, hour: 15, minute: 0),
                 PreviewExpenseActivity(.electronics, 239.9, 1, "Компактное зарядное устройство", dayOffset: 1, hour: 10, minute: 30),
-                PreviewExpenseActivity(.clothing, 189.5, 1, "Легкая куртка на вечер", dayOffset: 1, hour: 11, minute: 10),
+                PreviewExpenseActivity(.clothing, 189.5, 1, "Бейсболка", dayOffset: 1, hour: 11, minute: 10),
                 PreviewExpenseActivity(.otherTransport, 35, 2, "Поездка на Peak Tram", coordinate: Coordinate(latitude: 22.2777, longitude: 114.159, horizontalAccuracy: 25), dayOffset: 0, hour: 14, minute: 15),
                 PreviewExpenseActivity(.tour, 32, 5, "Билет на канатную дорогу, оплата онлайн", currency: .usd, dayOffset: 2, hour: 10, minute: 0),
                 PreviewExpenseActivity(.homeGoods, 84.8, 3, "Набор палочек для дома", dayOffset: 1, hour: 16, minute: 55),

@@ -48,7 +48,8 @@ struct EventDayExpensesView: View {
             viewModel: LocationGroupedExpensesViewModel(
                 sourceExpenses: data.expenses,
                 filter: .day(date)
-            )
+            ),
+            showsLocationNames: data.locations != nil
         )
         .equatable()
     }

@@ -19,7 +19,7 @@ struct NumericKeypad: View {
         /// Внешние отступы цифровой клавиатуры.
         static let contentInset: CGFloat = 18
         /// Длительность удержания удаления для очистки всего значения.
-        static let clearPressDuration: TimeInterval = 0.5
+        static let clearPressDuration: TimeInterval = 0.3
     }
 
     // MARK: - Свойства

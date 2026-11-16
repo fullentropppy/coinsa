@@ -862,13 +862,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bosnia-Herzegovina convertible mark"
+            "value" : "Bosnian Mark"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Боснийская конвертируемая марка"
+            "value" : "Боснийская марка"
           }
         }
       }
@@ -1746,13 +1746,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "New Taiwan Dollar"
+            "value" : "Taiwan Dollar"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Нов. тайваньский доллар"
+            "value" : "Тайваньский доллар"
           }
         }
       }
