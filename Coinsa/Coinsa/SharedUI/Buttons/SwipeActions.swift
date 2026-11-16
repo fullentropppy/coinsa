@@ -22,7 +22,7 @@ struct SwipeActions: View {
     
     /// Создает набор свайп-действий.
     /// - Parameters:
-    ///   - onDelete: Действие при удалении (опционально).
+    ///   - onDelete: Запрос подтверждения удаления без немедленного удаления строки (опционально).
     ///   - onEdit: Действие при редактировании (опционально).
     init(
         onDelete: (() -> Void)? = nil,
@@ -37,12 +37,13 @@ struct SwipeActions: View {
     var body: some View {
         Group {
             if let onDelete {
-                Button(role: .destructive) {
+                Button {
                     haptics.trigger(.warning)
                     onDelete()
                 } label: {
                     Label(.delete, systemImage: "trash")
                 }
+                .tint(.red)
             }
             if let onEdit {
                 Button {

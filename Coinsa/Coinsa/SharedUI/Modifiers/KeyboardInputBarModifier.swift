@@ -60,7 +60,7 @@ struct KeyboardInputBarModifier: ViewModifier {
     // MARK: - Компоненты
 
     private var clearButton: some View {
-        Button {
+        Button(role: .destructive) {
             haptics.trigger(.tap)
             clearAction?.clear()
         } label: {

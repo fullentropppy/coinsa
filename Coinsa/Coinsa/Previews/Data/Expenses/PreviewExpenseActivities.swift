@@ -25,7 +25,7 @@ extension PreviewExpenseCatalog {
                 PreviewExpenseActivity(.landmark, 4, 5, "Вход к римским мозаикам в Рисане", dayOffset: 2, hour: 10, minute: 40),
                 PreviewExpenseActivity(.vehicleRental, 44.95, 3, "Аренда автомобиля для поездки вдоль залива", dayOffset: 3, hour: 9, minute: 45),
                 PreviewExpenseActivity(.otherFood, 2, 1, "Чаевые после ужина на набережной", dayOffset: 3, hour: 20, minute: 20),
-                PreviewExpenseActivity(.otherTransport, 3, 4, "Парковка возле Пераста", dayOffset: 3, hour: 11, minute: 0),
+                PreviewExpenseActivity(.parking, 3, 4, "Парковка возле Пераста", dayOffset: 3, hour: 11, minute: 0),
             ]
         case .sarajevo:
             [
