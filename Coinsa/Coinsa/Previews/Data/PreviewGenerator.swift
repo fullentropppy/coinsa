@@ -11,10 +11,12 @@ import Foundation
 
 /// Сценарии генерации синтетических данных для превью и отладочного наполнения.
 enum PreviewScenario: String, CaseIterable {
-    case japan
+    case balkans
+    case asia
+    case sergievPosad
+    case saintPetersburg
     case russia
-    case southKorea
-    case turkey
+    case southAmerica
     case all
 }
 
@@ -42,11 +44,13 @@ enum PreviewGenerator {
         guard options.includeTrips else { return [] }
         let referenceDay = PlainDate(referenceDate, using: .current)
         let trips: [PreviewTrip] = switch scenario {
-        case .japan: [.japan]
-        case .russia: [.russia]
-        case .southKorea: [.southKorea]
-        case .turkey: [.turkey]
-        case .all: [.japan, .russia, .southKorea, .turkey]
+        case .balkans: [.balkans]
+        case .asia: [.asia]
+        case .sergievPosad: [.sergievPosad]
+        case .saintPetersburg: [.saintPetersburg]
+        case .russia: [.sergievPosad, .saintPetersburg]
+        case .southAmerica: [.southAmerica]
+        case .all: PreviewTrip.allCases
         }
 
         return trips.map {
@@ -61,7 +65,7 @@ enum PreviewGenerator {
     ///   - includeExpenses: Включать ли траты; игнорируется без локаций.
     ///   - referenceDate: Общий момент генерации; календарный день определяется в текущем поясе.
     static func makeExampleTrip(
-        _ previewTrip: PreviewTrip = .southKorea,
+        _ previewTrip: PreviewTrip = .balkans,
         includeLocations: Bool = false,
         includeExpenses: Bool = false,
         referenceDate: Date = .now
@@ -81,7 +85,7 @@ enum PreviewGenerator {
     ///   - includeExpenses: Включать ли траты локации.
     ///   - referenceDate: Общий момент генерации; календарный день определяется в текущем поясе.
     static func makeExampleLocation(
-        _ previewLocation: PreviewLocation = .seoul,
+        _ previewLocation: PreviewLocation = .belgrade,
         includeExpenses: Bool = false,
         referenceDate: Date = .now
     ) -> Location {
@@ -106,29 +110,33 @@ enum PreviewGenerator {
     ///   - previewLocation: Локация траты.
     ///   - referenceDate: Общий момент генерации; день траты определяется в текущем поясе.
     static func makeExampleExpense(
-        of previewLocation: PreviewLocation = .seoul,
+        of previewLocation: PreviewLocation = .belgrade,
         referenceDate: Date = .now
     ) -> Expense {
         let location = makeExampleLocation(previewLocation, referenceDate: referenceDate)
-        let center = previewLocation.centerPoint
+        var calendar = Calendar.utc
+        guard let timeZone = TimeZone(identifier: previewLocation.timeZoneID) else {
+            preconditionFailure("Invalid preview time zone: \(previewLocation.timeZoneID)")
+        }
+        calendar.timeZone = timeZone
         let sample = ExpensePreviewSample(
-            date: PlainDate(referenceDate, using: .current).storedDate.adding(hours: 12, minutes: 30, using: .utc),
-            homeAmount: 2600,
-            category: .food,
+            date: CivilDateTime(referenceDate, using: calendar).storedDate,
+            amount: 650,
+            currency: previewLocation.currency,
+            timeZoneID: previewLocation.timeZoneID,
+            paymentMethod: .card,
             subcategory: .breakfast,
-            comment: PreviewExpenseComment.breakfast.rawValue,
-            latitude: center.latitude,
-            longitude: center.longitude,
-            horizontalAccuracy: center.horizontalAccuracy
+            comment: "Завтрак и кофе перед прогулкой",
+            coordinate: previewLocation.centerPoint
         )
-        let expense = makeExpense(from: sample, to: location, timeZoneID: previewLocation.timeZoneID, createdAt: referenceDate)
+        let expense = makeExpense(from: sample, to: location, createdAt: referenceDate)
         location.expenses = [expense]
         return expense
     }
 
     /// Возвращает координаты центра примера локации.
     /// - Parameter previewLocation: Локация, для которой запрашивается центр.
-    static func makeExampleCoordinate(_ previewLocation: PreviewLocation = .seoul) -> Coordinate {
+    static func makeExampleCoordinate(_ previewLocation: PreviewLocation = .belgrade) -> Coordinate {
         previewLocation.centerPoint
     }
 }
@@ -185,50 +193,55 @@ private extension PreviewGenerator {
         )
 
         if options.includeExpenses {
-            location.expenses = expenseSamples(for: data, startDate: location.startPlainDate.startOfDay).map {
-                makeExpense(from: $0, to: location, timeZoneID: data.timeZoneID, createdAt: createdAt)
+            location.expenses = PreviewExpenseSamples.makeSamples(
+                for: data,
+                referenceDay: referenceDay
+            ).map {
+                makeExpense(from: $0, to: location, createdAt: createdAt)
             }
         }
 
         return location
     }
 
-    static func makeExpense(from sample: ExpensePreviewSample, to location: Location, timeZoneID: String, createdAt: Date) -> Expense {
-        guard let timeZone = TimeZone(identifier: timeZoneID) else {
-            fatalError("Invalid preview time zone: \(timeZoneID)")
+    static func makeExpense(from sample: ExpensePreviewSample, to location: Location, createdAt: Date) -> Expense {
+        guard let timeZone = TimeZone(identifier: sample.timeZoneID) else {
+            preconditionFailure("Invalid preview time zone: \(sample.timeZoneID)")
         }
+        let locationRate = location.locationCurrency == .rub ? 1 : location.rateLocationToHome * sample.rateVariation
+        let expenseRate = sample.currency == .rub ? 1 : PreviewExchangeRates.toHome(for: sample.currency) * sample.rateVariation
+        let rateExpenseToLocation = expenseRate / locationRate
+        let calculation = ExpenseCalculationContext(
+            homeAmount: 0,
+            homeCurrency: .rub,
+            expenseCurrency: sample.currency,
+            rateExpenseToHome: expenseRate,
+            rateExpenseToLocation: rateExpenseToLocation,
+            paymentMethod: sample.paymentMethod,
+            exchangeAdjustment: location.exchangeAdjustment
+        )
+        let homeAmount = sample.amount * calculation.exchangeRate(from: .expense, to: .home)
 
         return Expense(
             id: UUID(),
             date: sample.date,
             actualDate: CivilDateTime(sample.date).actualDate(using: timeZone),
-            timeZoneID: timeZoneID,
-            homeAmount: sample.homeAmount,
-            expenseCurrencyCode: location.locationCurrency.code,
-            rateExpenseToHome: location.rateLocationToHome,
-            rateExpenseToLocation: 1,
+            timeZoneID: sample.timeZoneID,
+            homeAmount: homeAmount,
+            expenseCurrencyCode: sample.currency.code,
+            rateExpenseToHome: expenseRate,
+            rateExpenseToLocation: rateExpenseToLocation,
             paymentMethodRaw: sample.paymentMethod.rawValue,
-            exchangeAdjustment: sample.exchangeAdjustment ?? location.exchangeAdjustment,
-            categoryRaw: sample.category.rawValue,
+            exchangeAdjustment: location.exchangeAdjustment,
+            categoryRaw: sample.subcategory.category.rawValue,
             subcategoryRaw: sample.subcategory.rawValue,
             location: location,
-            latitude: sample.latitude,
-            longitude: sample.longitude,
-            horizontalAccuracy: sample.horizontalAccuracy,
+            latitude: sample.coordinate?.latitude,
+            longitude: sample.coordinate?.longitude,
+            horizontalAccuracy: sample.coordinate?.horizontalAccuracy,
             comment: sample.comment,
             createdAt: createdAt,
             updatedAt: createdAt
         )
-    }
-
-    static func expenseSamples(for location: PreviewLocation, startDate: Date) -> [ExpensePreviewSample] {
-        switch location {
-        case .tokyo: TokyoExpenseSamples.makeSamples(startDate: startDate)
-        case .kyoto: KyotoExpenseSamples.makeSamples(startDate: startDate)
-        case .osaka: OsakaExpenseSamples.makeSamples(startDate: startDate)
-        case .saintp: SaintPetersburgExpenseSamples.makeSamples(startDate: startDate)
-        case .seoul: SeoulExpenseSamples.makeSamples(startDate: startDate)
-        case .busan, .istanbul: []
-        }
     }
 }

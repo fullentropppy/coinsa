@@ -856,6 +856,23 @@
         }
       }
     },
+    "currency.name.bam" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bosnia-Herzegovina convertible mark"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Боснийская конвертируемая марка"
+          }
+        }
+      }
+    },
     "currency.name.brl" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1464,6 +1481,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Оманский риал"
+          }
+        }
+      }
+    },
+    "currency.name.pen" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Peruvian sol"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Перуанский соль"
           }
         }
       }

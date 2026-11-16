@@ -143,7 +143,7 @@ struct LocationBudgetTransferView: View {
 // MARK: - Превью
 
 #Preview {
-    @Previewable @State var preview = TripPreviewData(.japan, includeLocations: true)
+    @Previewable @State var preview = TripPreviewData(.asia, includeLocations: true)
 
     if let source = preview.trip.locations?.first {
         LocationBudgetTransferView(source: source) { _ in }

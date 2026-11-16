@@ -25,7 +25,7 @@ extension PreviewBuilder {
     final class Builder {
         // MARK: - Свойства
 
-        private var scenario: PreviewScenario = .japan
+        private var scenario: PreviewScenario = .asia
         private var options = PreviewOptions()
 
         // MARK: - Установка параметров построителя

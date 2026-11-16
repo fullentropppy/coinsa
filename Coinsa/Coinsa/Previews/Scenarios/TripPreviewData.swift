@@ -21,7 +21,7 @@ struct TripPreviewData {
     ///   - isEditing: Подготавливать черновик существующей поездки или новой.
     ///   - includeLocations: Добавлять пример локаций поездки.
     ///   - includeExpenses: Добавлять пример трат в созданные локации.
-    init(_ previewTrip: PreviewTrip = .southKorea, isEditing: Bool = true, includeLocations: Bool = false, includeExpenses: Bool = false) {
+    init(_ previewTrip: PreviewTrip = .balkans, isEditing: Bool = true, includeLocations: Bool = false, includeExpenses: Bool = false) {
         let environment = PreviewEnvironment()
         container = environment.container
         settingsStore = environment.settingsStore

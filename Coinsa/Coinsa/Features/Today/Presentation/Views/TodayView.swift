@@ -266,7 +266,7 @@ private struct QuickExpenseSelection: Identifiable {
 
 #Preview("With Locations") {
     @Previewable @State var preview = PreviewEnvironment(
-        trips: PreviewBuilder.builder().withScenario(.southKorea).buildData()
+        trips: PreviewBuilder.builder().withScenario(.balkans).buildData()
     )
 
     TodayView(allowsAutomaticRateRequests: false)
@@ -276,7 +276,7 @@ private struct QuickExpenseSelection: Identifiable {
 
 #Preview("Without Expenses") {
     @Previewable @State var preview = PreviewEnvironment(
-        trips: PreviewBuilder.builder().withScenario(.southKorea).withExpenses(false).buildData()
+        trips: PreviewBuilder.builder().withScenario(.balkans).withExpenses(false).buildData()
     )
 
     TodayView(allowsAutomaticRateRequests: false)

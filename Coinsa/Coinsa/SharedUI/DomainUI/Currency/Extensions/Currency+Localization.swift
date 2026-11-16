@@ -16,6 +16,7 @@ extension Currency: LocalizedResourceProviding {
         case .ars: .currencyNameArs
         case .aud: .currencyNameAud
         case .azn: .currencyNameAzn
+        case .bam: .currencyNameBam
         case .brl: .currencyNameBrl
         case .byn: .currencyNameByn
         case .cad: .currencyNameCad
@@ -52,6 +53,7 @@ extension Currency: LocalizedResourceProviding {
         case .nok: .currencyNameNok
         case .nzd: .currencyNameNzd
         case .omr: .currencyNameOmr
+        case .pen: .currencyNamePen
         case .php: .currencyNamePhp
         case .pln: .currencyNamePln
         case .qar: .currencyNameQar

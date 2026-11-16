@@ -89,7 +89,7 @@ struct EventAnalyticsLocationsBody: View {
     private func locationsListSection(slices: [EventLocationAnalyticsSlice], colorOrder: [EventLocationAnalyticsSlice]) -> some View {
         Section {
             if slices.count > 1 || slices.contains(where: { $0.location.totalDays > 1 }) {
-                Picker(selection: $showsDailyAmounts.animation(.snappy)) {
+                Picker(selection: $showsDailyAmounts) {
                     Text(.analyticsLocationsAmountTotal).tag(false)
                     Text(.analyticsLocationsAmountDaily).tag(true)
                 } label: {
