@@ -18,6 +18,10 @@ struct ExpenseDetailView: View {
         static let gradientTransitionHalfWidth: CGFloat = 0.1
         /// Расстояние камеры фоновой карты до места траты в метрах.
         static let mapCameraDistance: Double = 10_000
+        /// Делитель верхнего отступа карты, определяющего вертикальную позицию маркера.
+        static let mapTopInsetDivisor: CGFloat = 1.2
+        /// Множитель высоты при расчете границы градиентной маски.
+        static let gradientHeightMultiplier: CGFloat = 1.2
         /// Отступы блоков сумм внутри карточки подробностей траты.
         static let amountBlockInset: CGFloat = 10
         /// Интервал под подписью способа оплаты перед основной суммой.
@@ -31,6 +35,7 @@ struct ExpenseDetailView: View {
     // MARK: - Хранимые свойства
 
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.displayScale) private var displayScale
     
     @State private var isShowingExpenseEdit = false
     @State private var isShowingMap = false
@@ -45,29 +50,19 @@ struct ExpenseDetailView: View {
         ExpenseDetailViewModel(expense: expense)
     }
 
-    private func formBackgroundGradient(in geometry: GeometryProxy) -> LinearGradient {
-        let lastStopLocation = min(
-            max((contentBottom - geometry.frame(in: .named(ContentSpace.form)).minY) / max(geometry.size.height, 1), 0), 1
-        )
+    private func formBackgroundGradient(contentInset: CGFloat, height: CGFloat) -> LinearGradient {
+        let lastStopLocation = contentInset / max(height, 1)
 
         return LinearGradient(
             stops:
                 [
                     .init(color: .black, location: 0),
                     .init(color: .black, location: max(lastStopLocation - Layout.gradientTransitionHalfWidth, 0)),
-                    .init(color: .clear, location: lastStopLocation + Layout.gradientTransitionHalfWidth)
+                    .init(color: .clear, location: min(lastStopLocation + Layout.gradientTransitionHalfWidth, 1))
                 ],
             startPoint: .top,
             endPoint: .bottom
         )
-    }
-    
-    private var mapCameraPosition: MapCameraPosition? {
-        if let cameraCoordinate = viewModel.coordinate {
-            .camera(MapCamera(centerCoordinate: cameraCoordinate, distance: Layout.mapCameraDistance))
-        } else {
-            nil
-        }
     }
     
     // MARK: - Инициализация
@@ -114,17 +109,16 @@ struct ExpenseDetailView: View {
     
     private var expenseDetailForm: some View {
         GeometryReader { geometry in
+            let visibleFrame = geometry.frame(in: .named(ContentSpace.form))
+
             ZStack {
                 backgroundContent(
-                    topInset: min(
-                        max(contentBottom - geometry.frame(in: .named(ContentSpace.form)).minY, 0),
-                        geometry.size.height
-                    )
+                    safeAreaBottom: visibleFrame.maxY
                 )
 
                 Form {
-                    mainSection
-                    commentSection
+                    mainSection(visibleFrame: visibleFrame)
+                    commentSection(visibleFrame: visibleFrame)
                 }
                 .scrollContentBackground(.hidden)
             }
@@ -139,7 +133,7 @@ struct ExpenseDetailView: View {
     
     // MARK: - Секции
 
-    private var mainSection: some View {
+    private func mainSection(visibleFrame: CGRect) -> some View {
         Section {
             VStack(spacing: ViewLayout.Summary.sectionSpacing) {
                 headerContent
@@ -148,12 +142,12 @@ struct ExpenseDetailView: View {
             }
         }
         .listRowBackground(
-            sectionBackground(isLast: expense.comment == nil)
+            sectionBackground(isLast: expense.comment == nil, visibleFrame: visibleFrame)
         )
     }
     
     @ViewBuilder
-    private var commentSection: some View {
+    private func commentSection(visibleFrame: CGRect) -> some View {
         if let comment = expense.comment {
             Section {
                 HStack {
@@ -166,7 +160,7 @@ struct ExpenseDetailView: View {
                 }
             }
             .listRowBackground(
-                sectionBackground(isLast: true)
+                sectionBackground(isLast: true, visibleFrame: visibleFrame)
             )
         }
     }
@@ -174,31 +168,51 @@ struct ExpenseDetailView: View {
     // MARK: - Компоненты
     
     @ViewBuilder
-    private func backgroundContent(topInset: CGFloat) -> some View {
-        if isVisible, let coordinate = viewModel.coordinate, let mapCameraPosition {
-            Map(position: .constant(mapCameraPosition)) {
-                Marker("", coordinate: coordinate)
-            }
-            .safeAreaPadding(.top, topInset)
+    private func backgroundContent(safeAreaBottom: CGFloat) -> some View {
+        if isVisible, let coordinate = viewModel.coordinate {
+            GeometryReader { geometry in
+                let frame = geometry.frame(in: .named(ContentSpace.form))
+                let bottomInset = min(max(frame.maxY - safeAreaBottom, 0), geometry.size.height)
+                let topInset = min(max(contentBottom - frame.minY, 0), geometry.size.height - bottomInset)
 
-            Rectangle()
-                .fill(.ultraThinMaterial)
-                .mask {
-                    GeometryReader { geometry in
-                        formBackgroundGradient(in: geometry)
+                ZStack {
+                    Map(position: .constant(.camera(MapCamera(centerCoordinate: coordinate, distance: Layout.mapCameraDistance)))) {
+                        Marker("", coordinate: coordinate)
                     }
+                    .safeAreaPadding(EdgeInsets(
+                        top: topInset / Layout.mapTopInsetDivisor,
+                        leading: 0,
+                        bottom: bottomInset,
+                        trailing: 0
+                    ))
+
+                    Rectangle()
+                        .fill(.ultraThinMaterial)
+                        .mask {
+                            formBackgroundGradient(
+                                contentInset: topInset,
+                                height: geometry.size.height * Layout.gradientHeightMultiplier
+                            )
+                        }
                 }
-                .ignoresSafeArea()
+            }
+            .ignoresSafeArea()
         } else {
             DaySegmentBackground(daySegment: .from(civilDateTime: expense.civilDateTime))
         }
     }
 
-    private func sectionBackground(isLast: Bool) -> some View {
-        RoundedRectangle(cornerRadius: 0)
+    private func sectionBackground(isLast: Bool, visibleFrame: CGRect) -> some View {
+        let tracksContentBottom = isLast && isVisible && viewModel.coordinate != nil
+        let scale = displayScale
+
+        return RoundedRectangle(cornerRadius: 0)
             .fill(.regularMaterial)
             .onGeometryChange(for: CGFloat?.self) { geometry in
-                isLast && isVisible && viewModel.coordinate != nil ? geometry.frame(in: .named(ContentSpace.form)).maxY : nil
+                guard tracksContentBottom else { return nil }
+                let bottom = geometry.frame(in: .named(ContentSpace.form)).maxY
+                let roundedBottom = (bottom * scale).rounded() / scale
+                return min(max(roundedBottom, visibleFrame.minY), visibleFrame.maxY)
             } action: { bottom in
                 if let bottom {
                     contentBottom = bottom
