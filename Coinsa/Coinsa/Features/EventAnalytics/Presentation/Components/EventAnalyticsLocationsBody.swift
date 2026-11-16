@@ -11,20 +11,6 @@ import SwiftUI
 
 /// Диаграмма долей трат и список локаций поездки.
 struct EventAnalyticsLocationsBody: View {
-    // MARK: - Константы
-
-    private enum Layout {
-        /// Палитра локаций в порядке их дат, независимая от режима сумм и сортировки списка.
-        static let locationColors: [Color] = [
-            .blue, .orange, .purple, .green, .pink, .cyan,
-            .yellow, .indigo, .mint, .brown, .red, .teal
-        ]
-        /// Насыщенность дополнительных оттенков после исчерпания системной палитры.
-        static let generatedColorSaturation: Double = 0.65
-        /// Яркость дополнительных оттенков после исчерпания системной палитры.
-        static let generatedColorBrightness: Double = 0.85
-    }
-
     // MARK: - Окружение
 
     @Environment(\.haptics) private var haptics
@@ -146,17 +132,7 @@ struct EventAnalyticsLocationsBody: View {
 
     private func color(for slice: EventLocationAnalyticsSlice, in slices: [EventLocationAnalyticsSlice]) -> Color {
         let index = slices.firstIndex { $0.id == slice.id } ?? 0
-        if index < Layout.locationColors.count {
-            return Layout.locationColors[index]
-        }
-
-        let uuid = slice.id.uuid
-        let hueSeed = (UInt16(uuid.0) << UInt8.bitWidth) | UInt16(uuid.1)
-        return Color(
-            hue: Double(hueSeed) / Double(UInt16.max),
-            saturation: Layout.generatedColorSaturation,
-            brightness: Layout.generatedColorBrightness
-        )
+        return ChartPalette.color(at: index, id: slice.id)
     }
 }
 

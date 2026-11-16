@@ -1,6 +1,6 @@
 {
   "fill" : {
-    "automatic-gradient" : "srgb:0.00000,0.53333,1.00000,1.00000",
+    "automatic-gradient" : "srgb:0.15686,0.48627,0.94118,1.00000",
     "orientation" : {
       "start" : {
         "x" : 0.5,
@@ -15,6 +15,7 @@
   "groups" : [
     {
       "blur-material" : 0.2,
+      "hidden" : false,
       "layers" : [
         {
           "fill-specializations" : [
@@ -35,10 +36,17 @@
           "name" : "lizard.fill"
         }
       ],
+      "lighting" : "individual",
+      "refractivity" : {
+        "depth" : 0,
+        "enabled" : false,
+        "strength" : 0.5
+      },
       "shadow" : {
         "kind" : "neutral",
         "opacity" : 1
       },
+      "specular" : true,
       "translucency" : {
         "enabled" : true,
         "value" : 0.5
@@ -47,12 +55,14 @@
     {
       "blend-mode" : "normal",
       "blur-material" : null,
+      "hidden" : false,
       "layers" : [
         {
+          "blend-mode" : "normal",
           "fill-specializations" : [
             {
               "value" : {
-                "automatic-gradient" : "srgb:0.00000,0.58980,1.00000,1.00000"
+                "automatic-gradient" : "srgb:0.00000,0.58824,1.00000,1.00000"
               }
             },
             {
@@ -62,6 +72,7 @@
               }
             }
           ],
+          "glass" : true,
           "image-name" : "Text.svg",
           "name" : "Text",
           "position" : {
@@ -122,8 +133,13 @@
         }
       ],
       "lighting" : "individual",
+      "refractivity" : {
+        "depth" : 0,
+        "enabled" : false,
+        "strength" : 0.5
+      },
       "shadow" : {
-        "kind" : "neutral",
+        "kind" : "none",
         "opacity" : 1
       },
       "specular" : false,

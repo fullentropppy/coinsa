@@ -37,13 +37,13 @@ extension ExpenseCategory: ValueVisualRepresentable {
     /// Акцентный цвет категории.
     var accentColor: Color {
         switch self {
-        case .food: .mint
-        case .transport: .blue
-        case .accommodation: .green
-        case .leisure: .yellow
-        case .shopping: .red
-        case .medicine: .cyan
-        case .miscellaneous: .brown
+        case .food: .ExpenseCategories.food
+        case .transport: .ExpenseCategories.transport
+        case .accommodation: .ExpenseCategories.accommodation
+        case .leisure: .ExpenseCategories.leisure
+        case .shopping: .ExpenseCategories.shopping
+        case .medicine: .ExpenseCategories.medicine
+        case .miscellaneous: .ExpenseCategories.miscellaneous
         }
     }
 }

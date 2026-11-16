@@ -37,13 +37,12 @@ struct SwipeActions: View {
     var body: some View {
         Group {
             if let onDelete {
-                Button {
+                Button(role: .destructive) {
                     haptics.trigger(.warning)
                     onDelete()
                 } label: {
                     Label(.delete, systemImage: "trash")
                 }
-                .tint(.red)
             }
             if let onEdit {
                 Button {
@@ -52,7 +51,7 @@ struct SwipeActions: View {
                 } label: {
                     Label(.edit, systemImage: "pencil")
                 }
-                .tint(.green)
+                .tint(.positive)
             }
         }
     }

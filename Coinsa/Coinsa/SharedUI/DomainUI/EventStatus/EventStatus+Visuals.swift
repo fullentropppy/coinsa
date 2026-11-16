@@ -29,9 +29,9 @@ extension EventStatus: ValueVisualRepresentable {
     /// Акцентный цвет для статуса события.
     var accentColor: Color {
         switch self {
-        case .upcoming: .teal
-        case .ongoing: .green
-        case .completed: .gray
+        case .upcoming: .EventStatuses.upcoming
+        case .ongoing: .EventStatuses.ongoing
+        case .completed: .EventStatuses.completed
         }
     }
 }

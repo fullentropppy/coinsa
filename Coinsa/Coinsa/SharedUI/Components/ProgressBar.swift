@@ -18,18 +18,6 @@ struct ProgressBar: View {
         static let trackOpacity: Double = 0.2
         /// Длительность анимации изменения заполнения.
         static let animationDuration: TimeInterval = 0.2
-        /// Граница перехода положительного прогресса от красного к оранжевому.
-        static let positiveOrangeThreshold: Double = 0.1
-        /// Граница перехода положительного прогресса от оранжевого к желтому.
-        static let positiveYellowThreshold: Double = 0.25
-        /// Граница перехода положительного прогресса от желтого к зеленому.
-        static let positiveGreenThreshold: Double = 0.4
-        /// Граница перехода отрицательного прогресса от зеленого к желтому.
-        static let negativeYellowThreshold: Double = 0.6
-        /// Граница перехода отрицательного прогресса от желтого к оранжевому.
-        static let negativeOrangeThreshold: Double = 0.75
-        /// Граница перехода отрицательного прогресса от оранжевого к красному.
-        static let negativeRedThreshold: Double = 0.9
     }
 
     // MARK: - Вложенные типы
@@ -59,31 +47,22 @@ struct ProgressBar: View {
 
     private var backgroundFill: Color {
         if style == .positive && progress == 0 {
-            .red
+            ProgressBarPalette.critical
         } else if style == .negative && progress == 0 {
-            .green
+            ProgressBarPalette.plain
         } else {
             .secondary
         }
     }
     
     private var barFill: Color {
-        if style == .plain {
-            return .green
-        } else if style == .positive {
-            switch progress {
-            case ..<Layout.positiveOrangeThreshold: return .red
-            case ..<Layout.positiveYellowThreshold: return .orange
-            case ..<Layout.positiveGreenThreshold: return .yellow
-            default: return .green
-            }
-        } else {
-            switch progress {
-            case ..<Layout.negativeYellowThreshold: return .green
-            case ..<Layout.negativeOrangeThreshold: return .yellow
-            case ..<Layout.negativeRedThreshold: return .orange
-            default: return .red
-            }
+        switch style {
+        case .plain:
+            ProgressBarPalette.plain
+        case .positive:
+            ProgressBarPalette.color(for: progress)
+        case .negative:
+            ProgressBarPalette.color(for: progress, reversed: true)
         }
     }
     
