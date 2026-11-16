@@ -13,6 +13,7 @@ enum ExpenseSubcategory: String, Codable, CaseIterable, Identifiable {
     case lunch
     case dinner
     case snack
+    case drinks
     case groceries
     case otherFood
     
@@ -27,12 +28,16 @@ enum ExpenseSubcategory: String, Codable, CaseIterable, Identifiable {
     case travelPass
     case vehicleRental
     case fuel
+    case parking
+    case tolls
+    case baggage
     case otherTransport
     
     // MARK: - Жилье
     
     case hotel
     case accommodationRental
+    case camping
     case touristTax
     case otherAccommodation
     
@@ -70,6 +75,7 @@ enum ExpenseSubcategory: String, Codable, CaseIterable, Identifiable {
     case bankFees
     case documents
     case laundry
+    case personalCare
     case donation
     case luggageStorage
     case postalService

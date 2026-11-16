@@ -15,6 +15,7 @@ extension ExpenseCategory {
                 .lunch,
                 .dinner,
                 .snack,
+                .drinks,
                 .groceries,
                 .otherFood
             ]
@@ -29,12 +30,16 @@ extension ExpenseCategory {
                 .travelPass,
                 .vehicleRental,
                 .fuel,
+                .parking,
+                .tolls,
+                .baggage,
                 .otherTransport
             ]
         case .accommodation:
             [
                 .hotel,
                 .accommodationRental,
+                .camping,
                 .touristTax,
                 .otherAccommodation
             ]
@@ -72,6 +77,7 @@ extension ExpenseCategory {
                 .bankFees,
                 .documents,
                 .laundry,
+                .personalCare,
                 .donation,
                 .luggageStorage,
                 .postalService,

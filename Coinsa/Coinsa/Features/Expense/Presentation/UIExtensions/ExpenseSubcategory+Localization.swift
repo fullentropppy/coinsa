@@ -18,6 +18,7 @@ extension ExpenseSubcategory: LocalizedResourceProviding {
         case .lunch: .expenseSubcategoryLunch
         case .dinner: .expenseSubcategoryDinner
         case .snack: .expenseSubcategorySnack
+        case .drinks: .expenseSubcategoryDrinks
         case .groceries: .expenseSubcategoryGroceries
         case .otherFood: .expenseSubcategoryOther
             
@@ -32,12 +33,16 @@ extension ExpenseSubcategory: LocalizedResourceProviding {
         case .travelPass: .expenseSubcategoryTravelPass
         case .vehicleRental: .expenseSubcategoryVehicleRental
         case .fuel: .expenseSubcategoryFuel
+        case .parking: .expenseSubcategoryParking
+        case .tolls: .expenseSubcategoryTolls
+        case .baggage: .expenseSubcategoryBaggage
         case .otherTransport: .expenseSubcategoryOther
             
         // MARK: - Жилье
             
         case .hotel: .expenseSubcategoryHotel
         case .accommodationRental: .expenseSubcategoryAccommodationRental
+        case .camping: .expenseSubcategoryCamping
         case .touristTax: .expenseSubcategoryTouristTax
         case .otherAccommodation: .expenseSubcategoryOther
             
@@ -75,6 +80,7 @@ extension ExpenseSubcategory: LocalizedResourceProviding {
         case .bankFees: .expenseSubcategoryBankFees
         case .documents: .expenseSubcategoryDocuments
         case .laundry: .expenseSubcategoryLaundry
+        case .personalCare: .expenseSubcategoryPersonalCare
         case .donation: .expenseSubcategoryDonation
         case .luggageStorage: .expenseSubcategoryLuggageStorage
         case .postalService: .expenseSubcategoryPostalService

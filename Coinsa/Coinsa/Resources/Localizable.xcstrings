@@ -3338,6 +3338,23 @@
         }
       }
     },
+    "expense.subcategory.baggage" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Baggage"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Багаж"
+          }
+        }
+      }
+    },
     "expense.subcategory.bankFees" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -3385,6 +3402,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Завтрак"
+          }
+        }
+      }
+    },
+    "expense.subcategory.camping" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Camping"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Кемпинг"
           }
         }
       }
@@ -3504,6 +3538,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Пожертвования"
+          }
+        }
+      }
+    },
+    "expense.subcategory.drinks" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Drinks"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Напитки"
           }
         }
       }
@@ -3797,6 +3848,40 @@
         }
       }
     },
+    "expense.subcategory.parking" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Parking"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Парковка"
+          }
+        }
+      }
+    },
+    "expense.subcategory.personalCare" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Personal care"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Личный уход"
+          }
+        }
+      }
+    },
     "expense.subcategory.plane" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -3912,6 +3997,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Такси"
+          }
+        }
+      }
+    },
+    "expense.subcategory.tolls" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tolls"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Платные дороги"
           }
         }
       }

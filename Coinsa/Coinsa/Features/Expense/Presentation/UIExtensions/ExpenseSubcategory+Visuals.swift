@@ -17,7 +17,8 @@ extension ExpenseSubcategory: ValueVisualRepresentable {
         case .breakfast: "sun.horizon"
         case .lunch: "sun.max"
         case .dinner: "moon"
-        case .snack: "cup.and.saucer"
+        case .snack: "pizza.slice"
+        case .drinks: "mug"
         case .groceries: "carrot"
         case .otherFood: category.primaryIcon
             
@@ -32,12 +33,16 @@ extension ExpenseSubcategory: ValueVisualRepresentable {
         case .travelPass: "ticket"
         case .vehicleRental: "key"
         case .fuel: "fuelpump"
+        case .parking: "parkingsign.square"
+        case .tolls: "road.lanes"
+        case .baggage: "suitcase"
         case .otherTransport: category.primaryIcon
             
         // MARK: - Жилье
             
         case .hotel: "bed.double"
         case .accommodationRental: "key"
+        case .camping: "tent"
         case .touristTax: "dollarsign.circle"
         case .otherAccommodation: category.primaryIcon
             
@@ -75,6 +80,7 @@ extension ExpenseSubcategory: ValueVisualRepresentable {
         case .bankFees: "percent"
         case .documents: "text.document"
         case .laundry: "washer"
+        case .personalCare: "comb"
         case .donation: "heart"
         case .luggageStorage: "suitcase.rolling"
         case .postalService: "shippingbox"
@@ -93,7 +99,8 @@ extension ExpenseSubcategory: ValueVisualRepresentable {
         case .breakfast: "sun.horizon.fill"
         case .lunch: "sun.max.fill"
         case .dinner: "moon.fill"
-        case .snack: "cup.and.saucer.fill"
+        case .snack: "pizza.slice.fill"
+        case .drinks: "mug.fill"
         case .groceries: "carrot.fill"
         case .otherFood: category.secondaryIcon
             
@@ -108,12 +115,16 @@ extension ExpenseSubcategory: ValueVisualRepresentable {
         case .travelPass: "ticket.fill"
         case .vehicleRental: "key.fill"
         case .fuel: "fuelpump.fill"
+        case .parking: "parkingsign.square.fill"
+        case .tolls: "road.lanes"
+        case .baggage: "suitcase.fill"
         case .otherTransport: category.secondaryIcon
             
         // MARK: - Жилье
             
         case .hotel: "bed.double.fill"
         case .accommodationRental: "key.fill"
+        case .camping: "tent.fill"
         case .touristTax: "dollarsign.circle.fill"
         case .otherAccommodation: category.secondaryIcon
             
@@ -151,6 +162,7 @@ extension ExpenseSubcategory: ValueVisualRepresentable {
         case .bankFees: "percent"
         case .documents: "text.document.fill"
         case .laundry: "washer.fill"
+        case .personalCare: "comb.fill"
         case .donation: "heart.fill"
         case .luggageStorage: "suitcase.rolling.fill"
         case .postalService: "shippingbox.fill"
