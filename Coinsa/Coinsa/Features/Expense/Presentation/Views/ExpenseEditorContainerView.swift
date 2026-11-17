@@ -153,6 +153,8 @@ struct ExpenseEditorContainerView: View {
             ),
             title: viewModel.subcategory.localizedResource,
             markerTitle: .expensePlace,
+            markerSystemImage: viewModel.subcategory.secondaryIcon,
+            markerTint: viewModel.subcategory.accentColor,
             errorTitle: .expensePlaceErrorTitle,
             errorMessage: .expensePlaceErrorMessage
         )

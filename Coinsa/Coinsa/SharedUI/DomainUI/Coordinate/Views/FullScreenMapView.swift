@@ -30,6 +30,8 @@ struct FullScreenMapView: View {
 
     private let title: LocalizedStringResource
     private let markerTitle: LocalizedStringResource
+    private let markerSystemImage: String?
+    private let markerTint: Color?
     private let isEditable: Bool
     private let errorTitle: LocalizedStringResource?
     private let errorMessage: LocalizedStringResource?
@@ -40,13 +42,17 @@ struct FullScreenMapView: View {
     /// - Parameters:
     ///   - coordinate: Привязка к объекту координат.
     ///   - title: Заголовок навигационной панели.
+    ///   - markerTitle: Заголовок маркера на карте.
+    ///   - markerSystemImage: Имя SF Symbol для маркера; `nil` сохраняет стандартную иконку.
+    ///   - markerTint: Цвет заливки маркера; `nil` сохраняет системный цвет.
     ///   - errorTitle: Заголовок предупреждения об ошибке геолокации.
     ///   - errorMessage: Сообщение предупреждения об ошибке геолокации.
-    ///   - markerTitle: Заголовок маркера на карте.
     init(
         coordinate: Binding<Coordinate?>,
         title: LocalizedStringResource,
         markerTitle: LocalizedStringResource,
+        markerSystemImage: String? = nil,
+        markerTint: Color? = nil,
         errorTitle: LocalizedStringResource,
         errorMessage: LocalizedStringResource
     ) {
@@ -57,6 +63,8 @@ struct FullScreenMapView: View {
         _cameraPosition = State(initialValue: Self.cameraPosition(for: initialCoordinate))
         self.title = title
         self.markerTitle = markerTitle
+        self.markerSystemImage = markerSystemImage
+        self.markerTint = markerTint
         self.errorTitle = errorTitle
         self.errorMessage = errorMessage
         self.isEditable = true
@@ -67,16 +75,22 @@ struct FullScreenMapView: View {
     ///   - coordinate: Объект координат для отображения.
     ///   - title: Заголовок навигационной панели.
     ///   - markerTitle: Заголовок маркера на карте.
+    ///   - markerSystemImage: Имя SF Symbol для маркера; `nil` сохраняет стандартную иконку.
+    ///   - markerTint: Цвет заливки маркера; `nil` сохраняет системный цвет.
     init(
         coordinate: Coordinate,
         title: LocalizedStringResource,
-        markerTitle: LocalizedStringResource
+        markerTitle: LocalizedStringResource,
+        markerSystemImage: String? = nil,
+        markerTint: Color? = nil
     ) {
         _coordinate = .constant(coordinate)
         _draftCoordinate = State(initialValue: coordinate)
         _cameraPosition = State(initialValue: Self.cameraPosition(for: coordinate))
         self.title = title
         self.markerTitle = markerTitle
+        self.markerSystemImage = markerSystemImage
+        self.markerTint = markerTint
         self.errorTitle = nil
         self.errorMessage = nil
         self.isEditable = false
@@ -113,7 +127,11 @@ struct FullScreenMapView: View {
     private var mapContent: some View {
         Map(position: $cameraPosition, interactionModes: .all) {
             if let draftCoordinate {
-                Marker(String(localized: markerTitle), coordinate: draftCoordinate.coreLocationCoordinate)
+                if let markerTint {
+                    markerContent(for: draftCoordinate).tint(markerTint)
+                } else {
+                    markerContent(for: draftCoordinate)
+                }
             }
         }
         .safeAreaPadding(MapLayout.controlsInset)
@@ -121,6 +139,15 @@ struct FullScreenMapView: View {
             if isEditable {
                 draftCoordinate = Coordinate(context.camera.centerCoordinate, horizontalAccuracy: nil)
             }
+        }
+    }
+
+    @MapContentBuilder
+    private func markerContent(for coordinate: Coordinate) -> some MapContent {
+        if let markerSystemImage {
+            Marker(String(localized: markerTitle), systemImage: markerSystemImage, coordinate: coordinate.coreLocationCoordinate)
+        } else {
+            Marker(String(localized: markerTitle), coordinate: coordinate.coreLocationCoordinate)
         }
     }
 
@@ -259,6 +286,8 @@ struct FullScreenMapView: View {
         coordinate: $coordinate,
         title: .expenseSubcategoryBreakfast,
         markerTitle: .expensePlace,
+        markerSystemImage: ExpenseSubcategory.breakfast.secondaryIcon,
+        markerTint: ExpenseSubcategory.breakfast.accentColor,
         errorTitle: .expensePlaceErrorTitle,
         errorMessage: .expensePlaceErrorMessage
     )

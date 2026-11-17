@@ -92,7 +92,9 @@ struct ExpenseDetailView: View {
                     FullScreenMapView(
                         coordinate: coordinate,
                         title: viewModel.expense.subcategory.localizedResource,
-                        markerTitle: .expensePlace
+                        markerTitle: .expensePlace,
+                        markerSystemImage: expense.subcategory.secondaryIcon,
+                        markerTint: expense.subcategory.accentColor
                     )
                 }
             }
@@ -177,7 +179,8 @@ struct ExpenseDetailView: View {
 
                 ZStack {
                     Map(position: .constant(.camera(MapCamera(centerCoordinate: coordinate, distance: Layout.mapCameraDistance)))) {
-                        Marker("", coordinate: coordinate)
+                        Marker("", systemImage: expense.subcategory.secondaryIcon, coordinate: coordinate)
+                            .tint(expense.subcategory.accentColor)
                     }
                     .safeAreaPadding(EdgeInsets(
                         top: topInset / Layout.mapTopInsetDivisor,

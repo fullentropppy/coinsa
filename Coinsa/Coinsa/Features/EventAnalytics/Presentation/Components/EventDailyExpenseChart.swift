@@ -14,7 +14,7 @@ struct EventDailyExpenseChart: View {
 
     private enum Layout {
         /// Интервал между дневным графиком и кнопками прокрутки.
-        static let controlsSpacing: CGFloat = 12
+        static let controlsSpacing: CGFloat = 14
         /// Высота области дневного графика.
         static let chartHeight: CGFloat = 200
         /// Непрозрачность верхней границы заливки под графиком.
@@ -181,7 +181,7 @@ struct EventDailyExpenseChart: View {
     }
     
     private func chartControls(timeline: EventExpenseChartTimeline) -> some View {
-        HStack {
+        HStack(alignment: .center) {
             Spacer()
             scrollPositionButton(
                 position: timeline.domain.lowerBound,
@@ -208,6 +208,8 @@ struct EventDailyExpenseChart: View {
             scrollPosition = position
         } label: {
             Image(systemName: icon)
+                .imageScale(.small)
+                .fontWeight(.semibold)
         }
         .buttonStyle(.borderless)
         .tint(.accent)

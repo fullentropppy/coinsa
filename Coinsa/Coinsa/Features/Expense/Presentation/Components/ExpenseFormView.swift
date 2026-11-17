@@ -229,7 +229,9 @@ struct ExpenseFormView: View {
                             get: { viewModel.coordinate ?? coordinate },
                             set: { viewModel.updateCoordinate($0) }
                         ),
-                        markerTitle: .expensePlace
+                        markerTitle: .expensePlace,
+                        markerSystemImage: viewModel.subcategory.secondaryIcon,
+                        markerTint: viewModel.subcategory.accentColor
                     )
                 }
                 .buttonStyle(.plain)

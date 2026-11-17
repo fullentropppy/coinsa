@@ -27,6 +27,8 @@ struct CompactMapView: View {
     // MARK: - Свойства
 
     private let markerTitle: LocalizedStringResource
+    private let markerSystemImage: String?
+    private let markerTint: Color?
     private let height: CGFloat
 
     // MARK: - Инициализация
@@ -35,15 +37,21 @@ struct CompactMapView: View {
     /// - Parameters:
     ///   - coordinate: Привязка к объекту координат.
     ///   - markerTitle: Заголовок маркера на карте.
+    ///   - markerSystemImage: Имя SF Symbol для маркера; `nil` сохраняет стандартную иконку.
+    ///   - markerTint: Цвет заливки маркера; `nil` сохраняет системный цвет.
     ///   - height: Высота карты. По умолчанию `200`.
     init(
         _ coordinate: Binding<Coordinate>,
         markerTitle: LocalizedStringResource,
+        markerSystemImage: String? = nil,
+        markerTint: Color? = nil,
         height: CGFloat = Layout.defaultHeight
     ) {
         _coordinate = coordinate
         _cameraPosition = State(initialValue: Self.cameraPosition(for: coordinate.wrappedValue))
         self.markerTitle = markerTitle
+        self.markerSystemImage = markerSystemImage
+        self.markerTint = markerTint
         self.height = height
     }
 
@@ -51,15 +59,21 @@ struct CompactMapView: View {
     /// - Parameters:
     ///   - coordinate: Объект координат для отображения.
     ///   - markerTitle: Заголовок маркера на карте.
+    ///   - markerSystemImage: Имя SF Symbol для маркера; `nil` сохраняет стандартную иконку.
+    ///   - markerTint: Цвет заливки маркера; `nil` сохраняет системный цвет.
     ///   - height: Высота карты. По умолчанию `200`.
     init(
         _ coordinate: Coordinate,
         markerTitle: LocalizedStringResource,
+        markerSystemImage: String? = nil,
+        markerTint: Color? = nil,
         height: CGFloat = Layout.defaultHeight
     ) {
         self.init(
             .constant(coordinate),
             markerTitle: markerTitle,
+            markerSystemImage: markerSystemImage,
+            markerTint: markerTint,
             height: height
         )
     }
@@ -77,10 +91,23 @@ struct CompactMapView: View {
 
     private var mapContent: some View {
         Map(position: $cameraPosition, interactionModes: []) {
-            Marker(String(localized: markerTitle), coordinate: coordinate.coreLocationCoordinate)
+            if let markerTint {
+                markerContent.tint(markerTint)
+            } else {
+                markerContent
+            }
         }
         .frame(height: height)
         .clipShape(RoundedRectangle(cornerRadius: Layout.cornerRadius, style: .continuous))
+    }
+
+    @MapContentBuilder
+    private var markerContent: some MapContent {
+        if let markerSystemImage {
+            Marker(String(localized: markerTitle), systemImage: markerSystemImage, coordinate: coordinate.coreLocationCoordinate)
+        } else {
+            Marker(String(localized: markerTitle), coordinate: coordinate.coreLocationCoordinate)
+        }
     }
 
     // MARK: - Инфраструктура
@@ -102,5 +129,11 @@ struct CompactMapView: View {
     
     List {
         CompactMapView($coordinate, markerTitle: .expensePlace)
+        CompactMapView(
+            $coordinate,
+            markerTitle: .expensePlace,
+            markerSystemImage: ExpenseSubcategory.breakfast.secondaryIcon,
+            markerTint: ExpenseSubcategory.breakfast.accentColor
+        )
     }
 }
