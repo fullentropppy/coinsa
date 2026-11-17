@@ -10,6 +10,8 @@ import SwiftUI
 /// Текстовое представление денежной суммы.
 struct AmountText: View {
     // MARK: - Свойства
+
+    @Environment(\.locale) private var locale
     
     private let amount: Double
     private let fractionLength: Int
@@ -18,6 +20,7 @@ struct AmountText: View {
     private let currency: Currency?
     private let currencyFont: Font?
     private let currencyColor: Color?
+    private let usesAdaptiveFormatting: Bool
     
     // MARK: - Инициализация
     
@@ -30,6 +33,7 @@ struct AmountText: View {
     ///   - currency: Валюта (опционально).
     ///   - currencyFont: Шрифт для кода валюты (если не указан, используется `font`).
     ///   - currencyColor: Цвет кода валюты (если не указан, используется `color`).
+    ///   - usesAdaptiveFormatting: Сокращать сумму при нехватке ширины. По умолчанию `true`.
     init(
         _ amount: Double,
         fractionLength: Int = 2,
@@ -37,7 +41,8 @@ struct AmountText: View {
         color: Color = .primary,
         currency: Currency? = nil,
         currencyFont: Font? = nil,
-        currencyColor: Color? = nil
+        currencyColor: Color? = nil,
+        usesAdaptiveFormatting: Bool = true
     ) {
         self.amount = amount
         self.fractionLength = max(0, fractionLength)
@@ -46,18 +51,46 @@ struct AmountText: View {
         self.currency = currency
         self.currencyFont = currency == nil ? nil : (currencyFont ?? font)
         self.currencyColor = currency == nil ? nil : (currencyColor ?? color)
+        self.usesAdaptiveFormatting = usesAdaptiveFormatting
     }
     
     // MARK: - Тело View
     
     var body: some View {
+        if usesAdaptiveFormatting {
+            ViewThatFits(in: .horizontal) {
+                amountContent(amount.numberFormat(fractionLength: fractionLength, locale: locale))
+                    .fixedSize(horizontal: true, vertical: false)
+                amountContent(amount.compactNumberFormat(fractionLength: fractionLength, locale: locale))
+            }
+            .lineLimit(1)
+            .minimumScaleFactor(ViewLayout.Label.minimumAmountScaleFactor)
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(Text(verbatim: accessibilityAmount))
+        } else {
+            amountContent(amount.numberFormat(fractionLength: fractionLength))
+        }
+    }
+
+    // MARK: - Компоненты
+
+    private var accessibilityAmount: String {
+        let fullAmount = amount.numberFormat(fractionLength: fractionLength, locale: locale)
+        if let currency {
+            return "\(fullAmount) \(currency.code)"
+        }
+        return fullAmount
+    }
+
+    private func amountContent(_ formattedAmount: String) -> some View {
         HStack(alignment: .firstTextBaseline, spacing: ViewLayout.Label.iconSpacing) {
-            Text(amount.numberFormat(fractionLength: fractionLength))
+            Text(verbatim: formattedAmount)
                 .font(font)
                 .foregroundStyle(color)
             
             if let currency, let currencyFont, let currencyColor {
                 CurrencyCodeText(currency, font: currencyFont, color: currencyColor)
+                    .fixedSize(horizontal: usesAdaptiveFormatting, vertical: false)
             }
         }
     }
@@ -71,11 +104,13 @@ extension AmountText {
     ///   - amount: Сумма.
     ///   - fractionLength: Количество знаков после запятой.
     ///   - currency: Валюта (опционально).
+    ///   - usesAdaptiveFormatting: Сокращать сумму при нехватке ширины. По умолчанию `true`.
     /// - Returns: Настроенное представление.
     static func standard(
         _ amount: Double,
         fractionLength: Int = 2,
-        currency: Currency? = nil
+        currency: Currency? = nil,
+        usesAdaptiveFormatting: Bool = true
     ) -> some View {
         AmountText(
             amount,
@@ -83,7 +118,8 @@ extension AmountText {
             font: .body.monospacedDigit(),
             currency: currency,
             currencyFont: .body.monospaced().weight(.medium),
-            currencyColor: .secondary
+            currencyColor: .secondary,
+            usesAdaptiveFormatting: usesAdaptiveFormatting
         )
     }
     
@@ -92,11 +128,13 @@ extension AmountText {
     ///   - amount: Сумма.
     ///   - fractionLength: Количество знаков после запятой.
     ///   - currency: Валюта (опционально).
+    ///   - usesAdaptiveFormatting: Сокращать сумму при нехватке ширины.
     /// - Returns: Настроенное представление.
     static func secondarySmall(
         _ amount: Double,
         fractionLength: Int = 2,
-        currency: Currency? = nil
+        currency: Currency? = nil,
+        usesAdaptiveFormatting: Bool = false
     ) -> some View {
         AmountText(
             amount,
@@ -104,7 +142,8 @@ extension AmountText {
             font: .footnote.monospacedDigit(),
             color: .secondary,
             currency: currency,
-            currencyFont: .footnote.monospaced().weight(.medium)
+            currencyFont: .footnote.monospaced().weight(.medium),
+            usesAdaptiveFormatting: usesAdaptiveFormatting
         )
     }
 }

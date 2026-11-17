@@ -37,6 +37,8 @@ enum ViewLayout {
     }
 
     enum Label {
+        /// Минимальный масштаб сокращенной суммы при нехватке ширины строки.
+        static let minimumAmountScaleFactor: CGFloat = 0.75
         /// Интервал между иконкой и текстом метки.
         static let iconSpacing: CGFloat = 4
         /// Интервал между компактной иконкой счетчика или действия и текстом.

@@ -15,6 +15,7 @@ struct AmountStack: View {
     private let homeCurrency: Currency
     private let expenseAmount: Double?
     private let expenseCurrency: Currency?
+    private let usesAdaptiveFormatting: Bool
     
     // MARK: - Инициализация
     
@@ -24,16 +25,19 @@ struct AmountStack: View {
     ///   - homeCurrency: Домашняя валюта.
     ///   - expenseAmount: Сумма в валюте траты (опционально).
     ///   - expenseCurrency: Валюта траты (опционально).
+    ///   - usesAdaptiveFormatting: Сокращать суммы при нехватке ширины. По умолчанию `true`.
     init(
         homeAmount: Double,
         homeCurrency: Currency,
         expenseAmount: Double? = nil,
-        expenseCurrency: Currency? = nil
+        expenseCurrency: Currency? = nil,
+        usesAdaptiveFormatting: Bool = true
     ) {
         self.homeAmount = homeAmount
         self.homeCurrency = homeCurrency
         self.expenseAmount = expenseAmount
         self.expenseCurrency = expenseCurrency
+        self.usesAdaptiveFormatting = usesAdaptiveFormatting
     }
     
     // MARK: - Тело View
@@ -43,10 +47,25 @@ struct AmountStack: View {
             if let mainAmount = expenseAmount,
                let mainCurrency = expenseCurrency,
                mainCurrency != homeCurrency {
-                AmountText.standard(mainAmount, currency: mainCurrency)
-                AmountText.secondarySmall(homeAmount, currency: homeCurrency)
+                AmountText
+                    .standard(
+                        mainAmount,
+                        currency: mainCurrency,
+                        usesAdaptiveFormatting: usesAdaptiveFormatting
+                    )
+                AmountText
+                    .secondarySmall(
+                        homeAmount,
+                        currency: homeCurrency,
+                        usesAdaptiveFormatting: usesAdaptiveFormatting
+                    )
             } else {
-                AmountText.standard(homeAmount, currency: homeCurrency)
+                AmountText
+                    .standard(
+                        homeAmount,
+                        currency: homeCurrency,
+                        usesAdaptiveFormatting: usesAdaptiveFormatting
+                    )
                     .frame(maxHeight: .infinity, alignment: .top)
             }
         }
@@ -60,4 +79,29 @@ struct AmountStack: View {
         AmountStack(homeAmount: 2500, homeCurrency: .rub)
         AmountStack(homeAmount: 2500, homeCurrency: .rub, expenseAmount: 5000, expenseCurrency: .jpy)
     }
+}
+
+#Preview("Large amounts") {
+    VStack(spacing: 20) {
+        AmountStack(
+            homeAmount: 24600,
+            homeCurrency: .rub,
+            expenseAmount: 750000,
+            expenseCurrency: .vnd,
+            usesAdaptiveFormatting: true
+        )
+        AmountStack(
+            homeAmount: 42000,
+            homeCurrency: .rub,
+            expenseAmount: 12500000,
+            expenseCurrency: .vnd,
+            usesAdaptiveFormatting: true
+        )
+        AmountStack(
+            homeAmount: -2500000000,
+            homeCurrency: .vnd,
+            usesAdaptiveFormatting: true
+        )
+    }
+    .frame(width: 140)
 }

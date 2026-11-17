@@ -10,6 +10,8 @@ import SwiftUI
 /// Представление баланса с прогресс-баром.
 struct EventAmountBalanceView: View {
     // MARK: - Хранимые свойства
+
+    @Environment(\.locale) private var locale
     
     private let budgetHomeAmount: Double
     private let homeAmountBalance: Double
@@ -51,40 +53,56 @@ struct EventAmountBalanceView: View {
     var body: some View {
         VStack(alignment: .leading) {
             ProgressBar(currentValue: homeAmountBalance, maxValue: budgetHomeAmount, style: .positive)
-            HStack {
-                Text(.amountBalancePercentage(balancePercent: progress.percentFormat()))
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-                Spacer()
-                differenceInfo
+            ViewThatFits(in: .horizontal) {
+                balanceRow(usesCompactFormatting: false)
+                balanceRow(usesCompactFormatting: true)
             }
+            .font(.footnote)
+            .foregroundStyle(.secondary)
+            .lineLimit(1)
+            .minimumScaleFactor(ViewLayout.Label.minimumAmountScaleFactor)
         }
     }
     
     // MARK: - Компоненты
     
-    private var differenceInfo: some View {
-        Group {
-            if let locationAmountBalance, let locationCurrency {
-                Text(
-                    .amountDuo(
-                        locationAmountBalance: locationAmountBalance.numberFormat(),
-                        locationCurrencyCode: locationCurrency.code,
-                        homeAmountBalance: homeAmountBalance.numberFormat(),
-                        homeCurrencyCode: homeCurrency.code
-                    )
-                )
-            } else {
-                Text(
-                    .amountMono(
-                        homeAmountBalance: homeAmountBalance.numberFormat(),
-                        homeCurrencyCode: homeCurrency.code
-                    )
-                )
-            }
+    private func balanceRow(usesCompactFormatting: Bool) -> some View {
+        HStack {
+            Text(.amountBalancePercentage(balancePercent: progress.percentFormat(locale: locale)))
+                .fixedSize(horizontal: !usesCompactFormatting, vertical: false)
+            Spacer()
+            balanceText(usesCompactFormatting: usesCompactFormatting)
+                .fixedSize(horizontal: !usesCompactFormatting, vertical: false)
+                .accessibilityLabel(balanceText(usesCompactFormatting: false))
         }
-        .font(.footnote)
-        .foregroundStyle(.secondary)
+    }
+
+    private func balanceText(usesCompactFormatting: Bool) -> Text {
+        if let locationAmountBalance, let locationCurrency {
+            Text(
+                .amountDuo(
+                    locationAmountBalance: formattedAmount(locationAmountBalance, usesCompactFormatting: usesCompactFormatting),
+                    locationCurrencyCode: locationCurrency.code,
+                    homeAmountBalance: formattedAmount(homeAmountBalance, usesCompactFormatting: usesCompactFormatting),
+                    homeCurrencyCode: homeCurrency.code
+                )
+            )
+        } else {
+            Text(
+                .amountMono(
+                    homeAmountBalance: formattedAmount(homeAmountBalance, usesCompactFormatting: usesCompactFormatting),
+                    homeCurrencyCode: homeCurrency.code
+                )
+            )
+        }
+    }
+
+    private func formattedAmount(_ amount: Double, usesCompactFormatting: Bool) -> String {
+        if usesCompactFormatting {
+            amount.compactNumberFormat(locale: locale)
+        } else {
+            amount.numberFormat(locale: locale)
+        }
     }
 }
 
