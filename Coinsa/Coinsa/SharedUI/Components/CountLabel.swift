@@ -36,6 +36,7 @@ struct CountLabel: View {
         HStack(spacing: ViewLayout.Label.compactIconSpacing) {
             Image(systemName: icon)
                 .imageScale(.small)
+                .fontWeight(.medium)
             Text(String(count))
         }
         .font(font)

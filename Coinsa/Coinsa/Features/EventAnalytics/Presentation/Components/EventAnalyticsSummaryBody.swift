@@ -76,6 +76,8 @@ struct EventAnalyticsSummaryBody: View {
                         HStack {
                             Image(systemName: expense.category.primaryIcon)
                                 .imageScale(.small)
+                                .font(.footnote)
+                                .fontWeight(.medium)
                                 .frame(width: ViewLayout.Row.iconWidth)
                             Text(expense.category.localizedResource)
                                 .font(.footnote)
@@ -83,6 +85,8 @@ struct EventAnalyticsSummaryBody: View {
                         HStack {
                             Image(systemName: expense.subcategory.primaryIcon)
                                 .imageScale(.small)
+                                .font(.footnote)
+                                .fontWeight(.medium)
                                 .frame(width: ViewLayout.Row.iconWidth)
                             Text(expense.subcategory.localizedResource)
                                 .font(.footnote)

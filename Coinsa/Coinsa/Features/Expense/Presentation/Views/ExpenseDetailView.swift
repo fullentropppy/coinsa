@@ -152,11 +152,10 @@ struct ExpenseDetailView: View {
     private func commentSection(visibleFrame: CGRect) -> some View {
         if let comment = expense.comment {
             Section {
-                HStack {
+                HStack(alignment: .top) {
                     Image(systemName: "ellipsis.bubble")
                         .foregroundStyle(.secondary)
                         .padding(.vertical, ViewLayout.Comment.iconVerticalInset)
-                        .frame(maxHeight: .infinity, alignment: .topLeading)
 
                     Text(comment)
                 }

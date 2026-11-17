@@ -276,11 +276,10 @@ struct ExpenseFormView: View {
 
     private var commentSection: some View {
         Section {
-            HStack {
+            HStack(alignment: .top) {
                 Image(systemName: "ellipsis.bubble")
                     .foregroundStyle(.secondary)
                     .padding(.vertical, ViewLayout.Comment.iconVerticalInset)
-                    .frame(maxHeight: .infinity, alignment: .topLeading)
 
                 TextField(.expenseComment, text: $viewModel.comment, axis: .vertical)
                     .lineLimit(ViewLayout.Comment.visibleLines)

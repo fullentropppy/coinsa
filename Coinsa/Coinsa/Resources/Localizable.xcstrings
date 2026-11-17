@@ -5508,23 +5508,6 @@
         }
       }
     },
-    "today.noExpenses" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "There are no expenses today"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Сегодня трат нет"
-          }
-        }
-      }
-    },
     "today.quickExpense" : {
       "extractionState" : "manual",
       "localizations" : {
