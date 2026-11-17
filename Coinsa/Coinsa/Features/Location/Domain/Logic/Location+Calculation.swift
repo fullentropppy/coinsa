@@ -24,7 +24,7 @@ extension Location {
     
     // MARK: - Публичные методы. Плановая сумма
     
-    /// Рассчитывает плановую сумму на сегодня (с учетом уже потраченного)
+    /// Рассчитывает лимит сегодняшнего дня с учетом всех записанных трат других дней.
     /// - Parameters:
     ///   - currency: Валютный контекст результата. Поддерживаются `.home` и `.location`.
     ///   - exchangeRateMode: Режим расчета курса. По умолчанию `.actual`
@@ -35,55 +35,46 @@ extension Location {
         using exchangeRateMode: ExchangeRateMode = .actual,
         calendar: Calendar = .utc
     ) -> Double {
-        if totalDays == 1 {
-            return calculateBudgetAmount(in: currency, using: exchangeRateMode, calendar: calendar)
-        }
-
         let today = PlainDate.today
-        let endOfYesterday = today.adding(days: -1).endOfDay
-        let startRange = min(startPlainDate.startOfDay, endOfYesterday)
-        let endRange = max(startRange, endOfYesterday)
-        
-        let expensesAmount = calculateExpensesAmount(
-            in: currency,
-            using: exchangeRateMode,
-            withinDateRange: startRange...endRange
-        )
+        let todayRange = today.startOfDay...today.endOfDay
+        let expensesAmount = expenses?.reduce(0) { result, expense in
+            guard !todayRange.contains(expense.civilDateTime.storedDate) else { return result }
+            return result + expense.amount(in: currency, using: exchangeRateMode)
+        } ?? 0
         
         return calculateDailyBudgetAmount(
             on: today,
             in: currency,
             using: exchangeRateMode,
-            expensesBeforeDay: expensesAmount,
+            expensesOutsideDay: expensesAmount,
             calendar: calendar
         )
     }
 
-    /// Рассчитывает бюджет дня из уже подсчитанных предыдущих расходов в выбранной валюте.
+    /// Распределяет свободный бюджет на оставшиеся дни, сохраняя лимит при добавлении трат выбранного дня.
     /// - Parameters:
     ///   - day: Календарный день, для которого определяется число оставшихся дней локации.
-    ///   - currency: Валютный контекст бюджета и предыдущих расходов. Поддерживаются `.home` и `.location`.
-    ///   - exchangeRateMode: Режим конвертации бюджета; должен совпадать с режимом подсчета предыдущих расходов. По умолчанию `.actual`.
-    ///   - expensesBeforeDay: Расходы от начала локации до конца предыдущего дня в выбранной валюте и режиме курса; для однодневной локации не учитываются.
-    ///   - calendar: Календарь для вычисления оставшихся дней. По умолчанию `.utc`.
-    /// - Returns: Остаток бюджета, распределенный на оставшиеся дни с учетом выбранного дня; в последний день возвращается весь остаток, включая отрицательный.
+    ///   - currency: Валютный контекст бюджета и трат других дней. Поддерживаются `.home` и `.location`.
+    ///   - exchangeRateMode: Режим конвертации бюджета; должен совпадать с режимом подсчета трат других дней. По умолчанию `.actual`.
+    ///   - expensesOutsideDay: Все записанные траты других дней в выбранной валюте и режиме курса, включая предоплаты и записи с будущей датой.
+    ///   - calendar: Календарь расчета бюджета; оставшиеся дни определяются по календарным датам в UTC.
+    /// - Returns: Неотрицательный лимит дня; после окончания локации и при некорректных суммах возвращается 0.
     func calculateDailyBudgetAmount(
         on day: PlainDate,
         in currency: CurrencyContext = .home,
         using exchangeRateMode: ExchangeRateMode = .actual,
-        expensesBeforeDay: Double,
+        expensesOutsideDay: Double,
         calendar: Calendar = .utc
     ) -> Double {
         let budgetAmount = calculateBudgetAmount(in: currency, using: exchangeRateMode, calendar: calendar)
 
-        if totalDays == 1 {
-            return budgetAmount
-        }
+        guard totalDays > 0, day <= endPlainDate,
+              budgetAmount.isFinite, expensesOutsideDay.isFinite else { return 0 }
 
-        let remainingDays = remainingDays(on: day, using: calendar)
-        let difference = budgetAmount - expensesBeforeDay
+        let remainingDays = endPlainDate.days(from: max(day, startPlainDate)) + 1
+        let difference = budgetAmount - expensesOutsideDay
         
-        return remainingDays == 0 ? difference : max(0, difference / Double(remainingDays + 1))
+        return max(0, difference / Double(remainingDays))
     }
     
     /// Рассчитывает общую плановую сумму по бюджету

@@ -23,15 +23,13 @@ enum TodaySummaryCalculator {
         overspendThreshold: Double
     ) -> TodaySummary {
         let todayRange = day.startOfDay...day.endOfDay
-        let endOfYesterday = day.adding(days: -1).endOfDay
-        let previousRange = min(location.startPlainDate.startOfDay, endOfYesterday)...endOfYesterday
         let isHomeLocation = location.homeCurrency == location.locationCurrency
         var todayExpenses: [Expense] = []
         var subcategoryCounts: [ExpenseSubcategory: Int] = [:]
         var todayHomeAmount = 0.0
         var todayLocationAmount = 0.0
-        var previousHomeAmount = 0.0
-        var previousLocationAmount = 0.0
+        var outsideDayHomeAmount = 0.0
+        var outsideDayLocationAmount = 0.0
         var totalHomeAmount = 0.0
         var totalLocationAmount = 0.0
 
@@ -47,17 +45,15 @@ enum TodaySummaryCalculator {
                 todayExpenses.append(expense)
                 todayHomeAmount += homeAmount
                 todayLocationAmount += locationAmount
-            }
-
-            if previousRange.contains(date) {
-                previousHomeAmount += homeAmount
-                previousLocationAmount += isHomeLocation ? 0 : expense.amount(in: .location, using: .actual)
+            } else {
+                outsideDayHomeAmount += homeAmount
+                outsideDayLocationAmount += isHomeLocation ? 0 : expense.amount(in: .location, using: .actual)
             }
         }
 
         todayExpenses.sort { $0.civilDateTime > $1.civilDateTime }
 
-        var budgetHomeAmount = location.calculateDailyBudgetAmount(on: day, expensesBeforeDay: previousHomeAmount)
+        var budgetHomeAmount = location.calculateDailyBudgetAmount(on: day, expensesOutsideDay: outsideDayHomeAmount)
         let switchLimit = max(0, budgetHomeAmount) * (1 + overspendThreshold / 100)
         let comparisonTolerance = max(todayHomeAmount.ulp, switchLimit.ulp) * 8
         let showsLocationBudget = showsLocationBudgetOnOverspend
@@ -82,7 +78,7 @@ enum TodaySummaryCalculator {
             budgetLocationAmount = isHomeLocation ? nil : location.calculateDailyBudgetAmount(
                 on: day,
                 in: .location,
-                expensesBeforeDay: previousLocationAmount
+                expensesOutsideDay: outsideDayLocationAmount
             )
             balanceExpensesHomeAmount = todayHomeAmount
             balanceExpensesLocationAmount = todayLocationAmount

@@ -62,7 +62,7 @@ struct EventAnalyticsDaysBody: View {
 
     private var dailyExpensesSection: some View {
         Section {
-            ForEach(viewModel.summaryExpenseChartPoints) { point in
+            ForEach(viewModel.summaryExpenseChartPoints.reversed()) { point in
                 if point.homeAmount > 0 {
                     dailyExpenseRow(point)
                 }
