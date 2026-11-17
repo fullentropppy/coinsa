@@ -4,6 +4,17 @@
     "" : {
       "shouldTranslate" : false
     },
+    "%@ (%@)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ (%2$@)"
+          }
+        }
+      },
+      "shouldTranslate" : false
+    },
     "%@ • %@" : {
       "localizations" : {
         "en" : {
@@ -4116,23 +4127,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Аренда"
-          }
-        }
-      }
-    },
-    "expense.timeZone.hint" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Time zone: %1$(gmtOffsetDisplay)@ (%2$(timeZoneID)@)"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Часовой пояс: %1$(gmtOffsetDisplay)@ (%2$(timeZoneID)@)"
           }
         }
       }

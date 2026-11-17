@@ -209,12 +209,12 @@ struct ExpenseFormView: View {
             }
             .environment(\.timeZone, .utc)
         } footer: {
-            Text(
-                .expenseTimeZoneHint(
-                    gmtOffsetDisplay: viewModel.timeZone.gmtOffsetDisplay,
-                    timeZoneID: viewModel.timeZone.identifier
-                )
-            )
+            HStack(spacing: ViewLayout.Label.iconSpacing) {
+                Image(systemName: "clock.fill")
+                    .imageScale(.small)
+                Text("\(viewModel.timeZone.gmtOffsetDisplay) (\(viewModel.timeZone.localizedDisplayName()))")
+            }
+            .font(.footnote)
         }
     }
 
@@ -257,7 +257,7 @@ struct ExpenseFormView: View {
         } footer: {
             if let coordinate = viewModel.coordinate {
                 HStack {
-                    HStack {
+                    HStack(spacing: ViewLayout.Label.iconSpacing) {
                         Image(systemName: "location.fill")
                             .imageScale(.small)
                         Text(coordinate.formattedDescription)
