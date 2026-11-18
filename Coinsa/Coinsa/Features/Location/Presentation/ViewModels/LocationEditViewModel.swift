@@ -253,6 +253,16 @@ final class LocationEditViewModel {
     }
     
     // MARK: - Операции с курсом обмена
+
+    /// Восстанавливает сохраненные валюту и курс после запрета смены валюты, сохраняя домашнюю сумму черновика.
+    func restoreStoredLocationCurrency() {
+        guard let location else { return }
+
+        currencyConverter.cancelRateRefresh()
+        currencyConverter.setCurrencies(base: homeCurrency, quote: location.locationCurrency)
+        currencyConverter.updateRate(location.rateLocationToHome)
+        amountManager.updateFromRateChange(for: .base, useExchangeAdjustment: false)
+    }
     
     func updateRate(_ newRate: Double, currentInput: CurrencyContext) {
         currencyConverter.updateRate(newRate)

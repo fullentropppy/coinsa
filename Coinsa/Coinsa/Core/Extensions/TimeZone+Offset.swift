@@ -11,33 +11,21 @@ import Foundation
 extension TimeZone {
     /// Смещение от GMT в часах.
     var gmtOffsetHours: Double {
-        Double(secondsFromGMT()).rounded() / 3600
+        Double(secondsFromGMT()) / 3600
     }
     
     /// Текстовое представление смещения от GMT в часах.
     var gmtOffsetDisplay: String {
-        let seconds = self.secondsFromGMT()
-        let hours = gmtOffsetHours
-        let formattedHours = hours.numberFormat(fractionLength: 0)
-        let minutes = abs(seconds % 3600) / 60
-        let formattedMinutes = minutes.formatted(.number.precision(.fractionLength(0)))
-        
-        var displayedOffset: String = ""
+        let seconds = secondsFromGMT()
+        let sign = seconds >= 0 ? "+" : "-"
+        let absoluteSeconds = abs(seconds)
+        let hours = absoluteSeconds / 3600
+        let minutes = absoluteSeconds % 3600 / 60
 
-        if hours >= 0 {
-            if minutes > 0 {
-                displayedOffset = "GMT+\(formattedHours):\(formattedMinutes)"
-            } else {
-                displayedOffset = "GMT+\(formattedHours)"
-            }
+        if minutes > 0 {
+            return "GMT\(sign)\(hours):\(String(format: "%02d", minutes))"
         } else {
-            if minutes > 0 {
-                displayedOffset = "GMT\(formattedHours):\(formattedMinutes)"
-            } else {
-                displayedOffset = "GMT\(formattedHours)"
-            }
+            return "GMT\(sign)\(hours)"
         }
-        
-        return displayedOffset
     }
 }

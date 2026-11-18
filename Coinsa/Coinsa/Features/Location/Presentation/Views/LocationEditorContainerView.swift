@@ -183,9 +183,18 @@ struct LocationEditorContainerView: View {
                 try viewModel.save(using: repository)
                 dismiss()
             } catch {
-                if let repositoryError = error as? LocationRepositoryError,
-                   repositoryError == .tripUnavailable {
-                    storageErrorMessage = .locationEditorUnavailableMessage
+                if let repositoryError = error as? LocationRepositoryError {
+                    switch repositoryError {
+                    case .tripUnavailable:
+                        storageErrorMessage = .locationEditorUnavailableMessage
+                    case .locationUnavailable:
+                        storageErrorMessage = .locationStorageErrorSaveMessage
+                    case .locationCurrencyLocked:
+                        if let location = viewModel.location, !location.isDeleted, location.modelContext === context {
+                            viewModel.restoreStoredLocationCurrency()
+                        }
+                        storageErrorMessage = .locationStorageErrorLocationCurrencyLockedMessage
+                    }
                 } else {
                     storageErrorMessage = .locationStorageErrorSaveMessage
                 }

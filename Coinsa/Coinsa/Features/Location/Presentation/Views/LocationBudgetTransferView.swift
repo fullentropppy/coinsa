@@ -93,15 +93,17 @@ struct LocationBudgetTransferView: View {
     }
 
     private var destinationSections: some View {
-        Group {
+        let groups = viewModel.groupedLocations
+
+        return Group {
             GroupHeader(
                 icon: Location.primaryIcon,
                 title: .locationBudgetTransferRecipientLocations,
-                itemCount: viewModel.groupedLocations.count
+                itemCount: groups.reduce(0) { $0 + $1.locations.count }
             )
             .listRowBackground(Color.clear)
             
-            ForEach(viewModel.groupedLocations, id: \.status) { group in
+            ForEach(groups, id: \.status) { group in
                 Section(group.status.safeLocalizedResourcePlural) {
                     ForEach(group.locations) { location in
                         Button {

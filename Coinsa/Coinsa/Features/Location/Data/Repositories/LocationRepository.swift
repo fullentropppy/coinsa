@@ -88,12 +88,19 @@ struct LocationRepository {
               let trip = location.trip, trip.modelContext === context, !trip.isDeleted else {
             throw LocationRepositoryError.tripUnavailable
         }
+        guard !location.hasExpenses || location.locationCurrency == locationCurrency else {
+            throw LocationRepositoryError.locationCurrencyLocked
+        }
 
         try saveChanges {
             location.name = name
             location.storedStartDate = startDate
             location.storedEndDate = endDate
-            location.locationCurrencyCode = locationCurrency.code
+            
+            if !location.hasExpenses {
+                location.locationCurrencyCode = locationCurrency.code
+            }
+            
             location.rateLocationToBase = rateLocationToHome
             location.exchangeAdjustment = exchangeAdjustment
             location.budget = budget
@@ -209,10 +216,11 @@ struct LocationRepository {
 
 // MARK: - Ошибки
 
-/// Причина недоступности данных для операции с локацией.
+/// Причина недоступности данных или запрета изменения валюты локации.
 enum LocationRepositoryError: LocalizedError {
     case tripUnavailable
     case locationUnavailable
+    case locationCurrencyLocked
 
     var errorDescription: String? {
         switch self {
@@ -220,6 +228,8 @@ enum LocationRepositoryError: LocalizedError {
             String(localized: .locationEditorUnavailableMessage)
         case .locationUnavailable:
             String(localized: .locationStorageErrorUnavailableMessage)
+        case .locationCurrencyLocked:
+            String(localized: .locationStorageErrorLocationCurrencyLockedMessage)
         }
     }
 }

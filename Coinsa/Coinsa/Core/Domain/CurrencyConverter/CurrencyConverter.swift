@@ -128,6 +128,11 @@ final class CurrencyConverter {
             completion?(rate)
         }
     }
+
+    /// Отменяет загрузку перед восстановлением сохраненных валюты и курса.
+    func cancelRateRefresh() {
+        exchangeRateManager.cancelRefresh()
+    }
     
     // MARK: - Конвертация сумм
     

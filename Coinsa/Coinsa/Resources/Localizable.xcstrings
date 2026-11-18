@@ -4811,6 +4811,23 @@
         }
       }
     },
+    "location.storage.error.locationCurrencyLocked.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The location currency cannot be changed while the location has expenses. Check the currency and try saving again."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Валюту локации нельзя изменить, пока в локации есть траты. Проверьте валюту и повторите сохранение."
+          }
+        }
+      }
+    },
     "location.storage.error.save.message" : {
       "extractionState" : "manual",
       "localizations" : {
