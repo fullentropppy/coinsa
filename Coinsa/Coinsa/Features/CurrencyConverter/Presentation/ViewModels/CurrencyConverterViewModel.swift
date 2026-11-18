@@ -42,12 +42,19 @@ final class CurrencyConverterViewModel {
     // MARK: - Инициализация
 
     /// Создает конвертер валют и начальное состояние ввода; для одинаковых валют курс равен единице.
-    init(from: Currency = .usd, to: Currency = .rub) {
-        let provider = ExchangeRateProvider(service: HexarateService())
+    /// - Parameters:
+    ///   - from: Исходная валюта суммы.
+    ///   - to: Валюта результата.
+    ///   - exchangeRateProvider: Провайдер курсов; при nil используется Hexarate.
+    init(
+        from: Currency = .usd,
+        to: Currency = .rub,
+        exchangeRateProvider: ExchangeRateProvider? = nil
+    ) {
         let initialRate: Double = from == to ? 1 : 0
 
         self.converter = CurrencyConverter(
-            exchangeRateProvider: provider,
+            exchangeRateProvider: exchangeRateProvider ?? ExchangeRateProvider(service: HexarateService()),
             baseCurrency: from,
             quoteCurrency: to,
             rateQuoteToBase: initialRate

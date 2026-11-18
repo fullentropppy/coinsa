@@ -257,6 +257,15 @@ enum PreviewExchangeRates {
     /// Возвращает количество рублей за единицу валюты траты.
     /// - Parameter currency: Валюта исходной суммы.
     static func toHome(for currency: Currency) -> Double {
+        guard let rate = availableRateToHome(for: currency) else {
+            preconditionFailure("Missing synthetic exchange rate for \(currency.code)")
+        }
+        return rate
+    }
+
+    /// Возвращает синтетический курс к рублю, если он определен для превью.
+    /// - Parameter currency: Валюта исходной суммы.
+    static func availableRateToHome(for currency: Currency) -> Double? {
         switch currency {
         case .rub: 1
         case .eur: 100
@@ -272,7 +281,7 @@ enum PreviewExchangeRates {
         case .ars: 0.075
         case .pen: 24
         case .cop: 0.022
-        default: preconditionFailure("Missing synthetic exchange rate for \(currency.code)")
+        default: nil
         }
     }
 }

@@ -21,15 +21,24 @@ struct LocationFormPreviewData {
         container = environment.container
         settingsStore = environment.settingsStore
         let context = container.mainContext
+        let exchangeRateProvider = ExchangeRateProvider(service: PreviewExchangeRateService())
 
         if isEditing {
             let location = PreviewGenerator.makeExampleLocation()
             context.insert(location)
-            viewModel = LocationEditViewModel(forEdit: location, allowsRateRequests: false)
+            viewModel = LocationEditViewModel(
+                forEdit: location,
+                allowsRateRequests: false,
+                exchangeRateProvider: exchangeRateProvider
+            )
         } else {
             let trip = PreviewGenerator.makeExampleTrip()
             context.insert(trip)
-            viewModel = LocationEditViewModel(forCreateWith: trip, allowsRateRequests: false)
+            viewModel = LocationEditViewModel(
+                forCreateWith: trip,
+                allowsRateRequests: false,
+                exchangeRateProvider: exchangeRateProvider
+            )
         }
         try! context.save()
     }

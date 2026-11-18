@@ -14,22 +14,29 @@ struct ExpenseFormPreviewData {
     let settingsStore: AppSettingsStore
     let viewModel: ExpenseEditViewModel?
 
-    /// Создает данные в памяти без CloudKit и настройки без автоматических запросов.
+    /// Создает данные в памяти без CloudKit, с локальными курсами и настройками без автоматических запросов.
     /// - Parameter isEditing: Подготавливать существующую трату или черновик новой.
     init(isEditing: Bool) {
         let environment = PreviewEnvironment()
         container = environment.container
         settingsStore = environment.settingsStore
         let context = container.mainContext
+        let exchangeRateProvider = ExchangeRateProvider(service: PreviewExchangeRateService())
 
         if isEditing {
             let expense = PreviewGenerator.makeExampleExpense()
             context.insert(expense)
-            viewModel = ExpenseEditViewModel(forEdit: expense)
+            viewModel = ExpenseEditViewModel(
+                forEdit: expense,
+                exchangeRateProvider: exchangeRateProvider
+            )
         } else {
             let location = PreviewGenerator.makeExampleLocation()
             context.insert(location)
-            viewModel = ExpenseEditViewModel(forCreateWith: location)
+            viewModel = ExpenseEditViewModel(
+                forCreateWith: location,
+                exchangeRateProvider: exchangeRateProvider
+            )
         }
         try! context.save()
     }

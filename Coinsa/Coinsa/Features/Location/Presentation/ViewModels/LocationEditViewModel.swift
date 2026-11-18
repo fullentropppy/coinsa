@@ -131,10 +131,12 @@ final class LocationEditViewModel {
     ///   - trip: Родительская поездка.
     ///   - preselectedExchangeAdjustment: Предустановленная корректировка курса.
     ///   - allowsRateRequests: Разрешать сетевые запросы курсов; отключается для изолированных превью.
+    ///   - exchangeRateProvider: Провайдер курсов; при nil используется Hexarate.
     convenience init(
         forCreateWith trip: Trip,
         preselectedExchangeAdjustment: Double? = nil,
-        allowsRateRequests: Bool = true
+        allowsRateRequests: Bool = true,
+        exchangeRateProvider: ExchangeRateProvider? = nil
     ) {
         self.init(
             trip: trip,
@@ -146,7 +148,8 @@ final class LocationEditViewModel {
             rateLocationToHome: 1,
             exchangeAdjustment: preselectedExchangeAdjustment ?? 0,
             budget: 0,
-            allowsRateRequests: allowsRateRequests
+            allowsRateRequests: allowsRateRequests,
+            exchangeRateProvider: exchangeRateProvider
         )
     }
     
@@ -154,7 +157,12 @@ final class LocationEditViewModel {
     /// - Parameters:
     ///   - location: Редактируемая локация.
     ///   - allowsRateRequests: Разрешать сетевые запросы курсов; отключается для изолированных превью.
-    convenience init?(forEdit location: Location, allowsRateRequests: Bool = true) {
+    ///   - exchangeRateProvider: Провайдер курсов; при nil используется Hexarate.
+    convenience init?(
+        forEdit location: Location,
+        allowsRateRequests: Bool = true,
+        exchangeRateProvider: ExchangeRateProvider? = nil
+    ) {
         guard !location.isDeleted, let trip = location.trip, !trip.isDeleted else { return nil }
 
         self.init(
@@ -167,7 +175,8 @@ final class LocationEditViewModel {
             rateLocationToHome: location.rateLocationToHome,
             exchangeAdjustment: location.exchangeAdjustment,
             budget: location.budget,
-            allowsRateRequests: allowsRateRequests
+            allowsRateRequests: allowsRateRequests,
+            exchangeRateProvider: exchangeRateProvider
         )
     }
     
@@ -183,6 +192,7 @@ final class LocationEditViewModel {
     ///   - exchangeAdjustment: Начальная корректировка курса.
     ///   - budget: Начальный бюджет в домашней валюте.
     ///   - allowsRateRequests: Разрешать сетевые запросы курсов.
+    ///   - exchangeRateProvider: Провайдер курсов или nil для Hexarate.
     private init(
         trip: Trip,
         location: Location?,
@@ -193,7 +203,8 @@ final class LocationEditViewModel {
         rateLocationToHome: Double,
         exchangeAdjustment: Double,
         budget: Double,
-        allowsRateRequests: Bool
+        allowsRateRequests: Bool,
+        exchangeRateProvider: ExchangeRateProvider?
     ) {
         self.trip = trip
         self.location = location
@@ -203,10 +214,8 @@ final class LocationEditViewModel {
         self.exchangeAdjustment = exchangeAdjustment.nonNegative
         self.allowsRateRequests = allowsRateRequests
         
-        let exchangeRateProvider = ExchangeRateProvider(service: HexarateService())
-        
         self.currencyConverter = CurrencyConverter(
-            exchangeRateProvider: exchangeRateProvider,
+            exchangeRateProvider: exchangeRateProvider ?? ExchangeRateProvider(service: HexarateService()),
             baseCurrency: trip.homeCurrency,
             quoteCurrency: locationCurrency,
             rateQuoteToBase: rateLocationToHome

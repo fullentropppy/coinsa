@@ -212,11 +212,13 @@ final class ExpenseEditViewModel {
     ///   - preselectedCategory: Предустановленная категория.
     ///   - preselectedSubcategory: Предустановленная подкатегория (определяет категорию, если задана).
     ///   - preselectedPaymentMethod: Предустановленный способ оплаты.
+    ///   - exchangeRateProvider: Общий провайдер курсов для обоих конвертеров; при nil используется Hexarate.
     convenience init(
         forCreateWith location: Location,
         preselectedCategory: ExpenseCategory? = nil,
         preselectedSubcategory: ExpenseSubcategory? = nil,
-        preselectedPaymentMethod: PaymentMethod? = nil
+        preselectedPaymentMethod: PaymentMethod? = nil,
+        exchangeRateProvider: ExchangeRateProvider? = nil
     ) {
         let date = CivilDateTime.now.storedDate
         let category = preselectedSubcategory?.category ?? preselectedCategory ?? .defaultValue
@@ -235,13 +237,19 @@ final class ExpenseEditViewModel {
             category: category,
             subcategory: preselectedSubcategory ?? .defaultValue(with: category),
             coordinate: nil,
-            comment: ""
+            comment: "",
+            exchangeRateProvider: exchangeRateProvider
         )
     }
     
     /// Создает черновик существующей траты; возвращает nil, если родительская локация недоступна.
-    /// - Parameter expense: Редактируемая трата.
-    convenience init?(forEdit expense: Expense) {
+    /// - Parameters:
+    ///   - expense: Редактируемая трата.
+    ///   - exchangeRateProvider: Общий провайдер курсов для обоих конвертеров; при nil используется Hexarate.
+    convenience init?(
+        forEdit expense: Expense,
+        exchangeRateProvider: ExchangeRateProvider? = nil
+    ) {
         guard !expense.isDeleted, let location = expense.location, !location.isDeleted else { return nil }
 
         self.init(
@@ -258,11 +266,28 @@ final class ExpenseEditViewModel {
             category: expense.category,
             subcategory: expense.subcategory,
             coordinate: expense.coordinate,
-            comment: expense.comment ?? ""
+            comment: expense.comment ?? "",
+            exchangeRateProvider: exchangeRateProvider
         )
     }
     
     /// Создает черновик траты, конвертеры валют и исходный снимок для определения изменений.
+    /// - Parameters:
+    ///   - location: Родительская локация.
+    ///   - expense: Исходная трата или nil при создании.
+    ///   - date: Гражданские дата и время в формате хранения.
+    ///   - homeAmount: Начальная сумма в домашней валюте.
+    ///   - expenseAmount: Начальная сумма в валюте траты.
+    ///   - expenseCurrency: Валюта траты.
+    ///   - rateExpenseToHome: Начальный курс к домашней валюте.
+    ///   - rateExpenseToLocation: Начальный курс к валюте локации.
+    ///   - paymentMethod: Способ оплаты.
+    ///   - exchangeAdjustment: Начальная корректировка курса.
+    ///   - category: Категория траты.
+    ///   - subcategory: Подкатегория траты.
+    ///   - coordinate: Место траты.
+    ///   - comment: Начальный комментарий.
+    ///   - exchangeRateProvider: Общий провайдер курсов для обоих конвертеров или nil для Hexarate.
     private init(
         location: Location,
         expense: Expense?,
@@ -277,7 +302,8 @@ final class ExpenseEditViewModel {
         category: ExpenseCategory,
         subcategory: ExpenseSubcategory,
         coordinate: Coordinate?,
-        comment: String
+        comment: String,
+        exchangeRateProvider: ExchangeRateProvider?
     ) {
         self.location = location
         self.expense = expense
@@ -289,13 +315,12 @@ final class ExpenseEditViewModel {
         self.coordinate = coordinate
         self.comment = comment
         
-        let baseExchangeRateProvider = ExchangeRateProvider(service: HexarateService())
-        let locationExchangeRateProvider = ExchangeRateProvider(service: HexarateService())
+        let provider = exchangeRateProvider ?? ExchangeRateProvider(service: HexarateService())
         let normalizedRateExpenseToHome = expenseCurrency == location.homeCurrency ? 1 : rateExpenseToHome
         let normalizedRateExpenseToLocation = expenseCurrency == location.locationCurrency ? 1 : rateExpenseToLocation
         
         self.homeCurrencyConverter = CurrencyConverter(
-            exchangeRateProvider: baseExchangeRateProvider,
+            exchangeRateProvider: provider,
             baseCurrency: location.homeCurrency,
             quoteCurrency: expenseCurrency,
             rateQuoteToBase: normalizedRateExpenseToHome,
@@ -303,7 +328,7 @@ final class ExpenseEditViewModel {
         )
         
         self.locationCurrencyConverter = CurrencyConverter(
-            exchangeRateProvider: locationExchangeRateProvider,
+            exchangeRateProvider: provider,
             baseCurrency: location.locationCurrency,
             quoteCurrency: expenseCurrency,
             rateQuoteToBase: normalizedRateExpenseToLocation,

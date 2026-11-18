@@ -32,7 +32,7 @@ struct CurrencyConverterView: View {
 
     // MARK: - Состояние
 
-    @State private var viewModel = CurrencyConverterViewModel()
+    @State private var viewModel: CurrencyConverterViewModel
 
     @Query private var locations: [Location]
     
@@ -43,6 +43,14 @@ struct CurrencyConverterView: View {
         return locations.first(where: { $0.id == selectedID })?.locationCurrency
     }
     
+    // MARK: - Инициализация
+
+    /// Создает экран с подготовленным состоянием или рабочим конвертером с Hexarate.
+    /// - Parameter initialViewModel: Состояние конвертера; при nil создается новый экземпляр.
+    init(initialViewModel: CurrencyConverterViewModel? = nil) {
+        _viewModel = State(initialValue: initialViewModel ?? CurrencyConverterViewModel())
+    }
+
     // MARK: - Тело View
 
     var body: some View {
@@ -211,7 +219,9 @@ struct CurrencyConverterView: View {
 #Preview {
     @Previewable @State var preview = PreviewEnvironment()
 
-    CurrencyConverterView()
+    CurrencyConverterView(initialViewModel: CurrencyConverterViewModel(
+        exchangeRateProvider: ExchangeRateProvider(service: PreviewExchangeRateService())
+    ))
         .modelContainer(preview.container)
         .environment(preview.settingsStore)
 }
