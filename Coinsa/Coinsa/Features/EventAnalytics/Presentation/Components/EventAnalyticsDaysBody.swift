@@ -12,8 +12,6 @@ struct EventAnalyticsDaysBody: View {
     // MARK: - Константы
 
     private enum Layout {
-        /// Вертикальные отступы секции дневного графика.
-        static let chartVerticalInset: CGFloat = 12
         /// Интервал между датой и количеством трат в дневной строке.
         static let dayDetailsSpacing: CGFloat = 6
     }
@@ -55,7 +53,7 @@ struct EventAnalyticsDaysBody: View {
         Section {
             EventDailyExpenseChart(viewModel: viewModel)
         }
-        .padding(.vertical, Layout.chartVerticalInset)
+        .padding(.vertical, ViewLayout.AnalyticsExpenseChart.sectionVerticalInset)
         .listRowInsets(EdgeInsets())
         .listRowBackground(Color.clear)
     }

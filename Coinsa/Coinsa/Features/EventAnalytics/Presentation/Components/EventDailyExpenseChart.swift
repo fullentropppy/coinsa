@@ -15,22 +15,8 @@ struct EventDailyExpenseChart: View {
     private enum Layout {
         /// Интервал между дневным графиком и кнопками прокрутки.
         static let controlsSpacing: CGFloat = 14
-        /// Высота области дневного графика.
-        static let chartHeight: CGFloat = 200
-        /// Непрозрачность верхней границы заливки под графиком.
-        static let areaTopOpacity: Double = 0.30
-        /// Непрозрачность нижней границы заливки под графиком.
-        static let areaBottomOpacity: Double = 0.01
-        /// Толщина линии дневных расходов.
-        static let expenseLineWidth: CGFloat = 4
-        /// Толщина опорных линий максимума и среднего уровня.
-        static let referenceLineWidth: CGFloat = 1
-        /// Длины штриха и промежутка опорных линий.
-        static let referenceLineDash: [CGFloat] = [4, 4]
-        /// Непрозрачность опорных линий дневного графика.
-        static let referenceLineOpacity: Double = 0.8
-        /// Запас сверху и снизу области графика для линии расходов.
-        static let plotVerticalInset: CGFloat = 2
+        /// Толщина нижней линии пропущенных дней.
+        static let gapExpenseLineWidth: CGFloat = 4
         /// Внутренний отступ ряда кнопок прокрутки графика.
         static let controlsInset: CGFloat = 2
         /// Толщина вертикальной линии пропущенных дней.
@@ -76,7 +62,7 @@ struct EventDailyExpenseChart: View {
         let timeline = viewModel.summaryChartTimeline
 
         VStack(spacing: Layout.controlsSpacing) {
-            dailyExpenseChart(timeline: timeline).frame(height: Layout.chartHeight)
+            dailyExpenseChart(timeline: timeline).frame(height: ViewLayout.AnalyticsExpenseChart.height)
             chartControls(timeline: timeline)
         }
     }
@@ -85,34 +71,16 @@ struct EventDailyExpenseChart: View {
 
     private func dailyExpenseChart(timeline: EventExpenseChartTimeline) -> some View {
         Chart {
-            ForEach(timeline.points) { point in
-                AreaMark(
-                    x: .value("", point.position),
-                    yStart: .value("", 0),
-                    yEnd: .value("", point.day.homeAmount),
-                    series: .value("", point.segment)
-                )
-                .interpolationMethod(.monotone)
-                .foregroundStyle(
-                    LinearGradient(
-                        colors: [
-                            Color.accentColor.opacity(Layout.areaTopOpacity),
-                            Color.accentColor.opacity(Layout.areaBottomOpacity)
-                        ],
-                        startPoint: .top,
-                        endPoint: .bottom
+            EventExpenseChartContent(
+                points: timeline.points.map {
+                    EventExpenseChartContent.Point(
+                        position: $0.position,
+                        homeAmount: $0.day.homeAmount,
+                        segment: $0.segment
                     )
-                )
-
-                LineMark(
-                    x: .value("", point.position),
-                    y: .value("", point.day.homeAmount),
-                    series: .value("", point.segment)
-                )
-                .interpolationMethod(.monotone)
-                .lineStyle(.init(lineWidth: Layout.expenseLineWidth, lineCap: .round, lineJoin: .round))
-                .foregroundStyle(Color.accentColor.gradient)
-            }
+                },
+                referenceHomeAmount: viewModel.maxDailyBaseExpenseAmount
+            )
 
             ForEach(timeline.gaps) { gap in
                 RuleMark(x: .value("", gap.position))
@@ -135,20 +103,8 @@ struct EventDailyExpenseChart: View {
                     xEnd: .value("", gap.position + 1),
                     y: .value("", 0)
                 )
-                .lineStyle(.init(lineWidth: Layout.expenseLineWidth, lineCap: .round, dash: Layout.gapExpenseLineDash))
+                .lineStyle(.init(lineWidth: Layout.gapExpenseLineWidth, lineCap: .round, dash: Layout.gapExpenseLineDash))
                 .foregroundStyle(Color.accentColor.gradient)
-            }
-
-            if viewModel.maxDailyBaseExpenseAmount > 0 {
-                RuleMark(y: .value("", viewModel.maxDailyBaseExpenseAmount))
-                    .lineStyle(.init(lineWidth: Layout.referenceLineWidth, dash: Layout.referenceLineDash))
-                    .foregroundStyle(.secondary.opacity(Layout.referenceLineOpacity))
-            }
-
-            if viewModel.halfDailyBaseExpenseAmount > 0 {
-                RuleMark(y: .value("", viewModel.halfDailyBaseExpenseAmount))
-                    .lineStyle(.init(lineWidth: Layout.referenceLineWidth, dash: Layout.referenceLineDash))
-                    .foregroundStyle(.secondary.opacity(Layout.referenceLineOpacity))
             }
         }
         .chartXScale(
@@ -157,7 +113,10 @@ struct EventDailyExpenseChart: View {
         )
         .chartYScale(
             domain: 0...viewModel.summaryChartUpperHomeAmount,
-            range: .plotDimension(startPadding: Layout.plotVerticalInset, endPadding: Layout.plotVerticalInset)
+            range: .plotDimension(
+                startPadding: ViewLayout.AnalyticsExpenseChart.plotVerticalInset,
+                endPadding: ViewLayout.AnalyticsExpenseChart.plotVerticalInset
+            )
         )
         .chartXAxis {
             AxisMarks(values: timeline.points.dropLast().map(\.position)) { value in

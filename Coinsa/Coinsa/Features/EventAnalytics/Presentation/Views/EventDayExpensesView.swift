@@ -5,9 +5,10 @@
 //  Created by Daniil Gritsenko on 09.11.2026.
 //
 
+import SwiftData
 import SwiftUI
 
-/// Экран списка всех трат за выбранный день с группировкой по локациям.
+/// Почасовая аналитика и список трат выбранного дня с группировкой по локациям.
 struct EventDayExpensesView: View {
     // MARK: - Хранимые свойства
 
@@ -15,7 +16,7 @@ struct EventDayExpensesView: View {
     private let data: EventCategoryAnalyticsData
     private let screenContextSubtitle: String
 
-    // MARK: - Хранимые свойства
+    // MARK: - Вычисляемые свойства
     
     private var navigationTitle: String {
         DateDisplayFormatter.format(
@@ -28,7 +29,11 @@ struct EventDayExpensesView: View {
     
     // MARK: - Инициализация
 
-    /// Создает список трат за календарный день с контекстом исходного события.
+    /// Создает аналитику трат за календарный день с контекстом исходного события.
+    /// - Parameters:
+    ///   - date: Выбранный календарный день.
+    ///   - data: Траты и валюты исходного события.
+    ///   - screenContextSubtitle: Подзаголовок исходной аналитики.
     init(
         date: PlainDate,
         data: EventCategoryAnalyticsData,
@@ -42,36 +47,72 @@ struct EventDayExpensesView: View {
     // MARK: - Тело View
 
     var body: some View {
-        LocationGroupedExpensesBody(
-            navigationTitle: navigationTitle,
-            navigationSubtitle: screenContextSubtitle,
-            viewModel: LocationGroupedExpensesViewModel(
-                sourceExpenses: data.expenses,
-                filter: .day(date)
-            ),
-            showsLocationNames: data.locations != nil
+        let day = EventDayExpenseAnalyticsData(
+            date: date,
+            expenses: data.expenses,
+            includesLocationAmount: data.locationCurrency != nil
         )
-        .equatable()
+
+        List {
+            Section {
+                EventAnalyticsDaysHeader(
+                    homeAmount: day.maxHourlyHomeAmount,
+                    homeCurrency: data.homeCurrency,
+                    locationAmount: day.maxHourlyLocationAmount,
+                    locationCurrency: data.locationCurrency
+                )
+            }
+
+            Section {
+                EventHourlyExpenseChart(data: day)
+            }
+            .padding(.vertical, ViewLayout.AnalyticsExpenseChart.sectionVerticalInset)
+            .listRowInsets(EdgeInsets())
+            .listRowBackground(Color.clear)
+
+            LocationGroupedExpensesSections(
+                viewModel: LocationGroupedExpensesViewModel(sourceExpenses: day.expenses, filter: .day(date)),
+                showsLocationNames: data.locations != nil
+            )
+        }
+        .navigationTitle(navigationTitle)
+        .navigationSubtitle(screenContextSubtitle)
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
 // MARK: - Превью
 
-#Preview {
-    let trip = PreviewGenerator.makeExampleTrip(includeLocations: true, includeExpenses: true)
-    let viewModel = TripDetailViewModel(trip: trip)
-    let analyticsViewModel = EventAnalyticsViewModel(data: viewModel.eventAnalyticsData)
-    let day = analyticsViewModel.summaryExpenseChartPoints
-        .last { $0.homeAmount > 0 }?
-        .date
+#Preview("For Trip") {
+    @Previewable @State var preview = ExpenseMapPreviewData(forTrip: true)
+    let day = preview.expenses.first.map { PlainDate($0.civilDateTime.storedDate) }
 
     NavigationStack {
         if let day {
             EventDayExpensesView(
                 date: day,
-                data: viewModel.eventAnalyticsData,
-                screenContextSubtitle: trip.screenContextSubtitle
+                data: preview.analyticsData,
+                screenContextSubtitle: preview.screenContextSubtitle
             )
         }
     }
+    .modelContainer(preview.container)
+    .environment(preview.settingsStore)
+}
+
+#Preview("For Location") {
+    @Previewable @State var preview = ExpenseMapPreviewData()
+    let day = preview.expenses.first.map { PlainDate($0.civilDateTime.storedDate) }
+
+    NavigationStack {
+        if let day {
+            EventDayExpensesView(
+                date: day,
+                data: preview.analyticsData,
+                screenContextSubtitle: preview.screenContextSubtitle
+            )
+        }
+    }
+    .modelContainer(preview.container)
+    .environment(preview.settingsStore)
 }

@@ -25,6 +25,15 @@ enum ViewLayout {
         static let cardSpacing: CGFloat = 8
     }
 
+    enum AnalyticsExpenseChart {
+        /// Высота дневного и почасового графиков трат.
+        static let height: CGFloat = 200
+        /// Запас сверху и снизу области графика для линии трат.
+        static let plotVerticalInset: CGFloat = 2
+        /// Вертикальные отступы секции графика трат.
+        static let sectionVerticalInset: CGFloat = 12
+    }
+
     enum AnalyticsDonutChart {
         /// Радиус внутреннего отверстия кольцевых диаграмм аналитики.
         static let innerRadius: CGFloat = 68

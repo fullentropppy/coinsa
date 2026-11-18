@@ -11,14 +11,36 @@ import SwiftUI
 struct EventAnalyticsDaysHeader: View {
     // MARK: - Хранимые свойства
 
-    private let viewModel: EventAnalyticsViewModel
+    private let homeAmount: Double
+    private let homeCurrency: Currency
+    private let locationAmount: Double?
+    private let locationCurrency: Currency?
     
     // MARK: - Инициализация
 
     /// Создает шапку вкладки дневной аналитики.
     /// - Parameter viewModel: ViewModel аналитики события.
     init(viewModel: EventAnalyticsViewModel) {
-        self.viewModel = viewModel
+        let peak = viewModel.summaryChartPeakPoint
+        self.init(
+            homeAmount: peak?.homeAmount ?? 0,
+            homeCurrency: viewModel.homeCurrency,
+            locationAmount: peak?.locationAmount,
+            locationCurrency: viewModel.locationCurrency
+        )
+    }
+
+    /// Создает шапку с опорной суммой графика и ее половиной.
+    /// - Parameters:
+    ///   - homeAmount: Максимальная сумма дня или часа в домашней валюте.
+    ///   - homeCurrency: Домашняя валюта события.
+    ///   - locationAmount: Соответствующая сумма в валюте локации.
+    ///   - locationCurrency: Дополнительная валюта при аналитике локации.
+    init(homeAmount: Double, homeCurrency: Currency, locationAmount: Double?, locationCurrency: Currency?) {
+        self.homeAmount = homeAmount
+        self.homeCurrency = homeCurrency
+        self.locationAmount = locationAmount
+        self.locationCurrency = locationCurrency
     }
     
     // MARK: - Тело View
@@ -28,17 +50,17 @@ struct EventAnalyticsDaysHeader: View {
             HStack(spacing: ViewLayout.Summary.cardSpacing) {
                 EventAmountCardView(
                     title: .amountExpensesDailyMax,
-                    homeAmount: viewModel.maxDailyBaseExpenseAmount,
-                    homeCurrency: viewModel.homeCurrency,
-                    locationAmount: viewModel.maxDailyLocationExpenseAmount,
-                    locationCurrency: viewModel.locationCurrency
+                    homeAmount: homeAmount,
+                    homeCurrency: homeCurrency,
+                    locationAmount: locationAmount,
+                    locationCurrency: locationCurrency
                 )
                 EventAmountCardView(
                     title: .amountExpensesDailyAverage,
-                    homeAmount: viewModel.halfDailyBaseExpenseAmount,
-                    homeCurrency: viewModel.homeCurrency,
-                    locationAmount: viewModel.halfDailyLocationExpenseAmount,
-                    locationCurrency: viewModel.locationCurrency
+                    homeAmount: homeAmount / 2,
+                    homeCurrency: homeCurrency,
+                    locationAmount: locationAmount.map { $0 / 2 },
+                    locationCurrency: locationCurrency
                 )
             }
         }

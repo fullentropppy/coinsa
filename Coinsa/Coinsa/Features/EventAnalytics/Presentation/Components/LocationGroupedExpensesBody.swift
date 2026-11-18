@@ -28,9 +28,21 @@ struct LocationGroupedExpensesBody: View, Equatable {
     // MARK: - Основной контент
 
     private var list: some View {
+        List {
+            LocationGroupedExpensesSections(viewModel: viewModel, showsLocationNames: showsLocationNames)
+        }
+    }
+}
+
+/// Секции сгруппированных трат для списка с аналитической шапкой или без нее.
+struct LocationGroupedExpensesSections: View {
+    let viewModel: LocationGroupedExpensesViewModel
+    let showsLocationNames: Bool
+
+    var body: some View {
         let groups = viewModel.expenseGroups
 
-        return List {
+        Group {
             if groups.isEmpty {
                 EmptyStateView(icon: Expense.primaryIcon, title: .analyticsEmptyStateTitle)
                     .listRowBackground(Color.clear)
