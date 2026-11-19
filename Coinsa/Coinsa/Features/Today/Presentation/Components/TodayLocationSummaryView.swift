@@ -21,6 +21,8 @@ struct TodayLocationSummaryView: View {
     @Binding var selectedLocationID: UUID
     let summary: EventSummaryData
     let rateLocationToHome: Double
+    let day: PlainDate
+    let hasDayExpenses: Bool
 
     // MARK: - Вычисляемые свойства
 
@@ -37,18 +39,24 @@ struct TodayLocationSummaryView: View {
     ///   - selectedLocationID: Привязка выбранной локации; изменение переключателя передает новый идентификатор экрану.
     ///   - summary: Подготовленные суммы бюджета, расходов и остатка выбранной локации.
     ///   - rateLocationToHome: Справочный курс в единицах домашней валюты за единицу валюты локации.
+    ///   - day: Календарный день экрана «Сегодня» для перехода к дневной аналитике.
+    ///   - hasDayExpenses: Есть ли у выбранной локации траты за указанный день.
     init(
         location: Location,
         locations: [Location],
         selectedLocationID: Binding<UUID>,
         summary: EventSummaryData,
-        rateLocationToHome: Double
+        rateLocationToHome: Double,
+        day: PlainDate,
+        hasDayExpenses: Bool
     ) {
         self.location = location
         self.locations = locations
         _selectedLocationID = selectedLocationID
         self.summary = summary
         self.rateLocationToHome = rateLocationToHome
+        self.day = day
+        self.hasDayExpenses = hasDayExpenses
     }
 
     // MARK: - Тело View
@@ -71,13 +79,23 @@ struct TodayLocationSummaryView: View {
                     .pickerStyle(.segmented)
                 }
 
+                contextContent(location: location)
+                
                 EventSummaryView(
                     data: summary,
                     showsHeader: false,
                     showsBudgetIfZero: location.hasBudget
                 )
             }
-            contextContent(location: location)
+            if hasDayExpenses {
+                AnalyticsNavigationLink { [location, day] in
+                    EventDayExpensesView(
+                        date: day,
+                        data: LocationDetailViewModel(location: location).eventAnalyticsData,
+                        screenContextSubtitle: location.screenContextSubtitle
+                    )
+                }
+            }
         }
         .listRowBackground(
             RoundedRectangle(cornerRadius: 0)

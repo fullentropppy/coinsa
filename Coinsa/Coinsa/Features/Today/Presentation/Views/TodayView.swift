@@ -186,7 +186,9 @@ private struct TodayContentView: View {
                 locations: currentLocations,
                 selectedLocationID: selectedLocationBinding(location: location),
                 summary: summary.data,
-                rateLocationToHome: viewModel.rateLocationToHome(for: location, key: rateKey)
+                rateLocationToHome: viewModel.rateLocationToHome(for: location, key: rateKey),
+                day: day,
+                hasDayExpenses: !summary.expenses.isEmpty
             )
             TodayQuickExpensesView(subcategories: summary.quickExpenseSubcategories) { category, subcategory in
                 selectedQuickExpense = QuickExpenseSelection(category: category, subcategory: subcategory)
