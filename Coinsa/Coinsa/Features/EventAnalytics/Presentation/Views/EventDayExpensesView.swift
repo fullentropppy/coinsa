@@ -8,7 +8,7 @@
 import SwiftData
 import SwiftUI
 
-/// Почасовая аналитика и список трат выбранного дня с группировкой по локациям.
+/// Накопительный график и список трат выбранного дня с группировкой по локациям.
 struct EventDayExpensesView: View {
     // MARK: - Хранимые свойства
 
@@ -56,10 +56,12 @@ struct EventDayExpensesView: View {
         List {
             Section {
                 EventAnalyticsDaysHeader(
-                    homeAmount: day.maxHourlyHomeAmount,
+                    homeAmount: day.homeAmount,
                     homeCurrency: data.homeCurrency,
-                    locationAmount: day.maxHourlyLocationAmount,
-                    locationCurrency: data.locationCurrency
+                    locationAmount: day.locationAmount,
+                    locationCurrency: data.locationCurrency,
+                    amountTitle: .analyticsAmountExpensesTotal,
+                    halfAmountTitle: .analyticsAmountExpensesHalf
                 )
             }
 

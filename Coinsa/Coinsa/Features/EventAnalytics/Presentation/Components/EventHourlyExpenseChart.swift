@@ -8,17 +8,23 @@
 import Charts
 import SwiftUI
 
-/// Непрокручиваемый график сумм трат каждого часа выбранного дня.
+/// Непрокручиваемый накопительный график трат выбранного дня.
 struct EventHourlyExpenseChart: View {
     let data: EventDayExpenseAnalyticsData
 
     var body: some View {
         Chart {
-            EventExpenseChartContent(points: chartPoints, referenceHomeAmount: data.maxHourlyHomeAmount)
+            EventExpenseChartContent(
+                points: data.cumulativePoints.map {
+                    EventExpenseChartContent.Point(position: $0.hour, homeAmount: $0.homeAmount)
+                },
+                referenceHomeAmount: data.homeAmount,
+                interpolationMethod: .stepEnd
+            )
         }
         .chartXScale(domain: 0...24, range: .plotDimension(startPadding: 0, endPadding: 0))
         .chartYScale(
-            domain: 0...max(data.maxHourlyHomeAmount, 1),
+            domain: 0...max(data.homeAmount, 1),
             range: .plotDimension(
                 startPadding: ViewLayout.AnalyticsExpenseChart.plotVerticalInset,
                 endPadding: ViewLayout.AnalyticsExpenseChart.plotVerticalInset
@@ -36,21 +42,6 @@ struct EventHourlyExpenseChart: View {
         }
         .chartYAxis(.hidden)
         .frame(height: ViewLayout.AnalyticsExpenseChart.height)
-    }
-
-    private var chartPoints: [EventExpenseChartContent.Point] {
-        let points = data.hourlyHomeAmounts.enumerated().map { hour, amount in
-            EventExpenseChartContent.Point(position: hour, homeAmount: amount)
-        } + [EventExpenseChartContent.Point(position: 24, homeAmount: data.hourlyHomeAmounts.last ?? 0)]
-
-        guard let firstActiveHour = data.hourlyHomeAmounts.firstIndex(where: { $0 != 0 }),
-              let lastActiveHour = data.hourlyHomeAmounts.lastIndex(where: { $0 != 0 }) else {
-            return points
-        }
-
-        return points.filter {
-            $0.homeAmount != 0 || $0.position < firstActiveHour || $0.position > lastActiveHour
-        }
     }
 }
 

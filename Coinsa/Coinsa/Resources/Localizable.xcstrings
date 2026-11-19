@@ -187,23 +187,6 @@
         }
       }
     },
-    "amount.expenses.dailyAverage" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Daily average"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Среднее"
-          }
-        }
-      }
-    },
     "amount.expenses.dailyMax" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -255,24 +238,58 @@
         }
       }
     },
-    "analytics.categories" : {
+    "analytics.amount.expenses.daily" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Categories"
+            "value" : "Expenses per day"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Категории"
+            "value" : "Траты в день"
           }
         }
       }
     },
-    "analytics.category.amount.daily" : {
+    "analytics.amount.expenses.half" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Half"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Половина"
+          }
+        }
+      }
+    },
+    "analytics.amount.expenses.total" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Total"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Всего"
+          }
+        }
+      }
+    },
+    "analytics.amount.mode.perDay" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -289,7 +306,7 @@
         }
       }
     },
-    "analytics.category.amount.total" : {
+    "analytics.amount.mode.total" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -302,6 +319,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Всего"
+          }
+        }
+      }
+    },
+    "analytics.categories" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Categories"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Категории"
           }
         }
       }
@@ -408,40 +442,6 @@
         }
       }
     },
-    "analytics.locations.amount.daily" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Per day"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "В день"
-          }
-        }
-      }
-    },
-    "analytics.locations.amount.total" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Total"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Всего"
-          }
-        }
-      }
-    },
     "analytics.summary" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -533,13 +533,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Total"
+            "value" : "Total expenses"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Всего"
+            "value" : "Всего трат"
           }
         }
       }

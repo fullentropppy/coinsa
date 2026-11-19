@@ -15,6 +15,8 @@ struct EventAnalyticsDaysHeader: View {
     private let homeCurrency: Currency
     private let locationAmount: Double?
     private let locationCurrency: Currency?
+    private let amountTitle: LocalizedStringResource
+    private let halfAmountTitle: LocalizedStringResource
     
     // MARK: - Инициализация
 
@@ -32,15 +34,26 @@ struct EventAnalyticsDaysHeader: View {
 
     /// Создает шапку с опорной суммой графика и ее половиной.
     /// - Parameters:
-    ///   - homeAmount: Максимальная сумма дня или часа в домашней валюте.
+    ///   - homeAmount: Опорная сумма графика в домашней валюте.
     ///   - homeCurrency: Домашняя валюта события.
     ///   - locationAmount: Соответствующая сумма в валюте локации.
     ///   - locationCurrency: Дополнительная валюта при аналитике локации.
-    init(homeAmount: Double, homeCurrency: Currency, locationAmount: Double?, locationCurrency: Currency?) {
+    ///   - amountTitle: Заголовок карточки опорной суммы.
+    ///   - halfAmountTitle: Заголовок карточки половины опорной суммы.
+    init(
+        homeAmount: Double,
+        homeCurrency: Currency,
+        locationAmount: Double?,
+        locationCurrency: Currency?,
+        amountTitle: LocalizedStringResource = .amountExpensesDailyMax,
+        halfAmountTitle: LocalizedStringResource = .analyticsAmountExpensesHalf
+    ) {
         self.homeAmount = homeAmount
         self.homeCurrency = homeCurrency
         self.locationAmount = locationAmount
         self.locationCurrency = locationCurrency
+        self.amountTitle = amountTitle
+        self.halfAmountTitle = halfAmountTitle
     }
     
     // MARK: - Тело View
@@ -49,14 +62,14 @@ struct EventAnalyticsDaysHeader: View {
         VStack(spacing: ViewLayout.Summary.sectionSpacing) {
             HStack(spacing: ViewLayout.Summary.cardSpacing) {
                 EventAmountCardView(
-                    title: .amountExpensesDailyMax,
+                    title: amountTitle,
                     homeAmount: homeAmount,
                     homeCurrency: homeCurrency,
                     locationAmount: locationAmount,
                     locationCurrency: locationCurrency
                 )
                 EventAmountCardView(
-                    title: .amountExpensesDailyAverage,
+                    title: halfAmountTitle,
                     homeAmount: homeAmount / 2,
                     homeCurrency: homeCurrency,
                     locationAmount: locationAmount.map { $0 / 2 },

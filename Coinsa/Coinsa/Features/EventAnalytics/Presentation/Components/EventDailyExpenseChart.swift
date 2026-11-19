@@ -74,7 +74,7 @@ struct EventDailyExpenseChart: View {
             EventExpenseChartContent(
                 points: timeline.points.map {
                     EventExpenseChartContent.Point(
-                        position: $0.position,
+                        position: Double($0.position),
                         homeAmount: $0.day.homeAmount,
                         segment: $0.segment
                     )

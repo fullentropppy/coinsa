@@ -11,8 +11,8 @@ extension CategoryAmountMode: LocalizedResourceProviding {
     /// Локализованное название режима отображения трат по категориям.
     var localizedResource: LocalizedStringResource {
         switch self {
-        case .total: .analyticsCategoryAmountTotal
-        case .daily: .analyticsCategoryAmountDaily
+        case .total: .analyticsAmountModeTotal
+        case .daily: .analyticsAmountModePerDay
         }
     }
 }

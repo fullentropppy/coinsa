@@ -76,8 +76,8 @@ struct EventAnalyticsLocationsBody: View {
         Section {
             if slices.count > 1 || slices.contains(where: { $0.location.totalDays > 1 }) {
                 Picker(selection: $showsDailyAmounts) {
-                    Text(.analyticsLocationsAmountTotal).tag(false)
-                    Text(.analyticsLocationsAmountDaily).tag(true)
+                    Text(.analyticsAmountModeTotal).tag(false)
+                    Text(.analyticsAmountModePerDay).tag(true)
                 } label: {
                     EmptyView()
                 }

@@ -7,14 +7,17 @@
 
 import Foundation
 
-/// Суммы трат выбранного гражданского дня и его 24 часов.
+/// Суммы трат выбранного гражданского дня и накопительные значения в течение дня.
 struct EventDayExpenseAnalyticsData {
+    struct CumulativePoint {
+        let hour: Double
+        let homeAmount: Double
+    }
+
     let expenses: [Expense]
-    let hourlyHomeAmounts: [Double]
+    let cumulativePoints: [CumulativePoint]
     let homeAmount: Double
     let locationAmount: Double?
-    let maxHourlyHomeAmount: Double
-    let maxHourlyLocationAmount: Double?
 
     /// Подготавливает суммы без округления и пересчета гражданского времени в пояс устройства.
     /// - Parameters:
@@ -22,35 +25,31 @@ struct EventDayExpenseAnalyticsData {
     ///   - expenses: Траты исходного события.
     ///   - includesLocationAmount: Рассчитывать дополнительную сумму в валюте локации.
     init(date: PlainDate, expenses: [Expense], includesLocationAmount: Bool) {
-        var dayExpenses: [Expense] = []
-        var hourlyHomeAmounts = Array(repeating: 0.0, count: 24)
-        var hourlyLocationAmounts = Array(repeating: 0.0, count: 24)
+        let dayExpenses = expenses.filter {
+            PlainDate($0.civilDateTime.storedDate, using: .utc) == date
+        }
+        var cumulativePoints = [CumulativePoint(hour: 0, homeAmount: 0)]
         var homeAmount = 0.0
         var locationAmount = 0.0
 
-        for expense in expenses {
+        for expense in dayExpenses.sorted(by: { $0.civilDateTime < $1.civilDateTime }) {
             let storedDate = expense.civilDateTime.storedDate
-            guard PlainDate(storedDate, using: .utc) == date else { continue }
-
-            dayExpenses.append(expense)
-            let amount = expense.homeAmount
-            let hour = storedDate.hour(using: .utc)
-            hourlyHomeAmounts[hour] += amount
-            homeAmount += amount
+            let hour = storedDate.timeIntervalSince(date.storedDate) / 3600
+            homeAmount += expense.homeAmount
             if includesLocationAmount {
-                let amount = expense.amount(in: .location)
-                hourlyLocationAmounts[hour] += amount
-                locationAmount += amount
+                locationAmount += expense.amount(in: .location)
             }
-        }
 
-        let peak = hourlyHomeAmounts.enumerated().max { $0.element < $1.element }
+            if cumulativePoints.last?.hour == hour {
+                cumulativePoints.removeLast()
+            }
+            cumulativePoints.append(CumulativePoint(hour: hour, homeAmount: homeAmount))
+        }
+        cumulativePoints.append(CumulativePoint(hour: 24, homeAmount: homeAmount))
 
         self.expenses = dayExpenses
-        self.hourlyHomeAmounts = hourlyHomeAmounts
+        self.cumulativePoints = cumulativePoints
         self.homeAmount = homeAmount
         self.locationAmount = includesLocationAmount ? locationAmount : nil
-        self.maxHourlyHomeAmount = peak?.element ?? 0
-        self.maxHourlyLocationAmount = includesLocationAmount ? peak.map { hourlyLocationAmounts[$0.offset] } : nil
     }
 }

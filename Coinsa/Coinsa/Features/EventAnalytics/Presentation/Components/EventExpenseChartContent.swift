@@ -11,11 +11,11 @@ import SwiftUI
 /// Общие линия, заливка и опорные уровни дневного и почасового графиков трат.
 struct EventExpenseChartContent: ChartContent {
     struct Point: Identifiable {
-        let position: Int
+        let position: Double
         let homeAmount: Double
         var segment: Int = 0
 
-        var id: Int { position }
+        var id: Double { position }
     }
 
     private enum Layout {
@@ -35,6 +35,7 @@ struct EventExpenseChartContent: ChartContent {
 
     let points: [Point]
     let referenceHomeAmount: Double
+    var interpolationMethod: InterpolationMethod = .monotone
 
     var body: some ChartContent {
         ForEach(points) { point in
@@ -44,7 +45,7 @@ struct EventExpenseChartContent: ChartContent {
                 yEnd: .value("", point.homeAmount),
                 series: .value("", point.segment)
             )
-            .interpolationMethod(.monotone)
+            .interpolationMethod(interpolationMethod)
             .foregroundStyle(
                 LinearGradient(
                     colors: [
@@ -61,7 +62,7 @@ struct EventExpenseChartContent: ChartContent {
                 y: .value("", point.homeAmount),
                 series: .value("", point.segment)
             )
-            .interpolationMethod(.monotone)
+            .interpolationMethod(interpolationMethod)
             .lineStyle(.init(lineWidth: Layout.expenseLineWidth, lineCap: .round, lineJoin: .round))
             .foregroundStyle(Color.accentColor.gradient)
         }
