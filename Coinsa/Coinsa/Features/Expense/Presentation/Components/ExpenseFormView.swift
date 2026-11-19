@@ -10,6 +10,13 @@ import SwiftData
 
 /// Форма траты с секциями и привязками к общему черновику и фокусу редактора.
 struct ExpenseFormView: View {
+    // MARK: - Константы
+
+    private enum Layout {
+        /// Вертикальный отступ разделителя суммы.
+        static let verticalAmountDeviderPadding: CGFloat = 8
+    }
+    
     // MARK: - Окружение
 
     @Environment(AppSettingsStore.self) private var settingsStore
@@ -27,6 +34,10 @@ struct ExpenseFormView: View {
     private let onShowMap: () -> Void
     private let onDelete: () -> Void
 
+    private var inversedCurrencyPairSide: CurrencyPairSide {
+        currencyPairSide == .base ? .quote : .base
+    }
+    
     // MARK: - Инициализация
 
     /// Создает секции, используя черновик и управление фокусом родительской формы.
@@ -91,10 +102,20 @@ struct ExpenseFormView: View {
                     placeholder: viewModel.amountInputPlaceholder
                 )
                 .id(currencyPairSide)
+                
+                Divider().frame(maxWidth: .infinity)
+                    .padding(.vertical, Layout.verticalAmountDeviderPadding)
+                    
                 HStack {
                     CurrencyCodeText.standard(viewModel.currency(for: currencyPairSide))
-                    if !viewModel.isExpensehomeCurrency {
+                    
+                    if !viewModel.isExpenseHomeCurrency {
                         InputCurrencySwitchButton(action: onSwitchInputCurrency)
+                        
+                        AmountText.standard(
+                            viewModel.amount(for: inversedCurrencyPairSide),
+                            currency: viewModel.currency(for: inversedCurrencyPairSide)
+                        )
                     }
                 }
             }

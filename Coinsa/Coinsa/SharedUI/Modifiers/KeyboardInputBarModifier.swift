@@ -16,6 +16,8 @@ struct KeyboardInputBarModifier: ViewModifier {
         static let dividerHeight: CGFloat = 20
         /// Отступ кнопки со стороны центрального разделителя.
         static let innerButtonInset: CGFloat = 10
+        /// Отступ иконки кнопки очистки снизу.
+        static let bootomClearButtonPadding: CGFloat = 3
     }
 
     // MARK: - Окружение
@@ -39,7 +41,7 @@ struct KeyboardInputBarModifier: ViewModifier {
                 alignment: settingsStore.isFloatingButtonOnLeft ? .leading : .trailing
             ) {
                 if isPresented {
-                    HStack(alignment: .firstTextBaseline, spacing: 0) {
+                    HStack(alignment: .center, spacing: 0) {
                         if settingsStore.isFloatingButtonOnLeft {
                             dismissButton
                             Divider().frame(height: Layout.dividerHeight)
@@ -66,6 +68,7 @@ struct KeyboardInputBarModifier: ViewModifier {
         } label: {
             Image(systemName: "xmark.rectangle")
         }
+        .padding(.bottom, Layout.bootomClearButtonPadding)
         .padding(.vertical, ViewLayout.FloatingControls.buttonInset)
         .padding(
             .leading,

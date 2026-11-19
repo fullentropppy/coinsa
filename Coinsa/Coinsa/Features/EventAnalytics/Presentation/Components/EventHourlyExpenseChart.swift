@@ -13,12 +13,8 @@ struct EventHourlyExpenseChart: View {
     let data: EventDayExpenseAnalyticsData
 
     var body: some View {
-        let points = data.hourlyHomeAmounts.enumerated().map { hour, amount in
-            EventExpenseChartContent.Point(position: hour, homeAmount: amount)
-        } + [EventExpenseChartContent.Point(position: 24, homeAmount: data.hourlyHomeAmounts.last ?? 0)]
-
         Chart {
-            EventExpenseChartContent(points: points, referenceHomeAmount: data.maxHourlyHomeAmount)
+            EventExpenseChartContent(points: chartPoints, referenceHomeAmount: data.maxHourlyHomeAmount)
         }
         .chartXScale(domain: 0...24, range: .plotDimension(startPadding: 0, endPadding: 0))
         .chartYScale(
@@ -40,6 +36,21 @@ struct EventHourlyExpenseChart: View {
         }
         .chartYAxis(.hidden)
         .frame(height: ViewLayout.AnalyticsExpenseChart.height)
+    }
+
+    private var chartPoints: [EventExpenseChartContent.Point] {
+        let points = data.hourlyHomeAmounts.enumerated().map { hour, amount in
+            EventExpenseChartContent.Point(position: hour, homeAmount: amount)
+        } + [EventExpenseChartContent.Point(position: 24, homeAmount: data.hourlyHomeAmounts.last ?? 0)]
+
+        guard let firstActiveHour = data.hourlyHomeAmounts.firstIndex(where: { $0 != 0 }),
+              let lastActiveHour = data.hourlyHomeAmounts.lastIndex(where: { $0 != 0 }) else {
+            return points
+        }
+
+        return points.filter {
+            $0.homeAmount != 0 || $0.position < firstActiveHour || $0.position > lastActiveHour
+        }
     }
 }
 

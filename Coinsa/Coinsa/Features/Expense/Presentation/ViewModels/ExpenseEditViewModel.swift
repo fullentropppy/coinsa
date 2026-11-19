@@ -46,7 +46,7 @@ final class ExpenseEditViewModel {
         expense != nil
     }
     
-    var isExpensehomeCurrency: Bool {
+    var isExpenseHomeCurrency: Bool {
         expenseCurrency == homeCurrency
     }
     
@@ -54,16 +54,16 @@ final class ExpenseEditViewModel {
         expenseCurrency == locationCurrency
     }
     
-    var isLocationhomeCurrency: Bool {
+    var isLocationHomeCurrency: Bool {
         homeCurrency == locationCurrency
     }
     
     var showsRateExpenseToBase: Bool {
-        !isExpensehomeCurrency
+        !isExpenseHomeCurrency
     }
     
     var showsRateExpenseToLocation: Bool {
-        !isExpenseLocationCurrency && !isLocationhomeCurrency
+        !isExpenseLocationCurrency && !isLocationHomeCurrency
     }
     
     var navigationTitle: LocalizedStringResource {
@@ -172,7 +172,7 @@ final class ExpenseEditViewModel {
             return nil
         }
         
-        if isExpenseLocationCurrency || isLocationhomeCurrency {
+        if isExpenseLocationCurrency || isLocationHomeCurrency {
             return .expenseAdjustedExchangeRateShort(
                 expenseCurrencyCode: expenseCurrency.code,
                 effectiveRateExpenseToHome: calculationContext
@@ -201,7 +201,7 @@ final class ExpenseEditViewModel {
     var exchangeAdjustment: Double
     
     var useExchangeAdjustment: Bool {
-        !isExpensehomeCurrency && paymentMethod == .card
+        !isExpenseHomeCurrency && paymentMethod == .card
     }
     
     // MARK: - Инициализация
@@ -511,7 +511,7 @@ final class ExpenseEditViewModel {
     // MARK: - Операции с хранилищем
     
     private var storedRateExpenseToHome: Double {
-        isExpensehomeCurrency ? 1 : rateExpenseToHome
+        isExpenseHomeCurrency ? 1 : rateExpenseToHome
     }
     
     private var storedRateExpenseToLocation: Double {
