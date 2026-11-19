@@ -73,7 +73,6 @@ struct EventAmountBalanceView: View {
             Spacer()
             balanceText(usesCompactFormatting: usesCompactFormatting)
                 .fixedSize(horizontal: !usesCompactFormatting, vertical: false)
-                .accessibilityLabel(balanceText(usesCompactFormatting: false))
         }
     }
 

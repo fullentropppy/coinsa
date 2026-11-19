@@ -65,22 +65,12 @@ struct AmountText: View {
             }
             .lineLimit(1)
             .minimumScaleFactor(ViewLayout.Label.minimumAmountScaleFactor)
-            .accessibilityElement(children: .ignore)
-            .accessibilityLabel(Text(verbatim: accessibilityAmount))
         } else {
             amountContent(amount.numberFormat(fractionLength: fractionLength))
         }
     }
 
     // MARK: - Компоненты
-
-    private var accessibilityAmount: String {
-        let fullAmount = amount.numberFormat(fractionLength: fractionLength, locale: locale)
-        if let currency {
-            return "\(fullAmount) \(currency.code)"
-        }
-        return fullAmount
-    }
 
     private func amountContent(_ formattedAmount: String) -> some View {
         HStack(alignment: .firstTextBaseline, spacing: ViewLayout.Label.iconSpacing) {

@@ -2641,13 +2641,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Enter the amount"
+            "value" : "Amount"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Введите сумму"
+            "value" : "Сумма"
           }
         }
       }
@@ -4732,13 +4732,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Enter the name"
+            "value" : "Name"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Введите название"
+            "value" : "Название"
           }
         }
       }
@@ -5837,13 +5837,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Enter the name"
+            "value" : "Name"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Введите название"
+            "value" : "Название"
           }
         }
       }
