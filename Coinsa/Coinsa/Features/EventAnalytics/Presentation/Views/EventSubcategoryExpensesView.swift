@@ -5,6 +5,7 @@
 //  Created by Daniil Gritsenko on 09.11.2026.
 //
 
+import SwiftData
 import SwiftUI
 
 /// Экран списка всех трат выбранной подкатегории с группировкой по локациям.
@@ -49,15 +50,21 @@ struct EventSubcategoryExpensesView: View {
             showsLocationNames: showsLocationNames
         )
         .equatable()
+        .eventExpensesMap(
+            expenses: expenses,
+            screenContextSubtitle: screenContextSubtitle,
+            navigationTitle: .analyticsExpensePlacesNavigationTitleSubcategory(
+                subcategoryName: String(localized: subcategory.localizedResource)
+            )
+        )
     }
 }
 
 // MARK: - Превью
 
 #Preview {
-    let trip = PreviewGenerator.makeExampleTrip(includeLocations: true, includeExpenses: true)
-    let viewModel = TripDetailViewModel(trip: trip)
-    let analyticsViewModel = EventAnalyticsViewModel(data: viewModel.eventAnalyticsData)
+    @Previewable @State var preview = ExpenseMapPreviewData(forTrip: true)
+    let analyticsViewModel = EventAnalyticsViewModel(data: preview.analyticsData)
     let category = analyticsViewModel
         .displayedSlicesSortedByAmount(for: .categories)
         .first?
@@ -72,10 +79,12 @@ struct EventSubcategoryExpensesView: View {
         if let subcategory {
             EventSubcategoryExpensesView(
                 subcategory: subcategory,
-                expenses: viewModel.eventAnalyticsData.expenses.filter { $0.subcategory == subcategory },
+                expenses: preview.expenses.filter { $0.subcategory == subcategory },
                 showsLocationNames: true,
-                screenContextSubtitle: trip.screenContextSubtitle
+                screenContextSubtitle: preview.screenContextSubtitle
             )
         }
     }
+    .modelContainer(preview.container)
+    .environment(preview.settingsStore)
 }

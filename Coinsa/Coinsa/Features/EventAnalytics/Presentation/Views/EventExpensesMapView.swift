@@ -26,6 +26,7 @@ struct EventExpensesMapView: View {
 
     @Query private var expenses: [Expense]
     let screenContextSubtitle: String
+    let navigationTitle: LocalizedStringResource
 
     private var items: [ExpenseMapItem] {
         ExpenseMapItem.items(for: expenses)
@@ -33,13 +34,22 @@ struct EventExpensesMapView: View {
 
     // MARK: - Инициализация
 
-    /// Создает карту с наблюдаемой выборкой переданных трат и подзаголовком события.
-    init(expenses: [Expense], screenContextSubtitle: String) {
+    /// Создает карту с наблюдаемой выборкой трат и заголовками выбранного контекста.
+    /// - Parameters:
+    ///   - expenses: Траты для отображения на карте.
+    ///   - screenContextSubtitle: Подзаголовок исходного события или выбранного дня.
+    ///   - navigationTitle: Локализованный заголовок карты; по умолчанию — «Места трат».
+    init(
+        expenses: [Expense],
+        screenContextSubtitle: String,
+        navigationTitle: LocalizedStringResource = .analyticsExpensePlaces
+    ) {
         let expenseIDs = expenses.map(\.id)
         _expenses = Query(filter: #Predicate<Expense> { expense in
             expenseIDs.contains(expense.id)
         })
         self.screenContextSubtitle = screenContextSubtitle
+        self.navigationTitle = navigationTitle
     }
 
     // MARK: - Тело View
@@ -47,7 +57,7 @@ struct EventExpensesMapView: View {
     var body: some View {
         NavigationStack {
             mapContent
-                .navigationTitle(.analyticsExpensePlaces)
+                .navigationTitle(navigationTitle)
                 .navigationSubtitle(screenContextSubtitle)
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {

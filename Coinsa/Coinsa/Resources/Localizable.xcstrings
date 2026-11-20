@@ -425,6 +425,40 @@
         }
       }
     },
+    "analytics.expensePlaces.navigationTitle.category" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Expense places: %1$(categoryName)@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Места трат: %1$(categoryName)@"
+          }
+        }
+      }
+    },
+    "analytics.expensePlaces.navigationTitle.subcategory" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Expense places: %1$(subcategoryName)@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Места трат: %1$(subcategoryName)@"
+          }
+        }
+      }
+    },
     "analytics.locations" : {
       "extractionState" : "manual",
       "localizations" : {

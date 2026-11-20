@@ -238,6 +238,7 @@ struct ExpenseDetailView: View {
         VStack(alignment: .leading) {
             HStack(spacing: ViewLayout.Label.iconSpacing) {
                 Image(systemName: expense.paymentMethod.primaryIcon)
+                    .fontWeight(.medium)
                 Text(expense.paymentMethod == .card ? .expensePaidByCard : .expensePaidInCash)
             }
             .font(.footnote)

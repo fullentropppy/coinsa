@@ -17,7 +17,6 @@ struct EventAnalyticsView: View {
     // MARK: - Состояние
 
     @State private var selectedMetric: EventAnalyticsMetric = .summary
-    @State private var isShowingExpensesMap = false
 
     // MARK: - Хранимые свойства
 
@@ -38,29 +37,14 @@ struct EventAnalyticsView: View {
     // MARK: - Тело View
 
     var body: some View {
-        let hasExpensePlaces = ExpenseMapItem.hasItems(for: viewModel.data.expenses)
-
-        return eventAnalyticsList
+        eventAnalyticsList
             .navigationTitle(.analytics)
             .navigationSubtitle(screenContextSubtitle)
             .navigationBarTitleDisplayMode(.inline)
-            .toolbar { [isShowingExpensesMap = $isShowingExpensesMap] in
-                if hasExpensePlaces {
-                    ToolbarItem(placement: .topBarTrailing) {
-                        Button {
-                            isShowingExpensesMap.wrappedValue = true
-                        } label: {
-                            Image(systemName: "map")
-                        }
-                    }
-                }
-            }
-            .fullScreenCover(isPresented: $isShowingExpensesMap) { [expenses = viewModel.data.expenses, screenContextSubtitle] in
-                EventExpensesMapView(
-                    expenses: expenses,
-                    screenContextSubtitle: screenContextSubtitle
-                )
-            }
+            .eventExpensesMap(
+                expenses: viewModel.data.expenses,
+                screenContextSubtitle: screenContextSubtitle
+            )
     }
 
     // MARK: - Основной контент

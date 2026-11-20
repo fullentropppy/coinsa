@@ -80,6 +80,14 @@ struct EventDayExpensesView: View {
         .navigationTitle(navigationTitle)
         .navigationSubtitle(screenContextSubtitle)
         .navigationBarTitleDisplayMode(.inline)
+        .eventExpensesMap(
+            expenses: day.expenses,
+            screenContextSubtitle: ScreenContextSubtitleFormatter.format(
+                parentTitle: data.title,
+                startDate: date,
+                endDate: date
+            )
+        )
     }
 }
 

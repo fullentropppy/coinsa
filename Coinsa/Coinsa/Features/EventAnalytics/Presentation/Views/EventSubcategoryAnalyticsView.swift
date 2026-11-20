@@ -5,6 +5,7 @@
 //  Created by Daniil Gritsenko on 03.08.2026.
 //
 
+import SwiftData
 import SwiftUI
 
 /// Экран аналитики подкатегорий выбранной категории расходов.
@@ -35,6 +36,13 @@ struct EventSubcategoryAnalyticsView: View, Equatable {
             .navigationTitle(viewModel.category.localizedResource)
             .navigationSubtitle(screenContextSubtitle)
             .navigationBarTitleDisplayMode(.inline)
+            .eventExpensesMap(
+                expenses: viewModel.expenses,
+                screenContextSubtitle: screenContextSubtitle,
+                navigationTitle: .analyticsExpensePlacesNavigationTitleCategory(
+                    categoryName: String(localized: viewModel.category.localizedResource)
+                )
+            )
     }
     
     // MARK: - Основной контент
@@ -103,9 +111,8 @@ struct EventSubcategoryAnalyticsView: View, Equatable {
 // MARK: - Превью
 
 #Preview {
-    let trip = PreviewGenerator.makeExampleTrip(includeLocations: true, includeExpenses: true)
-    let viewModel = TripDetailViewModel(trip: trip)
-    let analyticsViewModel = EventAnalyticsViewModel(data: viewModel.eventAnalyticsData)
+    @Previewable @State var preview = ExpenseMapPreviewData(forTrip: true)
+    let analyticsViewModel = EventAnalyticsViewModel(data: preview.analyticsData)
     let category = analyticsViewModel.displayedSlicesSortedByAmount(
         for: .categories
     ).first?.category ?? .defaultValue
@@ -114,8 +121,10 @@ struct EventSubcategoryAnalyticsView: View, Equatable {
         if let categoryViewModel = analyticsViewModel.subcategoryViewModels(amountMode: .total)[category] {
             EventSubcategoryAnalyticsView(
                 viewModel: categoryViewModel,
-                screenContextSubtitle: trip.screenContextSubtitle
+                screenContextSubtitle: preview.screenContextSubtitle
             )
         }
     }
+    .modelContainer(preview.container)
+    .environment(preview.settingsStore)
 }
