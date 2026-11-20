@@ -9,15 +9,23 @@ import Foundation
 
 /// Суммы трат выбранного гражданского дня и накопительные значения в течение дня.
 struct EventDayExpenseAnalyticsData {
+    // MARK: - Внутренние типы
+
     struct CumulativePoint {
+        // MARK: - Хранимые свойства
+
         let hour: Double
         let homeAmount: Double
     }
+
+    // MARK: - Хранимые свойства
 
     let expenses: [Expense]
     let cumulativePoints: [CumulativePoint]
     let homeAmount: Double
     let locationAmount: Double?
+
+    // MARK: - Инициализация
 
     /// Подготавливает суммы без округления и пересчета гражданского времени в пояс устройства.
     /// - Parameters:

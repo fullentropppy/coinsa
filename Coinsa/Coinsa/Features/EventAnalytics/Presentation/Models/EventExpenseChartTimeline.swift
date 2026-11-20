@@ -9,26 +9,42 @@ import Foundation
 
 /// Шкала дневного графика со сжатыми промежутками без трат.
 struct EventExpenseChartTimeline {
+    // MARK: - Внутренние типы
+
     struct Point: Identifiable {
+        // MARK: - Хранимые свойства
+
         let day: EventDailyExpenseAnalyticsData
         let position: Int
         let segment: Int
+
+        // MARK: - Вычисляемые свойства
 
         var id: PlainDate { day.date }
     }
 
     struct Gap: Identifiable {
+        // MARK: - Хранимые свойства
+
         let dates: ClosedRange<PlainDate>
         let position: Int
+
+        // MARK: - Вычисляемые свойства
 
         var id: PlainDate { dates.lowerBound }
         var hiddenDayCount: Int { dates.upperBound.days(from: dates.lowerBound) + 1 }
     }
 
+    // MARK: - Константы
+
     private static let minimumEmptyDaysToCollapse = 7
+
+    // MARK: - Хранимые свойства
 
     let points: [Point]
     let gaps: [Gap]
+
+    // MARK: - Вычисляемые свойства
 
     var domain: ClosedRange<Double> {
         0...Double(max(points.last?.position ?? 0, 1))
@@ -37,6 +53,8 @@ struct EventExpenseChartTimeline {
     var visibleLength: Double {
         Double(min(max((points.last?.position ?? 0) - 1, 1), 7))
     }
+
+    // MARK: - Инициализация
 
     /// Создает шкалу, оставляя по одному пустому дню с обеих сторон длинного промежутка.
     /// - Parameter days: Дневные суммы в порядке дат, включая дни без трат.
@@ -81,6 +99,8 @@ struct EventExpenseChartTimeline {
         self.points = points
         self.gaps = gaps
     }
+
+    // MARK: - Публичные методы
 
     func scrollPosition(for date: PlainDate) -> Double {
         let position: Int

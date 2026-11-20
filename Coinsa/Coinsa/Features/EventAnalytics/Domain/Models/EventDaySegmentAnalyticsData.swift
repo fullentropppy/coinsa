@@ -7,6 +7,8 @@
 
 /// Сводные данные по части суток.
 struct EventDaySegmentAnalyticsData {
+    // MARK: - Хранимые свойства
+
     let timeOfDay: DaySegment
     let expenseCount: Int
 }

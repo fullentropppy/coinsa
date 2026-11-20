@@ -8,8 +8,12 @@ import SwiftData
 
 /// Отбор трат группы карты и их представление по гражданским календарным дням.
 struct ExpenseMapGroupViewModel {
+    // MARK: - Хранимые свойства
+
     let expenses: [Expense]
     let expenseIDs: [UUID]
+
+    // MARK: - Вычисляемые свойства
 
     var groupedExpenses: [(date: CivilDateTime, expenses: [Expense])] {
         let ids = Set(expenseIDs)

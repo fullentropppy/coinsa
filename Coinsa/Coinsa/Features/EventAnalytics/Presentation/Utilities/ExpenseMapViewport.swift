@@ -9,6 +9,8 @@ import MapKit
 
 /// Область карты с кратчайшим охватом долгот, включая переход через 180-й меридиан.
 enum ExpenseMapViewport {
+    // MARK: - Публичные методы
+
     static func boundingRect(for coordinates: [CLLocationCoordinate2D]) -> MKMapRect? {
         let points = coordinates
             .filter { $0.latitude.isFinite && $0.longitude.isFinite && CLLocationCoordinate2DIsValid($0) }

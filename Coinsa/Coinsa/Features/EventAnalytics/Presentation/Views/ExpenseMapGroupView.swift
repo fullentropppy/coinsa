@@ -20,6 +20,8 @@ struct ExpenseMapGroupView: View {
     let expenseIDs: [UUID]
     let screenContextSubtitle: String
 
+    // MARK: - Вычисляемые свойства
+
     private var viewModel: ExpenseMapGroupViewModel {
         ExpenseMapGroupViewModel(expenses: expenses, expenseIDs: expenseIDs)
     }

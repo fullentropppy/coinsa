@@ -231,7 +231,9 @@ struct FullScreenMapView: View {
             try Task.checkCancellation()
             let currentCoordinate = Coordinate(location)
             draftCoordinate = currentCoordinate
-            cameraPosition = Self.cameraPosition(for: currentCoordinate)
+            withAnimation {
+                cameraPosition = Self.cameraPosition(for: currentCoordinate)
+            }
         } catch is CancellationError {
             return
         } catch {
@@ -240,7 +242,9 @@ struct FullScreenMapView: View {
     }
 
     private func centerOnSelectedLocation() {
-        cameraPosition = Self.cameraPosition(for: draftCoordinate)
+        withAnimation {
+            cameraPosition = Self.cameraPosition(for: draftCoordinate)
+        }
     }
 
     // MARK: - Инфраструктура

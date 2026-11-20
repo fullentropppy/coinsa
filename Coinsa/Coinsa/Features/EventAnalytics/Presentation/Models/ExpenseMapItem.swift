@@ -11,10 +11,14 @@ import SwiftUI
 
 /// Снимок координаты и оформления траты для обновления меток карты.
 struct ExpenseMapItem: Identifiable, Equatable {
+    // MARK: - Хранимые свойства
+
     let id: UUID
     let coordinate: Coordinate
     let icon: String
     let color: Color
+
+    // MARK: - Публичные методы
 
     static func hasItems(for expenses: [Expense]) -> Bool {
         expenses.contains { validCoordinate(for: $0) != nil }
@@ -32,6 +36,8 @@ struct ExpenseMapItem: Identifiable, Equatable {
             )
         }
     }
+
+    // MARK: - Приватные методы
 
     private static func validCoordinate(for expense: Expense) -> Coordinate? {
         guard !expense.isDeleted,

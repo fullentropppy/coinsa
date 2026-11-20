@@ -8,6 +8,8 @@
 import SwiftUI
 
 extension View {
+    // MARK: - Публичные методы
+
     /// Добавляет кнопку и полноэкранную карту мест переданных трат.
     func eventExpensesMap(
         expenses: [Expense],

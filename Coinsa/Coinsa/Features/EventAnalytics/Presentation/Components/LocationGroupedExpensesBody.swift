@@ -36,8 +36,12 @@ struct LocationGroupedExpensesBody: View, Equatable {
 
 /// Секции сгруппированных трат для списка с аналитической шапкой или без нее.
 struct LocationGroupedExpensesSections: View {
+    // MARK: - Хранимые свойства
+
     let viewModel: LocationGroupedExpensesViewModel
     let showsLocationNames: Bool
+
+    // MARK: - Тело View
 
     var body: some View {
         let groups = viewModel.expenseGroups

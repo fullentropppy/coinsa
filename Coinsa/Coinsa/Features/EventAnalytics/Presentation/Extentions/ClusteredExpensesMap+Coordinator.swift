@@ -9,12 +9,18 @@ import MapKit
 import SwiftUI
 
 extension ClusteredExpensesMap {
+    // MARK: - Внутренние типы
+
     final class Coordinator: NSObject, MKMapViewDelegate {
+        // MARK: - Хранимые свойства
+
         private var parent: ClusteredExpensesMap
         private var annotationsByID: [UUID: ExpenseMapAnnotation] = [:]
         private var lastFitRequest: Int
         private var needsFit: Bool
         private var animatesFit = false
+
+        // MARK: - Инициализация
 
         /// Создает координатор карты и запрашивает начальный охват, если камера еще не сохранена.
         init(_ parent: ClusteredExpensesMap) {
@@ -22,6 +28,8 @@ extension ClusteredExpensesMap {
             lastFitRequest = parent.fitRequest
             needsFit = parent.cameraState.camera == nil
         }
+
+        // MARK: - Обновление карты
 
         func update(_ parent: ClusteredExpensesMap, on map: MKMapView) {
             self.parent = parent
@@ -57,6 +65,8 @@ extension ClusteredExpensesMap {
             needsFit = false
             map.setVisibleMapRect(rect, edgePadding: map.layoutMargins, animated: animatesFit)
         }
+
+        // MARK: - MKMapViewDelegate
 
         func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
             parent.cameraState.camera = mapView.camera.copy() as? MKMapCamera

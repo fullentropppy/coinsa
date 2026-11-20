@@ -10,13 +10,21 @@ import SwiftUI
 
 /// Общие линия, заливка и опорные уровни дневного и почасового графиков трат.
 struct EventExpenseChartContent: ChartContent {
+    // MARK: - Внутренние типы
+
     struct Point: Identifiable {
+        // MARK: - Хранимые свойства
+
         let position: Double
         let homeAmount: Double
         var segment: Int = 0
 
+        // MARK: - Вычисляемые свойства
+
         var id: Double { position }
     }
+
+    // MARK: - Константы
 
     private enum Layout {
         /// Непрозрачность верхней границы заливки под графиком.
@@ -33,9 +41,13 @@ struct EventExpenseChartContent: ChartContent {
         static let referenceLineOpacity: Double = 0.8
     }
 
+    // MARK: - Хранимые свойства
+
     let points: [Point]
     let referenceHomeAmount: Double
     var interpolationMethod: InterpolationMethod = .monotone
+
+    // MARK: - Тело ChartContent
 
     var body: some ChartContent {
         ForEach(points) { point in

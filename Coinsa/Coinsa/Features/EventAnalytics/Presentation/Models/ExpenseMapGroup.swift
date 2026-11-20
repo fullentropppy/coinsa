@@ -9,6 +9,8 @@ import Foundation
 
 /// Идентификаторы трат выбранной группы меток.
 struct ExpenseMapGroup: Identifiable {
+    // MARK: - Хранимые свойства
+
     let id = UUID()
     let expenseIDs: [UUID]
 }

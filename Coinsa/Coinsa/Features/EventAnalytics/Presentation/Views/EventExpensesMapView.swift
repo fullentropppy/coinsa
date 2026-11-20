@@ -28,6 +28,8 @@ struct EventExpensesMapView: View {
     let screenContextSubtitle: String
     let navigationTitle: LocalizedStringResource
 
+    // MARK: - Вычисляемые свойства
+
     private var items: [ExpenseMapItem] {
         ExpenseMapItem.items(for: expenses)
     }

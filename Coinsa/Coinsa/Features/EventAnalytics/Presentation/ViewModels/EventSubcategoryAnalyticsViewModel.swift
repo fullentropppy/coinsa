@@ -9,6 +9,8 @@ import Foundation
 
 /// Параметры отображения и траты выбранной категории для вложенной аналитики.
 struct EventSubcategoryAnalyticsViewModel: Equatable {
+    // MARK: - Хранимые свойства
+
     let category: ExpenseCategory
     let amountMode: CategoryAmountMode
     let totalDays: Int
@@ -17,6 +19,8 @@ struct EventSubcategoryAnalyticsViewModel: Equatable {
     let expenses: [Expense]
     let expensesBySubcategory: [ExpenseSubcategory: [Expense]]
     let showsLocationNames: Bool
+
+    // MARK: - Вычисляемые свойства
 
     var amountDivisor: Double {
         switch amountMode {
@@ -49,6 +53,8 @@ struct EventSubcategoryAnalyticsViewModel: Equatable {
             return $0.expenseCount > $1.expenseCount
         }
     }
+
+    // MARK: - Публичные методы
 
     func shareValue(for slice: ExpenseSubcategoryAnalyticsSlice, among slices: [ExpenseSubcategoryAnalyticsSlice]) -> Double {
         let totalHomeAmount = slices.reduce(0) { $0 + $1.homeAmount }

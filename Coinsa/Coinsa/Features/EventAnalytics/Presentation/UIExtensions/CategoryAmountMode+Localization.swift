@@ -8,6 +8,8 @@
 import Foundation
 
 extension CategoryAmountMode: LocalizedResourceProviding {
+    // MARK: - Вычисляемые свойства
+
     /// Локализованное название режима отображения трат по категориям.
     var localizedResource: LocalizedStringResource {
         switch self {

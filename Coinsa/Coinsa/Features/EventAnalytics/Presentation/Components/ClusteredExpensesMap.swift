@@ -10,12 +10,16 @@ import SwiftUI
 
 /// Карта трат с системной кластеризацией пересекающихся меток.
 struct ClusteredExpensesMap: UIViewRepresentable {
+    // MARK: - Хранимые свойства
+
     let items: [ExpenseMapItem]
     let contentInsets: EdgeInsets
     let fitRequest: Int
     let cameraState: ExpenseMapCameraState
     let onSelectExpense: (UUID) -> Void
     let onSelectGroup: ([UUID]) -> Void
+
+    // MARK: - UIViewRepresentable
 
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
@@ -58,7 +62,11 @@ struct ClusteredExpensesMap: UIViewRepresentable {
 
 /// Карта, откладывающая первоначальное центрирование до получения размеров.
 final class ExpensesMKMapView: MKMapView {
+    // MARK: - Хранимые свойства
+
     var onLayout: ((MKMapView) -> Void)?
+
+    // MARK: - Жизненный цикл
 
     override func layoutSubviews() {
         super.layoutSubviews()

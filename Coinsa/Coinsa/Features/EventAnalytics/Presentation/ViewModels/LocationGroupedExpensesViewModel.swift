@@ -9,9 +9,15 @@ import Foundation
 
 /// Отбор и группировка трат аналитики с однократной подготовкой ключей сортировки.
 struct LocationGroupedExpensesViewModel: Equatable {
+    // MARK: - Внутренние типы
+
     enum Filter: Equatable {
+        // MARK: - Значения
+
         case subcategory(ExpenseSubcategory)
         case day(PlainDate)
+
+        // MARK: - Публичные методы
 
         func includes(_ expense: Expense) -> Bool {
             switch self {
@@ -24,12 +30,16 @@ struct LocationGroupedExpensesViewModel: Equatable {
     }
 
     struct Group: Identifiable {
+        // MARK: - Хранимые свойства
+
         let id: UUID
         let location: Location
         let expenses: [Expense]
     }
 
     private struct LocationSortEntry {
+        // MARK: - Хранимые свойства
+
         let group: Group
         let startDate: PlainDate
         let endDate: PlainDate
@@ -37,8 +47,12 @@ struct LocationGroupedExpensesViewModel: Equatable {
         let id: String
     }
 
+    // MARK: - Хранимые свойства
+
     let sourceExpenses: [Expense]
     let filter: Filter
+
+    // MARK: - Вычисляемые свойства
 
     var expenseGroups: [Group] {
         let grouped = Dictionary(grouping: sourceExpenses.filter(filter.includes)) { $0.location?.id }

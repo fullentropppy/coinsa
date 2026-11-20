@@ -10,7 +10,11 @@ import SwiftUI
 
 /// Непрокручиваемый накопительный график трат выбранного дня.
 struct EventHourlyExpenseChart: View {
+    // MARK: - Хранимые свойства
+
     let data: EventDayExpenseAnalyticsData
+
+    // MARK: - Тело View
 
     var body: some View {
         Chart {

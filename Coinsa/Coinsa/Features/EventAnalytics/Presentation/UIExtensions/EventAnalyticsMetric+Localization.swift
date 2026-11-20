@@ -8,6 +8,8 @@
 import SwiftUI
 
 extension EventAnalyticsMetric: LocalizedResourceProviding {
+    // MARK: - Вычисляемые свойства
+
     /// Локализованное название метрики аналитики.
     var localizedResource: LocalizedStringResource {
         switch self {

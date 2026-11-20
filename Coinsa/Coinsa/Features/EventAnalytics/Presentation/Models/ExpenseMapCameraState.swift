@@ -9,5 +9,7 @@ import MapKit
 
 /// Положение камеры, сохраняемое при переходах к деталям траты.
 final class ExpenseMapCameraState {
+    // MARK: - Хранимые свойства
+
     var camera: MKMapCamera?
 }
