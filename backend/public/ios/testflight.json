@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "channel": "testflight",
-  "notificationEnabled": false,
-  "latestVersion": "1.1",
+  "notificationEnabled": true,
+  "latestVersion": "2.0",
   "latestBuild": "12",
   "releaseNotes": {
     "ru": "",
