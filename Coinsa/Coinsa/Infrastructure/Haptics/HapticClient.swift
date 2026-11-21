@@ -13,6 +13,14 @@ struct HapticClient {
 }
 
 extension HapticClient {
+    /// Возвращает клиент, проверяющий разрешение перед каждым тактильным откликом.
+    func enabled(when isEnabled: @escaping () -> Bool) -> HapticClient {
+        HapticClient { type in
+            guard isEnabled() else { return }
+            trigger(type)
+        }
+    }
+
     static let live = HapticClient { type in
         switch type {
         case .add: UIImpactFeedbackGenerator(style: .medium).impactOccurred()

@@ -51,6 +51,10 @@ final class AppSettingsStore {
     var appAppearance: AppAppearance {
         didSet { userDefaultsManager.appAppearance = appAppearance }
     }
+
+    var isHapticFeedbackEnabled: Bool {
+        didSet { userDefaultsManager.isHapticFeedbackEnabled = isHapticFeedbackEnabled }
+    }
     
     var isFloatingButtonOnLeft: Bool {
         didSet { userDefaultsManager.isFloatingButtonOnLeft = isFloatingButtonOnLeft }
@@ -90,6 +94,7 @@ final class AppSettingsStore {
         self.showsLocationBudgetOnOverspend = userDefaultsManager.showsLocationBudgetOnOverspend
         self.todayBudgetOverspendThreshold = userDefaultsManager.todayBudgetOverspendThreshold
         self.appAppearance = userDefaultsManager.appAppearance
+        self.isHapticFeedbackEnabled = userDefaultsManager.isHapticFeedbackEnabled
         self.isFloatingButtonOnLeft = userDefaultsManager.isFloatingButtonOnLeft
         self.selectedLocationID = userDefaultsManager.selectedLocationID
         self.selectedPaymentMethod = userDefaultsManager.selectedPaymentMethod

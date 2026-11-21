@@ -67,6 +67,11 @@ final class UserDefaultsSettingsManager {
         set { defaults.set(newValue.rawValue, forKey: UserDefaultsKey.appAppearance) }
     }
     
+    var isHapticFeedbackEnabled: Bool {
+        get { defaults.bool(forKey: UserDefaultsKey.hapticFeedbackEnabled) }
+        set { defaults.set(newValue, forKey: UserDefaultsKey.hapticFeedbackEnabled) }
+    }
+
     var isFloatingButtonOnLeft: Bool {
         get { defaults.bool(forKey: UserDefaultsKey.isFloatingButtonOnLeft) }
         set { defaults.set(newValue, forKey: UserDefaultsKey.isFloatingButtonOnLeft) }
@@ -121,6 +126,7 @@ final class UserDefaultsSettingsManager {
         defaults.register(defaults: [
             UserDefaultsKey.fetchExpenseExchangeRateOnline: true,
             UserDefaultsKey.detectPlaceOfExpense: true,
+            UserDefaultsKey.hapticFeedbackEnabled: true,
             UserDefaultsKey.showsLocationBudgetOnOverspend: true,
             UserDefaultsKey.todayBudgetOverspendThreshold: 20.0
         ])
@@ -138,6 +144,7 @@ private enum UserDefaultsKey {
     static let showsLocationBudgetOnOverspend = "showsLocationBudgetOnOverspend"
     static let todayBudgetOverspendThreshold = "todayBudgetOverspendThreshold"
     static let appAppearance = "appAppearance"
+    static let hapticFeedbackEnabled = "hapticFeedbackEnabled"
     static let isFloatingButtonOnLeft = "isFloatingButtonOnLeft"
     static let selectedLocationID = "selectedLocationID"
     static let selectedPaymentMethod = "selectedPaymentMethod"

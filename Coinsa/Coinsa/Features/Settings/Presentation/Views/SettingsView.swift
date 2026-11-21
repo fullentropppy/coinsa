@@ -138,6 +138,9 @@ struct SettingsView: View {
                 appAppearance.makeLabel()
             }
             
+            Toggle(.settingsHapticFeedback, isOn: isHapticFeedbackEnabledBinding)
+                .tint(.accent)
+
             Toggle(.settingsFloatingButtonsOnLeft, isOn: isFloatingButtonOnLeftBinding)
                 .tint(.accent)
         }
@@ -202,6 +205,13 @@ struct SettingsView: View {
         )
     }
     
+    private var isHapticFeedbackEnabledBinding: Binding<Bool> {
+        Binding(
+            get: { settingsStore.isHapticFeedbackEnabled },
+            set: { settingsStore.isHapticFeedbackEnabled = $0 }
+        )
+    }
+
     private var isFloatingButtonOnLeftBinding: Binding<Bool> {
         Binding(
             get: { settingsStore.isFloatingButtonOnLeft },

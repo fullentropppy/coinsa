@@ -5219,6 +5219,23 @@
         }
       }
     },
+    "settings.hapticFeedback" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Haptic feedback"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Тактильный отклик"
+          }
+        }
+      }
+    },
     "settings.homeCurrency" : {
       "extractionState" : "manual",
       "localizations" : {

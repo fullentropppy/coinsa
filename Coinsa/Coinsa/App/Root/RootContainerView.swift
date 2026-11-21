@@ -61,7 +61,6 @@ struct RootContainerView: View {
             if let settingsStore {
                 RootTabView()
                     .environment(settingsStore)
-                    .environment(\.haptics, .live)
                     .preferredColorScheme(settingsStore.appAppearance.colorScheme)
             } else {
                 ProgressView()
@@ -88,5 +87,8 @@ struct RootContainerView: View {
             title: .appUpdateAvailableTitle,
             message: updateMessage ?? .appUpdateAvailableTitle
         )
+        .environment(\.haptics, HapticClient.live.enabled {
+            settingsStore?.isHapticFeedbackEnabled ?? false
+        })
     }
 }
