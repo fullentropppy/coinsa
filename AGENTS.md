@@ -9,17 +9,18 @@
 
 - Coinsa — iPhone-приложение для учёта расходов в путешествиях, бюджетов, валют и аналитики.
 - Основные технологии: SwiftUI, Observation, SwiftData, CloudKit, Swift Charts, MapKit, CoreLocation и UIKit.
-- Курсы загружаются из Hexarate через `URLSession`; сторонних пакетных зависимостей сейчас нет.
+- Курсы загружаются из Hexarate через `URLSession`; в iOS-приложении сторонних пакетных зависимостей сейчас нет.
 - Минимальная версия — iOS 26.0. Проверяй доступность новых API относительно deployment target.
 - Проект: `Coinsa/Coinsa.xcodeproj`; единственный application target — `Coinsa`.
 - Общие схемы: `Coinsa Debug` использует Debug для Run и Archive; `Coinsa` — Release для Run и Archive.
 - Для разработки предпочитай `Coinsa Debug`. Обе схемы сейчас запускают приложение без выбранного LLDB.
 - В проекте задан Swift language mode 5.0, default actor isolation `MainActor` и Approachable Concurrency.
 - При расхождении README и исходников проверяй факты по коду и настройкам проекта; сообщай о расхождении.
+- Версию и номер сборки приложения получай через `AppInfo.version` и `AppInfo.build`.
 
 ## Каталоги и ответственность слоёв
 
-Каталоги исходников ниже указаны относительно `Coinsa/Coinsa/`; `docs/` находится в корне репозитория.
+Каталоги исходников ниже указаны относительно `Coinsa/Coinsa/`; `docs/` и `backend/` находятся в корне репозитория.
 
 | Каталог | Ответственность |
 | --- | --- |
@@ -34,6 +35,14 @@
 | `Previews/` | `Data/` — синтетические модели и наборы примеров, общие с демоданными; `Support/` — окружение и построитель превью; `Scenarios/` — подготовка отдельных экранов |
 | `Resources/`, `BuildConfigs/` | Локализация, ресурсы, Info.plist и entitlements |
 | `docs/` | HTML-страницы политики конфиденциальности и план технических доработок в `development-plan.md` |
+| `backend/` | Публичный JSON проверки версии и конфигурация Cloudflare Workers Static Assets; Wrangler используется только для разработки и публикации сервиса |
+
+## API проверки обновлений
+
+- Приложение получает публичный JSON с Cloudflare через `URLSession`. Адрес API, интервал проверки и таймаут заданы в `Core/Configs/AppUpdateConfig.swift`; логика находится в `Core/Domain/AppUpdate/`, подключение к жизненному циклу — в `App/Root/RootContainerView.swift`.
+- Данные версии находятся в `backend/public/ios/testflight.json`. Поле `notificationEnabled` разрешает показ уведомления о более новой версии и сборке; отключение применяется после следующей успешной проверки API. Публичную ссылку-приглашение TestFlight в JSON не добавляй.
+- Для Git используются корневой `.gitignore` и `backend/.gitignore`; для исключения файлов из публикации Cloudflare — `backend/public/.assetsignore`. Правила Git не заменяют исключения статических файлов сервиса.
+- Публикация сервиса выполняется отдельно от сборки iOS командой `npx wrangler deploy` из `backend/`. Для сборки iOS-приложения Node.js и доступ к аккаунту Cloudflare не требуются. Ошибка API не блокирует работу приложения; в SwiftUI previews проверка отключена.
 
 ## Архитектура и изменения кода
 

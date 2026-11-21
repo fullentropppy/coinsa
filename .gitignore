@@ -22,4 +22,6 @@ playground.xcworkspace
 
 # Secrets
 *.env
+.env*
+.dev.vars*
 Secrets.plist

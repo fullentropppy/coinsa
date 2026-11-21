@@ -663,6 +663,57 @@
         }
       }
     },
+    "appUpdate.available.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Version %1$(newVersion)@ (%2$(newBuild)@) is available,\ncurrent version %3$(currentVersion)@ (%4$(currentBuild)@).\n\nTo update the app and view the list of changes, go to TestFlight."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Доступна версия %1$(newVersion)@ (%2$(newBuild)@),\nтекущая версия %3$(currentVersion)@ (%4$(currentBuild)@).\n\nДля обновления приложения и просмотра списка изменений перейдите в TestFlight."
+          }
+        }
+      }
+    },
+    "appUpdate.available.messageWithNotes" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Version %1$(newVersion)@ (%2$(newBuild)@) is available,\ncurrent version %3$(currentVersion)@ (%4$(currentBuild)@).\n\n%5$(releaseNotes)@\n\nTo update the app and view the full list of changes, go to TestFlight."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Доступна версия %1$(newVersion)@ (%2$(newBuild)@),\nтекущая версия %3$(currentVersion)@ (%4$(currentBuild)@).\n\n%5$(releaseNotes)@\n\nДля обновления приложения и просмотра полного списка изменений перейдите в TestFlight."
+          }
+        }
+      }
+    },
+    "appUpdate.available.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Update available"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Доступно обновление"
+          }
+        }
+      }
+    },
     "cancel" : {
       "extractionState" : "manual",
       "localizations" : {

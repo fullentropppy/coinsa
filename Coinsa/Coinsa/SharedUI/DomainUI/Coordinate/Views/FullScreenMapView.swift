@@ -136,7 +136,7 @@ struct FullScreenMapView: View {
         }
         .safeAreaPadding(MapLayout.controlsInset)
         .onMapCameraChange(frequency: .continuous) { context in
-            if isEditable {
+            if isEditable, cameraPosition.positionedByUser || draftCoordinate == nil {
                 draftCoordinate = Coordinate(context.camera.centerCoordinate, horizontalAccuracy: nil)
             }
         }
@@ -230,8 +230,8 @@ struct FullScreenMapView: View {
             let location = try await currentLocationProvider.requestCurrentLocation()
             try Task.checkCancellation()
             let currentCoordinate = Coordinate(location)
-            draftCoordinate = currentCoordinate
             withAnimation {
+                draftCoordinate = currentCoordinate
                 cameraPosition = Self.cameraPosition(for: currentCoordinate)
             }
         } catch is CancellationError {

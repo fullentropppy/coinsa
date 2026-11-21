@@ -35,14 +35,15 @@
 
   <h1>Privacy Policy</h1>
   <p class="muted"><strong>App:</strong> Coinsa<br>
-  <strong>Effective date:</strong> September 2026</p>
+  <strong>Effective date:</strong> September 2026<br>
+  <strong>Last updated:</strong> November 21, 2026</p>
 
   <p>This Privacy Policy describes how Coinsa ("the App") handles user data.</p>
 
   <h2>1. Data Collection</h2>
   <p>The App is designed to minimize data collection.</p>
-  <p>Coinsa does not require account registration and does not collect personally identifiable information such as name, email address, or phone number.</p>
-  <p>All data entered by the user (such as trips, locations, expenses, and expense locations) is stored locally on the device and optionally in the user’s private iCloud storage. When creating an expense, the App may use the device’s current location to save the location of that expense. The saved location is used only within the App to display where the expense was made and is not transmitted to the developer or third-party services.</p>
+  <p>Coinsa does not require account registration or ask for the user’s name, email address, or phone number.</p>
+  <p>All data entered by the user (such as trips, locations, expenses, and expense locations) is stored locally on the device and optionally in the user’s private iCloud storage. When creating an expense, the App may use the device’s current location to save the location of that expense. The saved location is used within the App to display where the expense was made and is not sent in exchange-rate or version-check requests.</p>
 
   <h2>2. iCloud (CloudKit)</h2>
   <p>The App uses Apple CloudKit to store and sync user data.</p>
@@ -50,8 +51,10 @@
   <p>The developer of the App does not have access to this data.</p>
 
   <h2>3. Third-Party Services</h2>
-  <p>The App uses a third-party service to retrieve currency exchange rates.</p>
-  <p>Requests sent to this service do not include any personal data and are limited to technical information such as currency pairs.</p>
+  <p>The App uses Hexarate to retrieve currency exchange rates. Requests include the currency codes for the requested pair.</p>
+  <p>To check for a new version and retrieve release notes, the App contacts the developer’s API hosted on Cloudflare. The request header includes the installed App version and build number.</p>
+  <p>Trips, locations, expenses, and saved expense locations are not sent to the exchange-rate service or the version-check API.</p>
+  <p>When the App contacts external services, their infrastructure receives the connection’s IP address and technical request information. Cloudflare processes this information in accordance with its <a href="https://www.cloudflare.com/privacypolicy/">Privacy Policy</a>.</p>
 
   <h2>4. Data Usage</h2>
   <p>User data is used solely within the App for:</p>
@@ -61,7 +64,7 @@
      - Displaying where an expense was made using its saved location</p>
 
   <h2>5. Data Sharing</h2>
-  <p>The App does not sell, rent, or share user data with third parties.</p>
+  <p>The App does not sell or rent user data. iCloud is used for storage and synchronization as described in section 2. When retrieving exchange rates and checking the version, the App shares the technical information described in section 3 with external services.</p>
   <p>The App does not use advertising or tracking technologies.</p>
 
   <h2>6. Data Security</h2>

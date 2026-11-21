@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "channel": "testflight",
+  "notificationEnabled": false,
+  "latestVersion": "1.1",
+  "latestBuild": "12",
+  "releaseNotes": {
+    "ru": "",
+    "en": ""
+  }
+}
