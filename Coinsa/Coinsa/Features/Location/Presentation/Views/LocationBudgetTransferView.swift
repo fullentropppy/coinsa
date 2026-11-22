@@ -76,17 +76,9 @@ struct LocationBudgetTransferView: View {
 
     private var availableAmountSection: some View {
         Section {
-            LabeledContent {
-                AmountStack(
-                    homeAmount: viewModel.availableHomeAmount,
-                    homeCurrency: viewModel.source.homeCurrency,
-                    expenseAmount: viewModel.availableLocationAmount,
-                    expenseCurrency: viewModel.source.locationCurrency
-                )
-            } label: {
-                Text(.locationBudgetTransferAvailable)
-                    .frame(maxHeight: .infinity, alignment: .topLeading)
-            }
+            LocationRowView(viewModel.source, showsBudgetBalance: true)
+        } header: {
+            Text(.locationBudgetTransferSenderLocation)
         } footer: {
             Text(.locationBudgetTransferHint)
         }

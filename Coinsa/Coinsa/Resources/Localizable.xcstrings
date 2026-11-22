@@ -4318,23 +4318,6 @@
         }
       }
     },
-    "location.budgetTransfer.available" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Available"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Доступно"
-          }
-        }
-      }
-    },
     "location.budgetTransfer.confirm" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -4501,6 +4484,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Локации-получатели"
+          }
+        }
+      }
+    },
+    "location.budgetTransfer.senderLocation" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sender location"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Локация-отправитель"
           }
         }
       }
