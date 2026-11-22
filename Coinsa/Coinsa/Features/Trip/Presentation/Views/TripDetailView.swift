@@ -23,6 +23,8 @@ struct TripDetailView: View {
     @State private var isShowingLocationCreate = false
     @State private var locationToEdit: Location?
     @State private var isShowingLocationDeletionError = false
+    @State private var isShowingTripDeleteConfirmation = false
+    @State private var isShowingTripDeletionError = false
 
     @Query private var availableTrips: [Trip]
 
@@ -107,6 +109,19 @@ struct TripDetailView: View {
                 isPresented: $isShowingLocationDeletionError,
                 title: .locationStorageErrorTitle,
                 message: .locationStorageErrorDeleteMessage,
+                isError: true
+            )
+            .deleteConfirmationAlert(
+                isPresented: $isShowingTripDeleteConfirmation,
+                title: .tripDeleteTitle,
+                message: .tripDeleteMessage,
+                onConfirm: confirmTripDelete,
+                onCancel: { isShowingTripDeleteConfirmation = false }
+            )
+            .notificationAlert(
+                isPresented: $isShowingTripDeletionError,
+                title: .tripStorageErrorTitle,
+                message: .tripStorageErrorDeleteMessage,
                 isError: true
             )
     }
@@ -199,11 +214,22 @@ struct TripDetailView: View {
         ToolbarItemGroup(placement: .topBarTrailing) {
             DetailActionsMenu(title: .tripActions, onEdit: {
                 isShowingTripEdit = true
+            }, onDelete: {
+                isShowingTripDeleteConfirmation = true
             })
         }
     }
 
     // MARK: - Действия
+
+    private func confirmTripDelete() {
+        do {
+            try TripRepository(context: context).delete(trip)
+            dismiss()
+        } catch {
+            isShowingTripDeletionError = true
+        }
+    }
     
     private func requestDelete(for locations: [Location]) {
         deletionHandler.request(for: locations)

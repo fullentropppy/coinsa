@@ -87,8 +87,8 @@ enum ViewLayout {
     }
 
     enum Comment {
-        /// Вертикальная поправка для выравнивания иконки с первой строкой комментария.
-        static let iconVerticalInset: CGFloat = 1
+        /// Поправка сверху для выравнивания иконки с первой строкой комментария.
+        static let iconTopInset: CGFloat = 3
         /// Диапазон числа видимых строк поля комментария до начала прокрутки.
         static let visibleLines = 1...10
     }

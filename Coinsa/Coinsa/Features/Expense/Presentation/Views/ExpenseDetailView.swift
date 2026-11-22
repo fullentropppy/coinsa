@@ -35,11 +35,14 @@ struct ExpenseDetailView: View {
     // MARK: - Хранимые свойства
 
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var context
     @Environment(\.displayScale) private var displayScale
     @Environment(\.haptics) private var haptics
     
     @State private var isShowingExpenseEdit = false
     @State private var isShowingExpenseCopy = false
+    @State private var isShowingDeleteConfirmation = false
+    @State private var isShowingDeletionError = false
     @State private var isShowingMap = false
     @State private var isVisible = false
     @State private var contentBottom: CGFloat = 0
@@ -77,6 +80,23 @@ struct ExpenseDetailView: View {
     // MARK: - Тело View
 
     var body: some View {
+        Group {
+            if !expense.isDeleted, expense.modelContext === context {
+                expenseDetailContent
+            } else {
+                Color.clear
+            }
+        }
+        .onAppear {
+            isVisible = true
+            checkIfDeleted()
+        }
+        .onDisappear {
+            isVisible = false
+        }
+    }
+
+    private var expenseDetailContent: some View {
         expenseDetailForm
             .navigationTitle(viewModel.navigationTitle)
             .navigationSubtitle(viewModel.navigationSubtitle)
@@ -92,6 +112,19 @@ struct ExpenseDetailView: View {
             .sheet(isPresented: $isShowingExpenseCopy) {
                 ExpenseCopyView(source: expense)
             }
+            .deleteConfirmationAlert(
+                isPresented: $isShowingDeleteConfirmation,
+                title: .expenseDeleteTitle,
+                message: .expenseDeleteMessage,
+                onConfirm: confirmDelete,
+                onCancel: { isShowingDeleteConfirmation = false }
+            )
+            .notificationAlert(
+                isPresented: $isShowingDeletionError,
+                title: .expenseStorageErrorTitle,
+                message: .expenseStorageErrorDeleteMessage,
+                isError: true
+            )
             .fullScreenCover(isPresented: $isShowingMap) {
                 if let coordinate = expense.coordinate {
                     FullScreenMapView(
@@ -102,13 +135,6 @@ struct ExpenseDetailView: View {
                         markerTint: expense.subcategory.accentColor
                     )
                 }
-            }
-            .onAppear {
-                isVisible = true
-                checkIfDeleted()
-            }
-            .onDisappear {
-                isVisible = false
             }
     }
 
@@ -159,7 +185,6 @@ struct ExpenseDetailView: View {
             Section {
                 HStack(alignment: .top) {
                     CommentIcon()
-
                     Text(comment)
                 }
             }
@@ -294,6 +319,8 @@ struct ExpenseDetailView: View {
         ToolbarItemGroup(placement: .topBarTrailing) {
             DetailActionsMenu(title: .expenseActions, onEdit: {
                 isShowingExpenseEdit = true
+            }, onDelete: {
+                isShowingDeleteConfirmation = true
             }) {
                 Button {
                     haptics.trigger(.tap)
@@ -306,6 +333,15 @@ struct ExpenseDetailView: View {
     }
     
     // MARK: - Действия
+
+    private func confirmDelete() {
+        do {
+            try ExpenseRepository(context: context).delete(expense)
+            dismiss()
+        } catch {
+            isShowingDeletionError = true
+        }
+    }
     
     private func checkIfDeleted() {
         if expense.modelContext == nil {

@@ -314,7 +314,7 @@ struct ExpenseFormView: View {
 
     private var commentSection: some View {
         Section {
-            HStack(alignment: .center) {
+            HStack(alignment: .top) {
                 CommentIcon()
 
                 TextField(.expenseComment, text: $viewModel.comment, axis: .vertical)

@@ -20,7 +20,7 @@ struct CommentIcon: View {
             AppIcon(AppSymbols.ellipsisBubble, style: .metadata)
         } else {
             AppIcon(AppSymbols.ellipsisBubble, style: .formLabel)
-                .padding(.vertical, ViewLayout.Comment.iconVerticalInset)
+                .padding(.top, ViewLayout.Comment.iconTopInset)
         }
     }
 }

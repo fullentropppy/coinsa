@@ -21,6 +21,8 @@ struct LocationDetailView: View {
     
     @State private var deletionHandler = DeletionHandler<Expense>()
     @State private var isShowingDeletionError = false
+    @State private var isShowingLocationDeleteConfirmation = false
+    @State private var isShowingLocationDeletionError = false
     @State private var isShowingLocationEdit = false
     @State private var isShowingExpenseCreate = false
     @State private var expenseToEdit: Expense?
@@ -53,6 +55,19 @@ struct LocationDetailView: View {
     // MARK: - Тело View
 
     var body: some View {
+        Group {
+            if !location.isDeleted, location.modelContext === context {
+                locationDetailContent
+            } else {
+                Color.clear
+            }
+        }
+        .onAppear {
+            checkIfDeleted()
+        }
+    }
+
+    private var locationDetailContent: some View {
         locationDetailForm
             .navigationTitle(viewModel.navigationTitle)
             .navigationSubtitle(viewModel.navigationSubtitle)
@@ -107,9 +122,19 @@ struct LocationDetailView: View {
                 onConfirm: { confirmDelete() },
                 onCancel: { cancelDelete() }
             )
-            .onAppear {
-                checkIfDeleted()
-            }
+            .deleteConfirmationAlert(
+                isPresented: $isShowingLocationDeleteConfirmation,
+                title: .locationDeleteTitle,
+                message: .locationDeleteMessage,
+                onConfirm: confirmLocationDelete,
+                onCancel: { isShowingLocationDeleteConfirmation = false }
+            )
+            .notificationAlert(
+                isPresented: $isShowingLocationDeletionError,
+                title: .locationStorageErrorTitle,
+                message: .locationStorageErrorDeleteMessage,
+                isError: true
+            )
     }
     
     // MARK: - Основной контент
@@ -196,6 +221,8 @@ struct LocationDetailView: View {
         ToolbarItemGroup(placement: .topBarTrailing) {
             DetailActionsMenu(title: .locationActions, onEdit: {
                 isShowingLocationEdit = true
+            }, onDelete: {
+                isShowingLocationDeleteConfirmation = true
             }) {
                 if LocationBudgetTransferViewModel.canTransfer(from: location) {
                     Button {
@@ -211,6 +238,15 @@ struct LocationDetailView: View {
     }
 
     // MARK: - Действия
+
+    private func confirmLocationDelete() {
+        do {
+            try LocationRepository(context: context).delete(location)
+            dismiss()
+        } catch {
+            isShowingLocationDeletionError = true
+        }
+    }
 
     private func showTransferSuccessIfNeeded() {
         isShowingTransferSuccess = transferSuccessMessage != nil
