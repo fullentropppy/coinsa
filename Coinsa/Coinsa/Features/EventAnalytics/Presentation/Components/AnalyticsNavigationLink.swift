@@ -31,9 +31,7 @@ struct AnalyticsNavigationLink<Destination: View>: View {
                 Text(.analytics)
                     .font(.subheadline)
                 Spacer()
-                Image(systemName: "chart.xyaxis.line")
-                    .imageScale(.small)
-                    .font(.subheadline.weight(.semibold))
+                AppIcon(AppSymbols.chartXyaxisLine, style: .navigationLabel)
             }
             .foregroundStyle(.secondary)
         }

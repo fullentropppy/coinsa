@@ -14,77 +14,77 @@ extension ExpenseSubcategory: ValueVisualRepresentable {
         
         // MARK: - Еда
             
-        case .breakfast: "sun.horizon"
-        case .lunch: "sun.max"
-        case .dinner: "moon"
-        case .snack: "pizza.slice"
-        case .drinks: "mug"
-        case .groceries: "carrot"
+        case .breakfast: AppSymbols.sunHorizon
+        case .lunch: AppSymbols.sunMax
+        case .dinner: AppSymbols.moon
+        case .snack: AppSymbols.pizzaSlice
+        case .drinks: AppSymbols.mug
+        case .groceries: AppSymbols.carrot
         case .otherFood: category.primaryIcon
             
         // MARK: - Транспорт
             
-        case .plane: "airplane"
-        case .ferry: "ferry"
-        case .train: "tram"
-        case .publicTransport: "bus"
-        case .taxi: "figure.wave"
-        case .transfer: "point.topright.filled.arrow.triangle.backward.to.point.bottomleft.scurvepath"
-        case .travelPass: "ticket"
-        case .vehicleRental: "key"
-        case .fuel: "fuelpump"
-        case .parking: "parkingsign.square"
-        case .tolls: "road.lanes"
-        case .baggage: "suitcase"
+        case .plane: AppSymbols.airplane
+        case .ferry: AppSymbols.ferry
+        case .train: AppSymbols.tram
+        case .publicTransport: AppSymbols.bus
+        case .taxi: AppSymbols.figureWave
+        case .transfer: AppSymbols.pointToprightFilledArrowTriangleBackwardToPointBottomleftScurvepath
+        case .travelPass: AppSymbols.ticket
+        case .vehicleRental: AppSymbols.key
+        case .fuel: AppSymbols.fuelpump
+        case .parking: AppSymbols.parkingsignSquare
+        case .tolls: AppSymbols.roadLanes
+        case .baggage: AppSymbols.suitcase
         case .otherTransport: category.primaryIcon
             
         // MARK: - Жилье
             
-        case .hotel: "bed.double"
-        case .accommodationRental: "key"
-        case .camping: "tent"
-        case .touristTax: "dollarsign.circle"
+        case .hotel: AppSymbols.bedDouble
+        case .accommodationRental: AppSymbols.key
+        case .camping: AppSymbols.tent
+        case .touristTax: AppSymbols.dollarsignCircle
         case .otherAccommodation: category.primaryIcon
             
         // MARK: - Досуг
             
-        case .tour: "map"
-        case .landmark: "building.columns"
-        case .park: "tree"
-        case .beach: "beach.umbrella"
-        case .activity: "figure.run"
-        case .entertainment: "theatermasks"
-        case .relaxation: "leaf"
+        case .tour: AppSymbols.map
+        case .landmark: AppSymbols.buildingColumns
+        case .park: AppSymbols.tree
+        case .beach: AppSymbols.beachUmbrella
+        case .activity: AppSymbols.figureRun
+        case .entertainment: AppSymbols.theatermasks
+        case .relaxation: AppSymbols.leaf
         case .otherLeisure: category.primaryIcon
         
         // MARK: - Шоппинг
             
-        case .clothing: "tshirt"
-        case .cosmetics: "face.smiling"
-        case .souvenirs: "gift"
-        case .jewelry: "crown"
-        case .homeGoods: "lamp.table"
-        case .electronics: "headphones"
+        case .clothing: AppSymbols.tshirt
+        case .cosmetics: AppSymbols.faceSmiling
+        case .souvenirs: AppSymbols.gift
+        case .jewelry: AppSymbols.crown
+        case .homeGoods: AppSymbols.lampTable
+        case .electronics: AppSymbols.headphones
         case .otherShopping: category.primaryIcon
             
         // MARK: - Медицина
             
-        case .healthInsurance: "staroflife.shield"
-        case .medicalCare: "stethoscope"
-        case .medication: "pills"
+        case .healthInsurance: AppSymbols.staroflifeShield
+        case .medicalCare: AppSymbols.stethoscope
+        case .medication: AppSymbols.pills
         case .otherMedicine: category.primaryIcon
         
         // MARK: - Прочее
             
-        case .connectivity: "wifi"
-        case .bankFees: "percent"
-        case .documents: "text.document"
-        case .laundry: "washer"
-        case .personalCare: "comb"
-        case .donation: "heart"
-        case .luggageStorage: "suitcase.rolling"
-        case .postalService: "shippingbox"
-        case .digitalService: "apple.logo"
+        case .connectivity: AppSymbols.wifi
+        case .bankFees: AppSymbols.percent
+        case .documents: AppSymbols.textDocument
+        case .laundry: AppSymbols.washer
+        case .personalCare: AppSymbols.comb
+        case .donation: AppSymbols.heart
+        case .luggageStorage: AppSymbols.suitcaseRolling
+        case .postalService: AppSymbols.shippingbox
+        case .digitalService: AppSymbols.appleLogo
         case .otherMiscellaneous: category.primaryIcon
             
         }
@@ -96,77 +96,77 @@ extension ExpenseSubcategory: ValueVisualRepresentable {
             
         // MARK: - Еда
             
-        case .breakfast: "sun.horizon.fill"
-        case .lunch: "sun.max.fill"
-        case .dinner: "moon.fill"
-        case .snack: "pizza.slice.fill"
-        case .drinks: "mug.fill"
-        case .groceries: "carrot.fill"
+        case .breakfast: AppSymbols.sunHorizonFill
+        case .lunch: AppSymbols.sunMaxFill
+        case .dinner: AppSymbols.moonFill
+        case .snack: AppSymbols.pizzaSliceFill
+        case .drinks: AppSymbols.mugFill
+        case .groceries: AppSymbols.carrotFill
         case .otherFood: category.secondaryIcon
             
         // MARK: - Транспорт
             
-        case .plane: "airplane"
-        case .ferry: "ferry.fill"
-        case .train: "tram.fill"
-        case .publicTransport: "bus.fill"
-        case .taxi: "figure.wave"
-        case .transfer: "point.topright.filled.arrow.triangle.backward.to.point.bottomleft.scurvepath"
-        case .travelPass: "ticket.fill"
-        case .vehicleRental: "key.fill"
-        case .fuel: "fuelpump.fill"
-        case .parking: "parkingsign.square.fill"
-        case .tolls: "road.lanes"
-        case .baggage: "suitcase.fill"
+        case .plane: AppSymbols.airplane
+        case .ferry: AppSymbols.ferryFill
+        case .train: AppSymbols.tramFill
+        case .publicTransport: AppSymbols.busFill
+        case .taxi: AppSymbols.figureWave
+        case .transfer: AppSymbols.pointToprightFilledArrowTriangleBackwardToPointBottomleftScurvepath
+        case .travelPass: AppSymbols.ticketFill
+        case .vehicleRental: AppSymbols.keyFill
+        case .fuel: AppSymbols.fuelpumpFill
+        case .parking: AppSymbols.parkingsignSquareFill
+        case .tolls: AppSymbols.roadLanes
+        case .baggage: AppSymbols.suitcaseFill
         case .otherTransport: category.secondaryIcon
             
         // MARK: - Жилье
             
-        case .hotel: "bed.double.fill"
-        case .accommodationRental: "key.fill"
-        case .camping: "tent.fill"
-        case .touristTax: "dollarsign.circle.fill"
+        case .hotel: AppSymbols.bedDoubleFill
+        case .accommodationRental: AppSymbols.keyFill
+        case .camping: AppSymbols.tentFill
+        case .touristTax: AppSymbols.dollarsignCircleFill
         case .otherAccommodation: category.secondaryIcon
             
         // MARK: - Досуг
             
-        case .tour: "map.fill"
-        case .landmark: "building.columns.fill"
-        case .park: "tree.fill"
-        case .beach: "beach.umbrella.fill"
-        case .activity: "figure.run"
-        case .entertainment: "theatermasks.fill"
-        case .relaxation: "leaf.fill"
+        case .tour: AppSymbols.mapFill
+        case .landmark: AppSymbols.buildingColumnsFill
+        case .park: AppSymbols.treeFill
+        case .beach: AppSymbols.beachUmbrellaFill
+        case .activity: AppSymbols.figureRun
+        case .entertainment: AppSymbols.theatermasksFill
+        case .relaxation: AppSymbols.leafFill
         case .otherLeisure: category.secondaryIcon
             
         // MARK: - Шоппинг
             
-        case .clothing: "tshirt.fill"
-        case .cosmetics: "face.smiling.fill"
-        case .souvenirs: "gift.fill"
-        case .jewelry: "crown.fill"
-        case .homeGoods: "lamp.table.fill"
-        case .electronics: "headphones"
+        case .clothing: AppSymbols.tshirtFill
+        case .cosmetics: AppSymbols.faceSmilingFill
+        case .souvenirs: AppSymbols.giftFill
+        case .jewelry: AppSymbols.crownFill
+        case .homeGoods: AppSymbols.lampTableFill
+        case .electronics: AppSymbols.headphones
         case .otherShopping: category.secondaryIcon
             
         // MARK: - Медицина
             
-        case .healthInsurance: "staroflife.shield.fill"
-        case .medicalCare: "stethoscope"
-        case .medication: "pills.fill"
+        case .healthInsurance: AppSymbols.staroflifeShieldFill
+        case .medicalCare: AppSymbols.stethoscope
+        case .medication: AppSymbols.pillsFill
         case .otherMedicine: category.secondaryIcon
             
         // MARK: - Прочее
             
-        case .connectivity: "wifi"
-        case .bankFees: "percent"
-        case .documents: "text.document.fill"
-        case .laundry: "washer.fill"
-        case .personalCare: "comb.fill"
-        case .donation: "heart.fill"
-        case .luggageStorage: "suitcase.rolling.fill"
-        case .postalService: "shippingbox.fill"
-        case .digitalService: "apple.logo"
+        case .connectivity: AppSymbols.wifi
+        case .bankFees: AppSymbols.percent
+        case .documents: AppSymbols.textDocumentFill
+        case .laundry: AppSymbols.washerFill
+        case .personalCare: AppSymbols.combFill
+        case .donation: AppSymbols.heartFill
+        case .luggageStorage: AppSymbols.suitcaseRollingFill
+        case .postalService: AppSymbols.shippingboxFill
+        case .digitalService: AppSymbols.appleLogo
         case .otherMiscellaneous: category.secondaryIcon
         }
     }

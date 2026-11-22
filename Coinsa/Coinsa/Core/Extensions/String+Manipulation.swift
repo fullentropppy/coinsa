@@ -9,6 +9,8 @@ import Foundation
 
 /// Манипуляции со строками.
 extension String {
+    // MARK: - Свойства
+
     /// Строка с удаленными пробелами и символами новой строки в начале и конце.
     var trimmed: String {
         self.trimmingCharacters(in: .whitespacesAndNewlines)

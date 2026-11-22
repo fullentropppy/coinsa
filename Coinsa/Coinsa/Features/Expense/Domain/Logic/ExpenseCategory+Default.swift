@@ -6,6 +6,8 @@
 //
 
 extension ExpenseCategory {
+    // MARK: - Свойства
+
     /// Категория траты по умолчанию (прочее).
     static var defaultValue: ExpenseCategory { ExpenseCategory.miscellaneous }
     

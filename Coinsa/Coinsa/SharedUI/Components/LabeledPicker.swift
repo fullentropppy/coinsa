@@ -160,11 +160,7 @@ struct LabeledPicker<SelectionValue: Hashable, Content: View, CurrentValueLabel:
             HStack(spacing: ViewLayout.Label.pickerIndicatorSpacing) {
                 currentValueLabel(selection.wrappedValue)
                 if !isDisabled {
-                    Image(systemName: "chevron.right")
-                        .imageScale(.small)
-                        .fontWeight(.semibold)
-                        .foregroundStyle(.accent)
-                        .frame(width: ViewLayout.Label.inputAccessoryWidth)
+                    AppIcon(AppSymbols.chevronRight, style: .navigationIndicator)
                 }
             }
         } label: {
@@ -211,10 +207,7 @@ struct LabeledPicker<SelectionValue: Hashable, Content: View, CurrentValueLabel:
                                 content(option)
                                 Spacer()
                                 if option == selection.wrappedValue {
-                                    Image(systemName: "checkmark")
-                                        .imageScale(.small)
-                                        .fontWeight(.semibold)
-                                        .foregroundStyle(.tint)
+                                    AppIcon(AppSymbols.checkmark, style: .selectionIndicator)
                                 }
                             }
                             .contentShape(.rect)

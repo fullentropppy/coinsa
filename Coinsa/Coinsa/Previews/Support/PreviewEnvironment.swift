@@ -11,8 +11,12 @@ import SwiftData
 /// Окружение превью с отдельным хранилищем и настройками без автоматического определения данных.
 @MainActor
 struct PreviewEnvironment {
+    // MARK: - Свойства
+
     let container: ModelContainer
     let settingsStore: AppSettingsStore
+
+    // MARK: - Инициализация
 
     /// Создает окружение с синтетическими поездками без обращения к хранилищу приложения и CloudKit.
     /// - Parameter trips: Поездки, которые требуется добавить в отдельный контейнер.
@@ -20,6 +24,8 @@ struct PreviewEnvironment {
         container = Self.makeContainer(with: trips)
         settingsStore = Self.makeSettingsStore()
     }
+
+    // MARK: - Методы
 
     /// Создает контейнер в памяти с отключенными CloudKit и автоматическим сохранением.
     /// - Parameter trips: Синтетические поездки для вставки вместе со связанными моделями.

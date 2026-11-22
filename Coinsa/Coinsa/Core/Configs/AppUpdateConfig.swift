@@ -9,6 +9,8 @@ import Foundation
 
 /// Параметры получения сведений об обновлении приложения.
 enum AppUpdateConfig {
+    // MARK: - Константы
+
     /// Публичный JSON канала TestFlight без ссылки-приглашения.
     static let endpoint = URL(string: "https://coinsa-api.coinsa.workers.dev/ios/testflight.json")!
     /// Минимальный интервал между проверками в секундах.

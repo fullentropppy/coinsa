@@ -10,9 +10,13 @@ import SwiftData
 /// Синтетический черновик и отдельное окружение для превью формы траты.
 @MainActor
 struct ExpenseFormPreviewData {
+    // MARK: - Свойства
+
     let container: ModelContainer
     let settingsStore: AppSettingsStore
     let viewModel: ExpenseEditViewModel?
+
+    // MARK: - Инициализация
 
     /// Создает данные в памяти без CloudKit, с локальными курсами и настройками без автоматических запросов.
     /// - Parameter isEditing: Подготавливать существующую трату или черновик новой.

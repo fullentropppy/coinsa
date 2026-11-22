@@ -8,6 +8,8 @@
 import Foundation
 
 extension ExpenseCategory: LocalizedResourceProviding {
+    // MARK: - Свойства
+
     /// Локализованное название категории траты.
     var localizedResource: LocalizedStringResource {
         switch self {

@@ -135,8 +135,7 @@ struct EventAnalyticsCategoriesBody: View {
                 HStack(spacing: ViewLayout.Row.metadataSpacing) {
                     slice.category.makeDot()
                     Text(shareValue(for: slice).percentFormat())
-                        .font(.footnote.monospacedDigit())
-                        .foregroundStyle(.secondary)
+                        .appTextStyle(.secondaryNumber)
                     
                     DotDivider.secondarySmall()
                     

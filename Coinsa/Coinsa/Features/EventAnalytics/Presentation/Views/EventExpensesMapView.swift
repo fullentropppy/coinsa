@@ -110,7 +110,7 @@ struct EventExpensesMapView: View {
         }
         .overlay {
             if items.isEmpty {
-                EmptyStateView(icon: "map", title: .analyticsExpensePlacesEmptyStateTitle)
+                EmptyStateView(icon: AppSymbols.map, title: .analyticsExpensePlacesEmptyStateTitle)
                     .background(.regularMaterial)
             }
         }
@@ -128,7 +128,7 @@ struct EventExpensesMapView: View {
             Button {
                 fitRequest += 1
             } label: {
-                Image(systemName: "scope")
+                Image(systemName: AppSymbols.scope)
             }
             .disabled(items.isEmpty)
             .padding(MapLayout.buttonPadding)

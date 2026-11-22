@@ -23,14 +23,11 @@ struct LinkView: View {
                 VStack(alignment: .leading) {
                     Text(name)
                     Text(description)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .appTextStyle(.secondaryCaption)
                 }
                 .tint(.primary)
                 Spacer()
-                Image(systemName: "arrow.up.right")
-                    .imageScale(.small)
-                    .fontWeight(.semibold)
+                AppIcon(AppSymbols.arrowUpRight)
                     .foregroundStyle(.link)
             }
         }

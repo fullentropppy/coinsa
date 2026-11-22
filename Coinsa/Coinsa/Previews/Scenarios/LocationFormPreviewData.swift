@@ -10,9 +10,13 @@ import SwiftData
 /// Синтетический черновик и отдельное окружение для превью редактора локации.
 @MainActor
 struct LocationFormPreviewData {
+    // MARK: - Свойства
+
     let container: ModelContainer
     let settingsStore: AppSettingsStore
     let viewModel: LocationEditViewModel?
+
+    // MARK: - Инициализация
 
     /// Создает данные в памяти без CloudKit, сетевых запросов и общих настроек приложения.
     /// - Parameter isEditing: Подготавливать существующую локацию или черновик новой.

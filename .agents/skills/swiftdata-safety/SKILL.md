@@ -5,7 +5,8 @@ description: >-
   Применяй при изменении persisted-полей, их типов и defaults, связей, delete rules,
   структуры моделей, миграции или переименовании сохраняемых данных, изменении
   конфигурации SwiftData/CloudKit и правках репозиториев, влияющих на удаление данных
-  или совместимость хранения. Не применяй к чисто UI-изменениям без влияния на хранение.
+  или совместимость хранения, включая нормализацию значений при записи без изменения
+  схемы. Не применяй к чисто UI-изменениям без влияния на хранение.
 ---
 
 # SwiftData safety для Coinsa
@@ -22,7 +23,7 @@ description: >-
 - `Features/*/Domain/Logic/` и `Features/Expense/Domain/Models/ExpenseCalculationContext.swift` — интерпретация сохранённых значений.
 - `App/Main/CoinsaApp.swift` — схема и создание `ModelContainer`.
 - `Core/Configs/AppInfo.swift`, `BuildConfigs/*.entitlements` и Xcode build settings — выбор CloudKit-контейнера для Debug/Release.
-- `Previews/Support/PreviewEnvironment.swift`, `Previews/Support/PreviewBuilder.swift` — изолированные контейнеры превью; `Previews/Data/PreviewGenerator.swift`, `Infrastructure/Debug/DemoDataService.swift` — синтетические данные и операции с переданным контекстом.
+- `Previews/Support/PreviewEnvironment.swift`, `Previews/Support/PreviewBuilder.swift` — изолированные контейнеры превью; `Previews/Data/Common/PreviewGenerator.swift`, `Infrastructure/Debug/DemoDataService.swift` — синтетические данные и операции с переданным контекстом.
 
 ## Порядок работы
 

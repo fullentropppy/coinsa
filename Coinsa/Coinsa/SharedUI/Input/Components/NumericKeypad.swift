@@ -70,7 +70,7 @@ struct NumericKeypad: View {
         Button {
             onDelete()
         } label: {
-            Image(systemName: "delete.left")
+            Image(systemName: AppSymbols.deleteLeft)
                 .font(.title2)
                 .frame(maxWidth: .infinity, minHeight: Layout.keyMinHeight)
         }

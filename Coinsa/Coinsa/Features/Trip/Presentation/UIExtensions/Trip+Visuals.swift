@@ -8,9 +8,11 @@
 import SwiftUI
 
 extension Trip: TypeVisualRepresentable {
+    // MARK: - Свойства
+
     /// Основная иконка поездки (контурная).
-    static var primaryIcon: String { "suitcase" }
+    static var primaryIcon: String { AppSymbols.suitcase }
     
     /// Вторичная иконка поездки (заливная).
-    static var secondaryIcon: String { "suitcase.fill" }
+    static var secondaryIcon: String { AppSymbols.suitcaseFill }
 }

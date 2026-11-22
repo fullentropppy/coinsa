@@ -39,7 +39,7 @@ struct DetailActionsMenu<AdditionalActions: View>: View {
             ToolbarButton.edit(showsTitle: true, action: onEdit)
             additionalActions
         } label: {
-            Label(title, systemImage: "ellipsis")
+            Label(title, systemImage: AppSymbols.ellipsis)
         }
     }
 }

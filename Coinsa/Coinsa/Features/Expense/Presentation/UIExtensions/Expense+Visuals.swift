@@ -8,9 +8,11 @@
 import SwiftUI
 
 extension Expense: TypeVisualRepresentable {
+    // MARK: - Свойства
+
     /// Основная иконка траты.
-    static var primaryIcon: String { "cart" }
+    static var primaryIcon: String { AppSymbols.cart }
     
     /// Вторичная иконка траты.
-    static var secondaryIcon: String { "cart.fill" }
+    static var secondaryIcon: String { AppSymbols.cartFill }
 }

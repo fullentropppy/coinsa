@@ -117,9 +117,7 @@ struct TodayLocationSummaryView: View {
                     exchangeRatesContent(location: location)
                 }
                 Spacer()
-                Image(systemName: Location.primaryIcon)
-                    .imageScale(.small)
-                    .font(.subheadline.weight(.semibold))
+                AppIcon(Location.primaryIcon, style: .navigationLabel)
                     
             }
             .foregroundStyle(.secondary)
@@ -128,9 +126,7 @@ struct TodayLocationSummaryView: View {
     
     private func exchangeRatesContent(location: Location) -> some View {
         HStack {
-            Image(systemName: "arrow.left.arrow.right")
-                .imageScale(.small)
-                .font(.subheadline.weight(.semibold))
+            AppIcon(AppSymbols.arrowLeftArrowRight, style: .navigationLabel)
             
             VStack(alignment: .leading) {
                 Text(

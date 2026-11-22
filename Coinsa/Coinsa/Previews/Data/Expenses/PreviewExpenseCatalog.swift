@@ -9,9 +9,13 @@ import Foundation
 
 /// Именованное место синтетической покупки с приблизительными координатами.
 struct PreviewExpensePlace {
+    // MARK: - Свойства
+
     let name: String
     let latitude: Double
     let longitude: Double
+
+    // MARK: - Инициализация
 
     /// Создает место в конкретном районе или у достопримечательности.
     /// - Parameters:
@@ -27,6 +31,8 @@ struct PreviewExpensePlace {
 
 /// Дополнительная покупка на маршруте, дополняющая повседневные траты.
 struct PreviewExpenseActivity {
+    // MARK: - Свойства
+
     let subcategory: ExpenseSubcategory
     let amount: Double
     let placeIndex: Int
@@ -36,6 +42,8 @@ struct PreviewExpenseActivity {
     let dayOffset: Int
     let minuteOfDay: Int
     let timeZoneID: String?
+
+    // MARK: - Инициализация
 
     /// Создает конкретную покупку с суммой в указанной или местной валюте.
     /// - Parameters:
@@ -75,6 +83,8 @@ struct PreviewExpenseActivity {
 
 /// География и условные цены повседневных покупок без сетевых зависимостей.
 enum PreviewExpenseCatalog {
+    // MARK: - Методы
+
     /// Возвращает районы и места, разнесенные по городу и ближайшим окрестностям.
     /// - Parameter location: Локация синтетического маршрута.
     static func places(for location: PreviewLocation) -> [PreviewExpensePlace] {

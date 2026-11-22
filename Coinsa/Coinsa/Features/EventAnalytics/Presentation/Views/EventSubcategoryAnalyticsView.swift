@@ -86,8 +86,7 @@ struct EventSubcategoryAnalyticsView: View, Equatable {
                         .foregroundStyle(slice.subcategory.accentColor.gradient)
                         .frame(width: ViewLayout.Row.iconWidth)
                     Text(viewModel.shareValue(for: slice, among: slices).percentFormat())
-                        .font(.footnote.monospacedDigit())
-                        .foregroundStyle(.secondary)
+                        .appTextStyle(.secondaryNumber)
                        
                     DotDivider.secondarySmall()
                     

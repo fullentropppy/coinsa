@@ -227,8 +227,7 @@ struct ExpenseFormView: View {
                 selection: $viewModel.date
             ) {
                 HStack {
-                    Image(systemName: "calendar")
-                        .foregroundStyle(.secondary)
+                    AppIcon(AppSymbols.calendar, style: .formLabel)
                     Text(.expenseDate)
                 }
             }
@@ -236,9 +235,7 @@ struct ExpenseFormView: View {
         } footer: {
             HStack {
                 HStack(spacing: ViewLayout.Label.iconSpacing) {
-                    Image(systemName: "clock.fill")
-                        .fontWeight(.medium)
-                        .imageScale(.small)
+                    AppIcon(AppSymbols.clockFill, style: .inlineMetadata)
                     Text("\(viewModel.timeZone.gmtOffsetDisplay) (\(viewModel.timeZone.localizedDisplayName()))")
                 }
                 .font(.footnote)
@@ -273,7 +270,7 @@ struct ExpenseFormView: View {
                     onLocate()
                 } label: {
                     HStack {
-                        Image(systemName: "location")
+                        Image(systemName: AppSymbols.location)
                         Text(.expensePlaceLocate)
                     }
                 }
@@ -284,7 +281,7 @@ struct ExpenseFormView: View {
                     onShowMap()
                 } label: {
                     HStack {
-                        Image(systemName: "map")
+                        Image(systemName: AppSymbols.map)
                         Text(.expensePlaceChoose)
                     }
                 }
@@ -293,9 +290,7 @@ struct ExpenseFormView: View {
             if let coordinate = viewModel.coordinate {
                 HStack {
                     HStack(spacing: ViewLayout.Label.iconSpacing) {
-                        Image(systemName: "location.fill")
-                            .fontWeight(.medium)
-                            .imageScale(.small)
+                        AppIcon(AppSymbols.locationFill, style: .inlineMetadata)
                         Text(coordinate.formattedDescription)
                     }
                     .font(.footnote.monospacedDigit())
@@ -319,10 +314,8 @@ struct ExpenseFormView: View {
 
     private var commentSection: some View {
         Section {
-            HStack(alignment: .top) {
-                Image(systemName: "ellipsis.bubble")
-                    .foregroundStyle(.secondary)
-                    .padding(.vertical, ViewLayout.Comment.iconVerticalInset)
+            HStack(alignment: .center) {
+                CommentIcon()
 
                 TextField(.expenseComment, text: $viewModel.comment, axis: .vertical)
                     .lineLimit(ViewLayout.Comment.visibleLines)
@@ -340,7 +333,7 @@ struct ExpenseFormView: View {
                     onDelete()
                 } label: {
                     HStack {
-                        Image(systemName: "trash")
+                        Image(systemName: AppSymbols.trash)
                         Text(.expenseDelete)
                     }
                 }

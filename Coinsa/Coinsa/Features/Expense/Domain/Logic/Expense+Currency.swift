@@ -6,6 +6,8 @@
 //
 
 extension Expense {
+    // MARK: - Свойства
+
     /// Домашняя валюта траты (из родительской поездки).
     var homeCurrency: Currency {
         location?.homeCurrency ?? .defaultValue

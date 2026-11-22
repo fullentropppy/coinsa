@@ -48,11 +48,7 @@ struct PercentInputField: View {
                 font: font,
                 textAlignment: .trailing
             )
-            Image(systemName: "percent")
-                .fontWeight(.semibold)
-                .imageScale(.small)
-                .foregroundStyle(.secondary)
-                .frame(width: ViewLayout.Label.inputAccessoryWidth)
+            AppIcon(AppSymbols.percent, style: .inputAccessory)
         }
     }
 }

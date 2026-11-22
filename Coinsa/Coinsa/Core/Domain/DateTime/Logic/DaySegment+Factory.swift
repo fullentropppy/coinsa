@@ -8,6 +8,8 @@
 import Foundation
 
 extension DaySegment {
+    // MARK: - Методы
+
     /// Создает часть суток по дате.
     /// - Parameters:
     ///   - date: Дата, по часу которой определяется часть суток.

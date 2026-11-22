@@ -24,7 +24,7 @@ struct DotView: View {
     // MARK: - Тело View
     
     var body: some View {
-        Image(systemName: "circle.fill")
+        Image(systemName: AppSymbols.circleFill)
             .imageScale(.small)
             .foregroundStyle(fillColor.gradient)
     }

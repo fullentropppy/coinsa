@@ -6,6 +6,8 @@
 //
 
 extension PaymentMethod {
+    // MARK: - Свойства
+
     /// Способ оплаты по умолчанию (карта).
     static var defaultValue: PaymentMethod { PaymentMethod.card }
     

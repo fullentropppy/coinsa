@@ -9,6 +9,8 @@ import SwiftUI
 
 /// Палитра серий диаграмм с устойчивой генерацией дополнительных оттенков.
 enum ChartPalette {
+    // MARK: - Свойства
+
     /// Цвета первых двадцати серий в порядке назначения.
     private static let seriesColors: [Color] = [
         .Chart.series01, .Chart.series02, .Chart.series03, .Chart.series04, .Chart.series05,
@@ -20,6 +22,8 @@ enum ChartPalette {
     private static let generatedColorSaturation: Double = 0.65
     /// Яркость дополнительных оттенков после исчерпания палитры.
     private static let generatedColorBrightness: Double = 0.85
+
+    // MARK: - Методы
 
     /// Возвращает цвет серии из палитры или вычисляет его по постоянному идентификатору.
     /// - Parameters:

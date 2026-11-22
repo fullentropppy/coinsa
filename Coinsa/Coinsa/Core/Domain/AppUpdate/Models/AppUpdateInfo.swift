@@ -9,6 +9,8 @@ import Foundation
 
 /// Сведения о доступной сборке и разрешении показывать уведомление.
 struct AppUpdateInfo: Decodable {
+    // MARK: - Свойства
+
     let schemaVersion: Int
     let channel: String
     let notificationEnabled: Bool
@@ -23,6 +25,8 @@ struct AppUpdateInfo: Decodable {
     var isSupported: Bool {
         schemaVersion == 1 && channel == "testflight" && release != nil
     }
+
+    // MARK: - Методы
 
     func localizedReleaseNotes(locale: Locale) -> String {
         let language = locale.language.languageCode?.identifier ?? "en"

@@ -9,8 +9,12 @@ import Foundation
 
 /// Числовая версия и сборка приложения с учетом незначащих завершающих нулей.
 struct AppReleaseVersion {
+    // MARK: - Свойства
+
     private let versionComponents: [Int]
     private let buildComponents: [Int]
+
+    // MARK: - Инициализация
 
     /// Создает сравнимую пару из одной–трех числовых компонент версии и сборки.
     /// - Parameters:
@@ -22,6 +26,8 @@ struct AppReleaseVersion {
         self.versionComponents = versionComponents
         self.buildComponents = buildComponents
     }
+
+    // MARK: - Методы
 
     func isNewer(than other: AppReleaseVersion) -> Bool {
         if versionComponents != other.versionComponents {

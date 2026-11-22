@@ -7,6 +7,8 @@
 
 /// Часть суток.
 enum DaySegment: CaseIterable {
+    // MARK: - Значения
+
     case night
     case dawn
     case earlyMorning

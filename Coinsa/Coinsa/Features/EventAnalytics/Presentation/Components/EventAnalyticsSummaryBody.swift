@@ -68,25 +68,19 @@ struct EventAnalyticsSummaryBody: View {
             ExpenseDetailView(expense)
         } label: {
             VStack(spacing: ViewLayout.Summary.sectionSpacing) {
-                summaryRowHeader(icon: "dollarsign", title: .analyticsSummaryLargestExpense) {
+                summaryRowHeader(icon: AppSymbols.dollarsign, title: .analyticsSummaryLargestExpense) {
                     DateLabel(expense.civilDateTime)
                 }
                 HStack {
                     VStack(alignment: .leading, spacing: ViewLayout.Row.contentSpacing) {
                         HStack {
-                            Image(systemName: expense.category.primaryIcon)
-                                .imageScale(.small)
-                                .font(.footnote)
-                                .fontWeight(.medium)
+                            AppIcon(expense.category.primaryIcon, style: .metadata)
                                 .frame(width: ViewLayout.Row.iconWidth)
                             Text(expense.category.localizedResource)
                                 .font(.footnote)
                         }
                         HStack {
-                            Image(systemName: expense.subcategory.primaryIcon)
-                                .imageScale(.small)
-                                .font(.footnote)
-                                .fontWeight(.medium)
+                            AppIcon(expense.subcategory.primaryIcon, style: .metadata)
                                 .frame(width: ViewLayout.Row.iconWidth)
                             Text(expense.subcategory.localizedResource)
                                 .font(.footnote)

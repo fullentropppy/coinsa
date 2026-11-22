@@ -125,3 +125,12 @@ struct Badge: View {
         }
     }
 }
+
+#Preview {
+    VStack(spacing: 20) {
+        Badge(style: .icon(icon: Trip.secondaryIcon, fill: Trip.accentColor))
+        Badge(style: .title(title: .tripLocations, fill: Location.accentColor))
+        Badge(style: .combined(icon: Location.secondaryIcon, badge: .tripLocations, fill: Location.accentColor))
+    }
+    .padding()
+}

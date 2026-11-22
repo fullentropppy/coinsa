@@ -54,8 +54,7 @@ struct EventAmountCardView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: Layout.contentSpacing) {
             Text(title)
-                .font(.footnote)
-                .foregroundStyle(.secondary)
+                .appTextStyle(.secondaryFootnote)
                 .padding(.bottom, Layout.amountVerticalInset)
             
             if let locationAmount, let locationCurrency {

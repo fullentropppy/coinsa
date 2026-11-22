@@ -13,12 +13,16 @@ import SwiftData
 @MainActor
 @Observable
 final class LocationBudgetTransferViewModel {
+    // MARK: - Вложенные типы
+
     struct Selection {
         let destination: Location
         let homeAmount: Double
         let homeCurrencyCode: String
         let message: LocalizedStringResource
     }
+
+    // MARK: - Свойства
 
     let source: Location
     var selection: Selection?
@@ -41,11 +45,15 @@ final class LocationBudgetTransferViewModel {
         Self.canTransfer(from: source)
     }
 
+    // MARK: - Инициализация
+
     /// Создает состояние переноса для существующей локации.
     /// - Parameter source: Локация, передающая положительный остаток бюджета.
     init(source: Location) {
         self.source = source
     }
+
+    // MARK: - Методы
 
     static func canTransfer(from source: Location) -> Bool {
         !source.isDeleted

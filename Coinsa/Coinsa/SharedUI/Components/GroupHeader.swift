@@ -54,9 +54,7 @@ struct GroupHeader: View {
                         .background(.gray, in: .capsule)
                 }
                 
-                Image(systemName: icon)
-                    .imageScale(.small)
-                    .fontWeight(.semibold)
+                AppIcon(icon)
                 Text(title)
                     .fontWeight(.semibold)
             }
@@ -68,6 +66,12 @@ struct GroupHeader: View {
 
 // MARK: - Превью
 
-#Preview {
-    GroupHeader(icon: Location.primaryIcon, title: .tripLocations, itemCount: 4)
+#Preview{
+    VStack(spacing: 20) {
+        GroupHeader(icon: Location.primaryIcon, title: .tripLocations)
+        GroupHeader(icon: Location.primaryIcon, title: .tripLocations, itemCount: 0)
+        GroupHeader(icon: Location.primaryIcon, title: .tripLocations, itemCount: 4)
+        GroupHeader(icon: Location.primaryIcon, title: .tripLocations, itemCount: 128)
+    }
+    .padding()
 }

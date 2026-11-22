@@ -67,8 +67,7 @@ struct TripFormView: View {
                 displayedComponents: .date
             ) {
                 HStack {
-                    Image(systemName: "calendar.badge.plus")
-                        .foregroundStyle(.secondary)
+                    AppIcon(AppSymbols.calendarBadgePlus, style: .formLabel)
                     Text(.tripStartDate)
                 }
             }
@@ -82,8 +81,7 @@ struct TripFormView: View {
                 displayedComponents: .date
             ) {
                 HStack {
-                    Image(systemName: "calendar.badge.checkmark")
-                        .foregroundStyle(.secondary)
+                    AppIcon(AppSymbols.calendarBadgeCheckmark, style: .formLabel)
                     Text(.tripEndDate)
                 }
             }
@@ -116,7 +114,7 @@ struct TripFormView: View {
                     onDelete()
                 } label: {
                     HStack {
-                        Image(systemName: "trash")
+                        Image(systemName: AppSymbols.trash)
                         Text(.tripDelete)
                     }
                 }

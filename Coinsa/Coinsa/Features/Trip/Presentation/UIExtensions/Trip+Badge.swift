@@ -8,6 +8,8 @@
 import SwiftUI
 
 extension Trip: TypeBadgeProviding {
+    // MARK: - Свойства
+
     /// Стиль бейджа для поездки (иконка с акцентным цветом).
     static var badgeStyle: Badge.Style {
         .icon(icon: secondaryIcon, fill: accentColor)

@@ -6,6 +6,8 @@
 //
 
 extension Expense {
+    // MARK: - Свойства
+
     /// Курс обмена валюты траты к домашней валюты.
     /// На переходный период для переименования baseAmount в homeAmount.
     var homeAmount: Double {

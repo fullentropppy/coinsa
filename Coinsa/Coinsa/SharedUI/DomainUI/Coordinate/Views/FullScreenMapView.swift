@@ -169,7 +169,7 @@ struct FullScreenMapView: View {
                     if isGeolocating {
                         ProgressView()
                     } else {
-                        Image(systemName: "location.fill")
+                        Image(systemName: AppSymbols.locationFill)
                     }
                 }
                 .disabled(isGeolocating)
@@ -180,7 +180,7 @@ struct FullScreenMapView: View {
                 Button {
                     centerOnSelectedLocation()
                 } label: {
-                    Image(systemName: "scope")
+                    Image(systemName: AppSymbols.scope)
                 }
                 .disabled(draftCoordinate == nil)
                 .padding(MapLayout.buttonPadding)

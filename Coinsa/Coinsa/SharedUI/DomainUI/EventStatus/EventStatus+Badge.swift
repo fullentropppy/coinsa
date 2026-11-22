@@ -8,6 +8,8 @@
 import SwiftUI
 
 extension EventStatus: ValueBadgeProviding {
+    // MARK: - Свойства
+
     /// Стиль бейджа для статуса события (текстовый бейдж с акцентным цветом).
     var badgeStyle: Badge.Style {
         .title(title: localizedResource, fill: accentColor)

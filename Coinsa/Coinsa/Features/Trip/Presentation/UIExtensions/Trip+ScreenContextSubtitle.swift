@@ -6,6 +6,8 @@
 //
 
 extension Trip {
+    // MARK: - Свойства
+
     /// Контекстный подзаголовок для экрана поездки.
     var screenContextSubtitle: String {
         ScreenContextSubtitleFormatter.format(

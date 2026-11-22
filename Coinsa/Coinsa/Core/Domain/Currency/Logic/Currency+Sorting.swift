@@ -8,6 +8,8 @@
 import Foundation
 
 extension Currency {
+    // MARK: - Свойства
+
     /// Все валюты, отсортированные по локализованному названию.
     static var allCasesSortedByName: [Currency] {
         allCases.sorted {

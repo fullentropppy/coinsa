@@ -47,7 +47,7 @@ struct TripEditorView: View {
                     Label {
                         Text(.tripEditorUnavailableTitle)
                     } icon: {
-                        Image(systemName: "exclamationmark.triangle")
+                        Image(systemName: AppSymbols.exclamationmarkTriangle)
                     }
                 } description: {
                     Text(.tripEditorUnavailableMessage)

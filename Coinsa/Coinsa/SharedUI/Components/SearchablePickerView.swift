@@ -64,10 +64,7 @@ struct SearchablePickerView<SelectionValue: Hashable, Content: View>: View {
                                     content(option)
                                     Spacer()
                                     if option == selection {
-                                        Image(systemName: "checkmark")
-                                            .imageScale(.small)
-                                            .fontWeight(.semibold)
-                                            .foregroundStyle(.tint)
+                                        AppIcon(AppSymbols.checkmark, style: .selectionIndicator)
                                     }
                                 }
                                 .contentShape(.rect)

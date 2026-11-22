@@ -61,7 +61,7 @@ struct SettingsDebugSectionView: View {
             }
         } header: {
             HStack {
-                Image(systemName: "wrench.and.screwdriver.fill")
+                Image(systemName: AppSymbols.wrenchAndScrewdriverFill)
                 Text(.settingsDebug)
             }
         }

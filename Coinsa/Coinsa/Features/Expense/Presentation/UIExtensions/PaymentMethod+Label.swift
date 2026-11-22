@@ -6,8 +6,10 @@
 //
 
 extension PaymentMethod: LabelProviding {
+    // MARK: - Свойства
+
     /// Стиль метки для способа оплаты (иконка с фиксированной шириной).
     var labelStyle: ItemLabel.Style {
-        .withIcon(title: localizedResource, icon: primaryIcon, iconWidth: ViewLayout.Label.formIconWidth)
+        .withIcon(title: localizedResource, icon: primaryIcon)
     }
 }

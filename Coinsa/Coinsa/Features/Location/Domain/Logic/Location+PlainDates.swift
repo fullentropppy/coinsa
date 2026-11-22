@@ -6,6 +6,8 @@
 //
 
 extension Location {
+    // MARK: - Свойства
+
     /// Календарная дата начала без времени и часового пояса.
     var startPlainDate: PlainDate {
         PlainDate(storedStartDate, using: .utc)

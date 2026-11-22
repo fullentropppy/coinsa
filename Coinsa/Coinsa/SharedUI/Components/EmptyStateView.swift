@@ -95,3 +95,10 @@ struct EmptyStateView: View {
         action: {}
     )
 }
+
+#Preview {
+    EmptyStateView(
+        icon: AppSymbols.map,
+        title: .analyticsExpensePlacesEmptyStateTitle
+    )
+}

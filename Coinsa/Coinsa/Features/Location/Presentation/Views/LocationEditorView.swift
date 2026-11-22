@@ -52,7 +52,7 @@ struct LocationEditorView: View {
                     Label {
                         Text(.locationEditorUnavailableTitle)
                     } icon: {
-                        Image(systemName: "exclamationmark.triangle")
+                        Image(systemName: AppSymbols.exclamationmarkTriangle)
                     }
                 } description: {
                     Text(.locationEditorUnavailableMessage)

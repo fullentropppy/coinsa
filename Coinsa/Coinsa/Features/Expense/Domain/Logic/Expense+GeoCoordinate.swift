@@ -6,6 +6,8 @@
 //
 
 extension Expense {
+    // MARK: - Свойства
+
     /// Географические координаты места совершения траты.
     var coordinate: Coordinate? {
         guard let latitude, let longitude else { return nil }

@@ -8,29 +8,31 @@
 import SwiftUI
 
 extension ExpenseCategory: ValueVisualRepresentable {
+    // MARK: - Свойства
+
     /// Основная иконка категории (контурная версия).
     var primaryIcon: String {
         switch self {
-        case .food: "fork.knife"
-        case .transport: "car"
-        case .accommodation: "house"
-        case .leisure: "star"
-        case .shopping: "bag"
-        case .medicine: "cross"
-        case .miscellaneous: "circle.grid.2x2"
+        case .food: AppSymbols.forkKnife
+        case .transport: AppSymbols.car
+        case .accommodation: AppSymbols.house
+        case .leisure: AppSymbols.star
+        case .shopping: AppSymbols.bag
+        case .medicine: AppSymbols.cross
+        case .miscellaneous: AppSymbols.circleGrid2x2
         }
     }
     
     /// Вторичная иконка категории (заливная версия).
     var secondaryIcon: String {
         switch self {
-        case .food: "fork.knife"
-        case .transport: "car.fill"
-        case .accommodation: "house.fill"
-        case .leisure: "star.fill"
-        case .shopping: "bag.fill"
-        case .medicine: "cross.fill"
-        case .miscellaneous: "circle.grid.2x2.fill"
+        case .food: AppSymbols.forkKnife
+        case .transport: AppSymbols.carFill
+        case .accommodation: AppSymbols.houseFill
+        case .leisure: AppSymbols.starFill
+        case .shopping: AppSymbols.bagFill
+        case .medicine: AppSymbols.crossFill
+        case .miscellaneous: AppSymbols.circleGrid2x2Fill
         }
     }
     

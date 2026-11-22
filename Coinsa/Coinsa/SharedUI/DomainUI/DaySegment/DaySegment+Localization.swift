@@ -8,6 +8,8 @@
 import Foundation
 
 extension DaySegment {
+    // MARK: - Свойства
+
     /// Локализованное название части суток.
     var localizedResource: LocalizedStringResource {
         switch self {

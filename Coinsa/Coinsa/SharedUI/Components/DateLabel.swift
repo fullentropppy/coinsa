@@ -129,7 +129,7 @@ extension DateLabel {
         withTime showsTime: Bool = true,
         using calendar: Calendar = .current
     ) -> some View {
-        DateLabel(date, withTime: showsTime, using: calendar, font: .footnote, color: .secondary)
+        DateLabel(date, withTime: showsTime, using: calendar, font: AppTextStyle.secondaryFootnote.font, color: AppTextStyle.secondaryFootnote.color)
     }
     
     /// Вторичная компактная метка для одной календарной даты без привязки к часовому поясу.
@@ -142,7 +142,7 @@ extension DateLabel {
         withTime showsTime: Bool = true,
         using calendar: Calendar = .current
     ) -> some View {
-        DateLabel(date, withTime: showsTime, font: .footnote, color: .secondary)
+        DateLabel(date, withTime: showsTime, font: AppTextStyle.secondaryFootnote.font, color: AppTextStyle.secondaryFootnote.color)
     }
     
     /// Вторичная компактная метка для диапазона дат.
@@ -158,7 +158,7 @@ extension DateLabel {
         withTime showsTime: Bool = false,
         using calendar: Calendar = .current
     ) -> some View {
-        DateLabel(from: startDate, to: endDate, withTime: showsTime, using: calendar, font: .footnote, color: .secondary)
+        DateLabel(from: startDate, to: endDate, withTime: showsTime, using: calendar, font: AppTextStyle.secondaryFootnote.font, color: AppTextStyle.secondaryFootnote.color)
     }
     
     /// Вторичная компактная метка для диапазона календарных дат без привязки к часовому поясу.
@@ -173,7 +173,7 @@ extension DateLabel {
         withTime showsTime: Bool = false,
         using calendar: Calendar = .current
     ) -> some View {
-        DateLabel(from: startDate, to: endDate, withTime: showsTime, font: .footnote, color: .secondary)
+        DateLabel(from: startDate, to: endDate, withTime: showsTime, font: AppTextStyle.secondaryFootnote.font, color: AppTextStyle.secondaryFootnote.color)
     }
 }
 

@@ -37,9 +37,7 @@ struct ClearButton: View {
             action()
         } label: {
             HStack(spacing: ViewLayout.Label.compactIconSpacing) {
-                Image(systemName: "xmark.circle.fill")
-                    .imageScale(.small)
-                    .fontWeight(.semibold)
+                AppIcon(AppSymbols.xmarkCircleFill)
                 if showsTitle {
                     Text(.clear)
                         .font(.footnote)
@@ -52,5 +50,11 @@ struct ClearButton: View {
 // MARK: - Превью
 
 #Preview {
-    ClearButton {}
+    HStack(spacing: 20) {
+        ClearButton {}
+        ClearButton(showsTitle: false) {}
+        ClearButton {}
+            .disabled(true)
+    }
+    .padding()
 }

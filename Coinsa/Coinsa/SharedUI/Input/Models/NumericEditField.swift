@@ -7,6 +7,8 @@
 
 /// Идентификаторы полей для управления фокусом в числовых вводах.
 nonisolated enum NumericEditField: Hashable {
+    // MARK: - Значения
+
     case amount
     case exchangeRate
     case locationExchangeRate

@@ -9,6 +9,8 @@ import Foundation
 
 /// Данные по смещениям часового пояса.
 extension TimeZone {
+    // MARK: - Свойства
+
     /// Смещение от GMT в часах.
     var gmtOffsetHours: Double {
         Double(secondsFromGMT()) / 3600

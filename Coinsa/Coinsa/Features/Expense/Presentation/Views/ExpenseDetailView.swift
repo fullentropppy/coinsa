@@ -158,9 +158,7 @@ struct ExpenseDetailView: View {
         if let comment = expense.comment {
             Section {
                 HStack(alignment: .top) {
-                    Image(systemName: "ellipsis.bubble")
-                        .foregroundStyle(.secondary)
-                        .padding(.vertical, ViewLayout.Comment.iconVerticalInset)
+                    CommentIcon()
 
                     Text(comment)
                 }
@@ -234,8 +232,7 @@ struct ExpenseDetailView: View {
             DateLabel.secondarySmall(expense.civilDateTime)
             DotDivider.secondarySmall()
             Text(expense.timeZone.gmtOffsetDisplay)
-                .font(.caption)
-                .foregroundStyle(.secondary)
+                .appTextStyle(.secondaryCaption)
         }
     }
     
@@ -246,8 +243,7 @@ struct ExpenseDetailView: View {
                     .fontWeight(.medium)
                 Text(expense.paymentMethod == .card ? .expensePaidByCard : .expensePaidInCash)
             }
-            .font(.footnote)
-            .foregroundStyle(.secondary)
+            .appTextStyle(.secondaryFootnote)
             .padding(.leading, Layout.amountBlockInset)
             .padding(.top, Layout.amountBlockInset)
             .padding(.bottom, Layout.paymentLabelBottomInset)
@@ -285,8 +281,7 @@ struct ExpenseDetailView: View {
     private var additionalInfoContent: some View {
         if let adjustedRateDescription = viewModel.exchangeRateDescription {
             Text(adjustedRateDescription)
-                .font(.footnote)
-                .foregroundStyle(.secondary)
+                .appTextStyle(.secondaryFootnote)
                 .multilineTextAlignment(.center)
                 .frame(maxWidth: .infinity, alignment: .center)
         }
@@ -304,7 +299,7 @@ struct ExpenseDetailView: View {
                     haptics.trigger(.tap)
                     isShowingExpenseCopy = true
                 } label: {
-                    Label(.expenseCopyAction, systemImage: "doc.on.doc")
+                    Label(.expenseCopyAction, systemImage: AppSymbols.docOnDoc)
                 }
             }
         }

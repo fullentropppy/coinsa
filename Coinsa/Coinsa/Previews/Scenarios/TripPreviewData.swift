@@ -10,10 +10,14 @@ import SwiftData
 /// Синтетическая поездка и отдельное окружение для превью редактора и деталей.
 @MainActor
 struct TripPreviewData {
+    // MARK: - Свойства
+
     let container: ModelContainer
     let settingsStore: AppSettingsStore
     let trip: Trip
     let viewModel: TripEditViewModel?
+
+    // MARK: - Инициализация
 
     /// Создает поездку в памяти без CloudKit и общих настроек приложения.
     /// - Parameters:

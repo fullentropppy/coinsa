@@ -37,7 +37,7 @@ struct PrimaryAddButton: View {
                 haptics.trigger(.add)
                 action()
             } label: {
-                Image(systemName: "plus")
+                Image(systemName: AppSymbols.plus)
                     .font(.title)
                     .shadow(color: .accent, radius: Layout.iconShadowRadius)
             }

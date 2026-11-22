@@ -8,6 +8,8 @@
 import Foundation
 
 extension Location {
+    // MARK: - Свойства
+
     /// Домашняя валюта (из родительской поездки или значение по умолчанию).
     var homeCurrency: Currency {
         if let trip {

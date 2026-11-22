@@ -8,6 +8,8 @@
 import Foundation
 
 extension Currency {
+    // MARK: - Методы
+
     /// Формирует секции для пикера: приоритетные сверху, остальные - ниже.
     /// - Parameters:
     ///   - homeCurrency: Домашняя валюта.

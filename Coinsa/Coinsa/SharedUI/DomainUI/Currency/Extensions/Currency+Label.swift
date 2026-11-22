@@ -8,6 +8,8 @@
 import Foundation
 
 extension Currency: LabelProviding {
+    // MARK: - Свойства
+
     /// Стиль метки для валюты (текст с кодом и названием).
     var labelStyle: ItemLabel.Style {
         .withText(title: localizedResource, text: code)

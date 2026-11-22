@@ -9,6 +9,8 @@ import Foundation
 
 /// Создание календаря для конкретной временной зоны.
 extension TimeZone {
+    // MARK: - Свойства
+
     /// Григорианский календарь для временной зоны.
     var calendar: Calendar {
         var calendar = Calendar(identifier: .gregorian)

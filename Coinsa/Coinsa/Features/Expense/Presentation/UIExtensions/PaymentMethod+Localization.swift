@@ -8,6 +8,8 @@
 import Foundation
 
 extension PaymentMethod: LocalizedResourceProviding {
+    // MARK: - Свойства
+
     /// Локализованное название способа оплаты.
     var localizedResource: LocalizedStringResource {
         switch self {

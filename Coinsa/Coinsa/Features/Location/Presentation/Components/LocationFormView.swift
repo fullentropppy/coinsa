@@ -92,8 +92,7 @@ struct LocationFormView: View {
                 displayedComponents: .date
             ) {
                 HStack {
-                    Image(systemName: "calendar.badge.plus")
-                        .foregroundStyle(.secondary)
+                    AppIcon(AppSymbols.calendarBadgePlus, style: .formLabel)
                     Text(.locationStartDate)
                 }
             }
@@ -107,8 +106,7 @@ struct LocationFormView: View {
                 displayedComponents: .date
             ) {
                 HStack {
-                    Image(systemName: "calendar.badge.checkmark")
-                        .foregroundStyle(.secondary)
+                    AppIcon(AppSymbols.calendarBadgeCheckmark, style: .formLabel)
                     Text(.locationEndDate)
                 }
             }
@@ -203,7 +201,7 @@ struct LocationFormView: View {
                     onDelete()
                 } label: {
                     HStack {
-                        Image(systemName: "trash")
+                        Image(systemName: AppSymbols.trash)
                         Text(.locationDelete)
                     }
                 }

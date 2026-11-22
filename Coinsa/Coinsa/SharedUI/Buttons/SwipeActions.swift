@@ -45,7 +45,7 @@ struct SwipeActions: View {
                     haptics.trigger(.warning)
                     onDelete()
                 } label: {
-                    Label(.delete, systemImage: "trash")
+                    Label(.delete, systemImage: AppSymbols.trash)
                 }
                 .tint(.red)
             }
@@ -54,7 +54,7 @@ struct SwipeActions: View {
                     haptics.trigger(.tap)
                     onEdit()
                 } label: {
-                    Label(.edit, systemImage: "pencil")
+                    Label(.edit, systemImage: AppSymbols.pencil)
                 }
                 .tint(.positive)
             }
@@ -63,7 +63,7 @@ struct SwipeActions: View {
                     haptics.trigger(.tap)
                     onCopy()
                 } label: {
-                    Label(.expenseCopyAction, systemImage: "doc.on.doc")
+                    Label(.expenseCopyAction, systemImage: AppSymbols.docOnDoc)
                 }
                 .tint(.accentColor)
             }

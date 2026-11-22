@@ -32,7 +32,7 @@ struct FormValidationBanner: View {
 
     var body: some View {
         HStack(spacing: Layout.contentSpacing) {
-            Image(systemName: "exclamationmark.circle")
+            Image(systemName: AppSymbols.exclamationmarkCircle)
                 .foregroundStyle(.red)
                 .imageScale(.small)
 
@@ -50,4 +50,12 @@ struct FormValidationBanner: View {
 
 #Preview {
     FormValidationBanner(message: .validationAmountRequired)
+}
+
+#Preview {
+    FormValidationBanner(message: .validationExchangeRateRequired)
+        .frame(width: 240)
+        .dynamicTypeSize(.xxxLarge)
+        .environment(\.locale, Locale(identifier: "ru"))
+        .padding()
 }

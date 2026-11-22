@@ -8,6 +8,8 @@
 import SwiftUI
 
 extension View {
+    // MARK: - Методы
+
     /// Добавляет панель очистки поля и закрытия клавиатуры; снятием фокуса управляет экран.
     func keyboardInputBar(isPresented: Bool, onDismiss: @escaping () -> Void) -> some View {
         self.modifier(

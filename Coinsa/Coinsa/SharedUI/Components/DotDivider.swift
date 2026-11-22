@@ -36,7 +36,7 @@ struct DotDivider: View {
 
 extension DotDivider {
     static func secondarySmall() -> some View {
-        DotDivider(font: .footnote)
+        DotDivider(font: AppTextStyle.secondaryFootnote.font, color: AppTextStyle.secondaryFootnote.color)
     }
 }
 

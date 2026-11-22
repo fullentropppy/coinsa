@@ -6,6 +6,8 @@
 //
 
 extension Trip {
+    // MARK: - Свойства
+
     /// Признак наличия локаций в поездке.
     var hasLocations: Bool {
         locations?.isEmpty == false

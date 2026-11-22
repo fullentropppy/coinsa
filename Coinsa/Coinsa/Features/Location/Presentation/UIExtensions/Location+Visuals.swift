@@ -8,8 +8,10 @@
 import SwiftUI
 
 extension Location: TypeVisualRepresentable {
+    // MARK: - Свойства
+
     /// Основная иконка локации.
-    static var primaryIcon: String { "mappin.and.ellipse" }
+    static var primaryIcon: String { AppSymbols.mappinAndEllipse }
     
     /// Вторичная иконка локации.
     static var secondaryIcon: String { primaryIcon }

@@ -24,9 +24,7 @@ struct InputCurrencySwitchButton: View {
             haptics.trigger(.tap)
             action()
         } label: {
-            Image(systemName: "arrow.left.arrow.right")
-                .imageScale(.small)
-                .fontWeight(.semibold)
+            AppIcon(AppSymbols.arrowLeftArrowRight)
         }
         .frame(width: ViewLayout.Label.inputAccessoryWidth)
         .buttonStyle(.borderless)

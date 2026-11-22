@@ -39,7 +39,7 @@ struct EventAnalyticsLocationsBody: View {
         let slices = viewModel.displayedLocationSlices(from: locationSlices, asDailyAverage: showsDailyAmounts)
 
         if slices.isEmpty {
-            EmptyStateView(icon: "chart.xyaxis.line", title: .analyticsEmptyStateTitle)
+            EmptyStateView(icon: AppSymbols.chartXyaxisLine, title: .analyticsEmptyStateTitle)
                 .listRowBackground(Color.clear)
         } else {
             if slices.count > 1 && slices.contains(where: { $0.homeAmount > 0 }) {
@@ -113,8 +113,7 @@ struct EventAnalyticsLocationsBody: View {
                     if slices.count > 1 {
                         DotView(color(for: slice, in: colorOrder))
                         Text(viewModel.shareValue(for: slice, among: slices, asDailyAverage: showsDailyAmounts).percentFormat())
-                            .font(.footnote.monospacedDigit())
-                            .foregroundStyle(.secondary)
+                            .appTextStyle(.secondaryNumber)
                         DotDivider.secondarySmall()
                     }
                     CountLabel.secondarySmall(slice.expenseCount, icon: Expense.primaryIcon)

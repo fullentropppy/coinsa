@@ -8,21 +8,23 @@
 import SwiftUI
 
 extension EventStatus: ValueVisualRepresentable {
+    // MARK: - Свойства
+
     /// Основная иконка для статуса события (контурная версия).
     var primaryIcon: String {
         switch self {
-        case .upcoming: "clock"
-        case .ongoing: "play.circle"
-        case .completed: "checkmark.circle"
+        case .upcoming: AppSymbols.clock
+        case .ongoing: AppSymbols.playCircle
+        case .completed: AppSymbols.checkmarkCircle
         }
     }
     
     /// Вторичная иконка для статуса события (заливная версия).
     var secondaryIcon: String {
         switch self {
-        case .upcoming: "clock.fill"
-        case .ongoing: "play.circle.fill"
-        case .completed: "checkmark.circle.fill"
+        case .upcoming: AppSymbols.clockFill
+        case .ongoing: AppSymbols.playCircleFill
+        case .completed: AppSymbols.checkmarkCircleFill
         }
     }
     

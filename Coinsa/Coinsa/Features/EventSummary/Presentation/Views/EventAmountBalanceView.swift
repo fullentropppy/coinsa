@@ -57,8 +57,7 @@ struct EventAmountBalanceView: View {
                 balanceRow(usesCompactFormatting: false)
                 balanceRow(usesCompactFormatting: true)
             }
-            .font(.footnote)
-            .foregroundStyle(.secondary)
+            .appTextStyle(.secondaryFootnote)
             .lineLimit(1)
             .minimumScaleFactor(ViewLayout.Label.minimumAmountScaleFactor)
         }

@@ -6,12 +6,14 @@
 //
 
 extension AppAppearance: ValueVisualRepresentable {
+    // MARK: - Свойства
+
     /// Основная иконка режима внешнего вида.
     var primaryIcon: String {
         switch self {
-        case .system: "circle.righthalf.filled"
-        case .light: "circle"
-        case .dark: "circle.fill"
+        case .system: AppSymbols.circleRighthalfFilled
+        case .light: AppSymbols.circle
+        case .dark: AppSymbols.circleFill
         }
     }
 }

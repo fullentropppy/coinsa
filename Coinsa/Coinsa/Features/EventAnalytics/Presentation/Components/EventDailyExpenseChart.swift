@@ -88,7 +88,7 @@ struct EventDailyExpenseChart: View {
                 .foregroundStyle(.secondary)
                 .annotation(position: .overlay, alignment: .top) {
                     HStack(spacing: Layout.gapLabelSpacing) {
-                        Image(systemName: "arrow.left.and.right")
+                        Image(systemName: AppSymbols.arrowLeftAndRight)
                             .imageScale(.small)
                         Text(.analyticsDaysChartHiddenDays(count: gap.hiddenDayCount))
                     }
@@ -144,17 +144,17 @@ struct EventDailyExpenseChart: View {
             Spacer()
             scrollPositionButton(
                 position: timeline.domain.lowerBound,
-                icon: "arrow.left.to.line"
+                icon: AppSymbols.arrowLeftToLine
             )
             Spacer()
             scrollPositionButton(
                 position: timeline.scrollPosition(for: .today),
-                icon: "arrow.down.to.line"
+                icon: AppSymbols.arrowDownToLine
             )
             Spacer()
             scrollPositionButton(
                 position: max(timeline.domain.lowerBound, timeline.domain.upperBound - timeline.visibleLength),
-                icon: "arrow.right.to.line"
+                icon: AppSymbols.arrowRightToLine
             )
             Spacer()
         }
@@ -166,9 +166,7 @@ struct EventDailyExpenseChart: View {
             haptics.trigger(.tap)
             scrollPosition = position
         } label: {
-            Image(systemName: icon)
-                .imageScale(.small)
-                .fontWeight(.semibold)
+            AppIcon(icon)
         }
         .buttonStyle(.borderless)
         .tint(.accent)

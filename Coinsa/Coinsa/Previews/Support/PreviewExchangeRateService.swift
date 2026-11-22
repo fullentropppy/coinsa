@@ -9,6 +9,8 @@ import Foundation
 
 /// Локальные курсы превью на основе демоданных без обращения к сети.
 struct PreviewExchangeRateService: ExchangeRateService {
+    // MARK: - Методы
+
     /// Возвращает синтетический курс; для неподдерживаемой пары сообщает об ошибке загрузки.
     /// - Parameters:
     ///   - from: Исходная валюта.

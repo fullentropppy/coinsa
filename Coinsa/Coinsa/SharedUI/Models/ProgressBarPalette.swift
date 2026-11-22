@@ -9,10 +9,14 @@ import SwiftUI
 
 /// Цвета и неравномерные пороги состояния полосы прогресса.
 enum ProgressBarPalette {
+    // MARK: - Константы
+
     /// Зеленый цвет обычной полосы и наиболее благоприятного состояния.
     static let plain: Color = .Progress.step01
     /// Красный цвет критического состояния, в том числе пустой полосы остатка.
     static let critical: Color = .Progress.step10
+
+    // MARK: - Свойства
 
     /// Нижние включенные границы в процентах, от благоприятного состояния к критическому.
     private static let steps: [(minimumPercent: Double, color: Color)] = [
@@ -27,6 +31,8 @@ enum ProgressBarPalette {
         (5, .Progress.step09),
         (0, critical)
     ]
+
+    // MARK: - Методы
 
     /// Выбирает цвет состояния с зеркальными порогами для отрицательного прогресса.
     /// - Parameters:

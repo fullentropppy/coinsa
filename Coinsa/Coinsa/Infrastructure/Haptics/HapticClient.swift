@@ -9,10 +9,14 @@ import UIKit
 
 /// Клиент для генерации тактильных откликов разных типов.
 struct HapticClient {
+    // MARK: - Свойства
+
     var trigger: (HapticType) -> Void
 }
 
 extension HapticClient {
+    // MARK: - Методы
+
     /// Возвращает клиент, проверяющий разрешение перед каждым тактильным откликом.
     func enabled(when isEnabled: @escaping () -> Bool) -> HapticClient {
         HapticClient { type in
@@ -20,6 +24,8 @@ extension HapticClient {
             trigger(type)
         }
     }
+
+    // MARK: - Константы
 
     static let live = HapticClient { type in
         switch type {

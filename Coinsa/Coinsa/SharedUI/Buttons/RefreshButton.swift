@@ -41,9 +41,7 @@ struct RefreshButton: View {
                     ProgressView()
                         .controlSize(.small)
                 } else {
-                    Image(systemName: "arrow.clockwise")
-                        .imageScale(.small)
-                        .fontWeight(.semibold)
+                    AppIcon(AppSymbols.arrowClockwise)
                         .foregroundStyle(.accent)
                 }
             }

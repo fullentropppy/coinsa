@@ -66,7 +66,7 @@ struct KeyboardInputBarModifier: ViewModifier {
             haptics.trigger(.tap)
             clearAction?.clear()
         } label: {
-            Image(systemName: "xmark.rectangle")
+            Image(systemName: AppSymbols.xmarkRectangle)
         }
         .padding(.bottom, Layout.bootomClearButtonPadding)
         .padding(.vertical, ViewLayout.FloatingControls.buttonInset)
@@ -86,7 +86,7 @@ struct KeyboardInputBarModifier: ViewModifier {
             haptics.trigger(.tap)
             onDismiss()
         } label: {
-            Image(systemName: "keyboard.chevron.compact.down")
+            Image(systemName: AppSymbols.keyboardChevronCompactDown)
         }
         .padding(.vertical, ViewLayout.FloatingControls.buttonInset)
         .padding(

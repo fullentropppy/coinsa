@@ -7,6 +7,8 @@
 
 /// Общая группировка и сортировка локаций поездки.
 enum LocationGrouping {
+    // MARK: - Методы
+
     static func grouped(_ locations: [Location]) -> [(status: EventStatus, locations: [Location])] {
         let grouped = Dictionary(grouping: locations) { $0.status }
         let statusOrder: [EventStatus] = [.ongoing, .upcoming, .completed]

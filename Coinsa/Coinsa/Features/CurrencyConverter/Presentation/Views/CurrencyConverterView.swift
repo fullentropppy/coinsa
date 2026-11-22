@@ -147,7 +147,7 @@ struct CurrencyConverterView: View {
                 haptics.trigger(.tap)
                 viewModel.swapCurrencies()
             } label: {
-                Image(systemName: "arrow.up.arrow.down")
+                Image(systemName: AppSymbols.arrowUpArrowDown)
                     .imageScale(.medium)
                     .fontWeight(.semibold)
             }
@@ -158,7 +158,7 @@ struct CurrencyConverterView: View {
             HStack(spacing: ViewLayout.Label.iconSpacing) {
                 AmountText.standard(1.0, fractionLength: 0, currency: viewModel.baseCurrency)
                 
-                Image(systemName: "equal")
+                Image(systemName: AppSymbols.equal)
                     .imageScale(.small)
                 
                 ExchangeRateReadOnlyField(

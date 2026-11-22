@@ -7,6 +7,8 @@
 
 /// Типы тактильных откликов, доступных в приложении.
 enum HapticType {
+    // MARK: - Значения
+
     case add
     case tap
     case success

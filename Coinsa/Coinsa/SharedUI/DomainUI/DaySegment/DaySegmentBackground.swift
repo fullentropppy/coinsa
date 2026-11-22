@@ -9,15 +9,23 @@ import SwiftUI
 
 /// Фон с градиентом для выбранной части суток.
 struct DaySegmentBackground: View {
+    // MARK: - Окружение
+
     @Environment(\.colorScheme) private var colorScheme
 
+    // MARK: - Свойства
+
     let daySegment: DaySegment
+
+    // MARK: - Тело View
 
     var body: some View {
         LinearGradient(gradient: daySegment.gradient(for: colorScheme), startPoint: .top, endPoint: .bottom)
             .ignoresSafeArea()
     }
 }
+
+// MARK: - Превью
 
 #Preview {
     LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 8) {

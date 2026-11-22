@@ -20,10 +20,10 @@ enum RootTab: Hashable {
     
     var icon: String {
         switch self {
-        case .today: "\(Date().day).calendar"
+        case .today: AppSymbols.calendarDay(Date().day)
         case .trips: Trip.primaryIcon
-        case .converter: "arrow.left.arrow.right.circle.fill"
-        case .settings: "gearshape.fill"
+        case .converter: AppSymbols.arrowLeftArrowRightCircleFill
+        case .settings: AppSymbols.gearshapeFill
         }
     }
     

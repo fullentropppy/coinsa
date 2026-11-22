@@ -9,6 +9,8 @@ import Foundation
 
 /// Повторяющиеся размеры интерфейса, сгруппированные по назначению.
 enum ViewLayout {
+    // MARK: - Вложенные типы
+
     enum Row {
         /// Интервал между основным и дополнительным содержимым строки списка.
         static let contentSpacing: CGFloat = 10

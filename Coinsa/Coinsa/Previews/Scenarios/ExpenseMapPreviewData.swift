@@ -10,6 +10,8 @@ import SwiftData
 /// Синтетические данные карты в памяти без CloudKit и с отдельными настройками.
 @MainActor
 struct ExpenseMapPreviewData {
+    // MARK: - Свойства
+
     let container: ModelContainer
     let analyticsData: EventCategoryAnalyticsData
     let screenContextSubtitle: String
@@ -18,6 +20,8 @@ struct ExpenseMapPreviewData {
     var expenses: [Expense] {
         analyticsData.expenses
     }
+
+    // MARK: - Инициализация
 
     /// Создает синтетические данные карты во временном in-memory хранилище без CloudKit.
     /// - Parameters:

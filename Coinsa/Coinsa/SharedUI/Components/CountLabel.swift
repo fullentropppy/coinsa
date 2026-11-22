@@ -23,8 +23,8 @@ struct CountLabel: View {
     ///   - count: Отображаемое число.
     ///   - font: Шрифт текста. По умолчанию - `.body`.
     ///   - color: Цвет текста и иконки. По умолчанию - `.primary`.
-    ///   - icon: Название системной иконки. По умолчанию `"number"`.
-    init(_ count: Int, font: Font = .body, color: Color = .primary, icon: String = "number") {
+    ///   - icon: Название системной иконки. По умолчанию `AppSymbols.number`.
+    init(_ count: Int, font: Font = .body, color: Color = .primary, icon: String = AppSymbols.number) {
         self.count = count
         self.font = font
         self.color = color
@@ -34,9 +34,7 @@ struct CountLabel: View {
     // MARK: - Тело View
     var body: some View {
         HStack(spacing: ViewLayout.Label.compactIconSpacing) {
-            Image(systemName: icon)
-                .imageScale(.small)
-                .fontWeight(.medium)
+            AppIcon(icon, style: .inlineMetadata)
             Text(String(count))
         }
         .font(font)
@@ -50,10 +48,10 @@ extension CountLabel {
     /// Вторичная компактная метка (мелкий шрифт, вторичный цвет).
     /// - Parameters:
     ///   - count: Отображаемое число.
-    ///   - icon: Название системной иконки. По умолчанию `"number"`.
+    ///   - icon: Название системной иконки. По умолчанию `AppSymbols.number`.
     /// - Returns: Настроенная метка.
-    static func secondarySmall(_ count: Int, icon: String = "number") -> some View {
-        CountLabel(count, font: .footnote.monospacedDigit(), color: .secondary, icon: icon)
+    static func secondarySmall(_ count: Int, icon: String = AppSymbols.number) -> some View {
+        CountLabel(count, font: AppTextStyle.secondaryNumber.font, color: AppTextStyle.secondaryNumber.color, icon: icon)
     }
     
     /// Метка для отображения количества дней.
@@ -63,14 +61,14 @@ extension CountLabel {
     ///   - color: Цвет текста и иконки. По умолчанию `.primary`.
     /// - Returns: Настроенная метка.
     static func days(_ days: Int, font: Font = .body.monospacedDigit(), color: Color = .primary) -> some View {
-        CountLabel(days, font: font, color: color, icon: "calendar")
+        CountLabel(days, font: font, color: color, icon: AppSymbols.calendar)
     }
     
     /// Вторичная компактная метка для дней (мелкий шрифт, вторичный цвет).
     /// - Parameter days: Количество дней.
     /// - Returns: Настроенная метка.
     static func daysSecondarySmall(_ days: Int) -> some View {
-        CountLabel.days(days, font: .footnote.monospacedDigit(), color: .secondary)
+        CountLabel.days(days, font: AppTextStyle.secondaryNumber.font, color: AppTextStyle.secondaryNumber.color)
     }
 }
 
@@ -89,4 +87,14 @@ extension CountLabel {
             CountLabel.daysSecondarySmall(count)
         }
     }
+}
+
+#Preview{
+    VStack(alignment: .leading, spacing: 20) {
+        CountLabel.secondarySmall(0, icon: Expense.primaryIcon)
+        CountLabel.secondarySmall(12345, icon: Expense.primaryIcon)
+        CountLabel.daysSecondarySmall(1)
+        CountLabel.daysSecondarySmall(365)
+    }
+    .padding()
 }

@@ -6,6 +6,8 @@
 //
 
 extension Location {
+    // MARK: - Свойства
+
     /// Признак наличия бюджета в локации.
     var hasBudget: Bool {
         budget > 0

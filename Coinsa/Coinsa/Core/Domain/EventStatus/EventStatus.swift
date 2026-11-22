@@ -7,6 +7,8 @@
 
 /// Статус события.
 enum EventStatus: String, Codable, CaseIterable {
+    // MARK: - Значения
+
     case upcoming
     case ongoing
     case completed

@@ -17,8 +17,7 @@ struct ItemLabel: View {
         /// - Parameters:
         ///   - title: Локализованный текст метки.
         ///   - icon: Название системной иконки.
-        ///   - iconWidth: Фиксированная ширина для иконки (обеспечивает выравнивание).
-        case withIcon(title: LocalizedStringResource, icon: String, iconWidth: CGFloat)
+        case withIcon(title: LocalizedStringResource, icon: String)
         
         /// Метка с текстовым бейджем в формате "бейдж • заголовок".
         /// - Parameters:
@@ -35,8 +34,8 @@ struct ItemLabel: View {
     
     var body: some View {
         switch style {
-        case .withIcon(let title, let icon, let iconWidth):
-            withIconComponent(title: title, icon: icon, iconWidth: iconWidth)
+        case .withIcon(let title, let icon):
+            withIconComponent(title: title, icon: icon)
         case .withText(let title, let badge):
             withBadgeComponent(title: title, badge: badge)
         }
@@ -46,15 +45,10 @@ struct ItemLabel: View {
     
     private func withIconComponent(
         title: LocalizedStringResource,
-        icon: String,
-        iconWidth: CGFloat
+        icon: String
     ) -> some View {
         HStack(alignment: .center, spacing: ViewLayout.Label.iconSpacing) {
-            Image(systemName: icon)
-                .imageScale(.small)
-                .fontWeight(.semibold)
-                .foregroundStyle(.secondary)
-                .frame(width: iconWidth, alignment: .center)
+            AppIcon(icon, style: .formLabel)
             Text(title)
         }
     }
@@ -80,4 +74,12 @@ struct ItemLabel: View {
             }
         }
     }
+}
+
+#Preview {
+    VStack(alignment: .leading, spacing: 20) {
+        Currency.defaultValue.makeLabel()
+        Currency.jpy.makeLabel()
+    }
+    .padding()
 }

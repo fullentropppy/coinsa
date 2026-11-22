@@ -203,7 +203,7 @@ struct LocationDetailView: View {
                         transferSuccessMessage = nil
                         isShowingBudgetTransfer = true
                     } label: {
-                        Label(.locationBudgetTransferAction, systemImage: "arrow.forward.to.line")
+                        Label(.locationBudgetTransferAction, systemImage: AppSymbols.arrowForwardToLine)
                     }
                 }
             }

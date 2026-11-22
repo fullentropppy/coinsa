@@ -9,6 +9,8 @@ import Foundation
 
 /// Исходная синтетическая покупка до конвертации и создания связей SwiftData.
 struct ExpensePreviewSample {
+    // MARK: - Свойства
+
     let date: Date
     let amount: Double
     let currency: Currency
@@ -18,6 +20,8 @@ struct ExpensePreviewSample {
     let subcategory: ExpenseSubcategory
     let comment: String?
     let coordinate: Coordinate?
+
+    // MARK: - Инициализация
 
     /// Создает покупку с гражданским временем и суммой в валюте оплаты.
     /// - Parameters:

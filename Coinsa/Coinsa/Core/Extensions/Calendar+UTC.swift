@@ -9,6 +9,8 @@ import Foundation
 
 /// Фиксированный UTC-календарь для хранения пользовательских календарных компонентов.
 extension Calendar {
+    // MARK: - Свойства
+
     static var utc: Calendar {
         var calendar = Calendar(identifier: .gregorian)
         calendar.timeZone = .utc

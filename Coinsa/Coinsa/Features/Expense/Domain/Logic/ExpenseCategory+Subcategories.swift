@@ -6,6 +6,8 @@
 //
 
 extension ExpenseCategory {
+    // MARK: - Свойства
+
     /// Дочерние подкатегории для категории.
     var subcategories: [ExpenseSubcategory] {
         switch self {

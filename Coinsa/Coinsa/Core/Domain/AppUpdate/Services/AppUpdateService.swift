@@ -9,13 +9,19 @@ import Foundation
 
 /// Загрузка публичной конфигурации обновлений без использования устаревшего локального кеша.
 struct AppUpdateService {
+    // MARK: - Свойства
+
     private let session: URLSession
+
+    // MARK: - Инициализация
 
     /// Создает сервис с возможностью подмены сети в изолированных проверках.
     /// - Parameter session: Сессия для получения JSON.
     init(session: URLSession = .shared) {
         self.session = session
     }
+
+    // MARK: - Методы
 
     func fetchUpdate() async throws -> AppUpdateInfo {
         var request = URLRequest(

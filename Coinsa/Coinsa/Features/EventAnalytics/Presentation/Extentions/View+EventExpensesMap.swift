@@ -48,7 +48,7 @@ private struct EventExpensesMapModifier: ViewModifier {
                         Button {
                             isShowingExpensesMap.wrappedValue = true
                         } label: {
-                            Image(systemName: "map")
+                            Image(systemName: AppSymbols.map)
                         }
                     }
                 }

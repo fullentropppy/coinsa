@@ -105,10 +105,7 @@ struct TodayQuickExpensesView: View {
             onSelect(category, nil)
         } label: {
             HStack(alignment: .center) {
-                Image(systemName: category.primaryIcon)
-                    .frame(width: Layout.quickExpenseIconSize, height: Layout.quickExpenseIconSize)
-                    .foregroundStyle(category.accentColor)
-                    .shadow(color: category.accentColor, radius: Layout.quickExpenseShadowRadius)
+                quickExpenseIcon(category.primaryIcon, color: category.accentColor)
                 Text(category.localizedResource)
             }
             .font(.subheadline.weight(.medium))
@@ -126,16 +123,20 @@ struct TodayQuickExpensesView: View {
             haptics.trigger(.add)
             onSelect(subcategory.category, subcategory)
         } label: {
-            Image(systemName: subcategory.primaryIcon)
-                .frame(width: Layout.quickExpenseIconSize, height: Layout.quickExpenseIconSize)
-                .foregroundStyle(subcategory.accentColor)
-                .shadow(color: subcategory.accentColor, radius: Layout.quickExpenseShadowRadius)
-                .font(.subheadline.weight(.medium))
+            quickExpenseIcon(subcategory.primaryIcon, color: subcategory.accentColor)
                 .padding(.vertical, Layout.quickExpenseVerticalInset)
                 .frame(maxWidth: .infinity)
         }
         .buttonStyle(.glassProminent)
         .tint(buttonTint)
         .foregroundStyle(Color.primary)
+    }
+
+    private func quickExpenseIcon(_ name: String, color: Color) -> some View {
+        Image(systemName: name)
+            .frame(width: Layout.quickExpenseIconSize, height: Layout.quickExpenseIconSize)
+            .foregroundStyle(color)
+            .shadow(color: color, radius: Layout.quickExpenseShadowRadius)
+            .font(.subheadline.weight(.medium))
     }
 }

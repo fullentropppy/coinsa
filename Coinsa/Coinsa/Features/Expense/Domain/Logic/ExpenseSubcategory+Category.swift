@@ -6,6 +6,8 @@
 //
 
 extension ExpenseSubcategory {
+    // MARK: - Свойства
+
     /// Родительская категория для подкатегории.
     var category: ExpenseCategory {
         for category in ExpenseCategory.allCases {

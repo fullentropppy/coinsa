@@ -65,11 +65,7 @@ struct CurrencyPicker<CurrentValueLabel: View>: View {
             HStack(spacing: ViewLayout.Label.pickerIndicatorSpacing) {
                 currentValueLabel(selection.wrappedValue)
                 if !isDisabled {
-                    Image(systemName: "chevron.right")
-                        .imageScale(.small)
-                        .fontWeight(.semibold)
-                        .foregroundStyle(.accent)
-                        .frame(width: ViewLayout.Label.inputAccessoryWidth)
+                    AppIcon(AppSymbols.chevronRight, style: .navigationIndicator)
                 }
             }
         } label: {

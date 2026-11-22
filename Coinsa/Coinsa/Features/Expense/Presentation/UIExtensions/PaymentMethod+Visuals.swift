@@ -6,19 +6,21 @@
 //
 
 extension PaymentMethod: ValueVisualRepresentable {
+    // MARK: - Свойства
+
     /// Основная иконка способа оплаты (контурная версия).
     var primaryIcon: String {
         switch self {
-        case .cash: "banknote"
-        case .card: "creditcard"
+        case .cash: AppSymbols.banknote
+        case .card: AppSymbols.creditcard
         }
     }
     
     /// Вторичная иконка способа оплаты (заливная версия).
     var secondaryIcon: String {
         switch self {
-        case .cash: "banknote.fill"
-        case .card: "creditcard.fill"
+        case .cash: AppSymbols.banknoteFill
+        case .card: AppSymbols.creditcardFill
         }
     }
 }

@@ -6,6 +6,8 @@
 //
 
 extension Expense {
+    // MARK: - Свойства
+
     /// Дата и время без часового пояса в UTC-календаре.
     var civilDateTime: CivilDateTime {
         CivilDateTime(storedDate, using: .utc)

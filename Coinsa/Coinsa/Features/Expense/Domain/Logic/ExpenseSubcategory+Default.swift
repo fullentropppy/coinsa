@@ -6,6 +6,8 @@
 //
 
 extension ExpenseSubcategory {
+    // MARK: - Методы
+
     /// Подкатегория траты по умолчанию (прочее).
     static func defaultValue(with category: ExpenseCategory = .miscellaneous) -> ExpenseSubcategory {
         switch category {

@@ -7,15 +7,21 @@
 
 /// Перераспределение всего остатка между бюджетами локаций в домашней валюте.
 struct LocationBudgetTransfer {
+    // MARK: - Вложенные типы
+
     enum ValidationError: Error {
         case invalidLocations
         case invalidAmounts
         case balanceChanged
     }
 
+    // MARK: - Свойства
+
     let homeAmount: Double
     let sourceBudget: Double
     let destinationBudget: Double
+
+    // MARK: - Инициализация
 
     /// Проверяет подтвержденный остаток и рассчитывает новые бюджеты без округления сумм.
     /// - Parameters:
@@ -53,6 +59,8 @@ struct LocationBudgetTransfer {
         sourceBudget = source.calculateExpensesAmount(in: .home)
         destinationBudget = newDestinationBudget
     }
+
+    // MARK: - Методы
 
     static func availableHomeAmount(from location: Location) -> Double? {
         let expensesAmount = location.calculateExpensesAmount(in: .home)

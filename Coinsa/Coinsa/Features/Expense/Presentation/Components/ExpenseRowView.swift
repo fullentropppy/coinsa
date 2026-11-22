@@ -44,19 +44,11 @@ struct ExpenseRowView: View {
                 DateLabel.secondarySmall(expense.civilDateTime)
                 if hasComment {
                     DotDivider.secondarySmall()
-                    commentIcon
+                    CommentIcon(isCompact: true)
                 }
             }
             
         }
-    }
-    
-    private var commentIcon: some View {
-        Image(systemName: "ellipsis.bubble")
-            .imageScale(.small)
-            .font(.footnote)
-            .fontWeight(.medium)
-            .foregroundStyle(.secondary)
     }
     
     private var rightStack: some View {

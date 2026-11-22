@@ -59,37 +59,37 @@ extension ToolbarButton {
     /// Кнопка "ОК" (галочка) с тактильным откликом `.tap`.
     static func ok(showsTitle: Bool = false, action: @escaping () -> Void) -> some View {
         let title: LocalizedStringResource? = showsTitle ? .ok : nil
-        return ToolbarButton(title: title, icon: "checkmark", action: action, hapticType: .tap)
+        return ToolbarButton(title: title, icon: AppSymbols.checkmark, action: action, hapticType: .tap)
     }
     
     /// Кнопка добавления (плюс) с тактильным откликом `.add`.
     static func add(showsTitle: Bool = false, action: @escaping () -> Void) -> some View {
         let title: LocalizedStringResource? = showsTitle ? .add : nil
-        return ToolbarButton(title: title, icon: "plus", action: action, hapticType: .add)
+        return ToolbarButton(title: title, icon: AppSymbols.plus, action: action, hapticType: .add)
     }
     
     /// Кнопка редактирования (карандаш) с тактильным откликом `.tap`.
     static func edit(showsTitle: Bool = false, action: @escaping () -> Void) -> some View {
         let title: LocalizedStringResource? = showsTitle ? .edit : nil
-        return ToolbarButton(title: title, icon: "pencil", action: action, hapticType: .tap)
+        return ToolbarButton(title: title, icon: AppSymbols.pencil, action: action, hapticType: .tap)
     }
     
     /// Кнопка удаления (корзина) с тактильным откликом `.warning`.
     static func delete(showsTitle: Bool = false, action: @escaping () -> Void) -> some View {
         let title: LocalizedStringResource? = showsTitle ? .delete : nil
-        return ToolbarButton(title: title, icon: "trash", action: action, hapticType: .warning)
+        return ToolbarButton(title: title, icon: AppSymbols.trash, action: action, hapticType: .warning)
     }
     
     /// Кнопка закрытия (крестик) без тактильного отклика.
     static func close(showsTitle: Bool = false, action: @escaping () -> Void) -> some View {
         let title: LocalizedStringResource? = showsTitle ? .close : nil
-        return ToolbarButton(title: title, icon: "xmark", action: action)
+        return ToolbarButton(title: title, icon: AppSymbols.xmark, action: action)
     }
         
     /// Кнопка настроек (шестеренка) без тактильного отклика.
     static func settings(showsTitle: Bool = false, action: @escaping () -> Void) -> some View {
         let title: LocalizedStringResource? = showsTitle ? .settings : nil
-        return ToolbarButton(title: title, icon: "gear", action: action)
+        return ToolbarButton(title: title, icon: AppSymbols.gear, action: action)
     }
 }
 
@@ -104,4 +104,16 @@ extension ToolbarButton {
         ToolbarButton.close {}
         ToolbarButton.settings {}
     }
+}
+
+#Preview("With titles") {
+    VStack(alignment: .leading, spacing: 20) {
+        ToolbarButton.ok(showsTitle: true) {}
+        ToolbarButton.add(showsTitle: true) {}
+        ToolbarButton.edit(showsTitle: true) {}
+        ToolbarButton.delete(showsTitle: true) {}
+        ToolbarButton.close(showsTitle: true) {}
+        ToolbarButton.settings(showsTitle: true) {}
+    }
+    .padding()
 }

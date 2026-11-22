@@ -9,6 +9,8 @@ import Foundation
 
 /// Подготавливает список и сводку дня за один проход по расходам локации.
 enum TodaySummaryCalculator {
+    // MARK: - Методы
+
     /// Рассчитывает сводку и подготавливает список трат и быстрые подкатегории одного дня.
     /// - Parameters:
     ///   - location: Локация с бюджетом, валютами и историей трат; сохраненные значения не изменяются.
@@ -108,6 +110,8 @@ enum TodaySummaryCalculator {
 
 /// Согласованные данные сводки, списка и быстрых подкатегорий одного дня.
 struct TodaySummary {
+    // MARK: - Свойства
+
     let data: EventSummaryData
     let expenses: [Expense]
     let quickExpenseSubcategories: [ExpenseSubcategory]

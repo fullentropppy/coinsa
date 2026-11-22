@@ -111,11 +111,7 @@ struct SettingsView: View {
                         HStack {
                             Text((settingsStore.todayBudgetOverspendThreshold).numberFormat(fractionLength: 0))
                                 .foregroundStyle(.primary)
-                            Image(systemName: "percent")
-                                .fontWeight(.semibold)
-                                .imageScale(.small)
-                                .foregroundStyle(.secondary)
-                                .frame(width: ViewLayout.Label.inputAccessoryWidth)
+                            AppIcon(AppSymbols.percent, style: .inputAccessory)
                         }
                     }
                     Slider(value: todayBudgetOverspendThresholdBinding, in: 0...100, step: 5) {

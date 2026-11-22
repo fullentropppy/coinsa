@@ -50,7 +50,7 @@ struct SplashView: View {
     var body: some View {
         Color.accent
             .overlay {
-                Image(systemName: "lizard.fill")
+                Image(systemName: AppSymbols.lizardFill)
                     .font(.system(size: Layout.iconSize, weight: .bold))
                     .foregroundStyle(.windowBackground)
                     .opacity(iconOpacity)

@@ -8,6 +8,8 @@
 import Foundation
 
 extension AppAppearance: LocalizedResourceProviding {
+    // MARK: - Свойства
+
     /// Локализованное название режима внешнего вида.
     var localizedResource: LocalizedStringResource {
         switch self {

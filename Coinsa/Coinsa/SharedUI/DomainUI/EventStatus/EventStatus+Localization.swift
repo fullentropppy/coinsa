@@ -8,6 +8,8 @@
 import Foundation
 
 extension EventStatus: LocalizedResourceProviding {
+    // MARK: - Свойства
+
     /// Локализованное название статуса в единственном числе.
     var localizedResource: LocalizedStringResource {
         switch self {

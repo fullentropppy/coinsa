@@ -6,6 +6,8 @@
 //
 
 extension Expense {
+    // MARK: - Свойства
+
     /// Подкатегория траты (из строкового значения).
     var subcategory: ExpenseSubcategory {
         ExpenseSubcategory.from(subcategoryRaw)

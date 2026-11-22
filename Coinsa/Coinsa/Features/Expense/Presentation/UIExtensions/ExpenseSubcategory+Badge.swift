@@ -8,6 +8,8 @@
 import SwiftUI
 
 extension ExpenseSubcategory: ValueBadgeProviding {
+    // MARK: - Свойства
+
     /// Стиль бейджа для подкатегории траты (иконка + текст, заливка акцентным цветом родительской категории).
     var badgeStyle: Badge.Style {
         .combined(icon: secondaryIcon, badge: localizedResource, fill: accentColor)

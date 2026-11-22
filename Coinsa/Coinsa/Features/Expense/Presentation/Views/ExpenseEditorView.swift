@@ -72,7 +72,7 @@ struct ExpenseEditorView: View {
                     Label {
                         Text(.expenseEditorUnavailableTitle)
                     } icon: {
-                        Image(systemName: "exclamationmark.triangle")
+                        Image(systemName: AppSymbols.exclamationmarkTriangle)
                     }
                 } description: {
                     Text(.expenseEditorUnavailableMessage)

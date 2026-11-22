@@ -6,6 +6,8 @@
 //
 
 extension Location {
+    // MARK: - Свойства
+
     /// Курс обмена валюты локации к домашней валюты.
     /// На переходный период для переименования rateLocationToBase в rateLocationToHome.
     var rateLocationToHome: Double {
