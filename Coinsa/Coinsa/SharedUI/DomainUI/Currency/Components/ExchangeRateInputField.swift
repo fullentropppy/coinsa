@@ -64,9 +64,9 @@ struct ExchangeRateInputField: View {
 
             CurrencyCodeText.standard(currency)
 
-            ExchangeRateRefreshButton(
+            RefreshButton(
                 isLoading: isLoading,
-                onRefresh: onRefresh
+                action: onRefresh
             )
         }
     }

@@ -30,6 +30,7 @@ struct ExpenseFormView: View {
     private let isCommentFocused: FocusState<Bool>.Binding
     private let isResolvingLocation: Bool
     private let onSwitchInputCurrency: () -> Void
+    private let onRefreshDate: () -> Void
     private let onLocate: () -> Void
     private let onShowMap: () -> Void
     private let onDelete: () -> Void
@@ -48,6 +49,7 @@ struct ExpenseFormView: View {
     ///   - isCommentFocused: Фокус поля комментария, принадлежащий экрану.
     ///   - isResolvingLocation: Выполняется ли определение координат.
     ///   - onSwitchInputCurrency: Переключение валюты ввода с завершением текущего ввода.
+    ///   - onRefreshDate: Установка текущих даты и времени.
     ///   - onLocate: Запрос текущей геопозиции.
     ///   - onShowMap: Открытие карты для выбора места траты.
     ///   - onDelete: Запрос подтверждения удаления.
@@ -58,6 +60,7 @@ struct ExpenseFormView: View {
         isCommentFocused: FocusState<Bool>.Binding,
         isResolvingLocation: Bool,
         onSwitchInputCurrency: @escaping () -> Void,
+        onRefreshDate: @escaping () -> Void,
         onLocate: @escaping () -> Void,
         onShowMap: @escaping () -> Void,
         onDelete: @escaping () -> Void
@@ -68,6 +71,7 @@ struct ExpenseFormView: View {
         self.isCommentFocused = isCommentFocused
         self.isResolvingLocation = isResolvingLocation
         self.onSwitchInputCurrency = onSwitchInputCurrency
+        self.onRefreshDate = onRefreshDate
         self.onLocate = onLocate
         self.onShowMap = onShowMap
         self.onDelete = onDelete
@@ -230,12 +234,19 @@ struct ExpenseFormView: View {
             }
             .environment(\.timeZone, .utc)
         } footer: {
-            HStack(spacing: ViewLayout.Label.iconSpacing) {
-                Image(systemName: "clock.fill")
-                    .imageScale(.small)
-                Text("\(viewModel.timeZone.gmtOffsetDisplay) (\(viewModel.timeZone.localizedDisplayName()))")
+            HStack {
+                HStack(spacing: ViewLayout.Label.iconSpacing) {
+                    Image(systemName: "clock.fill")
+                        .fontWeight(.medium)
+                        .imageScale(.small)
+                    Text("\(viewModel.timeZone.gmtOffsetDisplay) (\(viewModel.timeZone.localizedDisplayName()))")
+                }
+                .font(.footnote)
+
+                Spacer()
+
+                RefreshButton(action: onRefreshDate)
             }
-            .font(.footnote)
         }
     }
 
@@ -257,7 +268,10 @@ struct ExpenseFormView: View {
                 }
                 .buttonStyle(.plain)
             } else {
-                Button(action: onLocate) {
+                Button {
+                    haptics.trigger(.tap)
+                    onLocate()
+                } label: {
                     HStack {
                         Image(systemName: "location")
                         Text(.expensePlaceLocate)
@@ -280,13 +294,21 @@ struct ExpenseFormView: View {
                 HStack {
                     HStack(spacing: ViewLayout.Label.iconSpacing) {
                         Image(systemName: "location.fill")
+                            .fontWeight(.medium)
                             .imageScale(.small)
                         Text(coordinate.formattedDescription)
                     }
                     .font(.footnote.monospacedDigit())
                     Spacer()
-                    ClearButton {
-                        viewModel.updateCoordinate(nil)
+                    
+                    HStack(alignment: .lastTextBaseline) {
+                        ClearButton(showsTitle: false) {
+                            viewModel.updateCoordinate(nil)
+                        }
+                        .frame(width: ViewLayout.Label.inputAccessoryWidth)
+                        .buttonStyle(.borderless)
+                        
+                        RefreshButton(isLoading: isResolvingLocation, action: onLocate)
                     }
                 }
             } else {
@@ -422,6 +444,7 @@ private struct ExpenseFormPreview: View {
                         focusedField = nil
                         currencyPairSide = currencyPairSide == .base ? .quote : .base
                     },
+                    onRefreshDate: viewModel.updateDateToNow,
                     onLocate: {},
                     onShowMap: {},
                     onDelete: {}

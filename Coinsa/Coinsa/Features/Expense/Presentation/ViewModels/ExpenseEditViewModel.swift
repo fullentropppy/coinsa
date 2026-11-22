@@ -13,7 +13,7 @@ import SwiftData
 /// ViewModel для экрана создания/редактирования траты.
 @MainActor
 @Observable
-final class ExpenseEditViewModel {
+final class ExpenseEditViewModel: Identifiable {
     // MARK: - Зависимости
     
     private let homeCurrencyConverter: CurrencyConverter
@@ -28,6 +28,9 @@ final class ExpenseEditViewModel {
     private var initialSnapshot: Snapshot
     private var hasLoadedInitialRates = false
     private var amountInputSide: CurrencyPairSide = .quote
+    private var copiedDateMetadata: ExpenseCopyDateMetadata?
+    private(set) var needsCopyLocationRate = false
+
     private var calculationContext: ExpenseCalculationContext {
         ExpenseCalculationContext(
             homeAmount: homeAmount,
@@ -44,6 +47,10 @@ final class ExpenseEditViewModel {
     
     var isEdit: Bool {
         expense != nil
+    }
+
+    var isCopy: Bool {
+        copiedDateMetadata != nil
     }
     
     var isExpenseHomeCurrency: Bool {
@@ -108,6 +115,8 @@ final class ExpenseEditViewModel {
     var timeZone: TimeZone {
         if let expense, CivilDateTime(date) == CivilDateTime(initialSnapshot.date) {
             expense.timeZone
+        } else if let copiedDateMetadata, CivilDateTime(date) == copiedDateMetadata.civilDateTime {
+            copiedDateMetadata.timeZoneID.flatMap(TimeZone.init(identifier:)) ?? .current
         } else {
             .current
         }
@@ -271,6 +280,53 @@ final class ExpenseEditViewModel {
         )
     }
     
+    /// Создает новую трату из исходной в пределах одной поездки, сохраняя известные курсы.
+    /// - Parameters:
+    ///   - source: Копируемая трата.
+    ///   - location: Выбранная локация той же поездки.
+    ///   - exchangeRateProvider: Провайдер недостающего курса или nil для Hexarate.
+    convenience init?(
+        copying source: Expense,
+        to location: Location,
+        exchangeRateProvider: ExchangeRateProvider? = nil
+    ) {
+        guard !source.isDeleted, let sourceLocation = source.location, !sourceLocation.isDeleted,
+              let trip = sourceLocation.trip, !trip.isDeleted,
+              !location.isDeleted, location.trip === trip else { return nil }
+
+        let hasSameLocationCurrency = sourceLocation.locationCurrency == location.locationCurrency
+        let locationRate: Double
+        if hasSameLocationCurrency {
+            locationRate = source.rateExpenseToLocation
+        } else if location.locationCurrency == source.homeCurrency {
+            locationRate = source.rateExpenseToHome
+        } else if location.locationCurrency == source.expenseCurrency {
+            locationRate = 1
+        } else {
+            locationRate = 0
+        }
+
+        self.init(
+            location: location,
+            expense: nil,
+            date: source.civilDateTime.storedDate,
+            homeAmount: source.homeAmount,
+            expenseAmount: source.amount(in: .expense),
+            expenseCurrency: source.expenseCurrency,
+            rateExpenseToHome: source.rateExpenseToHome,
+            rateExpenseToLocation: locationRate,
+            paymentMethod: source.paymentMethod,
+            exchangeAdjustment: source.exchangeAdjustment,
+            category: source.category,
+            subcategory: source.subcategory,
+            coordinate: source.coordinate,
+            comment: source.comment ?? "",
+            exchangeRateProvider: exchangeRateProvider
+        )
+        copiedDateMetadata = ExpenseCopyDateMetadata(source)
+        needsCopyLocationRate = !hasSameLocationCurrency && locationRate == 0
+    }
+
     /// Создает черновик траты, конвертеры валют и исходный снимок для определения изменений.
     /// - Parameters:
     ///   - location: Родительская локация.
@@ -416,6 +472,12 @@ final class ExpenseEditViewModel {
         guard !hasLoadedInitialRates && !isEdit else { return }
         
         hasLoadedInitialRates = true
+        if isCopy {
+            if needsCopyLocationRate {
+                requestInitialRateExpenseToLocationIfNeeded()
+            }
+            return
+        }
         requestInitialRateExpenseToBaseIfNeeded()
         requestInitialRateExpenseToLocationIfNeeded()
     }
@@ -471,6 +533,12 @@ final class ExpenseEditViewModel {
         )
     }
     
+    // MARK: - Операции с датой
+
+    func updateDateToNow() {
+        date = CivilDateTime.now.storedDate
+    }
+
     // MARK: - Операции с категорией
     
     func updateCategory(_ newCategory: ExpenseCategory) {
@@ -502,7 +570,7 @@ final class ExpenseEditViewModel {
     }
 
     func applyResolvedCurrentLocation(_ location: CLLocation) {
-        guard !isEdit && coordinate == nil else { return }
+        guard !isEdit && !isCopy && coordinate == nil else { return }
 
         coordinate = Coordinate(location)
         syncInitialSnapshotWithCurrentValues()
@@ -551,7 +619,8 @@ final class ExpenseEditViewModel {
                 latitude: coordinate?.latitude,
                 longitude: coordinate?.longitude,
                 horizontalAccuracy: coordinate?.horizontalAccuracy,
-                comment: comment
+                comment: comment,
+                copiedDateMetadata: copiedDateMetadata
             )
         }
     }

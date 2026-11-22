@@ -76,6 +76,7 @@ private struct TodayContentView: View {
     @State private var isShowingDeletionError = false
     @State private var selectedQuickExpense: QuickExpenseSelection?
     @State private var expenseToEdit: Expense?
+    @State private var expenseToCopy: Expense?
     @Query private var currentLocations: [Location]
 
     private let date: Date
@@ -133,6 +134,9 @@ private struct TodayContentView: View {
                         }
                         .sheet(item: $expenseToEdit) { expense in
                             ExpenseEditorView(forEdit: expense)
+                        }
+                        .sheet(item: $expenseToCopy) { expense in
+                            ExpenseCopyView(source: expense)
                         }
                         .deleteConfirmationAlert(
                             isPresented: $deletionHandler.isShowingDeleteConfirmation,
@@ -210,7 +214,8 @@ private struct TodayContentView: View {
                     .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                         SwipeActions(
                             onDelete: { deletionHandler.request(for: [expense]) },
-                            onEdit: { expenseToEdit = expense }
+                            onEdit: { expenseToEdit = expense },
+                            onCopy: { expenseToCopy = expense }
                         )
                     }
                 }

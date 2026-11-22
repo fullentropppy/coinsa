@@ -45,7 +45,7 @@ struct ExchangeRateReadOnlyField: View {
                 .foregroundStyle(isLoading ? .secondary : .primary)
                 .lineLimit(1)
             CurrencyCodeText.standard(currency)
-            ExchangeRateRefreshButton(isLoading: isLoading, onRefresh: onRefresh)
+            RefreshButton(isLoading: isLoading, action: onRefresh)
         }
     }
 

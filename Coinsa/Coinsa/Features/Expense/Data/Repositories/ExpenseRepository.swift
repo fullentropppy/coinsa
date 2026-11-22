@@ -33,6 +33,7 @@ struct ExpenseRepository {
     ///   - longitude: Географическая долгота места траты.
     ///   - horizontalAccuracy: Точность определения координат в метрах.
     ///   - comment: Комментарий (опционально).
+    ///   - copiedDateMetadata: Исходный момент и пояс копии, сохраняемые при неизмененной дате.
     func add(
         date: Date,
         homeAmount: Double,
@@ -47,9 +48,11 @@ struct ExpenseRepository {
         latitude: Double?,
         longitude: Double?,
         horizontalAccuracy: Double?,
-        comment: String?
+        comment: String?,
+        copiedDateMetadata: ExpenseCopyDateMetadata? = nil
     ) throws {
-        guard location.modelContext === context, !location.isDeleted else {
+        guard location.modelContext === context, !location.isDeleted,
+              let trip = location.trip, trip.modelContext === context, !trip.isDeleted else {
             throw ExpenseRepositoryError.locationUnavailable
         }
 
@@ -79,6 +82,10 @@ struct ExpenseRepository {
             )
         
             normalizeExpenseData(expense, updatesDateMetadata: true)
+            if let copiedDateMetadata, expense.civilDateTime == copiedDateMetadata.civilDateTime {
+                expense.actualDate = copiedDateMetadata.actualDate
+                expense.timeZoneID = copiedDateMetadata.timeZoneID
+            }
             context.insert(expense)
         }
     }

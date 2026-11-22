@@ -24,6 +24,7 @@ struct LocationDetailView: View {
     @State private var isShowingLocationEdit = false
     @State private var isShowingExpenseCreate = false
     @State private var expenseToEdit: Expense?
+    @State private var expenseToCopy: Expense?
     @State private var isShowingBudgetTransfer = false
     @State private var transferSuccessMessage: LocalizedStringResource?
     @State private var isShowingTransferSuccess = false
@@ -70,6 +71,9 @@ struct LocationDetailView: View {
             }
             .sheet(item: $expenseToEdit) { expense in
                 ExpenseEditorView(forEdit: expense)
+            }
+            .sheet(item: $expenseToCopy) { expense in
+                ExpenseCopyView(source: expense)
             }
             .sheet(isPresented: $isShowingBudgetTransfer, onDismiss: showTransferSuccessIfNeeded) {
                 LocationBudgetTransferView(source: location) { destinationName in
@@ -175,7 +179,8 @@ struct LocationDetailView: View {
                         .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                             SwipeActions(
                                 onDelete: { requestDelete(for: [expense]) },
-                                onEdit: { expenseToEdit = expense }
+                                onEdit: { expenseToEdit = expense },
+                                onCopy: { expenseToCopy = expense }
                             )
                         }
                     }

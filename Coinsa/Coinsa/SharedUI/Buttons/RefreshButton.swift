@@ -1,14 +1,14 @@
 //
-//  ExchangeRateRefreshButton.swift
+//  RefreshButton.swift
 //  Coinsa
 //
-//  Created by Daniil Gritsenko on 07.11.2026.
+//  Created by Daniil Gritsenko on 22.11.2026.
 //
 
 import SwiftUI
 
-/// Кнопка обновления курса со спиннером в состоянии загрузки.
-struct ExchangeRateRefreshButton: View {
+/// Общая кнопка обновления со спиннером на время выполнения действия.
+struct RefreshButton: View {
     // MARK: - Окружение
     
     @Environment(\.haptics) private var haptics
@@ -16,14 +16,25 @@ struct ExchangeRateRefreshButton: View {
     // MARK: - Свойства
     
     let isLoading: Bool
-    let onRefresh: () -> Void
+    let action: () -> Void
+
+    // MARK: - Инициализация
+
+    /// Создает кнопку обновления с необязательным состоянием загрузки.
+    /// - Parameters:
+    ///   - isLoading: Показывать спиннер и блокировать повторное нажатие.
+    ///   - action: Действие обновления данных.
+    init(isLoading: Bool = false, action: @escaping () -> Void) {
+        self.isLoading = isLoading
+        self.action = action
+    }
 
     // MARK: - Тело View
     
     var body: some View {
         Button {
             haptics.trigger(.tap)
-            onRefresh()
+            action()
         } label: {
             ZStack {
                 if isLoading {
@@ -47,7 +58,7 @@ struct ExchangeRateRefreshButton: View {
 
 #Preview {
     HStack {
-        ExchangeRateRefreshButton(isLoading: false, onRefresh: {})
-        ExchangeRateRefreshButton(isLoading: true, onRefresh: {})
+        RefreshButton {}
+        RefreshButton(isLoading: true, action: {})
     }
 }

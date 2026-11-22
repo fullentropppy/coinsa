@@ -13,14 +13,21 @@ struct ExpenseEditorView: View {
     @Environment(\.dismiss) private var dismiss
 
     @State private var viewModel: ExpenseEditViewModel?
+    private let onSave: (() -> Void)?
     private let onDelete: (() -> Void)?
 
     /// Создает вход редактора с уже подготовленным черновиком без повторной инициализации состояния.
     /// - Parameters:
     ///   - initialViewModel: Черновик создания или редактирования траты.
+    ///   - onSave: Действие после успешного сохранения.
     ///   - onDelete: Действие после успешного удаления.
-    init(initialViewModel: ExpenseEditViewModel, onDelete: (() -> Void)? = nil) {
+    init(
+        initialViewModel: ExpenseEditViewModel,
+        onSave: (() -> Void)? = nil,
+        onDelete: (() -> Void)? = nil
+    ) {
         _viewModel = State(initialValue: initialViewModel)
+        self.onSave = onSave
         self.onDelete = onDelete
     }
 
@@ -42,6 +49,7 @@ struct ExpenseEditorView: View {
             preselectedSubcategory: preselectedSubcategory,
             preselectedPaymentMethod: preselectedPaymentMethod
         ))
+        onSave = nil
         onDelete = nil
     }
 
@@ -51,12 +59,13 @@ struct ExpenseEditorView: View {
     ///   - onDelete: Действие после успешного удаления.
     init(forEdit expense: Expense, onDelete: (() -> Void)? = nil) {
         _viewModel = State(initialValue: ExpenseEditViewModel(forEdit: expense))
+        onSave = nil
         self.onDelete = onDelete
     }
 
     var body: some View {
         if let viewModel {
-            ExpenseEditorContainerView(initialViewModel: viewModel, onDelete: onDelete)
+            ExpenseEditorContainerView(initialViewModel: viewModel, onSave: onSave, onDelete: onDelete)
         } else {
             NavigationStack {
                 ContentUnavailableView {

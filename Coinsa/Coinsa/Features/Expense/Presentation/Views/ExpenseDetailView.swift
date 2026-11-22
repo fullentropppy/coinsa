@@ -36,8 +36,10 @@ struct ExpenseDetailView: View {
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.displayScale) private var displayScale
+    @Environment(\.haptics) private var haptics
     
     @State private var isShowingExpenseEdit = false
+    @State private var isShowingExpenseCopy = false
     @State private var isShowingMap = false
     @State private var isVisible = false
     @State private var contentBottom: CGFloat = 0
@@ -86,6 +88,9 @@ struct ExpenseDetailView: View {
                 ExpenseEditorView(forEdit: expense) {
                     dismiss()
                 }
+            }
+            .sheet(isPresented: $isShowingExpenseCopy) {
+                ExpenseCopyView(source: expense)
             }
             .fullScreenCover(isPresented: $isShowingMap) {
                 if let coordinate = expense.coordinate {
@@ -294,7 +299,14 @@ struct ExpenseDetailView: View {
         ToolbarItemGroup(placement: .topBarTrailing) {
             DetailActionsMenu(title: .expenseActions, onEdit: {
                 isShowingExpenseEdit = true
-            })
+            }) {
+                Button {
+                    haptics.trigger(.tap)
+                    isShowingExpenseCopy = true
+                } label: {
+                    Label(.expenseCopyAction, systemImage: "doc.on.doc")
+                }
+            }
         }
     }
     

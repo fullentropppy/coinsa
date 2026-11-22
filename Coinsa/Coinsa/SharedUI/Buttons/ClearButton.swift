@@ -15,7 +15,19 @@ struct ClearButton: View {
 
     // MARK: - Свойства
 
+    private let showsTitle: Bool
     let action: () -> Void
+
+    // MARK: - Инициализация
+
+    /// Создает кнопку очистки с необязательной видимой подписью.
+    /// - Parameters:
+    ///   - showsTitle: Показывать текст рядом с иконкой.
+    ///   - action: Действие очистки содержимого.
+    init(showsTitle: Bool = true, action: @escaping () -> Void) {
+        self.showsTitle = showsTitle
+        self.action = action
+    }
 
     // MARK: - Тело View
 
@@ -27,8 +39,11 @@ struct ClearButton: View {
             HStack(spacing: ViewLayout.Label.compactIconSpacing) {
                 Image(systemName: "xmark.circle.fill")
                     .imageScale(.small)
-                Text(.clear)
-                    .font(.footnote)
+                    .fontWeight(.semibold)
+                if showsTitle {
+                    Text(.clear)
+                        .font(.footnote)
+                }
             }
         }
     }

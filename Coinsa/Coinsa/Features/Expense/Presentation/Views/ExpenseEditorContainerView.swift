@@ -37,6 +37,7 @@ struct ExpenseEditorContainerView: View {
 
     // MARK: - Зависимости
 
+    private let onSave: (() -> Void)?
     private let onDelete: (() -> Void)?
 
     // MARK: - Инфраструктура
@@ -50,12 +51,18 @@ struct ExpenseEditorContainerView: View {
     /// Создает форму подготовленного черновика с начальной стороной валютной пары.
     /// - Parameters:
     ///   - initialViewModel: Черновик с доступной родительской локацией.
+    ///   - onSave: Действие после успешного сохранения.
     ///   - onDelete: Действие после успешного удаления.
-    init(initialViewModel: ExpenseEditViewModel, onDelete: (() -> Void)? = nil) {
+    init(
+        initialViewModel: ExpenseEditViewModel,
+        onSave: (() -> Void)? = nil,
+        onDelete: (() -> Void)? = nil
+    ) {
         _viewModel = State(initialValue: initialViewModel)
         _currencyPairSide = State(
             initialValue: initialViewModel.homeCurrency == initialViewModel.expenseCurrency ? .base : .quote
         )
+        self.onSave = onSave
         self.onDelete = onDelete
     }
 
@@ -114,7 +121,7 @@ struct ExpenseEditorContainerView: View {
                     onCancel: { cancelDelete() }
                 )
                 .task {
-                    if settingsStore.fetchExpenseExchangeRateOnline {
+                    if settingsStore.fetchExpenseExchangeRateOnline || viewModel.needsCopyLocationRate {
                         viewModel.loadInitialRateIfNeeded()
                     }
                     if settingsStore.detectPlaceOfExpense {
@@ -137,6 +144,7 @@ struct ExpenseEditorContainerView: View {
             isCommentFocused: $isCommentFocused,
             isResolvingLocation: isResolvingLocation,
             onSwitchInputCurrency: switchInputCurrency,
+            onRefreshDate: viewModel.updateDateToNow,
             onLocate: requestCurrentLocation,
             onShowMap: { isShowingLocationMap = true },
             onDelete: requestDelete
@@ -232,6 +240,7 @@ struct ExpenseEditorContainerView: View {
 
             do {
                 try viewModel.save(using: repository)
+                onSave?()
                 dismiss()
             } catch {
                 if let repositoryError = error as? ExpenseRepositoryError,
@@ -275,7 +284,6 @@ struct ExpenseEditorContainerView: View {
 
     private func requestCurrentLocation() {
         guard locationTask == nil else { return }
-        haptics.trigger(.tap)
         locationTask = Task {
             await resolveCurrentLocation()
             locationTask = nil
@@ -283,7 +291,7 @@ struct ExpenseEditorContainerView: View {
     }
 
     private func resolveCurrentLocationIfNeeded() async {
-        guard !viewModel.isEdit, viewModel.coordinate == nil else { return }
+        guard !viewModel.isEdit, !viewModel.isCopy, viewModel.coordinate == nil else { return }
         await resolveCurrentLocation(automatically: true)
     }
 

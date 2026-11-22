@@ -17,6 +17,7 @@ struct SwipeActions: View {
     
     private let onDelete: (() -> Void)?
     private let onEdit: (() -> Void)?
+    private let onCopy: (() -> Void)?
     
     // MARK: - Инициализация
     
@@ -24,12 +25,15 @@ struct SwipeActions: View {
     /// - Parameters:
     ///   - onDelete: Запрос подтверждения удаления без немедленного удаления строки (опционально).
     ///   - onEdit: Действие при редактировании (опционально).
+    ///   - onCopy: Копирование в крайней левой позиции при свайпе справа (опционально).
     init(
         onDelete: (() -> Void)? = nil,
-        onEdit: (() -> Void)? = nil
+        onEdit: (() -> Void)? = nil,
+        onCopy: (() -> Void)? = nil
     ) {
         self.onDelete = onDelete
         self.onEdit = onEdit
+        self.onCopy = onCopy
     }
     
     // MARK: - Тело View
@@ -53,6 +57,15 @@ struct SwipeActions: View {
                     Label(.edit, systemImage: "pencil")
                 }
                 .tint(.positive)
+            }
+            if let onCopy {
+                Button {
+                    haptics.trigger(.tap)
+                    onCopy()
+                } label: {
+                    Label(.expenseCopyAction, systemImage: "doc.on.doc")
+                }
+                .tint(.accentColor)
             }
         }
     }
