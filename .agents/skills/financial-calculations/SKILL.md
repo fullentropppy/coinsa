@@ -18,6 +18,7 @@ description: >-
 Пути относительны к `Coinsa/Coinsa/`. Читай относящиеся к задаче файлы и их вызывающий код; перепроверяй приведённое ниже поведение.
 
 - `Features/{Trip,Location,Expense}/Domain/Models/`, `Domain/Logic/` и `Data/Repositories/` — хранение, вычисляемые aliases, агрегаты и нормализация.
+- `Features/DataTransfer/` — экспорт и импорт исходных сумм, курсов и метаданных без пересчета или округления. При объединении проверяй валюты родителей; гражданские компоненты, `actualDate` и `timeZoneID` сохраняются независимо. `null` и неизвестный исторический пояс не заменяются текущим поясом.
 - `Features/Expense/Domain/Models/ExpenseCalculationContext.swift` и `Domain/Logic/Expense+Calculation.swift` той же функции — переходы между тремя валютными контекстами.
 - `Core/Domain/CurrencyConverter/CurrencyConverter.swift`, `Core/Domain/Currency/Managers/AmountManager.swift` — парная конвертация и сохранение выбранной стороны ввода.
 - `Core/Domain/ExchangeRates/` — ExchangeRateMode, HexarateService, Provider и Manager; `Core/Domain/Currency/Logic/` — разбор кодов валют и defaults.

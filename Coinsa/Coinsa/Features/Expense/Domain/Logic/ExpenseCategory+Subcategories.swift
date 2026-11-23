@@ -9,7 +9,7 @@ extension ExpenseCategory {
     // MARK: - Свойства
 
     /// Дочерние подкатегории для категории.
-    var subcategories: [ExpenseSubcategory] {
+    nonisolated var subcategories: [ExpenseSubcategory] {
         switch self {
         case .food:
             [

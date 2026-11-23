@@ -1955,6 +1955,652 @@
         }
       }
     },
+    "dataTransfer.error.changed.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The data changed while you were reviewing the import. Review the updated summary and confirm the import again."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Данные изменились во время проверки импорта. Проверьте обновленную сводку и подтвердите импорт еще раз."
+          }
+        }
+      }
+    },
+    "dataTransfer.error.currency.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The file conflicts with the currencies of existing trips or locations. No changes were saved. Choose another file."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Валюты в файле конфликтуют с валютами существующих поездок или локаций. Изменения не сохранены. Выберите другой файл."
+          }
+        }
+      }
+    },
+    "dataTransfer.error.duplicate.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The data contains duplicate record identifiers. No changes were saved. Choose another file or try again after iCloud sync completes."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Данные содержат повторяющиеся идентификаторы записей. Изменения не сохранены. Выберите другой файл или повторите попытку после завершения синхронизации iCloud."
+          }
+        }
+      }
+    },
+    "dataTransfer.error.export.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couldn’t save the export file. Check that the destination is available and try again."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось сохранить файл экспорта. Проверьте доступность места сохранения и повторите попытку."
+          }
+        }
+      }
+    },
+    "dataTransfer.error.file.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The file is incomplete or is not a Coinsa file. Choose a complete file exported from Coinsa."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Файл неполный или не соответствует формату Coinsa. Выберите полный файл, экспортированный из Coinsa."
+          }
+        }
+      }
+    },
+    "dataTransfer.error.localChanges.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "There are unsaved changes in the app. Finish saving them and try again."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "В приложении есть несохраненные изменения. Завершите их сохранение и повторите попытку."
+          }
+        }
+      }
+    },
+    "dataTransfer.error.read.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couldn’t read the file. Check that it is available and try again."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось прочитать файл. Проверьте его доступность и повторите попытку."
+          }
+        }
+      }
+    },
+    "dataTransfer.error.relationships.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Some records have missing or conflicting parent trips or locations. No changes were saved. Choose another file or try again later."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "У некоторых записей отсутствуют или не совпадают родительские поездки или локации. Изменения не сохранены. Выберите другой файл или повторите попытку позже."
+          }
+        }
+      }
+    },
+    "dataTransfer.error.save.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couldn’t save the imported data. No changes were saved. Try again."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось сохранить импортируемые данные. Изменения не сохранены. Повторите попытку."
+          }
+        }
+      }
+    },
+    "dataTransfer.error.size.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The file exceeds the 20 MB limit. Choose a smaller file."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Файл превышает ограничение 20 МБ. Выберите файл меньшего размера."
+          }
+        }
+      }
+    },
+    "dataTransfer.error.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couldn’t transfer data"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось перенести данные"
+          }
+        }
+      }
+    },
+    "dataTransfer.error.values.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The data contains invalid or unsupported values. No changes were saved. Check the source data or choose another file."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Данные содержат некорректные или неподдерживаемые значения. Изменения не сохранены. Проверьте исходные данные или выберите другой файл."
+          }
+        }
+      }
+    },
+    "dataTransfer.error.version.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This file version is not supported. Choose a file with a supported format version."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Эта версия формата файла не поддерживается. Выберите файл с поддерживаемой версией формата."
+          }
+        }
+      }
+    },
+    "dataTransfer.export" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Export data"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Экспортировать данные"
+          }
+        }
+      }
+    },
+    "dataTransfer.export.emptyState.description" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add a trip to export your data."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Добавьте поездку, чтобы экспортировать данные."
+          }
+        }
+      }
+    },
+    "dataTransfer.export.emptyState.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No data to export"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нет данных для экспорта"
+          }
+        }
+      }
+    },
+    "dataTransfer.export.hint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Save all trips, locations, and expenses to a Coinsa file. App settings are not included. The file is not encrypted and may contain expense locations and comments."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сохранить все поездки, локации и траты в файл Coinsa. Настройки приложения не включаются. Файл не зашифрован и может содержать места трат и комментарии."
+          }
+        }
+      }
+    },
+    "dataTransfer.export.success.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "All trips, locations, and expenses have been saved to a Coinsa file."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Все поездки, локации и траты сохранены в файл Coinsa."
+          }
+        }
+      }
+    },
+    "dataTransfer.export.success.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Export complete"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Экспорт завершен"
+          }
+        }
+      }
+    },
+    "dataTransfer.import" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Import data"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Импортировать данные"
+          }
+        }
+      }
+    },
+    "dataTransfer.import.emptyState.description" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The file contains no records that can be added or updated."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "В файле нет записей, которые можно добавить или обновить."
+          }
+        }
+      }
+    },
+    "dataTransfer.import.emptyState.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No changes to import"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Импорт не требуется"
+          }
+        }
+      }
+    },
+    "dataTransfer.import.hint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add data from a Coinsa file. Existing records are updated when the file has the same or a later modification date. Older versions are skipped. Records absent from the file remain unchanged."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Добавить данные из файла Coinsa. Существующие записи обновляются, если дата изменения в файле такая же или более поздняя. Старые версии пропускаются. Данные, отсутствующие в файле, останутся без изменений."
+          }
+        }
+      }
+    },
+    "dataTransfer.import.progress" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Importing data…"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Импорт данных…"
+          }
+        }
+      }
+    },
+    "dataTransfer.navigationTitle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Import and export"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Импорт и экспорт"
+          }
+        }
+      }
+    },
+    "dataTransfer.preview.additions" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Will be added"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Будет добавлено"
+          }
+        }
+      }
+    },
+    "dataTransfer.preview.expenses" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Expenses"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Траты"
+          }
+        }
+      }
+    },
+    "dataTransfer.preview.exportedAt" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exported"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Дата экспорта"
+          }
+        }
+      }
+    },
+    "dataTransfer.preview.hint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No data has been saved yet. When modification dates match, the file takes priority. Previously deleted records may be added again. Records absent from the file will not be deleted. Imported changes will also sync through iCloud."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Данные еще не сохранены. При одинаковых датах изменения приоритет у файла. Ранее удаленные записи могут быть добавлены снова. Данные, отсутствующие в файле, не будут удалены. Импортированные изменения также будут синхронизироваться через iCloud."
+          }
+        }
+      }
+    },
+    "dataTransfer.preview.locations" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Locations"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Локации"
+          }
+        }
+      }
+    },
+    "dataTransfer.preview.navigationTitle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Review import"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Проверка импорта"
+          }
+        }
+      }
+    },
+    "dataTransfer.preview.older" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Older versions skipped"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Старых версий пропущено"
+          }
+        }
+      }
+    },
+    "dataTransfer.preview.trips" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trips"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Поездки"
+          }
+        }
+      }
+    },
+    "dataTransfer.preview.unchanged" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unchanged records"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Без изменений"
+          }
+        }
+      }
+    },
+    "dataTransfer.preview.updates" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Will be updated"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Будет обновлено"
+          }
+        }
+      }
+    },
+    "dataTransfer.progress" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preparing data…"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Подготовка данных…"
+          }
+        }
+      }
+    },
+    "dataTransfer.success.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The data has been saved."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Данные сохранены."
+          }
+        }
+      }
+    },
+    "dataTransfer.success.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Import complete"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Импорт завершен"
+          }
+        }
+      }
+    },
     "daySegment.afternoon" : {
       "extractionState" : "manual",
       "localizations" : {

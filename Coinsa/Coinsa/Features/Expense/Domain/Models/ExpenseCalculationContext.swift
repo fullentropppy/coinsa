@@ -6,7 +6,7 @@
 //
 
 /// Структура для хранения данных траты и вычисления сумм.
-struct ExpenseCalculationContext {
+nonisolated struct ExpenseCalculationContext {
     // MARK: - Хранимые свойства.
     
     let homeAmount: Double

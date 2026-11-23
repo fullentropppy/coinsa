@@ -53,6 +53,7 @@ struct SettingsView: View {
             dataLoadingSection
             todayBudgetSection
             appearanceSection
+            dataTransferSection
             aboutSection
 #if DEBUG
             SettingsDebugSectionView(demoDataService: demoDataService)
@@ -142,6 +143,14 @@ struct SettingsView: View {
         }
     }
     
+    private var dataTransferSection: some View {
+        Section {
+            NavigationLink(.dataTransferNavigationTitle) {
+                DataTransferView()
+            }
+        }
+    }
+
     private var aboutSection: some View {
         Section {
             NavigationLink(.settingsAbout) {
