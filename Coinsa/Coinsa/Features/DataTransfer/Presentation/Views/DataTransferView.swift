@@ -28,13 +28,6 @@ struct DataTransferView: View {
         .navigationTitle(.dataTransferNavigationTitle)
         .navigationBarTitleDisplayMode(.large)
         .disabled(viewModel.isWorking || viewModel.isWaitingForNotice || viewModel.plan != nil)
-        .overlay {
-            if viewModel.isWorking && !viewModel.isShowingImportPreview {
-                ProgressView(.dataTransferProgress)
-                    .padding(ViewLayout.Card.contentInset)
-                    .background(.regularMaterial, in: .rect(cornerRadius: ViewLayout.Card.cornerRadius))
-            }
-        }
         .fileImporter(
             isPresented: $viewModel.isShowingImporter,
             allowedContentTypes: [DataTransferDocument.archiveType]
@@ -70,20 +63,32 @@ struct DataTransferView: View {
     private var transferSections: some View {
         Group {
             Section {
-                Button(.dataTransferExport) {
-                    haptics.trigger(.tap)
-                    viewModel.exportData(container: context.container)
-                }
-            } footer: {
-                Text(.dataTransferExportHint)
-            }
-            Section {
-                Button(.dataTransferImport) {
+                Button {
                     haptics.trigger(.tap)
                     viewModel.isShowingImporter = true
+                } label: {
+                    HStack {
+                        Image(systemName: AppSymbols.squareAndArrowDown)
+                            .padding(.bottom, ViewLayout.Label.squareArrowIconBottomInset)
+                        Text(.dataTransferImport)
+                    }
                 }
             } footer: {
                 Text(.dataTransferImportHint)
+            }
+            Section {
+                Button {
+                    haptics.trigger(.tap)
+                    viewModel.exportData(container: context.container)
+                } label: {
+                    HStack {
+                        Image(systemName: AppSymbols.squareAndArrowUp)
+                            .padding(.bottom, ViewLayout.Label.squareArrowIconBottomInset)
+                        Text(.dataTransferExport)
+                    }
+                }
+            } footer: {
+                Text(.dataTransferExportHint)
             }
         }
     }

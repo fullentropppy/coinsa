@@ -2346,23 +2346,6 @@
         }
       }
     },
-    "dataTransfer.import.progress" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Importing data…"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Импорт данных…"
-          }
-        }
-      }
-    },
     "dataTransfer.navigationTitle" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2392,7 +2375,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Будет добавлено"
+            "value" : "Будут добавлены"
           }
         }
       }
@@ -2545,7 +2528,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Будет обновлено"
+            "value" : "Будут обновлены"
           }
         }
       }

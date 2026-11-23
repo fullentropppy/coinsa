@@ -53,11 +53,22 @@ struct SettingsDebugSectionView: View {
     
     private var settingsDebugSection: some View {
         Section {
-            Button(.debugLoad) {
+            Button {
                 requestLoadDemoData()
+            } label: {
+                HStack {
+                    Image(systemName: AppSymbols.squareAndArrowDown)
+                        .padding(.bottom, ViewLayout.Label.squareArrowIconBottomInset)
+                    Text(.debugLoad)
+                }
             }
-            Button(.debugDelete, role: .destructive) {
+            Button(role: .destructive) {
                 requestDeleteAllData()
+            } label: {
+                HStack {
+                    Image(systemName: AppSymbols.trash)
+                    Text(.debugDelete)
+                }
             }
         } header: {
             HStack {

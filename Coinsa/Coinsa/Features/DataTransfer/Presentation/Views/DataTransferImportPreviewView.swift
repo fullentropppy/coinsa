@@ -39,13 +39,6 @@ struct DataTransferImportPreviewView: View {
                     .disabled(viewModel.isWorking)
                 }
             }
-            .overlay {
-                if viewModel.isWorking {
-                    ProgressView(.dataTransferImportProgress)
-                        .padding(ViewLayout.Card.contentInset)
-                        .background(.regularMaterial, in: .rect(cornerRadius: ViewLayout.Card.cornerRadius))
-                }
-            }
             .notificationAlert(
                 isPresented: $viewModel.isShowingNotice,
                 title: viewModel.noticeTitle,
@@ -63,39 +56,106 @@ struct DataTransferImportPreviewView: View {
     @ViewBuilder
     private func previewSections(_ plan: DataTransferPlan) -> some View {
         Section {
-            LabeledContent(.dataTransferPreviewExportedAt) {
+            LabeledContent {
                 Text(DateDisplayFormatter.format(plan.source.exportedAt, showsTime: true))
+            } label: {
+                HStack {
+                    AppIcon(AppSymbols.calendar, style: .formLabel)
+                    Text(.dataTransferPreviewExportedAt)
+                }
             }
         }
         Section(.dataTransferPreviewAdditions) {
-            LabeledContent(.dataTransferPreviewTrips, value: plan.trips.additions.count.formatted())
-            LabeledContent(.dataTransferPreviewLocations, value: plan.locations.additions.count.formatted())
-            LabeledContent(.dataTransferPreviewExpenses, value: plan.expenses.additions.count.formatted())
+            LabeledContent {
+                Text(plan.trips.additions.count.formatted())
+            } label: {
+                HStack {
+                    AppIcon(Trip.primaryIcon, style: .formLabel)
+                    Text(.dataTransferPreviewTrips)
+                }
+            }
+            LabeledContent {
+                Text(plan.locations.additions.count.formatted())
+            } label: {
+                HStack {
+                    AppIcon(Location.primaryIcon, style: .formLabel)
+                    Text(.dataTransferPreviewLocations)
+                }
+            }
+            LabeledContent {
+                Text(plan.expenses.additions.count.formatted())
+            } label: {
+                HStack {
+                    AppIcon(Expense.primaryIcon, style: .formLabel)
+                    Text(.dataTransferPreviewExpenses)
+                }
+            }
         }
         Section(.dataTransferPreviewUpdates) {
-            LabeledContent(.dataTransferPreviewTrips, value: plan.trips.updates.count.formatted())
-            LabeledContent(.dataTransferPreviewLocations, value: plan.locations.updates.count.formatted())
-            LabeledContent(.dataTransferPreviewExpenses, value: plan.expenses.updates.count.formatted())
+            LabeledContent {
+                Text(plan.trips.updates.count.formatted())
+            } label: {
+                HStack {
+                    AppIcon(Trip.primaryIcon, style: .formLabel)
+                    Text(.dataTransferPreviewTrips)
+                }
+            }
+            LabeledContent {
+                Text(plan.locations.updates.count.formatted())
+            } label: {
+                HStack {
+                    AppIcon(Location.primaryIcon, style: .formLabel)
+                    Text(.dataTransferPreviewLocations)
+                }
+            }
+            LabeledContent {
+                Text(plan.expenses.updates.count.formatted())
+            } label: {
+                HStack {
+                    AppIcon(Expense.primaryIcon, style: .formLabel)
+                    Text(.dataTransferPreviewExpenses)
+                }
+            }
         }
         Section {
-            LabeledContent(.dataTransferPreviewUnchanged, value: plan.unchangedCount.formatted())
-            LabeledContent(.dataTransferPreviewOlder, value: plan.olderCount.formatted())
-        } footer: {
-            Text(.dataTransferPreviewHint)
+            LabeledContent {
+                Text(plan.unchangedCount.formatted())
+            } label: {
+                HStack {
+                    AppIcon(AppSymbols.equal, style: .formLabel)
+                    Text(.dataTransferPreviewUnchanged)
+                }
+            }
+            LabeledContent {
+                Text(plan.olderCount.formatted())
+            } label: {
+                HStack {
+                    AppIcon(AppSymbols.clock, style: .formLabel)
+                    Text(.dataTransferPreviewOlder)
+                }
+            }
         }
         Section {
-            Button(.dataTransferImport) {
+            Button {
                 haptics.trigger(.tap)
                 viewModel.confirmImport(container: context.container)
+            } label: {
+                HStack {
+                    Image(systemName: AppSymbols.squareAndArrowDown)
+                        .padding(.bottom, ViewLayout.Label.squareArrowIconBottomInset)
+                    Text(.dataTransferImport)
+                }
             }
             .disabled(!plan.hasChanges)
+        } footer: {
+            Text(.dataTransferPreviewHint)
         }
     }
 }
 
 // MARK: - Превью
 
-#Preview("Reviewing") {
+#Preview {
     @Previewable @State var preview = PreviewEnvironment(
         trips: PreviewBuilder.builder().withScenario(.all).buildData()
     )

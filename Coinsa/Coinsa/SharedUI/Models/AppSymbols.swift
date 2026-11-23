@@ -126,6 +126,8 @@ enum AppSymbols {
     static let scope = "scope"
     static let shippingbox = "shippingbox"
     static let shippingboxFill = "shippingbox.fill"
+    static let squareAndArrowDown = "square.and.arrow.down"
+    static let squareAndArrowUp = "square.and.arrow.up"
     static let star = "star"
     static let starFill = "star.fill"
     static let staroflifeShield = "staroflife.shield"
