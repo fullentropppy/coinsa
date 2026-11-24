@@ -27,12 +27,14 @@ extension ExpenseSubcategory: ValueVisualRepresentable {
         case .plane: AppSymbols.airplane
         case .ferry: AppSymbols.ferry
         case .train: AppSymbols.tram
+        case .intercityBus: AppSymbols.busDoubledecker
         case .publicTransport: AppSymbols.bus
         case .taxi: AppSymbols.figureWave
         case .transfer: AppSymbols.pointToprightFilledArrowTriangleBackwardToPointBottomleftScurvepath
         case .travelPass: AppSymbols.ticket
         case .vehicleRental: AppSymbols.key
         case .fuel: AppSymbols.fuelpump
+        case .vehicleMaintenance: AppSymbols.wrenchAndScrewdriver
         case .parking: AppSymbols.parkingsignSquare
         case .tolls: AppSymbols.roadLanes
         case .baggage: AppSymbols.suitcase
@@ -44,6 +46,7 @@ extension ExpenseSubcategory: ValueVisualRepresentable {
         case .accommodationRental: AppSymbols.key
         case .camping: AppSymbols.tent
         case .touristTax: AppSymbols.dollarsignCircle
+        case .accommodationServices: AppSymbols.bell
         case .otherAccommodation: category.primaryIcon
             
         // MARK: - Досуг
@@ -53,6 +56,7 @@ extension ExpenseSubcategory: ValueVisualRepresentable {
         case .park: AppSymbols.tree
         case .beach: AppSymbols.beachUmbrella
         case .activity: AppSymbols.figureRun
+        case .equipmentRental: AppSymbols.basketball
         case .entertainment: AppSymbols.theatermasks
         case .relaxation: AppSymbols.leaf
         case .otherLeisure: category.primaryIcon
@@ -61,6 +65,7 @@ extension ExpenseSubcategory: ValueVisualRepresentable {
             
         case .clothing: AppSymbols.tshirt
         case .cosmetics: AppSymbols.faceSmiling
+        case .hygiene: AppSymbols.bubblesAndSparkles
         case .souvenirs: AppSymbols.gift
         case .jewelry: AppSymbols.crown
         case .homeGoods: AppSymbols.lampTable
@@ -82,6 +87,7 @@ extension ExpenseSubcategory: ValueVisualRepresentable {
         case .laundry: AppSymbols.washer
         case .personalCare: AppSymbols.comb
         case .donation: AppSymbols.heart
+        case .tips: AppSymbols.banknote
         case .luggageStorage: AppSymbols.suitcaseRolling
         case .postalService: AppSymbols.shippingbox
         case .digitalService: AppSymbols.appleLogo
@@ -109,12 +115,14 @@ extension ExpenseSubcategory: ValueVisualRepresentable {
         case .plane: AppSymbols.airplane
         case .ferry: AppSymbols.ferryFill
         case .train: AppSymbols.tramFill
+        case .intercityBus: AppSymbols.busDoubledeckerFill
         case .publicTransport: AppSymbols.busFill
         case .taxi: AppSymbols.figureWave
         case .transfer: AppSymbols.pointToprightFilledArrowTriangleBackwardToPointBottomleftScurvepath
         case .travelPass: AppSymbols.ticketFill
         case .vehicleRental: AppSymbols.keyFill
         case .fuel: AppSymbols.fuelpumpFill
+        case .vehicleMaintenance: AppSymbols.wrenchAndScrewdriverFill
         case .parking: AppSymbols.parkingsignSquareFill
         case .tolls: AppSymbols.roadLanes
         case .baggage: AppSymbols.suitcaseFill
@@ -126,6 +134,7 @@ extension ExpenseSubcategory: ValueVisualRepresentable {
         case .accommodationRental: AppSymbols.keyFill
         case .camping: AppSymbols.tentFill
         case .touristTax: AppSymbols.dollarsignCircleFill
+        case .accommodationServices: AppSymbols.bellFill
         case .otherAccommodation: category.secondaryIcon
             
         // MARK: - Досуг
@@ -135,6 +144,7 @@ extension ExpenseSubcategory: ValueVisualRepresentable {
         case .park: AppSymbols.treeFill
         case .beach: AppSymbols.beachUmbrellaFill
         case .activity: AppSymbols.figureRun
+        case .equipmentRental: AppSymbols.basketballFill
         case .entertainment: AppSymbols.theatermasksFill
         case .relaxation: AppSymbols.leafFill
         case .otherLeisure: category.secondaryIcon
@@ -143,6 +153,7 @@ extension ExpenseSubcategory: ValueVisualRepresentable {
             
         case .clothing: AppSymbols.tshirtFill
         case .cosmetics: AppSymbols.faceSmilingFill
+        case .hygiene: AppSymbols.bubblesAndSparkles
         case .souvenirs: AppSymbols.giftFill
         case .jewelry: AppSymbols.crownFill
         case .homeGoods: AppSymbols.lampTableFill
@@ -164,6 +175,7 @@ extension ExpenseSubcategory: ValueVisualRepresentable {
         case .laundry: AppSymbols.washerFill
         case .personalCare: AppSymbols.combFill
         case .donation: AppSymbols.heartFill
+        case .tips: AppSymbols.banknoteFill
         case .luggageStorage: AppSymbols.suitcaseRollingFill
         case .postalService: AppSymbols.shippingboxFill
         case .digitalService: AppSymbols.appleLogo

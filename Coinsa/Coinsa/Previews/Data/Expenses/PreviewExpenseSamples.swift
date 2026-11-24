@@ -53,7 +53,7 @@ enum PreviewExpenseSamples {
                 currency: activity.currency ?? location.currency,
                 timeZoneID: activity.timeZoneID ?? location.timeZoneID,
                 rateVariation: rateVariation(at: index),
-                paymentMethod: [.donation, .otherFood, .otherMiscellaneous, .laundry, .beach].contains(activity.subcategory)
+                paymentMethod: [.donation, .tips, .otherFood, .otherMiscellaneous, .laundry, .beach].contains(activity.subcategory)
                     ? .cash : (index % 3 == 0 ? .cash : .card),
                 subcategory: activity.subcategory,
                 comment: activity.comment,
@@ -202,8 +202,8 @@ private extension PreviewExpenseSamples {
         }
         let ticket: (Double, Currency, ExpenseSubcategory, String)? = switch location {
         case .kotor: (21800, .rub, .plane, "Билет до Тивата, багаж включен")
-        case .sarajevo: (32, .eur, .transfer, "Билет на автобус Котор — Сараево")
-        case .belgrade: (2900, .rsd, .transfer, "Билет на автобус Сараево — Белград")
+        case .sarajevo: (32, .eur, .intercityBus, "Билет на автобус Котор — Сараево")
+        case .belgrade: (2900, .rsd, .intercityBus, "Билет на автобус Сараево — Белград")
         case .hongKong: (28600, .rub, .plane, "Билет Москва — Гонконг с пересадкой")
         case .hanoi: (84.70, .usd, .plane, "Билет Гонконг — Ханой, куплен до поездки")
         case .bangkok: (95.35, .usd, .plane, "Билет Ханой — Бангкок, куплен до поездки")

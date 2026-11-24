@@ -24,7 +24,7 @@ extension PreviewExpenseCatalog {
                 PreviewExpenseActivity(.jewelry, 18.9, 3, "Серебряная подвеска на память", dayOffset: 1, hour: 18, minute: 15),
                 PreviewExpenseActivity(.landmark, 4, 5, "Вход к римским мозаикам в Рисане", dayOffset: 2, hour: 10, minute: 40),
                 PreviewExpenseActivity(.vehicleRental, 44.95, 3, "Аренда автомобиля для поездки вдоль залива", dayOffset: 3, hour: 9, minute: 45),
-                PreviewExpenseActivity(.otherFood, 2, 1, "Чаевые после ужина на набережной", dayOffset: 3, hour: 20, minute: 20),
+                PreviewExpenseActivity(.tips, 2, 1, "Чаевые после ужина на набережной", dayOffset: 3, hour: 20, minute: 20),
                 PreviewExpenseActivity(.parking, 3, 4, "Парковка возле Пераста", dayOffset: 3, hour: 11, minute: 0),
             ]
         case .sarajevo:
@@ -56,7 +56,7 @@ extension PreviewExpenseCatalog {
                 PreviewExpenseActivity(.otherMiscellaneous, 100, 2, "Платный туалет на прогулке", dayOffset: 1, hour: 17, minute: 10),
                 PreviewExpenseActivity(.laundry, 949.5, 3, "Стирка и сушка вещей", dayOffset: 3, hour: 10, minute: 0),
                 PreviewExpenseActivity(.documents, 500, 0, "Копии документов для дальнейшей поездки", dayOffset: 0, hour: 17, minute: 10),
-                PreviewExpenseActivity(.otherMedicine, 648.75, 5, "Антисептик и защитные маски", dayOffset: 4, hour: 18, minute: 15),
+                PreviewExpenseActivity(.hygiene, 648.75, 5, "Антисептик и защитные маски", dayOffset: 4, hour: 18, minute: 15),
             ]
         case .hongKong:
             [
@@ -76,12 +76,12 @@ extension PreviewExpenseCatalog {
                 PreviewExpenseActivity(.tour, 350000, 0, "Пешая прогулка по старому кварталу", dayOffset: 0, hour: 10, minute: 0),
                 PreviewExpenseActivity(.souvenirs, 178500, 0, "Кофе и фильтр фин в подарок", dayOffset: 0, hour: 15, minute: 10),
                 PreviewExpenseActivity(.medicalCare, 450000, 2, "Консультация в клинике", dayOffset: 1, hour: 10, minute: 30),
-                PreviewExpenseActivity(.otherMedicine, 64500, 2, "Репеллент и антисептик", dayOffset: 1, hour: 11, minute: 45),
+                PreviewExpenseActivity(.hygiene, 64500, 2, "Репеллент и антисептик", dayOffset: 1, hour: 11, minute: 45),
                 PreviewExpenseActivity(.documents, 20000, 1, "Печать билетов и копии паспорта", dayOffset: 2, hour: 18, minute: 0),
                 PreviewExpenseActivity(.entertainment, 150000, 0, "Театр кукол на воде", dayOffset: 0, hour: 21, minute: 0),
                 PreviewExpenseActivity(.landmark, 70000, 3, "Вход в Храм литературы", coordinate: Coordinate(latitude: 21.0281, longitude: 105.8355, horizontalAccuracy: 25), dayOffset: 2, hour: 10, minute: 45),
                 PreviewExpenseActivity(.laundry, 90000, 0, "Стирка вещей перед следующим перелетом", dayOffset: 3, hour: 10, minute: 15),
-                PreviewExpenseActivity(.otherAccommodation, 100000, 0, "Доплата за поздний выезд, оплатил уже из Бангкока", coordinate: Coordinate(latitude: 13.761, longitude: 100.498, horizontalAccuracy: 25), timeZoneID: "Asia/Bangkok", dayOffset: 4, hour: 13, minute: 15),
+                PreviewExpenseActivity(.accommodationServices, 100000, 0, "Доплата за поздний выезд, оплатил уже из Бангкока", coordinate: Coordinate(latitude: 13.761, longitude: 100.498, horizontalAccuracy: 25), timeZoneID: "Asia/Bangkok", dayOffset: 4, hour: 13, minute: 15),
                 PreviewExpenseActivity(.digitalService, 4, 0, "Офлайн-аудиогид по Ханою", currency: .usd, dayOffset: 0, hour: 9, minute: 40),
             ]
         case .bangkok:
@@ -94,9 +94,9 @@ extension PreviewExpenseCatalog {
                 PreviewExpenseActivity(.jewelry, 350, 1, "Браслет с ночного рынка", dayOffset: 0, hour: 18, minute: 15),
                 PreviewExpenseActivity(.relaxation, 400, 2, "Тайский массаж после прогулки", dayOffset: 2, hour: 17, minute: 15),
                 PreviewExpenseActivity(.train, 45, 4, "Поездка по городской железной дороге", dayOffset: 1, hour: 9, minute: 45),
-                PreviewExpenseActivity(.otherFood, 40, 1, "Чаевые после ужина в Чайнатауне", dayOffset: 0, hour: 20, minute: 20),
+                PreviewExpenseActivity(.tips, 40, 1, "Чаевые после ужина в Чайнатауне", dayOffset: 0, hour: 20, minute: 20),
                 PreviewExpenseActivity(.donation, 60, 0, "Пожертвование в храме", dayOffset: 0, hour: 12, minute: 10),
-                PreviewExpenseActivity(.park, 40, 4, "Прокат коврика для отдыха в парке", dayOffset: 1, hour: 15, minute: 10),
+                PreviewExpenseActivity(.equipmentRental, 40, 4, "Прокат коврика для отдыха в парке", dayOffset: 1, hour: 15, minute: 10),
                 PreviewExpenseActivity(.entertainment, 600, 2, "Вечерняя музыкальная программа", dayOffset: 2, hour: 21, minute: 0),
                 PreviewExpenseActivity(.postalService, 90, 1, "Открытки родным", dayOffset: 3, hour: 11, minute: 15),
                 PreviewExpenseActivity(.otherShopping, 49.75, 4, "Чехол для покупок с рынка", dayOffset: 1, hour: 14, minute: 15),
@@ -113,7 +113,7 @@ extension PreviewExpenseCatalog {
                 PreviewExpenseActivity(.tour, 45, 1, "Предоплата морской экскурсии на следующий день", currency: .usd, dayOffset: 2, hour: 20, minute: 45),
                 PreviewExpenseActivity(.relaxation, 450, 1, "Массаж после пляжа", dayOffset: 0, hour: 17, minute: 15),
                 PreviewExpenseActivity(.souvenirs, 318.75, 0, "Пряности и небольшие подарки", dayOffset: 1, hour: 14, minute: 15),
-                PreviewExpenseActivity(.otherLeisure, 150, 2, "Прокат пляжного зонта", dayOffset: 2, hour: 10, minute: 30),
+                PreviewExpenseActivity(.equipmentRental, 150, 2, "Прокат пляжного зонта", dayOffset: 2, hour: 10, minute: 30),
                 PreviewExpenseActivity(.ferry, 400, 3, "Катер до соседнего острова", dayOffset: 3, hour: 9, minute: 35),
                 PreviewExpenseActivity(.landmark, 200, 0, "Билет в музей старого города", dayOffset: 1, hour: 11, minute: 45),
                 PreviewExpenseActivity(.laundry, 120, 4, "Стирка пляжных вещей", dayOffset: 1, hour: 18, minute: 0),
@@ -126,7 +126,7 @@ extension PreviewExpenseCatalog {
                 PreviewExpenseActivity(.train, 15, 3, "Поезд до Бату-Кейвс", dayOffset: 1, hour: 9, minute: 50),
                 PreviewExpenseActivity(.souvenirs, 41.85, 1, "Чай и открытки", dayOffset: 3, hour: 17, minute: 15),
                 PreviewExpenseActivity(.clothing, 84.9, 0, "Футболка и носки", dayOffset: 0, hour: 15, minute: 0),
-                PreviewExpenseActivity(.otherAccommodation, 30, 0, "Доплата за поздний выезд", dayOffset: 3, hour: 9, minute: 50),
+                PreviewExpenseActivity(.accommodationServices, 30, 0, "Доплата за поздний выезд", dayOffset: 3, hour: 9, minute: 50),
                 PreviewExpenseActivity(.bankFees, 12, 0, "Комиссия банкомата", dayOffset: 0, hour: 9, minute: 45),
                 PreviewExpenseActivity(.tour, 18, 4, "Небольшой гастрономический тур", currency: .usd, dayOffset: 2, hour: 10, minute: 30),
                 PreviewExpenseActivity(.park, 25, 3, "Вход в парк птиц", coordinate: Coordinate(latitude: 3.1432, longitude: 101.688, horizontalAccuracy: 25), dayOffset: 3, hour: 11, minute: 0),
@@ -149,12 +149,12 @@ extension PreviewExpenseCatalog {
                 PreviewExpenseActivity(.tour, 1500, 2, "Прогулка на катере по каналам", dayOffset: 0, hour: 14, minute: 30),
                 PreviewExpenseActivity(.entertainment, 2800, 3, "Билет на вечерний спектакль", dayOffset: 0, hour: 21, minute: 0),
                 PreviewExpenseActivity(.homeGoods, 1590.75, 0, "Керамическая тарелка из мастерской", dayOffset: 1, hour: 11, minute: 0),
-                PreviewExpenseActivity(.otherAccommodation, 1200, 0, "Уборка квартиры, оплатил после возвращения в Москву", coordinate: Coordinate(latitude: 55.757, longitude: 37.586, horizontalAccuracy: 40), timeZoneID: "Europe/Moscow", dayOffset: 4, hour: 12, minute: 0),
+                PreviewExpenseActivity(.accommodationServices, 1200, 0, "Уборка квартиры, оплатил после возвращения в Москву", coordinate: Coordinate(latitude: 55.757, longitude: 37.586, horizontalAccuracy: 40), timeZoneID: "Europe/Moscow", dayOffset: 4, hour: 12, minute: 0),
                 PreviewExpenseActivity(.souvenirs, 648.9, 5, "Открытки и значок из Севкабеля", dayOffset: 1, hour: 17, minute: 0),
                 PreviewExpenseActivity(.park, 1500, 4, "Нижний парк Петергофа", dayOffset: 2, hour: 12, minute: 0),
                 PreviewExpenseActivity(.train, 160, 4, "Электричка до Петергофа", coordinate: Coordinate(latitude: 59.9076, longitude: 30.2998, horizontalAccuracy: 25), dayOffset: 2, hour: 10, minute: 15),
                 PreviewExpenseActivity(.luggageStorage, 500, 3, "Чемодан до вечернего поезда", dayOffset: 3, hour: 17, minute: 30),
-                PreviewExpenseActivity(.otherFood, 150, 3, "Чаевые после ужина", dayOffset: 3, hour: 20, minute: 20),
+                PreviewExpenseActivity(.tips, 150, 3, "Чаевые после ужина", dayOffset: 3, hour: 20, minute: 20),
             ]
         case .noviSad, .istanbul, .saoPaulo, .rioDeJaneiro, .buenosAires, .lima, .bogota:
             []

@@ -2454,13 +2454,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Review import"
+            "value" : "Data import"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Проверка импорта"
+            "value" : "Импорт данных"
           }
         }
       }
@@ -4131,6 +4131,23 @@
         }
       }
     },
+    "expense.subcategory.accommodationServices" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Extra services"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Доп. услуги"
+          }
+        }
+      }
+    },
     "expense.subcategory.activity" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -4403,6 +4420,23 @@
         }
       }
     },
+    "expense.subcategory.equipmentRental" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Equipment rental"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Аренда снаряжения"
+          }
+        }
+      }
+    },
     "expense.subcategory.ferry" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -4501,6 +4535,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Отель"
+          }
+        }
+      }
+    },
+    "expense.subcategory.hygiene" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hygiene"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Гигиена"
+          }
+        }
+      }
+    },
+    "expense.subcategory.intercityBus" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Intercity bus"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Межгород. автобус"
           }
         }
       }
@@ -4811,6 +4879,23 @@
         }
       }
     },
+    "expense.subcategory.tips" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tips"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Чаевые"
+          }
+        }
+      }
+    },
     "expense.subcategory.tolls" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -4909,6 +4994,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Проездной"
+          }
+        }
+      }
+    },
+    "expense.subcategory.vehicleMaintenance" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vehicle maintenance"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Обслуживание"
           }
         }
       }

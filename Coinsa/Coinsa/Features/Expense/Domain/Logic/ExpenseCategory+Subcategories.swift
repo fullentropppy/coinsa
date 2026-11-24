@@ -26,12 +26,14 @@ extension ExpenseCategory {
                 .plane,
                 .ferry,
                 .train,
+                .intercityBus,
                 .publicTransport,
                 .taxi,
                 .transfer,
                 .travelPass,
                 .vehicleRental,
                 .fuel,
+                .vehicleMaintenance,
                 .parking,
                 .tolls,
                 .baggage,
@@ -43,6 +45,7 @@ extension ExpenseCategory {
                 .accommodationRental,
                 .camping,
                 .touristTax,
+                .accommodationServices,
                 .otherAccommodation
             ]
         case .leisure:
@@ -52,6 +55,7 @@ extension ExpenseCategory {
                 .park,
                 .beach,
                 .activity,
+                .equipmentRental,
                 .entertainment,
                 .relaxation,
                 .otherLeisure
@@ -60,6 +64,7 @@ extension ExpenseCategory {
             [
                 .clothing,
                 .cosmetics,
+                .hygiene,
                 .souvenirs,
                 .jewelry,
                 .homeGoods,
@@ -81,6 +86,7 @@ extension ExpenseCategory {
                 .laundry,
                 .personalCare,
                 .donation,
+                .tips,
                 .luggageStorage,
                 .postalService,
                 .digitalService,

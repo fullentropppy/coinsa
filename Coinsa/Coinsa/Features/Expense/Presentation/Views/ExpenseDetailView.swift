@@ -173,6 +173,7 @@ struct ExpenseDetailView: View {
                 cardContent
                 additionalInfoContent
             }
+            .fixedSize(horizontal: false, vertical: true)
         }
         .listRowBackground(
             sectionBackground(isLast: expense.comment == nil, visibleFrame: visibleFrame)
@@ -255,9 +256,7 @@ struct ExpenseDetailView: View {
             expense.subcategory.makeBadge()
             Spacer()
             DateLabel.secondarySmall(expense.civilDateTime)
-            DotDivider.secondarySmall()
-            Text(expense.timeZone.gmtOffsetDisplay)
-                .appTextStyle(.secondaryCaption)
+            
         }
     }
     
@@ -267,6 +266,9 @@ struct ExpenseDetailView: View {
                 Image(systemName: expense.paymentMethod.primaryIcon)
                     .fontWeight(.medium)
                 Text(expense.paymentMethod == .card ? .expensePaidByCard : .expensePaidInCash)
+                DotDivider.secondarySmall()
+                Text(expense.timeZone.gmtOffsetDisplay)
+                    .appTextStyle(.secondaryCaption)
             }
             .appTextStyle(.secondaryFootnote)
             .padding(.leading, Layout.amountBlockInset)

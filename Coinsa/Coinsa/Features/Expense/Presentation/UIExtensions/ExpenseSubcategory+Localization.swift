@@ -27,12 +27,14 @@ extension ExpenseSubcategory: LocalizedResourceProviding {
         case .plane: .expenseSubcategoryPlane
         case .ferry: .expenseSubcategoryFerry
         case .train: .expenseSubcategoryTrain
+        case .intercityBus: .expenseSubcategoryIntercityBus
         case .publicTransport: .expenseSubcategoryPublicTransport
         case .taxi: .expenseSubcategoryTaxi
         case .transfer: .expenseSubcategoryTransfer
         case .travelPass: .expenseSubcategoryTravelPass
         case .vehicleRental: .expenseSubcategoryVehicleRental
         case .fuel: .expenseSubcategoryFuel
+        case .vehicleMaintenance: .expenseSubcategoryVehicleMaintenance
         case .parking: .expenseSubcategoryParking
         case .tolls: .expenseSubcategoryTolls
         case .baggage: .expenseSubcategoryBaggage
@@ -44,6 +46,7 @@ extension ExpenseSubcategory: LocalizedResourceProviding {
         case .accommodationRental: .expenseSubcategoryAccommodationRental
         case .camping: .expenseSubcategoryCamping
         case .touristTax: .expenseSubcategoryTouristTax
+        case .accommodationServices: .expenseSubcategoryAccommodationServices
         case .otherAccommodation: .expenseSubcategoryOther
             
         // MARK: - Досуг
@@ -53,6 +56,7 @@ extension ExpenseSubcategory: LocalizedResourceProviding {
         case .park: .expenseSubcategoryPark
         case .beach: .expenseSubcategoryBeach
         case .activity: .expenseSubcategoryActivity
+        case .equipmentRental: .expenseSubcategoryEquipmentRental
         case .entertainment: .expenseSubcategoryEntertainment
         case .relaxation: .expenseSubcategoryRelaxation
         case .otherLeisure: .expenseSubcategoryOther
@@ -61,6 +65,7 @@ extension ExpenseSubcategory: LocalizedResourceProviding {
             
         case .clothing: .expenseSubcategoryClothing
         case .cosmetics: .expenseSubcategoryCosmetics
+        case .hygiene: .expenseSubcategoryHygiene
         case .souvenirs: .expenseSubcategorySouvenirs
         case .jewelry: .expenseSubcategoryJewelry
         case .homeGoods: .expenseSubcategoryHomeGoods
@@ -82,6 +87,7 @@ extension ExpenseSubcategory: LocalizedResourceProviding {
         case .laundry: .expenseSubcategoryLaundry
         case .personalCare: .expenseSubcategoryPersonalCare
         case .donation: .expenseSubcategoryDonation
+        case .tips: .expenseSubcategoryTips
         case .luggageStorage: .expenseSubcategoryLuggageStorage
         case .postalService: .expenseSubcategoryPostalService
         case .digitalService: .expenseSubcategoryDigitalService
