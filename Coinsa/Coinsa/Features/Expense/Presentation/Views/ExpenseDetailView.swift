@@ -256,7 +256,6 @@ struct ExpenseDetailView: View {
             expense.subcategory.makeBadge()
             Spacer()
             DateLabel.secondarySmall(expense.civilDateTime)
-            
         }
     }
     
@@ -264,7 +263,7 @@ struct ExpenseDetailView: View {
         VStack(alignment: .leading) {
             HStack(spacing: ViewLayout.Label.iconSpacing) {
                 Image(systemName: expense.paymentMethod.primaryIcon)
-                    .fontWeight(.medium)
+                    .fontWeight(.semibold)
                 Text(expense.paymentMethod == .card ? .expensePaidByCard : .expensePaidInCash)
                 DotDivider.secondarySmall()
                 Text(expense.timeZone.gmtOffsetDisplay)

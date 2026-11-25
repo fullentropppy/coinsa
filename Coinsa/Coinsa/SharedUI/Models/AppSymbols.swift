@@ -34,6 +34,7 @@ enum AppSymbols {
     static let bell = "bell"
     static let bellFill = "bell.fill"
     static let bubblesAndSparkles = "bubbles.and.sparkles"
+    static let bubblesAndSparklesFill = "bubbles.and.sparkles.fill"
     static let buildingColumns = "building.columns"
     static let buildingColumnsFill = "building.columns.fill"
     static let bus = "bus"

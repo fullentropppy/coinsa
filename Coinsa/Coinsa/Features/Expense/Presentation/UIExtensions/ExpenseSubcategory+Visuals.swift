@@ -153,7 +153,7 @@ extension ExpenseSubcategory: ValueVisualRepresentable {
             
         case .clothing: AppSymbols.tshirtFill
         case .cosmetics: AppSymbols.faceSmilingFill
-        case .hygiene: AppSymbols.bubblesAndSparkles
+        case .hygiene: AppSymbols.bubblesAndSparklesFill
         case .souvenirs: AppSymbols.giftFill
         case .jewelry: AppSymbols.crownFill
         case .homeGoods: AppSymbols.lampTableFill

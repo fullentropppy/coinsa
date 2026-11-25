@@ -132,7 +132,7 @@ struct SettingsView: View {
                 selection: selectedAppAppearance,
                 options: AppAppearance.allCases
             ) { appAppearance in
-                appAppearance.makeLabel()
+                Text(appAppearance.localizedResource)
             }
             
             Toggle(.settingsHapticFeedback, isOn: isHapticFeedbackEnabledBinding)

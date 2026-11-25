@@ -14,7 +14,6 @@ struct AppIcon: View {
     enum Style: CaseIterable {
         case compact
         case formLabel
-        /// Компактные сведения с шрифтом и цветом родительской метки.
         case inlineMetadata
         case metadata
         case inputAccessory
