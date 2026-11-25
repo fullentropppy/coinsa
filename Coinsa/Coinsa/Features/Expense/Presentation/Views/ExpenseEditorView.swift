@@ -53,7 +53,26 @@ struct ExpenseEditorView: View {
         onDelete = nil
     }
 
-    /// Создает редактор или сообщает о недоступности родительской локации.
+    /// Создает редактор новой общей траты без выбора локации.
+    /// - Parameters:
+    ///   - trip: Поездка общей траты.
+    ///   - preselectedPaymentMethod: Предустановленный способ оплаты.
+    ///   - exchangeAdjustment: Корректировка новой траты из настроек приложения.
+    init(
+        forCreateWith trip: Trip,
+        preselectedPaymentMethod: PaymentMethod? = nil,
+        exchangeAdjustment: Double = 0
+    ) {
+        _viewModel = State(initialValue: ExpenseEditViewModel(
+            forCreateWith: trip,
+            preselectedPaymentMethod: preselectedPaymentMethod,
+            exchangeAdjustment: exchangeAdjustment
+        ))
+        onSave = nil
+        onDelete = nil
+    }
+
+    /// Создает редактор или сообщает о недоступности владельца траты.
     /// - Parameters:
     ///   - expense: Редактируемая трата.
     ///   - onDelete: Действие после успешного удаления.
@@ -102,6 +121,24 @@ struct ExpenseEditorView: View {
 #Preview("Creating") {
     @Previewable @State var preview = ExpenseFormPreviewData(isEditing: false)
 
+    if let viewModel = preview.viewModel {
+        ExpenseEditorView(initialViewModel: viewModel)
+            .modelContainer(preview.container)
+            .environment(preview.settingsStore)
+    }
+}
+
+#Preview("General Editing") {
+    @Previewable @State var preview = ExpenseFormPreviewData(isEditing: true, isGeneralExpense: true)
+    if let viewModel = preview.viewModel {
+        ExpenseEditorView(initialViewModel: viewModel)
+            .modelContainer(preview.container)
+            .environment(preview.settingsStore)
+    }
+}
+
+#Preview("General Creating") {
+    @Previewable @State var preview = ExpenseFormPreviewData(isEditing: false, isGeneralExpense: true)
     if let viewModel = preview.viewModel {
         ExpenseEditorView(initialViewModel: viewModel)
             .modelContainer(preview.container)

@@ -14,7 +14,7 @@ nonisolated enum DataTransferValidation {
     /// Проверяет схему, идентификаторы, родителей и значения всего графа, включая конечность расчетов.
     /// - Parameter archive: Исходный или объединенный снимок, который нельзя исправлять при проверке.
     static func validate(_ archive: DataTransferArchive) throws {
-        guard archive.format == "ru.dgritsenko.coinsa.archive", (1...2).contains(archive.schemaVersion) else {
+        guard archive.format == "ru.dgritsenko.coinsa.archive", (1...3).contains(archive.schemaVersion) else {
             throw DataTransferError.unsupportedVersion
         }
         let allIDs = archive.trips.map(\.id) + archive.locations.map(\.id) + archive.expenses.map(\.id)
@@ -22,7 +22,12 @@ nonisolated enum DataTransferValidation {
         let tripIDs = Set(archive.trips.map(\.id))
         let locationIDs = Set(archive.locations.map(\.id))
         guard archive.locations.allSatisfy({ tripIDs.contains($0.tripID) }),
-              archive.expenses.allSatisfy({ locationIDs.contains($0.locationID) }) else {
+              archive.expenses.allSatisfy({ expense in
+                  if let locationID = expense.locationID {
+                      return expense.tripID == nil && locationIDs.contains(locationID)
+                  }
+                  return archive.schemaVersion >= 3 && expense.tripID.map(tripIDs.contains) == true
+              }) else {
             throw DataTransferError.invalidRelationships
         }
         guard validDate(archive.exportedAt) else {
@@ -33,7 +38,9 @@ nonisolated enum DataTransferValidation {
         for trip in archive.trips {
             try validateDates(start: trip.startDate, end: trip.endDate)
             guard !trip.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
-                  Currency(rawValue: trip.homeCurrencyCode) != nil else {
+                  Currency(rawValue: trip.homeCurrencyCode) != nil,
+                  nonNegative(trip.generalExpensesBudget),
+                  archive.schemaVersion >= 3 || trip.generalExpensesBudget == 0 else {
                 throw DataTransferError.invalidValues
             }
             try validateMetadata(createdAt: trip.createdAt, updatedAt: trip.updatedAt)
@@ -50,6 +57,7 @@ nonisolated enum DataTransferValidation {
         }
         for expense in archive.expenses {
             _ = try DataTransferCodec.date(expense.civilDateTime, includesTime: true)
+            let tripID = expense.tripID ?? expense.locationID.flatMap { locations[$0]?.tripID }
             guard Currency(rawValue: expense.expenseCurrencyCode) != nil,
                   PaymentMethod(rawValue: expense.paymentMethodRaw) != nil,
                   let category = ExpenseCategory(rawValue: expense.categoryRaw),
@@ -58,7 +66,8 @@ nonisolated enum DataTransferValidation {
                   nonNegative(expense.homeAmount), positive(expense.rateExpenseToHome),
                   positive(expense.rateExpenseToLocation), nonNegative(expense.exchangeAdjustment),
                   expense.actualDate.map(validDate) != false,
-                  let location = locations[expense.locationID], let trip = trips[location.tripID],
+                  let tripID, let trip = trips[tripID],
+                  expense.tripID == nil || expense.rateExpenseToLocation == expense.rateExpenseToHome,
                   let homeCurrency = Currency(rawValue: trip.homeCurrencyCode),
                   let expenseCurrency = Currency(rawValue: expense.expenseCurrencyCode),
                   let paymentMethod = PaymentMethod(rawValue: expense.paymentMethodRaw) else {

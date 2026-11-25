@@ -12,13 +12,17 @@ struct EventAnalyticsExpensesHeader: View {
     // MARK: - Хранимые свойства
 
     private let viewModel: EventAnalyticsViewModel
+    private let excludesGeneralExpenses: Bool
     
     // MARK: - Инициализация
 
     /// Создает шапку с общей суммой трат и средним за день события.
-    /// - Parameter viewModel: ViewModel аналитики события.
-    init(viewModel: EventAnalyticsViewModel) {
+    /// - Parameters:
+    ///   - viewModel: ViewModel аналитики события.
+    ///   - excludesGeneralExpenses: Показывать в шапке только траты локаций.
+    init(viewModel: EventAnalyticsViewModel, excludesGeneralExpenses: Bool = false) {
         self.viewModel = viewModel
+        self.excludesGeneralExpenses = excludesGeneralExpenses
     }
     
     // MARK: - Тело View
@@ -27,7 +31,7 @@ struct EventAnalyticsExpensesHeader: View {
         HStack(spacing: ViewLayout.Summary.cardSpacing) {
             EventAmountCardView(
                 title: .amountExpenses,
-                homeAmount: viewModel.expensesTotalHomeAmount,
+                homeAmount: excludesGeneralExpenses ? viewModel.locationsExpensesTotalHomeAmount : viewModel.expensesTotalHomeAmount,
                 homeCurrency: viewModel.homeCurrency,
                 locationAmount: viewModel.expensesTotalLocationAmount,
                 locationCurrency: viewModel.locationCurrency
@@ -35,7 +39,7 @@ struct EventAnalyticsExpensesHeader: View {
             if viewModel.totalDays > 1 {
                 EventAmountCardView(
                     title: .amountExpensesDaily,
-                    homeAmount: viewModel.dailyHomeExpensesAmount,
+                    homeAmount: excludesGeneralExpenses ? viewModel.locationsDailyHomeExpensesAmount : viewModel.dailyHomeExpensesAmount,
                     homeCurrency: viewModel.homeCurrency,
                     locationAmount: viewModel.dailyLocationExpensesAmount,
                     locationCurrency: viewModel.locationCurrency

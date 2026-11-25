@@ -144,7 +144,7 @@ private extension PreviewExpenseSamples {
         let purchases: [(minute: Int, amount: Double, subcategory: ExpenseSubcategory, comment: String?, coordinate: Coordinate?)] = [
             (8 * 60 + 20, 684.50, .breakfast, "Завтрак и кофе перед прогулкой по Звездаре",
              Coordinate(latitude: breakfastPlace.latitude, longitude: breakfastPlace.longitude, horizontalAccuracy: 25)),
-            (10 * 60 + 10, 325, .souvenirs, "Магниты и открытки с видами Белграда", nil),
+            (10 * 60 + 10, 3250, .souvenirs, "Запланированная покупка подарков, вне дневных трат", nil),
             (13 * 60 + 15, 1438.90, .lunch, "Обед в небольшом кафе на Врачаре",
              Coordinate(latitude: lunchPlace.latitude, longitude: lunchPlace.longitude, horizontalAccuracy: 25)),
             (15 * 60 + 20, 812.45, .taxi, nil,
@@ -160,7 +160,8 @@ private extension PreviewExpenseSamples {
                 paymentMethod: index == 1 ? .cash : .card,
                 subcategory: purchase.subcategory,
                 comment: purchase.comment,
-                coordinate: purchase.coordinate
+                coordinate: purchase.coordinate,
+                isExcludedFromDailySpending: index == 1
             )
         }
     }

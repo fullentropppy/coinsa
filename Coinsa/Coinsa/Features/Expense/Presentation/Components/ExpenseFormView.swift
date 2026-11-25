@@ -87,7 +87,9 @@ struct ExpenseFormView: View {
             commentSection
             dateSection
             placeOfExpenseSection
-            dailySpendingSection
+            if !viewModel.isGeneralExpense {
+                dailySpendingSection
+            }
             actionsSection
         }
     }

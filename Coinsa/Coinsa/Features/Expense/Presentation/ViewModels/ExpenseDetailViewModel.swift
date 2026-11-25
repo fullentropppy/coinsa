@@ -7,6 +7,7 @@
 
 import Foundation
 import MapKit
+import SwiftData
 
 /// ViewModel для детального экрана траты.
 struct ExpenseDetailViewModel {
@@ -15,6 +16,11 @@ struct ExpenseDetailViewModel {
     let expense: Expense
 
     // MARK: - Вычисляемые свойства. Общее
+
+    var canMove: Bool {
+        guard let trip = expense.owningTrip else { return false }
+        return expense.location != nil || (trip.locations ?? []).contains { !$0.isDeleted && $0.trip === trip }
+    }
 
     var isExpenseHomeCurrency: Bool {
         homeCurrency == expenseCurrency
@@ -33,7 +39,7 @@ struct ExpenseDetailViewModel {
     }
     
     var navigationSubtitle: String {
-        expense.location?.screenContextSubtitle ?? ""
+        expense.location?.screenContextSubtitle ?? expense.owningTrip?.screenContextSubtitle ?? ""
     }
     
     // MARK: - Вычисляемые свойства. Валюта и сумма

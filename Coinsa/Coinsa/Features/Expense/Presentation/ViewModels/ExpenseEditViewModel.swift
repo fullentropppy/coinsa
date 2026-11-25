@@ -21,7 +21,9 @@ final class ExpenseEditViewModel: Identifiable {
     private let amountManager: AmountManager
     
     let expense: Expense?
-    let location: Location
+    let location: Location?
+    let trip: Trip?
+    private let initialHomeCurrency: Currency
     
     // MARK: - Внутреннее состояние
     
@@ -29,7 +31,8 @@ final class ExpenseEditViewModel: Identifiable {
     private var hasLoadedInitialRates = false
     private var amountInputSide: CurrencyPairSide = .quote
     private var copiedDateMetadata: ExpenseCopyDateMetadata?
-    private(set) var needsCopyLocationRate = false
+    private var moveContext: ExpenseMoveContext?
+    private(set) var needsDestinationLocationRate = false
 
     private var calculationContext: ExpenseCalculationContext {
         ExpenseCalculationContext(
@@ -45,14 +48,22 @@ final class ExpenseEditViewModel: Identifiable {
     
     // MARK: - Состояние UI. Общее поведение и оформление
     
+    var isGeneralExpense: Bool {
+        location == nil && trip != nil
+    }
+
     var isEdit: Bool {
         expense != nil
     }
 
     var isCopy: Bool {
-        copiedDateMetadata != nil
+        copiedDateMetadata != nil && !isMove
     }
     
+    var isMove: Bool {
+        moveContext != nil
+    }
+
     var isExpenseHomeCurrency: Bool {
         expenseCurrency == homeCurrency
     }
@@ -74,7 +85,7 @@ final class ExpenseEditViewModel: Identifiable {
     }
     
     var navigationTitle: LocalizedStringResource {
-        isEdit ? .expenseNavigationTitleEdit : .expenseNavigationTitleCreate
+        isEdit || isMove ? .expenseNavigationTitleEdit : .expenseNavigationTitleCreate
     }
     
     var hasChanges: Bool {
@@ -97,11 +108,11 @@ final class ExpenseEditViewModel: Identifiable {
     }
     
     var homeCurrency: Currency {
-        location.homeCurrency
+        initialHomeCurrency
     }
     
     var locationCurrency: Currency {
-        location.locationCurrency
+        location?.locationCurrency ?? homeCurrency
     }
     
     var expenseCurrency: Currency {
@@ -157,7 +168,7 @@ final class ExpenseEditViewModel: Identifiable {
     }
     
     var rateExpenseToLocation: Double {
-        get { locationCurrencyConverter.rateQuoteToBase }
+        get { isGeneralExpense ? rateExpenseToHome : locationCurrencyConverter.rateQuoteToBase }
         set { locationCurrencyConverter.updateRate(newValue) }
     }
     
@@ -253,7 +264,32 @@ final class ExpenseEditViewModel: Identifiable {
         )
     }
     
-    /// Создает черновик существующей траты; возвращает nil, если родительская локация недоступна.
+    /// Создает черновик общей траты в домашней валюте поездки.
+    /// - Parameters:
+    ///   - trip: Поездка общей траты.
+    ///   - preselectedPaymentMethod: Предустановленный способ оплаты.
+    ///   - exchangeAdjustment: Корректировка для новой траты из настроек приложения.
+    ///   - exchangeRateProvider: Провайдер курсов или nil для Hexarate.
+    convenience init(
+        forCreateWith trip: Trip,
+        preselectedPaymentMethod: PaymentMethod? = nil,
+        exchangeAdjustment: Double = 0,
+        exchangeRateProvider: ExchangeRateProvider? = nil
+    ) {
+        self.init(
+            location: nil, trip: trip, expense: nil,
+            date: CivilDateTime.now.storedDate,
+            homeAmount: 0, expenseAmount: 0, expenseCurrency: trip.homeCurrency,
+            rateExpenseToHome: 1, rateExpenseToLocation: 1,
+            paymentMethod: preselectedPaymentMethod ?? .card,
+            exchangeAdjustment: exchangeAdjustment,
+            category: .defaultValue, subcategory: .defaultValue(with: .defaultValue),
+            coordinate: nil, comment: "", isExcludedFromDailySpending: false,
+            exchangeRateProvider: exchangeRateProvider
+        )
+    }
+
+    /// Создает черновик существующей траты; возвращает nil, если единственный владелец недоступен.
     /// - Parameters:
     ///   - expense: Редактируемая трата.
     ///   - exchangeRateProvider: Общий провайдер курсов для обоих конвертеров; при nil используется Hexarate.
@@ -261,10 +297,11 @@ final class ExpenseEditViewModel: Identifiable {
         forEdit expense: Expense,
         exchangeRateProvider: ExchangeRateProvider? = nil
     ) {
-        guard !expense.isDeleted, let location = expense.location, !location.isDeleted else { return nil }
+        guard expense.owningTrip != nil else { return nil }
 
         self.init(
-            location: location,
+            location: expense.location,
+            trip: expense.trip,
             expense: expense,
             date: expense.civilDateTime.storedDate,
             homeAmount: expense.homeAmount,
@@ -293,11 +330,9 @@ final class ExpenseEditViewModel: Identifiable {
         to location: Location,
         exchangeRateProvider: ExchangeRateProvider? = nil
     ) {
-        guard !source.isDeleted, let sourceLocation = source.location, !sourceLocation.isDeleted,
-              let trip = sourceLocation.trip, !trip.isDeleted,
-              !location.isDeleted, location.trip === trip else { return nil }
+        guard let trip = source.owningTrip, !location.isDeleted, location.trip === trip else { return nil }
 
-        let hasSameLocationCurrency = sourceLocation.locationCurrency == location.locationCurrency
+        let hasSameLocationCurrency = source.locationCurrency == location.locationCurrency
         let locationRate: Double
         if hasSameLocationCurrency {
             locationRate = source.rateExpenseToLocation
@@ -328,12 +363,67 @@ final class ExpenseEditViewModel: Identifiable {
             exchangeRateProvider: exchangeRateProvider
         )
         copiedDateMetadata = ExpenseCopyDateMetadata(source)
-        needsCopyLocationRate = !hasSameLocationCurrency && locationRate == 0
+        needsDestinationLocationRate = !hasSameLocationCurrency && locationRate == 0
+    }
+
+    /// Копирует трату в общие траты той же поездки с сохранением курса и метаданных даты.
+    /// - Parameters:
+    ///   - source: Исходная трата локации или поездки.
+    ///   - trip: Поездка исходной траты.
+    ///   - exchangeRateProvider: Провайдер курсов или nil для Hexarate.
+    convenience init?(
+        copying source: Expense,
+        to trip: Trip,
+        exchangeRateProvider: ExchangeRateProvider? = nil
+    ) {
+        guard source.owningTrip === trip, !trip.isDeleted else { return nil }
+        self.init(
+            location: nil, trip: trip, expense: nil,
+            date: source.civilDateTime.storedDate,
+            homeAmount: source.homeAmount, expenseAmount: source.amount(in: .expense),
+            expenseCurrency: source.expenseCurrency,
+            rateExpenseToHome: source.rateExpenseToHome, rateExpenseToLocation: source.rateExpenseToHome,
+            paymentMethod: source.paymentMethod, exchangeAdjustment: source.exchangeAdjustment,
+            category: source.category, subcategory: source.subcategory,
+            coordinate: source.coordinate, comment: source.comment ?? "",
+            isExcludedFromDailySpending: false,
+            exchangeRateProvider: exchangeRateProvider
+        )
+        copiedDateMetadata = ExpenseCopyDateMetadata(source)
+    }
+
+    /// Создает черновик переноса в локацию, сохраняя исходную запись до подтверждения.
+    /// - Parameters:
+    ///   - source: Переносимая трата.
+    ///   - location: Целевая локация той же поездки.
+    ///   - exchangeRateProvider: Провайдер недостающего курса или nil для Hexarate.
+    convenience init?(
+        moving source: Expense,
+        to location: Location,
+        exchangeRateProvider: ExchangeRateProvider? = nil
+    ) {
+        self.init(copying: source, to: location, exchangeRateProvider: exchangeRateProvider)
+        moveContext = ExpenseMoveContext(source, to: location)
+    }
+
+    /// Создает черновик переноса в общие траты без изменения исходной записи.
+    /// - Parameters:
+    ///   - source: Переносимая трата локации.
+    ///   - trip: Поездка исходной траты.
+    ///   - exchangeRateProvider: Провайдер курсов или nil для Hexarate.
+    convenience init?(
+        moving source: Expense,
+        to trip: Trip,
+        exchangeRateProvider: ExchangeRateProvider? = nil
+    ) {
+        self.init(copying: source, to: trip, exchangeRateProvider: exchangeRateProvider)
+        moveContext = ExpenseMoveContext(source, trip: trip)
     }
 
     /// Создает черновик траты, конвертеры валют и исходный снимок для определения изменений.
     /// - Parameters:
-    ///   - location: Родительская локация.
+    ///   - location: Родительская локация или nil для общей траты.
+    ///   - trip: Поездка общей траты или nil для траты локации.
     ///   - expense: Исходная трата или nil при создании.
     ///   - date: Гражданские дата и время в формате хранения.
     ///   - homeAmount: Начальная сумма в домашней валюте.
@@ -350,7 +440,8 @@ final class ExpenseEditViewModel: Identifiable {
     ///   - isExcludedFromDailySpending: Начальное исключение из дневных трат.
     ///   - exchangeRateProvider: Общий провайдер курсов для обоих конвертеров или nil для Hexarate.
     private init(
-        location: Location,
+        location: Location?,
+        trip: Trip? = nil,
         expense: Expense?,
         date: Date,
         homeAmount: Double,
@@ -368,6 +459,7 @@ final class ExpenseEditViewModel: Identifiable {
         exchangeRateProvider: ExchangeRateProvider?
     ) {
         self.location = location
+        self.trip = trip
         self.expense = expense
         self.date = date
         self.paymentMethod = paymentMethod
@@ -379,12 +471,16 @@ final class ExpenseEditViewModel: Identifiable {
         self.isExcludedFromDailySpending = isExcludedFromDailySpending
         
         let provider = exchangeRateProvider ?? ExchangeRateProvider(service: HexarateService())
-        let normalizedRateExpenseToHome = expenseCurrency == location.homeCurrency ? 1 : rateExpenseToHome
-        let normalizedRateExpenseToLocation = expenseCurrency == location.locationCurrency ? 1 : rateExpenseToLocation
+        let homeCurrency = location?.homeCurrency ?? trip?.homeCurrency ?? .defaultValue
+        initialHomeCurrency = homeCurrency
+        let locationCurrency = location?.locationCurrency ?? homeCurrency
+        let normalizedRateExpenseToHome = expenseCurrency == homeCurrency ? 1 : rateExpenseToHome
+        let normalizedRateExpenseToLocation = location == nil ? normalizedRateExpenseToHome
+            : (expenseCurrency == locationCurrency ? 1 : rateExpenseToLocation)
         
         self.homeCurrencyConverter = CurrencyConverter(
             exchangeRateProvider: provider,
-            baseCurrency: location.homeCurrency,
+            baseCurrency: homeCurrency,
             quoteCurrency: expenseCurrency,
             rateQuoteToBase: normalizedRateExpenseToHome,
             exchangeAdjustment: exchangeAdjustment
@@ -392,7 +488,7 @@ final class ExpenseEditViewModel: Identifiable {
         
         self.locationCurrencyConverter = CurrencyConverter(
             exchangeRateProvider: provider,
-            baseCurrency: location.locationCurrency,
+            baseCurrency: locationCurrency,
             quoteCurrency: expenseCurrency,
             rateQuoteToBase: normalizedRateExpenseToLocation,
             exchangeAdjustment: 0
@@ -435,7 +531,9 @@ final class ExpenseEditViewModel: Identifiable {
             )
         }
         
-        locationCurrencyConverter.updateQuoteCurrency(newCurrency)
+        if !isGeneralExpense {
+            locationCurrencyConverter.updateQuoteCurrency(newCurrency)
+        }
     }
     
     func currency(for currencyPairSide: CurrencyPairSide) -> Currency {
@@ -480,8 +578,8 @@ final class ExpenseEditViewModel: Identifiable {
         guard !hasLoadedInitialRates && !isEdit else { return }
         
         hasLoadedInitialRates = true
-        if isCopy {
-            if needsCopyLocationRate {
+        if isCopy || isMove {
+            if needsDestinationLocationRate {
                 requestInitialRateExpenseToLocationIfNeeded()
             }
             return
@@ -579,7 +677,7 @@ final class ExpenseEditViewModel: Identifiable {
     }
 
     func applyResolvedCurrentLocation(_ location: CLLocation) {
-        guard !isEdit && !isCopy && coordinate == nil else { return }
+        guard !isEdit && !isCopy && !isMove && coordinate == nil else { return }
 
         coordinate = Coordinate(location)
         syncInitialSnapshotWithCurrentValues()
@@ -592,11 +690,11 @@ final class ExpenseEditViewModel: Identifiable {
     }
     
     private var storedRateExpenseToLocation: Double {
-        isExpenseLocationCurrency ? 1 : rateExpenseToLocation
+        isGeneralExpense ? storedRateExpenseToHome : (isExpenseLocationCurrency ? 1 : rateExpenseToLocation)
     }
     
     func save(using repository: ExpenseRepository) throws {
-        if let expense {
+        if let expense = expense ?? moveContext?.expense {
             try repository.update(
                 expense,
                 date: date,
@@ -612,7 +710,9 @@ final class ExpenseEditViewModel: Identifiable {
                 longitude: coordinate?.longitude,
                 horizontalAccuracy: coordinate?.horizontalAccuracy,
                 comment: comment,
-                isExcludedFromDailySpending: isExcludedFromDailySpending
+                isExcludedFromDailySpending: isExcludedFromDailySpending,
+                expectedHomeCurrency: homeCurrency,
+                moveContext: moveContext
             )
         } else {
             try repository.add(
@@ -626,11 +726,13 @@ final class ExpenseEditViewModel: Identifiable {
                 category: category,
                 subcategory: subcategory,
                 location: location,
+                trip: trip,
                 latitude: coordinate?.latitude,
                 longitude: coordinate?.longitude,
                 horizontalAccuracy: coordinate?.horizontalAccuracy,
                 comment: comment,
                 isExcludedFromDailySpending: isExcludedFromDailySpending,
+                expectedHomeCurrency: homeCurrency,
                 copiedDateMetadata: copiedDateMetadata
             )
         }

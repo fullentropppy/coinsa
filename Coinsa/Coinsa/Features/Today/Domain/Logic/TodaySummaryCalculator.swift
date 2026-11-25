@@ -7,7 +7,7 @@
 
 import Foundation
 
-/// Подготавливает список и сводку дня за один проход по расходам локации.
+/// Подготавливает сводку локации и список дня с общими тратами ее поездки.
 enum TodaySummaryCalculator {
     // MARK: - Методы
 
@@ -17,7 +17,7 @@ enum TodaySummaryCalculator {
     ///   - day: Календарный день для фильтрации гражданских дат трат и расчета оставшихся дней.
     ///   - showsLocationBudgetOnOverspend: Разрешает переключение бюджета и остатка на всю локацию при перерасходе дневных трат без признака исключения.
     ///   - overspendThreshold: Допустимое превышение дневного бюджета в процентах от 0 до 100; переключение требует строгого превышения порога.
-    /// - Returns: Сводка дневных трат без исключенных сумм в обеих валютах, полный список трат дня и быстрые подкатегории.
+    /// - Returns: Сводка дневных трат локации без исключенных сумм, список с общими тратами ее поездки и быстрые подкатегории по истории локации.
     static func calculate(
         for location: Location,
         on day: PlainDate,
@@ -57,7 +57,15 @@ enum TodaySummaryCalculator {
             }
         }
 
-        todayExpenses.sort { $0.civilDateTime > $1.civilDateTime }
+        if let trip = location.trip {
+            todayExpenses += (trip.generalExpenses ?? []).filter {
+                $0.isGeneralExpense && $0.owningTrip === trip && todayRange.contains($0.civilDateTime.storedDate)
+            }
+        }
+        todayExpenses.sort {
+            if $0.civilDateTime != $1.civilDateTime { return $0.civilDateTime > $1.civilDateTime }
+            return $0.id.uuidString < $1.id.uuidString
+        }
 
         var budgetHomeAmount = location.calculateDailyBudgetAmount(on: day, reservedExpensesAmount: reservedHomeAmount)
         let switchLimit = max(0, budgetHomeAmount) * (1 + overspendThreshold / 100)

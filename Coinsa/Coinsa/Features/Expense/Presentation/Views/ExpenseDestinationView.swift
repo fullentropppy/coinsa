@@ -1,15 +1,15 @@
 //
-//  ExpenseCopyView.swift
+//  ExpenseDestinationView.swift
 //  Coinsa
 //
-//  Created by Daniil Gritsenko on 22.11.2026.
+//  Created by Daniil Gritsenko on 25.11.2026.
 //
 
 import SwiftUI
 import SwiftData
 
-/// Выбор локации текущей поездки с переходом к черновику копии траты.
-struct ExpenseCopyView: View {
+/// Общий выбор назначения для копирования и переноса траты в пределах поездки.
+struct ExpenseDestinationView: View {
     // MARK: - Окружение
 
     @Environment(\.modelContext) private var context
@@ -18,15 +18,17 @@ struct ExpenseCopyView: View {
 
     // MARK: - Состояние
 
-    @State private var viewModel: ExpenseCopyViewModel
-    @State private var didSaveCopy = false
+    @State private var viewModel: ExpenseDestinationViewModel
+    @State private var didSaveExpense = false
 
     // MARK: - Инициализация
 
-    /// Создает экран копирования существующей траты.
-    /// - Parameter source: Трата, данные которой будут перенесены в новый черновик.
-    init(source: Expense) {
-        _viewModel = State(initialValue: ExpenseCopyViewModel(source: source))
+    /// Создает экран выбора назначения существующей траты.
+    /// - Parameters:
+    ///   - source: Исходная трата текущей поездки.
+    ///   - mode: Копирование или перенос с подтверждением в редакторе.
+    init(source: Expense, mode: ExpenseDestinationViewModel.Mode = .copy) {
+        _viewModel = State(initialValue: ExpenseDestinationViewModel(source: source, mode: mode))
     }
 
     // MARK: - Тело View
@@ -44,8 +46,8 @@ struct ExpenseCopyView: View {
     private var locationSelection: some View {
         NavigationStack {
             locationList
-                .navigationTitle(Text(.expenseCopyNavigationTitle))
-                .navigationSubtitle(viewModel.sourceLocation?.trip?.screenContextSubtitle ?? "")
+                .navigationTitle(Text(viewModel.navigationTitle))
+                .navigationSubtitle(viewModel.sourceTrip?.screenContextSubtitle ?? "")
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: .topBarLeading) {
@@ -54,13 +56,13 @@ struct ExpenseCopyView: View {
                 }
                 .notificationAlert(
                     isPresented: errorBinding,
-                    title: .expenseStorageErrorTitle,
+                    title: viewModel.errorTitle,
                     message: viewModel.errorMessage ?? .errorUnknownMessage,
                     isError: true
                 )
         }
         .sheet(item: $viewModel.draft, onDismiss: handleEditorDismiss) { draft in
-            ExpenseEditorView(initialViewModel: draft, onSave: { didSaveCopy = true })
+            ExpenseEditorView(initialViewModel: draft, onSave: { didSaveExpense = true })
         }
     }
 
@@ -68,29 +70,37 @@ struct ExpenseCopyView: View {
 
     @ViewBuilder
     private var locationList: some View {
-        if let sourceLocation = viewModel.sourceLocation {
+        if let trip = viewModel.sourceTrip {
             List {
                 Section {
-                    locationButton(sourceLocation)
+                    ExpenseRowView(viewModel.source)
                 } header: {
-                    Text(.expenseCopyCurrentLocation)
+                    Text(viewModel.sourceTitle)
                 } footer: {
-                    Text(.expenseCopyHint)
+                    Text(viewModel.hint)
+                }
+
+                if viewModel.showsGeneralExpenses {
+                    Section {
+                        Button {
+                            haptics.trigger(.tap)
+                            viewModel.selectGeneralExpenses(in: context)
+                        } label: {
+                            TripRowView(trip)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .contentShape(Rectangle())
+                        }
+                        .buttonStyle(.plain)
+                    } header: {
+                        Text(.tripGeneralExpenses)
+                    }
                 }
 
                 let groups = viewModel.groupedLocations
-                GroupHeader(
-                    icon: Location.primaryIcon,
-                    title: .expenseCopyOtherLocations,
-                    itemCount: groups.reduce(0) { $0 + $1.locations.count }
-                )
-                .listRowBackground(Color.clear)
-
-                ForEach(groups, id: \.status) { group in
-                    Section(group.status.safeLocalizedResourcePlural) {
-                        ForEach(group.locations) { location in
-                            locationButton(location)
-                        }
+                if !groups.isEmpty {
+                    LocationDestinationSections(groups: groups, title: .expenseDestinationLocations) { location in
+                        haptics.trigger(.tap)
+                        viewModel.select(location, in: context)
                     }
                 }
             }
@@ -107,18 +117,6 @@ struct ExpenseCopyView: View {
         }
     }
 
-    private func locationButton(_ location: Location) -> some View {
-        Button {
-            haptics.trigger(.tap)
-            viewModel.select(location, in: context)
-        } label: {
-            LocationRowView(location)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .contentShape(Rectangle())
-        }
-        .buttonStyle(.plain)
-    }
-
     // MARK: - Биндинги
 
     private var errorBinding: Binding<Bool> {
@@ -131,7 +129,7 @@ struct ExpenseCopyView: View {
     // MARK: - Действия
 
     private func handleEditorDismiss() {
-        if didSaveCopy {
+        if didSaveExpense {
             dismiss()
         }
     }
@@ -143,7 +141,7 @@ struct ExpenseCopyView: View {
     @Previewable @State var preview = ExpenseFormPreviewData(isEditing: true)
 
     if let expense = preview.viewModel?.expense {
-        ExpenseCopyView(source: expense)
+        ExpenseDestinationView(source: expense)
             .modelContainer(preview.container)
             .environment(preview.settingsStore)
     }
@@ -153,7 +151,17 @@ struct ExpenseCopyView: View {
     @Previewable @State var preview = TripPreviewData(.asia, includeLocations: true, includeExpenses: true)
 
     if let expense = preview.trip.locations?.first?.expenses?.first {
-        ExpenseCopyView(source: expense)
+        ExpenseDestinationView(source: expense)
+            .modelContainer(preview.container)
+            .environment(preview.settingsStore)
+    }
+}
+
+#Preview("Moving") {
+    @Previewable @State var preview = ExpenseFormPreviewData(isEditing: true)
+
+    if let expense = preview.viewModel?.expense {
+        ExpenseDestinationView(source: expense, mode: .move)
             .modelContainer(preview.container)
             .environment(preview.settingsStore)
     }

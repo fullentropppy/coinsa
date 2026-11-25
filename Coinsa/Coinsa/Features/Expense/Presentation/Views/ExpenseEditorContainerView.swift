@@ -50,7 +50,7 @@ struct ExpenseEditorContainerView: View {
 
     /// Создает форму подготовленного черновика с начальной стороной валютной пары.
     /// - Parameters:
-    ///   - initialViewModel: Черновик с доступной родительской локацией.
+    ///   - initialViewModel: Черновик с доступной локацией или поездкой.
     ///   - onSave: Действие после успешного сохранения.
     ///   - onDelete: Действие после успешного удаления.
     init(
@@ -73,7 +73,7 @@ struct ExpenseEditorContainerView: View {
             expenseEditForm
                 .disabled(isSaving)
                 .navigationTitle(viewModel.navigationTitle)
-                .navigationSubtitle(viewModel.location.screenContextSubtitle)
+                .navigationSubtitle(viewModel.location?.screenContextSubtitle ?? viewModel.trip?.screenContextSubtitle ?? "")
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     toolbarContent
@@ -102,7 +102,7 @@ struct ExpenseEditorContainerView: View {
                 )
                 .notificationAlert(
                     isPresented: storageErrorBinding,
-                    title: .expenseStorageErrorTitle,
+                    title: viewModel.isMove ? .expenseMoveErrorTitle : .expenseStorageErrorTitle,
                     message: storageErrorMessage ?? .errorUnknownMessage,
                     isError: true
                 )
@@ -121,7 +121,7 @@ struct ExpenseEditorContainerView: View {
                     onCancel: { cancelDelete() }
                 )
                 .task {
-                    if settingsStore.fetchExpenseExchangeRateOnline || viewModel.needsCopyLocationRate {
+                    if settingsStore.fetchExpenseExchangeRateOnline || viewModel.needsDestinationLocationRate {
                         viewModel.loadInitialRateIfNeeded()
                     }
                     if settingsStore.detectPlaceOfExpense {
@@ -243,11 +243,17 @@ struct ExpenseEditorContainerView: View {
                 onSave?()
                 dismiss()
             } catch {
-                if let repositoryError = error as? ExpenseRepositoryError,
-                   repositoryError == .locationUnavailable {
+                if let repositoryError = error as? ExpenseRepositoryError, repositoryError == .homeCurrencyChanged {
+                    storageErrorMessage = .expenseEditorErrorHomeCurrencyChangedMessage
+                } else if (error as? ExpenseRepositoryError) == .moveConflict {
+                    storageErrorMessage = .expenseMoveErrorChangedMessage
+                } else if (error as? ExpenseRepositoryError) == .invalidMoveRate {
+                    storageErrorMessage = .expenseMoveErrorRateMessage
+                } else if let repositoryError = error as? ExpenseRepositoryError,
+                   repositoryError == .locationUnavailable || repositoryError == .tripUnavailable {
                     storageErrorMessage = .expenseEditorUnavailableMessage
                 } else {
-                    storageErrorMessage = .expenseStorageErrorSaveMessage
+                    storageErrorMessage = viewModel.isMove ? .expenseMoveErrorSaveMessage : .expenseStorageErrorSaveMessage
                 }
             }
         }
@@ -291,7 +297,7 @@ struct ExpenseEditorContainerView: View {
     }
 
     private func resolveCurrentLocationIfNeeded() async {
-        guard !viewModel.isEdit, !viewModel.isCopy, viewModel.coordinate == nil else { return }
+        guard !viewModel.isEdit, !viewModel.isCopy, !viewModel.isMove, viewModel.coordinate == nil else { return }
         await resolveCurrentLocation(automatically: true)
     }
 

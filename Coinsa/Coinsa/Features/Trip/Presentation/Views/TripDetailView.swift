@@ -136,13 +136,24 @@ struct TripDetailView: View {
     }
     
     // MARK: - Секции
-    
+
     private var headerSection: some View {
         Section {
             EventSummaryView(
                 data: viewModel.eventHeaderData,
                 showsAmounts: viewModel.showsFullHeader
             )
+            NavigationLink { [trip] in
+                TripGeneralExpensesView(trip)
+            } label: {
+                HStack {
+                    Text(.tripGeneralExpenses)
+                        .font(.subheadline)
+                    Spacer()
+                    CountLabel.secondarySmall(viewModel.generalExpensesCount, icon: Expense.primaryIcon)
+                }
+                .foregroundStyle(.secondary)
+            }
             if viewModel.showsFullHeader {
                 AnalyticsNavigationLink { [trip] in
                     EventAnalyticsView(

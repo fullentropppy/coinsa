@@ -33,10 +33,6 @@ final class LocationBudgetTransferViewModel {
         LocationBudgetTransfer.availableHomeAmount(from: source) ?? 0
     }
 
-    var availableLocationAmount: Double {
-        source.calculateBudgetBalance(in: .location)
-    }
-
     var groupedLocations: [(status: EventStatus, locations: [Location])] {
         LocationGrouping.grouped(Self.destinations(for: source))
     }

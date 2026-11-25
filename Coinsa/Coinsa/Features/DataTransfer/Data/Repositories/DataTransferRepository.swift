@@ -58,6 +58,7 @@ struct DataTransferRepository {
                         startDate: try DataTransferCodec.date(record.startDate),
                         endDate: try DataTransferCodec.date(record.endDate),
                         homeCurrencyCode: record.homeCurrencyCode, locations: [],
+                        generalExpensesBudget: record.generalExpensesBudget,
                         createdAt: record.createdAt, updatedAt: record.updatedAt
                     )
                     context.insert(trip)
@@ -69,6 +70,7 @@ struct DataTransferRepository {
                     trip.storedStartDate = try DataTransferCodec.date(record.startDate)
                     trip.storedEndDate = try DataTransferCodec.date(record.endDate)
                     trip.baseCurrencyCode = record.homeCurrencyCode
+                    trip.generalExpensesBudget = record.generalExpensesBudget
                     trip.updatedAt = record.updatedAt
                 }
                 for record in checkedPlan.locations.additions {
@@ -97,7 +99,9 @@ struct DataTransferRepository {
                     location.updatedAt = record.updatedAt
                 }
                 for record in checkedPlan.expenses.additions {
-                    guard let location = locations[record.locationID] else { throw DataTransferError.invalidRelationships }
+                    let location = record.locationID.flatMap { locations[$0] }
+                    let trip = record.tripID.flatMap { trips[$0] }
+                    guard (location != nil) != (trip != nil) else { throw DataTransferError.invalidRelationships }
                     let expense = Expense(
                         id: record.id, date: try DataTransferCodec.date(record.civilDateTime, includesTime: true),
                         actualDate: record.actualDate ?? Date(timeIntervalSinceReferenceDate: 0),
@@ -107,7 +111,8 @@ struct DataTransferRepository {
                         rateExpenseToLocation: record.rateExpenseToLocation,
                         paymentMethodRaw: record.paymentMethodRaw, exchangeAdjustment: record.exchangeAdjustment,
                         categoryRaw: record.categoryRaw, subcategoryRaw: record.subcategoryRaw,
-                        location: location, latitude: record.latitude, longitude: record.longitude,
+                        location: location, trip: trip,
+                        latitude: record.latitude, longitude: record.longitude,
                         horizontalAccuracy: record.horizontalAccuracy, comment: record.comment,
                         isExcludedFromDailySpending: record.isExcludedFromDailySpending,
                         createdAt: record.createdAt, updatedAt: record.updatedAt
@@ -118,6 +123,11 @@ struct DataTransferRepository {
                 }
                 for record in checkedPlan.expenses.updates {
                     guard let expense = expenses[record.id] else { throw DataTransferError.invalidRelationships }
+                    let location = record.locationID.flatMap { locations[$0] }
+                    let trip = record.tripID.flatMap { trips[$0] }
+                    guard (location != nil) != (trip != nil) else { throw DataTransferError.invalidRelationships }
+                    expense.location = location
+                    expense.trip = trip
                     expense.storedDate = try DataTransferCodec.date(record.civilDateTime, includesTime: true)
                     expense.actualDate = record.actualDate
                     expense.timeZoneID = record.timeZoneID
@@ -163,7 +173,8 @@ struct DataTransferRepository {
                 }
                 return DataTransferArchive.TripRecord(
                     id: trip.id, name: trip.name, startDate: start, endDate: end,
-                    homeCurrencyCode: trip.baseCurrencyCode, createdAt: trip.createdAt, updatedAt: trip.updatedAt
+                    homeCurrencyCode: trip.baseCurrencyCode, generalExpensesBudget: trip.generalExpensesBudget,
+                    createdAt: trip.createdAt, updatedAt: trip.updatedAt
                 )
             }.sorted { $0.id.uuidString < $1.id.uuidString },
             locations: try locations.map { location in
@@ -183,13 +194,14 @@ struct DataTransferRepository {
                 )
             }.sorted { $0.id.uuidString < $1.id.uuidString },
             expenses: try expenses.map { expense in
-                guard let location = expense.location, !location.isDeleted else { throw DataTransferError.invalidRelationships }
+                guard expense.owningTrip != nil else { throw DataTransferError.invalidRelationships }
                 let civilDateTime = DataTransferCodec.dateString(expense.storedDate, includesTime: true)
                 guard try DataTransferCodec.date(civilDateTime, includesTime: true) == expense.storedDate else {
                     throw DataTransferError.invalidValues
                 }
                 return DataTransferArchive.ExpenseRecord(
-                    id: expense.id, locationID: location.id, civilDateTime: civilDateTime,
+                    id: expense.id, locationID: expense.location?.id, tripID: expense.trip?.id,
+                    civilDateTime: civilDateTime,
                     actualDate: expense.actualDate, timeZoneID: expense.timeZoneID,
                     homeAmount: expense.baseAmount, expenseCurrencyCode: expense.expenseCurrencyCode,
                     rateExpenseToHome: expense.rateExpenseToBase,

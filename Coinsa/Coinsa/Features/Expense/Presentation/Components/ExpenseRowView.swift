@@ -61,7 +61,7 @@ struct ExpenseRowView: View {
             homeCurrency: expense.homeCurrency,
             expenseAmount: expense.amount(in: .expense),
             expenseCurrency: expense.expenseCurrency,
-            primaryAmountColor: showsDailySpendingExclusion && expense.isExcludedFromDailySpending ? .secondary : .primary
+            primaryAmountColor: showsDailySpendingExclusion && (expense.isExcludedFromDailySpending || expense.isGeneralExpense) ? .secondary : .primary
         )
     }
 }

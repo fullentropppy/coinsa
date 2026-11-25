@@ -25,6 +25,7 @@ struct PreviewOptions {
     var includeTrips = true
     var includeLocations = true
     var includeExpenses = true
+    var includeGeneralExpenses = true
 }
 
 // MARK: - Генератор превью-данных
@@ -62,7 +63,7 @@ enum PreviewGenerator {
     /// - Parameters:
     ///   - previewTrip: Предопределенная поездка.
     ///   - includeLocations: Включать ли локации поездки.
-    ///   - includeExpenses: Включать ли траты; игнорируется без локаций.
+    ///   - includeExpenses: Включать ли траты локаций и общие траты, в том числе без локаций.
     ///   - referenceDate: Общий момент генерации; календарный день определяется в текущем поясе.
     static func makeExampleTrip(
         _ previewTrip: PreviewTrip = .balkans,
@@ -92,7 +93,7 @@ enum PreviewGenerator {
         let referenceDay = PlainDate(referenceDate, using: .current)
         let trip = makeTrip(
             from: previewLocation.tripData,
-            with: PreviewOptions(includeLocations: false, includeExpenses: false),
+            with: PreviewOptions(includeLocations: false, includeExpenses: includeExpenses),
             referenceDay: referenceDay,
             createdAt: referenceDate
         )
@@ -161,6 +162,15 @@ private extension PreviewGenerator {
             updatedAt: createdAt
         )
 
+        if options.includeExpenses && options.includeGeneralExpenses {
+            trip.generalExpenses = data.locationsData.flatMap { location in
+                PreviewExpenseSamples.makeSamples(for: location, referenceDay: referenceDay)
+                    .filter { $0.subcategory == .plane }
+                    .map { makeExpense(from: $0, location: nil, trip: trip, exchangeAdjustment: location.exchangeAdjustment, createdAt: createdAt) }
+            }
+            trip.generalExpensesBudget = data.generalExpensesBudget
+        }
+
         if options.includeLocations {
             trip.locations = data.locationsData.map {
                 makeLocation(from: $0, to: trip, with: options, referenceDay: referenceDay, createdAt: createdAt)
@@ -193,11 +203,17 @@ private extension PreviewGenerator {
         )
 
         if options.includeExpenses {
-            location.expenses = PreviewExpenseSamples.makeSamples(
-                for: data,
-                referenceDay: referenceDay
-            ).map {
+            let samples = PreviewExpenseSamples.makeSamples(for: data, referenceDay: referenceDay)
+            location.expenses = samples.filter {
+                !options.includeGeneralExpenses || $0.subcategory != .plane
+            }.map {
                 makeExpense(from: $0, to: location, createdAt: createdAt)
+            }
+            if options.includeGeneralExpenses {
+                let generalAmount = samples.filter { $0.subcategory == .plane }.reduce(0.0) { result, sample in
+                    result + homeAmount(for: sample, exchangeAdjustment: data.exchangeAdjustment)
+                }
+                location.budget = max(0, location.budget - generalAmount)
             }
         }
 
@@ -205,22 +221,34 @@ private extension PreviewGenerator {
     }
 
     static func makeExpense(from sample: ExpensePreviewSample, to location: Location, createdAt: Date) -> Expense {
+        guard let trip = location.trip else { preconditionFailure("Missing preview trip") }
+        return makeExpense(from: sample, location: location, trip: trip, exchangeAdjustment: location.exchangeAdjustment, createdAt: createdAt)
+    }
+
+    static func homeAmount(for sample: ExpensePreviewSample, exchangeAdjustment: Double) -> Double {
+        let expenseRate = sample.currency == .rub ? 1 : PreviewExchangeRates.toHome(for: sample.currency) * sample.rateVariation
+        let calculation = ExpenseCalculationContext(
+            homeAmount: 0, homeCurrency: .rub, expenseCurrency: sample.currency,
+            rateExpenseToHome: expenseRate, rateExpenseToLocation: expenseRate,
+            paymentMethod: sample.paymentMethod, exchangeAdjustment: exchangeAdjustment
+        )
+        return sample.amount * calculation.exchangeRate(from: .expense, to: .home)
+    }
+
+    static func makeExpense(
+        from sample: ExpensePreviewSample,
+        location: Location?,
+        trip: Trip,
+        exchangeAdjustment: Double,
+        createdAt: Date
+    ) -> Expense {
         guard let timeZone = TimeZone(identifier: sample.timeZoneID) else {
             preconditionFailure("Invalid preview time zone: \(sample.timeZoneID)")
         }
-        let locationRate = location.locationCurrency == .rub ? 1 : location.rateLocationToHome * sample.rateVariation
+        let locationRate = location.map { $0.locationCurrency == .rub ? 1 : $0.rateLocationToHome * sample.rateVariation } ?? 1
         let expenseRate = sample.currency == .rub ? 1 : PreviewExchangeRates.toHome(for: sample.currency) * sample.rateVariation
         let rateExpenseToLocation = expenseRate / locationRate
-        let calculation = ExpenseCalculationContext(
-            homeAmount: 0,
-            homeCurrency: .rub,
-            expenseCurrency: sample.currency,
-            rateExpenseToHome: expenseRate,
-            rateExpenseToLocation: rateExpenseToLocation,
-            paymentMethod: sample.paymentMethod,
-            exchangeAdjustment: location.exchangeAdjustment
-        )
-        let homeAmount = sample.amount * calculation.exchangeRate(from: .expense, to: .home)
+        let homeAmount = homeAmount(for: sample, exchangeAdjustment: exchangeAdjustment)
 
         return Expense(
             id: UUID(),
@@ -232,14 +260,16 @@ private extension PreviewGenerator {
             rateExpenseToHome: expenseRate,
             rateExpenseToLocation: rateExpenseToLocation,
             paymentMethodRaw: sample.paymentMethod.rawValue,
-            exchangeAdjustment: location.exchangeAdjustment,
+            exchangeAdjustment: exchangeAdjustment,
             categoryRaw: sample.subcategory.category.rawValue,
             subcategoryRaw: sample.subcategory.rawValue,
             location: location,
+            trip: location == nil ? trip : nil,
             latitude: sample.coordinate?.latitude,
             longitude: sample.coordinate?.longitude,
             horizontalAccuracy: sample.coordinate?.horizontalAccuracy,
             comment: sample.comment,
+            isExcludedFromDailySpending: sample.isExcludedFromDailySpending || [.hotel, .accommodationRental].contains(sample.subcategory),
             createdAt: createdAt,
             updatedAt: createdAt
         )

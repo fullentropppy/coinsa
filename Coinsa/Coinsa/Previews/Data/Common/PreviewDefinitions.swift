@@ -19,6 +19,16 @@ enum PreviewTrip: String, CaseIterable {
 
     var name: String { rawValue }
 
+    /// Независимый округленный план общих трат в рублях с запасом или небольшим перерасходом.
+    var generalExpensesBudget: Double {
+        switch self {
+        case .balkans: 40000
+        case .asia: 55000
+        case .southAmerica: 100000
+        case .sergievPosad, .saintPetersburg: 0
+        }
+    }
+
     /// Возвращает начало маршрута относительно опорного календарного дня.
     /// - Parameter referenceDay: Единый день генерации без часового пояса.
     func startDate(relativeTo referenceDay: PlainDate) -> PlainDate {

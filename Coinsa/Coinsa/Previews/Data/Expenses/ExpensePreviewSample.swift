@@ -20,6 +20,7 @@ struct ExpensePreviewSample {
     let subcategory: ExpenseSubcategory
     let comment: String?
     let coordinate: Coordinate?
+    let isExcludedFromDailySpending: Bool
 
     // MARK: - Инициализация
 
@@ -34,6 +35,7 @@ struct ExpensePreviewSample {
     ///   - subcategory: Подкатегория, однозначно определяющая категорию.
     ///   - comment: Необязательное описание покупки.
     ///   - coordinate: Место покупки; `nil` оставляет трату без геопозиции.
+    ///   - isExcludedFromDailySpending: Исключение разовой покупки из дневного учета.
     init(
         date: Date,
         amount: Double,
@@ -43,7 +45,8 @@ struct ExpensePreviewSample {
         paymentMethod: PaymentMethod = .cash,
         subcategory: ExpenseSubcategory,
         comment: String? = nil,
-        coordinate: Coordinate? = nil
+        coordinate: Coordinate? = nil,
+        isExcludedFromDailySpending: Bool = false
     ) {
         self.date = date
         self.amount = amount
@@ -54,5 +57,6 @@ struct ExpensePreviewSample {
         self.subcategory = subcategory
         self.comment = comment
         self.coordinate = coordinate
+        self.isExcludedFromDailySpending = isExcludedFromDailySpending
     }
 }

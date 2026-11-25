@@ -23,12 +23,17 @@ struct TripRepository {
     ///   - startDate: Дата начала.
     ///   - endDate: Дата окончания.
     ///   - homeCurrency: Домашняя валюта.
+    ///   - generalExpensesBudget: Бюджет общих трат в домашней валюте.
     func add(
         name: String,
         startDate: Date,
         endDate: Date,
-        homeCurrency: Currency
+        homeCurrency: Currency,
+        generalExpensesBudget: Double = 0
     ) throws {
+        guard generalExpensesBudget.isFinite, generalExpensesBudget >= 0 else {
+            throw TripRepositoryError.invalidGeneralExpensesBudget
+        }
         try saveChanges {
             let now = Date()
         
@@ -39,6 +44,7 @@ struct TripRepository {
                 endDate: endDate,
                 homeCurrencyCode: homeCurrency.code,
                 locations: [],
+                generalExpensesBudget: generalExpensesBudget,
                 createdAt: now,
                 updatedAt: now
             )
@@ -55,18 +61,28 @@ struct TripRepository {
     ///   - startDate: Новая дата начала.
     ///   - endDate: Новая дата окончания.
     ///   - homeCurrency: Новая домашняя валюта.
+    ///   - generalExpensesBudget: Новый бюджет общих трат.
+    ///   - expectedHomeCurrency: Сохраненная валюта при открытии черновика.
     
     func update(
         _ trip: Trip,
         name: String,
         startDate: Date,
         endDate: Date,
-        homeCurrency: Currency
+        homeCurrency: Currency,
+        generalExpensesBudget: Double,
+        expectedHomeCurrency: Currency
     ) throws {
         guard trip.modelContext === context, !trip.isDeleted else {
             throw TripRepositoryError.tripUnavailable
         }
-        guard !trip.hasLocations || trip.homeCurrency == homeCurrency else {
+        guard generalExpensesBudget.isFinite, generalExpensesBudget >= 0 else {
+            throw TripRepositoryError.invalidGeneralExpensesBudget
+        }
+        guard expectedHomeCurrency == trip.homeCurrency else {
+            throw TripRepositoryError.homeCurrencyChanged
+        }
+        guard trip.canChangeHomeCurrency || trip.homeCurrency == homeCurrency else {
             throw TripRepositoryError.homeCurrencyLocked
         }
 
@@ -74,9 +90,10 @@ struct TripRepository {
             trip.name = name
             trip.storedStartDate = startDate
             trip.storedEndDate = endDate
-            if !trip.hasLocations {
+            if trip.canChangeHomeCurrency {
                 trip.baseCurrencyCode = homeCurrency.code
             }
+            trip.generalExpensesBudget = generalExpensesBudget
             trip.updatedAt = Date()
 
             normalizeTripData(trip)
@@ -138,6 +155,8 @@ struct TripRepository {
 enum TripRepositoryError: LocalizedError {
     case tripUnavailable
     case homeCurrencyLocked
+    case invalidGeneralExpensesBudget
+    case homeCurrencyChanged
 
     var errorDescription: String? {
         switch self {
@@ -145,6 +164,10 @@ enum TripRepositoryError: LocalizedError {
             String(localized: .tripEditorUnavailableMessage)
         case .homeCurrencyLocked:
             String(localized: .tripStorageErrorHomeCurrencyLockedMessage)
+        case .invalidGeneralExpensesBudget:
+            String(localized: .validationTripGeneralExpensesBudgetInvalid)
+        case .homeCurrencyChanged:
+            String(localized: .tripStorageErrorHomeCurrencyChangedMessage)
         }
     }
 }
