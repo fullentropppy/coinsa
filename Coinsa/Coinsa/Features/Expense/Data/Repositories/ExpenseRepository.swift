@@ -33,6 +33,7 @@ struct ExpenseRepository {
     ///   - longitude: Географическая долгота места траты.
     ///   - horizontalAccuracy: Точность определения координат в метрах.
     ///   - comment: Комментарий (опционально).
+    ///   - isExcludedFromDailySpending: Исключать трату из дневной суммы.
     ///   - copiedDateMetadata: Исходный момент и пояс копии, сохраняемые при неизмененной дате.
     func add(
         date: Date,
@@ -49,6 +50,7 @@ struct ExpenseRepository {
         longitude: Double?,
         horizontalAccuracy: Double?,
         comment: String?,
+        isExcludedFromDailySpending: Bool = false,
         copiedDateMetadata: ExpenseCopyDateMetadata? = nil
     ) throws {
         guard location.modelContext === context, !location.isDeleted,
@@ -77,6 +79,7 @@ struct ExpenseRepository {
                 longitude: longitude,
                 horizontalAccuracy: horizontalAccuracy,
                 comment: comment,
+                isExcludedFromDailySpending: isExcludedFromDailySpending,
                 createdAt: now,
                 updatedAt: now
             )
@@ -106,6 +109,7 @@ struct ExpenseRepository {
     ///   - longitude: Новая географическая долгота места траты.
     ///   - horizontalAccuracy: Новая точность определения координат в метрах.
     ///   - comment: Новый комментарий.
+    ///   - isExcludedFromDailySpending: Исключать трату из дневной суммы.
     func update(
         _ expense: Expense,
         date: Date,
@@ -120,7 +124,8 @@ struct ExpenseRepository {
         latitude: Double?,
         longitude: Double?,
         horizontalAccuracy: Double?,
-        comment: String?
+        comment: String?,
+        isExcludedFromDailySpending: Bool
     ) throws {
         guard expense.modelContext === context, !expense.isDeleted,
               let location = expense.location, !location.isDeleted else {
@@ -143,6 +148,7 @@ struct ExpenseRepository {
             expense.longitude = longitude
             expense.horizontalAccuracy = horizontalAccuracy
             expense.comment = comment
+            expense.isExcludedFromDailySpending = isExcludedFromDailySpending
             expense.updatedAt = Date()
         
             normalizeExpenseData(expense, updatesDateMetadata: hasDateChanged)

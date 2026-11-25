@@ -126,6 +126,7 @@ final class ExpenseEditViewModel: Identifiable {
     var subcategory: ExpenseSubcategory
     var coordinate: Coordinate?
     var comment: String
+    var isExcludedFromDailySpending: Bool
     
     // MARK: - Состояние UI. Сумма
     
@@ -247,6 +248,7 @@ final class ExpenseEditViewModel: Identifiable {
             subcategory: preselectedSubcategory ?? .defaultValue(with: category),
             coordinate: nil,
             comment: "",
+            isExcludedFromDailySpending: false,
             exchangeRateProvider: exchangeRateProvider
         )
     }
@@ -276,6 +278,7 @@ final class ExpenseEditViewModel: Identifiable {
             subcategory: expense.subcategory,
             coordinate: expense.coordinate,
             comment: expense.comment ?? "",
+            isExcludedFromDailySpending: expense.isExcludedFromDailySpending,
             exchangeRateProvider: exchangeRateProvider
         )
     }
@@ -321,6 +324,7 @@ final class ExpenseEditViewModel: Identifiable {
             subcategory: source.subcategory,
             coordinate: source.coordinate,
             comment: source.comment ?? "",
+            isExcludedFromDailySpending: source.isExcludedFromDailySpending,
             exchangeRateProvider: exchangeRateProvider
         )
         copiedDateMetadata = ExpenseCopyDateMetadata(source)
@@ -343,6 +347,7 @@ final class ExpenseEditViewModel: Identifiable {
     ///   - subcategory: Подкатегория траты.
     ///   - coordinate: Место траты.
     ///   - comment: Начальный комментарий.
+    ///   - isExcludedFromDailySpending: Начальное исключение из дневных трат.
     ///   - exchangeRateProvider: Общий провайдер курсов для обоих конвертеров или nil для Hexarate.
     private init(
         location: Location,
@@ -359,6 +364,7 @@ final class ExpenseEditViewModel: Identifiable {
         subcategory: ExpenseSubcategory,
         coordinate: Coordinate?,
         comment: String,
+        isExcludedFromDailySpending: Bool,
         exchangeRateProvider: ExchangeRateProvider?
     ) {
         self.location = location
@@ -370,6 +376,7 @@ final class ExpenseEditViewModel: Identifiable {
         self.subcategory = subcategory
         self.coordinate = coordinate
         self.comment = comment
+        self.isExcludedFromDailySpending = isExcludedFromDailySpending
         
         let provider = exchangeRateProvider ?? ExchangeRateProvider(service: HexarateService())
         let normalizedRateExpenseToHome = expenseCurrency == location.homeCurrency ? 1 : rateExpenseToHome
@@ -408,7 +415,8 @@ final class ExpenseEditViewModel: Identifiable {
             category: category,
             subcategory: subcategory,
             coordinate: coordinate,
-            comment: comment
+            comment: comment,
+            isExcludedFromDailySpending: isExcludedFromDailySpending
         )
     }
     
@@ -529,7 +537,8 @@ final class ExpenseEditViewModel: Identifiable {
             category: initialSnapshot.category,
             subcategory: initialSnapshot.subcategory,
             coordinate: coordinate,
-            comment: initialSnapshot.comment
+            comment: initialSnapshot.comment,
+            isExcludedFromDailySpending: initialSnapshot.isExcludedFromDailySpending
         )
     }
     
@@ -602,7 +611,8 @@ final class ExpenseEditViewModel: Identifiable {
                 latitude: coordinate?.latitude,
                 longitude: coordinate?.longitude,
                 horizontalAccuracy: coordinate?.horizontalAccuracy,
-                comment: comment
+                comment: comment,
+                isExcludedFromDailySpending: isExcludedFromDailySpending
             )
         } else {
             try repository.add(
@@ -620,6 +630,7 @@ final class ExpenseEditViewModel: Identifiable {
                 longitude: coordinate?.longitude,
                 horizontalAccuracy: coordinate?.horizontalAccuracy,
                 comment: comment,
+                isExcludedFromDailySpending: isExcludedFromDailySpending,
                 copiedDateMetadata: copiedDateMetadata
             )
         }
@@ -643,10 +654,12 @@ private extension ExpenseEditViewModel {
         let subcategory: ExpenseSubcategory
         let coordinate: Coordinate?
         let comment: String?
+        let isExcludedFromDailySpending: Bool
         
         // MARK: - Инициализация
         
         /// Фиксирует текущее состояние редактора, включая сохраняемые курсы обмена.
+        /// - Parameter viewModel: Черновик, поля которого участвуют в определении изменений.
         init(viewModel: ExpenseEditViewModel) {
             self.init(
                 date: viewModel.date,
@@ -659,11 +672,25 @@ private extension ExpenseEditViewModel {
                 category: viewModel.category,
                 subcategory: viewModel.subcategory,
                 coordinate: viewModel.coordinate,
-                comment: viewModel.comment
+                comment: viewModel.comment,
+                isExcludedFromDailySpending: viewModel.isExcludedFromDailySpending
             )
         }
         
         /// Создает снимок полей траты для сравнения с исходным состоянием редактора.
+        /// - Parameters:
+        ///   - date: Гражданские дата и время траты.
+        ///   - homeAmount: Сумма в домашней валюте.
+        ///   - expenseCurrency: Валюта траты.
+        ///   - rateExpenseToHome: Сохраняемый курс к домашней валюте.
+        ///   - rateExpenseToLocation: Сохраняемый курс к валюте локации.
+        ///   - paymentMethod: Способ оплаты.
+        ///   - exchangeAdjustment: Корректировка курса.
+        ///   - category: Категория траты.
+        ///   - subcategory: Подкатегория траты.
+        ///   - coordinate: Место траты.
+        ///   - comment: Комментарий.
+        ///   - isExcludedFromDailySpending: Исключение из дневных трат.
         init(
             date: Date,
             homeAmount: Double,
@@ -675,7 +702,8 @@ private extension ExpenseEditViewModel {
             category: ExpenseCategory,
             subcategory: ExpenseSubcategory,
             coordinate: Coordinate?,
-            comment: String?
+            comment: String?,
+            isExcludedFromDailySpending: Bool
         ) {
             self.date = date
             self.homeAmount = homeAmount
@@ -688,6 +716,7 @@ private extension ExpenseEditViewModel {
             self.subcategory = subcategory
             self.coordinate = coordinate
             self.comment = comment
+            self.isExcludedFromDailySpending = isExcludedFromDailySpending
         }
     }
 }

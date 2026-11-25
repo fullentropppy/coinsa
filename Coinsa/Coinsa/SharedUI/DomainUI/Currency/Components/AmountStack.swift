@@ -16,6 +16,7 @@ struct AmountStack: View {
     private let expenseAmount: Double?
     private let expenseCurrency: Currency?
     private let usesAdaptiveFormatting: Bool
+    private let primaryAmountColor: Color
     
     // MARK: - Инициализация
     
@@ -26,18 +27,21 @@ struct AmountStack: View {
     ///   - expenseAmount: Сумма в валюте траты (опционально).
     ///   - expenseCurrency: Валюта траты (опционально).
     ///   - usesAdaptiveFormatting: Сокращать суммы при нехватке ширины. По умолчанию `true`.
+    ///   - primaryAmountColor: Цвет основной суммы без изменения вторичной суммы и кодов валют.
     init(
         homeAmount: Double,
         homeCurrency: Currency,
         expenseAmount: Double? = nil,
         expenseCurrency: Currency? = nil,
-        usesAdaptiveFormatting: Bool = true
+        usesAdaptiveFormatting: Bool = true,
+        primaryAmountColor: Color = .primary
     ) {
         self.homeAmount = homeAmount
         self.homeCurrency = homeCurrency
         self.expenseAmount = expenseAmount
         self.expenseCurrency = expenseCurrency
         self.usesAdaptiveFormatting = usesAdaptiveFormatting
+        self.primaryAmountColor = primaryAmountColor
     }
     
     // MARK: - Тело View
@@ -51,6 +55,7 @@ struct AmountStack: View {
                     .standard(
                         mainAmount,
                         currency: mainCurrency,
+                        color: primaryAmountColor,
                         usesAdaptiveFormatting: usesAdaptiveFormatting
                     )
                 AmountText
@@ -64,6 +69,7 @@ struct AmountStack: View {
                     .standard(
                         homeAmount,
                         currency: homeCurrency,
+                        color: primaryAmountColor,
                         usesAdaptiveFormatting: usesAdaptiveFormatting
                     )
                     .frame(maxHeight: .infinity, alignment: .top)

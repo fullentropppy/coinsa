@@ -94,18 +94,21 @@ extension AmountText {
     ///   - amount: Сумма.
     ///   - fractionLength: Количество знаков после запятой.
     ///   - currency: Валюта (опционально).
+    ///   - color: Цвет числа; код валюты сохраняет вторичный цвет.
     ///   - usesAdaptiveFormatting: Сокращать сумму при нехватке ширины. По умолчанию `true`.
     /// - Returns: Настроенное представление.
     static func standard(
         _ amount: Double,
         fractionLength: Int = 2,
         currency: Currency? = nil,
+        color: Color = .primary,
         usesAdaptiveFormatting: Bool = true
     ) -> some View {
         AmountText(
             amount,
             fractionLength: fractionLength,
             font: .body.monospacedDigit(),
+            color: color,
             currency: currency,
             currencyFont: .body.monospaced().weight(.medium),
             currencyColor: .secondary,

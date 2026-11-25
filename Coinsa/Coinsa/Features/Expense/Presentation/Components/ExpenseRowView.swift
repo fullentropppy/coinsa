@@ -12,6 +12,7 @@ struct ExpenseRowView: View {
     // MARK: - Свойства
 
     private let expense: Expense
+    private let showsDailySpendingExclusion: Bool
     
     private var hasComment: Bool {
         expense.comment != nil
@@ -20,9 +21,12 @@ struct ExpenseRowView: View {
     // MARK: - Инициализация
     
     /// Создает строку для отображения траты.
-    /// - Parameter expense: Трата для отображения.
-    init(_ expense: Expense) {
+    /// - Parameters:
+    ///   - expense: Трата для отображения.
+    ///   - showsDailySpendingExclusion: Показывать исключение из дневных трат цветом основной суммы.
+    init(_ expense: Expense, showsDailySpendingExclusion: Bool = false) {
         self.expense = expense
+        self.showsDailySpendingExclusion = showsDailySpendingExclusion
     }
     
     // MARK: - Тело View
@@ -56,7 +60,8 @@ struct ExpenseRowView: View {
             homeAmount: expense.homeAmount,
             homeCurrency: expense.homeCurrency,
             expenseAmount: expense.amount(in: .expense),
-            expenseCurrency: expense.expenseCurrency
+            expenseCurrency: expense.expenseCurrency,
+            primaryAmountColor: showsDailySpendingExclusion && expense.isExcludedFromDailySpending ? .secondary : .primary
         )
     }
 }

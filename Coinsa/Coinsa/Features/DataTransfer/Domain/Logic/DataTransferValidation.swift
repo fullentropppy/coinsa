@@ -14,7 +14,7 @@ nonisolated enum DataTransferValidation {
     /// Проверяет схему, идентификаторы, родителей и значения всего графа, включая конечность расчетов.
     /// - Parameter archive: Исходный или объединенный снимок, который нельзя исправлять при проверке.
     static func validate(_ archive: DataTransferArchive) throws {
-        guard archive.format == "ru.dgritsenko.coinsa.archive", archive.schemaVersion == 1 else {
+        guard archive.format == "ru.dgritsenko.coinsa.archive", (1...2).contains(archive.schemaVersion) else {
             throw DataTransferError.unsupportedVersion
         }
         let allIDs = archive.trips.map(\.id) + archive.locations.map(\.id) + archive.expenses.map(\.id)

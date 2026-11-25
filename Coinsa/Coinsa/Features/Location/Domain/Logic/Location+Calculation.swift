@@ -24,7 +24,7 @@ extension Location {
     
     // MARK: - Публичные методы. Плановая сумма
     
-    /// Рассчитывает лимит сегодняшнего дня с учетом всех записанных трат других дней.
+    /// Рассчитывает лимит сегодняшнего дня с учетом трат других дней и исключенных дневных трат.
     /// - Parameters:
     ///   - currency: Валютный контекст результата. Поддерживаются `.home` и `.location`.
     ///   - exchangeRateMode: Режим расчета курса. По умолчанию `.actual`
@@ -38,7 +38,8 @@ extension Location {
         let today = PlainDate.today
         let todayRange = today.startOfDay...today.endOfDay
         let expensesAmount = expenses?.reduce(0) { result, expense in
-            guard !todayRange.contains(expense.civilDateTime.storedDate) else { return result }
+            guard expense.isExcludedFromDailySpending
+                    || !todayRange.contains(expense.civilDateTime.storedDate) else { return result }
             return result + expense.amount(in: currency, using: exchangeRateMode)
         } ?? 0
         
@@ -46,33 +47,33 @@ extension Location {
             on: today,
             in: currency,
             using: exchangeRateMode,
-            expensesOutsideDay: expensesAmount,
+            reservedExpensesAmount: expensesAmount,
             calendar: calendar
         )
     }
 
-    /// Распределяет свободный бюджет на оставшиеся дни, сохраняя лимит при добавлении трат выбранного дня.
+    /// Распределяет свободный бюджет на оставшиеся дни; обычные траты выбранного дня не меняют лимит.
     /// - Parameters:
     ///   - day: Календарный день, для которого определяется число оставшихся дней локации.
-    ///   - currency: Валютный контекст бюджета и трат других дней. Поддерживаются `.home` и `.location`.
+    ///   - currency: Валютный контекст бюджета и сумм, занятых тратами. Поддерживаются `.home` и `.location`.
     ///   - exchangeRateMode: Режим конвертации бюджета; должен совпадать с режимом подсчета трат других дней. По умолчанию `.actual`.
-    ///   - expensesOutsideDay: Все записанные траты других дней в выбранной валюте и режиме курса, включая предоплаты и записи с будущей датой.
+    ///   - reservedExpensesAmount: Все траты других дней и исключенные траты выбранного дня в выбранной валюте и режиме курса.
     ///   - calendar: Календарь расчета бюджета; оставшиеся дни определяются по календарным датам в UTC.
     /// - Returns: Неотрицательный лимит дня; после окончания локации и при некорректных суммах возвращается 0.
     func calculateDailyBudgetAmount(
         on day: PlainDate,
         in currency: CurrencyContext = .home,
         using exchangeRateMode: ExchangeRateMode = .actual,
-        expensesOutsideDay: Double,
+        reservedExpensesAmount: Double,
         calendar: Calendar = .utc
     ) -> Double {
         let budgetAmount = calculateBudgetAmount(in: currency, using: exchangeRateMode, calendar: calendar)
 
         guard totalDays > 0, day <= endPlainDate,
-              budgetAmount.isFinite, expensesOutsideDay.isFinite else { return 0 }
+              budgetAmount.isFinite, reservedExpensesAmount.isFinite else { return 0 }
 
         let remainingDays = endPlainDate.days(from: max(day, startPlainDate)) + 1
-        let difference = budgetAmount - expensesOutsideDay
+        let difference = budgetAmount - reservedExpensesAmount
         
         return max(0, difference / Double(remainingDays))
     }

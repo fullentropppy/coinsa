@@ -209,7 +209,7 @@ private struct TodayContentView: View {
                     NavigationLink {
                         ExpenseDetailView(expense)
                     } label: {
-                        ExpenseRowView(expense)
+                        ExpenseRowView(expense, showsDailySpendingExclusion: true)
                     }
                     .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                         SwipeActions(

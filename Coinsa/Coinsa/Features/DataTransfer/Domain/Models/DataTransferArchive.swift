@@ -14,7 +14,7 @@ nonisolated struct DataTransferArchive: Codable, Equatable, Sendable {
     // MARK: - Свойства
 
     var format = "ru.dgritsenko.coinsa.archive"
-    var schemaVersion = 1
+    var schemaVersion = 2
     var exportedAt: Date
     var appVersion: String
     var appBuild: String
@@ -69,8 +69,38 @@ nonisolated struct DataTransferArchive: Codable, Equatable, Sendable {
         @RequiredNullable var longitude: Double?
         @RequiredNullable var horizontalAccuracy: Double?
         @RequiredNullable var comment: String?
+        var isExcludedFromDailySpending = false
         var createdAt: Date
         var updatedAt: Date
+    }
+}
+
+extension DataTransferArchive.ExpenseRecord {
+    /// Читает снимок траты, сохраняя прежний дневной учет для файлов без нового признака.
+    /// - Parameter decoder: Декодер записи из поддерживаемой версии файла.
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(UUID.self, forKey: .id)
+        locationID = try container.decode(UUID.self, forKey: .locationID)
+        civilDateTime = try container.decode(String.self, forKey: .civilDateTime)
+        _actualDate = try container.decode(RequiredNullable<Date>.self, forKey: .actualDate)
+        _timeZoneID = try container.decode(RequiredNullable<String>.self, forKey: .timeZoneID)
+        homeAmount = try container.decode(Double.self, forKey: .homeAmount)
+        expenseCurrencyCode = try container.decode(String.self, forKey: .expenseCurrencyCode)
+        rateExpenseToHome = try container.decode(Double.self, forKey: .rateExpenseToHome)
+        rateExpenseToLocation = try container.decode(Double.self, forKey: .rateExpenseToLocation)
+        paymentMethodRaw = try container.decode(String.self, forKey: .paymentMethodRaw)
+        exchangeAdjustment = try container.decode(Double.self, forKey: .exchangeAdjustment)
+        categoryRaw = try container.decode(String.self, forKey: .categoryRaw)
+        subcategoryRaw = try container.decode(String.self, forKey: .subcategoryRaw)
+        _latitude = try container.decode(RequiredNullable<Double>.self, forKey: .latitude)
+        _longitude = try container.decode(RequiredNullable<Double>.self, forKey: .longitude)
+        _horizontalAccuracy = try container.decode(RequiredNullable<Double>.self, forKey: .horizontalAccuracy)
+        _comment = try container.decode(RequiredNullable<String>.self, forKey: .comment)
+        isExcludedFromDailySpending = container.contains(.isExcludedFromDailySpending)
+            ? try container.decode(Bool.self, forKey: .isExcludedFromDailySpending) : false
+        createdAt = try container.decode(Date.self, forKey: .createdAt)
+        updatedAt = try container.decode(Date.self, forKey: .updatedAt)
     }
 }
 
@@ -161,8 +191,12 @@ nonisolated enum DataTransferCodec {
             guard header?["format"] as? String == "ru.dgritsenko.coinsa.archive" else {
                 throw DataTransferError.invalidFile
             }
-            guard let version = header?["schemaVersion"] as? Int, version == 1 else {
+            guard let version = header?["schemaVersion"] as? Int, (1...2).contains(version) else {
                 throw DataTransferError.unsupportedVersion
+            }
+            if version == 2, let expenses = header?["expenses"] as? [[String: Any]],
+               expenses.contains(where: { $0["isExcludedFromDailySpending"] == nil }) {
+                throw DataTransferError.invalidFile
             }
             archive = try JSONDecoder().decode(DataTransferArchive.self, from: data)
         } catch let error as DataTransferError {

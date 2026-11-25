@@ -109,6 +109,7 @@ struct DataTransferRepository {
                         categoryRaw: record.categoryRaw, subcategoryRaw: record.subcategoryRaw,
                         location: location, latitude: record.latitude, longitude: record.longitude,
                         horizontalAccuracy: record.horizontalAccuracy, comment: record.comment,
+                        isExcludedFromDailySpending: record.isExcludedFromDailySpending,
                         createdAt: record.createdAt, updatedAt: record.updatedAt
                     )
                     expense.actualDate = record.actualDate
@@ -132,6 +133,7 @@ struct DataTransferRepository {
                     expense.longitude = record.longitude
                     expense.horizontalAccuracy = record.horizontalAccuracy
                     expense.comment = record.comment
+                    expense.isExcludedFromDailySpending = record.isExcludedFromDailySpending
                     expense.updatedAt = record.updatedAt
                 }
             }
@@ -196,6 +198,7 @@ struct DataTransferRepository {
                     categoryRaw: expense.categoryRaw, subcategoryRaw: expense.subcategoryRaw,
                     latitude: expense.latitude, longitude: expense.longitude,
                     horizontalAccuracy: expense.horizontalAccuracy, comment: expense.comment,
+                    isExcludedFromDailySpending: expense.isExcludedFromDailySpending,
                     createdAt: expense.createdAt, updatedAt: expense.updatedAt
                 )
             }.sorted { $0.id.uuidString < $1.id.uuidString }

@@ -15,9 +15,9 @@ enum TodaySummaryCalculator {
     /// - Parameters:
     ///   - location: Локация с бюджетом, валютами и историей трат; сохраненные значения не изменяются.
     ///   - day: Календарный день для фильтрации гражданских дат трат и расчета оставшихся дней.
-    ///   - showsLocationBudgetOnOverspend: Разрешает переключение бюджета и остатка на всю локацию при перерасходе.
+    ///   - showsLocationBudgetOnOverspend: Разрешает переключение бюджета и остатка на всю локацию при перерасходе дневных трат без признака исключения.
     ///   - overspendThreshold: Допустимое превышение дневного бюджета в процентах от 0 до 100; переключение требует строгого превышения порога.
-    /// - Returns: Сводка с расходами выбранного дня в обеих валютах, отсортированные от новых к старым траты и быстрые подкатегории.
+    /// - Returns: Сводка дневных трат без исключенных сумм в обеих валютах, полный список трат дня и быстрые подкатегории.
     static func calculate(
         for location: Location,
         on day: PlainDate,
@@ -30,32 +30,36 @@ enum TodaySummaryCalculator {
         var subcategoryCounts: [ExpenseSubcategory: Int] = [:]
         var todayHomeAmount = 0.0
         var todayLocationAmount = 0.0
-        var outsideDayHomeAmount = 0.0
-        var outsideDayLocationAmount = 0.0
+        var reservedHomeAmount = 0.0
+        var reservedLocationAmount = 0.0
         var totalHomeAmount = 0.0
         var totalLocationAmount = 0.0
 
         for expense in location.expenses ?? [] {
             let date = expense.civilDateTime.storedDate
+            let isToday = todayRange.contains(date)
             let homeAmount = expense.amount(in: .home)
             let locationAmount = isHomeLocation ? 0 : expense.amount(in: .location)
             subcategoryCounts[expense.subcategory, default: 0] += 1
             totalHomeAmount += homeAmount
             totalLocationAmount += locationAmount
 
-            if todayRange.contains(date) {
+            if isToday {
                 todayExpenses.append(expense)
+            }
+
+            if isToday && !expense.isExcludedFromDailySpending {
                 todayHomeAmount += homeAmount
                 todayLocationAmount += locationAmount
             } else {
-                outsideDayHomeAmount += homeAmount
-                outsideDayLocationAmount += isHomeLocation ? 0 : expense.amount(in: .location, using: .actual)
+                reservedHomeAmount += homeAmount
+                reservedLocationAmount += isHomeLocation ? 0 : expense.amount(in: .location, using: .actual)
             }
         }
 
         todayExpenses.sort { $0.civilDateTime > $1.civilDateTime }
 
-        var budgetHomeAmount = location.calculateDailyBudgetAmount(on: day, expensesOutsideDay: outsideDayHomeAmount)
+        var budgetHomeAmount = location.calculateDailyBudgetAmount(on: day, reservedExpensesAmount: reservedHomeAmount)
         let switchLimit = max(0, budgetHomeAmount) * (1 + overspendThreshold / 100)
         let comparisonTolerance = max(todayHomeAmount.ulp, switchLimit.ulp) * 8
         let showsLocationBudget = showsLocationBudgetOnOverspend
@@ -80,7 +84,7 @@ enum TodaySummaryCalculator {
             budgetLocationAmount = isHomeLocation ? nil : location.calculateDailyBudgetAmount(
                 on: day,
                 in: .location,
-                expensesOutsideDay: outsideDayLocationAmount
+                reservedExpensesAmount: reservedLocationAmount
             )
             balanceExpensesHomeAmount = todayHomeAmount
             balanceExpensesLocationAmount = todayLocationAmount

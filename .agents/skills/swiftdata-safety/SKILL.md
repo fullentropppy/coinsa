@@ -20,7 +20,7 @@ description: >-
 
 - `Features/{Trip,Location,Expense}/Domain/Models/` — сохраняемые модели и связи.
 - `Features/{Trip,Location,Expense}/Data/Repositories/` — CRUD, нормализация и сохранение контекста.
-- `Features/DataTransfer/` — переносимые снимки и импорт через отдельный контекст. Обновление по UUID учитывает `updatedAt` каждой сущности; при равных датах приоритет у файла. Импорт не вызывает нормализацию редакторов, не удаляет отсутствующие записи и не меняет существующего родителя.
+- `Features/DataTransfer/` — переносимые снимки и импорт через отдельный контекст. Обновление по UUID учитывает `updatedAt` каждой сущности; при равных датах приоритет у файла. Импорт не вызывает нормализацию редакторов, не удаляет отсутствующие записи и не меняет существующего родителя. Экспорт использует формат 2 и сохраняет `Expense.isExcludedFromDailySpending`; импорт формата 1 считает отсутствующий признак выключенным.
 - `Features/*/Domain/Logic/` и `Features/Expense/Domain/Models/ExpenseCalculationContext.swift` — интерпретация сохранённых значений.
 - `App/Main/CoinsaApp.swift` — схема и создание `ModelContainer`.
 - `Core/Configs/AppInfo.swift`, `BuildConfigs/*.entitlements` и Xcode build settings — выбор CloudKit-контейнера для Debug/Release.

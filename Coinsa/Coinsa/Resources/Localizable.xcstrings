@@ -3621,6 +3621,40 @@
         }
       }
     },
+    "expense.dailySpending.exclude" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exclude from daily spending"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Исключить из дневных трат"
+          }
+        }
+      }
+    },
+    "expense.dailySpending.exclude.hint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exclude this expense from the daily spending total on the \"Today\" screen. Its amount is deducted from the budget when calculating the daily limit. The expense remains fully included in location and trip totals."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не включать трату в сумму дневных трат на экране \"Сегодня\". Ее сумма вычитается из бюджета при расчете дневного лимита. В итогах локации и поездки трата учитывается полностью."
+          }
+        }
+      }
+    },
     "expense.date" : {
       "extractionState" : "manual",
       "localizations" : {

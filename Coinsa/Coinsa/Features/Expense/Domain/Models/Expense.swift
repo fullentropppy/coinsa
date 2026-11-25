@@ -66,6 +66,9 @@ class Expense {
     /// Комментарий к трате.
     var comment: String?
 
+    /// Исключает трату из дневной суммы, сохраняя ее влияние на доступный бюджет.
+    var isExcludedFromDailySpending: Bool = false
+
     /// Дата создания записи.
     var createdAt: Date = Date()
     
@@ -93,6 +96,7 @@ class Expense {
     ///   - longitude: Географическая долгота места траты.
     ///   - horizontalAccuracy: Точность определения координат в метрах.
     ///   - comment: Комментарий.
+    ///   - isExcludedFromDailySpending: Исключать из дневных трат; по умолчанию выключено.
     ///   - createdAt: Дата создания.
     ///   - updatedAt: Дата обновления.
     init(
@@ -113,6 +117,7 @@ class Expense {
         longitude: Double?,
         horizontalAccuracy: Double?,
         comment: String?,
+        isExcludedFromDailySpending: Bool = false,
         createdAt: Date,
         updatedAt: Date
     ) {
@@ -136,5 +141,6 @@ class Expense {
         self.longitude = longitude
         self.horizontalAccuracy = horizontalAccuracy
         self.comment = comment
+        self.isExcludedFromDailySpending = isExcludedFromDailySpending
     }
 }

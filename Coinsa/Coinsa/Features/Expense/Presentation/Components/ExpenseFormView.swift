@@ -87,6 +87,7 @@ struct ExpenseFormView: View {
             commentSection
             dateSection
             placeOfExpenseSection
+            dailySpendingSection
             actionsSection
         }
     }
@@ -322,6 +323,18 @@ struct ExpenseFormView: View {
                     .focused(isCommentFocused)
                     .keyboardClearAction(text: $viewModel.comment)
             }
+        }
+    }
+
+    private var dailySpendingSection: some View {
+        Section {
+            Toggle(.expenseDailySpendingExclude, isOn: $viewModel.isExcludedFromDailySpending)
+                .tint(.accent)
+                .onChange(of: viewModel.isExcludedFromDailySpending) {
+                    haptics.trigger(.tap)
+                }
+        } footer: {
+            Text(.expenseDailySpendingExcludeHint)
         }
     }
 
