@@ -19,7 +19,6 @@ struct TripGeneralExpensesView: View {
     // MARK: - Состояние
 
     @State private var isShowingCreate = false
-    @State private var isShowingTripEdit = false
     @State private var isShowingAnalytics = false
     @State private var expenseToEdit: Expense?
     @State private var deletionHandler = DeletionHandler<Expense>()
@@ -56,7 +55,6 @@ struct TripGeneralExpensesView: View {
         .onChange(of: isTripAvailable, initial: true) { _, available in
             if !available {
                 isShowingCreate = false
-                isShowingTripEdit = false
                 isShowingAnalytics = false
                 expenseToEdit = nil
                 dismiss()
@@ -68,9 +66,14 @@ struct TripGeneralExpensesView: View {
         List {
             Section {
                 EventSummaryView(data: viewModel.summaryData, showsHeader: false)
-                if !viewModel.expenses.isEmpty {
-                    DetailNavigationButton.analytics {
-                        isShowingAnalytics = true
+                HStack {
+                    DetailNavigationButton.trip {
+                        dismiss()
+                    }
+                    if !viewModel.expenses.isEmpty {
+                        DetailNavigationButton.analytics {
+                            isShowingAnalytics = true
+                        }
                     }
                 }
             }
@@ -122,13 +125,6 @@ struct TripGeneralExpensesView: View {
                 )
             }
         }
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                ToolbarButton.edit {
-                    isShowingTripEdit = true
-                }
-            }
-        }
         .safeAreaInset(edge: .bottom) {
             if !viewModel.expenses.isEmpty {
                 PrimaryAddButton(isOnLeft: settingsStore.isFloatingButtonOnLeft) {
@@ -142,9 +138,6 @@ struct TripGeneralExpensesView: View {
                 preselectedPaymentMethod: settingsStore.selectedPaymentMethod,
                 exchangeAdjustment: settingsStore.exchangeAdjustment
             )
-        }
-        .sheet(isPresented: $isShowingTripEdit) {
-            TripEditorView(forEdit: trip)
         }
         .sheet(item: $expenseToEdit) { expense in
             ExpenseEditorView(forEdit: expense)
