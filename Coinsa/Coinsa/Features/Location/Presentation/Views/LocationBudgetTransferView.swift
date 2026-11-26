@@ -88,6 +88,7 @@ struct LocationBudgetTransferView: View {
         LocationDestinationSections(
             groups: viewModel.groupedLocations,
             title: .locationBudgetTransferRecipientLocations,
+            icon: AppSymbols.trayAndArrowDown,
             showsBudgetBalance: true,
             isEnabled: viewModel.canTransfer
         ) { location in

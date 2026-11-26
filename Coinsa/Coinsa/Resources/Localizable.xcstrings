@@ -3536,6 +3536,23 @@
         }
       }
     },
+    "expense.copy.destinationTitle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copy to"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Куда скопировать"
+          }
+        }
+      }
+    },
     "expense.copy.hint" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -3566,23 +3583,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Копирование траты"
-          }
-        }
-      }
-    },
-    "expense.copy.sourceExpense" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Expense to copy"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Копируемая трата"
           }
         }
       }
@@ -3876,6 +3876,23 @@
         }
       }
     },
+    "expense.move.destinationTitle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Move to"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Куда перенести"
+          }
+        }
+      }
+    },
     "expense.move.error.changed.message" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -3974,23 +3991,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Перенос траты"
-          }
-        }
-      }
-    },
-    "expense.move.sourceExpense" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Expense to move"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Переносимая трата"
           }
         }
       }
@@ -4212,6 +4212,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Убрать место траты"
+          }
+        }
+      }
+    },
+    "expense.sourceExpense" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Current expense"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Текущая трата"
           }
         }
       }
@@ -5480,13 +5497,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Recipient locations"
+            "value" : "Move to"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Локации-получатели"
+            "value" : "Куда перенести"
           }
         }
       }
@@ -5497,13 +5514,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sender location"
+            "value" : "Current location"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Локация-отправитель"
+            "value" : "Текущая локация"
           }
         }
       }
@@ -6925,13 +6942,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Budget for expenses without a location, such as tickets and insurance. It is included in the trip budget and is not distributed across location days."
+            "value" : "Budget for expenses without a location. It is included in the trip budget and is not distributed across location days."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Бюджет для трат без привязки к локациям, например билетов и страховки. Он входит в бюджет поездки и не распределяется по дням локаций."
+            "value" : "Бюджет для трат без привязки к локациям. Он входит в бюджет поездки и не распределяется по дням локаций."
           }
         }
       }

@@ -55,6 +55,7 @@ struct GroupHeader: View {
                 }
                 
                 AppIcon(icon)
+                    .padding(.bottom, icon == AppSymbols.trayAndArrowDown ? ViewLayout.Label.arrowIconBottomInset : 0)
                 Text(title)
                     .fontWeight(.semibold)
             }

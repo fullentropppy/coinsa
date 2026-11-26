@@ -69,7 +69,7 @@ struct DataTransferView: View {
                 } label: {
                     HStack {
                         Image(systemName: AppSymbols.squareAndArrowDown)
-                            .padding(.bottom, ViewLayout.Label.squareArrowIconBottomInset)
+                            .padding(.bottom, ViewLayout.Label.arrowIconBottomInset)
                         Text(.dataTransferImport)
                     }
                 }
@@ -83,7 +83,7 @@ struct DataTransferView: View {
                 } label: {
                     HStack {
                         Image(systemName: AppSymbols.squareAndArrowUp)
-                            .padding(.bottom, ViewLayout.Label.squareArrowIconBottomInset)
+                            .padding(.bottom, ViewLayout.Label.arrowIconBottomInset)
                         Text(.dataTransferExport)
                     }
                 }

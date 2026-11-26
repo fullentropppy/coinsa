@@ -217,7 +217,7 @@ struct EventAnalyticsViewModel {
     // MARK: - Публичные методы
 
     func displayedLocationSlices(from slices: [EventLocationAnalyticsSlice], asDailyAverage: Bool) -> [EventLocationAnalyticsSlice] {
-        slices.sorted {
+        slices.filter { $0.expenseCount > 0 }.sorted {
             let firstAmount = $0.amount(asDailyAverage: asDailyAverage)
             let secondAmount = $1.amount(asDailyAverage: asDailyAverage)
             if firstAmount != secondAmount {

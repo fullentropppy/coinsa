@@ -75,9 +75,22 @@ struct ExpenseDestinationView: View {
                 Section {
                     ExpenseRowView(viewModel.source)
                 } header: {
-                    Text(viewModel.sourceTitle)
+                    Text(.expenseSourceExpense)
                 } footer: {
                     Text(viewModel.hint)
+                }
+
+                let groups = viewModel.groupedLocations
+                let destinationCount = groups.reduce(0) { $0 + $1.locations.count }
+                    + (viewModel.showsGeneralExpenses ? 1 : 0)
+
+                if destinationCount > 0 {
+                    GroupHeader(
+                        icon: AppSymbols.trayAndArrowDown,
+                        title: viewModel.destinationTitle,
+                        itemCount: destinationCount
+                    )
+                    .listRowBackground(Color.clear)
                 }
 
                 if viewModel.showsGeneralExpenses {
@@ -96,9 +109,8 @@ struct ExpenseDestinationView: View {
                     }
                 }
 
-                let groups = viewModel.groupedLocations
                 if !groups.isEmpty {
-                    LocationDestinationSections(groups: groups, title: .expenseDestinationLocations) { location in
+                    LocationDestinationSections(groups: groups) { location in
                         haptics.trigger(.tap)
                         viewModel.select(location, in: context)
                     }

@@ -46,8 +46,8 @@ final class ExpenseDestinationViewModel {
         mode == .copy ? .expenseCopyNavigationTitle : .expenseMoveNavigationTitle
     }
 
-    var sourceTitle: LocalizedStringResource {
-        mode == .copy ? .expenseCopySourceExpense : .expenseMoveSourceExpense
+    var destinationTitle: LocalizedStringResource {
+        mode == .copy ? .expenseCopyDestinationTitle : .expenseMoveDestinationTitle
     }
 
     var hint: LocalizedStringResource {
