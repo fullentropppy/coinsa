@@ -69,7 +69,7 @@ struct TripGeneralExpensesView: View {
             }
             if viewModel.expenses.isEmpty {
                 EmptyStateView(
-                    icon: AppSymbols.ticket,
+                    icon: Expense.primaryIcon,
                     title: .tripGeneralExpensesEmptyStateTitle,
                     description: .tripGeneralExpensesEmptyStateDescription,
                     buttonLabel: .expenseAdd

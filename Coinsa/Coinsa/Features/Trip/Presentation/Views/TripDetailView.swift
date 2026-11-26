@@ -25,6 +25,8 @@ struct TripDetailView: View {
     @State private var isShowingLocationDeletionError = false
     @State private var isShowingTripDeleteConfirmation = false
     @State private var isShowingTripDeletionError = false
+    @State private var isShowingGeneralExpenses = false
+    @State private var isShowingAnalytics = false
 
     @Query private var availableTrips: [Trip]
 
@@ -67,6 +69,8 @@ struct TripDetailView: View {
                 isShowingTripEdit = false
                 isShowingLocationCreate = false
                 locationToEdit = nil
+                isShowingGeneralExpenses = false
+                isShowingAnalytics = false
                 dismiss()
             }
         }
@@ -76,6 +80,17 @@ struct TripDetailView: View {
         tripDetailForm
             .navigationTitle(trip.name)
             .toolbarTitleDisplayMode(.inline)
+            .navigationDestination(isPresented: $isShowingGeneralExpenses) { [trip] in
+                TripGeneralExpensesView(trip)
+            }
+            .navigationDestination(isPresented: $isShowingAnalytics) { [trip] in
+                AnalyticsDestinationView { [trip] in
+                    EventAnalyticsView(
+                        data: TripDetailViewModel(trip: trip).eventAnalyticsData,
+                        screenContextSubtitle: trip.screenContextSubtitle
+                    )
+                }
+            }
             .toolbar {
                 toolbarContent
             }
@@ -143,28 +158,19 @@ struct TripDetailView: View {
                 data: viewModel.eventHeaderData,
                 showsAmounts: viewModel.showsFullHeader
             )
-            NavigationLink { [trip] in
-                TripGeneralExpensesView(trip)
-            } label: {
-                HStack {
-                    Text(.tripGeneralExpenses)
-                        .font(.subheadline)
-                    Spacer()
-                    CountLabel.secondarySmall(viewModel.generalExpensesCount, icon: Expense.primaryIcon)
+            HStack {
+                DetailNavigationButton(icon: Expense.primaryIcon, title: .tripGeneralExpenses) {
+                    isShowingGeneralExpenses = true
                 }
-                .foregroundStyle(.secondary)
-            }
-            if viewModel.showsFullHeader {
-                AnalyticsNavigationLink { [trip] in
-                    EventAnalyticsView(
-                        data: TripDetailViewModel(trip: trip).eventAnalyticsData,
-                        screenContextSubtitle: trip.screenContextSubtitle
-                    )
+                if viewModel.showsAnalytics {
+                    DetailNavigationButton.analytics {
+                        isShowingAnalytics = true
+                    }
                 }
             }
         }
     }
-    
+
     private var locationsSection: some View {
         Group {
             if trip.hasLocations {
@@ -201,8 +207,8 @@ struct TripDetailView: View {
             ForEach(viewModel.groupedLocations, id: \.status) { group in
                 Section(group.status.safeLocalizedResourcePlural) {
                     ForEach(group.locations) { location in
-                        NavigationLink {
-                            LocationDetailView(location)
+                        NavigationLink { [location, tripID = trip.id] in
+                            LocationDetailView(location, parentTripID: tripID)
                         } label: {
                             LocationRowView(location)
                         }

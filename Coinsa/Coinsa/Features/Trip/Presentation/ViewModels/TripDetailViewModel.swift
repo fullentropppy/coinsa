@@ -22,6 +22,10 @@ struct TripDetailViewModel {
     var showsFullHeader: Bool {
         trip.hasLocations || trip.hasGeneralExpenses || trip.generalExpensesBudget > 0
     }
+
+    var showsAnalytics: Bool {
+        !trip.allExpenses.isEmpty
+    }
     
     var eventHeaderData: EventSummaryData {
         let budgetAmount = trip.calculateBudgetAmount()

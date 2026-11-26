@@ -31,6 +31,9 @@
         }
       }
     },
+    "•" : {
+      "shouldTranslate" : false
+    },
     "add" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -3777,13 +3780,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Add your first expense\nto get started."
+            "value" : "Add your first expense."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Добавьте первую трату,\nчтобы начать."
+            "value" : "Добавьте первую трату."
           }
         }
       }
@@ -5828,6 +5831,23 @@
         }
       }
     },
+    "location.navigation.parent" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Location"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Локация"
+          }
+        }
+      }
+    },
     "location.navigationTitle.create" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -6922,13 +6942,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Add tickets, insurance, and other expenses for the whole trip."
+            "value" : "Add the first expense for the entire trip."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Добавьте билеты, страховку и другие траты всей поездки."
+            "value" : "Добавьте первую трату на всю поездку."
           }
         }
       }
@@ -7065,6 +7085,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Название"
+          }
+        }
+      }
+    },
+    "trip.navigation.parent" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trip"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Поездка"
           }
         }
       }
@@ -7323,9 +7360,6 @@
           }
         }
       }
-    },
-    "•" : {
-      "shouldTranslate" : false
     }
   },
   "version" : "1.1"

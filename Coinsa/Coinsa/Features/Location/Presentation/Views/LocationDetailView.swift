@@ -29,10 +29,13 @@ struct LocationDetailView: View {
     @State private var isShowingBudgetTransfer = false
     @State private var transferSuccessMessage: LocalizedStringResource?
     @State private var isShowingTransferSuccess = false
+    @State private var tripToShow: Trip?
+    @State private var isShowingAnalytics = false
     
     // MARK: - Зависимости
     
     private let location: Location
+    private let parentTripID: UUID?
 
     // MARK: - Инфраструктура
 
@@ -46,9 +49,13 @@ struct LocationDetailView: View {
     
     // MARK: - Инициализация
 
-    /// Создает экран подробностей переданной локации.
-    init(_ location: Location) {
+    /// Создает экран локации с возможностью возврата к поездке, из которой она открыта.
+    /// - Parameters:
+    ///   - location: Локация для отображения.
+    ///   - parentTripID: Идентификатор поездки на предыдущем экране текущего стека, если она есть.
+    init(_ location: Location, parentTripID: UUID? = nil) {
         self.location = location
+        self.parentTripID = parentTripID
     }
 
     // MARK: - Тело View
@@ -71,6 +78,17 @@ struct LocationDetailView: View {
             .navigationTitle(viewModel.navigationTitle)
             .navigationSubtitle(viewModel.navigationSubtitle)
             .toolbarTitleDisplayMode(.inline)
+            .navigationDestination(item: $tripToShow) { trip in
+                TripDetailView(trip)
+            }
+            .navigationDestination(isPresented: $isShowingAnalytics) { [location] in
+                AnalyticsDestinationView { [location] in
+                    EventAnalyticsView(
+                        data: LocationDetailViewModel(location: location).eventAnalyticsData,
+                        screenContextSubtitle: location.screenContextSubtitle
+                    )
+                }
+            }
             .toolbar {
                 toolbarContent
             }
@@ -147,11 +165,21 @@ struct LocationDetailView: View {
     private var headerSection: some View {
         Section {
             EventSummaryView(data: viewModel.eventHeaderData)
-            AnalyticsNavigationLink { [location] in
-                EventAnalyticsView(
-                    data: LocationDetailViewModel(location: location).eventAnalyticsData,
-                    screenContextSubtitle: location.screenContextSubtitle
-                )
+            HStack {
+                if let trip = location.trip, !trip.isDeleted, trip.modelContext === context {
+                    DetailNavigationButton.trip {
+                        if trip.id == parentTripID {
+                            dismiss()
+                        } else {
+                            tripToShow = trip
+                        }
+                    }
+                }
+                if location.hasExpenses {
+                    DetailNavigationButton.analytics {
+                        isShowingAnalytics = true
+                    }
+                }
             }
         }
     }
