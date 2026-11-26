@@ -20,6 +20,7 @@ struct TripGeneralExpensesView: View {
 
     @State private var isShowingCreate = false
     @State private var isShowingTripEdit = false
+    @State private var isShowingAnalytics = false
     @State private var expenseToEdit: Expense?
     @State private var deletionHandler = DeletionHandler<Expense>()
     @State private var isShowingDeletionError = false
@@ -56,6 +57,7 @@ struct TripGeneralExpensesView: View {
             if !available {
                 isShowingCreate = false
                 isShowingTripEdit = false
+                isShowingAnalytics = false
                 expenseToEdit = nil
                 dismiss()
             }
@@ -66,6 +68,11 @@ struct TripGeneralExpensesView: View {
         List {
             Section {
                 EventSummaryView(data: viewModel.summaryData, showsHeader: false)
+                if !viewModel.expenses.isEmpty {
+                    DetailNavigationButton.analytics {
+                        isShowingAnalytics = true
+                    }
+                }
             }
             if viewModel.expenses.isEmpty {
                 EmptyStateView(
@@ -107,6 +114,14 @@ struct TripGeneralExpensesView: View {
         .navigationTitle(Text(.tripGeneralExpensesNavigationTitle))
         .navigationSubtitle(trip.screenContextSubtitle)
         .navigationBarTitleDisplayMode(.inline)
+        .navigationDestination(isPresented: $isShowingAnalytics) { [trip] in
+            AnalyticsDestinationView { [trip] in
+                EventAnalyticsView(
+                    data: TripGeneralExpensesViewModel(trip: trip).eventAnalyticsData,
+                    screenContextSubtitle: trip.screenContextSubtitle
+                )
+            }
+        }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 ToolbarButton.edit {

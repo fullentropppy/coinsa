@@ -37,4 +37,26 @@ struct TripGeneralExpensesViewModel {
                 })
             }
     }
+
+    var eventAnalyticsData: EventCategoryAnalyticsData {
+        let expensesAmountByCategory = trip.calculateGeneralExpensesAmountByCategory()
+
+        return EventCategoryAnalyticsData(
+            title: trip.name,
+            dateRangeProvider: trip,
+            homeCurrency: trip.homeCurrency,
+            locationCurrency: nil,
+            baseBudget: trip.generalExpensesBudget,
+            locationBudget: nil,
+            expensesAmountByCategory: ExpenseCategory.allCases.map { category in
+                ExpenseAnalyticsSlice(
+                    category: category,
+                    homeAmount: expensesAmountByCategory[category] ?? 0,
+                    locationAmount: nil
+                )
+            },
+            expenses: expenses,
+            locations: nil
+        )
+    }
 }

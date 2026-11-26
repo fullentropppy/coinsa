@@ -42,4 +42,13 @@ extension Trip {
             return result + expense.amount(in: .home)
         }
     }
+
+    /// Рассчитывает суммы общих трат по категориям в домашней валюте.
+    /// - Returns: Суммы без трат локаций, согласованные с итогом общих трат.
+    func calculateGeneralExpensesAmountByCategory() -> [ExpenseCategory: Double] {
+        (generalExpenses ?? []).reduce(into: [:]) { result, expense in
+            guard expense.isGeneralExpense, expense.owningTrip === self else { return }
+            result[expense.category, default: 0] += expense.amount(in: .home)
+        }
+    }
 }
