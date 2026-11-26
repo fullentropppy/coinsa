@@ -48,7 +48,7 @@ struct LocationRowView: View {
     // MARK: - Компоненты
     
     private var upperStack: some View {
-        HStack(spacing: ViewLayout.Row.metadataSpacing) {
+        HStack(spacing: ViewLayout.Row.eventStatusBadgeSpacing) {
             location.status.makeDot()
             Text(location.name).fontWeight(.semibold)
         }

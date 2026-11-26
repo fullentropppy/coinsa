@@ -33,7 +33,7 @@ struct TripRowView: View {
     // MARK: - Компоненты
     
     private var upperStack: some View {
-        HStack(spacing: ViewLayout.Row.metadataSpacing) {
+        HStack(spacing: ViewLayout.Row.eventStatusBadgeSpacing) {
             trip.status.makeDot()
             Text(trip.name).fontWeight(.semibold)
         }

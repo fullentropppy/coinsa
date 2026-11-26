@@ -16,6 +16,8 @@ enum ViewLayout {
         static let contentSpacing: CGFloat = 10
         /// Интервал между датой, счетчиком и другими краткими сведениями в строке.
         static let metadataSpacing: CGFloat = 4
+        /// Интервал между иконкой статуса и названием события.
+        static let eventStatusBadgeSpacing: CGFloat = 6
         /// Ширина колонки иконок в строках аналитики.
         static let iconWidth: CGFloat = 20
     }
@@ -57,7 +59,7 @@ enum ViewLayout {
         /// Нижний отступ символов со стрелкой над квадратом или лотком для визуального выравнивания с текстом.
         static let arrowIconBottomInset: CGFloat = 3
         /// Ширина колонки иконок категорий, подкатегорий, способов оплаты и др. в формах.
-        static let formIconWidth: CGFloat = 24
+        static let formIconWidth: CGFloat = 22
         /// Ширина служебных элементов рядом с полем ввода: процента, переключателя и обновления.
         static let inputAccessoryWidth: CGFloat = 16
         /// Интервал между текущим значением пикера и стрелкой перехода.

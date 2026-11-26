@@ -59,7 +59,6 @@ struct EventSummaryView: View {
                 if showsAmounts {
                     amountsContent
                 }
-                
                 if showsAmountBalance {
                     amountBalanceContent
                 }
