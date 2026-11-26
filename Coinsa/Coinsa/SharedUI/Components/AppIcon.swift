@@ -88,7 +88,7 @@ struct AppIcon: View {
 
 // MARK: - Превью
 
-#Preview("Icon roles") {
+#Preview {
     VStack(spacing: 20) {
         ForEach(AppIcon.Style.allCases, id: \.self) { style in
             HStack {
@@ -98,17 +98,4 @@ struct AppIcon: View {
             }
         }
     }
-    .padding()
-}
-
-#Preview("Large text, dark") {
-    HStack(spacing: 20) {
-        AppIcon(AppSymbols.calendar, style: .formLabel)
-        AppIcon(AppSymbols.percent, style: .inputAccessory)
-        AppIcon(AppSymbols.chevronRight, style: .navigationIndicator)
-        AppIcon(AppSymbols.checkmark, style: .selectionIndicator)
-    }
-    .dynamicTypeSize(.xxxLarge)
-    .preferredColorScheme(.dark)
-    .padding()
 }

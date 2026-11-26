@@ -533,13 +533,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Largest expense"
+            "value" : "Largest"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Самая крупная"
+            "value" : "Крупнейшая"
           }
         }
       }
@@ -567,13 +567,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Total expenses"
+            "value" : "Total"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Всего трат"
+            "value" : "Всего"
           }
         }
       }

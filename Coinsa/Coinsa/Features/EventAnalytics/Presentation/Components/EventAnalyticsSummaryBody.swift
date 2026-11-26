@@ -75,13 +75,13 @@ struct EventAnalyticsSummaryBody: View {
                     VStack(alignment: .leading, spacing: ViewLayout.Row.contentSpacing) {
                         HStack {
                             AppIcon(expense.category.primaryIcon, style: .metadata)
-                                .frame(width: ViewLayout.Row.iconWidth)
+                                .frame(width: ViewLayout.Label.formIconWidth)
                             Text(expense.category.localizedResource)
                                 .font(.footnote)
                         }
                         HStack {
                             AppIcon(expense.subcategory.primaryIcon, style: .metadata)
-                                .frame(width: ViewLayout.Row.iconWidth)
+                                .frame(width: ViewLayout.Label.formIconWidth)
                             Text(expense.subcategory.localizedResource)
                                 .font(.footnote)
                         }
@@ -107,9 +107,7 @@ struct EventAnalyticsSummaryBody: View {
         @ViewBuilder content: () -> Content
     ) -> some View {
         HStack {
-            Image(systemName: icon)
-                .foregroundStyle(.secondary)
-                .frame(width: ViewLayout.Row.iconWidth)
+            AppIcon(icon, style: .formLabel)
             Text(title)
             Spacer()
             content()
