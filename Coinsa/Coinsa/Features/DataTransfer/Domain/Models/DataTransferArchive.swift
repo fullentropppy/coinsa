@@ -14,13 +14,18 @@ nonisolated struct DataTransferArchive: Codable, Equatable, Sendable {
     // MARK: - Свойства
 
     var format = "ru.dgritsenko.coinsa.archive"
-    var schemaVersion = 3
+    var schemaVersion = 1
     var exportedAt: Date
     var appVersion: String
     var appBuild: String
     var trips: [TripRecord]
     var locations: [LocationRecord]
     var expenses: [ExpenseRecord]
+    var hasExportedAt = true
+
+    private enum CodingKeys: String, CodingKey {
+        case format, schemaVersion, exportedAt, appVersion, appBuild, trips, locations, expenses
+    }
 
     // MARK: - Записи снимка
 
@@ -34,6 +39,11 @@ nonisolated struct DataTransferArchive: Codable, Equatable, Sendable {
         var generalExpensesBudget: Double = 0
         var createdAt: Date
         var updatedAt: Date
+        var hasUpdatedAt = true
+
+        private enum CodingKeys: String, CodingKey {
+            case id, name, startDate, endDate, homeCurrencyCode, generalExpensesBudget, createdAt, updatedAt
+        }
     }
 
     /// Сохраненные поля локации со ссылкой на родительскую поездку по UUID.
@@ -49,6 +59,12 @@ nonisolated struct DataTransferArchive: Codable, Equatable, Sendable {
         var budget: Double
         var createdAt: Date
         var updatedAt: Date
+        var hasUpdatedAt = true
+
+        private enum CodingKeys: String, CodingKey {
+            case id, tripID, name, startDate, endDate, locationCurrencyCode
+            case rateLocationToHome, exchangeAdjustment, budget, createdAt, updatedAt
+        }
     }
 
     /// Полный снимок траты с независимыми гражданскими компонентами и метаданными момента.
@@ -74,58 +90,132 @@ nonisolated struct DataTransferArchive: Codable, Equatable, Sendable {
         var isExcludedFromDailySpending = false
         var createdAt: Date
         var updatedAt: Date
+        var hasUpdatedAt = true
+        var hasActualDate = true
+        var hasTimeZoneID = true
+
+        private enum CodingKeys: String, CodingKey {
+            case id, locationID, tripID, civilDateTime, actualDate, timeZoneID, homeAmount, expenseCurrencyCode
+            case rateExpenseToHome, rateExpenseToLocation, paymentMethodRaw, exchangeAdjustment
+            case categoryRaw, subcategoryRaw, latitude, longitude, horizontalAccuracy, comment
+            case isExcludedFromDailySpending, createdAt, updatedAt
+        }
+    }
+}
+
+extension DataTransferArchive {
+    /// Читает единый формат, дополняя отсутствующие служебные поля и пустые списки.
+    /// - Parameter decoder: Декодер файла; одна опорная дата используется для всех новых метаданных.
+    nonisolated init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        format = try container.decode(String.self, forKey: .format)
+        schemaVersion = try container.decode(Int.self, forKey: .schemaVersion)
+        let exportedAt = try container.decodeIfPresent(Date.self, forKey: .exportedAt)
+        self.exportedAt = exportedAt ?? decoder.dataTransferImportDate
+        hasExportedAt = exportedAt != nil
+        appVersion = try container.decodeIfPresent(String.self, forKey: .appVersion) ?? ""
+        appBuild = try container.decodeIfPresent(String.self, forKey: .appBuild) ?? ""
+        guard container.contains(.trips) || container.contains(.locations) || container.contains(.expenses) else {
+            throw DataTransferError.invalidFile
+        }
+        trips = try container.decodeIfPresent([TripRecord].self, forKey: .trips) ?? []
+        locations = try container.decodeIfPresent([LocationRecord].self, forKey: .locations) ?? []
+        expenses = try container.decodeIfPresent([ExpenseRecord].self, forKey: .expenses) ?? []
     }
 }
 
 extension DataTransferArchive.TripRecord {
-    /// Читает поездку; в файлах до версии 3 бюджет общих трат отсутствует.
-    /// - Parameter decoder: Декодер записи поддерживаемой версии файла.
-    init(from decoder: Decoder) throws {
+    /// Читает поездку, назначая отсутствующие UUID и служебные даты до предварительного просмотра.
+    /// - Parameter decoder: Декодер записи единственного поддерживаемого формата.
+    nonisolated init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        id = try container.decode(UUID.self, forKey: .id)
+        id = try container.decodeIfPresent(UUID.self, forKey: .id) ?? UUID()
         name = try container.decode(String.self, forKey: .name)
         startDate = try container.decode(String.self, forKey: .startDate)
         endDate = try container.decode(String.self, forKey: .endDate)
         homeCurrencyCode = try container.decode(String.self, forKey: .homeCurrencyCode)
-        generalExpensesBudget = container.contains(.generalExpensesBudget)
-            ? try container.decode(Double.self, forKey: .generalExpensesBudget) : 0
-        createdAt = try container.decode(Date.self, forKey: .createdAt)
-        updatedAt = try container.decode(Date.self, forKey: .updatedAt)
+        generalExpensesBudget = try container.decodeIfPresent(Double.self, forKey: .generalExpensesBudget) ?? 0
+        createdAt = try container.decodeIfPresent(Date.self, forKey: .createdAt) ?? decoder.dataTransferImportDate
+        let updatedAt = try container.decodeIfPresent(Date.self, forKey: .updatedAt)
+        self.updatedAt = updatedAt ?? decoder.dataTransferImportDate
+        hasUpdatedAt = updatedAt != nil
+    }
+}
+
+extension DataTransferArchive.LocationRecord {
+    /// Читает локацию с обязательным UUID поездки и необязательными служебными метаданными.
+    /// - Parameter decoder: Декодер записи; поездка может находиться в файле или локальной базе.
+    nonisolated init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decodeIfPresent(UUID.self, forKey: .id) ?? UUID()
+        tripID = try container.decode(UUID.self, forKey: .tripID)
+        name = try container.decode(String.self, forKey: .name)
+        startDate = try container.decode(String.self, forKey: .startDate)
+        endDate = try container.decode(String.self, forKey: .endDate)
+        locationCurrencyCode = try container.decode(String.self, forKey: .locationCurrencyCode)
+        rateLocationToHome = try container.decode(Double.self, forKey: .rateLocationToHome)
+        exchangeAdjustment = try container.decodeIfPresent(Double.self, forKey: .exchangeAdjustment) ?? 0
+        budget = try container.decodeIfPresent(Double.self, forKey: .budget) ?? 0
+        createdAt = try container.decodeIfPresent(Date.self, forKey: .createdAt) ?? decoder.dataTransferImportDate
+        let updatedAt = try container.decodeIfPresent(Date.self, forKey: .updatedAt)
+        self.updatedAt = updatedAt ?? decoder.dataTransferImportDate
+        hasUpdatedAt = updatedAt != nil
     }
 }
 
 extension DataTransferArchive.ExpenseRecord {
-    /// Читает снимок траты, сохраняя прежний дневной учет для файлов без нового признака.
-    /// - Parameter decoder: Декодер записи из поддерживаемой версии файла.
-    init(from decoder: Decoder) throws {
+    /// Читает трату с обязательным единственным владельцем, не выдумывая фактический момент и пояс.
+    /// - Parameter decoder: Декодер записи; пропущенные необязательные поля равнозначны отсутствующим данным.
+    nonisolated init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        id = try container.decode(UUID.self, forKey: .id)
-        _locationID = try container.decode(RequiredNullable<UUID>.self, forKey: .locationID)
-        _tripID = container.contains(.tripID)
-            ? try container.decode(RequiredNullable<UUID>.self, forKey: .tripID) : RequiredNullable(wrappedValue: nil)
+        id = try container.decodeIfPresent(UUID.self, forKey: .id) ?? UUID()
+        let locationID = try container.decodeIfPresent(UUID.self, forKey: .locationID)
+        let tripID = try container.decodeIfPresent(UUID.self, forKey: .tripID)
+        _locationID = RequiredNullable(wrappedValue: locationID)
+        _tripID = RequiredNullable(wrappedValue: tripID)
+        guard (locationID != nil) != (tripID != nil) else { throw DataTransferError.invalidRelationships }
         civilDateTime = try container.decode(String.self, forKey: .civilDateTime)
-        _actualDate = try container.decode(RequiredNullable<Date>.self, forKey: .actualDate)
-        _timeZoneID = try container.decode(RequiredNullable<String>.self, forKey: .timeZoneID)
+        _actualDate = RequiredNullable(wrappedValue: try container.decodeIfPresent(Date.self, forKey: .actualDate))
+        _timeZoneID = RequiredNullable(wrappedValue: try container.decodeIfPresent(String.self, forKey: .timeZoneID))
+        hasActualDate = container.contains(.actualDate)
+        hasTimeZoneID = container.contains(.timeZoneID)
         homeAmount = try container.decode(Double.self, forKey: .homeAmount)
         expenseCurrencyCode = try container.decode(String.self, forKey: .expenseCurrencyCode)
         rateExpenseToHome = try container.decode(Double.self, forKey: .rateExpenseToHome)
-        rateExpenseToLocation = try container.decode(Double.self, forKey: .rateExpenseToLocation)
+        if let rate = try container.decodeIfPresent(Double.self, forKey: .rateExpenseToLocation) {
+            rateExpenseToLocation = rate
+        } else if tripID != nil {
+            rateExpenseToLocation = rateExpenseToHome
+        } else {
+            throw DataTransferError.invalidValues
+        }
         paymentMethodRaw = try container.decode(String.self, forKey: .paymentMethodRaw)
-        exchangeAdjustment = try container.decode(Double.self, forKey: .exchangeAdjustment)
+        exchangeAdjustment = try container.decodeIfPresent(Double.self, forKey: .exchangeAdjustment) ?? 0
         categoryRaw = try container.decode(String.self, forKey: .categoryRaw)
         subcategoryRaw = try container.decode(String.self, forKey: .subcategoryRaw)
-        _latitude = try container.decode(RequiredNullable<Double>.self, forKey: .latitude)
-        _longitude = try container.decode(RequiredNullable<Double>.self, forKey: .longitude)
-        _horizontalAccuracy = try container.decode(RequiredNullable<Double>.self, forKey: .horizontalAccuracy)
-        _comment = try container.decode(RequiredNullable<String>.self, forKey: .comment)
-        isExcludedFromDailySpending = container.contains(.isExcludedFromDailySpending)
-            ? try container.decode(Bool.self, forKey: .isExcludedFromDailySpending) : false
-        createdAt = try container.decode(Date.self, forKey: .createdAt)
-        updatedAt = try container.decode(Date.self, forKey: .updatedAt)
+        _latitude = RequiredNullable(wrappedValue: try container.decodeIfPresent(Double.self, forKey: .latitude))
+        _longitude = RequiredNullable(wrappedValue: try container.decodeIfPresent(Double.self, forKey: .longitude))
+        _horizontalAccuracy = RequiredNullable(wrappedValue: try container.decodeIfPresent(Double.self, forKey: .horizontalAccuracy))
+        _comment = RequiredNullable(wrappedValue: try container.decodeIfPresent(String.self, forKey: .comment))
+        isExcludedFromDailySpending = try container.decodeIfPresent(Bool.self, forKey: .isExcludedFromDailySpending) ?? false
+        createdAt = try container.decodeIfPresent(Date.self, forKey: .createdAt) ?? decoder.dataTransferImportDate
+        let updatedAt = try container.decodeIfPresent(Date.self, forKey: .updatedAt)
+        self.updatedAt = updatedAt ?? decoder.dataTransferImportDate
+        hasUpdatedAt = updatedAt != nil
     }
 }
 
-/// Отличает явное отсутствие значения от пропущенного обязательного ключа файла.
+private extension CodingUserInfoKey {
+    nonisolated static let dataTransferImportDate = CodingUserInfoKey(rawValue: "dataTransferImportDate")!
+}
+
+private extension Decoder {
+    nonisolated var dataTransferImportDate: Date {
+        userInfo[.dataTransferImportDate] as? Date ?? Date()
+    }
+}
+
+/// Сохраняет явный JSON null для необязательных полей полного экспорта.
 @propertyWrapper
 nonisolated struct RequiredNullable<Value: Codable & Equatable & Sendable>: Codable, Equatable, Sendable {
     // MARK: - Свойства
@@ -134,7 +224,7 @@ nonisolated struct RequiredNullable<Value: Codable & Equatable & Sendable>: Coda
 
     // MARK: - Инициализация
 
-    /// Сохраняет необязательное значение, ключ которого обязателен в формате файла.
+    /// Сохраняет необязательное значение, ключ которого всегда записывается при полном экспорте.
     /// - Parameter wrappedValue: Значение или явное отсутствие значения.
     init(wrappedValue: Value?) {
         self.wrappedValue = wrappedValue
@@ -142,7 +232,7 @@ nonisolated struct RequiredNullable<Value: Codable & Equatable & Sendable>: Coda
 
     /// Декодирует присутствующий ключ, допускающий JSON null.
     /// - Parameter decoder: Декодер значения обязательного ключа.
-    init(from decoder: Decoder) throws {
+    nonisolated init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         wrappedValue = container.decodeNil() ? nil : try container.decode(Value.self)
     }
@@ -201,9 +291,9 @@ nonisolated enum DataTransferCodec {
         return data
     }
 
-    /// Проверяет версию, обязательные поля и целостность файла до передачи данных в импорт.
+    /// Читает версию и обязательные поля; целостность связей проверяется с локальными родителями в плане импорта.
     /// - Parameter data: Содержимое файла с ограниченным размером.
-    /// - Returns: Декодированный снимок без исправления или нормализации его значений.
+    /// - Returns: Записи с назначенными UUID и метаданными; суммы и гражданские даты не пересчитываются.
     static func decode(_ data: Data) throws -> DataTransferArchive {
         guard data.count <= maximumFileSize else { throw DataTransferError.fileTooLarge }
         let archive: DataTransferArchive
@@ -212,28 +302,17 @@ nonisolated enum DataTransferCodec {
             guard header?["format"] as? String == "ru.dgritsenko.coinsa.archive" else {
                 throw DataTransferError.invalidFile
             }
-            guard let version = header?["schemaVersion"] as? Int, (1...3).contains(version) else {
+            guard header?["schemaVersion"] as? Int == 1 else {
                 throw DataTransferError.unsupportedVersion
             }
-            if version >= 2, let expenses = header?["expenses"] as? [[String: Any]],
-               expenses.contains(where: { $0["isExcludedFromDailySpending"] == nil }) {
-                throw DataTransferError.invalidFile
-            }
-            if version == 3 {
-                guard let trips = header?["trips"] as? [[String: Any]],
-                      let expenses = header?["expenses"] as? [[String: Any]],
-                      trips.allSatisfy({ $0["generalExpensesBudget"] != nil }),
-                      expenses.allSatisfy({ $0["tripID"] != nil }) else {
-                    throw DataTransferError.invalidFile
-                }
-            }
-            archive = try JSONDecoder().decode(DataTransferArchive.self, from: data)
+            let decoder = JSONDecoder()
+            decoder.userInfo[.dataTransferImportDate] = Date()
+            archive = try decoder.decode(DataTransferArchive.self, from: data)
         } catch let error as DataTransferError {
             throw error
         } catch {
             throw DataTransferError.invalidFile
         }
-        try DataTransferValidation.validate(archive)
         return archive
     }
 
@@ -243,9 +322,10 @@ nonisolated enum DataTransferCodec {
     /// - Parameters:
     ///   - date: Дата в UTC-представлении календарных компонентов.
     ///   - includesTime: Добавлять гражданское время с точностью до секунд.
-    /// - Returns: День или дата и время; пустая строка для неконечного значения.
+    /// - Returns: День или дата и время; пустая строка для значений вне диапазона годов 0001–9999.
     static func dateString(_ date: Date, includesTime: Bool = false) -> String {
-        guard date.timeIntervalSinceReferenceDate.isFinite else { return "" }
+        let seconds = date.timeIntervalSinceReferenceDate
+        guard seconds.isFinite, (-63_113_904_000..<252_423_993_600).contains(seconds) else { return "" }
         let parts = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date)
         let day = String(format: "%04d-%02d-%02d", parts.year ?? 0, parts.month ?? 0, parts.day ?? 0)
         if includesTime {

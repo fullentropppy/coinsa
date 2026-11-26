@@ -12,14 +12,13 @@ import UniformTypeIdentifiers
 nonisolated struct DataTransferDocument: FileDocument {
     // MARK: - Тип документа и содержимое
 
-    static var archiveType: UTType { UTType(exportedAs: "ru.dgritsenko.coinsa.archive", conformingTo: .json) }
-    static var readableContentTypes: [UTType] { [archiveType] }
+    static var readableContentTypes: [UTType] { [.json] }
     var data: Data
 
     // MARK: - Инициализация
 
     /// Создает документ из уже проверенного и закодированного снимка.
-    /// - Parameter data: Содержимое файла Coinsa.
+    /// - Parameter data: JSON-содержимое переносимых записей.
     init(data: Data) {
         self.data = data
     }
@@ -45,7 +44,7 @@ nonisolated struct DataTransferDocument: FileDocument {
 
     /// Координирует доступ к выбранному файлу и ограничивает память при чтении до декодирования.
     /// - Parameter url: URL из системного диалога с возможным security-scoped доступом.
-    /// - Returns: Проверенный снимок после завершения чтения и освобождения доступа к файлу.
+    /// - Returns: Декодированные записи; внешние родители новых трат проверяются при подготовке плана.
     static func read(from url: URL) throws -> DataTransferArchive {
         let hasAccess = url.startAccessingSecurityScopedResource()
         defer { if hasAccess { url.stopAccessingSecurityScopedResource() } }

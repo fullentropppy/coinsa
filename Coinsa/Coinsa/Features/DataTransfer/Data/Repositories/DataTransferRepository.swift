@@ -155,7 +155,7 @@ struct DataTransferRepository {
 
     // MARK: - Подготовка переносимых записей
 
-    /// Читает сущности независимо от обратных списков связей и отклоняет потерю календарных компонентов.
+    /// Читает сущности независимо от обратных списков связей в точности гражданских компонентов домена.
     /// - Parameter context: Отдельный контекст для последовательного чтения всех трех типов моделей.
     /// - Returns: Полный проверенный снимок с исходными числами, метаданными и связями по UUID.
     private func snapshot(in context: ModelContext) throws -> DataTransferArchive {
@@ -164,13 +164,9 @@ struct DataTransferRepository {
         let expenses = try context.fetch(FetchDescriptor<Expense>())
         let archive = DataTransferArchive(
             exportedAt: Date(), appVersion: AppInfo.version, appBuild: AppInfo.build,
-            trips: try trips.map { trip in
+            trips: trips.map { trip in
                 let start = DataTransferCodec.dateString(trip.storedStartDate)
                 let end = DataTransferCodec.dateString(trip.storedEndDate)
-                guard try DataTransferCodec.date(start) == trip.storedStartDate,
-                      try DataTransferCodec.date(end) == trip.storedEndDate else {
-                    throw DataTransferError.invalidValues
-                }
                 return DataTransferArchive.TripRecord(
                     id: trip.id, name: trip.name, startDate: start, endDate: end,
                     homeCurrencyCode: trip.baseCurrencyCode, generalExpensesBudget: trip.generalExpensesBudget,
@@ -181,10 +177,6 @@ struct DataTransferRepository {
                 guard let trip = location.trip, !trip.isDeleted else { throw DataTransferError.invalidRelationships }
                 let start = DataTransferCodec.dateString(location.storedStartDate)
                 let end = DataTransferCodec.dateString(location.storedEndDate)
-                guard try DataTransferCodec.date(start) == location.storedStartDate,
-                      try DataTransferCodec.date(end) == location.storedEndDate else {
-                    throw DataTransferError.invalidValues
-                }
                 return DataTransferArchive.LocationRecord(
                     id: location.id, tripID: trip.id, name: location.name, startDate: start, endDate: end,
                     locationCurrencyCode: location.locationCurrencyCode,
@@ -196,9 +188,6 @@ struct DataTransferRepository {
             expenses: try expenses.map { expense in
                 guard expense.owningTrip != nil else { throw DataTransferError.invalidRelationships }
                 let civilDateTime = DataTransferCodec.dateString(expense.storedDate, includesTime: true)
-                guard try DataTransferCodec.date(civilDateTime, includesTime: true) == expense.storedDate else {
-                    throw DataTransferError.invalidValues
-                }
                 return DataTransferArchive.ExpenseRecord(
                     id: expense.id, locationID: expense.location?.id, tripID: expense.trip?.id,
                     civilDateTime: civilDateTime,

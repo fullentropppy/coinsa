@@ -14,7 +14,7 @@ nonisolated enum DataTransferValidation {
     /// Проверяет схему, идентификаторы, родителей и значения всего графа, включая конечность расчетов.
     /// - Parameter archive: Исходный или объединенный снимок, который нельзя исправлять при проверке.
     static func validate(_ archive: DataTransferArchive) throws {
-        guard archive.format == "ru.dgritsenko.coinsa.archive", (1...3).contains(archive.schemaVersion) else {
+        guard archive.format == "ru.dgritsenko.coinsa.archive", archive.schemaVersion == 1 else {
             throw DataTransferError.unsupportedVersion
         }
         let allIDs = archive.trips.map(\.id) + archive.locations.map(\.id) + archive.expenses.map(\.id)
@@ -26,7 +26,7 @@ nonisolated enum DataTransferValidation {
                   if let locationID = expense.locationID {
                       return expense.tripID == nil && locationIDs.contains(locationID)
                   }
-                  return archive.schemaVersion >= 3 && expense.tripID.map(tripIDs.contains) == true
+                  return expense.tripID.map(tripIDs.contains) == true
               }) else {
             throw DataTransferError.invalidRelationships
         }
@@ -39,8 +39,7 @@ nonisolated enum DataTransferValidation {
             try validateDates(start: trip.startDate, end: trip.endDate)
             guard !trip.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
                   Currency(rawValue: trip.homeCurrencyCode) != nil,
-                  nonNegative(trip.generalExpensesBudget),
-                  archive.schemaVersion >= 3 || trip.generalExpensesBudget == 0 else {
+                  nonNegative(trip.generalExpensesBudget) else {
                 throw DataTransferError.invalidValues
             }
             try validateMetadata(createdAt: trip.createdAt, updatedAt: trip.updatedAt)

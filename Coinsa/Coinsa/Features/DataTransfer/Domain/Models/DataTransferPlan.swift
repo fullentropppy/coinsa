@@ -45,10 +45,11 @@ nonisolated struct DataTransferPlan: Equatable, Sendable {
     ///   - source: Полностью проверяемый файл импорта.
     ///   - baseline: Текущие локальные записи, отсортированные по UUID.
     init(source: DataTransferArchive, baseline: DataTransferArchive) throws {
-        try DataTransferValidation.validate(source)
         try DataTransferValidation.validate(baseline)
         self.source = source
         self.baseline = baseline
+        let source = Self.resolveParents(source, baseline: baseline)
+        try DataTransferValidation.validate(source)
 
         let localTrips = Dictionary(uniqueKeysWithValues: baseline.trips.map { ($0.id, $0) })
         let localLocations = Dictionary(uniqueKeysWithValues: baseline.locations.map { ($0.id, $0) })
@@ -71,16 +72,19 @@ nonisolated struct DataTransferPlan: Equatable, Sendable {
             }
         }
 
-        let incomingTrips = source.trips.map { record in
+        trips = Self.classify(source.trips, local: localTrips, updatedAt: \.updatedAt, createdAt: \.createdAt, hasUpdatedAt: \.hasUpdatedAt)
+        locations = Self.classify(source.locations, local: localLocations, updatedAt: \.updatedAt, createdAt: \.createdAt, hasUpdatedAt: \.hasUpdatedAt)
+        let incomingExpenses = source.expenses.map { record in
             var record = record
-            if source.schemaVersion < 3, let local = localTrips[record.id] {
-                record.generalExpensesBudget = local.generalExpensesBudget
+            if let local = localExpenses[record.id] {
+                if !record.hasActualDate { record.actualDate = local.actualDate }
+                if !record.hasTimeZoneID { record.timeZoneID = local.timeZoneID }
             }
+            record.hasActualDate = true
+            record.hasTimeZoneID = true
             return record
         }
-        trips = Self.classify(incomingTrips, local: localTrips, updatedAt: \.updatedAt, createdAt: \.createdAt)
-        locations = Self.classify(source.locations, local: localLocations, updatedAt: \.updatedAt, createdAt: \.createdAt)
-        expenses = Self.classify(source.expenses, local: localExpenses, updatedAt: \.updatedAt, createdAt: \.createdAt)
+        expenses = Self.classify(incomingExpenses, local: localExpenses, updatedAt: \.updatedAt, createdAt: \.createdAt, hasUpdatedAt: \.hasUpdatedAt)
 
         let tripsWithLocations = Set(baseline.locations.map(\.tripID))
         let tripsWithGeneralExpenses = Set(baseline.expenses.compactMap(\.tripID))
@@ -133,25 +137,48 @@ nonisolated struct DataTransferPlan: Equatable, Sendable {
 
     // MARK: - Подготовка изменений
 
-    /// Разделяет записи по действиям, сохраняя дату создания существующей записи.
+    /// Дополняет файл снимками существующих родителей, если в файле указаны только их UUID.
+    /// - Parameters:
+    ///   - source: Записи из файла с уже назначенными UUID и служебными датами.
+    ///   - baseline: Локальный снимок, относительно которого пользователь подтвердит импорт.
+    /// - Returns: Полный граф для общей проверки и расчета сводки.
+    private static func resolveParents(_ source: DataTransferArchive, baseline: DataTransferArchive) -> DataTransferArchive {
+        var resolved = source
+        let locationIDs = Set(source.locations.map(\.id))
+        let referencedLocations = Set(source.expenses.compactMap(\.locationID)).subtracting(locationIDs)
+        resolved.locations += baseline.locations.filter { referencedLocations.contains($0.id) }
+        let tripIDs = Set(source.trips.map(\.id))
+        let referencedTrips = Set(resolved.locations.map(\.tripID) + source.expenses.compactMap(\.tripID)).subtracting(tripIDs)
+        resolved.trips += baseline.trips.filter { referencedTrips.contains($0.id) }
+        return resolved
+    }
+
+    /// Разделяет записи по действиям; отсутствие updatedAt дает файлу приоритет без изменения даты создания.
     /// - Parameters:
     ///   - incoming: Записи из файла, проверенные на уникальность UUID.
     ///   - local: Локальные записи по UUID.
     ///   - updatedAt: Поле версии для сравнения актуальности.
     ///   - createdAt: Поле даты создания, которое сохраняется из локальной записи.
+    ///   - hasUpdatedAt: Передана ли дата изменения явно; при отсутствии дата не уменьшается относительно локальной.
     /// - Returns: Добавления, обновления и счетчики пропущенных записей.
     private static func classify<Record: Identifiable & Equatable & Sendable>(
         _ incoming: [Record],
         local: [UUID: Record],
-        updatedAt: KeyPath<Record, Date>,
-        createdAt: WritableKeyPath<Record, Date>
+        updatedAt: WritableKeyPath<Record, Date>,
+        createdAt: WritableKeyPath<Record, Date>,
+        hasUpdatedAt: WritableKeyPath<Record, Bool>
     ) -> DataTransferChanges<Record> where Record.ID == UUID {
         var changes = DataTransferChanges<Record>()
         for var record in incoming {
             guard let existing = local[record.id] else {
+                record[keyPath: hasUpdatedAt] = true
                 changes.additions.append(record)
                 continue
             }
+            if !record[keyPath: hasUpdatedAt] {
+                record[keyPath: updatedAt] = max(record[keyPath: updatedAt], existing[keyPath: updatedAt])
+            }
+            record[keyPath: hasUpdatedAt] = true
             if record[keyPath: updatedAt] < existing[keyPath: updatedAt] {
                 changes.older += 1
                 continue

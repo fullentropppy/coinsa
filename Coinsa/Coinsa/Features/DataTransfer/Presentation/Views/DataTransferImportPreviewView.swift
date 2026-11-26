@@ -55,13 +55,15 @@ struct DataTransferImportPreviewView: View {
     /// - Parameter plan: Проверенный план добавления, обновления и пропуска записей.
     @ViewBuilder
     private func previewSections(_ plan: DataTransferPlan) -> some View {
-        Section {
-            LabeledContent {
-                Text(DateDisplayFormatter.format(plan.source.exportedAt, showsTime: true))
-            } label: {
-                HStack {
-                    AppIcon(AppSymbols.calendar, style: .formLabel)
-                    Text(.dataTransferPreviewExportedAt)
+        if plan.source.hasExportedAt {
+            Section {
+                LabeledContent {
+                    Text(DateDisplayFormatter.format(plan.source.exportedAt, showsTime: true))
+                } label: {
+                    HStack {
+                        AppIcon(AppSymbols.calendar, style: .formLabel)
+                        Text(.dataTransferPreviewExportedAt)
+                    }
                 }
             }
         }
@@ -148,7 +150,9 @@ struct DataTransferImportPreviewView: View {
             }
             .disabled(!plan.hasChanges)
         } footer: {
-            Text(.dataTransferPreviewHint)
+            VStack(alignment: .leading) {
+                Text(.dataTransferPreviewHint)
+            }
         }
     }
 }

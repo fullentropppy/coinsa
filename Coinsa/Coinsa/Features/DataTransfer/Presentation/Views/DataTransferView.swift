@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import UniformTypeIdentifiers
 
 /// Экспорт всех поездок и подтверждаемое объединение данных из файла.
 struct DataTransferView: View {
@@ -30,14 +31,14 @@ struct DataTransferView: View {
         .disabled(viewModel.isWorking || viewModel.isWaitingForNotice || viewModel.plan != nil)
         .fileImporter(
             isPresented: $viewModel.isShowingImporter,
-            allowedContentTypes: [DataTransferDocument.archiveType]
+            allowedContentTypes: [.json]
         ) { result in
             viewModel.importFile(result, container: context.container)
         }
         .fileExporter(
             isPresented: $viewModel.isShowingExporter,
             document: viewModel.document,
-            contentType: DataTransferDocument.archiveType,
+            contentType: .json,
             defaultFilename: "Coinsa-\(DataTransferCodec.dateString(Date()))"
         ) { result in
             viewModel.exportCompleted(result)
@@ -74,7 +75,9 @@ struct DataTransferView: View {
                     }
                 }
             } footer: {
-                Text(.dataTransferImportHint)
+                VStack(alignment: .leading) {
+                    Text(.dataTransferImportHint)
+                }
             }
             Section {
                 Button {

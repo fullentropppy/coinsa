@@ -2029,13 +2029,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The file is incomplete or is not a Coinsa file. Choose a complete file exported from Coinsa."
+            "value" : "The file does not contain valid Coinsa data. Check the file contents or choose another file."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Файл неполный или не соответствует формату Coinsa. Выберите полный файл, экспортированный из Coinsa."
+            "value" : "Файл не содержит корректных данных Coinsa. Проверьте содержимое файла или выберите другой."
           }
         }
       }
@@ -2233,13 +2233,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Save all trips, locations, and expenses to a Coinsa file. App settings are not included. The file is not encrypted and may contain expense locations and comments."
+            "value" : "Export all trips, locations, and expenses to a file. App settings are not included. The file is not encrypted and may contain expense locations and comments."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Сохранить все поездки, локации и траты в файл Coinsa. Настройки приложения не включаются. Файл не зашифрован и может содержать места трат и комментарии."
+            "value" : "Экспортировать все поездки, локации и траты в файл. Настройки приложения не включаются. Файл не зашифрован и может содержать места трат и комментарии."
           }
         }
       }
@@ -2250,13 +2250,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "All trips, locations, and expenses have been saved to a Coinsa file."
+            "value" : "All trips, locations, and expenses have been saved to a file."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Все поездки, локации и траты сохранены в файл Coinsa."
+            "value" : "Все поездки, локации и траты сохранены в файл."
           }
         }
       }
@@ -2335,13 +2335,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Add data from a Coinsa file. Existing records are updated when the file has the same or a later modification date. Older versions are skipped. Records absent from the file remain unchanged."
+            "value" : "Import trips, locations, and expenses from a file. A summary of changes will appear before saving."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Добавить данные из файла Coinsa. Существующие записи обновляются, если дата изменения в файле такая же или более поздняя. Старые версии пропускаются. Данные, отсутствующие в файле, останутся без изменений."
+            "value" : "Импортировать поездки, локации и траты из файла. Перед сохранением появится сводка изменений."
           }
         }
       }
@@ -2420,13 +2420,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No data has been saved yet. When modification dates match, the file takes priority. Previously deleted records may be added again. Records absent from the file will not be deleted. Imported changes will also sync through iCloud."
+            "value" : "Review the summary of changes. Once you confirm, the data will be saved and synced through iCloud."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Данные еще не сохранены. При одинаковых датах изменения приоритет у файла. Ранее удаленные записи могут быть добавлены снова. Данные, отсутствующие в файле, не будут удалены. Импортированные изменения также будут синхронизироваться через iCloud."
+            "value" : "Проверьте сводку изменений. После подтверждения данные будут сохранены и синхронизированы через iCloud."
           }
         }
       }

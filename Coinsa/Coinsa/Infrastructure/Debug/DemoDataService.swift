@@ -44,12 +44,19 @@ struct DemoDataService {
         try context.save()
     }
 
-    /// Удаляет все поездки из базы данных.
+    /// Удаляет все три типа записей, включая оставшиеся без родителей после прежних наборов или синхронизации.
     /// - Throws: Ошибки при получении данных или сохранении изменений.
     func deleteAllData() throws {
-        let descriptor = FetchDescriptor<Trip>()
-        let trips = try context.fetch(descriptor)
-        
+        let expenses = try context.fetch(FetchDescriptor<Expense>())
+        let locations = try context.fetch(FetchDescriptor<Location>())
+        let trips = try context.fetch(FetchDescriptor<Trip>())
+
+        for expense in expenses {
+            context.delete(expense)
+        }
+        for location in locations {
+            context.delete(location)
+        }
         for trip in trips {
             context.delete(trip)
         }
