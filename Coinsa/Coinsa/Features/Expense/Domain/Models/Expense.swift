@@ -8,7 +8,7 @@
 import Foundation
 import SwiftData
 
-/// Модель траты в определенной локации с указанием суммы, категории и способа оплаты.
+/// Трата локации или общая трата поездки с суммой, категорией и способом оплаты.
 @Model
 class Expense {
     // MARK: - Свойства
@@ -53,6 +53,9 @@ class Expense {
     
     /// Локация, в которой совершена трата.
     var location: Location?
+
+    /// Прямая связь с поездкой только для общей траты без локации.
+    var trip: Trip?
     
     /// Географическая широта места траты.
     var latitude: Double?
@@ -91,7 +94,8 @@ class Expense {
     ///   - exchangeAdjustment: Корректировка курса.
     ///   - categoryRaw: Сырое значение категории.
     ///   - subcategoryRaw: Сырое значение подкатегории.
-    ///   - location: Локация траты.
+    ///   - location: Локация обычной траты; отсутствует у общей траты.
+    ///   - trip: Поездка общей траты; отсутствует у траты локации.
     ///   - latitude: Географическая широта места траты.
     ///   - longitude: Географическая долгота места траты.
     ///   - horizontalAccuracy: Точность определения координат в метрах.
@@ -112,7 +116,8 @@ class Expense {
         exchangeAdjustment: Double,
         categoryRaw: String,
         subcategoryRaw: String,
-        location: Location,
+        location: Location? = nil,
+        trip: Trip? = nil,
         latitude: Double?,
         longitude: Double?,
         horizontalAccuracy: Double?,
@@ -137,6 +142,7 @@ class Expense {
         self.categoryRaw = categoryRaw
         self.subcategoryRaw = subcategoryRaw
         self.location = location
+        self.trip = trip
         self.latitude = latitude
         self.longitude = longitude
         self.horizontalAccuracy = horizontalAccuracy

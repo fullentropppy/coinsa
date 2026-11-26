@@ -27,7 +27,7 @@ struct EventAnalyticsLocationsBody: View {
     // MARK: - Инициализация
 
     /// Создает содержимое вкладки локаций для аналитики поездки.
-    /// - Parameter viewModel: ViewModel с локациями и суммами в домашней валюте поездки.
+    /// - Parameter viewModel: Локации и их суммы в домашней валюте поездки.
     init(viewModel: EventAnalyticsViewModel) {
         self.viewModel = viewModel
     }
@@ -74,7 +74,7 @@ struct EventAnalyticsLocationsBody: View {
 
     private func locationsListSection(slices: [EventLocationAnalyticsSlice], colorOrder: [EventLocationAnalyticsSlice]) -> some View {
         Section {
-            if slices.count > 1 || slices.contains(where: { $0.location.totalDays > 1 }) {
+            if slices.count > 1 || slices.contains(where: { $0.totalDays > 1 }) {
                 Picker(selection: $showsDailyAmounts) {
                     Text(.analyticsAmountModeTotal).tag(false)
                     Text(.analyticsAmountModePerDay).tag(true)
@@ -155,6 +155,20 @@ struct EventAnalyticsLocationsBody: View {
     NavigationStack {
         List {
             EventAnalyticsLocationsBody(viewModel: EventAnalyticsViewModel(data: preview.analyticsData))
+        }
+    }
+    .modelContainer(preview.container)
+    .environment(preview.settingsStore)
+}
+
+#Preview("Without locations") {
+    @Previewable @State var preview = TripPreviewData(includeExpenses: true)
+
+    NavigationStack {
+        List {
+            EventAnalyticsLocationsBody(
+                viewModel: EventAnalyticsViewModel(data: TripDetailViewModel(trip: preview.trip).eventAnalyticsData)
+            )
         }
     }
     .modelContainer(preview.container)

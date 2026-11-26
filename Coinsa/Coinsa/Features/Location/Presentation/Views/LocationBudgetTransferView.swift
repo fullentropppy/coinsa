@@ -85,32 +85,15 @@ struct LocationBudgetTransferView: View {
     }
 
     private var destinationSections: some View {
-        let groups = viewModel.groupedLocations
-
-        return Group {
-            GroupHeader(
-                icon: Location.primaryIcon,
-                title: .locationBudgetTransferRecipientLocations,
-                itemCount: groups.reduce(0) { $0 + $1.locations.count }
-            )
-            .listRowBackground(Color.clear)
-            
-            ForEach(groups, id: \.status) { group in
-                Section(group.status.safeLocalizedResourcePlural) {
-                    ForEach(group.locations) { location in
-                        Button {
-                            haptics.trigger(.warning)
-                            viewModel.select(location)
-                        } label: {
-                            LocationRowView(location, showsBudgetBalance: true)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .contentShape(Rectangle())
-                        }
-                        .buttonStyle(.plain)
-                        .disabled(!viewModel.canTransfer)
-                    }
-                }
-            }
+        LocationDestinationSections(
+            groups: viewModel.groupedLocations,
+            title: .locationBudgetTransferRecipientLocations,
+            icon: AppSymbols.trayAndArrowDown,
+            showsBudgetBalance: true,
+            isEnabled: viewModel.canTransfer
+        ) { location in
+            haptics.trigger(.warning)
+            viewModel.select(location)
         }
     }
 

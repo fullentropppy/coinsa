@@ -62,7 +62,11 @@ struct LocationGroupedExpensesSections: View {
                         }
                     } header: {
                         if showsLocationNames {
-                            Text(group.location.name)
+                            if let location = group.location {
+                                Text(location.name)
+                            } else {
+                                Text(.tripGeneralExpenses)
+                            }
                         }
                     }
                 }

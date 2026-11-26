@@ -14,7 +14,7 @@ nonisolated struct DataTransferArchive: Codable, Equatable, Sendable {
     // MARK: - Свойства
 
     var format = "ru.dgritsenko.coinsa.archive"
-    var schemaVersion = 2
+    var schemaVersion = 3
     var exportedAt: Date
     var appVersion: String
     var appBuild: String
@@ -31,6 +31,7 @@ nonisolated struct DataTransferArchive: Codable, Equatable, Sendable {
         var startDate: String
         var endDate: String
         var homeCurrencyCode: String
+        var generalExpensesBudget: Double = 0
         var createdAt: Date
         var updatedAt: Date
     }
@@ -53,7 +54,8 @@ nonisolated struct DataTransferArchive: Codable, Equatable, Sendable {
     /// Полный снимок траты с независимыми гражданскими компонентами и метаданными момента.
     struct ExpenseRecord: Codable, Equatable, Identifiable, Sendable {
         var id: UUID
-        var locationID: UUID
+        @RequiredNullable var locationID: UUID?
+        @RequiredNullable var tripID: UUID? = nil
         var civilDateTime: String
         @RequiredNullable var actualDate: Date?
         @RequiredNullable var timeZoneID: String?
@@ -75,13 +77,32 @@ nonisolated struct DataTransferArchive: Codable, Equatable, Sendable {
     }
 }
 
+extension DataTransferArchive.TripRecord {
+    /// Читает поездку; в файлах до версии 3 бюджет общих трат отсутствует.
+    /// - Parameter decoder: Декодер записи поддерживаемой версии файла.
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(UUID.self, forKey: .id)
+        name = try container.decode(String.self, forKey: .name)
+        startDate = try container.decode(String.self, forKey: .startDate)
+        endDate = try container.decode(String.self, forKey: .endDate)
+        homeCurrencyCode = try container.decode(String.self, forKey: .homeCurrencyCode)
+        generalExpensesBudget = container.contains(.generalExpensesBudget)
+            ? try container.decode(Double.self, forKey: .generalExpensesBudget) : 0
+        createdAt = try container.decode(Date.self, forKey: .createdAt)
+        updatedAt = try container.decode(Date.self, forKey: .updatedAt)
+    }
+}
+
 extension DataTransferArchive.ExpenseRecord {
     /// Читает снимок траты, сохраняя прежний дневной учет для файлов без нового признака.
     /// - Parameter decoder: Декодер записи из поддерживаемой версии файла.
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         id = try container.decode(UUID.self, forKey: .id)
-        locationID = try container.decode(UUID.self, forKey: .locationID)
+        _locationID = try container.decode(RequiredNullable<UUID>.self, forKey: .locationID)
+        _tripID = container.contains(.tripID)
+            ? try container.decode(RequiredNullable<UUID>.self, forKey: .tripID) : RequiredNullable(wrappedValue: nil)
         civilDateTime = try container.decode(String.self, forKey: .civilDateTime)
         _actualDate = try container.decode(RequiredNullable<Date>.self, forKey: .actualDate)
         _timeZoneID = try container.decode(RequiredNullable<String>.self, forKey: .timeZoneID)
@@ -191,12 +212,20 @@ nonisolated enum DataTransferCodec {
             guard header?["format"] as? String == "ru.dgritsenko.coinsa.archive" else {
                 throw DataTransferError.invalidFile
             }
-            guard let version = header?["schemaVersion"] as? Int, (1...2).contains(version) else {
+            guard let version = header?["schemaVersion"] as? Int, (1...3).contains(version) else {
                 throw DataTransferError.unsupportedVersion
             }
-            if version == 2, let expenses = header?["expenses"] as? [[String: Any]],
+            if version >= 2, let expenses = header?["expenses"] as? [[String: Any]],
                expenses.contains(where: { $0["isExcludedFromDailySpending"] == nil }) {
                 throw DataTransferError.invalidFile
+            }
+            if version == 3 {
+                guard let trips = header?["trips"] as? [[String: Any]],
+                      let expenses = header?["expenses"] as? [[String: Any]],
+                      trips.allSatisfy({ $0["generalExpensesBudget"] != nil }),
+                      expenses.allSatisfy({ $0["tripID"] != nil }) else {
+                    throw DataTransferError.invalidFile
+                }
             }
             archive = try JSONDecoder().decode(DataTransferArchive.self, from: data)
         } catch let error as DataTransferError {

@@ -39,6 +39,14 @@ struct EventAnalyticsViewModel {
         data.expensesAmountByCategory.reduce(0) { $0 + $1.homeAmount }
     }
 
+    var locationsExpensesTotalHomeAmount: Double {
+        homeAmount(for: data.expenses.filter { $0.location != nil && $0.owningTrip != nil })
+    }
+
+    var locationsDailyHomeExpensesAmount: Double {
+        locationsExpensesTotalHomeAmount / totalDayDivisor
+    }
+
     var dailyHomeBudgetAmount: Double {
         data.baseBudget / totalDayDivisor
     }
@@ -188,16 +196,20 @@ struct EventAnalyticsViewModel {
     // MARK: - Вычисляемые свойства. Аналитика локаций
 
     var locationSlices: [EventLocationAnalyticsSlice] {
-        (data.locations ?? []).sorted {
+        let expensesByLocation = Dictionary(grouping: data.expenses.filter {
+            $0.location != nil && $0.owningTrip != nil
+        }) { $0.location?.id }
+        return (data.locations ?? []).sorted {
             if $0.startPlainDate != $1.startPlainDate {
                 return $0.startPlainDate < $1.startPlainDate
             }
             return $0.id.uuidString < $1.id.uuidString
         }.map { location in
-            EventLocationAnalyticsSlice(
+            let expenses = expensesByLocation[location.id] ?? []
+            return EventLocationAnalyticsSlice(
                 location: location,
-                homeAmount: location.calculateExpensesAmount(in: .home),
-                expenseCount: location.expensesCount
+                homeAmount: homeAmount(for: expenses),
+                expenseCount: expenses.count
             )
         }
     }
@@ -205,7 +217,7 @@ struct EventAnalyticsViewModel {
     // MARK: - Публичные методы
 
     func displayedLocationSlices(from slices: [EventLocationAnalyticsSlice], asDailyAverage: Bool) -> [EventLocationAnalyticsSlice] {
-        slices.sorted {
+        slices.filter { $0.expenseCount > 0 }.sorted {
             let firstAmount = $0.amount(asDailyAverage: asDailyAverage)
             let secondAmount = $1.amount(asDailyAverage: asDailyAverage)
             if firstAmount != secondAmount {
@@ -253,7 +265,7 @@ struct EventAnalyticsViewModel {
         case .summary: true
         case .days: totalDays > 1 && expensesTotalHomeAmount > 0
         case .categories: !displayedSlicesSortedByID(for: metric).isEmpty
-        case .locations: data.locations != nil
+        case .locations: data.locations?.isEmpty == false
         }
     }
 

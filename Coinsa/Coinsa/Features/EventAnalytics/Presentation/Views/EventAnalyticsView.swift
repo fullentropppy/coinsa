@@ -122,8 +122,10 @@ struct EventAnalyticsView: View {
             EventAnalyticsSummaryHeader(viewModel: viewModel)
         case .days:
             EventAnalyticsDaysHeader(viewModel: viewModel)
-        case .categories, .locations:
+        case .categories:
             EventAnalyticsExpensesHeader(viewModel: viewModel)
+        case .locations:
+            EventAnalyticsExpensesHeader(viewModel: viewModel, excludesGeneralExpenses: true)
         }
     }
 }

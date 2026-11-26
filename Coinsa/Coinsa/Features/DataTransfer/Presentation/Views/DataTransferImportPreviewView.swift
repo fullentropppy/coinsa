@@ -142,7 +142,7 @@ struct DataTransferImportPreviewView: View {
             } label: {
                 HStack {
                     Image(systemName: AppSymbols.squareAndArrowDown)
-                        .padding(.bottom, ViewLayout.Label.squareArrowIconBottomInset)
+                        .padding(.bottom, ViewLayout.Label.arrowIconBottomInset)
                     Text(.dataTransferImport)
                 }
             }

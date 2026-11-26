@@ -54,8 +54,8 @@ enum ViewLayout {
         static let iconSpacing: CGFloat = 4
         /// Интервал между компактной иконкой счетчика или действия и текстом.
         static let compactIconSpacing: CGFloat = 2
-        /// Нижний отступ символов квадрата со стрелкой для визуального выравнивания с текстом кнопки.
-        static let squareArrowIconBottomInset: CGFloat = 4
+        /// Нижний отступ символов со стрелкой над квадратом или лотком для визуального выравнивания с текстом.
+        static let arrowIconBottomInset: CGFloat = 3
         /// Ширина колонки иконок категорий, подкатегорий, способов оплаты и др. в формах.
         static let formIconWidth: CGFloat = 24
         /// Ширина служебных элементов рядом с полем ввода: процента, переключателя и обновления.

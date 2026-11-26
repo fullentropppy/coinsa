@@ -41,6 +41,7 @@ struct ExpenseDetailView: View {
     
     @State private var isShowingExpenseEdit = false
     @State private var isShowingExpenseCopy = false
+    @State private var isShowingExpenseMove = false
     @State private var isShowingDeleteConfirmation = false
     @State private var isShowingDeletionError = false
     @State private var isShowingMap = false
@@ -110,7 +111,10 @@ struct ExpenseDetailView: View {
                 }
             }
             .sheet(isPresented: $isShowingExpenseCopy) {
-                ExpenseCopyView(source: expense)
+                ExpenseDestinationView(source: expense)
+            }
+            .sheet(isPresented: $isShowingExpenseMove) {
+                ExpenseDestinationView(source: expense, mode: .move)
             }
             .deleteConfirmationAlert(
                 isPresented: $isShowingDeleteConfirmation,
@@ -323,6 +327,13 @@ struct ExpenseDetailView: View {
             }, onDelete: {
                 isShowingDeleteConfirmation = true
             }) {
+                Button {
+                    haptics.trigger(.tap)
+                    isShowingExpenseMove = true
+                } label: {
+                    Label(.expenseMoveAction, systemImage: AppSymbols.arrowForwardToLine)
+                }
+                .disabled(!viewModel.canMove)
                 Button {
                     haptics.trigger(.tap)
                     isShowingExpenseCopy = true

@@ -7,23 +7,22 @@
 
 import Foundation
 
-/// Траты одной локации в домашней валюте поездки.
+/// Доля трат одной локации в домашней валюте поездки.
 struct EventLocationAnalyticsSlice: Identifiable {
-    // MARK: - Хранимые свойства
+    // MARK: - Свойства
 
     let location: Location
     let homeAmount: Double
     let expenseCount: Int
 
-    // MARK: - Вычисляемые свойства
-
     var id: UUID { location.id }
+    var totalDays: Int { location.totalDays }
 
-    // MARK: - Публичные методы
+    // MARK: - Методы
 
-    /// Возвращает общую сумму или среднее за календарные дни самой локации.
+    /// Возвращает сумму трат или среднее за календарные дни локации.
     /// - Parameter asDailyAverage: Делить сумму на длительность локации с включением обеих дат.
     func amount(asDailyAverage: Bool) -> Double {
-        asDailyAverage ? homeAmount / max(Double(location.totalDays), 1) : homeAmount
+        asDailyAverage ? homeAmount / max(Double(totalDays), 1) : homeAmount
     }
 }

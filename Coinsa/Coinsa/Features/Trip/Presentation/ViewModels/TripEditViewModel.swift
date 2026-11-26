@@ -42,14 +42,16 @@ final class TripEditViewModel {
     var validationMessage: LocalizedStringResource? {
         if name.isBlank {
             .validationTripNameRequired
+        } else if !generalExpensesBudget.isFinite || generalExpensesBudget < 0 {
+            .validationTripGeneralExpensesBudgetInvalid
         } else {
             nil
         }
     }
 
-    var hasLocations: Bool {
+    var isHomeCurrencyLocked: Bool {
         guard let trip, !trip.isDeleted, trip.modelContext != nil else { return false }
-        return trip.hasLocations
+        return !trip.canChangeHomeCurrency
     }
     
     var totalDays: Int {
@@ -68,6 +70,7 @@ final class TripEditViewModel {
     }
     var endDate: Date
     var homeCurrency: Currency
+    var generalExpensesBudget: Double
     
     // MARK: - Инициализация
 
@@ -79,7 +82,8 @@ final class TripEditViewModel {
             name: "",
             startDate: PlainDate.today.storedDate,
             endDate: PlainDate.today.storedDate,
-            homeCurrency: homeCurrency
+            homeCurrency: homeCurrency,
+            generalExpensesBudget: 0
         )
     }
     
@@ -93,7 +97,8 @@ final class TripEditViewModel {
             name: trip.name,
             startDate: trip.startPlainDate.storedDate,
             endDate: trip.endPlainDate.storedDate,
-            homeCurrency: trip.homeCurrency
+            homeCurrency: trip.homeCurrency,
+            generalExpensesBudget: trip.generalExpensesBudget
         )
     }
 
@@ -104,24 +109,28 @@ final class TripEditViewModel {
     ///   - startDate: Начальная календарная дата поездки.
     ///   - endDate: Конечная календарная дата поездки.
     ///   - homeCurrency: Домашняя валюта черновика.
+    ///   - generalExpensesBudget: Начальный бюджет общих трат в домашней валюте.
     private init(
         trip: Trip?,
         name: String,
         startDate: Date,
         endDate: Date,
-        homeCurrency: Currency
+        homeCurrency: Currency,
+        generalExpensesBudget: Double
     ) {
         self.trip = trip
         self.name = name
         self.startDate = startDate
         self.endDate = endDate
         self.homeCurrency = homeCurrency
+        self.generalExpensesBudget = generalExpensesBudget
         
         self.initialSnapshot = Snapshot(
             name: name,
             startDate: startDate,
             endDate: endDate,
-            homeCurrency: homeCurrency
+            homeCurrency: homeCurrency,
+            generalExpensesBudget: generalExpensesBudget
         )
     }
     
@@ -134,14 +143,17 @@ final class TripEditViewModel {
                 name: name,
                 startDate: startDate,
                 endDate: endDate,
-                homeCurrency: homeCurrency
+                homeCurrency: homeCurrency,
+                generalExpensesBudget: generalExpensesBudget,
+                expectedHomeCurrency: initialSnapshot.homeCurrency
             )
         } else {
             try repository.add(
                 name: name,
                 startDate: startDate,
                 endDate: endDate,
-                homeCurrency: homeCurrency
+                homeCurrency: homeCurrency,
+                generalExpensesBudget: generalExpensesBudget
             )
         }
     }
@@ -158,25 +170,35 @@ private extension TripEditViewModel {
         let startDate: Date
         let endDate: Date
         let homeCurrency: Currency
+        let generalExpensesBudget: Double
 
         // MARK: - Инициализация
 
         /// Фиксирует текущее состояние редактора поездки для сравнения изменений.
+        /// - Parameter viewModel: Черновик с бюджетом общих трат и остальными полями поездки.
         init(viewModel: TripEditViewModel) {
             self.init(
                 name: viewModel.name,
                 startDate: viewModel.startDate,
                 endDate: viewModel.endDate,
-                homeCurrency: viewModel.homeCurrency
+                homeCurrency: viewModel.homeCurrency,
+                generalExpensesBudget: viewModel.generalExpensesBudget
             )
         }
         
         /// Создает снимок поездки, удаляя крайние пробелы из названия.
-        init(name: String, startDate: Date, endDate: Date, homeCurrency: Currency) {
+        /// - Parameters:
+        ///   - name: Название поездки.
+        ///   - startDate: Начальная гражданская дата.
+        ///   - endDate: Конечная гражданская дата.
+        ///   - homeCurrency: Домашняя валюта.
+        ///   - generalExpensesBudget: Бюджет общих трат.
+        init(name: String, startDate: Date, endDate: Date, homeCurrency: Currency, generalExpensesBudget: Double) {
             self.name = name.trimmed
             self.startDate = startDate
             self.endDate = endDate
             self.homeCurrency = homeCurrency
+            self.generalExpensesBudget = generalExpensesBudget
         }
     }
 }

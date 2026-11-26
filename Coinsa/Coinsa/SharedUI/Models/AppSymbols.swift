@@ -165,6 +165,7 @@ enum AppSymbols {
     static let ticketFill = "ticket.fill"
     static let tram = "tram"
     static let tramFill = "tram.fill"
+    static let trayAndArrowDown = "tray.and.arrow.down"
     static let trash = "trash"
     static let tree = "tree"
     static let treeFill = "tree.fill"

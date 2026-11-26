@@ -14,6 +14,7 @@ struct TripFormView: View {
 
     @Bindable private var viewModel: TripEditViewModel
     private let isNameFocused: FocusState<Bool>.Binding
+    private let focusedField: FocusState<NumericEditField?>.Binding
     private let onDelete: () -> Void
 
     // MARK: - Инициализация
@@ -22,14 +23,17 @@ struct TripFormView: View {
     /// - Parameters:
     ///   - viewModel: Общий черновик поездки.
     ///   - isNameFocused: Фокус названия, принадлежащий контейнеру.
+    ///   - focusedField: Фокус числового поля бюджета, принадлежащий контейнеру.
     ///   - onDelete: Запрос подтверждения удаления.
     init(
         viewModel: TripEditViewModel,
         isNameFocused: FocusState<Bool>.Binding,
+        focusedField: FocusState<NumericEditField?>.Binding,
         onDelete: @escaping () -> Void
     ) {
         self.viewModel = viewModel
         self.isNameFocused = isNameFocused
+        self.focusedField = focusedField
         self.onDelete = onDelete
     }
 
@@ -40,6 +44,7 @@ struct TripFormView: View {
             titleSection
             rangeSection
             currencySection
+            budgetSection
             actionsSection
         }
     }
@@ -97,7 +102,7 @@ struct TripFormView: View {
                 title: .tripHomeCurrency,
                 selection: homeCurrencyBinding,
                 sections: Currency.pickerSections(homeCurrency: viewModel.homeCurrency),
-                isDisabled: viewModel.hasLocations
+                isDisabled: viewModel.isHomeCurrencyLocked
             ) { currency in
                 CurrencyCodeText.standard(currency)
             }
@@ -106,6 +111,26 @@ struct TripFormView: View {
         }
     }
     
+    private var budgetSection: some View {
+        Section {
+            LabeledContent(.tripGeneralExpensesBudget) {
+                HStack {
+                    NumericInputField(
+                        $viewModel.generalExpensesBudget,
+                        focusedField: focusedField,
+                        focusID: .budget,
+                        fractionDigits: 2,
+                        font: .body.monospacedDigit(),
+                        textAlignment: .trailing
+                    )
+                    CurrencyCodeText.standard(viewModel.homeCurrency)
+                }
+            }
+        } footer: {
+            Text(.tripGeneralExpensesBudgetHint)
+        }
+    }
+
     @ViewBuilder
     private var actionsSection: some View {
         if viewModel.isEditing {
@@ -139,6 +164,7 @@ private struct TripFormPreview: View {
     let preview: TripPreviewData
 
     @FocusState private var isNameFocused: Bool
+    @FocusState private var focusedField: NumericEditField?
 
     var body: some View {
         if let viewModel = preview.viewModel {
@@ -146,10 +172,12 @@ private struct TripFormPreview: View {
                 TripFormView(
                     viewModel: viewModel,
                     isNameFocused: $isNameFocused,
+                    focusedField: $focusedField,
                     onDelete: {}
                 )
-                .keyboardInputBar(isPresented: isNameFocused) {
+                .keyboardInputBar(isPresented: isNameFocused || focusedField != nil) {
                     isNameFocused = false
+                    focusedField = nil
                 }
             }
             .modelContainer(preview.container)

@@ -33,7 +33,7 @@ struct LocationGroupedExpensesViewModel: Equatable {
         // MARK: - Хранимые свойства
 
         let id: UUID
-        let location: Location
+        let location: Location?
         let expenses: [Expense]
     }
 
@@ -55,10 +55,11 @@ struct LocationGroupedExpensesViewModel: Equatable {
     // MARK: - Вычисляемые свойства
 
     var expenseGroups: [Group] {
-        let grouped = Dictionary(grouping: sourceExpenses.filter(filter.includes)) { $0.location?.id }
+        let grouped = Dictionary(grouping: sourceExpenses.filter(filter.includes)) { $0.location?.id ?? $0.owningTrip?.id }
 
         let entries: [LocationSortEntry] = grouped.values.compactMap { expenses in
-            guard let location = expenses.first?.location else { return nil }
+            guard let first = expenses.first, let trip = first.owningTrip else { return nil }
+            let location = first.location
 
             let entries = expenses.map { expense in
                 (expense: expense, date: expense.civilDateTime.storedDate, id: expense.id.uuidString)
@@ -71,15 +72,18 @@ struct LocationGroupedExpensesViewModel: Equatable {
             }.map(\.expense)
 
             return LocationSortEntry(
-                group: Group(id: location.id, location: location, expenses: sortedExpenses),
-                startDate: location.startPlainDate,
-                endDate: location.endPlainDate,
-                updatedAt: location.updatedAt,
-                id: location.id.uuidString
+                group: Group(id: location?.id ?? trip.id, location: location, expenses: sortedExpenses),
+                startDate: location?.startPlainDate ?? trip.startPlainDate,
+                endDate: location?.endPlainDate ?? trip.endPlainDate,
+                updatedAt: location?.updatedAt ?? trip.updatedAt,
+                id: (location?.id ?? trip.id).uuidString
             )
         }
 
         return entries.sorted {
+            if ($0.group.location == nil) != ($1.group.location == nil) {
+                return $0.group.location == nil
+            }
             if $0.startDate != $1.startDate {
                 return $0.startDate > $1.startDate
             }

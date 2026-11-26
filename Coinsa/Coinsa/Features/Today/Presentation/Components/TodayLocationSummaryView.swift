@@ -16,13 +16,16 @@ struct TodayLocationSummaryView: View {
 
     // MARK: - Свойства
 
+    private let onShowLocation: () -> Void
+    private let onShowAnalytics: () -> Void
+    
     let location: Location
     let locations: [Location]
-    @Binding var selectedLocationID: UUID
     let summary: EventSummaryData
     let rateLocationToHome: Double
-    let day: PlainDate
     let hasDayExpenses: Bool
+    
+    @Binding var selectedLocationID: UUID
 
     // MARK: - Вычисляемые свойства
 
@@ -39,24 +42,27 @@ struct TodayLocationSummaryView: View {
     ///   - selectedLocationID: Привязка выбранной локации; изменение переключателя передает новый идентификатор экрану.
     ///   - summary: Подготовленные суммы бюджета, расходов и остатка выбранной локации.
     ///   - rateLocationToHome: Справочный курс в единицах домашней валюты за единицу валюты локации.
-    ///   - day: Календарный день экрана «Сегодня» для перехода к дневной аналитике.
     ///   - hasDayExpenses: Есть ли у выбранной локации траты за указанный день.
+    ///   - onShowLocation: Переход к выбранной локации.
+    ///   - onShowAnalytics: Переход к дневной аналитике выбранной локации.
     init(
         location: Location,
         locations: [Location],
         selectedLocationID: Binding<UUID>,
         summary: EventSummaryData,
         rateLocationToHome: Double,
-        day: PlainDate,
-        hasDayExpenses: Bool
+        hasDayExpenses: Bool,
+        onShowLocation: @escaping () -> Void,
+        onShowAnalytics: @escaping () -> Void
     ) {
         self.location = location
         self.locations = locations
         _selectedLocationID = selectedLocationID
         self.summary = summary
         self.rateLocationToHome = rateLocationToHome
-        self.day = day
         self.hasDayExpenses = hasDayExpenses
+        self.onShowLocation = onShowLocation
+        self.onShowAnalytics = onShowAnalytics
     }
 
     // MARK: - Тело View
@@ -79,22 +85,21 @@ struct TodayLocationSummaryView: View {
                     .pickerStyle(.segmented)
                 }
 
-                contextContent(location: location)
-                
                 EventSummaryView(
                     data: summary,
                     showsHeader: false,
                     showsBudgetIfZero: location.hasBudget
                 )
             }
-            if hasDayExpenses {
-                AnalyticsNavigationLink { [location, day] in
-                    EventDayExpensesView(
-                        date: day,
-                        data: LocationDetailViewModel(location: location).eventAnalyticsData,
-                        screenContextSubtitle: location.screenContextSubtitle
-                    )
+            HStack {
+                DetailNavigationButton.location(action: onShowLocation)
+                if hasDayExpenses {
+                    DetailNavigationButton.analytics(action: onShowAnalytics)
                 }
+            }
+        } footer: {
+            if location.locationCurrency != location.homeCurrency {
+                exchangeRates
             }
         }
         .listRowBackground(
@@ -105,46 +110,25 @@ struct TodayLocationSummaryView: View {
 
     // MARK: - Компоненты
 
-    private func contextContent(location: Location) -> some View {
-        NavigationLink {
-            LocationDetailView(location)
-        } label: {
-            HStack(alignment: .center) {
-                if location.homeCurrency == location.locationCurrency {
-                    Text("\(location.name) • \(location.trip?.name ?? "")")
-                        .font(.subheadline)
-                } else {
-                    exchangeRatesContent(location: location)
-                }
-                Spacer()
-                AppIcon(Location.primaryIcon, style: .navigationLabel)
-                    
-            }
-            .foregroundStyle(.secondary)
-        }
-    }
-    
-    private func exchangeRatesContent(location: Location) -> some View {
-        HStack {
-            AppIcon(AppSymbols.arrowLeftArrowRight, style: .navigationLabel)
-            
-            VStack(alignment: .leading) {
-                Text(
-                    .todayExchangeRateOf(
-                        baseCurrencyCode: location.locationCurrencyCode,
-                        rateBaseToQuote: rateLocationToHome.numberFormat(fractionLength: 4),
-                        quoteCurrencyCode: location.trip?.baseCurrencyCode ?? ""
-                    )
+    private var exchangeRates: some View {
+        HStack{
+            Text(
+                .todayExchangeRateOf(
+                    baseCurrencyCode: location.locationCurrencyCode,
+                    rateBaseToQuote: rateLocationToHome.numberFormat(fractionLength: 4),
+                    quoteCurrencyCode: location.trip?.baseCurrencyCode ?? ""
                 )
-                Text(
-                    .todayExchangeRateOf(
-                        baseCurrencyCode: location.trip?.baseCurrencyCode ?? "",
-                        rateBaseToQuote: rateHomeToLocation.numberFormat(fractionLength: 4),
-                        quoteCurrencyCode: location.locationCurrencyCode
-                    )
+            )
+            DotDivider()
+            Text(
+                .todayExchangeRateOf(
+                    baseCurrencyCode: location.trip?.baseCurrencyCode ?? "",
+                    rateBaseToQuote: rateHomeToLocation.numberFormat(fractionLength: 4),
+                    quoteCurrencyCode: location.locationCurrencyCode
                 )
-            }
-            .font(.caption)
+            )
         }
+        .frame(maxWidth: .infinity)
+        .frame(alignment: .center)
     }
 }

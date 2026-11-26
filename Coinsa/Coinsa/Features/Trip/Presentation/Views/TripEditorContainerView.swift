@@ -25,6 +25,7 @@ struct TripEditorContainerView: View {
     @State private var isSaving = false
 
     @FocusState private var isNameFocused: Bool
+    @FocusState private var focusedField: NumericEditField?
     
     // MARK: - Зависимости
     
@@ -60,8 +61,9 @@ struct TripEditorContainerView: View {
                 }
                 .interactiveDismissDisabled(true)
                 .scrollDismissesKeyboard(.interactively)
-                .keyboardInputBar(isPresented: isNameFocused) {
+                .keyboardInputBar(isPresented: isNameFocused || focusedField != nil) {
                     isNameFocused = false
+                    focusedField = nil
                 }
                 .formValidationBanner($validationNotice)
                 .notificationAlert(
@@ -90,6 +92,7 @@ struct TripEditorContainerView: View {
         TripFormView(
             viewModel: viewModel,
             isNameFocused: $isNameFocused,
+            focusedField: $focusedField,
             onDelete: requestDelete
         )
     }
@@ -128,6 +131,7 @@ struct TripEditorContainerView: View {
         guard !isSaving else { return }
         isSaving = true
         isNameFocused = false
+        focusedField = nil
 
         DispatchQueue.main.asyncAfter(deadline: .now() + ViewLayout.Editor.saveAfterKeyboardDismissDelay) {
             defer { isSaving = false }
@@ -145,6 +149,10 @@ struct TripEditorContainerView: View {
                     switch repositoryError {
                     case .tripUnavailable:
                         storageErrorMessage = .tripEditorUnavailableMessage
+                    case .invalidGeneralExpensesBudget:
+                        storageErrorMessage = .validationTripGeneralExpensesBudgetInvalid
+                    case .homeCurrencyChanged:
+                        storageErrorMessage = .tripStorageErrorHomeCurrencyChangedMessage
                     case .homeCurrencyLocked:
                         if let trip = viewModel.trip, !trip.isDeleted, trip.modelContext === context {
                             viewModel.homeCurrency = trip.homeCurrency

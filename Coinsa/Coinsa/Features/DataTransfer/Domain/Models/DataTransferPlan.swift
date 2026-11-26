@@ -62,19 +62,32 @@ nonisolated struct DataTransferPlan: Equatable, Sendable {
             }
         }
         for expense in source.expenses {
-            guard localExpenses[expense.id].map({ $0.locationID == expense.locationID }) != false else {
+            guard localExpenses[expense.id].map({ local in
+                let localTripID = local.tripID ?? local.locationID.flatMap { localLocations[$0]?.tripID }
+                let sourceTripID = expense.tripID ?? expense.locationID.flatMap { sourceLocations[$0]?.tripID }
+                return localTripID == sourceTripID
+            }) != false else {
                 throw DataTransferError.invalidRelationships
             }
         }
 
-        trips = Self.classify(source.trips, local: localTrips, updatedAt: \.updatedAt, createdAt: \.createdAt)
+        let incomingTrips = source.trips.map { record in
+            var record = record
+            if source.schemaVersion < 3, let local = localTrips[record.id] {
+                record.generalExpensesBudget = local.generalExpensesBudget
+            }
+            return record
+        }
+        trips = Self.classify(incomingTrips, local: localTrips, updatedAt: \.updatedAt, createdAt: \.createdAt)
         locations = Self.classify(source.locations, local: localLocations, updatedAt: \.updatedAt, createdAt: \.createdAt)
         expenses = Self.classify(source.expenses, local: localExpenses, updatedAt: \.updatedAt, createdAt: \.createdAt)
 
         let tripsWithLocations = Set(baseline.locations.map(\.tripID))
-        let locationsWithExpenses = Set(baseline.expenses.map(\.locationID))
+        let tripsWithGeneralExpenses = Set(baseline.expenses.compactMap(\.tripID))
+        let locationsWithExpenses = Set(baseline.expenses.compactMap(\.locationID))
         guard trips.updates.allSatisfy({
-            !tripsWithLocations.contains($0.id) || localTrips[$0.id]?.homeCurrencyCode == $0.homeCurrencyCode
+            (!tripsWithLocations.contains($0.id) && !tripsWithGeneralExpenses.contains($0.id))
+                || localTrips[$0.id]?.homeCurrencyCode == $0.homeCurrencyCode
         }), locations.updates.allSatisfy({
             !locationsWithExpenses.contains($0.id) || localLocations[$0.id]?.locationCurrencyCode == $0.locationCurrencyCode
         }) else {
@@ -94,11 +107,17 @@ nonisolated struct DataTransferPlan: Equatable, Sendable {
             }
         }
         for expense in expenses.additions + expenses.updates {
-            guard let sourceLocation = sourceLocations[expense.locationID],
-                  let mergedLocation = mergedLocations[expense.locationID],
-                  mergedLocation.locationCurrencyCode == sourceLocation.locationCurrencyCode,
-                  mergedTrips[mergedLocation.tripID]?.homeCurrencyCode == sourceTrips[sourceLocation.tripID]?.homeCurrencyCode else {
-                throw DataTransferError.currencyConflict
+            if let locationID = expense.locationID {
+                guard let sourceLocation = sourceLocations[locationID],
+                      let mergedLocation = mergedLocations[locationID],
+                      mergedLocation.locationCurrencyCode == sourceLocation.locationCurrencyCode,
+                      mergedTrips[mergedLocation.tripID]?.homeCurrencyCode == sourceTrips[sourceLocation.tripID]?.homeCurrencyCode else {
+                    throw DataTransferError.currencyConflict
+                }
+            } else if let tripID = expense.tripID {
+                guard mergedTrips[tripID]?.homeCurrencyCode == sourceTrips[tripID]?.homeCurrencyCode else {
+                    throw DataTransferError.currencyConflict
+                }
             }
         }
     }

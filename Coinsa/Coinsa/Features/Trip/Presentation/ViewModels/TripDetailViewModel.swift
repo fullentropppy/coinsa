@@ -15,13 +15,21 @@ struct TripDetailViewModel {
     
     // MARK: - Вычисляемые свойства
     
+    var generalExpensesCount: Int {
+        trip.generalExpensesCount
+    }
+
     var showsFullHeader: Bool {
-        trip.hasLocations
+        trip.hasLocations || trip.hasGeneralExpenses || trip.generalExpensesBudget > 0
+    }
+
+    var showsAnalytics: Bool {
+        !trip.allExpenses.isEmpty
     }
     
     var eventHeaderData: EventSummaryData {
-        let budgetAmount = trip.calculateBudgetAmount(inHomeCurrency: true)
-        let expensesAmount = trip.calculateExpensesAmount(inHomeCurrency: true)
+        let budgetAmount = trip.calculateBudgetAmount()
+        let expensesAmount = trip.calculateExpensesAmount()
         
         return EventSummaryData(
             badgeProvider: Trip.self,
@@ -33,9 +41,9 @@ struct TripDetailViewModel {
     }
 
     var eventAnalyticsData: EventCategoryAnalyticsData {
-        let baseBudget = trip.calculateBudgetAmount(inHomeCurrency: true)
-        let expensesAmountByCategory = trip.calculateExpensesAmountByCategory(inHomeCurrency: true)
-        let expenses = trip.locations?.flatMap { $0.expenses ?? [] } ?? []
+        let baseBudget = trip.calculateBudgetAmount()
+        let expensesAmountByCategory = trip.calculateExpensesAmountByCategory()
+        let expenses = trip.allExpenses
 
         return EventCategoryAnalyticsData(
             title: trip.name,
