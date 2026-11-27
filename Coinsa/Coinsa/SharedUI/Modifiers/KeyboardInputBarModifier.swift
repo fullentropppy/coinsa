@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 /// Показывает панель очистки поля и закрытия клавиатуры с учетом настройки положения.
 struct KeyboardInputBarModifier: ViewModifier {
@@ -27,6 +28,10 @@ struct KeyboardInputBarModifier: ViewModifier {
 
     @FocusedValue(\.keyboardClearAction) private var clearAction
 
+    // MARK: - Состояние
+
+    @State private var isKeyboardVisible = false
+
     // MARK: - Свойства
     
     let isPresented: Bool
@@ -40,7 +45,7 @@ struct KeyboardInputBarModifier: ViewModifier {
                 edge: .bottom,
                 alignment: settingsStore.isFloatingButtonOnLeft ? .leading : .trailing
             ) {
-                if isPresented {
+                if isPresented && isKeyboardVisible {
                     HStack(alignment: .center, spacing: 0) {
                         if settingsStore.isFloatingButtonOnLeft {
                             dismissButton
@@ -56,6 +61,12 @@ struct KeyboardInputBarModifier: ViewModifier {
                     .padding(.horizontal, ViewLayout.FloatingControls.edgeInset)
                     .padding(.bottom, ViewLayout.FloatingControls.edgeInset)
                 }
+            }
+            .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { _ in
+                isKeyboardVisible = true
+            }
+            .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)) { _ in
+                isKeyboardVisible = false
             }
     }
 

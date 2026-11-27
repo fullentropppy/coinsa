@@ -20,13 +20,13 @@ enum ProgressBarPalette {
 
     /// Нижние включенные границы в процентах, от благоприятного состояния к критическому.
     private static let steps: [(minimumPercent: Double, color: Color)] = [
-        (90, plain),
-        (80, .Progress.step02),
-        (65, .Progress.step03),
-        (50, .Progress.step04),
-        (40, .Progress.step05),
-        (30, .Progress.step06),
-        (20, .Progress.step07),
+        (75, plain),
+        (60, .Progress.step02),
+        (45, .Progress.step03),
+        (35, .Progress.step04),
+        (25, .Progress.step05),
+        (20, .Progress.step06),
+        (15, .Progress.step07),
         (10, .Progress.step08),
         (5, .Progress.step09),
         (0, critical)
