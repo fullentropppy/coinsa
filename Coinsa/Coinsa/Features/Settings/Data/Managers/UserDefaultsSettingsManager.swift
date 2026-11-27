@@ -27,6 +27,11 @@ final class UserDefaultsSettingsManager {
         get { defaults.double(forKey: UserDefaultsKey.exchangeAdjustment) }
         set { defaults.set(newValue, forKey: UserDefaultsKey.exchangeAdjustment) }
     }
+
+    var cacheExchangeRates: Bool {
+        get { defaults.bool(forKey: UserDefaultsKey.cacheExchangeRates) }
+        set { defaults.set(newValue, forKey: UserDefaultsKey.cacheExchangeRates) }
+    }
     
     // MARK: - Автозагрузка/определение данных
     
@@ -121,9 +126,11 @@ final class UserDefaultsSettingsManager {
     // MARK: - Инициализация
     
     /// Инициализирует переданное хранилище настроек и регистрирует значения по умолчанию.
+    /// - Parameter defaults: Хранилище настроек; для превью и проверок используется отдельный suite.
     init(defaults: UserDefaults = .standard) {
         self.defaults = defaults
         defaults.register(defaults: [
+            UserDefaultsKey.cacheExchangeRates: true,
             UserDefaultsKey.fetchExpenseExchangeRateOnline: true,
             UserDefaultsKey.detectPlaceOfExpense: true,
             UserDefaultsKey.hapticFeedbackEnabled: true,
@@ -139,6 +146,7 @@ final class UserDefaultsSettingsManager {
 private enum UserDefaultsKey {
     static let homeCurrency = "homeCurrency"
     static let exchangeAdjustment = "exchangeAdjustment"
+    static let cacheExchangeRates = "cacheExchangeRates"
     static let fetchExpenseExchangeRateOnline = "fetchExpenseExchangeRateOnline"
     static let detectPlaceOfExpense = "detectPlaceOfExpense"
     static let showsLocationBudgetOnOverspend = "showsLocationBudgetOnOverspend"

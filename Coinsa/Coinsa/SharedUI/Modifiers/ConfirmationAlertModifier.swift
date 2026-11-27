@@ -18,7 +18,8 @@ struct ConfirmationAlertModifier: ViewModifier {
     let isPresented: Binding<Bool>
     let title: LocalizedStringResource
     let message: LocalizedStringResource
-    let destructiveButtonTitle: LocalizedStringResource
+    let confirmButtonTitle: LocalizedStringResource
+    let confirmButtonRole: ButtonRole?
     let onConfirm: () -> Void
     let hapticTypeOnConfirm: HapticType?
     let onCancel: (() -> Void)?
@@ -32,8 +33,9 @@ struct ConfirmationAlertModifier: ViewModifier {
     ///   - isPresented: Флаг отображения алерта.
     ///   - title: Заголовок.
     ///   - message: Сообщение.
-    ///   - destructiveButtonTitle: Текст деструктивной кнопки.
+    ///   - confirmButtonTitle: Текст кнопки подтверждения.
     ///   - onConfirm: Действие при подтверждении.
+    ///   - confirmButtonRole: Роль кнопки; по умолчанию обычное действие без деструктивного оформления.
     ///   - hapticTypeOnConfirm: Тактильный отклик при подтверждении.
     ///   - onCancel: Действие при отмене.
     ///   - hapticTypeOnCancel: Тактильный отклик при отмене.
@@ -42,8 +44,9 @@ struct ConfirmationAlertModifier: ViewModifier {
         isPresented: Binding<Bool>,
         title: LocalizedStringResource,
         message: LocalizedStringResource,
-        destructiveButtonTitle: LocalizedStringResource,
+        confirmButtonTitle: LocalizedStringResource,
         onConfirm: @escaping () -> Void,
+        confirmButtonRole: ButtonRole? = nil,
         hapticTypeOnConfirm: HapticType? = nil,
         onCancel: (() -> Void)? = nil,
         hapticTypeOnCancel: HapticType? = nil,
@@ -52,7 +55,8 @@ struct ConfirmationAlertModifier: ViewModifier {
         self.isPresented = isPresented
         self.title = title
         self.message = message
-        self.destructiveButtonTitle = destructiveButtonTitle
+        self.confirmButtonTitle = confirmButtonTitle
+        self.confirmButtonRole = confirmButtonRole
         self.onConfirm = onConfirm
         self.hapticTypeOnConfirm = hapticTypeOnConfirm
         self.onCancel = onCancel
@@ -65,7 +69,7 @@ struct ConfirmationAlertModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .alert(title, isPresented: isPresented) {
-                Button(destructiveButtonTitle, role: .destructive) {
+                Button(confirmButtonTitle, role: confirmButtonRole) {
                     if let hapticTypeOnConfirm {
                         haptics.trigger(hapticTypeOnConfirm)
                     }

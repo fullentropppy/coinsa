@@ -25,6 +25,10 @@ final class AppSettingsStore {
     var exchangeAdjustment: Double {
         didSet { userDefaultsManager.exchangeAdjustment = exchangeAdjustment }
     }
+
+    var cacheExchangeRates: Bool {
+        didSet { userDefaultsManager.cacheExchangeRates = cacheExchangeRates }
+    }
     
     // MARK: - Автозагрузка/определение данных
     
@@ -85,10 +89,12 @@ final class AppSettingsStore {
     // MARK: - Инициализация
     
     /// Создает хранилище настроек, загружая значения из переданного UserDefaults.
+    /// - Parameter defaults: Хранилище настроек; для превью и проверок используется отдельный suite.
     init(defaults: UserDefaults = .standard) {
         self.userDefaultsManager = UserDefaultsSettingsManager(defaults: defaults)
         self.homeCurrency = userDefaultsManager.homeCurrency
         self.exchangeAdjustment = userDefaultsManager.exchangeAdjustment
+        self.cacheExchangeRates = userDefaultsManager.cacheExchangeRates
         self.fetchExpenseExchangeRateOnline = userDefaultsManager.fetchExpenseExchangeRateOnline
         self.detectPlaceOfExpense = userDefaultsManager.detectPlaceOfExpense
         self.showsLocationBudgetOnOverspend = userDefaultsManager.showsLocationBudgetOnOverspend

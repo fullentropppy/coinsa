@@ -3678,13 +3678,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Exclude this expense from the daily spending total on the \"Today\" screen. Its amount is deducted from the budget when calculating the daily limit. The expense remains fully included in location and trip totals."
+            "value" : "Exclude this expense from the daily spending total on the “Today” screen. Its amount is deducted from the budget when calculating the daily limit. The expense remains fully included in location and trip totals."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Не включать трату в сумму дневных трат на экране \"Сегодня\". Ее сумма вычитается из бюджета при расчете дневного лимита. В итогах локации и поездки трата учитывается полностью."
+            "value" : "Не включать трату в сумму дневных трат на экране «Сегодня». Ее сумма вычитается из бюджета при расчете дневного лимита. В итогах локации и поездки трата учитывается полностью."
           }
         }
       }
@@ -6188,6 +6188,40 @@
         }
       }
     },
+    "settings.cacheExchangeRates" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cache exchange rates"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Кэшировать курсы обмена"
+          }
+        }
+      }
+    },
+    "settings.cacheExchangeRates.hint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reduce the number of network requests when downloading courses in editors, converter, and other application screens. Applies to automatic and manual downloads. A previously downloaded course can be used without the Internet for a while. When turned off, each request accesses the network."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сократить число сетевых запросов при загрузке курсов в редакторах, конвертере и на других экранах приложения. Действует на автоматическую и ручную загрузку. Ранее загруженный курс может некоторое время использоваться без интернета. При выключении каждый запрос обращается к сети."
+          }
+        }
+      }
+    },
     "settings.debug" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -7221,6 +7255,278 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Поездки"
+          }
+        }
+      }
+    },
+    "trip.ratesRefresh.action" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Update exchange rates"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Обновить курсы"
+          }
+        }
+      }
+    },
+    "trip.ratesRefresh.confirm" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Update"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Обновить"
+          }
+        }
+      }
+    },
+    "trip.ratesRefresh.confirmation.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exchange rates for the trip’s current and upcoming locations will be updated. Budgets and totals in location currencies will be recalculated. Amounts in the home currency and exchange rates of saved expenses will remain unchanged."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Курсы текущих и предстоящих локаций поездки будут обновлены. Бюджеты и итоги в валютах локаций будут пересчитаны. Суммы в домашней валюте и курсы сохраненных трат не изменятся."
+          }
+        }
+      }
+    },
+    "trip.ratesRefresh.confirmation.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Update exchange rates?"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Обновить курсы?"
+          }
+        }
+      }
+    },
+    "trip.ratesRefresh.error.dataChanged.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Location data changed while exchange rates were loading. The loaded rates have not been applied. Try again."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Данные локаций изменились во время загрузки курсов. Загруженные курсы не применены. Повторите попытку."
+          }
+        }
+      }
+    },
+    "trip.ratesRefresh.error.invalidRate.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The service returned an invalid exchange rate for these locations: %(locations)@. Try again."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сервис вернул некорректный курс для локаций: %(locations)@. Повторите попытку."
+          }
+        }
+      }
+    },
+    "trip.ratesRefresh.error.loading.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The service could not provide an exchange rate for these locations: %(locations)@. Try again."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось получить курс от сервиса для локаций: %(locations)@. Повторите попытку."
+          }
+        }
+      }
+    },
+    "trip.ratesRefresh.error.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Location exchange rates have not been updated.\n\n%(details)@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Курсы локаций не обновлены.\n\n%(details)@"
+          }
+        }
+      }
+    },
+    "trip.ratesRefresh.error.network.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Could not load the exchange rate for these locations: %(locations)@. Check your internet connection and try again."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось загрузить курс для локаций: %(locations)@. Проверьте подключение к интернету и повторите попытку."
+          }
+        }
+      }
+    },
+    "trip.ratesRefresh.error.partial.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exchange rates for some locations have been updated.\n\n%(details)@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Курсы части локаций обновлены.\n\n%(details)@"
+          }
+        }
+      }
+    },
+    "trip.ratesRefresh.error.save.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The updated exchange rates could not be saved. The previous rates have been restored. Try again."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось сохранить обновленные курсы. Прежние курсы восстановлены. Повторите попытку."
+          }
+        }
+      }
+    },
+    "trip.ratesRefresh.error.timeout.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The exchange rate request timed out for these locations: %(locations)@. Try again."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Время ожидания курса для локаций истекло: %(locations)@. Повторите попытку."
+          }
+        }
+      }
+    },
+    "trip.ratesRefresh.error.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unable to update exchange rates"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось обновить курсы"
+          }
+        }
+      }
+    },
+    "trip.ratesRefresh.error.unavailableLocations.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The trip or its current and upcoming locations are no longer available. Try again."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Поездка или ее текущие и предстоящие локации больше недоступны. Повторите попытку."
+          }
+        }
+      }
+    },
+    "trip.ratesRefresh.progress" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Updating exchange rates"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Обновление курсов"
+          }
+        }
+      }
+    },
+    "trip.ratesRefresh.success.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Location exchange rates have been updated."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Курсы локаций обновлены."
           }
         }
       }

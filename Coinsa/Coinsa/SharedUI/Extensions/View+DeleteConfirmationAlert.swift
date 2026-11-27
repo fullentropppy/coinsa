@@ -30,8 +30,9 @@ extension View {
                 isPresented: isPresented,
                 title: title,
                 message: message,
-                destructiveButtonTitle: .delete,
+                confirmButtonTitle: .delete,
                 onConfirm: onConfirm,
+                confirmButtonRole: .destructive,
                 hapticTypeOnConfirm: .success,
                 onCancel: onCancel,
                 hapticTypeOnAppear: .warning

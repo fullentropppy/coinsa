@@ -62,6 +62,12 @@ struct TripDetailViewModel {
         LocationGrouping.grouped(trip.locations ?? [])
     }
 
+    // MARK: - Методы
+
+    func canRefreshRates(on day: PlainDate) -> Bool {
+        !LocationExchangeRateUpdate.availableLocations(in: trip, on: day).isEmpty
+    }
+
     // MARK: - Приватные методы
 
     private func slices(

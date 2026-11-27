@@ -24,8 +24,9 @@ extension View {
                 isPresented: isPresented,
                 title: .discardTitle,
                 message: .discardMessage,
-                destructiveButtonTitle: .discardConfirm,
+                confirmButtonTitle: .discardConfirm,
                 onConfirm: onConfirm,
+                confirmButtonRole: .destructive,
                 hapticTypeOnConfirm: .success,
                 hapticTypeOnAppear: .warning
             )

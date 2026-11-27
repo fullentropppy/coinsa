@@ -15,6 +15,7 @@ struct TripDetailView: View {
     @Environment(\.modelContext) private var context
     @Environment(AppSettingsStore.self) private var settingsStore
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.scenePhase) private var scenePhase
     
     // MARK: - Состояние
     
@@ -27,12 +28,23 @@ struct TripDetailView: View {
     @State private var isShowingTripDeletionError = false
     @State private var isShowingGeneralExpenses = false
     @State private var isShowingAnalytics = false
+    @State private var isShowingRateRefreshConfirmation = false
+    @State private var rateRefresh = TripExchangeRateRefreshViewModel()
+    @State private var rateRefreshTask: Task<Void, Never>?
+    @State private var currentDay = PlainDate.today
 
     @Query private var availableTrips: [Trip]
 
     // MARK: - Зависимости
     
     private let trip: Trip
+
+    // MARK: - Константы оформления
+
+    private enum Layout {
+        /// Размер центральной панели ожидания в пунктах.
+        static let progressSide: CGFloat = 160
+    }
 
     // MARK: - Инфраструктура
     
@@ -71,8 +83,20 @@ struct TripDetailView: View {
                 locationToEdit = nil
                 isShowingGeneralExpenses = false
                 isShowingAnalytics = false
+                isShowingRateRefreshConfirmation = false
+                rateRefreshTask?.cancel()
+                rateRefresh.isShowingResult = false
                 dismiss()
             }
+        }
+        .onDisappear {
+            rateRefreshTask?.cancel()
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .NSCalendarDayChanged)) { _ in
+            currentDay = .today
+        }
+        .onChange(of: scenePhase) { _, phase in
+            if phase == .active { currentDay = .today }
         }
     }
 
@@ -95,6 +119,29 @@ struct TripDetailView: View {
             .toolbar {
                 toolbarContent
             }
+            .blockingOverlay(isPresented: rateRefresh.isRefreshing) {
+                BlockingProgressView(
+                    title: .tripRatesRefreshProgress,
+                    width: Layout.progressSide,
+                    height: Layout.progressSide
+                )
+            }
+            .modifier(
+                ConfirmationAlertModifier(
+                    isPresented: $isShowingRateRefreshConfirmation,
+                    title: .tripRatesRefreshConfirmationTitle,
+                    message: .tripRatesRefreshConfirmationMessage,
+                    confirmButtonTitle: .tripRatesRefreshConfirm,
+                    onConfirm: refreshRates,
+                    hapticTypeOnAppear: .warning
+                )
+            )
+            .notificationAlert(
+                isPresented: $rateRefresh.isShowingResult,
+                title: rateRefresh.isError ? .tripRatesRefreshErrorTitle : "",
+                message: rateRefresh.message ?? .errorUnknownMessage,
+                isError: rateRefresh.isError
+            )
             .sheet(isPresented: $isShowingTripEdit) {
                 TripEditorView(forEdit: trip)
             }
@@ -234,11 +281,26 @@ struct TripDetailView: View {
                 isShowingTripEdit = true
             }, onDelete: {
                 isShowingTripDeleteConfirmation = true
-            })
+            }) {
+                if viewModel.canRefreshRates(on: currentDay) {
+                    Button {
+                        isShowingRateRefreshConfirmation = true
+                    } label: {
+                        Label(.tripRatesRefreshAction, systemImage: AppSymbols.arrowClockwise)
+                    }
+                }
+            }
         }
     }
 
     // MARK: - Действия
+
+    private func refreshRates() {
+        guard !rateRefresh.isRefreshing else { return }
+        rateRefreshTask = Task {
+            await rateRefresh.refresh(in: trip, using: repository)
+        }
+    }
 
     private func confirmTripDelete() {
         do {
@@ -278,6 +340,7 @@ struct TripDetailView: View {
     NavigationStack {
         TripDetailView(preview.trip)
     }
+    .blockingOverlayHost()
     .modelContainer(preview.container)
     .environment(preview.settingsStore)
 }
@@ -288,6 +351,7 @@ struct TripDetailView: View {
     NavigationStack {
         TripDetailView(preview.trip)
     }
+    .blockingOverlayHost()
     .modelContainer(preview.container)
     .environment(preview.settingsStore)
 }

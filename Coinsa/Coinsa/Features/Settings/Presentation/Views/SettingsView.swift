@@ -50,6 +50,7 @@ struct SettingsView: View {
         Form {
             homeCurrencySection
             exchangeAdjustmentSection
+            exchangeRateCacheSection
             dataLoadingSection
             todayBudgetSection
             appearanceSection
@@ -90,6 +91,15 @@ struct SettingsView: View {
         }
     }
     
+    private var exchangeRateCacheSection: some View {
+        Section {
+            Toggle(.settingsCacheExchangeRates, isOn: cacheExchangeRatesBinding)
+                .tint(.accent)
+        } footer: {
+            Text(.settingsCacheExchangeRatesHint)
+        }
+    }
+
     private var dataLoadingSection: some View {
         Section {
             Toggle(.settingsFetchExpenseExchangeRateOnline, isOn: fetchExpenseExchangeRateOnline)
@@ -175,6 +185,13 @@ struct SettingsView: View {
         )
     }
     
+    private var cacheExchangeRatesBinding: Binding<Bool> {
+        Binding(
+            get: { settingsStore.cacheExchangeRates },
+            set: { settingsStore.cacheExchangeRates = $0 }
+        )
+    }
+
     private var fetchExpenseExchangeRateOnline: Binding<Bool> {
         Binding(
             get: { settingsStore.fetchExpenseExchangeRateOnline },

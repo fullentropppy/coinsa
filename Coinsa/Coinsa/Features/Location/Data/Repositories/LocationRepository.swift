@@ -162,6 +162,60 @@ struct LocationRepository {
         return transfer.homeAmount
     }
 
+    /// Сохраняет загруженные курсы вместе, не меняя бюджеты, корректировки и сохраненные траты.
+    /// - Parameters:
+    ///   - updates: Курсы и снимки локаций до начала загрузки.
+    ///   - trip: Поездка, которой должны по-прежнему принадлежать все локации.
+    ///   - expectedHomeCurrencyCode: Домашняя валюта на момент начала загрузки.
+    func updateExchangeRates(
+        _ updates: [LocationExchangeRateUpdate],
+        in trip: Trip,
+        expectedHomeCurrencyCode: String
+    ) throws {
+        guard !updates.isEmpty else { return }
+        guard !trip.isDeleted, trip.modelContext === context else {
+            throw LocationExchangeRateUpdate.ValidationError.unavailableLocations
+        }
+        guard trip.baseCurrencyCode == expectedHomeCurrencyCode else {
+            throw LocationExchangeRateUpdate.ValidationError.dataChanged
+        }
+
+        let today = PlainDate.today
+        for update in updates {
+            let location = update.target.location
+            guard !location.isDeleted, location.modelContext === context, location.trip === trip else {
+                throw LocationExchangeRateUpdate.ValidationError.unavailableLocations
+            }
+            guard location.endPlainDate >= today,
+                  location.locationCurrencyCode == update.target.currencyCode,
+                  location.updatedAt == update.target.updatedAt else {
+                throw LocationExchangeRateUpdate.ValidationError.dataChanged
+            }
+            guard update.rate.isFinite, update.rate > 0 else {
+                throw LocationExchangeRateUpdate.ValidationError.invalidRate
+            }
+        }
+
+        let previousValues = updates.map {
+            (location: $0.target.location, rate: $0.target.location.rateLocationToHome, updatedAt: $0.target.location.updatedAt)
+        }
+        let now = Date()
+        for update in updates {
+            update.target.location.rateLocationToBase = update.rate
+            update.target.location.updatedAt = now
+        }
+
+        do {
+            try context.save()
+        } catch {
+            for previous in previousValues {
+                previous.location.rateLocationToBase = previous.rate
+                previous.location.updatedAt = previous.updatedAt
+            }
+            throw error
+        }
+    }
+
     /// Удаляет локацию вместе с дочерними тратами.
     /// - Parameter location: Локация для удаления.
     func delete(_ location: Location) throws {
