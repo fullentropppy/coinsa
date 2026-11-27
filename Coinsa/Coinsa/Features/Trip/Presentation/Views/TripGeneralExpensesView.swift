@@ -121,6 +121,7 @@ struct TripGeneralExpensesView: View {
             AnalyticsDestinationView { [trip] in
                 EventAnalyticsView(
                     data: TripGeneralExpensesViewModel(trip: trip).eventAnalyticsData,
+                    navigationTitle: .analyticsNavigationTitleGeneralExpenses,
                     screenContextSubtitle: trip.screenContextSubtitle
                 )
             }

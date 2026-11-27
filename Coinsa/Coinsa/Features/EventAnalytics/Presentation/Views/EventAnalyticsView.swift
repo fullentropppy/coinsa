@@ -21,6 +21,7 @@ struct EventAnalyticsView: View {
     // MARK: - Хранимые свойства
 
     private let viewModel: EventAnalyticsViewModel
+    private let navigationTitle: LocalizedStringResource
     private let screenContextSubtitle: String
 
     // MARK: - Инициализация
@@ -28,9 +29,11 @@ struct EventAnalyticsView: View {
     /// Создает экран аналитики.
     /// - Parameters:
     ///   - data: Аналитические данные события.
+    ///   - navigationTitle: Локализованный заголовок для контекста аналитики.
     ///   - screenContextSubtitle: Подзаголовок экрана.
-    init(data: EventCategoryAnalyticsData, screenContextSubtitle: String) {
+    init(data: EventCategoryAnalyticsData, navigationTitle: LocalizedStringResource, screenContextSubtitle: String) {
         self.viewModel = EventAnalyticsViewModel(data: data)
+        self.navigationTitle = navigationTitle
         self.screenContextSubtitle = screenContextSubtitle
     }
 
@@ -38,7 +41,7 @@ struct EventAnalyticsView: View {
 
     var body: some View {
         eventAnalyticsList
-            .navigationTitle(.analytics)
+            .navigationTitle(navigationTitle)
             .navigationSubtitle(screenContextSubtitle)
             .navigationBarTitleDisplayMode(.inline)
             .eventExpensesMap(
@@ -136,7 +139,7 @@ struct EventAnalyticsView: View {
     @Previewable @State var preview = ExpenseMapPreviewData(forTrip: true)
 
     NavigationStack {
-        EventAnalyticsView(data: preview.analyticsData, screenContextSubtitle: preview.screenContextSubtitle)
+        EventAnalyticsView(data: preview.analyticsData, navigationTitle: .analyticsNavigationTitleTrip, screenContextSubtitle: preview.screenContextSubtitle)
     }
     .modelContainer(preview.container)
     .environment(preview.settingsStore)
@@ -146,7 +149,7 @@ struct EventAnalyticsView: View {
     @Previewable @State var preview = ExpenseMapPreviewData()
 
     NavigationStack {
-        EventAnalyticsView(data: preview.analyticsData, screenContextSubtitle: preview.screenContextSubtitle)
+        EventAnalyticsView(data: preview.analyticsData, navigationTitle: .analyticsNavigationTitleLocation, screenContextSubtitle: preview.screenContextSubtitle)
     }
     .modelContainer(preview.container)
     .environment(preview.settingsStore)
@@ -156,7 +159,7 @@ struct EventAnalyticsView: View {
     @Previewable @State var preview = ExpenseMapPreviewData(includeExpenses: false)
 
     NavigationStack {
-        EventAnalyticsView(data: preview.analyticsData, screenContextSubtitle: preview.screenContextSubtitle)
+        EventAnalyticsView(data: preview.analyticsData, navigationTitle: .analyticsNavigationTitleLocation, screenContextSubtitle: preview.screenContextSubtitle)
     }
     .modelContainer(preview.container)
     .environment(preview.settingsStore)

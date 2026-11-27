@@ -93,6 +93,7 @@ struct EventAnalyticsLocationsBody: View {
                     AnalyticsDestinationView { [location] in
                         EventAnalyticsView(
                             data: LocationDetailViewModel(location: location).eventAnalyticsData,
+                            navigationTitle: .analyticsNavigationTitleLocation,
                             screenContextSubtitle: location.screenContextSubtitle
                         )
                     }

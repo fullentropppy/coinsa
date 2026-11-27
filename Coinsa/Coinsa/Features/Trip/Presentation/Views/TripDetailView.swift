@@ -87,6 +87,7 @@ struct TripDetailView: View {
                 AnalyticsDestinationView { [trip] in
                     EventAnalyticsView(
                         data: TripDetailViewModel(trip: trip).eventAnalyticsData,
+                        navigationTitle: .analyticsNavigationTitleTrip,
                         screenContextSubtitle: trip.screenContextSubtitle
                     )
                 }

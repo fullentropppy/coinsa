@@ -476,6 +476,57 @@
         }
       }
     },
+    "analytics.navigationTitle.generalExpenses" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "General expense analytics"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Аналитика общих трат"
+          }
+        }
+      }
+    },
+    "analytics.navigationTitle.location" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Location analytics"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Аналитика локации"
+          }
+        }
+      }
+    },
+    "analytics.navigationTitle.trip" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trip analytics"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Аналитика поездки"
+          }
+        }
+      }
+    },
     "analytics.summary" : {
       "extractionState" : "manual",
       "localizations" : {
