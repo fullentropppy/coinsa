@@ -5837,13 +5837,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Exchange rate for calculating the budget amount and for new expenses (if automatic fetch of the exchange rate is disabled or the exchange rate could not be fetched)."
+            "value" : "Exchange rate for calculating the budget and displaying expenses and the remaining budget in the location currency on the “Today” screen, in location details and analytics. It is also used for new expenses if online exchange rate loading is disabled or the rate could not be loaded. Saved expense amounts and exchange rates stay unchanged."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Курс обмена для расчета суммы бюджета и автоматической подстановки в новых тратах (если отключена автоматическая загрузка курса обмена или курс обмена не удалось загрузить)."
+            "value" : "Курс обмена для расчета бюджета, а также отображения трат и остатка в валюте локации на экране «Сегодня», в деталях и аналитике локации. Также используется для автоматической подстановки в новых тратах, если отключена загрузка курса обмена из сети или курс не удалось загрузить. Суммы и курсы уже сохраненных трат не меняются."
           }
         }
       }

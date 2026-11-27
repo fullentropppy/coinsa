@@ -29,20 +29,15 @@ enum TodaySummaryCalculator {
         var todayExpenses: [Expense] = []
         var subcategoryCounts: [ExpenseSubcategory: Int] = [:]
         var todayHomeAmount = 0.0
-        var todayLocationAmount = 0.0
         var reservedHomeAmount = 0.0
-        var reservedLocationAmount = 0.0
         var totalHomeAmount = 0.0
-        var totalLocationAmount = 0.0
 
         for expense in location.expenses ?? [] {
             let date = expense.civilDateTime.storedDate
             let isToday = todayRange.contains(date)
             let homeAmount = expense.amount(in: .home)
-            let locationAmount = isHomeLocation ? 0 : expense.amount(in: .location)
             subcategoryCounts[expense.subcategory, default: 0] += 1
             totalHomeAmount += homeAmount
-            totalLocationAmount += locationAmount
 
             if isToday {
                 todayExpenses.append(expense)
@@ -50,10 +45,8 @@ enum TodaySummaryCalculator {
 
             if isToday && !expense.isExcludedFromDailySpending {
                 todayHomeAmount += homeAmount
-                todayLocationAmount += locationAmount
             } else {
                 reservedHomeAmount += homeAmount
-                reservedLocationAmount += isHomeLocation ? 0 : expense.amount(in: .location, using: .actual)
             }
         }
 
@@ -67,7 +60,7 @@ enum TodaySummaryCalculator {
             return $0.id.uuidString < $1.id.uuidString
         }
 
-        var budgetHomeAmount = location.calculateDailyBudgetAmount(on: day, reservedExpensesAmount: reservedHomeAmount)
+        var budgetHomeAmount = location.calculateDailyBudgetAmount(on: day, reservedHomeExpensesAmount: reservedHomeAmount)
         let switchLimit = max(0, budgetHomeAmount) * (1 + overspendThreshold / 100)
         let comparisonTolerance = max(todayHomeAmount.ulp, switchLimit.ulp) * 8
         let showsLocationBudget = showsLocationBudgetOnOverspend
@@ -79,24 +72,12 @@ enum TodaySummaryCalculator {
             && switchLimit.isFinite
             && todayHomeAmount - switchLimit > comparisonTolerance
 
-        let budgetLocationAmount: Double?
-        let balanceExpensesHomeAmount: Double
-        let balanceExpensesLocationAmount: Double
-
         if showsLocationBudget {
             budgetHomeAmount = location.budget
-            budgetLocationAmount = isHomeLocation ? nil : location.calculateBudgetAmount(in: .location)
-            balanceExpensesHomeAmount = totalHomeAmount
-            balanceExpensesLocationAmount = totalLocationAmount
-        } else {
-            budgetLocationAmount = isHomeLocation ? nil : location.calculateDailyBudgetAmount(
-                on: day,
-                in: .location,
-                reservedExpensesAmount: reservedLocationAmount
-            )
-            balanceExpensesHomeAmount = todayHomeAmount
-            balanceExpensesLocationAmount = todayLocationAmount
         }
+
+        let homeAmountBalance = budgetHomeAmount - (showsLocationBudget ? totalHomeAmount : todayHomeAmount)
+        let conversion = location.currencyConversion
 
         let summaryData = EventSummaryData(
             badgeProvider: Location.self,
@@ -105,11 +86,11 @@ enum TodaySummaryCalculator {
             budgetHomeAmount: budgetHomeAmount,
             expensesHomeAmount: todayHomeAmount,
             homeCurrency: location.homeCurrency,
-            budgetLocationAmount: budgetLocationAmount,
-            expensesLocationAmount: isHomeLocation ? nil : todayLocationAmount,
+            budgetLocationAmount: isHomeLocation ? nil : conversion.locationAmount(forHomeAmount: budgetHomeAmount),
+            expensesLocationAmount: isHomeLocation ? nil : conversion.locationAmount(forHomeAmount: todayHomeAmount),
             locationCurrency: location.locationCurrency,
-            homeAmountBalance: budgetHomeAmount - balanceExpensesHomeAmount,
-            locationAmountBalance: budgetLocationAmount.map { $0 - balanceExpensesLocationAmount }
+            homeAmountBalance: homeAmountBalance,
+            locationAmountBalance: isHomeLocation ? nil : conversion.locationAmount(forHomeAmount: homeAmountBalance)
         )
 
         return TodaySummary(

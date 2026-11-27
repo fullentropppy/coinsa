@@ -16,6 +16,7 @@ struct EventSubcategoryAnalyticsViewModel: Equatable {
     let totalDays: Int
     let homeCurrency: Currency
     let locationCurrency: Currency?
+    let locationConversion: LocationCurrencyConversion?
     let expenses: [Expense]
     let expensesBySubcategory: [ExpenseSubcategory: [Expense]]
     let showsLocationNames: Bool
@@ -43,7 +44,7 @@ struct EventSubcategoryAnalyticsViewModel: Equatable {
                 subcategory: subcategory,
                 expenseCount: expenses.count,
                 homeAmount: homeAmount,
-                locationAmount: locationCurrency == nil ? nil : expenses.reduce(0) { $0 + $1.amount(in: .location) }
+                locationAmount: locationCurrency == nil ? nil : locationConversion?.locationAmount(forHomeAmount: homeAmount)
             )
         }
         .sorted {

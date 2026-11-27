@@ -51,7 +51,7 @@ struct TripDetailViewModel {
             homeCurrency: trip.homeCurrency,
             locationCurrency: nil,
             baseBudget: baseBudget,
-            locationBudget: nil,
+            locationConversion: nil,
             expensesAmountByCategory: slices(from: expensesAmountByCategory, localValues: nil),
             expenses: expenses,
             locations: trip.locations ?? []

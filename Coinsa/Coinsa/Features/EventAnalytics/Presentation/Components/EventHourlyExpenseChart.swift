@@ -59,7 +59,7 @@ struct EventHourlyExpenseChart: View {
         EventHourlyExpenseChart(data: EventDayExpenseAnalyticsData(
             date: expenses.first.map { PlainDate($0.civilDateTime.storedDate) } ?? .today,
             expenses: expenses,
-            includesLocationAmount: false
+            locationConversion: nil
         ))
     }
 }

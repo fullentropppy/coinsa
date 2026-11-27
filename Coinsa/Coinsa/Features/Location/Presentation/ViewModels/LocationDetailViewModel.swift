@@ -45,6 +45,7 @@ struct LocationDetailViewModel {
         let expensesHomeAmount = location.calculateExpensesAmount(in: CurrencyContext.home)
         let expensesLocationAmount = isHomeLocation ? nil : location.calculateExpensesAmount(in: CurrencyContext.location)
         let locationCurrency = isHomeLocation ? nil : locationCurrency
+        let homeAmountBalance = budgetHomeAmount - expensesHomeAmount
 
         return EventSummaryData(
             badgeProvider: Location.self,
@@ -54,7 +55,9 @@ struct LocationDetailViewModel {
             homeCurrency: homeCurrency,
             budgetLocationAmount: budgetLocationAmount,
             expensesLocationAmount: expensesLocationAmount,
-            locationCurrency: locationCurrency
+            locationCurrency: locationCurrency,
+            homeAmountBalance: homeAmountBalance,
+            locationAmountBalance: isHomeLocation ? nil : location.currencyConversion.locationAmount(forHomeAmount: homeAmountBalance)
         )
     }
 
@@ -68,7 +71,6 @@ struct LocationDetailViewModel {
         let expensesLocationAmountByCategory = isHomeLocation ? nil : location.calculateExpensesAmountByCategory(
             in: CurrencyContext.location
         )
-        let locationBudget = isHomeLocation ? nil : location.calculateBudgetAmount(in: CurrencyContext.location)
 
         return EventCategoryAnalyticsData(
             title: location.name,
@@ -76,7 +78,7 @@ struct LocationDetailViewModel {
             homeCurrency: homeCurrency,
             locationCurrency: isHomeLocation ? nil : locationCurrency,
             baseBudget: location.budget,
-            locationBudget: locationBudget,
+            locationConversion: isHomeLocation ? nil : location.currencyConversion,
             expensesAmountByCategory: slices(from: expensesAmountByCategoryBase, localValues: expensesLocationAmountByCategory),
             expenses: location.expenses ?? [],
             locations: nil

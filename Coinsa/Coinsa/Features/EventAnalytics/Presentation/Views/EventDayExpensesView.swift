@@ -50,7 +50,7 @@ struct EventDayExpensesView: View {
         let day = EventDayExpenseAnalyticsData(
             date: date,
             expenses: data.expenses,
-            includesLocationAmount: data.locationCurrency != nil
+            locationConversion: data.locationConversion
         )
 
         List {

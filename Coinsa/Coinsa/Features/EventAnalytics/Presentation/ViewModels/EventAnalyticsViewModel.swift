@@ -62,35 +62,19 @@ struct EventAnalyticsViewModel {
     // MARK: - Вычисляемые свойства. Сумма в валюте локации
     
     var expensesTotalLocationAmount: Double? {
-        if locationCurrency != nil {
-            data.expensesAmountByCategory.reduce(0) { $0 + ($1.locationAmount ?? 0) }
-        } else {
-            nil
-        }
+        data.locationAmount(forHomeAmount: expensesTotalHomeAmount)
     }
     
     var dailyLocationBudgetAmount: Double? {
-        if let locationBudget = data.locationBudget {
-            locationBudget / totalDayDivisor
-        } else {
-            nil
-        }
+        data.locationAmount(forHomeAmount: dailyHomeBudgetAmount)
     }
     
     var dailyLocationExpensesAmount: Double? {
-        if let expensesTotalLocationAmount {
-            expensesTotalLocationAmount / totalDayDivisor
-        } else {
-            nil
-        }
+        data.locationAmount(forHomeAmount: dailyHomeExpensesAmount)
     }
     
     var locationAmountBalance: Double? {
-        if let locationBudget = data.locationBudget, let expensesTotalLocationAmount {
-            locationBudget - expensesTotalLocationAmount
-        } else {
-            nil
-        }
+        data.locationAmount(forHomeAmount: homeAmountBalance)
     }
     
     // MARK: - Вычисляемые свойства. Сводная аналитика
@@ -102,7 +86,9 @@ struct EventAnalyticsViewModel {
             homeCurrency: homeCurrency,
             budgetLocationAmount: data.locationBudget,
             expensesLocationAmount: expensesTotalLocationAmount,
-            locationCurrency: locationCurrency
+            locationCurrency: locationCurrency,
+            homeAmountBalance: homeAmountBalance,
+            locationAmountBalance: locationAmountBalance
         )
     }
     
@@ -252,6 +238,7 @@ struct EventAnalyticsViewModel {
                 totalDays: totalDays,
                 homeCurrency: homeCurrency,
                 locationCurrency: locationCurrency,
+                locationConversion: data.locationConversion,
                 expenses: expensesByCategory[category] ?? [],
                 expensesBySubcategory: expensesBySubcategory.filter { category.subcategories.contains($0.key) },
                 showsLocationNames: data.locations != nil
@@ -298,10 +285,6 @@ struct EventAnalyticsViewModel {
     }
     
     private func locationAmount(for expenses: [Expense]) -> Double? {
-        if locationCurrency != nil {
-            expenses.reduce(0) { $0 + $1.amount(in: .location) }
-        } else {
-            nil
-        }
+        data.locationAmount(forHomeAmount: homeAmount(for: expenses))
     }
 }

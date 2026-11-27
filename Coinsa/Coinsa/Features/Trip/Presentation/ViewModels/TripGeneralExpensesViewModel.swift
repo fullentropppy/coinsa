@@ -47,7 +47,7 @@ struct TripGeneralExpensesViewModel {
             homeCurrency: trip.homeCurrency,
             locationCurrency: nil,
             baseBudget: trip.generalExpensesBudget,
-            locationBudget: nil,
+            locationConversion: nil,
             expensesAmountByCategory: ExpenseCategory.allCases.map { category in
                 ExpenseAnalyticsSlice(
                     category: category,

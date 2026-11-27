@@ -31,22 +31,18 @@ struct EventDayExpenseAnalyticsData {
     /// - Parameters:
     ///   - date: Выбранный календарный день.
     ///   - expenses: Траты исходного события.
-    ///   - includesLocationAmount: Рассчитывать дополнительную сумму в валюте локации.
-    init(date: PlainDate, expenses: [Expense], includesLocationAmount: Bool) {
+    ///   - locationConversion: Сохраненный курс исходной локации; для поездки и общих трат передается `nil`.
+    init(date: PlainDate, expenses: [Expense], locationConversion: LocationCurrencyConversion?) {
         let dayExpenses = expenses.filter {
             PlainDate($0.civilDateTime.storedDate, using: .utc) == date
         }
         var cumulativePoints = [CumulativePoint(hour: 0, homeAmount: 0)]
         var homeAmount = 0.0
-        var locationAmount = 0.0
 
         for expense in dayExpenses.sorted(by: { $0.civilDateTime < $1.civilDateTime }) {
             let storedDate = expense.civilDateTime.storedDate
             let hour = storedDate.timeIntervalSince(date.storedDate) / 3600
             homeAmount += expense.homeAmount
-            if includesLocationAmount {
-                locationAmount += expense.amount(in: .location)
-            }
 
             if cumulativePoints.last?.hour == hour {
                 cumulativePoints.removeLast()
@@ -58,6 +54,6 @@ struct EventDayExpenseAnalyticsData {
         self.expenses = dayExpenses
         self.cumulativePoints = cumulativePoints
         self.homeAmount = homeAmount
-        self.locationAmount = includesLocationAmount ? locationAmount : nil
+        self.locationAmount = locationConversion?.locationAmount(forHomeAmount: homeAmount)
     }
 }
