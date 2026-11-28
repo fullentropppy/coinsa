@@ -55,13 +55,24 @@ struct EventSubcategoryAnalyticsView: View, Equatable {
 
         return List {
             Section {
+                EventAnalyticsExpensesHeader(summary: viewModel.expensesSummary)
+            } footer: {
+                if !viewModel.expenses.isEmpty {
+                    CountLabel.secondarySmall(viewModel.expenses.count, icon: Expense.primaryIcon)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                }
+            }
+
+            Section {
                 ForEach(slices) { slice in
                     let expenses = expensesBySubcategory[slice.subcategory] ?? []
+                    let summary = viewModel.expensesSummary(for: slice.subcategory)
 
-                    NavigationLink { [subcategory = slice.subcategory, expenses, showsLocationNames, screenContextSubtitle] in
+                    NavigationLink { [subcategory = slice.subcategory, expenses, summary, showsLocationNames, screenContextSubtitle] in
                         EventSubcategoryExpensesView(
                             subcategory: subcategory,
                             expenses: expenses,
+                            summary: summary,
                             showsLocationNames: showsLocationNames,
                             screenContextSubtitle: screenContextSubtitle
                         )
@@ -98,9 +109,9 @@ struct EventSubcategoryAnalyticsView: View, Equatable {
             }
             Spacer()
             AmountStack(
-                homeAmount: slice.homeAmount / viewModel.amountDivisor,
+                homeAmount: slice.homeAmount,
                 homeCurrency: viewModel.homeCurrency,
-                expenseAmount: slice.locationAmount.map { $0 / viewModel.amountDivisor },
+                expenseAmount: slice.locationAmount,
                 expenseCurrency: viewModel.locationCurrency
             )
         }
@@ -117,7 +128,7 @@ struct EventSubcategoryAnalyticsView: View, Equatable {
     ).first?.category ?? .defaultValue
 
     NavigationStack {
-        if let categoryViewModel = analyticsViewModel.subcategoryViewModels(amountMode: .total)[category] {
+        if let categoryViewModel = analyticsViewModel.subcategoryViewModels()[category] {
             EventSubcategoryAnalyticsView(
                 viewModel: categoryViewModel,
                 screenContextSubtitle: preview.screenContextSubtitle

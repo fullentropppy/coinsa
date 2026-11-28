@@ -14,6 +14,7 @@ struct EventSummaryData {
     let badgeProvider: TypeBadgeProviding.Type?
     let dateRangeProvider: DateRangeProviding?
     let budgetTitle: LocalizedStringResource
+    let expensesTitle: LocalizedStringResource
     let budgetHomeAmount: Double
     let expensesHomeAmount: Double
     let homeCurrency: Currency
@@ -30,6 +31,7 @@ struct EventSummaryData {
     ///   - badgeProvider: Провайдер бейджа (опционально).
     ///   - dateRangeProvider: Провайдер диапазона дат (опционально).
     ///   - budgetTitle: Заголовок бюджета. По умолчанию «Бюджет».
+    ///   - expensesTitle: Заголовок суммы трат. По умолчанию «Траты».
     ///   - budgetHomeAmount: Cумма бюджета в домашней валюте.
     ///   - expensesHomeAmount: Сумма трат в домашней валюте.
     ///   - homeCurrency: Домашняя валюта.
@@ -42,6 +44,7 @@ struct EventSummaryData {
         badgeProvider: TypeBadgeProviding.Type? = nil,
         dateRangeProvider: DateRangeProviding? = nil,
         budgetTitle: LocalizedStringResource = .amountBudget,
+        expensesTitle: LocalizedStringResource = .amountExpenses,
         budgetHomeAmount: Double,
         expensesHomeAmount: Double,
         homeCurrency: Currency,
@@ -54,6 +57,7 @@ struct EventSummaryData {
         self.badgeProvider = badgeProvider
         self.dateRangeProvider = dateRangeProvider
         self.budgetTitle = budgetTitle
+        self.expensesTitle = expensesTitle
         self.budgetHomeAmount = budgetHomeAmount
         self.expensesHomeAmount = expensesHomeAmount
         self.homeCurrency = homeCurrency

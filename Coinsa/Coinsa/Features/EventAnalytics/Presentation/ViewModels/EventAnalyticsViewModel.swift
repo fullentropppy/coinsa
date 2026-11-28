@@ -202,20 +202,18 @@ struct EventAnalyticsViewModel {
 
     // MARK: - Публичные методы
 
-    func displayedLocationSlices(from slices: [EventLocationAnalyticsSlice], asDailyAverage: Bool) -> [EventLocationAnalyticsSlice] {
+    func displayedLocationSlices(from slices: [EventLocationAnalyticsSlice]) -> [EventLocationAnalyticsSlice] {
         slices.filter { $0.expenseCount > 0 }.sorted {
-            let firstAmount = $0.amount(asDailyAverage: asDailyAverage)
-            let secondAmount = $1.amount(asDailyAverage: asDailyAverage)
-            if firstAmount != secondAmount {
-                return firstAmount > secondAmount
+            if $0.homeAmount != $1.homeAmount {
+                return $0.homeAmount > $1.homeAmount
             }
             return $0.id.uuidString < $1.id.uuidString
         }
     }
 
-    func shareValue(for slice: EventLocationAnalyticsSlice, among slices: [EventLocationAnalyticsSlice], asDailyAverage: Bool) -> Double {
-        let totalAmount = slices.reduce(0) { $0 + $1.amount(asDailyAverage: asDailyAverage) }
-        return totalAmount > 0 ? slice.amount(asDailyAverage: asDailyAverage) / totalAmount : 0
+    func shareValue(for slice: EventLocationAnalyticsSlice, among slices: [EventLocationAnalyticsSlice]) -> Double {
+        let totalAmount = slices.reduce(0) { $0 + $1.homeAmount }
+        return totalAmount > 0 ? slice.homeAmount / totalAmount : 0
     }
 
     func displayedSlicesSortedByID(for metric: EventAnalyticsMetric) -> [ExpenseAnalyticsSlice] {
@@ -226,7 +224,7 @@ struct EventAnalyticsViewModel {
         slices(for: metric).sorted { $0.homeAmount > $1.homeAmount }
     }
     
-    func subcategoryViewModels(amountMode: CategoryAmountMode) -> [ExpenseCategory: EventSubcategoryAnalyticsViewModel] {
+    func subcategoryViewModels() -> [ExpenseCategory: EventSubcategoryAnalyticsViewModel] {
         let expensesByCategory = Dictionary(grouping: data.expenses) { $0.category }
         let expensesBySubcategory = Dictionary(grouping: data.expenses) { $0.subcategory }
         let totalDays = totalDays
@@ -234,7 +232,6 @@ struct EventAnalyticsViewModel {
         return Dictionary(uniqueKeysWithValues: ExpenseCategory.allCases.map { category in
             let viewModel = EventSubcategoryAnalyticsViewModel(
                 category: category,
-                amountMode: amountMode,
                 totalDays: totalDays,
                 homeCurrency: homeCurrency,
                 locationCurrency: locationCurrency,

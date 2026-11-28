@@ -14,6 +14,7 @@ struct EventSubcategoryExpensesView: View {
 
     private let subcategory: ExpenseSubcategory
     private let expenses: [Expense]
+    private let summary: EventAnalyticsExpensesSummary
     private let showsLocationNames: Bool
     private let screenContextSubtitle: String
 
@@ -23,16 +24,19 @@ struct EventSubcategoryExpensesView: View {
     /// - Parameters:
     ///   - subcategory: Подкатегория для отбора трат.
     ///   - expenses: Траты только выбранной подкатегории.
+    ///   - summary: Итоги подкатегории за полный период исходного события.
     ///   - showsLocationNames: Показывать названия локаций в заголовках секций поездки.
     ///   - screenContextSubtitle: Подзаголовок исходной аналитики.
     init(
         subcategory: ExpenseSubcategory,
         expenses: [Expense],
+        summary: EventAnalyticsExpensesSummary,
         showsLocationNames: Bool,
         screenContextSubtitle: String
     ) {
         self.subcategory = subcategory
         self.expenses = expenses
+        self.summary = summary
         self.showsLocationNames = showsLocationNames
         self.screenContextSubtitle = screenContextSubtitle
     }
@@ -47,7 +51,8 @@ struct EventSubcategoryExpensesView: View {
                 sourceExpenses: expenses,
                 filter: .subcategory(subcategory)
             ),
-            showsLocationNames: showsLocationNames
+            showsLocationNames: showsLocationNames,
+            expensesSummary: summary
         )
         .equatable()
         .eventExpensesMap(
@@ -69,17 +74,18 @@ struct EventSubcategoryExpensesView: View {
         .displayedSlicesSortedByAmount(for: .categories)
         .first?
         .category ?? .defaultValue
-    let subcategory = analyticsViewModel
-        .subcategoryViewModels(amountMode: .total)[category]?
+    let categoryViewModel = analyticsViewModel.subcategoryViewModels()[category]
+    let subcategory = categoryViewModel?
         .displayedSlices
         .first?
         .subcategory
 
     NavigationStack {
-        if let subcategory {
+        if let subcategory, let categoryViewModel {
             EventSubcategoryExpensesView(
                 subcategory: subcategory,
                 expenses: preview.expenses.filter { $0.subcategory == subcategory },
+                summary: categoryViewModel.expensesSummary(for: subcategory),
                 showsLocationNames: true,
                 screenContextSubtitle: preview.screenContextSubtitle
             )

@@ -34,9 +34,33 @@ struct TripDetailViewModel {
         return EventSummaryData(
             badgeProvider: Trip.self,
             dateRangeProvider: trip,
+            budgetTitle: .tripSummaryBudget,
+            expensesTitle: .tripSummaryExpenses,
             budgetHomeAmount: budgetAmount,
             expensesHomeAmount: expensesAmount,
             homeCurrency: trip.homeCurrency
+        )
+    }
+
+    var locationsSummaryData: EventSummaryData {
+        EventSummaryData(
+            budgetHomeAmount: trip.calculateLocationsBudgetAmount(),
+            expensesHomeAmount: trip.calculateLocationsExpensesAmount(),
+            homeCurrency: trip.homeCurrency
+        )
+    }
+
+    var locationsAnalyticsData: EventCategoryAnalyticsData {
+        EventCategoryAnalyticsData(
+            title: trip.name,
+            dateRangeProvider: trip,
+            homeCurrency: trip.homeCurrency,
+            locationCurrency: nil,
+            baseBudget: trip.calculateLocationsBudgetAmount(),
+            locationConversion: nil,
+            expensesAmountByCategory: slices(from: trip.calculateLocationsExpensesAmountByCategory(), localValues: nil),
+            expenses: trip.locationExpenses,
+            locations: trip.locations ?? []
         )
     }
 

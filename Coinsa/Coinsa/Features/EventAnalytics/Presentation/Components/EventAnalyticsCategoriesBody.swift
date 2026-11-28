@@ -10,13 +10,8 @@ import SwiftUI
 
 /// Тело вкладки аналитики расходов по категориям.
 struct EventAnalyticsCategoriesBody: View {
-    // MARK: - Окружение
-
-    @Environment(\.haptics) private var haptics
-
     // MARK: - Состояние
 
-    @State private var categoryAmountMode: CategoryAmountMode = .total
     @State private var isChartVisible = false
 
     // MARK: - Хранимые свойства
@@ -32,13 +27,6 @@ struct EventAnalyticsCategoriesBody: View {
 
     private var displayedSlicesSortedByAmount: [ExpenseAnalyticsSlice] {
         viewModel.displayedSlicesSortedByAmount(for: .categories)
-    }
-
-    private var categoryAmountDivisor: Double {
-        switch categoryAmountMode {
-        case .total: 1
-        case .daily: max(Double(viewModel.totalDays), 1)
-        }
     }
 
     // MARK: - Инициализация
@@ -91,25 +79,10 @@ struct EventAnalyticsCategoriesBody: View {
     }
 
     private var categoriesLegendSection: some View {
-        let categoryViewModels = viewModel.subcategoryViewModels(amountMode: categoryAmountMode)
+        let categoryViewModels = viewModel.subcategoryViewModels()
         let screenContextSubtitle = screenContextSubtitle
 
         return Section {
-            if viewModel.totalDays > 1 {
-                Picker(selection: $categoryAmountMode) {
-                    ForEach(CategoryAmountMode.allCases) { mode in
-                        Text(mode.localizedResource).tag(mode)
-                    }
-                } label: {
-                    EmptyView()
-                }
-                .pickerStyle(.segmented)
-                .onChange(of: categoryAmountMode) {
-                    haptics.trigger(.tap)
-                }
-                .listRowSeparator(.hidden)
-            }
-
             ForEach(displayedSlicesSortedByAmount) { slice in
                 if slice.homeAmount > 0, let categoryViewModel = categoryViewModels[slice.category] {
                     NavigationLink { [categoryViewModel, screenContextSubtitle] in
@@ -147,9 +120,9 @@ struct EventAnalyticsCategoriesBody: View {
             }
             Spacer()
             AmountStack(
-                homeAmount: slice.homeAmount / categoryAmountDivisor,
+                homeAmount: slice.homeAmount,
                 homeCurrency: viewModel.homeCurrency,
-                expenseAmount: slice.locationAmount.map { $0 / categoryAmountDivisor },
+                expenseAmount: slice.locationAmount,
                 expenseCurrency: viewModel.locationCurrency
             )
         }

@@ -289,40 +289,6 @@
         }
       }
     },
-    "analytics.amount.mode.perDay" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Per day"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "В день"
-          }
-        }
-      }
-    },
-    "analytics.amount.mode.total" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Total"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Всего"
-          }
-        }
-      }
-    },
     "analytics.categories" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -506,6 +472,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Аналитика локации"
+          }
+        }
+      }
+    },
+    "analytics.navigationTitle.locations" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Location expenses analytics"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Аналитика локаций"
           }
         }
       }
@@ -7072,40 +7055,6 @@
         }
       }
     },
-    "trip.generalExpenses.expenses" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Expenses"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Траты"
-          }
-        }
-      }
-    },
-    "trip.generalExpenses.navigationTitle" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "General expenses"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Общие траты"
-          }
-        }
-      }
-    },
     "trip.homeCurrency" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -7629,6 +7578,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Не удалось выполнить операцию"
+          }
+        }
+      }
+    },
+    "trip.summary.budget" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Total budget"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Весь бюджет"
+          }
+        }
+      }
+    },
+    "trip.summary.expenses" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "All expenses"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Все траты"
           }
         }
       }

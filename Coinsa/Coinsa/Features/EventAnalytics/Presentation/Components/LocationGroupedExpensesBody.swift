@@ -15,6 +15,7 @@ struct LocationGroupedExpensesBody: View, Equatable {
     let navigationSubtitle: String
     let viewModel: LocationGroupedExpensesViewModel
     var showsLocationNames = true
+    var expensesSummary: EventAnalyticsExpensesSummary? = nil
 
     // MARK: - Тело View
 
@@ -29,6 +30,17 @@ struct LocationGroupedExpensesBody: View, Equatable {
 
     private var list: some View {
         List {
+            if let expensesSummary {
+                Section {
+                    EventAnalyticsExpensesHeader(summary: expensesSummary)
+                } footer: {
+                    if viewModel.expensesCount > 0 {
+                        CountLabel.secondarySmall(viewModel.expensesCount, icon: Expense.primaryIcon)
+                            .frame(maxWidth: .infinity, alignment: .center)
+                    }
+                }
+            }
+
             LocationGroupedExpensesSections(viewModel: viewModel, showsLocationNames: showsLocationNames)
         }
     }

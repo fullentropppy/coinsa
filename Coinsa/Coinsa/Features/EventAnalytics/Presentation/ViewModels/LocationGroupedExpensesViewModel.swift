@@ -54,8 +54,16 @@ struct LocationGroupedExpensesViewModel: Equatable {
 
     // MARK: - Вычисляемые свойства
 
+    private var filteredExpenses: [Expense] {
+        sourceExpenses.filter(filter.includes)
+    }
+
+    var expensesCount: Int {
+        filteredExpenses.count
+    }
+
     var expenseGroups: [Group] {
-        let grouped = Dictionary(grouping: sourceExpenses.filter(filter.includes)) { $0.location?.id ?? $0.owningTrip?.id }
+        let grouped = Dictionary(grouping: filteredExpenses) { $0.location?.id ?? $0.owningTrip?.id }
 
         let entries: [LocationSortEntry] = grouped.values.compactMap { expenses in
             guard let first = expenses.first, let trip = first.owningTrip else { return nil }

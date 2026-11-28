@@ -51,8 +51,7 @@ struct LocationDestinationSections: View {
         if let title {
             GroupHeader(
                 icon: icon,
-                title: title,
-                itemCount: groups.reduce(0) { $0 + $1.locations.count }
+                title: title
             )
             .listRowBackground(Color.clear)
         }

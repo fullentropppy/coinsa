@@ -16,13 +16,4 @@ struct EventLocationAnalyticsSlice: Identifiable {
     let expenseCount: Int
 
     var id: UUID { location.id }
-    var totalDays: Int { location.totalDays }
-
-    // MARK: - Методы
-
-    /// Возвращает сумму трат или среднее за календарные дни локации.
-    /// - Parameter asDailyAverage: Делить сумму на длительность локации с включением обеих дат.
-    func amount(asDailyAverage: Bool) -> Double {
-        asDailyAverage ? homeAmount / max(Double(totalDays), 1) : homeAmount
-    }
 }

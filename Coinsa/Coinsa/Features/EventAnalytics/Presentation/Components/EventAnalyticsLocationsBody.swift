@@ -11,13 +11,8 @@ import SwiftUI
 
 /// Диаграмма долей трат и список локаций поездки.
 struct EventAnalyticsLocationsBody: View {
-    // MARK: - Окружение
-
-    @Environment(\.haptics) private var haptics
-
     // MARK: - Состояние
 
-    @State private var showsDailyAmounts = false
     @State private var isChartVisible = false
 
     // MARK: - Хранимые свойства
@@ -36,7 +31,7 @@ struct EventAnalyticsLocationsBody: View {
 
     var body: some View {
         let locationSlices = viewModel.locationSlices
-        let slices = viewModel.displayedLocationSlices(from: locationSlices, asDailyAverage: showsDailyAmounts)
+        let slices = viewModel.displayedLocationSlices(from: locationSlices)
 
         if slices.isEmpty {
             EmptyStateView(icon: AppSymbols.chartXyaxisLine, title: .analyticsEmptyStateTitle)
@@ -55,7 +50,7 @@ struct EventAnalyticsLocationsBody: View {
         Section {
             Chart(slices.filter { $0.homeAmount > 0 }) { slice in
                 SectorMark(
-                    angle: .value("", slice.amount(asDailyAverage: showsDailyAmounts)),
+                    angle: .value("", slice.homeAmount),
                     innerRadius: .fixed(ViewLayout.AnalyticsDonutChart.innerRadius),
                     angularInset: ViewLayout.AnalyticsDonutChart.angularInset
                 )
@@ -74,20 +69,6 @@ struct EventAnalyticsLocationsBody: View {
 
     private func locationsListSection(slices: [EventLocationAnalyticsSlice], colorOrder: [EventLocationAnalyticsSlice]) -> some View {
         Section {
-            if slices.count > 1 || slices.contains(where: { $0.totalDays > 1 }) {
-                Picker(selection: $showsDailyAmounts) {
-                    Text(.analyticsAmountModeTotal).tag(false)
-                    Text(.analyticsAmountModePerDay).tag(true)
-                } label: {
-                    EmptyView()
-                }
-                .pickerStyle(.segmented)
-                .onChange(of: showsDailyAmounts) {
-                    haptics.trigger(.tap)
-                }
-                .listRowSeparator(.hidden)
-            }
-
             ForEach(slices) { slice in
                 NavigationLink { [location = slice.location] in
                     AnalyticsDestinationView { [location] in
@@ -113,7 +94,7 @@ struct EventAnalyticsLocationsBody: View {
                 HStack(spacing: ViewLayout.Row.metadataSpacing) {
                     if slices.count > 1 {
                         DotView(color(for: slice, in: colorOrder))
-                        Text(viewModel.shareValue(for: slice, among: slices, asDailyAverage: showsDailyAmounts).percentFormat())
+                        Text(viewModel.shareValue(for: slice, among: slices).percentFormat())
                             .appTextStyle(.secondaryNumber)
                         DotDivider.secondarySmall()
                     }
@@ -122,7 +103,7 @@ struct EventAnalyticsLocationsBody: View {
             }
             Spacer()
             AmountStack(
-                homeAmount: slice.amount(asDailyAverage: showsDailyAmounts),
+                homeAmount: slice.homeAmount,
                 homeCurrency: viewModel.homeCurrency
             )
         }

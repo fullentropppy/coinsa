@@ -7,12 +7,11 @@
 
 import SwiftUI
 
-/// Общие суммы трат для вкладок категорий и локаций.
+/// Общие суммы трат и средние за день для выбранного раздела аналитики.
 struct EventAnalyticsExpensesHeader: View {
     // MARK: - Хранимые свойства
 
-    private let viewModel: EventAnalyticsViewModel
-    private let excludesGeneralExpenses: Bool
+    private let summary: EventAnalyticsExpensesSummary
     
     // MARK: - Инициализация
 
@@ -21,8 +20,21 @@ struct EventAnalyticsExpensesHeader: View {
     ///   - viewModel: ViewModel аналитики события.
     ///   - excludesGeneralExpenses: Показывать в шапке только траты локаций.
     init(viewModel: EventAnalyticsViewModel, excludesGeneralExpenses: Bool = false) {
-        self.viewModel = viewModel
-        self.excludesGeneralExpenses = excludesGeneralExpenses
+        self.summary = EventAnalyticsExpensesSummary(
+            homeAmount: excludesGeneralExpenses ? viewModel.locationsExpensesTotalHomeAmount : viewModel.expensesTotalHomeAmount,
+            homeCurrency: viewModel.homeCurrency,
+            locationAmount: viewModel.expensesTotalLocationAmount,
+            locationCurrency: viewModel.locationCurrency,
+            dailyHomeAmount: excludesGeneralExpenses ? viewModel.locationsDailyHomeExpensesAmount : viewModel.dailyHomeExpensesAmount,
+            dailyLocationAmount: viewModel.dailyLocationExpensesAmount,
+            totalDays: viewModel.totalDays
+        )
+    }
+
+    /// Создает шапку из итогов выбранной категории или подкатегории.
+    /// - Parameter summary: Суммы выбранных трат и средние за день исходного события.
+    init(summary: EventAnalyticsExpensesSummary) {
+        self.summary = summary
     }
     
     // MARK: - Тело View
@@ -31,18 +43,18 @@ struct EventAnalyticsExpensesHeader: View {
         HStack(spacing: ViewLayout.Summary.cardSpacing) {
             EventAmountCardView(
                 title: .amountExpenses,
-                homeAmount: excludesGeneralExpenses ? viewModel.locationsExpensesTotalHomeAmount : viewModel.expensesTotalHomeAmount,
-                homeCurrency: viewModel.homeCurrency,
-                locationAmount: viewModel.expensesTotalLocationAmount,
-                locationCurrency: viewModel.locationCurrency
+                homeAmount: summary.homeAmount,
+                homeCurrency: summary.homeCurrency,
+                locationAmount: summary.locationAmount,
+                locationCurrency: summary.locationCurrency
             )
-            if viewModel.totalDays > 1 {
+            if summary.totalDays > 1 {
                 EventAmountCardView(
                     title: .amountExpensesDaily,
-                    homeAmount: excludesGeneralExpenses ? viewModel.locationsDailyHomeExpensesAmount : viewModel.dailyHomeExpensesAmount,
-                    homeCurrency: viewModel.homeCurrency,
-                    locationAmount: viewModel.dailyLocationExpensesAmount,
-                    locationCurrency: viewModel.locationCurrency
+                    homeAmount: summary.dailyHomeAmount,
+                    homeCurrency: summary.homeCurrency,
+                    locationAmount: summary.dailyLocationAmount,
+                    locationCurrency: summary.locationCurrency
                 )
             }
         }

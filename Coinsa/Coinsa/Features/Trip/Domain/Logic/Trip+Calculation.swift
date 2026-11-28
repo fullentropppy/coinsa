@@ -13,9 +13,7 @@ extension Trip {
     /// Рассчитывает полный бюджет поездки в домашней валюте.
     /// - Returns: Бюджеты локаций и общих трат без смешения локальных валют.
     func calculateBudgetAmount() -> Double {
-        generalExpensesBudget + (locations ?? []).reduce(0) {
-            $0 + $1.calculateBudgetAmount(in: .home)
-        }
+        generalExpensesBudget + calculateLocationsBudgetAmount()
     }
 
     // MARK: - Фактическая сумма

@@ -182,6 +182,11 @@ struct LocationDetailView: View {
                     }
                 }
             }
+        } footer: {
+            if location.expensesCount > 0 {
+                CountLabel.secondarySmall(location.expensesCount, icon: Expense.primaryIcon)
+                    .frame(maxWidth: .infinity, alignment: .center)
+            }
         }
     }
     
@@ -210,28 +215,19 @@ struct LocationDetailView: View {
     }
     
     private var expenseListContent: some View {
-        Group {
-            GroupHeader(
-                icon: Expense.primaryIcon,
-                title: .locationExpenses,
-                itemCount: location.expensesCount
-            )
-            .listRowBackground(Color.clear)
-            
-            ForEach(viewModel.groupedExpenses, id: \.date) { group in
-                Section(DateDisplayFormatter.formatRelative(group.date, showsTime: false)) {
-                    ForEach(group.expenses) { expense in
-                        NavigationLink {
-                            ExpenseDetailView(expense)
-                        } label: {
-                            ExpenseRowView(expense)
-                        }
-                        .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                            SwipeActions(
-                                onDelete: { requestDelete(for: [expense]) },
-                                onEdit: { expenseToEdit = expense }
-                            )
-                        }
+        ForEach(viewModel.groupedExpenses, id: \.date) { group in
+            Section(DateDisplayFormatter.formatRelative(group.date, showsTime: false)) {
+                ForEach(group.expenses) { expense in
+                    NavigationLink {
+                        ExpenseDetailView(expense)
+                    } label: {
+                        ExpenseRowView(expense)
+                    }
+                    .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                        SwipeActions(
+                            onDelete: { requestDelete(for: [expense]) },
+                            onEdit: { expenseToEdit = expense }
+                        )
                     }
                 }
             }

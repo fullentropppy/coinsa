@@ -77,7 +77,7 @@ private struct BlockingOverlayHostModifier: ViewModifier {
 
 // MARK: - Превью
 
-#Preview("Loading") {
+#Preview{
     NavigationStack {
         List {
             Text(.tripRatesRefreshAction)

@@ -87,8 +87,7 @@ struct ExpenseDestinationView: View {
                 if destinationCount > 0 {
                     GroupHeader(
                         icon: AppSymbols.trayAndArrowDown,
-                        title: viewModel.destinationTitle,
-                        itemCount: destinationCount
+                        title: viewModel.destinationTitle
                     )
                     .listRowBackground(Color.clear)
                 }

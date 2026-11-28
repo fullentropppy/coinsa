@@ -12,7 +12,6 @@ struct EventSubcategoryAnalyticsViewModel: Equatable {
     // MARK: - Хранимые свойства
 
     let category: ExpenseCategory
-    let amountMode: CategoryAmountMode
     let totalDays: Int
     let homeCurrency: Currency
     let locationCurrency: Currency?
@@ -23,11 +22,8 @@ struct EventSubcategoryAnalyticsViewModel: Equatable {
 
     // MARK: - Вычисляемые свойства
 
-    var amountDivisor: Double {
-        switch amountMode {
-        case .total: 1
-        case .daily: max(Double(totalDays), 1)
-        }
+    var expensesSummary: EventAnalyticsExpensesSummary {
+        makeExpensesSummary(for: expenses)
     }
 
     var displayedSlices: [ExpenseSubcategoryAnalyticsSlice] {
@@ -57,8 +53,29 @@ struct EventSubcategoryAnalyticsViewModel: Equatable {
 
     // MARK: - Публичные методы
 
+    func expensesSummary(for subcategory: ExpenseSubcategory) -> EventAnalyticsExpensesSummary {
+        makeExpensesSummary(for: expensesBySubcategory[subcategory] ?? [])
+    }
+
     func shareValue(for slice: ExpenseSubcategoryAnalyticsSlice, among slices: [ExpenseSubcategoryAnalyticsSlice]) -> Double {
         let totalHomeAmount = slices.reduce(0) { $0 + $1.homeAmount }
         return totalHomeAmount > 0 ? slice.homeAmount / totalHomeAmount : 0
+    }
+
+    // MARK: - Вспомогательные методы
+
+    private func makeExpensesSummary(for expenses: [Expense]) -> EventAnalyticsExpensesSummary {
+        let homeAmount = expenses.reduce(0) { $0 + $1.homeAmount }
+        let dailyHomeAmount = homeAmount / max(Double(totalDays), 1)
+
+        return EventAnalyticsExpensesSummary(
+            homeAmount: homeAmount,
+            homeCurrency: homeCurrency,
+            locationAmount: locationCurrency == nil ? nil : locationConversion?.locationAmount(forHomeAmount: homeAmount),
+            locationCurrency: locationCurrency,
+            dailyHomeAmount: dailyHomeAmount,
+            dailyLocationAmount: locationCurrency == nil ? nil : locationConversion?.locationAmount(forHomeAmount: dailyHomeAmount),
+            totalDays: totalDays
+        )
     }
 }

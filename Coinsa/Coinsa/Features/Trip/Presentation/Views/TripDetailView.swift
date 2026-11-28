@@ -8,7 +8,7 @@
 import SwiftUI
 import SwiftData
 
-/// Детальный экран поездки с информацией о локациях и аналитикой.
+/// Детальный экран поездки со сводкой, локациями и общими тратами.
 struct TripDetailView: View {
     // MARK: - Окружение
 
@@ -16,6 +16,7 @@ struct TripDetailView: View {
     @Environment(AppSettingsStore.self) private var settingsStore
     @Environment(\.dismiss) private var dismiss
     @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.haptics) private var haptics
     
     // MARK: - Состояние
     
@@ -26,8 +27,12 @@ struct TripDetailView: View {
     @State private var isShowingLocationDeletionError = false
     @State private var isShowingTripDeleteConfirmation = false
     @State private var isShowingTripDeletionError = false
-    @State private var isShowingGeneralExpenses = false
-    @State private var isShowingAnalytics = false
+    @State private var selectedMode: ContentMode = .locations
+    @State private var analyticsScope: AnalyticsScope?
+    @State private var isShowingExpenseCreate = false
+    @State private var expenseToEdit: Expense?
+    @State private var expenseDeletionHandler = DeletionHandler<Expense>()
+    @State private var isShowingExpenseDeletionError = false
     @State private var isShowingRateRefreshConfirmation = false
     @State private var rateRefresh = TripExchangeRateRefreshViewModel()
     @State private var rateRefreshTask: Task<Void, Never>?
@@ -38,6 +43,19 @@ struct TripDetailView: View {
     // MARK: - Зависимости
     
     private let trip: Trip
+
+    private enum ContentMode {
+        case locations
+        case generalExpenses
+    }
+
+    private enum AnalyticsScope: String, Identifiable {
+        case trip
+        case locations
+        case generalExpenses
+
+        var id: String { rawValue }
+    }
 
     // MARK: - Константы оформления
 
@@ -55,6 +73,21 @@ struct TripDetailView: View {
     private var viewModel: TripDetailViewModel {
         TripDetailViewModel(trip: trip)
     }
+
+    private var generalExpensesViewModel: TripGeneralExpensesViewModel {
+        TripGeneralExpensesViewModel(trip: trip)
+    }
+
+    private var isTripAvailable: Bool {
+        !availableTrips.isEmpty && !trip.isDeleted && trip.modelContext === context
+    }
+
+    private var hasSelectedItems: Bool {
+        switch selectedMode {
+        case .locations: trip.hasLocations
+        case .generalExpenses: !generalExpensesViewModel.expenses.isEmpty
+        }
+    }
     
     // MARK: - Инициализация
 
@@ -70,19 +103,22 @@ struct TripDetailView: View {
 
     var body: some View {
         Group {
-            if !availableTrips.isEmpty, !trip.isDeleted, trip.modelContext === context {
+            if isTripAvailable {
                 tripDetailContent
             } else {
                 Color.clear
             }
         }
-        .onChange(of: availableTrips.isEmpty, initial: true) { _, isUnavailable in
-            if isUnavailable {
+        .onChange(of: isTripAvailable, initial: true) { _, available in
+            if !available {
                 isShowingTripEdit = false
                 isShowingLocationCreate = false
                 locationToEdit = nil
-                isShowingGeneralExpenses = false
-                isShowingAnalytics = false
+                isShowingExpenseCreate = false
+                expenseToEdit = nil
+                analyticsScope = nil
+                deletionHandler.cancel()
+                expenseDeletionHandler.cancel()
                 isShowingRateRefreshConfirmation = false
                 rateRefreshTask?.cancel()
                 rateRefresh.isShowingResult = false
@@ -104,16 +140,28 @@ struct TripDetailView: View {
         tripDetailForm
             .navigationTitle(trip.name)
             .toolbarTitleDisplayMode(.inline)
-            .navigationDestination(isPresented: $isShowingGeneralExpenses) { [trip] in
-                TripGeneralExpensesView(trip)
-            }
-            .navigationDestination(isPresented: $isShowingAnalytics) { [trip] in
+            .navigationDestination(item: $analyticsScope) { [trip] scope in
                 AnalyticsDestinationView { [trip] in
-                    EventAnalyticsView(
-                        data: TripDetailViewModel(trip: trip).eventAnalyticsData,
-                        navigationTitle: .analyticsNavigationTitleTrip,
-                        screenContextSubtitle: trip.screenContextSubtitle
-                    )
+                    switch scope {
+                    case .trip:
+                        EventAnalyticsView(
+                            data: TripDetailViewModel(trip: trip).eventAnalyticsData,
+                            navigationTitle: .analyticsNavigationTitleTrip,
+                            screenContextSubtitle: trip.screenContextSubtitle
+                        )
+                    case .locations:
+                        EventAnalyticsView(
+                            data: TripDetailViewModel(trip: trip).locationsAnalyticsData,
+                            navigationTitle: .analyticsNavigationTitleLocations,
+                            screenContextSubtitle: trip.screenContextSubtitle
+                        )
+                    case .generalExpenses:
+                        EventAnalyticsView(
+                            data: TripGeneralExpensesViewModel(trip: trip).eventAnalyticsData,
+                            navigationTitle: .analyticsNavigationTitleGeneralExpenses,
+                            screenContextSubtitle: trip.screenContextSubtitle
+                        )
+                    }
                 }
             }
             .toolbar {
@@ -154,13 +202,34 @@ struct TripDetailView: View {
             .sheet(item: $locationToEdit) { location in
                 LocationEditorView(forEdit: location)
             }
+            .sheet(isPresented: $isShowingExpenseCreate) {
+                ExpenseEditorView(
+                    forCreateWith: trip,
+                    preselectedPaymentMethod: settingsStore.selectedPaymentMethod,
+                    exchangeAdjustment: settingsStore.exchangeAdjustment
+                )
+            }
+            .sheet(item: $expenseToEdit) { expense in
+                ExpenseEditorView(forEdit: expense)
+            }
             .safeAreaInset(edge: .bottom) {
-                if trip.hasLocations {
-                    PrimaryAddButton(isOnLeft: settingsStore.isFloatingButtonOnLeft) {
-                        isShowingLocationCreate = true
-                    }
+                if hasSelectedItems {
+                    PrimaryAddButton(isOnLeft: settingsStore.isFloatingButtonOnLeft, action: createSelectedItem)
                 }
             }
+            .deleteConfirmationAlert(
+                isPresented: $expenseDeletionHandler.isShowingDeleteConfirmation,
+                title: .expenseDeleteTitle,
+                message: .expenseDeleteMessage,
+                onConfirm: confirmExpenseDelete,
+                onCancel: { expenseDeletionHandler.cancel() }
+            )
+            .notificationAlert(
+                isPresented: $isShowingExpenseDeletionError,
+                title: .expenseStorageErrorTitle,
+                message: .expenseStorageErrorDeleteMessage,
+                isError: true
+            )
             .deleteConfirmationAlert(
                 isPresented: $deletionHandler.isShowingDeleteConfirmation,
                 title: .locationDeleteTitle,
@@ -194,7 +263,18 @@ struct TripDetailView: View {
     private var tripDetailForm: some View {
         List {
             headerSection
-            locationsSection
+            modeSummarySection
+            switch selectedMode {
+            case .locations:
+                locationsSection
+            case .generalExpenses:
+                TripGeneralExpensesContentView(
+                    viewModel: generalExpensesViewModel,
+                    onCreate: { isShowingExpenseCreate = true },
+                    onEdit: { expenseToEdit = $0 },
+                    onDelete: { expenseDeletionHandler.request(for: [$0]) }
+                )
+            }
         }
     }
     
@@ -206,14 +286,55 @@ struct TripDetailView: View {
                 data: viewModel.eventHeaderData,
                 showsAmounts: viewModel.showsFullHeader
             )
-            HStack {
-                DetailNavigationButton(icon: Expense.primaryIcon, title: .tripGeneralExpenses) {
-                    isShowingGeneralExpenses = true
+            if viewModel.showsAnalytics {
+                DetailNavigationButton(icon: AppSymbols.chartXyaxisLine, title: .analyticsNavigationTitleTrip) {
+                    analyticsScope = .trip
                 }
-                if viewModel.showsAnalytics {
-                    DetailNavigationButton.analytics {
-                        isShowingAnalytics = true
+            }
+        }
+    }
+
+    private var modeSummarySection: some View {
+        Section {
+            VStack(spacing: ViewLayout.Summary.sectionSpacing) {
+                Picker(selection: $selectedMode) {
+                    Text(.tripLocations).tag(ContentMode.locations)
+                    Text(.tripGeneralExpenses).tag(ContentMode.generalExpenses)
+                } label: {
+                    EmptyView()
+                }
+                .pickerStyle(.segmented)
+                .onChange(of: selectedMode) {
+                    haptics.trigger(.tap)
+                }
+
+                EventSummaryView(
+                    data: selectedMode == .locations ? viewModel.locationsSummaryData : generalExpensesViewModel.summaryData,
+                    showsHeader: false
+                )
+            }
+            if selectedMode == .locations {
+                if !trip.locationExpenses.isEmpty {
+                    DetailNavigationButton(icon: AppSymbols.chartXyaxisLine, title: .analyticsNavigationTitleLocations) {
+                        analyticsScope = .locations
                     }
+                }
+            } else if !generalExpensesViewModel.expenses.isEmpty {
+                DetailNavigationButton(icon: AppSymbols.chartXyaxisLine, title: .analyticsNavigationTitleGeneralExpenses) {
+                    analyticsScope = .generalExpenses
+                }
+            }
+        } footer: {
+            switch selectedMode {
+            case .locations:
+                if trip.locationsCount > 0 {
+                    CountLabel.secondarySmall(trip.locationsCount, icon: Location.primaryIcon)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                }
+            case .generalExpenses:
+                if viewModel.generalExpensesCount > 0 {
+                    CountLabel.secondarySmall(viewModel.generalExpensesCount, icon: Expense.primaryIcon)
+                        .frame(maxWidth: .infinity, alignment: .center)
                 }
             }
         }
@@ -244,28 +365,19 @@ struct TripDetailView: View {
     }
     
     private var locationListContent: some View {
-        Group {
-            GroupHeader(
-                icon: Location.primaryIcon,
-                title: .tripLocations,
-                itemCount: trip.locationsCount
-            )
-            .listRowBackground(Color.clear)
-            
-            ForEach(viewModel.groupedLocations, id: \.status) { group in
-                Section(group.status.safeLocalizedResourcePlural) {
-                    ForEach(group.locations) { location in
-                        NavigationLink { [location, tripID = trip.id] in
-                            LocationDetailView(location, parentTripID: tripID)
-                        } label: {
-                            LocationRowView(location)
-                        }
-                        .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                            SwipeActions(
-                                onDelete: { requestDelete(for: [location]) },
-                                onEdit: { locationToEdit = location }
-                            )
-                        }
+        ForEach(viewModel.groupedLocations, id: \.status) { group in
+            Section(group.status.safeLocalizedResourcePlural) {
+                ForEach(group.locations) { location in
+                    NavigationLink { [location, tripID = trip.id] in
+                        LocationDetailView(location, parentTripID: tripID)
+                    } label: {
+                        LocationRowView(location)
+                    }
+                    .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                        SwipeActions(
+                            onDelete: { requestDelete(for: [location]) },
+                            onEdit: { locationToEdit = location }
+                        )
                     }
                 }
             }
@@ -282,7 +394,7 @@ struct TripDetailView: View {
             }, onDelete: {
                 isShowingTripDeleteConfirmation = true
             }) {
-                if viewModel.canRefreshRates(on: currentDay) {
+                if selectedMode == .locations && viewModel.canRefreshRates(on: currentDay) {
                     Button {
                         isShowingRateRefreshConfirmation = true
                     } label: {
@@ -294,6 +406,22 @@ struct TripDetailView: View {
     }
 
     // MARK: - Действия
+
+    private func createSelectedItem() {
+        switch selectedMode {
+        case .locations: isShowingLocationCreate = true
+        case .generalExpenses: isShowingExpenseCreate = true
+        }
+    }
+
+    private func confirmExpenseDelete() {
+        do {
+            try ExpenseRepository(context: context).delete(expenseDeletionHandler.itemsPendingDeletion)
+            expenseDeletionHandler.cancel()
+        } catch {
+            isShowingExpenseDeletionError = true
+        }
+    }
 
     private func refreshRates() {
         guard !rateRefresh.isRefreshing else { return }

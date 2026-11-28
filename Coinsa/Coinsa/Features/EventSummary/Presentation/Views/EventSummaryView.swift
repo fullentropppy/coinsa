@@ -100,7 +100,7 @@ struct EventSummaryView: View {
                 )
             }
             EventAmountCardView(
-                title: .amountExpenses,
+                title: data.expensesTitle,
                 homeAmount: data.expensesHomeAmount,
                 homeCurrency: data.homeCurrency,
                 locationAmount: data.expensesLocationAmount,
