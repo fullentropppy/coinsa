@@ -63,6 +63,9 @@ struct EventDayExpensesView: View {
                     amountTitle: .analyticsAmountExpensesTotal,
                     halfAmountTitle: .analyticsAmountExpensesHalf
                 )
+            } footer: {
+                CountLabel.secondarySmall(day.expenses.count, icon: Expense.primaryIcon)
+                    .frame(maxWidth: .infinity, alignment: .center)
             }
 
             Section {

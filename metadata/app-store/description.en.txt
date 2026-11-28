@@ -1,0 +1,60 @@
+Coinsa — travel expense tracker
+
+Coinsa helps you plan budgets, track spending by location and across the whole trip, work with currencies, and get insights into your expenses.
+
+* Trips and locations
+
+- Create trips with a home currency and add locations with their own currencies and dates.
+- View budgets, expenses, and balances for each location and the whole trip.
+
+* Budget and expenses
+
+Set location budgets and a separate budget for general trip expenses. Track flights, insurance, and other shared costs without assigning them to a location.
+
+- Choose categories and subcategories: food, transport, accommodation, leisure, shopping, medicine, and miscellaneous.
+- Record cash or card payments, add comments, and save expense locations on a map.
+- Copy and move expenses between locations and general expenses within the same trip.
+- Transfer the full positive budget balance from one location to another while keeping the total trip budget unchanged.
+
+Exclude a prepaid or large location expense from daily spending: it reduces the available budget and stays in totals and analytics without counting toward the daily spending amount.
+
+* Today
+
+Follow your recommended budget, spending, and balance for today. The daily budget accounts for prepayments, other-day expenses, and amounts excluded from daily spending.
+
+- Configure the summary budget and balance to switch to the whole location when you overspend.
+- Add expenses through subcategory shortcuts based on the selected location's history.
+
+The daily list also shows general expenses for the selected location's trip; these do not affect the location's daily budget.
+
+* Currencies and converter
+
+- Choose a currency for each expense, load exchange rates, and set a rate adjustment to account for fees on foreign-currency card payments.
+- Refresh rates for ongoing and upcoming locations from the trip menu without changing saved expense amounts.
+- Find a currency by code and name.
+
+Use the separate converter to convert an amount and swap the conversion direction. Selected currencies and the amount are retained on the device.
+
+* Analytics
+
+- View total budget, spending, balance, daily averages, expense count, and the largest purchase.
+- Explore daily and hourly charts, categories, and subcategories with links to individual records.
+- Compare spending across trip locations.
+- View expense locations on a map with nearby markers grouped together.
+
+General expenses are included in trip totals and have their own analytics.
+
+* Import, export, and synchronization
+
+- Save all trips, locations, and expenses to a JSON file.
+- Before importing, preview the records to be added, updated, or skipped. Records absent from the file are not deleted.
+
+Trips, locations, and expenses sync through private iCloud storage between devices running Coinsa with the same Apple Account. Settings and converter state remain on the device.
+
+* Settings
+
+Choose light, dark, or system appearance, haptic feedback, and floating button placement. Configure automatic rate loading and location detection when creating an expense.
+
+Coinsa requires no registration and does not use advertising or tracking technologies.
+
+Requires iOS 26 or later.
